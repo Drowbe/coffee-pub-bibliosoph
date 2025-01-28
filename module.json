@@ -1,0 +1,50 @@
+{
+  "id": "coffee-pub-bibliosoph",
+  "title": "Coffee Pub Bibliosoph",
+  "description": "Rolltable card formatting goodness.",
+  "version": "0.1.03",
+  "compatibility": {
+    "minimum": "11",
+    "verified": "12"
+  },
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json",
+      "flags": {}
+    }
+  ],
+  "authors": [
+    {
+      "name": "drowbe"
+    },
+    {
+      "name": "CLIFFFF"
+    }
+  ],
+  "esmodules": [
+    "scripts/bibliosoph.js"
+  ],
+  "styles": [
+    "styles/default.css"
+  ],
+  "manifest": "module.json",
+  "changelog": "CHANGELOG.md",
+  "license": "LICENSE",
+  "readme": "README.md",
+  "relationships": {
+    "requires": [
+      {
+        "id": "coffee-pub-blacksmith",
+        "type": "module"
+      }
+    ],
+    "recommends": [
+      {
+        "id": "forien-easy-polls",
+        "type": "module"
+      }
+    ]
+  }
+}

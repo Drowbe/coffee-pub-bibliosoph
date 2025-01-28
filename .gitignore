@@ -1,0 +1,54 @@
+# Node modules
+node_modules/
+
+# Development files
+.git/
+.github/
+.vscode/
+.idea/
+*.code-workspace
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+.DS_Store
+Thumbs.db
+
+# Foundry specific
+coffee-pub-blacksmith.lock
+*.zip
+
+# Foundry Database Files (always ignore)
+packs/**/*.ldb
+packs/**/LOCK
+packs/**/CURRENT
+packs/**/LOG*
+packs/**/*.log
+packs/**/*.old
+packs/**/*-journal
+packs/**/MANIFEST*
+packs/**/*MANIFEST*
+
+# OS generated files
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Build directories
+dist/
+build/ 

@@ -1,0 +1,132 @@
+<span style="visibility: hidden">coffeepub-hide-header</span>
+<div id="cards-wrapper-{{cardStyle}}">
+    <!-- CARD TITLE -->
+    <div id="cards-title-{{cardStyle}}">
+        <i class="fas {{iconStyle}}" id="cards-icon-{{cardStyle}}"></i>{{cardTitle}}
+    </div>
+    <!-- SENDER -->
+    {{#if userName}}
+        <div id="cards-user-{{cardStyle}}">
+            <img id="cards-token-image-{{cardStyle}}" src="{{userAvatar}}" />
+            <div id="cards-token-text-wrapper-{{cardStyle}}">
+                <span id="cards-token-name-{{cardStyle}}">{{userName}}</span>
+                <br />
+                <span id="cards-token-character-{{cardStyle}}">{{characterName}}</span>
+            </div>
+        </div>
+    {{/if}}
+    <!-- PRIVATE MESSAGE -->
+    {{#if arrToPrivate}}
+        {{#each arrToPrivate}}
+            {{{this}}}
+        {{/each}}
+    {{/if}}
+    <!-- BANNER IMAGE -->
+    {{#if banner}}
+        <div id="cards-image-{{cardStyle}}">
+            <img style="width: 100%;" src="{{banner}}" />
+        </div>
+    {{/if}}
+    <!-- CARD SUBTITLE -->
+    {{#if cardSubTitle}}
+        <div id="cards-title-{{cardStyle}}">
+            <i class="fas {{iconSubStyle}}" id="cards-icon-{{cardStyle}}"></i>{{cardSubTitle}}
+        </div>
+    {{/if}}
+    <!-- LARGE IMAGE -->
+    {{#if image}}
+        <div id="cards-image-{{cardStyle}}">
+            <img class="token-background-{{imageBackground}}" style="width: {{imageScale}}%;" src="{{image}}" />
+        </div>
+    {{/if}}
+    <!-- CARD CONTENT -->
+    {{#if (or content descriptionReveal descriptionBefore descriptionAfter)}}
+        <div id="cards-content-light-{{cardStyle}}">
+            <!-- CONTENT TITLE -->
+            {{#if title}}
+                <h1>{{title}}</h1>
+                <hr />
+            {{/if}}
+            <!-- CONTENT - NORMAL -->
+            {{#if content}}
+                {{{content}}}
+            {{/if}}
+            <!-- CONTENT - SEARCH -->
+            {{#if descriptionBefore}}<p>{{descriptionBefore}}</p>{{/if}}
+            {{#if descriptionReveal}}<p><strong>{{quantityword}} {{title}}</strong> {{descriptionReveal}}</p>{{/if}}
+            {{#if descriptionAfter}}<p>{{descriptionAfter}}</p>{{/if}}
+        </div>
+    {{/if}}
+    <!-- INJURY TREATMENT -->
+    {{#if treatment}}
+        <!-- <div class="dnd5e2 chat-card" id="cards-content-light-{{cardStyle}}"> -->
+        <div class="dnd5e2 chat-card">
+            <section class="card-header description collapsible collapsed">
+                <!-- TREATMENT TITLE -->
+                <header class="summary">
+                    <h2><i class="fas fa-heart-pulse" id="cards-icon-{{cardStyle}}"></i>Treatment</h2>
+                    <i class="fas fa-chevron-down fa-fw"></i>
+                </header>
+                <!-- TREATMENT CONTENT -->
+                <section class="details collapsible-content card-content">
+                    <div class="wrapper">
+                    {{treatment}}
+                    </div>
+                </section>
+            </section>      
+        </div>
+    {{/if}}
+    <!-- INJURY DETAILS -->
+    {{#if duration}}
+    <div id="cards-content-dark-{{cardStyle}}">
+        <p><i class="fas fa-hourglass-half" id="cards-icon-{{cardStyle}}"></i><strong>{{duration}}</strong></p>
+    </div>
+    <div id="cards-content-dark-{{cardStyle}}">
+        <p><i class="fas fa-heart-crack" id="cards-icon-{{cardStyle}}"></i><strong>{{damage}}</strong></p>
+    </div>
+    <div id="cards-content-dark-{{cardStyle}}">
+        <p><i class="fas fa-sparkles" id="cards-icon-{{cardStyle}}"></i><strong>{{statuseffect}}</strong></p>
+    </div>
+    {{/if}}
+    <!-- COMPENDIUM LINK -->
+    {{#if link}}
+    <div id="cards-content-dark-{{cardStyle}}">
+        <p>{{link}} x <strong>{{quantitynum}}</strong></p>
+    </div>
+    {{/if}}
+    <!-- RARITY -->
+    {{#if (or kind rarity value details)}}
+    <div id="cards-content-light-{{cardStyle}}">
+        <h2>Additional Details</h2>
+        <ul>
+            {{#if kind}}<li><strong>Type:</strong> {{kind}}</li>{{/if}}
+            {{#if rarity}}<li><strong>Rarity:</strong> {{rarity}}</li>{{/if}}
+            {{#if value}}<li><strong>Value:</strong> {{value}}</li>{{/if}}
+            {{#if details}}<li><strong>Details:</strong> {{details}}</li>{{/if}}
+        </ul>
+    </div>
+    {{/if}}
+    <!-- ACTIONS -->
+    {{#if action}}
+        <div id="cards-content-dark-{{cardStyle}}">
+            <p>{{#if actionlabel}}{{actionlabel}} {{/if}}{{action}}</p>
+        </div>
+    {{/if}}
+    <!-- INJURY BUTTON -->
+    {{#if injurybutton}}
+        {{#each injurybutton}}
+            <button id="cards-button-{{this.cardStyle}}" class="category-button" style="text-align: left;" value="{{this.category}}"><i class="fas {{this.buttonicon}}" id="cards-icon-{{this.cardStyle}}"></i>{{this.category}}</button>
+        {{/each}}
+    {{/if}}
+    <!-- INJURY BUTTON -->
+    {{#if arreffect}}
+        <!-- Reply Button -->
+        <button id="cards-button-{{cardStyle}}" title="Apply this injury to the selected token..." class="coffee-pub-bibliosoph-button-injury" data-effect="{{arreffect}}"><i class="fas {{iconStyle}}" id="cards-icon-{{cardStyle}}"></i>{{button}}</button>
+    {{/if}}
+    <!-- PRIVATE MESSAGE -->
+    {{#if arrToPrivate}}
+        <!-- Reply Button -->
+        <button id="cards-button-{{cardStyle}}" title="Reply to this message..." class="coffee-pub-bibliosoph-button-reply" data-recipient="{{strRecipients}}"><i class="fas fa-circle-up" id="cards-icon-{{cardStyle}}"></i>Reply All</button>
+    {{/if}}
+</div>
+

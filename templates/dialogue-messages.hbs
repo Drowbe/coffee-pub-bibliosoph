@@ -1,0 +1,90 @@
+{{log 'bibliosoph window template' this}}
+<form id="bibliosophchat">
+  {{#if isPublic}}
+    <input type="hidden" id="hiddenCardTypeCategory" name="hiddenCardTypeCategory" value="CARDTYPEMESSAGE">
+  {{/if}}
+  {{#unless isPublic}}
+    <input type="hidden" id="hiddenCardTypeCategory" name="hiddenCardTypeCategory" value="CARDTYPEWHISPER">
+  {{/unless}} 
+  {{#if isPublic}}
+    <div id ="optionChatType" class="bibliosoph-option-image-container">
+      <input type="hidden" id="hiddenOptionChatType" name="optionChatTypeHidden" value="">
+      <img class="bibliosoph-option-image bibliosoph-option-image-selected" title="Party Message" src="icons/sundries/documents/envelope-sealed-red-tan.webp" value="messageParty">
+      <img class="bibliosoph-option-image" title="Party Plan" src="icons/skills/social/diplomacy-handshake.webp" value="messageVote">
+      <img class="bibliosoph-option-image" title="Agree" src="icons/skills/social/thumbsup-approval-like.webp" value="messageThumbsup">
+      <img class="bibliosoph-option-image" title="Disagree" src="icons/skills/social/wave-halt-stop.webp" value="messageThumbsdown">
+      <img class="bibliosoph-option-image" title="Praise" src="icons/magic/life/heart-shadow-red.webp" value="messagePraise">
+      <img class="bibliosoph-option-image" title="Insult" src="icons/skills/wounds/injury-face-impact-orange.webp" value="messageInsult">
+    </div>
+   {{/if}}
+   {{#if optionList}}
+        <div style='width: 100%; margin-bottom: 5px;'>
+            <strong>Recipients</strong>
+        </div>
+        <div style='width: 100%; margin-bottom: 10px;'>
+            {{{optionList}}}
+        </div>
+      
+    {{/if}}
+    <textarea rows="10" id='inputMessage' name='inputMessage' class="bibliosoph-textarea"></textarea>
+    <button type="submit" value="Submit" class="bibliosoph-send-button-normal"><i class="fas fa-circle-up"></i></button>
+</form>
+<div class="tooltip-container">
+  <div class="tooltip-label"></div>
+  {{#if isPublic}}
+    <div class="tooltip-item">Party Messages
+      <span class="tooltiptext">
+        You can send several types of messages. All of these go to the entire party.
+        <ul>
+          <li><b>Party Message</b>: This is a normal message that goes to everyone. Adding a message is mandatory since it is what will be displayed to the party. There is no additional image.</li>
+          <li><b>Party Plan</b>: Use this message to call for plans or a vote on something. This includes a visual cue to draw attention to your suggestion. Message text is encouraged for clairty.</li>
+          <li><b>Agree</b>: A visual way to let the party know you agree with what is being discussed. This does not register an official vote in the voting system. Adding a message is optional.</li>
+          <li><b>Disagree</b>: A visual way to let the party know you do not agree with somthing being discussed. Adding a message is optional.</li>
+        </ul>
+      </span>
+    </div>
+  {{/if}}
+  {{#unless isPublic}}
+    <div class="tooltip-item">Private Messages
+      <span class="tooltiptext">
+        Private chats are only sent to the users you choose.
+        <ol>
+          <li><b>Select Recipients</b>: Only the party members you choose will see the message.</li>
+          <li><b>Enter Message</b>: Once satisfied with your message, click send.</li>
+          <li><b>Repeat</b>: The previous party members remain selected so you can continue the private conversation.</li>
+          <li><b>Responding</b>: If you are responding to a message, you need still need to select the users. The system assumes you may not want to "repply all" and defaults to none.</li>
+          <li><b>Note</b>: The game master sees all private messages just like normal whispers.</li>
+        </ol>
+      </span>
+    </div>
+  {{/unless}}
+  <div class="tooltip-divider">|</div>
+  <div class="tooltip-item">Formatting
+    <span class="tooltiptext">
+      You can use a subset of Markdown attributes to format your message:
+      <ul>
+        <li><b>Large Title</b>: # Title Here</li>
+        <li><b>Medium Title</b>: ## Title Here</li>
+        <li><b>Small Title</b>: ### Title Here</li>
+        <li><b>Horisantal Rule</b>: --- &#40;3 Dashes on their own line&#41;</li>
+        <li><b>Bold Text</b>: **Text Here**</li>
+        <li><b>Italic Text</b>: *Text Here*</li>
+        <li><b>Bulleted List</b>: - List Item Here</li>
+        <li><b>Numbered List</b>: 1. List Item Here</li>
+        <li><b>Block Text</b>: &gt; Text Here</li>
+      </ul>
+    </span>
+  </div>
+  <div class="tooltip-divider">|</div>
+  <div class="tooltip-item">Polls
+    <span class="tooltiptext">
+      Full polls coming soon; however in the meantime you can:
+      <ul>
+        <li><b>Plain Text</b>: You can just, you know, ask people what you want to know.</li>
+        <li><b>Keystroke "P"</b>: Pressing "P" will bring up a quick poll interface.</li>
+        <li><b>Keystroke "ALT + P"</b>: Pressing this keyboard combo will bring up saved polls and allow you to create new ones.</li>
+      </ul>
+    </span>
+  </div>
+  <div class="tooltip-label"></div>
+</div>
