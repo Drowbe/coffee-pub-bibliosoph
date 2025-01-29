@@ -1,17 +1,40 @@
 # Coffee Pub Bibliosoph
 
-Introducing "Coffee Pub Scribe," the latest in the growing suite of Coffee Pub tools, designed to bring the warmth and camaraderie of a storyteller's coffee pub to your Foundry VTT gaming table. This module transforms the storytelling experience, turning journal entries into beautifully formatted narrative cards that invite players into the heart of your tale without ever leaving the chat window's embrace.
+![Foundry v12](https://img.shields.io/badge/foundry-v12-green)
+![Latest Release](https://img.shields.io/github/v/release/Drowbe/coffee-pub-bibliosoph)
+![MIT License](https://img.shields.io/badge/license-MIT-blue)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/Drowbe/coffee-pub-bibliosoph/release.yml)
+![GitHub all releases](https://img.shields.io/github/downloads/Drowbe/coffee-pub-bibliosoph/total)
+
+A comprehensive chat and encounter management module for Foundry VTT, designed to enhance your game's narrative and mechanical elements through a variety of specialized chat cards and automated features.
 
 ## ⚡ Features
 
-- **Part of Coffee Pub Tools:** Scribe joins a family of tools aimed at enriching your gaming experience with the charm of a coffee pub meet-up.
-- **Stylized Text Cards:** Enliven your campaign narrative with text cards that are as visually appealing as they are captivating.
-- **Chat Window Integration:** Merge your storytelling seamlessly into the game's chat, maintaining engagement and immersion.
-- **Custom Design Options:** Customize the look of your narrative cards to fit the atmosphere and aesthetic of your campaign's world.
-- **User-friendly Interface:** Intuitive design for quick learning and use, so you can focus more on the story and less on the setup.
-- **Adaptive Text Formatting:** Auto-adjusting content for readability, ensuring that your story's presentation is always top-notch.
-- **Journal Enhancements:** For GMs, view the formatted player cards directly within your journal entries, linking narration and gameplay together smoothly.
-- **HTML Blockquote Integration:** Utilize simple HTML to elevate your storytelling. Wrap any text in blockquote tags, and Scribe will transform it into a beautifully formatted card, consistent with the Scribe style.
+- **Dynamic Chat System**
+  - Public and private messaging system with recipient selection
+  - Customizable chat cards for various game events
+  - Reply functionality built into chat messages
+
+- **Encounter Management**
+  - Specialized encounter generators for different environments:
+    - General, Cave, Desert, Dungeon, Forest
+    - Mountain, Sky, Snow, Urban, Water
+  - Configurable through macros for each environment type
+
+- **Character Interactions**
+  - Investigation system
+  - Gift and shady goods mechanics
+  - Beverage system
+  - Character biography integration
+  - Insult and praise mechanics
+  - Party messaging system
+
+- **Game Event Handlers**
+  - Critical hit and fumble card generation
+  - Inspiration tracking
+  - Deck of Many Things integration
+  - Injury system with active effect application
+  - Status effect management
 
 ## 📦 Installation
 
@@ -20,30 +43,41 @@ You can install this module by using the following manifest URL in Foundry VTT:
 https://github.com/Drowbe/coffee-pub-bibliosoph/releases/latest/download/module.json
 ```
 
-### Requirements
-- Foundry VTT v12 (compatible)
-- Foundry VTT v13 (ready)
+### Requirements and Recommendations
+
+#### Required Module
+- [Coffee Pub Blacksmith](https://github.com/Drowbe/coffee-pub-blacksmith) - Core module providing shared functionality for all Coffee Pub modules
+
+#### Recommended Modules
+- [Coffee Pub Crier](https://github.com/Drowbe/coffee-pub-crier) - Enhances combat turn announcements and notifications
+- [Coffee Pub Scribe](https://github.com/Drowbe/coffee-pub-scribe) - Provides advanced text formatting and storytelling tools
+
+### System Requirements
+- Foundry VTT v12 (required)
+- Compatible with v13 (future release)
+
+## Module Integration
+
+Coffee Pub Bibliosoph is part of the Coffee Pub suite of modules, designed to work together seamlessly:
+
+- **Blacksmith** (Required): Provides core functionality and shared resources
+- **Bibliosoph**: Handles chat and encounter management
+- **Crier**: Manages combat announcements and notifications
+- **Scribe**: Offers enhanced text formatting and storytelling tools
+
+Each module can function independently (except for the Blacksmith requirement) but they're designed to complement each other for a fuller experience.
 
 ## 📖 Usage Guide
 
-### Card Format
+### Initial Setup
+1. Install and enable both Coffee Pub Blacksmith and Coffee Pub Bibliosoph
+2. Configure the module settings for your desired encounter types and features
+3. Set up the corresponding macros for each enabled feature
 
-To build a nicely formatted card, all you need to do is leverage the markup built right into foundry. Anything you put within "blockquote" tag will be formatted as a card. This DOES MEAN that if you plan to use blockquote for other reasons, any of that content will be formatted accordingly.
-
-```html
-<blockquote>
-    <h4>Card Title</h4> 
-    <p>Some narrative here.</p>
-    <h5>Image Title</h5>
-    <img src="link to image">
-    <hr>
-    <p>Optional additional narrative</p>
-    <h6><strong>Name of Speaker</strong> "The words the speaker is saying."</h6>
-    <h6><em>Inner Dialogue</em> "The text that the player is thinking"</h6>
-</blockquote>
-```
-
-As we add more layout elements to Scribe, we will update this simple framework as necessary.
+### Key Features Configuration
+- Each feature (encounters, messages, etc.) can be individually enabled/disabled
+- Macro names can be customized in the module settings
+- Active effects for injuries can be configured with custom durations and effects
 
 ## 📄 License
 

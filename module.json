@@ -4,8 +4,9 @@
   "description": "Rolltable card formatting goodness.",
   "version": "0.1.03",
   "compatibility": {
-    "minimum": "11",
-    "verified": "12"
+    "minimum": "12",
+    "verified": "12",
+    "maximum": "13"
   },
   "languages": [
     {
@@ -39,13 +40,20 @@
     "requires": [
       {
         "id": "coffee-pub-blacksmith",
-        "type": "module"
+        "type": "module",
+        "manifest": "https://github.com/Drowbe/coffee-pub-blacksmith/releases/latest/download/module.json"
       }
     ],
     "recommends": [
       {
-        "id": "forien-easy-polls",
-        "type": "module"
+        "id": "coffee-pub-scribe",
+        "type": "module",
+        "manifest": "https://github.com/Drowbe/coffee-pub-scribe/releases/latest/download/module.json"
+      },
+      {
+        "id": "coffee-pub-crier",
+        "type": "module",
+        "manifest": "https://github.com/Drowbe/coffee-pub-crier/releases/latest/download/module.json"
       }
     ]
   }
