@@ -5,7 +5,7 @@ on:
 
 permissions:
   issues: write
-  repository-projects: write
+  contents: read
 
 jobs:
   cleanup:
