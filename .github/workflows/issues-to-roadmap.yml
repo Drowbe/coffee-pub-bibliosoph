@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: master
+          ref: main
           token: ${{ secrets.PAT_TOKEN }}
           
       - name: Update ROADMAP.md from Issues
