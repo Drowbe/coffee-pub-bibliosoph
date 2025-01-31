@@ -16,7 +16,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ github.ref }}
+          fetch-depth: 1
           token: ${{ secrets.PAT_TOKEN }}
           
       - name: Update ROADMAP.md from Issues
