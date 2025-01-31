@@ -60,8 +60,8 @@ jobs:
             
             // Now clean up project items
             const projectQuery = `
-              query($owner: String!, $number: Int!) {
-                user(login: $owner) {
+              query($owner: String!, $repo: String!, $number: Int!) {
+                repository(owner: $owner, name: $repo) {
                   projectV2(number: $number) {
                     id
                     items(first: 100) {
@@ -76,10 +76,11 @@ jobs:
             
             const projectResult = await github.graphql(projectQuery, {
               owner: context.repo.owner,
+              repo: context.repo.repo,
               number: parseInt(process.env.PROJECT_NUMBER)
             });
             
-            const project = projectResult.user.projectV2;
+            const project = projectResult.repository.projectV2;
             const items = project.items.nodes;
             
             console.log(`Found ${items.length} project items to clean up`);
