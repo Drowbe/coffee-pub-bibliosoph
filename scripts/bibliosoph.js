@@ -856,81 +856,63 @@ Hooks.on('createChatMessage', (msg) => {
 
 async function publishChatCard() {
     // Build the card
-    var compiledHtml = "";
-    var strInjuryCategory = "";
-    var strChatType = BIBLIOSOPH.CHAT_TYPE_OTHER;
+    let compiledHtml = "";
+    let strChatType = BIBLIOSOPH.CHAT_TYPE_OTHER;
+    let strRollTableName = "";
+    let strTableName = "";
+    let strTableImage = "";
+    let strTitle = "";
+    let strContent = "";
+    let strAction = "";
+    let strImage = "";
+    let strCardStyle = "";
+    let strCardTitle = "";
+    let strImageBackground = "";
+    let strImageScale = "";
+    let strIconStyle = "";
+    let strActionLabel = "";
+    let strSound = "";
+    let strVolume = 1;
+    let strUserName = game.user.name;
+    let strUserAvatar = game.user.avatar;
+    let strPlayerType = game.user.role;
+    let strCharacterName = "";
+    let arrToPrivate = "";
+    let strRecipients = "";
+
+    // Get the character name if they have one
+    if (game.user.character) {
+        strCharacterName = game.user.character.name;
+    }
+
+    // Build the card based on the type
     if (BIBLIOSOPH.CARDTYPEENCOUNTER) {
-         // ENCOUNTER
-        var strRollTableName = "";
-        switch (BIBLIOSOPH.CARDTYPE) {
-            case "General":
-                strRollTableName = game.settings.get(MODULE_ID, 'encounterTableGeneral');
-                break;
-            case "Cave":
-                strRollTableName = game.settings.get(MODULE_ID, 'encounterTableCave');
-                break;
-            case "Desert":
-                strRollTableName = game.settings.get(MODULE_ID, 'encounterTableDesert');
-                break;
-            case "Dungeon":
-                strRollTableName = game.settings.get(MODULE_ID, 'encounterTableDungeon');
-                break;
-            case "Forest":
-                strRollTableName = game.settings.get(MODULE_ID, 'encounterTableForest');
-                break;
-            case "Mountain":
-                strRollTableName = game.settings.get(MODULE_ID, 'encounterTableMountain');
-                break;
-            case "Sky":
-                strRollTableName = game.settings.get(MODULE_ID, 'encounterTableSky');
-                break;
-            case "Snow":
-                strRollTableName = game.settings.get(MODULE_ID, 'encounterTableSnow');
-                break;
-            case "Urban":
-                strRollTableName = game.settings.get(MODULE_ID, 'encounterTableUrban');
-                break;
-            case "Water":
-                strRollTableName = game.settings.get(MODULE_ID, 'encounterTableWater');
-                break;
-            default:
-                strRollTableName = game.settings.get(MODULE_ID, 'encounterTableGeneral');
-        }
+        // ENCOUNTER
+        strRollTableName = game.settings.get(MODULE_ID, 'encounterTable');
         compiledHtml = await createChatCardEncounter(strRollTableName);
+    } else if (BIBLIOSOPH.CARDTYPEINJURY) {
+        // INJURY
+        strRollTableName = game.settings.get(MODULE_ID, 'injuryTable');
+        compiledHtml = await createChatCardInjury(strRollTableName);
     } else if (BIBLIOSOPH.CARDTYPEINVESTIGATION) {
-        // SEARCH
+        // INVESTIGATION
         strRollTableName = game.settings.get(MODULE_ID, 'investigationTable');
         compiledHtml = await createChatCardSearch(strRollTableName);
-    }
-    else if (BIBLIOSOPH.CARDTYPEGIFT) {
-        // GIFTS
+    } else if (BIBLIOSOPH.CARDTYPEGIFT) {
+        // GIFT
         strRollTableName = game.settings.get(MODULE_ID, 'giftTable');
-        compiledHtml = await createChatCardSearch(strRollTableName);
+        compiledHtml = await createChatCardGeneral(strRollTableName);
     } else if (BIBLIOSOPH.CARDTYPESHADYGOODS) {
         // SHADY GOODS
-        strRollTableName = game.settings.get(MODULE_ID, 'shadygoodsTable');
-        compiledHtml = await createChatCardSearch(strRollTableName);
+        strRollTableName = game.settings.get(MODULE_ID, 'shadyGoodsTable');
+        compiledHtml = await createChatCardGeneral(strRollTableName);
     } else if (BIBLIOSOPH.CARDTYPECRIT) {
-        // CRITICAL
-        //postConsoleAndNotification("Card Type: ", "Crit", false, true, false);
-        strRollTableName = game.settings.get(MODULE_ID, 'criticalTable');
+        // CRIT
+        strRollTableName = game.settings.get(MODULE_ID, 'critTable');
         compiledHtml = await createChatCardGeneral(strRollTableName);
     } else if (BIBLIOSOPH.CARDTYPEFUMBLE) {
         // FUMBLE
-        //postConsoleAndNotification("Card Type: ", "Fumble", false, true, false);
         strRollTableName = game.settings.get(MODULE_ID, 'fumbleTable');
-        compiledHtml = await createChatCardGeneral(strRollTableName);
-    } else if (BIBLIOSOPH.CARDTYPEINSPIRATION) {
-        // INSPIRATION
-        strRollTableName = game.settings.get(MODULE_ID, 'inspirationTable');
-        compiledHtml = await createChatCardGeneral(strRollTableName);
-    } else if (BIBLIOSOPH.CARDTYPEDOMT) {
-        // DECK OF MANY THINGS
-        strRollTableName = game.settings.get(MODULE_ID, 'domtTable');
-        compiledHtml = await createChatCardGeneral(strRollTableName);
-    } else if (BIBLIOSOPH.CARDTYPEBEVERAGE) {
-        // BEVERAGE
-        strRollTableName = game.settings.get(MODULE_ID, 'beverageTable');
         compiledHtml = await createChatCardGeneral(strRollTableName);
     } else if (BIBLIOSOPH.CARDTYPEBIO) {
         // BIO
@@ -952,75 +934,40 @@ async function publishChatCard() {
         // Call the chat function
         strChatType = BIBLIOSOPH.CHAT_TYPE_WHISPER;
         compiledHtml = await createChatCardGeneral();
-    } else if (BIBLIOSOPH.CARDTYPEINJURY) {
-
-        // V12 CONTEXT:
-        //Atropos — 03/04/2024 6:00 AM
-        // Existing chat messages are migrated so that if their style was previously the integer 4, it is now 0 so matching on the CONST.CHAT_MESSAGE_STYLES.WHISPER const will still match.
-        // Atropos — 03/04/2024 6:00 AM
-        // @cs96and the important reason for this change is so that users who are creating new chat messages using style: CONST.CHAT_MESSAGE_STYLES.WHISPER will obtain the correct behavior. There is no specific whisper type or style anymore - only whehter or not a message has whisper recipients.
-        
-        // INJURY CARD
-
-        // DEBUG
-        postConsoleAndNotification("IN BIBLIOSOPH.CARDTYPEINJURY", "", false, true, false);
-
-        var compendiumName = game.settings.get(MODULE_ID, 'injuryCompendium');
-        let content = await createChatCardInjurySelector(compendiumName);
-
-        let chatData = {
-            user: game.user._id,
-            content: content
-        };
-        
-        // Store the created chat message
-        let chatMessage = await ChatMessage.create(chatData);
-        
     }
-    else
-    {   
-        // NOTHING
-        postConsoleAndNotification("Card Type: ", "No Card Type Set", false, true, true);
-    }
-    //user, speaker, timestamp, flavor, whisper, blind, roll, sound, emote, flags, content
-    //these are the types: OTHER (Uncategorized), OOC (Out of Char), IC (In Character), EMOTE (e.g. "waves hand"), WHISPER (Private), ROLL (Dice Roll)
-    // ** If a WHisper send a whisper card... all other go as a normal card.
-    //postConsoleAndNotification("strChatType", strChatType, false, true, true);
-    if (strChatType == BIBLIOSOPH.CHAT_TYPE_WHISPER ) {
-        // IT IS A WHISPER
-        let users = BIBLIOSOPH.MESSAGES_LIST_TO_PRIVATE;
-        // Check if `users` is an array.
-        if (!Array.isArray(users)) {
-            postConsoleAndNotification("Expected 'users' to be an array, but it is not.", users, false, true, true);
-        }
-        let userids = users
-            .map(u => game.users.find(us => us && us.name === u))
-            .filter(u => u !== undefined && u !== null) 
-            .map(u => u._id);
-        if (userids.length > 0) {
-            ChatMessage.create({
-                user: game.user._id,
-                whisper: userids,
-                content: compiledHtml,
-                //type: strChatType,
-                speaker: ChatMessage.getSpeaker()
-            });
+
+    // Create the chat message data
+    const chatData = {
+        user: game.user.id,
+        content: compiledHtml,
+        speaker: ChatMessage.getSpeaker(),
+        style: 0 // Default style for normal messages
+    };
+
+    // Add whisper recipients if it's a whisper message
+    if (strChatType === BIBLIOSOPH.CHAT_TYPE_WHISPER) {
+        const users = BIBLIOSOPH.MESSAGES_LIST_TO_PRIVATE;
+        if (Array.isArray(users)) {
+            const userIds = users
+                .map(u => game.users.find(us => us && us.name === u))
+                .filter(u => u !== undefined && u !== null)
+                .map(u => u.id);
+            
+            if (userIds.length > 0) {
+                chatData.whisper = userIds;
+            } else {
+                postConsoleAndNotification("No User Selected: ", "No users to send a whisper to.", false, true, true);
+                return;
+            }
         } else {
-            // Post Debug
-            postConsoleAndNotification("No User Selected: ", "No users to send a whisper to.", false, true, true);
+            postConsoleAndNotification("Expected 'users' to be an array, but it is not.", users, false, true, true);
+            return;
         }
-    } else {
-        // If there is content, send it.
-        if (compiledHtml){
-            // IT IS A NORMAL CHAT MESSAGE
-            var chatData = {
-                user: game.user._id,
-                content: compiledHtml,
-                speaker: ChatMessage.getSpeaker()
-            };
-            // Send the msaage to the chat window.
-            ChatMessage.create(chatData, {});
-        }
+    }
+
+    // Create and send the chat message
+    if (compiledHtml) {
+        await ChatMessage.create(chatData);
     }
 
     // Reset everything for the next time
