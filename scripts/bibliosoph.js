@@ -33,9 +33,6 @@ registerBlacksmithUpdatedHook();
 registerSettings();
 
 
-
-
-
 // ================================================================== 
 // ===== REGISTER HOOKS =============================================
 // ================================================================== 
@@ -58,26 +55,6 @@ Hooks.on('renderChatLog', (app, html, data) => {
 // ************************************
 
 // Hook that fires after module loads
-
-Hooks.on("ready", () => {
-    // TURNING THIS OFF UNTIL I CAN FOCUS ON GETTIN IT GOING
-
-    // // ********  CREATE BLACKSMITH TOOLBAR **********
-    // // First  create a reference to the shared class
-    // postConsoleAndNotification("*** game.modules", game.modules, false, true, false);
-    // const MODULE_LIBRARY_ID = "coffee-pub-blacksmith";
-    // const toolbar = game.modules[MODULE_LIBRARY_ID].toolbar;
-    // //  Add a button to the shared toolbar
-    // postConsoleAndNotification("BUILDING Toolbar", MODULE_LIBRARY_ID, false, true, false);
-    // toolbar.addCustomButton("btnPublicMessage", "Public Message", "fas fa-message", () => { buildButtonEventPublicMessage(); });
-
-
-    // // Public Button
-    // function buildButtonEventPublicMessage() {
-    //     postConsoleAndNotification("Clicked Button", "Public Message", false, false, true);
-    // }
-
-});
 
 Hooks.on("ready", () => {
 
@@ -797,53 +774,6 @@ Hooks.on("renderChatMessage", (message, html) => {
 });
 
 
-
-
-
-// ************************************
-// ** HOOK Monitor Rolls in Chat
-// ************************************
-
-
-// Hooks.on("renderChatMessage", async (message, html, data) => {
-//     postConsoleAndNotification("renderChatMessage message: ", message, false, true, false);
-//     const rollType = message.getFlag('dnd5e', 'rollType');
-//     if (rollType === 'damage') {
-//         let rollData = JSON.parse(message.data.roll);
-//         if(rollData.total > 10){
-//             let actor = game.actors.get(message.data.speaker.actor);
-//             triggerInjury(actor);
-//         }
-//     }
-// });
-
-
-// Hooks.on("createChatMessage", (message) => {
-//     //postConsoleAndNotification("message.isRoll: ", message.isRoll, false, true, true);
-//     //postConsoleAndNotification("message.roll.total: ", message.roll.total, false, true, true);
-//     //postConsoleAndNotification("message.user.character?.active: ", message.user.character?.active, false, true, true);
-
-//     // if (message.isRoll && message.roll.total > 10 && message.user.character?.active) {
-//     //   const actor = game.actors.get(message.user.character.data._id);
-      
-//     //   if(actor.data.data.hp.value <= 3) {
-//     //     triggerInjury(actor);
-//     //   }
-//     // }
-
-//     // Parse the message to see if it's a roll, and if so, what the total was
-//     let rollInfo = messageContent.match(/Rolling\s*1d(\d+)\s*-\s*Result:\s*(\d+)/);
-
-//     if (rollInfo) {
-//         let rolledValue = parseInt(rollInfo[2], 10);
-        
-//         if (rolledValue > 10 && game.user.isGM) {
-//         // Call your function only if the roll is damage roll and is > 10
-//         triggerInjury(game.user.character);
-//         }
-//     }
-//   });
-
 // ================================================================== 
 // ===== FUNCTIONS ==================================================
 // ================================================================== 
@@ -861,7 +791,6 @@ Hooks.on("renderChatMessage", (message, html) => {
 // -----------------------------------------------------------------------------------------------------------------
 
 
-// Place the following in your Foundry VTT module JavaScript
 
 Hooks.on('updateToken', (scene, token, updateData) => {
     //postConsoleAndNotification("IN UPDATETOKEN token: ", token, false, true, false);
@@ -1056,36 +985,6 @@ async function publishChatCard() {
         // Store the created chat message
         let chatMessage = await ChatMessage.create(chatData);
         
-        // *** DEBUG - NEED TO FIX FOR v12
-        // THE BUTTON CLICK IS NOT BEING REGISTERED
-
-        // Define button behavior
-        // let buttons = document.querySelectorAll(".category-button");
-        // for(let button of buttons) {
-        //     button.onclick = async (e) => {
-                
-        //         //DEBUG
-        //         postConsoleAndNotification("INSIDE OF let button of buttons", "", false, true, false);
-
-        //         // Retrieve the category from button value
-        //         strInjuryCategory = e.target.value;
-        //         // create the card
-        //         compiledHtml = await createChatCardInjury(strInjuryCategory);
-        //         var chatData = {
-        //             user: game.user._id,
-        //             content: compiledHtml,
-        //             speaker: ChatMessage.getSpeaker()
-        //         };
-
-        //         // Delete the original chat message before creating new one
-        //         await chatMessage.delete();
-
-        //         // Send the msaage to the chat window.
-        //         ChatMessage.create(chatData, {});
-        //     };
-        // }
-
-
     }
     else
     {   
@@ -2130,7 +2029,8 @@ function buildPlayerList(recipients) {
                 var strCardStyle = "cardsdark";
                 if (targets.length > 0) {
                     for (let i = 0; i < targets.length; i++) {
-                        if (game.actors.get(targets[i].data.actorId).data.permission[player.id] !== undefined && game.actors.get(targets[i].data.actorId).data.permission[player.id] > 2) {
+                        const actor = game.actors.get(targets[i].data.actorId);
+                        if (actor && actor.system && actor.system.permission && actor.system.permission[player.id] !== undefined && actor.system.permission[player.id] > 2) {
                             checked = "checked";
                         }
                     }
@@ -2144,7 +2044,7 @@ function buildPlayerList(recipients) {
                     ownedCharacters = player.character.name;
                 } else {
                     characters.forEach(character => {
-                        if (character.data.permission[`${player.id}`] > 2) {
+                        if (character && character.system && character.system.permission && character.system.permission[`${player.id}`] > 2) {
                             var charName = character.name.replace(/'/g, '`');
                             var startSymbol = "; ";
                             if (ownedCharacters == "") {
@@ -2416,39 +2316,7 @@ function numToWord(intNumber) {
         postConsoleAndNotification(err);
     }
 }
-// function numToWord(intNumber) {
-//     if (intNumber < 0)
-//       return false;
-      
-//     var single_digit = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine']
-//     var double_digit = ['Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen']
-//     var below_hundred = ['Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety']
-    
-//     if (intNumber === 0) return 'Zero';
-    
-//     function translate(intNumber) {
-//         var word = "";
-//         if (intNumber < 10) {
-//             word = single_digit[intNumber] + ' ';
-//         } else if (intNumber < 20) {
-//             word = double_digit[intNumber - 10] + ' ';
-//         } else if (intNumber < 100) {
-//             var rem = translate(intNumber % 10);
-//             word = below_hundred[(intNumber - intNumber % 10) / 10 - 2] + ' ' + rem;
-//         } else if (intNumber < 1000) {
-//             word = single_digit[Math.trunc(intNumber / 100)] + ' Hundred ' + translate(intNumber % 100);
-//         } else if (intNumber < 1000000) {
-//             word = translate(parseInt(intNumber / 1000)).trim() + ' Thousand ' + translate(intNumber % 1000);
-//         } else if (intNumber < 1000000000) {
-//             word = translate(parseInt(intNumber / 1000000)).trim() + ' Million ' + translate(intNumber % 1000000);
-//         } else {
-//             word = translate(parseInt(intNumber / 1000000000)).trim() + ' Billion ' + translate(intNumber % 1000000000);
-//         }
-//         return word;
-//     }
-    
-//     return translate(intNumber).trim();
-// }
+
 
 // ************************************
 // ** UTILITY Remove HTML Tags
@@ -2828,86 +2696,6 @@ async function getCategoryButtons(categories){
     return arrInjuryButtons;
 }
 
-
-
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!! DO NOT DELETE THIS -- USING FOR PARTS  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// // ************************************
-// // ** UTILITY Get Compenium Page Content
-// // ************************************
-// // USEAGE: This looks in a specific journal for all pages with a specific name. This of this as a key:value array where it
-// // will return an array of values based on the unique key.
-// // NOTE: You have pages named "fruit." In the content for each page you have the name of a single fruit.. like "apple".
-// // On the next page you have "banana." On the next you have "orange."
-// // This will return an array with "apple,banana,orange".
-// async function getCompendiumJournalList(compendiumName, key, scrubhtml) {
-//     // set vars
-    
-//     // compendium > journal (key) > page (e.g. key) > content
-//     // compendium: mandatory
-//     // Key: optional
-//     // scrubhtml: optional
-//     // if no "key", returns all journals in the compendium
-//     // key: Optional
-    
-//     const strCompendiumName = compendiumName;
-//     const strKey = key;
-//     const blnScrubHTML = scrubhtml;
-//     if (!strCompendiumName) {
-//         postConsoleAndNotification("Compendium not supplied." , strCompendiumName, false, false, false); 
-//         return;
-//     }
-//     if (!strKey) {
-//         postConsoleAndNotification("Page Name not supplied." , strKey, false, false, false); 
-//         return;
-//     }
-//     if (!blnScrubHTML) {
-//         blnScrubHTML = true;
-//     }
-//     // grab data
-//     const pack = game.packs.get(strCompendiumName);
-//     if (!pack) {
-//         postConsoleAndNotification("Compendium not found." , strCompendiumName, false, false, false); 
-//         return;
-//     }
-//     // Get all entries from the compendium 
-//     const entries = await pack.getDocuments();
-//     // Collect all available categories and add them to the buttons
-//     let arrValues = [];
-//     for (let entry of entries) {
-//         const journalPagesAll = entry._source.pages;
-//         const journalPagesKey = journalPagesAll.find(page => page.name === strKey);
-//         //postConsoleAndNotification("journalPagesAll" , journalPagesAll, false, true, false);
-//         //postConsoleAndNotification("journalPagesKey" , journalPagesKey, false, true, false);
-
-//         let strValue = removeHTMLTags(journalPagesKey ? journalPagesKey.text.content : null);
-//         if (strValue && !arrValues.includes(strValue)) {
-//             arrValues.push(strValue);
-//         }
-//     }
-
-//     // Sort arrpages in alphabetical order
-//     arrValues.sort();
-
-//     postConsoleAndNotification("getCompendiumPageContent" , arrValues, false, false, false);
-
-//     // If no arrpages, return null or handle however you prefer
-//     if (arrValues.length === 0) {
-//         return null;
-//     }
-//     // Return the Array
-
-//     var arrTEMP = [];
-//     arrTEMP = arrValues
-//     postConsoleAndNotification("createChatCardInjurySelector arrTEMP" , arrTEMP, false, true, false); 
-
-
-//     return arrValues;
-// }
-
-
-
-
-
 // ************************************
 // ** UTILITY Get Compenium Pages [USING and WORKS]
 // ************************************
@@ -3059,55 +2847,6 @@ function getHTMLMetadata(html){
     }
 }
 
-
-
-
-// THIS VERION WORKED WITH THE OLD INJURY JOURNALS
-// async function getRandomJournalCollection(compendiumName,category) {
-//     const pack = game.packs.get(compendiumName);
-//     const strMatchingCategory = category.toLowerCase();
-//     if (!pack) {
-//         console.error(`Compendium ${compendiumName} not found`);
-//         return;
-//     }
-//     // Get all entries from the compendium 
-//     const entries = await pack.getDocuments();
-//     // Collect all available categories
-//     let categories = [];
-//     for (let entry of entries) {
-//         const content = entry._source.pages;
-//         const categoryPage = content.find(page => page.name === 'category');
-//         let category = removeHTMLTags(categoryPage ? categoryPage.text.content : null);
-//         if (category && !categories.includes(category)) {
-//             categories.push(category);
-//         }
-//     }
-//     // If no categories, return null or handle however you prefer
-//     if (categories.length === 0) {
-//         return null;
-//     }
-//     // Randomly select a category
-//     //const randomCategory = categories[Math.floor(Math.random() * categories.length)];
-
-//     // Filter entries by the randomly selected `category`
-//     const filteredEntries = entries.filter(entry => {
-//         let content = entry._source.pages;
-//         let categoryPage = content.find(page => page.name === 'category');
-//         //return (removeHTMLTags(categoryPage ? categoryPage.text.content : null)) === randomCategory;
-//         return (removeHTMLTags(categoryPage ? categoryPage.text.content : null)) === strMatchingCategory;
-//     });
-
-//     const randomIndex = Math.floor(Math.random() * filteredEntries.length);
-//     const entity = filteredEntries[randomIndex];
-//     return entity ? entity.name : null;
-// }
-
-
-
-
-
-
-
 // ************************************
 // ** UTILITY Get Injury Journal Data
 // ************************************
@@ -3177,88 +2916,6 @@ async function getInjuryDataFromJournalPages(compendiumName, journalName) {
         postConsoleAndNotification("No content found for entry ", journalName + " in compendium " + compendiumName, false, true, false);
     }
 }
-
-// // ************************************
-// // ** UTILITY Convert Seconds
-// // ************************************
-
-// function convertSecondsToString(numSeconds) {
-  
-//     if (numSeconds === "0" || isNaN(numSeconds)) {
-//       return "Permanent";
-//     }
-  
-//     // Calculate the total number of rounds
-//     let rounds = Math.floor(numSeconds / 6);
-  
-//     let years, months, weeks, days, hours, minutes, seconds;
-  
-//     minutes = Math.floor(numSeconds / 60);
-//     numSeconds %= 60;
-//     hours = Math.floor(minutes / 60);
-//     minutes %= 60;
-//     days = Math.floor(hours / 24);
-//     hours %= 24;
-//     weeks = Math.floor(days / 7);
-//     days %= 7;
-//     months = Math.floor(weeks / 4.34524);
-//     weeks %= 4.34524;
-//     years = Math.floor(months / 12);
-//     months %= 12;
-  
-//     let timeString = '';
-  
-//     if (years > 0) timeString += `${years} YR `;
-//     if (months > 0) timeString += `${months} MO `;
-//     if (weeks > 0) timeString += `${Math.floor(weeks)} WK `;
-//     if (days > 0) timeString += `${days} DAY `;
-//     if (hours > 0) timeString += `${hours} HR `;
-  
-//     if (minutes > 0) timeString += `${minutes} MIN `;
-//     if (numSeconds > 0) timeString += `${numSeconds} SEC `;
-  
-//     // Add rounds to the output string
-//     timeString += `(${rounds} ROUNDS)`;
-  
-//     return timeString;
-//   }
-
-
-
-// // ************************************
-// // ** UTILITY Convert Array to String
-// // ************************************
-
-// function objectToString(obj) {
-//     let str = '';
-//     for (let key in obj) {
-//         if (str !== '') {
-//             str += '|'; 
-//         }
-//         str += key + '=' + obj[key];
-//     }
-//     return str;
-// }
-
-// ************************************
-// ** UTILITY Convert String to Array
-// ************************************
-
-// function stringToObject(str) {
-//     //postConsoleAndNotification("Converting string to object: ", str, false, true, false);
-//     let obj = {};
-//     if (str) {
-//         let pairs = str.split('|');
-//         for (let pair of pairs) {
-//             let [key, value] = pair.split('=');
-//             obj[key] = value;
-//         }
-//     } else {
-//         postConsoleAndNotification("Can't convert an empty string: ", str, false, false, false);
-//     }
-//     return obj;
-// }
-
 
 
 // ************************************
@@ -3371,78 +3028,6 @@ async function applyActiveEffect(strLabel, strIcon, intDamage, intDuration, strS
     }
 
 }
-
-// ************************************
-// ** UTILITY MACRO CHAT... PARKING HERE
-// ************************************
-
-// //This example outputs several roll results in one ChatMessage.
-// //just define your rolls, and define your flavor that belongs with it, and let the good times roll :)
-// //functions in v10+
-
-// async function makeChatFromRolls(data) {
-//     const rollArray = data.map(d => ({roll: new Roll(d.formula).evaluate({async: false}), flavor: d.flavor}));
-//     const rollArrayResults = rollArray.map(d => d.roll.total);
-//     const content = rollArray.reduce((acc, roll) => {
-//         let rollFormula = roll.roll.formula;
-//         let section = roll.roll.dice.reduce((acc, dice) => {
-//             let rollDiceParts = `${dice.number}d${dice.faces}`;
-//             let diceTotal = dice.results.reduce((acc, die) => {
-//                 if(!die.discarded) acc += die.result;
-//                 return acc;
-//             }, 0);
-//             let diceList = dice.results.reduce((total, e) => {
-//                 let discarded = e.discarded ? "discarded" : "";
-//                 let exploded = e.exploded ? "exploded" : "";
-//                 let critFail = dice.faces === e.result ? "max" : e.result === 1 ? "min" : "";
-//                 total +=`<li class="roll die ${discarded} ${exploded} d${dice.faces} ${critFail}">${e.result}</li>`;
-//                 return total;
-//             }, ``);
-//             acc += `<section class="tooltip-part">
-//                         <div class="dice">
-//                             <header class="part-header flexrow">
-//                                 <span class="part-formula">${rollDiceParts}</span>
-//                                 <span class="part-total">${diceTotal}</span>
-//                             </header>
-//                             <ol class="dice-rolls">
-//                                 ${diceList}
-//                             </ol>
-//                         </div>
-//                     </section>`    
-        
-//             return acc;
-//         }, ``);
-//         acc  += `
-//             <div>${roll.flavor}</div>
-//             <div class="dice-roll">
-//                 <div class="dice-result">
-//                     <div class="dice-formula">${rollFormula}</div>
-//                     <div class="dice-tooltip" style="display:none;">
-//                         ${section}
-//                     </div>
-//                     <h4 class="dice-total">${roll.roll.total}</h4>
-//                 </div>
-//             </div>
-//         `;
-//         return acc;
-//     }, '');
-//     for(let roll of rollArray) {
-//         game.dice3d?.showForRoll(roll.roll);
-//     }
-//     await ChatMessage.create({content});
-//     return rollArrayResults;
-// }
-// //lets try it with a stat array for a 5e character.
-// const results = await makeChatFromRolls([
-//     {formula: "4d6dl1", flavor: "Roll 1:"}, 
-//     {formula: "4d6dl1", flavor: "Roll 2:"}, 
-//     {formula: "4d6dl1", flavor: "Roll 3:"},
-//     {formula: "4d6dl1", flavor: "Roll 4:"},
-//     {formula: "4d6dl1", flavor: "Roll 5:"}, 
-//     {formula: "4d6dl1", flavor: "Roll 6:"}
-// ]);
-
-
 
 // ************************************
 // ** UTILITY Reset Bibliosoph Vars
