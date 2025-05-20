@@ -793,24 +793,15 @@ Hooks.on("renderChatMessage", (message, html) => {
 
 
 Hooks.on('updateToken', (scene, token, updateData) => {
-    //postConsoleAndNotification("IN UPDATETOKEN token: ", token, false, true, false);
-    //postConsoleAndNotification("IN UPDATETOKEN updateData: ", updateData, false, true, false);
     if (updateData.actorData) {
-      const newHP = getProperty(updateData, 'actorData.data.attributes.hp.value');
-      //postConsoleAndNotification("TOKEN UPDATED getProperty: ", newHP, false, true, false);
+      const newHP = getProperty(updateData, 'actorData.system.attributes.hp.value');
       if (newHP !== undefined) {
         const actor = canvas.tokens.get(token._id).actor;
-        const oldHP = actor.data.data.attributes.hp.value;
-        //postConsoleAndNotification("TOKEN UPDATED actor: ", actor, false, true, false);
-        //postConsoleAndNotification("TOKEN UPDATED oldHP: ", oldHP, false, true, false);
+        const oldHP = actor.system.attributes.hp.value;
         if (oldHP - newHP > 5) {
           console.log(`Actor ${actor.name} was hit for more than 5 HP.`);
-          //postConsoleAndNotification("Actor ${actor.name} was hit for more than 5 HP. newHP: ", oldHP, false, true, false);
         }
       }
-    } else {
-        //postConsoleAndNotification("TOKEN NOT UPDATED updateData.actorData: ",  updateData.actorData, false, true, false);
-
     }
 });
 
@@ -2936,19 +2927,16 @@ async function getInjuryDataFromJournalPages(compendiumName, journalName) {
     * @param {string} [strStatusEffect] - An optional additional status effect.
 */
 async function applyActiveEffect(strLabel, strIcon, intDamage, intDuration, strStatusEffect) {
-    
     postConsoleAndNotification("Applying active effects: ",strLabel, false, false, false);
     
     // Get the selected token
     const token = canvas.tokens.controlled[0];
     // If a token is selected
     if (token) {
-        
         // --- Apply Active Effects ---
-
         // Prepare the array of official status effects
         const officialStatusEffects = ["blinded", "charmed", "deafened", "frightened", "grappled", "incapacitated", "invisible", "paralyzed", "petrified", "poisoned", "prone", "restrained", "stunned", "unconscious", "exhaustion"];
-        // If a token is selected
+        
         if (token) {
             let existingEffect = null;
             // Check if the token already has the effect
@@ -2960,52 +2948,38 @@ async function applyActiveEffect(strLabel, strIcon, intDamage, intDuration, strS
             }
             if (!existingEffect) {
                 postConsoleAndNotification("Applying active effects on " + token.actor.name + ".", strLabel, false, false, false);
-            // Create the effect data
-            const effectData = {
-                name: strLabel,
-                icon: strIcon,
-                duration: {
-                    seconds: intDuration,
-                },
-                changes: [
-                    {
-                        key: 'system.attributes.hp.value',
-                        mode: 2,
-                        value: `-${intDamage}`,
-                    }
-                ],
-            };
-            // Create a clean copy of the effect data
-            const cleanEffectData = foundry.utils.deepClone(effectData);
-
-            // If there's a 'data' property at the top level, rename it to 'system'
-            if (cleanEffectData.data) {
-                cleanEffectData.system = cleanEffectData.data;
-                delete cleanEffectData.data;
-            }
-            // Update any 'data.' references in the 'changes' array
-            if (cleanEffectData.changes) {
-                cleanEffectData.changes = cleanEffectData.changes.map(change => ({
-                    ...change,
-                    key: change.key.replace('data.', 'system.')
-                }));
-            }
-            // Now create the embedded document
-            await token.actor.createEmbeddedDocuments("ActiveEffect", [cleanEffectData]);
-
-
+                // Create the effect data
+                const effectData = {
+                    name: strLabel,
+                    icon: strIcon,
+                    duration: {
+                        seconds: intDuration,
+                    },
+                    changes: [
+                        {
+                            key: 'system.attributes.hp.value',
+                            mode: 2,
+                            value: `-${intDamage}`,
+                        }
+                    ],
+                };
+                
+                // Create a clean copy of the effect data
+                const cleanEffectData = foundry.utils.deepClone(effectData);
+                
+                // Now create the embedded document
+                await token.actor.createEmbeddedDocuments("ActiveEffect", [cleanEffectData]);
+                
                 postConsoleAndNotification("Applied " + strLabel + " ", token.actor.name, false, false, true);
             } else {
-                postConsoleAndNotification("Active effect already present on " + token.actor.name + ", skippings. ", strLabel, false, false, true);
+                postConsoleAndNotification("Active effect already present on " + token.actor.name + ", skipping. ", strLabel, false, false, true);
             }
         }
         // --- Apply Status Effects, if needed ---
         if(game.modules.get("dfreds-convenient-effects")?.active) { 
-            // Normalize both statusEffect and officialStatusEffects to lower case for comparison
             if (strStatusEffect && officialStatusEffects.map(eff => eff.toLowerCase()).includes(strStatusEffect.toLowerCase())) {
                 let statusEffectName = strStatusEffect.charAt(0).toUpperCase() + strStatusEffect.slice(1);
                 try {
-                    // Check if the token already has the status effect
                     let hasEffect = token.actor.effects.find(e => e.data.label === statusEffectName);
                     if (!hasEffect){
                         game.dfreds.effectInterface.toggleEffect(statusEffectName, token.actor);
@@ -3021,12 +2995,7 @@ async function applyActiveEffect(strLabel, strIcon, intDamage, intDuration, strS
         } else {
             console.log("DFreds Convenient Effects module is not installed or not active.");
         }
-
-    } else {
-        console.log('Please select a token.');
-        postConsoleAndNotification("Please select a token on which to apply the active effects. ",strLabel, false, false, true);
     }
-
 }
 
 // ************************************
