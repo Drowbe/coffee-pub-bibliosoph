@@ -12,8 +12,7 @@
 // ===== VARIABLE EXPORTS ===========================================
 // ================================================================== 
 
-// CORE CONSTANTS
-export const MODULE_AUTHOR = 'COFFEE PUB'
+
 // GLOBAL VARS
 export const COFFEEPUB = {
     // SHARED MODULE VARIABLES
@@ -37,7 +36,7 @@ export const COFFEEPUB = {
 // ================================================================== 
 
 // Grab the module data
-import { MODULE_TITLE, MODULE_ID } from './const.js';
+import { MODULE } from './const.js';
 
 // ================================================================== 
 // ===== GLOBAL FUNCTIONS ===========================================
@@ -391,7 +390,7 @@ export async function playSound(sound = 'sound', volume = 0.7) {
 // these are not exported.
 let history = [];
 function pushHistory(...args) {
-	const maxHistoryLength = game.settings.get(MODULE_ID, 'openAIContextLength');
+	const maxHistoryLength = game.settings.get(MODULE.ID, 'openAIContextLength');
 
 	history.push(...args);
 	if (history.length > maxHistoryLength) {
@@ -531,7 +530,7 @@ export function postConsoleAndNotification(message, result, blnDivider, blnDebug
     var strFancyCaptionBorder = "border: 1px dotted #A4C76A";
     var strFancyCaptionBackground = "background: #2D3F11";
     var strFancyCaptionFontColor = "color: #A4C76A";
-    var strModuleTitle = MODULE_TITLE;
+    var strModuleTitle = MODULE.NAME;
 
 // === COMMON/ADAPTED STYLES ===
 
@@ -730,7 +729,7 @@ export function postConsoleAndNotification(message, result, blnDivider, blnDebug
         //They are not passing a variable or array
     } 
     // Build the Debug
-    strNotificationMessage = MODULE_AUTHOR + " " + MODULE_CONSOLE_COMMON_PIPE + " " + MODULE_TITLE + ": " + strMessage + " | " + strResult;
+    strNotificationMessage = MODULE.AUTHOR + " " + MODULE_CONSOLE_COMMON_PIPE + " " + MODULE.NAME + ": " + strMessage + " | " + strResult;
     if (blnDivider) {
         console.info(MODULE_CONSOLE_COMMON_DIVIDER, MODULE_CONSOLE_COMMON_STYLE_DIVIDER);
     }
@@ -759,23 +758,23 @@ export function postConsoleAndNotification(message, result, blnDivider, blnDebug
                 if (COFFEEPUB.strConsoleDebugStyle == "fancy") {
                     // FANCY STYLE
                     // BUILD Content
-                    strConsoleMessage = "%c" + MODULE_CONSOLE_COMMON_ICON_BUG + " " + MODULE_AUTHOR + " " + MODULE_CONSOLE_COMMON_PIPE  + " " + MODULE_TITLE + " DEBUG" + strMessageFlag + strMessage + strResultFlag;
+                    strConsoleMessage = "%c" + MODULE_CONSOLE_COMMON_ICON_BUG + " " + MODULE.AUTHOR + " " + MODULE_CONSOLE_COMMON_PIPE  + " " + MODULE.NAME + " DEBUG" + strMessageFlag + strMessage + strResultFlag;
                     // PUBLISH with Styles
                     console.info(strConsoleMessage, MODULE_CONSOLE_DEBUG_STYLE_FANCY_CAPTION, MODULE_CONSOLE_DEBUG_STYLE_FANCY_LABEL_MESSAGE, MODULE_CONSOLE_DEBUG_STYLE_FANCY_TEXT_MESSAGE, MODULE_CONSOLE_DEBUG_STYLE_FANCY_LABEL_RESULT,MODULE_CONSOLE_DEBUG_STYLE_FANCY_TEXT_RESULT, strResult);
                 } else if (COFFEEPUB.strConsoleDebugStyle == "simple") {
                     // SIMPLE STYLE
                     // BUILD Content
-                    strConsoleMessage = "%c" + MODULE_CONSOLE_COMMON_ICON_BUG + " " + MODULE_AUTHOR + "%c" + MODULE_CONSOLE_COMMON_PIPE + "%c" + MODULE_TITLE  + " DEBUG" + strMessageFlag + strMessage + strResultFlag;
+                    strConsoleMessage = "%c" + MODULE_CONSOLE_COMMON_ICON_BUG + " " + MODULE.AUTHOR + "%c" + MODULE_CONSOLE_COMMON_PIPE + "%c" + MODULE.NAME  + " DEBUG" + strMessageFlag + strMessage + strResultFlag;
                     // PUBLISH with Styles
                     console.info(strConsoleMessage, MODULE_CONSOLE_DEBUG_STYLE_SIMPLE_AUTHOR, MODULE_CONSOLE_COMMON_STYLE_PIPE, MODULE_CONSOLE_DEBUG_STYLE_SIMPLE_MODULE, MODULE_CONSOLE_DEBUG_STYLE_SIMPLE_LABEL_MESSAGE, MODULE_CONSOLE_DEBUG_STYLE_SIMPLE_TEXT_MESSAGE, MODULE_CONSOLE_DEBUG_STYLE_SIMPLE_LABEL_RESULT,MODULE_CONSOLE_DEBUG_STYLE_SIMPLE_TEXT_RESULT, strResult );
                 } else {
                     // PLAIN STYLE
-                    strConsoleMessage =  "%c" + MODULE_AUTHOR + " " + MODULE_CONSOLE_COMMON_PIPE + " %c" + MODULE_TITLE + " DEBUG: %c" + strMessage;
+                    strConsoleMessage =  "%c" + MODULE.AUTHOR + " " + MODULE_CONSOLE_COMMON_PIPE + " %c" + MODULE.NAME + " DEBUG: %c" + strMessage;
                     console.info(strConsoleMessage, MODULE_CONSOLE_DEBUG_STYLE_PLAIN_AUTHOR, MODULE_CONSOLE_DEBUG_STYLE_PLAIN_MODULE, MODULE_CONSOLE_DEBUG_STYLE_PLAIN_TEXT_MESSAGE, strResult);
                 }
             } else {
                 // UNSTYLED NOT-FANCY CONSOLE
-                strConsoleMessage = MODULE_AUTHOR + " " + MODULE_CONSOLE_COMMON_PIPE + " " + MODULE_TITLE + " DEBUG: " + strMessage;
+                strConsoleMessage = MODULE.AUTHOR + " " + MODULE_CONSOLE_COMMON_PIPE + " " + MODULE.NAME + " DEBUG: " + strMessage;
                 console.info(strConsoleMessage, strResult);
             }
             if (blnNotification){
@@ -785,10 +784,10 @@ export function postConsoleAndNotification(message, result, blnDivider, blnDebug
     } else {
         // Normal Mode (NOT DEBUG)
         if (COFFEEPUB.blnFancyConsole) {
-            strConsoleMessage = "%c" + MODULE_AUTHOR + "%c" + MODULE_CONSOLE_COMMON_PIPE + "%c" + MODULE_TITLE + "%c" + strMessage;
+            strConsoleMessage = "%c" + MODULE.AUTHOR + "%c" + MODULE_CONSOLE_COMMON_PIPE + "%c" + MODULE.NAME + "%c" + strMessage;
             console.info(strConsoleMessage, MODULE_CONSOLE_NORMAL_STYLE_AUTHOR, MODULE_CONSOLE_COMMON_STYLE_PIPE, MODULE_CONSOLE_NORMAL_STYLE_MODULE, MODULE_CONSOLE_NORMAL_STYLE_TEXT, strResult);
         } else {
-            strConsoleMessage = MODULE_AUTHOR + " " + MODULE_CONSOLE_COMMON_PIPE + " " + MODULE_TITLE + ": " + strMessage;
+            strConsoleMessage = MODULE.AUTHOR + " " + MODULE_CONSOLE_COMMON_PIPE + " " + MODULE.NAME + ": " + strMessage;
             console.info(strConsoleMessage, strResult);
         }
         if (blnNotification){

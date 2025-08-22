@@ -3,13 +3,13 @@
 // ================================================================== 
 
 // Grab the module data
-import { MODULE_TITLE, MODULE_ID, BIBLIOSOPH  } from './const.js';
+import { MODULE, BIBLIOSOPH  } from './const.js';
 
 
 // *** BEGIN: GLOBAL IMPORTS ***
 // *** These should be the same across all modules
 // -- Import the shared GLOBAL variables --
-import { COFFEEPUB, MODULE_AUTHOR } from './global.js';
+import { COFFEEPUB } from './global.js';
 // -- Load the shared GLOBAL functions --
 import { registerBlacksmithUpdatedHook, resetModuleSettings, getOpenAIReplyAsHtml} from './global.js';
 // -- Global utilities --
@@ -67,63 +67,63 @@ Hooks.on("ready", () => {
         postConsoleAndNotification("Coffee Pub Blacksmith does not seem to be enabled. It is required for Coffee Pub Bibliosoph to function. Please enable it in your options.", "", false, false, true); 
     }
     // Do these things after the client has loaded
-    // BIBLIOSOPH.DEBUGON = game.settings.get(MODULE_ID, 'globalDebugMode');
+    // BIBLIOSOPH.DEBUGON = game.settings.get(MODULE.ID, 'globalDebugMode');
     // Get the variables ready
     resetBibliosophVars();
     // SET VARIABLES
-    var strGeneralMacro = game.settings.get(MODULE_ID, 'encounterMacroGeneral');
-    var strCaveMacro = game.settings.get(MODULE_ID, 'encounterMacroCave');
-    var strDesertMacro = game.settings.get(MODULE_ID, 'encounterMacroDesert');
-    var strDungeonMacro = game.settings.get(MODULE_ID, 'encounterMacroDungeon');
-    var strForestMacro = game.settings.get(MODULE_ID, 'encounterMacroForest');
-    var strMountainMacro = game.settings.get(MODULE_ID, 'encounterMacroMountain');
-    var strSkyMacro = game.settings.get(MODULE_ID, 'encounterMacroSky');
-    var strSnowMacro = game.settings.get(MODULE_ID, 'encounterMacroSnow');
-    var strUrbanMacro = game.settings.get(MODULE_ID, 'encounterMacroUrban');
-    var strWaterMacro = game.settings.get(MODULE_ID, 'encounterMacroWater');
-    var strInvestigationMacro = game.settings.get(MODULE_ID, 'investigationMacro');
-    var strGiftMacro = game.settings.get(MODULE_ID, 'giftMacro');
-    var strShadygoodsMacro = game.settings.get(MODULE_ID, 'shadygoodsMacro');
-    var strCriticalMacro = game.settings.get(MODULE_ID, 'criticalMacro');
-    var strFumbleMacro = game.settings.get(MODULE_ID, 'fumbleMacro');
-    var strInspirationMacro = game.settings.get(MODULE_ID, 'inspirationMacro');
-    var strDOMTMacro = game.settings.get(MODULE_ID, 'domtMacro');
-    var strBeverageMacro = game.settings.get(MODULE_ID, 'beverageMacro');
-    var strBioMacro = game.settings.get(MODULE_ID, 'bioMacro');
-    var strInsultMacro = game.settings.get(MODULE_ID, 'insultsMacro');
-    var strPraiseMacro = game.settings.get(MODULE_ID, 'praiseMacro');
-    var strPartyMacro = game.settings.get(MODULE_ID, 'partyMessageMacro');
+    var strGeneralMacro = game.settings.get(MODULE.ID, 'encounterMacroGeneral');
+    var strCaveMacro = game.settings.get(MODULE.ID, 'encounterMacroCave');
+    var strDesertMacro = game.settings.get(MODULE.ID, 'encounterMacroDesert');
+    var strDungeonMacro = game.settings.get(MODULE.ID, 'encounterMacroDungeon');
+    var strForestMacro = game.settings.get(MODULE.ID, 'encounterMacroForest');
+    var strMountainMacro = game.settings.get(MODULE.ID, 'encounterMacroMountain');
+    var strSkyMacro = game.settings.get(MODULE.ID, 'encounterMacroSky');
+    var strSnowMacro = game.settings.get(MODULE.ID, 'encounterMacroSnow');
+    var strUrbanMacro = game.settings.get(MODULE.ID, 'encounterMacroUrban');
+    var strWaterMacro = game.settings.get(MODULE.ID, 'encounterMacroWater');
+    var strInvestigationMacro = game.settings.get(MODULE.ID, 'investigationMacro');
+    var strGiftMacro = game.settings.get(MODULE.ID, 'giftMacro');
+    var strShadygoodsMacro = game.settings.get(MODULE.ID, 'shadygoodsMacro');
+    var strCriticalMacro = game.settings.get(MODULE.ID, 'criticalMacro');
+    var strFumbleMacro = game.settings.get(MODULE.ID, 'fumbleMacro');
+    var strInspirationMacro = game.settings.get(MODULE.ID, 'inspirationMacro');
+    var strDOMTMacro = game.settings.get(MODULE.ID, 'domtMacro');
+    var strBeverageMacro = game.settings.get(MODULE.ID, 'beverageMacro');
+    var strBioMacro = game.settings.get(MODULE.ID, 'bioMacro');
+    var strInsultMacro = game.settings.get(MODULE.ID, 'insultsMacro');
+    var strPraiseMacro = game.settings.get(MODULE.ID, 'praiseMacro');
+    var strPartyMacro = game.settings.get(MODULE.ID, 'partyMessageMacro');
     var strPartyMacroID = getMacroIdByName(strPartyMacro);
-    var strPrivateMacro = game.settings.get(MODULE_ID, 'privateMessageMacro');
+    var strPrivateMacro = game.settings.get(MODULE.ID, 'privateMessageMacro');
     var strPrivateMacroID = getMacroIdByName(strPrivateMacro);
 
-    var strInjuriesMacroGlobal = game.settings.get(MODULE_ID, 'injuriesMacroGlobal');
+    var strInjuriesMacroGlobal = game.settings.get(MODULE.ID, 'injuriesMacroGlobal');
     var strInjuriesMacroGlobalID = getMacroIdByName(strInjuriesMacroGlobal);
 
-    var blnGeneralEnabled = game.settings.get(MODULE_ID, 'encounterEnabledGeneral');
-    var blnCaveEnabled = game.settings.get(MODULE_ID, 'encounterEnabledCave');
-    var blnDesertEnabled = game.settings.get(MODULE_ID, 'encounterEnabledDesert');
-    var blnDungeonEnabled = game.settings.get(MODULE_ID, 'encounterEnabledDungeon');
-    var blnForestEnabled = game.settings.get(MODULE_ID, 'encounterEnabledForest');
-    var blnMountainEnabled = game.settings.get(MODULE_ID, 'encounterEnabledMountain');
-    var blnSkyEnabled = game.settings.get(MODULE_ID, 'encounterEnabledSky');
-    var blnSnowEnabled = game.settings.get(MODULE_ID, 'encounterEnabledSnow');
-    var blnUrbanEnabled = game.settings.get(MODULE_ID, 'encounterEnabledUrban');
-    var blnWaterEnabled = game.settings.get(MODULE_ID, 'encounterEnabledWater');
-    var blnPartyMessageEnabled = game.settings.get(MODULE_ID, 'partyMessageEnabled');
-    var blnPrivateMessageEnabled = game.settings.get(MODULE_ID, 'privateMessageEnabled');
-    var blnBeverageEnabled = game.settings.get(MODULE_ID, 'beverageEnabled');
-    var blnBioEnabled = game.settings.get(MODULE_ID, 'bioEnabled');
-    var blnInsultsEnabled = game.settings.get(MODULE_ID, 'insultsEnabled');
-    var blnPraiseEnabled = game.settings.get(MODULE_ID, 'praiseEnabled');
-    var blnInvestigationEnabled = game.settings.get(MODULE_ID, 'investigationEnabled');
-    var blnGiftEnabled = game.settings.get(MODULE_ID, 'giftEnabled');
-    var blnShadygoodsEnabled = game.settings.get(MODULE_ID, 'shadygoodsEnabled');
-    var blnCriticalEnabled = game.settings.get(MODULE_ID, 'criticalEnabled');
-    var blnFumbleEnabled = game.settings.get(MODULE_ID, 'fumbleEnabled');
-    var blnInspirationEnabled = game.settings.get(MODULE_ID, 'inspirationEnabled');
-    var blndomtEnabled = game.settings.get(MODULE_ID, 'domtEnabled');
-    var blninjuriesEnabledGlobal = game.settings.get(MODULE_ID, 'injuriesEnabledGlobal');
+    var blnGeneralEnabled = game.settings.get(MODULE.ID, 'encounterEnabledGeneral');
+    var blnCaveEnabled = game.settings.get(MODULE.ID, 'encounterEnabledCave');
+    var blnDesertEnabled = game.settings.get(MODULE.ID, 'encounterEnabledDesert');
+    var blnDungeonEnabled = game.settings.get(MODULE.ID, 'encounterEnabledDungeon');
+    var blnForestEnabled = game.settings.get(MODULE.ID, 'encounterEnabledForest');
+    var blnMountainEnabled = game.settings.get(MODULE.ID, 'encounterEnabledMountain');
+    var blnSkyEnabled = game.settings.get(MODULE.ID, 'encounterEnabledSky');
+    var blnSnowEnabled = game.settings.get(MODULE.ID, 'encounterEnabledSnow');
+    var blnUrbanEnabled = game.settings.get(MODULE.ID, 'encounterEnabledUrban');
+    var blnWaterEnabled = game.settings.get(MODULE.ID, 'encounterEnabledWater');
+    var blnPartyMessageEnabled = game.settings.get(MODULE.ID, 'partyMessageEnabled');
+    var blnPrivateMessageEnabled = game.settings.get(MODULE.ID, 'privateMessageEnabled');
+    var blnBeverageEnabled = game.settings.get(MODULE.ID, 'beverageEnabled');
+    var blnBioEnabled = game.settings.get(MODULE.ID, 'bioEnabled');
+    var blnInsultsEnabled = game.settings.get(MODULE.ID, 'insultsEnabled');
+    var blnPraiseEnabled = game.settings.get(MODULE.ID, 'praiseEnabled');
+    var blnInvestigationEnabled = game.settings.get(MODULE.ID, 'investigationEnabled');
+    var blnGiftEnabled = game.settings.get(MODULE.ID, 'giftEnabled');
+    var blnShadygoodsEnabled = game.settings.get(MODULE.ID, 'shadygoodsEnabled');
+    var blnCriticalEnabled = game.settings.get(MODULE.ID, 'criticalEnabled');
+    var blnFumbleEnabled = game.settings.get(MODULE.ID, 'fumbleEnabled');
+    var blnInspirationEnabled = game.settings.get(MODULE.ID, 'inspirationEnabled');
+    var blndomtEnabled = game.settings.get(MODULE.ID, 'domtEnabled');
+    var blninjuriesEnabledGlobal = game.settings.get(MODULE.ID, 'injuriesEnabledGlobal');
     
 
 
@@ -864,85 +864,85 @@ async function publishChatCard() {
         var strRollTableName = "";
         switch (BIBLIOSOPH.CARDTYPE) {
             case "General":
-                strRollTableName = game.settings.get(MODULE_ID, 'encounterTableGeneral');
+                strRollTableName = game.settings.get(MODULE.ID, 'encounterTableGeneral');
                 break;
             case "Cave":
-                strRollTableName = game.settings.get(MODULE_ID, 'encounterTableCave');
+                strRollTableName = game.settings.get(MODULE.ID, 'encounterTableCave');
                 break;
             case "Desert":
-                strRollTableName = game.settings.get(MODULE_ID, 'encounterTableDesert');
+                strRollTableName = game.settings.get(MODULE.ID, 'encounterTableDesert');
                 break;
             case "Dungeon":
-                strRollTableName = game.settings.get(MODULE_ID, 'encounterTableDungeon');
+                strRollTableName = game.settings.get(MODULE.ID, 'encounterTableDungeon');
                 break;
             case "Forest":
-                strRollTableName = game.settings.get(MODULE_ID, 'encounterTableForest');
+                strRollTableName = game.settings.get(MODULE.ID, 'encounterTableForest');
                 break;
             case "Mountain":
-                strRollTableName = game.settings.get(MODULE_ID, 'encounterTableMountain');
+                strRollTableName = game.settings.get(MODULE.ID, 'encounterTableMountain');
                 break;
             case "Sky":
-                strRollTableName = game.settings.get(MODULE_ID, 'encounterTableSky');
+                strRollTableName = game.settings.get(MODULE.ID, 'encounterTableSky');
                 break;
             case "Snow":
-                strRollTableName = game.settings.get(MODULE_ID, 'encounterTableSnow');
+                strRollTableName = game.settings.get(MODULE.ID, 'encounterTableSnow');
                 break;
             case "Urban":
-                strRollTableName = game.settings.get(MODULE_ID, 'encounterTableUrban');
+                strRollTableName = game.settings.get(MODULE.ID, 'encounterTableUrban');
                 break;
             case "Water":
-                strRollTableName = game.settings.get(MODULE_ID, 'encounterTableWater');
+                strRollTableName = game.settings.get(MODULE.ID, 'encounterTableWater');
                 break;
             default:
-                strRollTableName = game.settings.get(MODULE_ID, 'encounterTableGeneral');
+                strRollTableName = game.settings.get(MODULE.ID, 'encounterTableGeneral');
         }
         compiledHtml = await createChatCardEncounter(strRollTableName);
     } else if (BIBLIOSOPH.CARDTYPEINVESTIGATION) {
         // SEARCH
-        strRollTableName = game.settings.get(MODULE_ID, 'investigationTable');
+        strRollTableName = game.settings.get(MODULE.ID, 'investigationTable');
         compiledHtml = await createChatCardSearch(strRollTableName);
     }
     else if (BIBLIOSOPH.CARDTYPEGIFT) {
         // GIFTS
-        strRollTableName = game.settings.get(MODULE_ID, 'giftTable');
+        strRollTableName = game.settings.get(MODULE.ID, 'giftTable');
         compiledHtml = await createChatCardSearch(strRollTableName);
     } else if (BIBLIOSOPH.CARDTYPESHADYGOODS) {
         // SHADY GOODS
-        strRollTableName = game.settings.get(MODULE_ID, 'shadygoodsTable');
+        strRollTableName = game.settings.get(MODULE.ID, 'shadygoodsTable');
         compiledHtml = await createChatCardSearch(strRollTableName);
     } else if (BIBLIOSOPH.CARDTYPECRIT) {
         // CRITICAL
         //postConsoleAndNotification("Card Type: ", "Crit", false, true, false);
-        strRollTableName = game.settings.get(MODULE_ID, 'criticalTable');
+        strRollTableName = game.settings.get(MODULE.ID, 'criticalTable');
         compiledHtml = await createChatCardGeneral(strRollTableName);
     } else if (BIBLIOSOPH.CARDTYPEFUMBLE) {
         // FUMBLE
         //postConsoleAndNotification("Card Type: ", "Fumble", false, true, false);
-        strRollTableName = game.settings.get(MODULE_ID, 'fumbleTable');
+        strRollTableName = game.settings.get(MODULE.ID, 'fumbleTable');
         compiledHtml = await createChatCardGeneral(strRollTableName);
     } else if (BIBLIOSOPH.CARDTYPEINSPIRATION) {
         // INSPIRATION
-        strRollTableName = game.settings.get(MODULE_ID, 'inspirationTable');
+        strRollTableName = game.settings.get(MODULE.ID, 'inspirationTable');
         compiledHtml = await createChatCardGeneral(strRollTableName);
     } else if (BIBLIOSOPH.CARDTYPEDOMT) {
         // DECK OF MANY THINGS
-        strRollTableName = game.settings.get(MODULE_ID, 'domtTable');
+        strRollTableName = game.settings.get(MODULE.ID, 'domtTable');
         compiledHtml = await createChatCardGeneral(strRollTableName);
     } else if (BIBLIOSOPH.CARDTYPEBEVERAGE) {
         // BEVERAGE
-        strRollTableName = game.settings.get(MODULE_ID, 'beverageTable');
+        strRollTableName = game.settings.get(MODULE.ID, 'beverageTable');
         compiledHtml = await createChatCardGeneral(strRollTableName);
     } else if (BIBLIOSOPH.CARDTYPEBIO) {
         // BIO
-        strRollTableName = game.settings.get(MODULE_ID, 'bioTable');
+        strRollTableName = game.settings.get(MODULE.ID, 'bioTable');
         compiledHtml = await createChatCardGeneral(strRollTableName);
     } else if (BIBLIOSOPH.CARDTYPEINSULT) {
         // INSULT
-        strRollTableName = game.settings.get(MODULE_ID, 'insultsTable');
+        strRollTableName = game.settings.get(MODULE.ID, 'insultsTable');
         compiledHtml = await createChatCardGeneral(strRollTableName);
     } else if (BIBLIOSOPH.CARDTYPEPRAISE) {
         // PRAISE
-        strRollTableName = game.settings.get(MODULE_ID, 'praiseTable');
+        strRollTableName = game.settings.get(MODULE.ID, 'praiseTable');
         compiledHtml = await createChatCardGeneral(strRollTableName);
     } else if (BIBLIOSOPH.CARDTYPEMESSAGE) {
         // MESSAGE
@@ -965,7 +965,7 @@ async function publishChatCard() {
         // DEBUG
         postConsoleAndNotification("IN BIBLIOSOPH.CARDTYPEINJURY", "", false, true, false);
 
-        var compendiumName = game.settings.get(MODULE_ID, 'injuryCompendium');
+        var compendiumName = game.settings.get(MODULE.ID, 'injuryCompendium');
         let content = await createChatCardInjurySelector(compendiumName);
 
         let chatData = {
@@ -1077,28 +1077,28 @@ async function createChatCardGeneral(strRollTableName) {
      switch(true) {
         case (BIBLIOSOPH.CARDTYPECRIT):
             // CRITICAL
-            strCardStyle = game.settings.get(MODULE_ID, 'cardThemeCritical');
+            strCardStyle = game.settings.get(MODULE.ID, 'cardThemeCritical');
             strSound = "modules/coffee-pub-blacksmith/sounds/reaction-yay.mp3";
             strIconStyle = "fa-burst";
             strActionLabel = "Action";
             break;
         case (BIBLIOSOPH.CARDTYPEFUMBLE):
             // FUMBLE
-            strCardStyle = game.settings.get(MODULE_ID, 'cardThemeFumble');
+            strCardStyle = game.settings.get(MODULE.ID, 'cardThemeFumble');
             strSound = "modules/coffee-pub-blacksmith/sounds/sadtrombone.mp3";
             strIconStyle = "fa-heart-crack";
             strActionLabel = "Action";
             break;
         case (BIBLIOSOPH.CARDTYPEINSPIRATION):
             // INSPIRATION
-            strCardStyle = game.settings.get(MODULE_ID, 'cardThemeInspiration');
+            strCardStyle = game.settings.get(MODULE.ID, 'cardThemeInspiration');
             strSound = "modules/coffee-pub-blacksmith/sounds/spell-magic-circle.mp3";
             strIconStyle = "fa-sparkles";
             strActionLabel = "Card";
             break;
         case (BIBLIOSOPH.CARDTYPEINSULT):
             // INSULT
-            strCardStyle = game.settings.get(MODULE_ID, 'cardThemeInsults');
+            strCardStyle = game.settings.get(MODULE.ID, 'cardThemeInsults');
             // this is from a user
             strUserName = strUserName; //where used?
             strSound = "modules/coffee-pub-blacksmith/sounds/reaction-oooooh.mp3";
@@ -1107,34 +1107,34 @@ async function createChatCardGeneral(strRollTableName) {
             break;
         case (BIBLIOSOPH.CARDTYPEPRAISE):
             // PRAISE
-            strCardStyle = game.settings.get(MODULE_ID, 'cardThemePraise');
+            strCardStyle = game.settings.get(MODULE.ID, 'cardThemePraise');
             strSound = "modules/coffee-pub-blacksmith/sounds/reaction-ahhhhh.mp3";
             strIconStyle = "fa-flower-tulip";
             strActionLabel = "Action";
             break;
         case (BIBLIOSOPH.CARDTYPEDOMT):
             // DECK OF MANY THINGS
-            strCardStyle = game.settings.get(MODULE_ID, 'cardThemeDOMT');
+            strCardStyle = game.settings.get(MODULE.ID, 'cardThemeDOMT');
             strSound = "modules/coffee-pub-blacksmith/sounds/fanfare-harp.mp3";
             strIconStyle = "fa-cards-blank";
             strActionLabel = "Action";
             break;
         case (BIBLIOSOPH.CARDTYPEBEVERAGE):
             // BEVERAGE
-            strCardStyle = game.settings.get(MODULE_ID, 'cardThemeBeverage');
+            strCardStyle = game.settings.get(MODULE.ID, 'cardThemeBeverage');
             strSound = "modules/coffee-pub-blacksmith/sounds/general-cocktail-ice.mp3";
             strIconStyle = "fa-martini-glass-citrus";
             strActionLabel = "Action";
             break;
         case (BIBLIOSOPH.CARDTYPEBIO):
             // BIO
-            strCardStyle = game.settings.get(MODULE_ID, 'cardThemeBio');
+            strCardStyle = game.settings.get(MODULE.ID, 'cardThemeBio');
             strSound = "modules/coffee-pub-blacksmith/sounds/general-toilet-flushing.mp3";
             strIconStyle = "fa-toilet";
             strActionLabel = "Action";
             break;
         case (BIBLIOSOPH.CARDTYPEMESSAGE):
-            strCardStyle = game.settings.get(MODULE_ID, 'cardThemePartyMessage');
+            strCardStyle = game.settings.get(MODULE.ID, 'cardThemePartyMessage');
             switch (true) {
                 case (BIBLIOSOPH.MESSAGES_TITLE == "messageVote"):
                     strCardTitle = "Party Plan";
@@ -1155,7 +1155,7 @@ async function createChatCardGeneral(strRollTableName) {
                     strIconStyle = "fa-solid fa-thumbs-down";
                     break;
                 case (BIBLIOSOPH.MESSAGES_TITLE == "messagePraise"):
-                    strCardStyle = game.settings.get(MODULE_ID, 'cardThemePraise');
+                    strCardStyle = game.settings.get(MODULE.ID, 'cardThemePraise');
                     strCardTitle = "Praise";
                     strImage = "icons/magic/life/heart-shadow-red.webp";
                     strSound = "modules/coffee-pub-blacksmith/sounds/reaction-ahhhhh.mp3";
@@ -1163,7 +1163,7 @@ async function createChatCardGeneral(strRollTableName) {
                     strActionLabel = "Action";
                     break;
                 case (BIBLIOSOPH.MESSAGES_TITLE == "messageInsult"):
-                    strCardStyle = game.settings.get(MODULE_ID, 'cardThemeInsults');
+                    strCardStyle = game.settings.get(MODULE.ID, 'cardThemeInsults');
                     strCardTitle = "Defamation";
                     strImage = "icons/skills/wounds/injury-face-impact-orange.webp";
                     strSound = "modules/coffee-pub-blacksmith/sounds/reaction-oooooh.mp3";
@@ -1180,7 +1180,7 @@ async function createChatCardGeneral(strRollTableName) {
             strActionLabel = "Reply";
             break;
         case (BIBLIOSOPH.CARDTYPEWHISPER):
-            strCardStyle = game.settings.get(MODULE_ID, 'cardThemePrivateMessage');
+            strCardStyle = game.settings.get(MODULE.ID, 'cardThemePrivateMessage');
             strCardTitle = "Private Message";
             // set the image to the user avatar
             strImage = strUserAvatar;
@@ -1268,12 +1268,12 @@ async function createChatCardInjury(category) {
     postConsoleAndNotification("BUTTON CLICKED. IN createChatCardInjury. Category:", category, false, true, false);
 
     // Set the defaults
-    var compendiumName = game.settings.get(MODULE_ID, 'injuryCompendium');
-    var blnInjuryImageEnabled = game.settings.get(MODULE_ID, 'injuryImageEnabled');
+    var compendiumName = game.settings.get(MODULE.ID, 'injuryCompendium');
+    var blnInjuryImageEnabled = game.settings.get(MODULE.ID, 'injuryImageEnabled');
     let strCategory = category; // we will use this to fileter the compendium
-    var strSound = game.settings.get(MODULE_ID, 'injurySound');
-    var strVolume = game.settings.get(MODULE_ID, 'injurySoundVolume');
-    var strCardStyle = game.settings.get(MODULE_ID, 'cardThemeInjury');
+    var strSound = game.settings.get(MODULE.ID, 'injurySound');
+    var strVolume = game.settings.get(MODULE.ID, 'injurySoundVolume');
+    var strCardStyle = game.settings.get(MODULE.ID, 'cardThemeInjury');
     var strBanner = "modules/coffee-pub-blacksmith/images/banners/banners-damage-oops-6.webp";
     var strIconStyle = "fa-skull"; // default... specific overrides happen below.
     var iconSubStyle = "";
@@ -1517,14 +1517,14 @@ async function createChatCardEncounter(strRollTableName) {
     // Set the defaults
     var strSound = "modules/coffee-pub-blacksmith/sounds/rustling-grass.mp3";
     var strVolume = "0.7";
-    var intEncounterOdds = game.settings.get(MODULE_ID, 'encounterOdds');
-    var intEncounterDice = "1d" + game.settings.get(MODULE_ID, 'encounterDice');
-    var strTableNoEncounter = game.settings.get(MODULE_ID, 'encounterTableNoEncounter');
-    var strTableReveal = game.settings.get(MODULE_ID, 'encounterTableReveal');
-    var strTableBefore = game.settings.get(MODULE_ID, 'encounterTableBefore');
-    var strTableAfter = game.settings.get(MODULE_ID, 'encounterTableAfter');
+    var intEncounterOdds = game.settings.get(MODULE.ID, 'encounterOdds');
+    var intEncounterDice = "1d" + game.settings.get(MODULE.ID, 'encounterDice');
+    var strTableNoEncounter = game.settings.get(MODULE.ID, 'encounterTableNoEncounter');
+    var strTableReveal = game.settings.get(MODULE.ID, 'encounterTableReveal');
+    var strTableBefore = game.settings.get(MODULE.ID, 'encounterTableBefore');
+    var strTableAfter = game.settings.get(MODULE.ID, 'encounterTableAfter');
     var strNoEncounter = "";
-    var strCardStyle = game.settings.get(MODULE_ID, 'cardThemeEncounter');
+    var strCardStyle = game.settings.get(MODULE.ID, 'cardThemeEncounter');
     var strIconStyle = "fa-swords";
     var strType = BIBLIOSOPH.CARDTYPE + " Encounter";
     var strImageBackground = "cobblestone";
@@ -1690,9 +1690,9 @@ async function createChatCardSearch(strRollTableName) {
     var strSound = "modules/coffee-pub-blacksmith/sounds/chest-open.mp3";
     var strVolume = "0.7";
     var intSearchOdds = "";
-    var intSearchDice = "1d" + game.settings.get(MODULE_ID, 'investigationDice');
+    var intSearchDice = "1d" + game.settings.get(MODULE.ID, 'investigationDice');
     var strNoSearch = "";
-    var strCardStyle = game.settings.get(MODULE_ID, 'cardThemeInvestigation');
+    var strCardStyle = game.settings.get(MODULE.ID, 'cardThemeInvestigation');
     var strIconStyle = "fa-eye";
     var strType = BIBLIOSOPH.CARDTYPE;
     var strImageBackground = "themecolor";
@@ -1733,8 +1733,8 @@ async function createChatCardSearch(strRollTableName) {
     }
     // Set the odds
     if (BIBLIOSOPH.CARDTYPEINVESTIGATION){
-        intSearchOdds = game.settings.get(MODULE_ID, 'investigationOdds');
-        intSearchDice = "1d" + game.settings.get(MODULE_ID, 'investigationDice');
+        intSearchOdds = game.settings.get(MODULE.ID, 'investigationOdds');
+        intSearchDice = "1d" + game.settings.get(MODULE.ID, 'investigationDice');
     } else {
         intSearchOdds = "100";
         intSearchDice = "1d1";
@@ -2078,7 +2078,7 @@ function buildPlayerList(recipients) {
 function buildPrivateList(arrPlayers) {
     // TESTING
     const arrPrivateList = new Array();
-    var blnCompressedList = game.settings.get(MODULE_ID, 'cardLayoutPrivateMessage');;
+    var blnCompressedList = game.settings.get(MODULE.ID, 'cardLayoutPrivateMessage');;
     var strRecipients = "";
     var strHTMLBlock = "";
     var intPlayerID = "";
@@ -2089,7 +2089,7 @@ function buildPrivateList(arrPlayers) {
     var intCharacterID = "";
     var strCharacterTokenImage = "";
     var strCharacterPortraitImage = "";
-    var strCardStyle = game.settings.get(MODULE_ID, 'cardThemePrivateMessage');
+    var strCardStyle = game.settings.get(MODULE.ID, 'cardThemePrivateMessage');
     let intArrayCounter = 0;
     let intItemCounter = 0;
     while (intArrayCounter < arrPlayers.length) {
@@ -2484,7 +2484,7 @@ function markdownToHtml(text) {
 
 async function checkAndCreateMacro(settingName) {
     // Grab the macro name from the settings. if it doesn't exist, create a new one
-    var macroName = game.settings.get(MODULE_ID, settingName);
+    var macroName = game.settings.get(MODULE.ID, settingName);
     console.info( "COFFEE PUB BLBIOSOPH: Checking if Macro exists. macroName = " + macroName);
     // Set the appropriate data based on encounter types
     var blnEnabled = false;
@@ -2492,52 +2492,52 @@ async function checkAndCreateMacro(settingName) {
     var predefinedImage = '';
     var strCommand = '// No Code Needed as Bibliosoph only uses the macro as a way to trigger its code.';
     if (settingName == "encounterMacroGeneral") {
-        blnEnabled = game.settings.get(MODULE_ID, "encounterEnabledGeneral");
+        blnEnabled = game.settings.get(MODULE.ID, "encounterEnabledGeneral");
         macroNewName = "Encounter: General"
         predefinedImage = 'icons/environment/wilderness/mine-interior-dungeon-door.webp';
         strCommand = '// ' + macroName + ': No Code Needed as Bibliosoph only uses the macro as a way to trigger its code.';
     } else if (settingName == "encounterMacroCave") {
-        blnEnabled = game.settings.get(MODULE_ID, "encounterEnabledCave");
+        blnEnabled = game.settings.get(MODULE.ID, "encounterEnabledCave");
         macroNewName = "Encounter: Cave"
         predefinedImage = 'icons/environment/wilderness/cave-entrance-rocky.webp';
         strCommand = '// ' + macroName + ': No Code Needed as Bibliosoph only uses the macro as a way to trigger its code.';
     } else if (settingName == "encounterMacroDesert") {
-        blnEnabled = game.settings.get(MODULE_ID, "encounterEnabledDesert");
+        blnEnabled = game.settings.get(MODULE.ID, "encounterEnabledDesert");
         macroNewName = "Encounter: Desert"
         predefinedImage = 'icons/environment/wilderness/terrain-rocks-brown.webp';
         strCommand = '// ' + macroName + ': No Code Needed as Bibliosoph only uses the macro as a way to trigger its code.';
     } else if (settingName == "encounterMacroDungeon") {
-        blnEnabled = game.settings.get(MODULE_ID, "encounterEnabledDungeon");
+        blnEnabled = game.settings.get(MODULE.ID, "encounterEnabledDungeon");
         macroNewName = "Encounter: Dungeon"
         predefinedImage = 'icons/environment/wilderness/tomb-entrance.webp';
         strCommand = '// ' + macroName + ': No Code Needed as Bibliosoph only uses the macro as a way to trigger its code.';
     } else if (settingName == "encounterMacroForest") {
-        blnEnabled = game.settings.get(MODULE_ID, "encounterEnabledForest");
+        blnEnabled = game.settings.get(MODULE.ID, "encounterEnabledForest");
         macroNewName = "Encounter: Forest"
         predefinedImage = 'icons/environment/wilderness/tree-ash.webp';
         strCommand = '// ' + macroName + ': No Code Needed as Bibliosoph only uses the macro as a way to trigger its code.';
     } else if (settingName == "encounterMacroMountain") {
-        blnEnabled = game.settings.get(MODULE_ID, "encounterEnabledMountain");
+        blnEnabled = game.settings.get(MODULE.ID, "encounterEnabledMountain");
         macroNewName = "Encounter: Mountain"
         predefinedImage = 'icons/environment/wilderness/carved-standing-stone.webp';
         strCommand = '// ' + macroName + ': No Code Needed as Bibliosoph only uses the macro as a way to trigger its code.';
     } else if (settingName == "encounterMacroSky") {
-        blnEnabled = game.settings.get(MODULE_ID, "encounterEnabledSky");
+        blnEnabled = game.settings.get(MODULE.ID, "encounterEnabledSky");
         macroNewName = "Encounter: Sky"
         predefinedImage = 'icons/environment/wilderness/cave-entrance-island.webp';
         strCommand = '// ' + macroName + ': No Code Needed as Bibliosoph only uses the macro as a way to trigger its code.';
     } else if (settingName == "encounterMacroSnow") {
-        blnEnabled = game.settings.get(MODULE_ID, "encounterEnabledSnow");
+        blnEnabled = game.settings.get(MODULE.ID, "encounterEnabledSnow");
         macroNewName = "Encounter: Snow"
         predefinedImage = 'icons/environment/wilderness/tree-spruce.webp';
         strCommand = '// ' + macroName + ': No Code Needed as Bibliosoph only uses the macro as a way to trigger its code.';
     } else if (settingName == "encounterMacroUrban") {
-        blnEnabled = game.settings.get(MODULE_ID, "encounterEnabledUrban");
+        blnEnabled = game.settings.get(MODULE.ID, "encounterEnabledUrban");
         macroNewName = "Encounter: Urban"
         predefinedImage = 'icons/environment/settlement/house-manor.webp';
         strCommand = '// ' + macroName + ': No Code Needed as Bibliosoph only uses the macro as a way to trigger its code.';
     } else if (settingName == "encounterMacroWater") {
-        blnEnabled = game.settings.get(MODULE_ID, "encounterEnabledWater");
+        blnEnabled = game.settings.get(MODULE.ID, "encounterEnabledWater");
         macroNewName = "Encounter: Water"
         predefinedImage = 'icons/environment/wilderness/island.webp';
         strCommand = '// ' + macroName + ': No Code Needed as Bibliosoph only uses the macro as a way to trigger its code.';
@@ -2560,7 +2560,7 @@ async function checkAndCreateMacro(settingName) {
             });
 
             // save updated Macro in settings
-            game.settings.set(MODULE_ID, settingName, macroName);
+            game.settings.set(MODULE.ID, settingName, macroName);
         }
     } else {
         // Not Enabled.
@@ -2575,7 +2575,7 @@ async function checkAndCreateMacro(settingName) {
 async function createChatCardInjurySelector(compendiumName) {
     
     const pack = game.packs.get(compendiumName);
-    var strCardStyle = game.settings.get(MODULE_ID, 'cardThemeInjury');
+    var strCardStyle = game.settings.get(MODULE.ID, 'cardThemeInjury');
     var strIconStyle = "fa-skull";
     var strCardTitle = "Select Injury";
     var strTitle = "";
@@ -2622,7 +2622,7 @@ async function getCategoryButtons(categories){
 
     var strButtonIcon = "";
     var arrCategories = categories;
-    var strCardStyle = game.settings.get(MODULE_ID, 'cardThemeInjury');
+    var strCardStyle = game.settings.get(MODULE.ID, 'cardThemeInjury');
     var arrInjuryButtons = [];
     // Set the appripriate icon based on the array.
     if (arrCategories) {

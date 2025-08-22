@@ -2,16 +2,23 @@
 // ===== EXPORTS ====================================================
 // ================================================================== 
 
-export const MODULE_TITLE = 'BIBLIOSOPH'
-export const MODULE_ID = 'coffee-pub-bibliosoph'
+
+export const MODULE = {
+    ID: 'coffee-pub-bibliosoph',
+    NAME: 'BIBLIOSOPH',
+    TITLE: 'Coffee Pub Bibliosoph',
+    AUTHOR: "Coffee Pub"
+};
+
+
 export const BIBLIOSOPH = {
     DEBUGON: true,
-    //ID: MODULE_ID,
-    MESSAGE_TEMPLATE_CARD: `modules/${MODULE_ID}/templates/chat-card.hbs`,
-    WINDOW_CHAT_TEMPLATE: `modules/${MODULE_ID}/templates/dialogue-messages.hbs`,
-    PATH_SOUND:`modules/${MODULE_ID}/sounds/`,
-    PATH_IMAGES:`modules/${MODULE_ID}/images/`,
-    PORTRAIT_NOIMAGE:`modules/${MODULE_ID}/images/portrait-noimage.webp`,
+    //ID: MODULE.ID,
+    MESSAGE_TEMPLATE_CARD: `modules/${MODULE.ID}/templates/chat-card.hbs`,
+    WINDOW_CHAT_TEMPLATE: `modules/${MODULE.ID}/templates/dialogue-messages.hbs`,
+    PATH_SOUND:`modules/${MODULE.ID}/sounds/`,
+    PATH_IMAGES:`modules/${MODULE.ID}/images/`,
+    PORTRAIT_NOIMAGE:`modules/${MODULE.ID}/images/portrait-noimage.webp`,
     CARDTYPE: "",
     CARDTYPEENCOUNTER: false,
     CARDTYPEINJURY: false,
