@@ -6,7 +6,6 @@
 import { MODULE, BIBLIOSOPH  } from './const.js';
 
 // *** BEGIN: BLACKSMITH API INTEGRATION ***
-// *** Replacing global.js with Blacksmith API ***
 // Blacksmith API will be accessed locally in each hook as needed
 
 // Helper function to safely get Blacksmith API
