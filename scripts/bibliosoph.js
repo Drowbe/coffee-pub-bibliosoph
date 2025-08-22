@@ -48,9 +48,9 @@ function validateMandatorySettings() {
     ];
     
     macroChecks.forEach(check => {
-        if (check.required && (!check.setting || check.setting === '-- Choose a Macro --')) {
+        if (check.required && (!check.setting || check.setting === '-- Choose a Macro --' || check.setting === 'none')) {
             missingSettings.push(check.name);
-        } else if (check.setting && check.setting !== '-- Choose a Macro --') {
+        } else if (check.setting && check.setting !== '-- Choose a Macro --' && check.setting !== 'none') {
             // Check if the macro actually exists
             const macro = game.macros.getName(check.setting);
             if (!macro) {
@@ -64,8 +64,8 @@ function validateMandatorySettings() {
         // Single user notification
         getBlacksmith()?.utils?.postConsoleAndNotification(
             MODULE.NAME, 
-            "Bibliosoph setup is not complete: Please set the required information in settings. See console for more details.", 
-            "", 
+            "Bibliosoph setup is not complete: Please set the required information in settings.", 
+            "See console for more details.", 
             false, 
             true
         );
@@ -171,7 +171,10 @@ Hooks.on("ready", async () => {
         blacksmith.utils.postConsoleAndNotification(MODULE.NAME, "Coffee Pub Blacksmith is installed and connected.", "", false, false);
         
         // Validate all mandatory settings and provide consolidated feedback
-        validateMandatorySettings();
+        // Add a small delay to ensure UI is stable before showing notifications
+        setTimeout(() => {
+            validateMandatorySettings();
+        }, 1000);
     } else {
         // This is an error that breaks functionality - use console.error
         console.error("BIBLIOSOPH | Coffee Pub Blacksmith does not seem to be enabled. It is required for Coffee Pub Bibliosoph to function. Please enable it in your options.");
