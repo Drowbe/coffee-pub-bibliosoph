@@ -8,6 +8,82 @@ import { MODULE, BIBLIOSOPH  } from './const.js';
 // *** BEGIN: BLACKSMITH API INTEGRATION ***
 // *** Replacing global.js with Blacksmith API ***
 // Blacksmith API will be accessed locally in each hook as needed
+
+// Helper function to safely get Blacksmith API
+function getBlacksmith() {
+    return game.modules.get('coffee-pub-blacksmith')?.api;
+}
+
+// Function to validate all mandatory settings and provide consolidated feedback
+function validateMandatorySettings() {
+    const missingSettings = [];
+    const invalidMacros = [];
+    
+    // Check all mandatory macro settings
+    const macroChecks = [
+        { name: 'General Encounters', setting: game.settings.get(MODULE.ID, 'encounterMacroGeneral'), required: true },
+        { name: 'Cave Encounters', setting: game.settings.get(MODULE.ID, 'encounterMacroCave'), required: true },
+        { name: 'Desert Encounters', setting: game.settings.get(MODULE.ID, 'encounterMacroDesert'), required: true },
+        { name: 'Dungeon Encounters', setting: game.settings.get(MODULE.ID, 'encounterMacroDungeon'), required: true },
+        { name: 'Forest Encounters', setting: game.settings.get(MODULE.ID, 'encounterMacroForest'), required: true },
+        { name: 'Mountain Encounters', setting: game.settings.get(MODULE.ID, 'encounterMacroMountain'), required: true },
+        { name: 'Sky Encounters', setting: game.settings.get(MODULE.ID, 'encounterMacroSky'), required: true },
+        { name: 'Snow Encounters', setting: game.settings.get(MODULE.ID, 'encounterMacroSnow'), required: true },
+        { name: 'Urban Encounters', setting: game.settings.get(MODULE.ID, 'encounterMacroUrban'), required: true },
+        { name: 'Water Encounters', setting: game.settings.get(MODULE.ID, 'encounterMacroWater'), required: true },
+        { name: 'Investigations', setting: game.settings.get(MODULE.ID, 'investigationMacro'), required: true },
+        { name: 'Gifts', setting: game.settings.get(MODULE.ID, 'giftMacro'), required: true },
+        { name: 'Shady Goods', setting: game.settings.get(MODULE.ID, 'shadygoodsMacro'), required: true },
+        { name: 'Critical Hits', setting: game.settings.get(MODULE.ID, 'criticalMacro'), required: true },
+        { name: 'Fumbles', setting: game.settings.get(MODULE.ID, 'fumbleMacro'), required: true },
+        { name: 'Inspiration', setting: game.settings.get(MODULE.ID, 'inspirationMacro'), required: true },
+        { name: 'Deck of Many Things', setting: game.settings.get(MODULE.ID, 'domtMacro'), required: true },
+        { name: 'Beverage Break', setting: game.settings.get(MODULE.ID, 'beverageMacro'), required: true },
+        { name: 'Bio Break', setting: game.settings.get(MODULE.ID, 'bioMacro'), required: true },
+        { name: 'Insults', setting: game.settings.get(MODULE.ID, 'insultsMacro'), required: true },
+        { name: 'Praise', setting: game.settings.get(MODULE.ID, 'praiseMacro'), required: true },
+        { name: 'Party Message', setting: game.settings.get(MODULE.ID, 'partyMessageMacro'), required: false },
+        { name: 'Private Message', setting: game.settings.get(MODULE.ID, 'privateMessageMacro'), required: false },
+        { name: 'General Injuries', setting: game.settings.get(MODULE.ID, 'injuriesMacroGlobal'), required: true }
+    ];
+    
+    macroChecks.forEach(check => {
+        if (check.required && (!check.setting || check.setting === '-- Choose a Macro --')) {
+            missingSettings.push(check.name);
+        } else if (check.setting && check.setting !== '-- Choose a Macro --') {
+            // Check if the macro actually exists
+            const macro = game.macros.getName(check.setting);
+            if (!macro) {
+                invalidMacros.push(`${check.name}: "${check.setting}"`);
+            }
+        }
+    });
+    
+    // If there are issues, show consolidated notification and console details
+    if (missingSettings.length > 0 || invalidMacros.length > 0) {
+        // Single user notification
+        getBlacksmith()?.utils?.postConsoleAndNotification(
+            MODULE.NAME, 
+            "Bibliosoph setup is not complete: Please set the required information in settings. See console for more details.", 
+            "", 
+            false, 
+            true
+        );
+        
+        // Detailed console logging
+        if (missingSettings.length > 0) {
+            console.warn(`BIBLIOSOPH | Missing mandatory macro settings:`, missingSettings);
+        }
+        if (invalidMacros.length > 0) {
+            console.warn(`BIBLIOSOPH | Invalid macro names in settings:`, invalidMacros);
+        }
+        
+        return false; // Setup incomplete
+    }
+    
+    return true; // Setup complete
+}
+
 // *** END: BLACKSMITH API INTEGRATION ***
 
 
@@ -51,14 +127,15 @@ Hooks.once('init', async function() {
                     tooltip: 'Bibliosoph - Rolltable card formatting',
                     onClick: () => {
                         // TODO: Implement click handler for chat panel icon
-                        console.log('Bibliosoph chat panel icon clicked');
+                        // Removed unnecessary console.log - this is just a placeholder
                     }
                 }
             }
         ]
     });
 
-    console.log("BIBLIOSOPH | Successfully registered with Coffee Pub Blacksmith");
+    // This is a system message - user should know registration succeeded
+    blacksmith?.utils?.postConsoleAndNotification(MODULE.NAME, "Successfully registered with Coffee Pub Blacksmith", "", false, false);
 });
 
 // ***** CHAT CLICKS *****
@@ -80,12 +157,6 @@ Hooks.on("ready", async () => {
     // Re-access Blacksmith API to ensure availability
     const blacksmith = game.modules.get('coffee-pub-blacksmith')?.api;
     
-    // Add diagnostic logging as recommended by API developer
-    console.log('BIBLIOSOPH | Blacksmith API:', blacksmith);
-    console.log('BIBLIOSOPH | Utils available:', blacksmith?.utils);
-    console.log('BIBLIOSOPH | getSettingSafely available:', typeof blacksmith?.utils?.getSettingSafely);
-    console.log('BIBLIOSOPH | setSettingSafely available:', typeof blacksmith?.utils?.setSettingSafely);
-    
     // Verify Blacksmith API is available
     if (!blacksmith?.utils?.getSettingSafely) {
         console.error("BIBLIOSOPH | Blacksmith API not fully initialized! Module may not function properly.");
@@ -93,13 +164,17 @@ Hooks.on("ready", async () => {
         return;
     }
 
-    // Use Blacksmith's safe console logging
-    blacksmith.utils.postConsoleAndNotification("BIBLIOSOPH", "Initializing Blacksmith connections...", "", false, false, false);
+    // Use Blacksmith's safe console logging - system message for initialization
+    blacksmith.utils.postConsoleAndNotification(MODULE.NAME, "Initializing Blacksmith connections...", "", false, false);
     
     if (game.modules.get("coffee-pub-blacksmith")?.active) {
-        blacksmith.utils.postConsoleAndNotification("BIBLIOSOPH", "Coffee Pub Blacksmith is installed and connected.", "", false, false, false);
+        blacksmith.utils.postConsoleAndNotification(MODULE.NAME, "Coffee Pub Blacksmith is installed and connected.", "", false, false);
+        
+        // Validate all mandatory settings and provide consolidated feedback
+        validateMandatorySettings();
     } else {
-        blacksmith.utils.postConsoleAndNotification("BIBLIOSOPH", "Coffee Pub Blacksmith does not seem to be enabled. It is required for Coffee Pub Bibliosoph to function. Please enable it in your options.", "", false, false, true);
+        // This is an error that breaks functionality - use console.error
+        console.error("BIBLIOSOPH | Coffee Pub Blacksmith does not seem to be enabled. It is required for Coffee Pub Bibliosoph to function. Please enable it in your options.");
         return;
     }
     // Do these things after the client has loaded
@@ -117,6 +192,7 @@ Hooks.on("ready", async () => {
             try {
                 return game.settings.get(MODULE.ID, settingKey) ?? defaultValue;
             } catch (error) {
+                // This is an error that could break functionality - keep as console.warn
                 console.warn(`BIBLIOSOPH | Error getting setting ${settingKey}, using fallback:`, error);
                 return defaultValue;
             }
@@ -133,6 +209,7 @@ Hooks.on("ready", async () => {
             try {
                 return game.settings.set(MODULE.ID, settingKey, value);
             } catch (error) {
+                // This is an error that could break functionality - keep as console.warn
                 console.warn(`BIBLIOSOPH | Error setting setting ${settingKey}:`, error);
                 return false;
             }
@@ -194,13 +271,6 @@ Hooks.on("ready", async () => {
     var blndomtEnabled = getSetting('domtEnabled', false);
     var blninjuriesEnabledGlobal = getSetting('injuriesEnabledGlobal', false);
     
-
-
-    //postConsoleAndNotification("blninjuriesEnabledGlobal: ", blninjuriesEnabledGlobal, false, true, false);
-    //postConsoleAndNotification("strInjuriesMacroGlobal: ", strInjuriesMacroGlobal, false, true, false);
-    //postConsoleAndNotification("strInjuriesMacroGlobalID: ", strInjuriesMacroGlobalID, false, true, false);
-
-
     // BUTTON PRESSES IN CHAT
     document.addEventListener('click', function(event) {
         if(event.target.classList.contains('coffee-pub-bibliosoph-button-reply')) {
@@ -268,12 +338,13 @@ Hooks.on("ready", async () => {
                     publishChatCard();
                 };
             } else {
-                ui.notifications.warn(`BIBLIOSOPH General Encounter: Make sure there is a macro matching the name you entered in Bibliosoph settings.`, {permanent: false, console: true});
+                // User needs to know about macro configuration issues
+                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `General Encounter: Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
-        } else {
-            // They haven't set this macro
-            ui.notifications.warn(`COFFEE PUB Bibliosoph: Macro for General Encounters not set.`, {permanent: false, console: true});
-        }
+                    } else {
+                // They haven't set this macro - consolidated validation handles this
+                // getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for General Encounters not set.`, "", false, false);
+            }
      }
     // *** CAVE ***
     if (blnCaveEnabled) {
@@ -289,11 +360,12 @@ Hooks.on("ready", async () => {
                     publishChatCard();
                 };
             } else {
-                ui.notifications.error(`BIBLIOSOPH: "${strCaveMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, {permanent: false, console: true});
+                // User needs to know about macro configuration issues
+                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `"${strCaveMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            ui.notifications.warn(`COFFEE PUB Bibliosoph: Macro for Cave Encounters not set.`, {permanent: false, console: true});
+            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Cave Encounters not set.`, "", false, false);
         }
     }
     // *** DESERT ***
@@ -310,11 +382,12 @@ Hooks.on("ready", async () => {
                     publishChatCard();
                 };
             } else {
-                ui.notifications.warn(`COFFEE PUB Bibliosoph: Macro for Desert Encounters "${strDesertMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, {permanent: false, console: true});
+                // User needs to know about macro configuration issues
+                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `"${strDesertMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            ui.notifications.warn(`COFFEE PUB Bibliosoph: Macro for Desert Encounters not set.`, {permanent: false, console: true});
+            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Desert Encounters not set.`, "", false, false);
         }
     }   
     // *** DUNGEON ***
@@ -331,11 +404,12 @@ Hooks.on("ready", async () => {
                     publishChatCard();
                 };
             } else {
-                ui.notifications.warn(`COFFEE PUB Bibliosoph: Macro for Dungeon Encounters "${strDungeonMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, {permanent: false, console: true});
+                // User needs to know about macro configuration issues
+                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `"${strDungeonMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            ui.notifications.warn(`COFFEE PUB Bibliosoph: Macro for Dungeon Encounters not set.`, {permanent: false, console: true});
+            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Dungeon Encounters not set.`, "", false, false);
         }
     }   
     // *** FOREST ***
@@ -352,11 +426,12 @@ Hooks.on("ready", async () => {
                     publishChatCard();
                 };
             } else {
-                ui.notifications.warn(`COFFEE PUB Bibliosoph: Macro for Forest Encounters "${strForestMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, {permanent: false, console: true});
+                // User needs to know about macro configuration issues
+                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `"${strForestMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            ui.notifications.warn(`COFFEE PUB Bibliosoph: Macro for Forest Encounters not set`, {permanent: false, console: true});
+            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Forest Encounters not set.`, "", false, false);
         }
     }
     // *** MOUNTAIN ***
@@ -373,11 +448,12 @@ Hooks.on("ready", async () => {
                     publishChatCard();
                 };
             } else {
-                ui.notifications.warn(`COFFEE PUB Bibliosoph: Macro for Mountain Encounters "${strMountainMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, {permanent: false, console: true});
+                // User needs to know about macro configuration issues
+                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `"${strMountainMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            ui.notifications.warn(`COFFEE PUB Bibliosoph: Macro for Mountain Encounters not set.`, {permanent: false, console: true});
+            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Mountain Encounters not set.`, "", false, true);
         }
     }
     // *** SKY ***
@@ -394,11 +470,12 @@ Hooks.on("ready", async () => {
                     publishChatCard();
                 };
             } else {
-                ui.notifications.warn(`COFFEE PUB Bibliosoph: Macro for Sky Encounters "${strSkyMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, {permanent: false, console: true});
+                // User needs to know about macro configuration issues
+                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `"${strSkyMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            ui.notifications.warn(`COFFEE PUB Bibliosoph: Macro for Sky Encounters not set.`, {permanent: false, console: true});
+            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Sky Encounters not set.`, "", false, true);
         }
     }
     // *** SNOW ***
@@ -415,11 +492,12 @@ Hooks.on("ready", async () => {
                     publishChatCard();
                 };
             } else {
-                ui.notifications.warn(`COFFEE PUB Bibliosoph: Macro for Snow Encounters "${strSnowMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, {permanent: false, console: true});
+                // User needs to know about macro configuration issues
+                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `"${strSnowMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            ui.notifications.warn(`COFFEE PUB Bibliosoph: Macro for Snow Encounters not set.`, {permanent: false, console: true});
+            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Snow Encounters not set.`, "", false, false);
         }
     }
     // *** URBAN ***
@@ -436,11 +514,12 @@ Hooks.on("ready", async () => {
                     publishChatCard();
                 };
             } else {
-                ui.notifications.warn(`COFFEE PUB Bibliosoph: Macro for Urban Encounters "${strUrbanMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, {permanent: false, console: true});
+                // User needs to know about macro configuration issues
+                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `"${strUrbanMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            ui.notifications.warn(`COFFEE PUB Bibliosoph: Macro for Urban Encounters not set.`, {permanent: false, console: true});
+            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Urban Encounters not set.`, "", false, false);
         }
     }
     // *** WATER ***
@@ -457,11 +536,12 @@ Hooks.on("ready", async () => {
                     publishChatCard();
                 };
             } else {
-                ui.notifications.warn(`COFFEE PUB Bibliosoph: Macro for Water Encounters "${strWaterMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, {permanent: false, console: true});
+                // User needs to know about macro configuration issues
+                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `"${strWaterMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            ui.notifications.warn(`COFFEE PUB Bibliosoph: Macro for Water Encounters not set.`, {permanent: false, console: true});
+            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Water Encounters not set.`, "", false, false);
         }
     }
     //************* ITEM ROLLS *************
@@ -480,11 +560,12 @@ Hooks.on("ready", async () => {
                     publishChatCard();
                 };
             } else {
-                ui.notifications.warn(`BIBLIOSOPH: Investigation Macro "${strInvestigationMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, {permanent: false, console: true});
+                // User needs to know about macro configuration issues
+                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Investigation Macro "${strInvestigationMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            ui.notifications.warn(`COFFEE PUB Bibliosoph: Macro for Investigations is not set.`, {permanent: false, console: true});
+            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Investigations is not set.`, "", false, false);
         }
     }
     // *** GIFTS ***
@@ -502,11 +583,12 @@ Hooks.on("ready", async () => {
                     publishChatCard();
                 };
             } else {
-                ui.notifications.warn(`BIBLIOSOPH: Gifts Macro "${strGiftMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, {permanent: false, console: true});
+                // User needs to know about macro configuration issues
+                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Gifts Macro "${strGiftMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            ui.notifications.warn(`COFFEE PUB Bibliosoph: Macro for Gifts not set.`, {permanent: false, console: true});
+            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Gifts not set.`, "", false, false);
         }
     }
     // *** SHADY GOODS ***
@@ -524,11 +606,12 @@ Hooks.on("ready", async () => {
                     publishChatCard();
                 };
             } else {
-                ui.notifications.warn(`BIBLIOSOPH: Shady Goods Macro "${strShadygoodsMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, {permanent: false, console: true});
+                // User needs to know about macro configuration issues
+                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Shady Goods Macro "${strShadygoodsMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            ui.notifications.warn(`COFFEE PUB Bibliosoph: Macro for Shady Goods not set.`, {permanent: false, console: true});
+            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Shady Goods not set.`, "", false, false);
         }
     }
     // ************* CRITS AND FUMBLES *************
@@ -547,11 +630,12 @@ Hooks.on("ready", async () => {
                     publishChatCard();
                 };
             } else {
-                ui.notifications.warn(`BIBLIOSOPH: Critical Hits Macro "${strCriticalMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, {permanent: false, console: true});
+                // User needs to know about macro configuration issues
+                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Critical Hits Macro "${strCriticalMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            ui.notifications.warn(`COFFEE PUB Bibliosoph: Macro for Critial Hits not set.`, {permanent: false, console: true});
+            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Critical Hits not set.`, "", false, false);
         }
     }
     // *** FUMBLE ***
@@ -569,11 +653,12 @@ Hooks.on("ready", async () => {
                     publishChatCard();
                 };
             } else {
-                ui.notifications.warn(`BIBLIOSOPH: Fumble Macro "${strFumbleMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, {permanent: false, console: true});
+                // User needs to know about macro configuration issues
+                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Fumble Macro "${strFumbleMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            ui.notifications.warn(`COFFEE PUB Bibliosoph: Macro for Fumbles not set.`, {permanent: false, console: true});
+            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Fumbles not set.`, "", false, false);
         }
     }
     // ************* CARD ROLLS *************
@@ -592,11 +677,12 @@ Hooks.on("ready", async () => {
                     publishChatCard();
                 };
             } else {
-                ui.notifications.warn(`BIBLIOSOPH: Inspiration Macro "${strInspirationMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, {permanent: false, console: true});
+                // User needs to know about macro configuration issues
+                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Inspiration Macro "${strInspirationMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            ui.notifications.warn(`COFFEE PUB Bibliosoph: Macro for Inspiration not set.`, {permanent: false, console: true});
+            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Inspiration not set.`, "", false, false);
         }
     }
     // *** DOMT ***
@@ -614,11 +700,12 @@ Hooks.on("ready", async () => {
                     publishChatCard();
                 };
             } else {
-                ui.notifications.warn(`BIBLIOSOPH: Deck of Many Things Macro "${strDOMTMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, {permanent: false, console: true});
+                // User needs to know about macro configuration issues
+                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Deck of Many Things Macro "${strDOMTMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            ui.notifications.warn(`COFFEE PUB Bibliosoph: Macro for Deck of Many Things not set.`, {permanent: false, console: true});
+            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Deck of Many Things not set.`, "", false, false);
         }
     }
     // ************* PARTY MESSAGES *************
@@ -637,11 +724,12 @@ Hooks.on("ready", async () => {
                     publishChatCard();
                 };
             } else {
-                ui.notifications.warn(`BIBLIOSOPH: Beverage Break Macro "${strBeverageMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, {permanent: false, console: true});
+                // User needs to know about macro configuration issues
+                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Beverage Break Macro "${strBeverageMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            ui.notifications.warn(`COFFEE PUB Bibliosoph: Macro for Beverage Break not set.`, {permanent: false, console: true});
+            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Beverage Break not set.`, "", false, false);
         }
     }
     // *** BIO ***
@@ -659,11 +747,12 @@ Hooks.on("ready", async () => {
                     publishChatCard();
                 };
             } else {
-                ui.notifications.warn(`BIBLIOSOPH: Bio Break Macro "${strBioMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, {permanent: false, console: true});
+                // User needs to know about macro configuration issues
+                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Bio Break Macro "${strBioMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            ui.notifications.warn(`COFFEE PUB Bibliosoph: Macro for Bio Break not set.`, {permanent: false, console: true});
+            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Bio Break not set.`, "", false, false);
         }
     }
     // *** MESSAGES ***
@@ -683,11 +772,12 @@ Hooks.on("ready", async () => {
                     publishChatCard();
                 };
             } else {
-                ui.notifications.warn(`BIBLIOSOPH: Insult Macro "${strInsultMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, {permanent: false, console: true});
+                // User needs to know about macro configuration issues
+                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Insult Macro "${strInsultMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            ui.notifications.warn(`COFFEE PUB Bibliosoph: Macro for Insults not set.`, {permanent: false, console: true});
+            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Insults not set.`, "", false, false);
         } 
     }
     // *** PRAISE ***
@@ -705,11 +795,12 @@ Hooks.on("ready", async () => {
                     publishChatCard();
                 };
             } else {
-                ui.notifications.warn(`BIBLIOSOPH: Praise Macro "${strPraiseMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, {permanent: false, console: true});
+                // User needs to know about macro configuration issues
+                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Praise Macro "${strPraiseMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            ui.notifications.warn(`COFFEE PUB Bibliosoph: Macro for Praise not set.`, {permanent: false, console: true});
+            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Praise not set.`, "", false, false);
         } 
     }
     // *** Public Message ***
@@ -737,11 +828,12 @@ Hooks.on("ready", async () => {
                     blankForm.render(true);
                 };
             } else {
-                ui.notifications.warn(`BIBLIOSOPH: Party Message Macro "${strPartyMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, {permanent: false, console: true});
+                // User needs to know about macro configuration issues
+                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Party Message Macro "${strPartyMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            ui.notifications.warn(`COFFEE PUB Bibliosoph: Macro for Party Message not set.`, {permanent: false, console: true});
+            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Party Message not set.`, "", false, false);
         } 
     }
     // *** Private Message ***
@@ -769,11 +861,12 @@ Hooks.on("ready", async () => {
                     blankForm.render(true);
                 };
             } else {
-                ui.notifications.warn(`BIBLIOSOPH: Private Message Macro "${strPrivateMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, {permanent: false, console: true});
+                // User needs to know about macro configuration issues
+                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Private Message Macro "${strPrivateMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            ui.notifications.warn(`COFFEE PUB Bibliosoph: Macro for Private Message not set.`, {permanent: false, console: true});
+            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Private Message not set.`, "", false, false);
         } 
     }
 
@@ -798,11 +891,12 @@ Hooks.on("ready", async () => {
                     publishChatCard();
                 };
             } else {
-                ui.notifications.warn(`COFFEE PUB Bibliosoph: Macro for General Injuries "${strWaterMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, {permanent: false, console: true});
+                // User needs to know about macro configuration issues
+                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `"${strWaterMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            ui.notifications.warn(`COFFEE PUB Bibliosoph: Macro for General Injuries not set.`, {permanent: false, console: true});
+            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for General Injuries not set.`, "", false, false);
         }
     }
 
@@ -816,19 +910,17 @@ Hooks.on("ready", async () => {
 // ************************************
 
 Hooks.on('blacksmithUpdated', (newBlacksmith) => {
-    // Access updated data through the newBlacksmith parameter
-    // This hook is called whenever Blacksmith updates its shared variables
     if (newBlacksmith) {
-        // You can access updated choice arrays and other shared data here
-        // For example: newBlacksmith.arrThemeChoices, newBlacksmith.arrSoundChoices, etc.
-        console.log("BIBLIOSOPH | Blacksmith data updated:", newBlacksmith);
+        // This is debug info - only log if really needed for troubleshooting
+        // console.log("BIBLIOSOPH | Blacksmith data updated:", newBlacksmith);
         
         // Re-verify API is ready - useful if this is the first time Blacksmith is fully initialized
         const blacksmith = game.modules.get('coffee-pub-blacksmith')?.api;
         if (blacksmith?.utils?.getSettingSafely) {
-            console.log("BIBLIOSOPH | Blacksmith API now fully available via blacksmithUpdated hook");
-            console.log("BIBLIOSOPH | getSettingSafely available:", typeof blacksmith.utils.getSettingSafely);
-            console.log("BIBLIOSOPH | setSettingSafely available:", typeof blacksmith.utils.setSettingSafely);
+            // This is debug info - only log if really needed for troubleshooting
+            // console.log("BIBLIOSOPH | Blacksmith API now fully available via blacksmithUpdated hook");
+            // console.log("BIBLIOSOPH | getSettingSafely available:", typeof blacksmith.utils.getSettingSafely);
+            // console.log("BIBLIOSOPH | setSettingSafely available:", typeof blacksmith.utils.setSettingSafely);
         }
     }
 });
@@ -841,8 +933,7 @@ Hooks.on("renderChatMessage", (message, html) => {
     html.find(".category-button").click(async (event) => {
         event.preventDefault();
         
-        // DEBUG
-        postConsoleAndNotification("Button clicked", "", false, true, false);
+        // Removed unnecessary debug logging - button clicks don't need console spam
 
         // Retrieve the category from button value
         let strInjuryCategory = event.currentTarget.value;
@@ -890,50 +981,41 @@ Hooks.on('updateToken', (scene, token, updateData) => {
         const actor = canvas.tokens.get(token._id).actor;
         const oldHP = actor.system.attributes.hp.value;
         if (oldHP - newHP > 5) {
-          console.log(`Actor ${actor.name} was hit for more than 5 HP.`);
+          // This is debug info - only log if really needed for troubleshooting
+          // console.log(`Actor ${actor.name} was hit for more than 5 HP.`);
         }
       }
     }
 });
 
 Hooks.on('createChatMessage', (msg) => {
-    postConsoleAndNotification("IN createChatMessage msg: ", msg, false, false, false);
-    postConsoleAndNotification("IN createChatMessage msg.rolls: ", msg.rolls, false, false, false);
-    postConsoleAndNotification("IN createChatMessage msg.rolls.total: ", msg.rolls.total, false, false, false);
-    postConsoleAndNotification("IN createChatMessage msg.rolls._total: ", msg.rolls._total, false, false, false);
-    postConsoleAndNotification("IN createChatMessage msg.rolls[0]: ", msg.rolls[0], false, false, false);
-    postConsoleAndNotification("IN createChatMessage msg.rolls.D20Roll: ", msg.rolls.D20Roll, false, false, false);
-    // postConsoleAndNotification("IN createChatMessage msg.rolls[0].D20Roll: ", msg.rolls[0].D20Roll, false, true, false);
-    postConsoleAndNotification("IN createChatMessage msg.rolls.results: ", msg.rolls.results, false, false, false);
+    // Removed excessive debug logging - this was flooding the console
+    // Only log critical information when needed for troubleshooting
+    
    //if (msg.flavor) {
     if (msg.rolls.total) {
         const totalRoll = msg.rolls.total;
         const targetAC = 15; // Replace with appropriate function to get target's AC
-        //postConsoleAndNotification("IN createChatMessage totalRoll: ", totalRoll, false, true, false);
         // Critical Hit
         if (totalRoll === 20) {
-            //postConsoleAndNotification("IN createChatMessage CRITICAL", "", false, false, true);
             ChatMessage.create({
                 content: `${msg.user.name} made a critical hit!`
             });
         } 
         // Fumble
         else if (totalRoll === 1) {
-            //postConsoleAndNotification("IN createChatMessage FUMBLE", "", false, false, true);
             ChatMessage.create({
                 content: `${msg.user.name} fumbled their attack.`
             });
         } 
         // Normal Hit
         else if (totalRoll >= targetAC) {
-            //postConsoleAndNotification("IN createChatMessage NORMAL HIT", "", false, false, false);
             ChatMessage.create({
                 content: `${msg.user.name} hit their target!`
             });
         } 
         // Miss
         else {
-            //postConsoleAndNotification("IN createChatMessage MISS", "", false, false, false);
             ChatMessage.create({
                 content: `${msg.user.name} missed their target.`
             });
@@ -1053,8 +1135,6 @@ async function publishChatCard() {
         
         // INJURY CARD
 
-        // DEBUG
-        postConsoleAndNotification("IN BIBLIOSOPH.CARDTYPEINJURY", "", false, true, false);
 
         var compendiumName = game.settings.get(MODULE.ID, 'injuryCompendium');
         let content = await createChatCardInjurySelector(compendiumName);
@@ -1071,7 +1151,7 @@ async function publishChatCard() {
     else
     {   
         // NOTHING
-        postConsoleAndNotification("Card Type: ", "No Card Type Set", false, true, true);
+        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "Card Type: No Card Type Set", "", true, false);
     }
     //user, speaker, timestamp, flavor, whisper, blind, roll, sound, emote, flags, content
     //these are the types: OTHER (Uncategorized), OOC (Out of Char), IC (In Character), EMOTE (e.g. "waves hand"), WHISPER (Private), ROLL (Dice Roll)
@@ -1082,7 +1162,8 @@ async function publishChatCard() {
         let users = BIBLIOSOPH.MESSAGES_LIST_TO_PRIVATE;
         // Check if `users` is an array.
         if (!Array.isArray(users)) {
-            postConsoleAndNotification("Expected 'users' to be an array, but it is not.", users, false, true, true);
+            // This is an error that could break functionality - use console.warn
+            console.warn("BIBLIOSOPH | Expected 'users' to be an array, but it is not:", users);
         }
         let userids = users
             .map(u => game.users.find(us => us && us.name === u))
@@ -1097,8 +1178,8 @@ async function publishChatCard() {
                 speaker: ChatMessage.getSpeaker()
             });
         } else {
-            // Post Debug
-            postConsoleAndNotification("No User Selected: ", "No users to send a whisper to.", false, true, true);
+            // Post Debug - This is debug info, only log if really needed for troubleshooting
+            // getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "No User Selected: No users to send a whisper to.", "", true, true);
         }
     } else {
         // If there is content, send it.
@@ -1114,8 +1195,8 @@ async function publishChatCard() {
         }
     }
 
-    // Reset everything for the next time
-    postConsoleAndNotification("The card has been delivered, so we are clearing our variables for next time.", "", false, false, false);
+    // Reset everything for the next time - This is a system message
+    getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "The card has been delivered, so we are clearing our variables for next time.", "", false, false);
     resetBibliosophVars();
 }
 
@@ -1307,13 +1388,8 @@ async function createChatCardGeneral(strRollTableName) {
         strImage = arrRollTableResults.strImage;
     } else {
         // Not getting data from a table, set it accordingly
-        // send debug
-        postConsoleAndNotification("Roll Table: ","No Table to Roll", false, true, false);
         // No Tabel content so assume message
         strContent = markdownToHtml(BIBLIOSOPH.MESSAGES_CONTENT);
-        // Post Debug
-        postConsoleAndNotification("Chat Card Content", strContent, false, true, false);
-        
     }
     const templatePath = BIBLIOSOPH.MESSAGE_TEMPLATE_CARD;
     const response = await fetch(templatePath);
@@ -1355,9 +1431,6 @@ async function createChatCardGeneral(strRollTableName) {
 
 async function createChatCardInjury(category) {  
 
-    // DEBUG
-    postConsoleAndNotification("BUTTON CLICKED. IN createChatCardInjury. Category:", category, false, true, false);
-
     // Set the defaults
     var compendiumName = game.settings.get(MODULE.ID, 'injuryCompendium');
     var blnInjuryImageEnabled = game.settings.get(MODULE.ID, 'injuryImageEnabled');
@@ -1397,9 +1470,8 @@ async function createChatCardInjury(category) {
 
     // get the journal data
     let objInjuryData = await getJournalCategoryPageData(compendiumName,strCategory) ;
-    postConsoleAndNotification("objInjuryData: ", objInjuryData, false, true, false);
     if (!objInjuryData) {
-        postConsoleAndNotification("objInjuryData is null or undefined", false, false, false);
+        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "objInjuryData is null or undefined", "", true, false);
     } else {
         strJournalType = objInjuryData.journaltype; // not used
         strInjuryCategory = objInjuryData.category;
@@ -1418,7 +1490,6 @@ async function createChatCardInjury(category) {
         if (!strInjuryCategory) {
             strInjuryCategory = "General";
             strIconStyle = "fa-skull";
-            postConsoleAndNotification("The data in 'objInjuryData.category' is null or undefined or an empty string. Auto set to: " + strInjuryCategory, false, false, false);
         } else {
             // Data was returned
             switch(strInjuryCategory.toLowerCase()) {
@@ -1482,21 +1553,18 @@ async function createChatCardInjury(category) {
         
         if (!strInjuryTitle) {
             strInjuryTitle = "Injury Label Missing";
-            postConsoleAndNotification("The data in 'objInjuryData.label' is null or undefined or an empty string. Changed to: " + objInjuryData.label, false, false, false);
         } else {
             // Data was returned
         }
         
         if (!strInjuryImage) {
             strInjuryImage = "icons/skills/wounds/injury-pain-body-orange.webp";
-            postConsoleAndNotification("The data in 'objInjuryData.icon' is null or undefined or an empty string. Applying the default image: " + objInjuryData.icon, false, false, false);
         } else {
             // Data was returned
         }
         
         if (!intInjuryDamage) {
             intInjuryDamage = "0";
-            postConsoleAndNotification("The data in 'objInjuryData.damage' is null or undefined or an empty string. Setting it to the deafult: " + objInjuryData.damage, false, false, false);
         } else {
             // Data was returned
             strInjuryDamage = intInjuryDamage + " Hit Points";
@@ -1504,21 +1572,18 @@ async function createChatCardInjury(category) {
         
         if (!strInjuryDescription) {
             strInjuryDescription = "The description is missing.";
-            postConsoleAndNotification("The data in 'objInjuryData.description' is null or undefined or an empty string. Setting it to: " + objInjuryData.description, false, false, false);
         } else {
             // Data was returned
         }
         
         if (!strInjuryTreatment) {
             strInjuryTreatment = "There is no known treatment.";
-            postConsoleAndNotification("The data in 'objInjuryData.treatment' is null or undefined or an empty string. Setting it to the default of: " + objInjuryData.treatment, false, false, false);
         } else {
             // Data was returned
         }
         
         if (!strInjuryAction) {
             strInjuryAction = "Apply Injury to Token";
-            postConsoleAndNotification("The data in 'objInjuryData.action' is null or undefined or an empty string. Setting it to the default of: " + objInjuryData.action, false, false, false);
         } else {
             // Data was returned
         }
@@ -1526,7 +1591,6 @@ async function createChatCardInjury(category) {
         if (intInjuryDuration === undefined || intInjuryDuration === null || intInjuryDuration === "") {
             intInjuryDuration = 0;
             strInjuryDuration = "Permanent";
-            postConsoleAndNotification("The data in 'objInjuryData.duration' is null or undefined or an empty string. Setting it to the default of: " + objInjuryData.duration, false, false, false);
         } else {
             // Data was returned
             // Convert seconds to words
@@ -1535,7 +1599,6 @@ async function createChatCardInjury(category) {
 
         if (!strStatusEffect) {
             strStatusEffect = "none";
-            postConsoleAndNotification("The data in 'objInjuryData.duration' is null or undefined or an empty string. Setting it to the default of: " + objInjuryData.duration, false, false, false);
         } else {
             // Data was returned
         }
@@ -1896,7 +1959,7 @@ async function createChatCardSearch(strRollTableName) {
         if (BIBLIOSOPH.CARDTYPEINVESTIGATION){
             let tableDescBefore = game.tables.getName("Search Descriptions: Before");
             if (!tableDescBefore) {
-                postConsoleAndNotification("You need to choose a roll table for Investigation Descriptions (Before) in settings.", "", false, false, true); 
+                postConsoleAndNotification("You need to choose a roll table for Investigation Descriptions (Before) in settings.", "", false, false, false); 
                 return;
             }
             let rollDescBeforeResults = await tableDescBefore.roll();
@@ -1904,7 +1967,7 @@ async function createChatCardSearch(strRollTableName) {
             // Get the reveal text
             let tableDescReveal = game.tables.getName("Search Descriptions: Reveal");
             if (!tableDescReveal) {
-                postConsoleAndNotification("You need to choose a roll table for Investigation Descriptions (Reveal) in settings.", "", false, false, true); 
+                postConsoleAndNotification("You need to choose a roll table for Investigation Descriptions (Reveal) in settings.", "", false, false, false); 
                 return;
             }
             let rollDescRevealResults = await tableDescReveal.roll();
@@ -1912,7 +1975,7 @@ async function createChatCardSearch(strRollTableName) {
             // Get the after desription parts
             let tableDescAfter = game.tables.getName("Search Descriptions: After");
             if (!tableDescAfter) {
-                postConsoleAndNotification("You need to choose a roll table for Investigation Descriptions (After) in settings.", "", false, false, true); 
+                postConsoleAndNotification("You need to choose a roll table for Investigation Descriptions (After) in settings.", "", false, false, false); 
                 return;
             }
             let rollDescAfterResults = await tableDescAfter.roll();
@@ -2006,7 +2069,7 @@ async function getRollTable(tableName) {
 
     // Check to see if the table is valid
     if (!table) {
-        postConsoleAndNotification("Roll Table not Found. Did you set one in settings?", "", false, false, true); 
+        postConsoleAndNotification("Roll Table not Found. Did you set one in settings?", "", false, false, false); 
         return;
     }
     
@@ -3061,9 +3124,9 @@ async function applyActiveEffect(strLabel, strIcon, intDamage, intDuration, strS
                 // Now create the embedded document
                 await token.actor.createEmbeddedDocuments("ActiveEffect", [cleanEffectData]);
                 
-                postConsoleAndNotification("Applied " + strLabel + " ", token.actor.name, false, false, true);
+                postConsoleAndNotification("Applied " + strLabel + " ", token.actor.name, false, false, false);
             } else {
-                postConsoleAndNotification("Active effect already present on " + token.actor.name + ", skipping. ", strLabel, false, false, true);
+                postConsoleAndNotification("Active effect already present on " + token.actor.name + ", skipping. ", strLabel, false, false, false);
             }
         }
         // --- Apply Status Effects, if needed ---
@@ -3075,9 +3138,9 @@ async function applyActiveEffect(strLabel, strIcon, intDamage, intDuration, strS
                     if (!hasEffect){
                         game.dfreds.effectInterface.toggleEffect(statusEffectName, token.actor);
                         console.log(`Toggled ${statusEffectName} for ${token.actor.name}`);
-                        postConsoleAndNotification("Added status effect " + statusEffectName + ".",token.actor.name, false, false, true);
+                        postConsoleAndNotification("Added status effect " + statusEffectName + ".",token.actor.name, false, false, false);
                     } else {
-                        postConsoleAndNotification(token.actor.name + " already has status effect " + statusEffectName + ".","Skipping adding the status effect.", false, false, true);
+                        postConsoleAndNotification(token.actor.name + " already has status effect " + statusEffectName + ".","Skipping adding the status effect.", false, false, false);
                     }
                 } catch (err) {
                     postConsoleAndNotification("Error while toggling status effect " + statusEffectName + ": ",err, false, false, false);

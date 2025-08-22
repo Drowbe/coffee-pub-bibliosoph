@@ -18,10 +18,27 @@
   ],
   "authors": [
     {
-      "name": "drowbe"
+      "name": "COFFEE PUB",
+      "discord": "drowbe",
+      "url": "https://github.com/Drowbe",  
+      "patreon": "Coffee Pub", 
+      "github": "Drowbe", 
+      "flags": {             
+        "isMaintainer": true,
+        "contribution": "owner"
+      }
     },
     {
-      "name": "CLIFFFF"
+      "name": "Drowbe", 
+      "discord": "drowbe",            
+      "url": "https://willhavebeen.com",  
+      "patreon": "Coffee Pub", 
+      "reddit": "Drowbe",  
+      "github": "Drowbe", 
+      "flags": {             
+        "isMaintainer": true,
+        "contribution": "developer"
+      }
     }
   ],
   "esmodules": [
@@ -33,6 +50,7 @@
   "url": "https://github.com/Drowbe/coffee-pub-bibliosoph",
   "manifest": "https://github.com/Drowbe/coffee-pub-bibliosoph/releases/latest/download/module.json",
   "download": "https://github.com/Drowbe/coffee-pub-bibliosoph/releases/latest/download/coffee-pub-bibliosoph.zip",
+  "bugs": "https://github.com/Drowbe/coffee-pub-bibliosoph/issues",
   "changelog": "CHANGELOG.md",
   "license": "LICENSE",
   "readme": "README.md",

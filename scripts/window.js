@@ -1,5 +1,10 @@
 import { BIBLIOSOPH } from './const.js'
 
+// Helper function to safely get Blacksmith API
+function getBlacksmith() {
+    return game.modules.get('coffee-pub-blacksmith')?.api;
+}
+
 export class BiblioWindowChat extends FormApplication {
 
     // ************************************
@@ -54,8 +59,7 @@ export class BiblioWindowChat extends FormApplication {
         // Look for selected images
         html.find('#optionChatType > img').on('click', (event) => { 
             let chosenValue = event.currentTarget.getAttribute("value");
-            console.log(chosenValue);
-            
+
             // Highlight the chosen option
             html.find('#optionChatType > img').removeClass('bibliosoph-option-image-selected');
             event.currentTarget.classList.add('bibliosoph-option-image-selected');
@@ -77,15 +81,6 @@ export class BiblioWindowChat extends FormApplication {
             } else {
                 this.selectedDivs.push(divValue); // select
             }
-
-            // console.log("---------------------"); 
-            // console.log(divValue); // print it
-            // console.log("---------------------");
-            // console.log(this.selectedDivs);
-            // console.log("---------------------");
-            // console.log(BiblioWindowChat.selectedDivs);
-            // console.log("---------------------");
-
 
         });
     }
@@ -110,7 +105,7 @@ export class BiblioWindowChat extends FormApplication {
 
         // this is called when the form is submitted
         if (this.onFormSubmit) {
-            console.log('calling form submit callback')
+
             this.onFormSubmit()
         }
         // Clear input field after form submission
@@ -126,72 +121,5 @@ export class BiblioWindowChat extends FormApplication {
             // Clear the form
             $(event.currentTarget).find('textarea#inputMessage').val('');
         }        
-    }
-}
-
-// ************************************
-// ** UTILITY Debug
-// ************************************
-
-
-function postDebug(type, severity, title, message, override) {
-    // CONSOLE, NOTIFICATION, BOTH
-    var strTYPE = type;
-    if (!strTYPE){
-        strTYPE = "CONSOLE";
-    }
-    // Console: log, warn, error
-    // Notification: info, warn, error
-    var strSeverity = severity;
-    if (!strSeverity){
-        strSeverity = "INFO";
-    }
-    var strTitle = title;
-    if (!strTitle){
-        strTitle = "No Title Set";
-    }
-    var strMessage = message;
-    if (!strMessage){
-        //strMessage = "No Message Received.";
-    } 
-    // Build the Debug
-    var strConsoleMessage = "";
-    strConsoleMessage = "========================= \n";
-    strConsoleMessage = strConsoleMessage + "==  COFFEE PUB DEBUG   == \n";
-    strConsoleMessage = strConsoleMessage + strTitle + "\n";
-    strConsoleMessage = strConsoleMessage + strMessage + "\n";
-    strConsoleMessage = strConsoleMessage + "========================= \n";
-    var strNotificationMessage = "";
-    strNotificationMessage = strTitle + ": " + strMessage;
-
-    if (BIBLIOSOPH.DEBUGON || override) {
-        if (strTYPE == "BOTH"){
-            if (strSeverity == "ERROR"){
-                console.error(strConsoleMessage);
-                ui.notifications.error(message, {permanent: false, console: true});
-            } else if (strSeverity == "WARN") {
-                console.warn(strConsoleMessage);
-                ui.notifications.warn(message, {permanent: false, console: false});
-            } else {
-                console.log(strConsoleMessage);
-                ui.notifications.info(message, {permanent: false, console: false});
-            }
-        } else if (strTYPE == "NOTIFICATION") {
-            if (strSeverity == "ERROR"){
-                ui.notifications.error(message, {permanent: false, console: true});
-            } else if (strSeverity == "WARN") {
-                ui.notifications.warn(message, {permanent: false, console: false});
-            } else {
-                ui.notifications.info(message, {permanent: false, console: false});
-            }
-        } else {
-            if (strSeverity == "ERROR"){
-                console.error(strConsoleMessage);
-            } else if (strSeverity == "WARN") {
-                console.warn(strConsoleMessage);
-            } else {
-                console.log(strConsoleMessage);
-            }
-        }
     }
 }

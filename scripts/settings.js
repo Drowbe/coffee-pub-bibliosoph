@@ -4,13 +4,6 @@
 
 // Grab the module data
 import { MODULE, BIBLIOSOPH  } from './const.js';
-// -- Import the shared GLOBAL variables --
-import { COFFEEPUB } from './global.js';
-// -- Load the shared GLOBAL functions --
-import { registerBlacksmithUpdatedHook, postConsoleAndNotification, getActorId, resetModuleSettings} from './global.js';
-// -- Import special page variables --
-// none.
-
 
 // ================================================================== 
 // ===== EXPORTS ====================================================
@@ -26,29 +19,30 @@ import { registerBlacksmithUpdatedHook, postConsoleAndNotification, getActorId, 
   
 export const registerSettings = () => {
 	Hooks.once('ready', async() => {
+		// Helper function to safely get Blacksmith API
+		function getBlacksmith() {
+			return game.modules.get('coffee-pub-blacksmith')?.api;
+		}
+
 		// Helper function to safely get Blacksmith choice arrays
 		const getBlacksmithChoices = (choiceType, fallbackMessage = "No choices available") => {
-			// Helper function to safely get Blacksmith API
-			function getBlacksmith() {
-				return game.modules.get('coffee-pub-blacksmith')?.api;
-			}
 			const blacksmith = getBlacksmith();
 			const choices = blacksmith?.BLACKSMITH?.[choiceType];
 			if (choices && Object.keys(choices).length > 0) return { ...choices };
 			return { "none": fallbackMessage };
 		};
 
+		// Helper function to get Blacksmith default values
+		const getBlacksmithDefault = (defaultType, fallbackValue = "default") => {
+			const blacksmith = getBlacksmith();
+			return blacksmith?.BLACKSMITH?.[defaultType] ?? fallbackValue;
+		};
+
 		// Register settings...
-		postConsoleAndNotification("Registering Settings...", "", false, false, false) 
-		// Debug: Post the Blacksmith choice arrays
+		// This is a system message - user should know settings are being registered
+		getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "Registering Settings...", "", false, false);
+		// Debug: Post the Blacksmith choice arrays - This is debug info, only log if really needed for troubleshooting
 		const blacksmith = game.modules.get('coffee-pub-blacksmith')?.api;
-		postConsoleAndNotification("Blacksmith Theme Choices: ", blacksmith?.BLACKSMITH?.arrThemeChoices?.length || 0, false, true, false);
-		postConsoleAndNotification("Blacksmith Macro Choices: ", blacksmith?.BLACKSMITH?.arrMacroChoices?.length || 0, false, true, false);
-		postConsoleAndNotification("Blacksmith Table Choices: ", blacksmith?.BLACKSMITH?.arrTableChoices?.length || 0, false, true, false);
-		postConsoleAndNotification("Blacksmith Background Image Choices: ", blacksmith?.BLACKSMITH?.arrBackgroundImageChoices?.length || 0, false, true, false);
-		postConsoleAndNotification("Blacksmith Icon Choices: ", blacksmith?.BLACKSMITH?.arrIconChoices?.length || 0, false, true, false);
-		postConsoleAndNotification("Blacksmith Sound Choices: ", blacksmith?.BLACKSMITH?.arrSoundChoices?.length || 0, false, true, false);
-		postConsoleAndNotification("Blacksmith Compendium Choices: ", blacksmith?.BLACKSMITH?.arrCompendiumChoices?.length || 0, false, true, false);
 
 		// ---------- TITLE ----------
 		game.settings.register(MODULE.ID, "headingH1Bibliosoph", {
@@ -59,19 +53,6 @@ export const registerSettings = () => {
 			default: "",
 			type: String,
 		});
-		// -------------------------------------
-
-		// ---------- HORIZANTAL RULE ----------
-		/* 
-		game.settings.register(MODULE.ID, "headingHRBibliosoph", {
-			name: " ",
-			hint: " ",
-			scope: "world",
-			config: true,
-			default: "",
-			type: String,
-		});
-		*/
 		// -------------------------------------
 
 
@@ -123,7 +104,7 @@ export const registerSettings = () => {
 			scope: 'world',
 			config: true,
 			requiresReload: false,
-			default: COFFEEPUB.strDEFAULTCARDTHEME,
+			default: getBlacksmithDefault('strDefaultCardTheme', 'default'), // Get default from Blacksmith API
 			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
 		});
 
@@ -164,7 +145,7 @@ export const registerSettings = () => {
 			scope: 'world',
 			config: true,
 			requiresReload: false,
-			default: COFFEEPUB.strDEFAULTCARDTHEME,
+			default: getBlacksmithDefault('strDefaultCardTheme', 'default'), // Get default from Blacksmith API
 			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
 		});
 
@@ -207,7 +188,7 @@ export const registerSettings = () => {
 			scope: 'world',
 			config: true,
 			requiresReload: false,
-			default: COFFEEPUB.strDEFAULTCARDTHEME,
+			default: getBlacksmithDefault('strDefaultCardTheme', 'default'), // Get default from Blacksmith API
 			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
 		});
 		// -- Beverage Table --
@@ -259,7 +240,7 @@ export const registerSettings = () => {
 			scope: 'world',
 			config: true,
 			requiresReload: false,
-			default: COFFEEPUB.strDEFAULTCARDTHEME,
+			default: getBlacksmithDefault('strDefaultCardTheme', 'default'), // Get default from Blacksmith API
 			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
 		});
 		// -- Bio Table --
@@ -311,7 +292,7 @@ export const registerSettings = () => {
 			scope: 'world',
 			config: true,
 			requiresReload: false,
-			default: COFFEEPUB.strDEFAULTCARDTHEME,
+			default: getBlacksmithDefault('strDefaultCardTheme', 'default'), // Get default from Blacksmith API
 			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
 		});
 		// -- Insults Table --
@@ -362,7 +343,7 @@ export const registerSettings = () => {
 			scope: 'world',
 			config: true,
 			requiresReload: false,
-			default: COFFEEPUB.strDEFAULTCARDTHEME,
+			default: getBlacksmithDefault('strDefaultCardTheme', 'default'), // Get default from Blacksmith API
 			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
 		});
 		// -- Praise Table --
@@ -427,7 +408,7 @@ export const registerSettings = () => {
 			scope: 'world',
 			config: true,
 			requiresReload: false,
-			default: COFFEEPUB.strDEFAULTCARDTHEME,
+			default: getBlacksmithDefault('strDefaultCardTheme', 'default'), // Get default from Blacksmith API
 			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
 		});
 		// -- Investigation Odds --
@@ -591,7 +572,7 @@ export const registerSettings = () => {
 			scope: 'world',
 			config: true,
 			requiresReload: false,
-			default: COFFEEPUB.strDEFAULTCARDTHEME,
+			default: getBlacksmithDefault('strDefaultCardTheme', 'default'), // Get default from Blacksmith API
 			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
 		});
 		// -- Critical Table --
@@ -644,7 +625,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			type: String,
-			default: COFFEEPUB.strDEFAULTCARDTHEME,
+			default: getBlacksmithDefault('strDefaultCardTheme', 'default'), // Get default from Blacksmith API
 			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
 		});
 		// -- Fumble Table --
@@ -697,7 +678,7 @@ export const registerSettings = () => {
 			scope: 'world',
 			config: true,
 			requiresReload: false,
-			default: COFFEEPUB.strDEFAULTCARDTHEME,
+			default: getBlacksmithDefault('strDefaultCardTheme', 'default'), // Get default from Blacksmith API
 			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
 		});
 		// -- Inspiration Table --
@@ -750,7 +731,7 @@ export const registerSettings = () => {
 			scope: 'world',
 			config: true,
 			requiresReload: false,
-			default: COFFEEPUB.strDEFAULTCARDTHEME,
+			default: getBlacksmithDefault('strDefaultCardTheme', 'default'), // Get default from Blacksmith API
 			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
 		});
 		// -- DOMT Table --
@@ -807,7 +788,7 @@ export const registerSettings = () => {
 			scope: 'world',
 			config: true,
 			requiresReload: false,
-			default: COFFEEPUB.strDEFAULTCARDTHEME,
+			default: getBlacksmithDefault('strDefaultCardTheme', 'default'), // Get default from Blacksmith API
 			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
 		});
 		// -- Encounter Odds --
@@ -1319,7 +1300,7 @@ export const registerSettings = () => {
 			scope: 'world',
 			config: true,
 			requiresReload: false,
-			default: COFFEEPUB.strDEFAULTCARDTHEME,
+			default: getBlacksmithDefault('strDefaultCardTheme', 'default'), // Get default from Blacksmith API
 			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
 		});
 
