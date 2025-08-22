@@ -5,16 +5,10 @@
 // Grab the module data
 import { MODULE, BIBLIOSOPH  } from './const.js';
 
-
-// *** BEGIN: GLOBAL IMPORTS ***
-// *** These should be the same across all modules
-// -- Import the shared GLOBAL variables --
-import { COFFEEPUB } from './global.js';
-// -- Load the shared GLOBAL functions --
-import { registerBlacksmithUpdatedHook, resetModuleSettings, getOpenAIReplyAsHtml} from './global.js';
-// -- Global utilities --
-import { postConsoleAndNotification, rollCoffeePubDice, playSound, getActorId, getTokenImage, getPortraitImage, getTokenId, objectToString, stringToObject,trimString, generateFormattedDate, toSentenceCase, convertSecondsToString} from './global.js';
-// *** END: GLOBAL IMPORTS ***
+// *** BEGIN: BLACKSMITH API INTEGRATION ***
+// *** Replacing global.js with Blacksmith API ***
+// Blacksmith API will be accessed locally in each hook as needed
+// *** END: BLACKSMITH API INTEGRATION ***
 
 
 // -- Import special page variables --
@@ -27,8 +21,6 @@ import { BiblioWindowChat } from './window.js';
 // ===== REGISTER COMMON ============================================
 // ================================================================== 
 
-// Register the Blacksmith hook
-registerBlacksmithUpdatedHook();
 // Ensure the settings are registered before anything else
 registerSettings();
 
@@ -39,8 +31,34 @@ registerSettings();
 
 // ***** INIT *****
 // Hook that loads as the module loads
-Hooks.once('init', () => {
-    // Nothin'
+Hooks.once('init', async function() {
+    // Register with Coffee Pub Blacksmith
+    const blacksmith = game.modules.get('coffee-pub-blacksmith')?.api;
+    if (!blacksmith?.registerModule) {
+        console.error("BIBLIOSOPH | Required dependency 'coffee-pub-blacksmith' not found or not ready!");
+        return;
+    }
+
+    // Register this module with Blacksmith
+    blacksmith.registerModule('coffee-pub-bibliosoph', {
+        name: 'BIBLIOSOPH',
+        version: '0.1.03',
+        features: [
+            {
+                type: 'chatPanelIcon',
+                data: {
+                    icon: 'fas fa-book-open',
+                    tooltip: 'Bibliosoph - Rolltable card formatting',
+                    onClick: () => {
+                        // TODO: Implement click handler for chat panel icon
+                        console.log('Bibliosoph chat panel icon clicked');
+                    }
+                }
+            }
+        ]
+    });
+
+    console.log("BIBLIOSOPH | Successfully registered with Coffee Pub Blacksmith");
 });
 
 // ***** CHAT CLICKS *****
@@ -56,74 +74,125 @@ Hooks.on('renderChatLog', (app, html, data) => {
 
 // Hook that fires after module loads
 
-Hooks.on("ready", () => {
+Hooks.on("ready", async () => {
 
     // ********  VERIFY BLACKSMITH  **********
-    // Get variables from other modules
-    postConsoleAndNotification("Initializing Blacksmith connections...", "", false, false, false); 
-    if(game.modules.get("coffee-pub-blacksmith")?.active) {
-        postConsoleAndNotification("Coffee Pub Blacksmith is installed and connected.", "", false, false, false); 
+    // Re-access Blacksmith API to ensure availability
+    const blacksmith = game.modules.get('coffee-pub-blacksmith')?.api;
+    
+    // Add diagnostic logging as recommended by API developer
+    console.log('BIBLIOSOPH | Blacksmith API:', blacksmith);
+    console.log('BIBLIOSOPH | Utils available:', blacksmith?.utils);
+    console.log('BIBLIOSOPH | getSettingSafely available:', typeof blacksmith?.utils?.getSettingSafely);
+    console.log('BIBLIOSOPH | setSettingSafely available:', typeof blacksmith?.utils?.setSettingSafely);
+    
+    // Verify Blacksmith API is available
+    if (!blacksmith?.utils?.getSettingSafely) {
+        console.error("BIBLIOSOPH | Blacksmith API not fully initialized! Module may not function properly.");
+        console.warn("BIBLIOSOPH | Will use fallback values for settings");
+        return;
+    }
+
+    // Use Blacksmith's safe console logging
+    blacksmith.utils.postConsoleAndNotification("BIBLIOSOPH", "Initializing Blacksmith connections...", "", false, false, false);
+    
+    if (game.modules.get("coffee-pub-blacksmith")?.active) {
+        blacksmith.utils.postConsoleAndNotification("BIBLIOSOPH", "Coffee Pub Blacksmith is installed and connected.", "", false, false, false);
     } else {
-        postConsoleAndNotification("Coffee Pub Blacksmith does not seem to be enabled. It is required for Coffee Pub Bibliosoph to function. Please enable it in your options.", "", false, false, true); 
+        blacksmith.utils.postConsoleAndNotification("BIBLIOSOPH", "Coffee Pub Blacksmith does not seem to be enabled. It is required for Coffee Pub Bibliosoph to function. Please enable it in your options.", "", false, false, true);
+        return;
     }
     // Do these things after the client has loaded
     // BIBLIOSOPH.DEBUGON = game.settings.get(MODULE.ID, 'globalDebugMode');
     // Get the variables ready
     resetBibliosophVars();
-    // SET VARIABLES
-    var strGeneralMacro = game.settings.get(MODULE.ID, 'encounterMacroGeneral');
-    var strCaveMacro = game.settings.get(MODULE.ID, 'encounterMacroCave');
-    var strDesertMacro = game.settings.get(MODULE.ID, 'encounterMacroDesert');
-    var strDungeonMacro = game.settings.get(MODULE.ID, 'encounterMacroDungeon');
-    var strForestMacro = game.settings.get(MODULE.ID, 'encounterMacroForest');
-    var strMountainMacro = game.settings.get(MODULE.ID, 'encounterMacroMountain');
-    var strSkyMacro = game.settings.get(MODULE.ID, 'encounterMacroSky');
-    var strSnowMacro = game.settings.get(MODULE.ID, 'encounterMacroSnow');
-    var strUrbanMacro = game.settings.get(MODULE.ID, 'encounterMacroUrban');
-    var strWaterMacro = game.settings.get(MODULE.ID, 'encounterMacroWater');
-    var strInvestigationMacro = game.settings.get(MODULE.ID, 'investigationMacro');
-    var strGiftMacro = game.settings.get(MODULE.ID, 'giftMacro');
-    var strShadygoodsMacro = game.settings.get(MODULE.ID, 'shadygoodsMacro');
-    var strCriticalMacro = game.settings.get(MODULE.ID, 'criticalMacro');
-    var strFumbleMacro = game.settings.get(MODULE.ID, 'fumbleMacro');
-    var strInspirationMacro = game.settings.get(MODULE.ID, 'inspirationMacro');
-    var strDOMTMacro = game.settings.get(MODULE.ID, 'domtMacro');
-    var strBeverageMacro = game.settings.get(MODULE.ID, 'beverageMacro');
-    var strBioMacro = game.settings.get(MODULE.ID, 'bioMacro');
-    var strInsultMacro = game.settings.get(MODULE.ID, 'insultsMacro');
-    var strPraiseMacro = game.settings.get(MODULE.ID, 'praiseMacro');
-    var strPartyMacro = game.settings.get(MODULE.ID, 'partyMessageMacro');
+    
+    // Create safe settings helper function (final version)
+    const getSetting = (settingKey, defaultValue) => {
+        if (blacksmith?.utils?.getSettingSafely) {
+            // Use Blacksmith's safe settings access
+            return blacksmith.utils.getSettingSafely(MODULE.ID, settingKey, defaultValue);
+        } else {
+            // Fallback to standard FoundryVTT settings
+            try {
+                return game.settings.get(MODULE.ID, settingKey) ?? defaultValue;
+            } catch (error) {
+                console.warn(`BIBLIOSOPH | Error getting setting ${settingKey}, using fallback:`, error);
+                return defaultValue;
+            }
+        }
+    };
+
+    // Create safe settings setter function
+    const setSetting = (settingKey, value) => {
+        if (blacksmith?.utils?.setSettingSafely) {
+            // Use Blacksmith's safe settings modification
+            return blacksmith.utils.setSettingSafely(MODULE.ID, settingKey, value);
+        } else {
+            // Fallback to standard FoundryVTT settings
+            try {
+                return game.settings.set(MODULE.ID, settingKey, value);
+            } catch (error) {
+                console.warn(`BIBLIOSOPH | Error setting setting ${settingKey}:`, error);
+                return false;
+            }
+        }
+    };
+    
+    // SET VARIABLES using Blacksmith's safe settings access
+    var strGeneralMacro = getSetting('encounterMacroGeneral', '');
+    var strCaveMacro = getSetting('encounterMacroCave', '');
+    var strDesertMacro = getSetting('encounterMacroDesert', '');
+    var strDungeonMacro = getSetting('encounterMacroDungeon', '');
+    var strForestMacro = getSetting('encounterMacroForest', '');
+    var strMountainMacro = getSetting('encounterMacroMountain', '');
+    var strSkyMacro = getSetting('encounterMacroSky', '');
+    var strSnowMacro = getSetting('encounterMacroSnow', '');
+    var strUrbanMacro = getSetting('encounterMacroUrban', '');
+    var strWaterMacro = getSetting('encounterMacroWater', '');
+    var strInvestigationMacro = getSetting('investigationMacro', '');
+    var strGiftMacro = getSetting('giftMacro', '');
+    var strShadygoodsMacro = getSetting('shadygoodsMacro', '');
+    var strCriticalMacro = getSetting('criticalMacro', '');
+    var strFumbleMacro = getSetting('fumbleMacro', '');
+    var strInspirationMacro = getSetting('inspirationMacro', '');
+    var strDOMTMacro = getSetting('domtMacro', '');
+    var strBeverageMacro = getSetting('beverageMacro', '');
+    var strBioMacro = getSetting('bioMacro', '');
+    var strInsultMacro = getSetting('insultsMacro', '');
+    var strPraiseMacro = getSetting('praiseMacro', '');
+    var strPartyMacro = getSetting('partyMessageMacro', '');
     var strPartyMacroID = getMacroIdByName(strPartyMacro);
-    var strPrivateMacro = game.settings.get(MODULE.ID, 'privateMessageMacro');
+    var strPrivateMacro = getSetting('privateMessageMacro', '');
     var strPrivateMacroID = getMacroIdByName(strPrivateMacro);
 
-    var strInjuriesMacroGlobal = game.settings.get(MODULE.ID, 'injuriesMacroGlobal');
+    var strInjuriesMacroGlobal = getSetting('injuriesMacroGlobal', '');
     var strInjuriesMacroGlobalID = getMacroIdByName(strInjuriesMacroGlobal);
 
-    var blnGeneralEnabled = game.settings.get(MODULE.ID, 'encounterEnabledGeneral');
-    var blnCaveEnabled = game.settings.get(MODULE.ID, 'encounterEnabledCave');
-    var blnDesertEnabled = game.settings.get(MODULE.ID, 'encounterEnabledDesert');
-    var blnDungeonEnabled = game.settings.get(MODULE.ID, 'encounterEnabledDungeon');
-    var blnForestEnabled = game.settings.get(MODULE.ID, 'encounterEnabledForest');
-    var blnMountainEnabled = game.settings.get(MODULE.ID, 'encounterEnabledMountain');
-    var blnSkyEnabled = game.settings.get(MODULE.ID, 'encounterEnabledSky');
-    var blnSnowEnabled = game.settings.get(MODULE.ID, 'encounterEnabledSnow');
-    var blnUrbanEnabled = game.settings.get(MODULE.ID, 'encounterEnabledUrban');
-    var blnWaterEnabled = game.settings.get(MODULE.ID, 'encounterEnabledWater');
-    var blnPartyMessageEnabled = game.settings.get(MODULE.ID, 'partyMessageEnabled');
-    var blnPrivateMessageEnabled = game.settings.get(MODULE.ID, 'privateMessageEnabled');
-    var blnBeverageEnabled = game.settings.get(MODULE.ID, 'beverageEnabled');
-    var blnBioEnabled = game.settings.get(MODULE.ID, 'bioEnabled');
-    var blnInsultsEnabled = game.settings.get(MODULE.ID, 'insultsEnabled');
-    var blnPraiseEnabled = game.settings.get(MODULE.ID, 'praiseEnabled');
-    var blnInvestigationEnabled = game.settings.get(MODULE.ID, 'investigationEnabled');
-    var blnGiftEnabled = game.settings.get(MODULE.ID, 'giftEnabled');
-    var blnShadygoodsEnabled = game.settings.get(MODULE.ID, 'shadygoodsEnabled');
-    var blnCriticalEnabled = game.settings.get(MODULE.ID, 'criticalEnabled');
-    var blnFumbleEnabled = game.settings.get(MODULE.ID, 'fumbleEnabled');
-    var blnInspirationEnabled = game.settings.get(MODULE.ID, 'inspirationEnabled');
-    var blndomtEnabled = game.settings.get(MODULE.ID, 'domtEnabled');
-    var blninjuriesEnabledGlobal = game.settings.get(MODULE.ID, 'injuriesEnabledGlobal');
+    var blnGeneralEnabled = getSetting('encounterEnabledGeneral', false);
+    var blnCaveEnabled = getSetting('encounterEnabledCave', false);
+    var blnDesertEnabled = getSetting('encounterEnabledDesert', false);
+    var blnDungeonEnabled = getSetting('encounterEnabledDungeon', false);
+    var blnForestEnabled = getSetting('encounterEnabledForest', false);
+    var blnMountainEnabled = getSetting('encounterEnabledMountain', false);
+    var blnSkyEnabled = getSetting('encounterEnabledSky', false);
+    var blnSnowEnabled = getSetting('encounterEnabledSnow', false);
+    var blnUrbanEnabled = getSetting('encounterEnabledUrban', false);
+    var blnWaterEnabled = getSetting('encounterEnabledWater', false);
+    var blnPartyMessageEnabled = getSetting('partyMessageEnabled', false);
+    var blnPrivateMessageEnabled = getSetting('privateMessageEnabled', false);
+    var blnBeverageEnabled = getSetting('beverageEnabled', false);
+    var blnBioEnabled = getSetting('bioEnabled', false);
+    var blnInsultsEnabled = getSetting('insultsEnabled', false);
+    var blnPraiseEnabled = getSetting('praiseEnabled', false);
+    var blnInvestigationEnabled = getSetting('investigationEnabled', false);
+    var blnGiftEnabled = getSetting('giftEnabled', false);
+    var blnShadygoodsEnabled = getSetting('shadygoodsEnabled', false);
+    var blnCriticalEnabled = getSetting('criticalEnabled', false);
+    var blnFumbleEnabled = getSetting('fumbleEnabled', false);
+    var blnInspirationEnabled = getSetting('inspirationEnabled', false);
+    var blndomtEnabled = getSetting('domtEnabled', false);
+    var blninjuriesEnabledGlobal = getSetting('injuriesEnabledGlobal', false);
     
 
 
@@ -741,6 +810,28 @@ Hooks.on("ready", () => {
 
 
 
+
+// ************************************
+// ** BLACKSMITH HOOK LISTENER
+// ************************************
+
+Hooks.on('blacksmithUpdated', (newBlacksmith) => {
+    // Access updated data through the newBlacksmith parameter
+    // This hook is called whenever Blacksmith updates its shared variables
+    if (newBlacksmith) {
+        // You can access updated choice arrays and other shared data here
+        // For example: newBlacksmith.arrThemeChoices, newBlacksmith.arrSoundChoices, etc.
+        console.log("BIBLIOSOPH | Blacksmith data updated:", newBlacksmith);
+        
+        // Re-verify API is ready - useful if this is the first time Blacksmith is fully initialized
+        const blacksmith = game.modules.get('coffee-pub-blacksmith')?.api;
+        if (blacksmith?.utils?.getSettingSafely) {
+            console.log("BIBLIOSOPH | Blacksmith API now fully available via blacksmithUpdated hook");
+            console.log("BIBLIOSOPH | getSettingSafely available:", typeof blacksmith.utils.getSettingSafely);
+            console.log("BIBLIOSOPH | setSettingSafely available:", typeof blacksmith.utils.setSettingSafely);
+        }
+    }
+});
 
 // ************************************
 // ** HOOK TEST INJURY CHAT BUTTON

@@ -26,17 +26,29 @@ import { registerBlacksmithUpdatedHook, postConsoleAndNotification, getActorId, 
   
 export const registerSettings = () => {
 	Hooks.once('ready', async() => {
+		// Helper function to safely get Blacksmith choice arrays
+		const getBlacksmithChoices = (choiceType, fallbackMessage = "No choices available") => {
+			// Helper function to safely get Blacksmith API
+			function getBlacksmith() {
+				return game.modules.get('coffee-pub-blacksmith')?.api;
+			}
+			const blacksmith = getBlacksmith();
+			const choices = blacksmith?.BLACKSMITH?.[choiceType];
+			if (choices && Object.keys(choices).length > 0) return { ...choices };
+			return { "none": fallbackMessage };
+		};
+
 		// Register settings...
 		postConsoleAndNotification("Registering Settings...", "", false, false, false) 
-		// Debug: Post the variables
-		postConsoleAndNotification("Variables in Settings. COFFEEPUB.strDEFAULTCARDTHEME: ", COFFEEPUB.strDEFAULTCARDTHEME, false, true, false);
-		postConsoleAndNotification("Variables in Settings. COFFEEPUB.arrTHEMECHOICES: ", COFFEEPUB.arrTHEMECHOICES, false, true, false);
-		postConsoleAndNotification("Variables in Settings. COFFEEPUB.arrMACROCHOICES: ", COFFEEPUB.arrMACROCHOICES, false, true, false);
-		postConsoleAndNotification("Variables in Settings. COFFEEPUB.arrTABLECHOICES: ", COFFEEPUB.arrTABLECHOICES, false, true, false);
-		postConsoleAndNotification("Variables in Settings. COFFEEPUB.arrBACKGROUNDIMAGECHOICES: ", COFFEEPUB.arrBACKGROUNDIMAGECHOICES, false, true, false);
-		postConsoleAndNotification("Variables in Settings. COFFEEPUB.arrICONCHOICES: ", COFFEEPUB.arrICONCHOICES, false, true, false);
-		postConsoleAndNotification("Variables in Settings. COFFEEPUB.arrSOUNDCHOICES: ", COFFEEPUB.arrSOUNDCHOICES, false, true, false);
-		postConsoleAndNotification("Variables in Settings. COFFEEPUB.arrCOMPENDIUMCHOICES: ", COFFEEPUB.arrCOMPENDIUMCHOICES, false, true, false);
+		// Debug: Post the Blacksmith choice arrays
+		const blacksmith = game.modules.get('coffee-pub-blacksmith')?.api;
+		postConsoleAndNotification("Blacksmith Theme Choices: ", blacksmith?.BLACKSMITH?.arrThemeChoices?.length || 0, false, true, false);
+		postConsoleAndNotification("Blacksmith Macro Choices: ", blacksmith?.BLACKSMITH?.arrMacroChoices?.length || 0, false, true, false);
+		postConsoleAndNotification("Blacksmith Table Choices: ", blacksmith?.BLACKSMITH?.arrTableChoices?.length || 0, false, true, false);
+		postConsoleAndNotification("Blacksmith Background Image Choices: ", blacksmith?.BLACKSMITH?.arrBackgroundImageChoices?.length || 0, false, true, false);
+		postConsoleAndNotification("Blacksmith Icon Choices: ", blacksmith?.BLACKSMITH?.arrIconChoices?.length || 0, false, true, false);
+		postConsoleAndNotification("Blacksmith Sound Choices: ", blacksmith?.BLACKSMITH?.arrSoundChoices?.length || 0, false, true, false);
+		postConsoleAndNotification("Blacksmith Compendium Choices: ", blacksmith?.BLACKSMITH?.arrCompendiumChoices?.length || 0, false, true, false);
 
 		// ---------- TITLE ----------
 		game.settings.register(MODULE.ID, "headingH1Bibliosoph", {
@@ -102,7 +114,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			default: '-- Choose a Macro --',
-			choices: COFFEEPUB.arrMACROCHOICES
+			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
 		});
 		// -- Party Message Theme --
 		game.settings.register(MODULE.ID, 'cardThemePartyMessage', {
@@ -112,7 +124,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: COFFEEPUB.strDEFAULTCARDTHEME,
-			choices: COFFEEPUB.arrTHEMECHOICES
+			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
 		});
 
 		// ---------- SUBHEADING ----------
@@ -142,7 +154,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			default: '-- Choose a Macro --',
-			choices: COFFEEPUB.arrMACROCHOICES
+			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
 		});
 
 		// -- Private Message Theme --
@@ -153,7 +165,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: COFFEEPUB.strDEFAULTCARDTHEME,
-			choices: COFFEEPUB.arrTHEMECHOICES
+			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
 		});
 
 		// -- Private Message Layout --
@@ -196,7 +208,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: COFFEEPUB.strDEFAULTCARDTHEME,
-			choices: COFFEEPUB.arrTHEMECHOICES
+			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
 		});
 		// -- Beverage Table --
 		game.settings.register(MODULE.ID,'beverageTable', {
@@ -206,7 +218,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
-			choices: COFFEEPUB.arrTABLECHOICES
+			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
 		});
 		// -- Beverage Macro --
 		game.settings.register(MODULE.ID,'beverageMacro', {
@@ -216,7 +228,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			default: '-- Choose a Macro --',
-			choices: COFFEEPUB.arrMACROCHOICES
+			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
 		});
 
 		// ** BIO **
@@ -248,7 +260,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: COFFEEPUB.strDEFAULTCARDTHEME,
-			choices: COFFEEPUB.arrTHEMECHOICES
+			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
 		});
 		// -- Bio Table --
 		game.settings.register(MODULE.ID,'bioTable', {
@@ -258,7 +270,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
-			choices: COFFEEPUB.arrTABLECHOICES
+			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
 		});
 		// -- Bio Macro --
 		game.settings.register(MODULE.ID,'bioMacro', {
@@ -268,7 +280,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			default: '-- Choose a Macro --',
-			choices: COFFEEPUB.arrMACROCHOICES
+			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
 		});
 
 		// ** INSULTS **
@@ -300,7 +312,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: COFFEEPUB.strDEFAULTCARDTHEME,
-			choices: COFFEEPUB.arrTHEMECHOICES
+			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
 		});
 		// -- Insults Table --
 		game.settings.register(MODULE.ID,'insultsTable', {
@@ -310,7 +322,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
-			choices: COFFEEPUB.arrTABLECHOICES
+			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
 		});
 		// -- Insults Macro --
 		game.settings.register(MODULE.ID,'insultsMacro', {
@@ -320,7 +332,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			default: '-- Choose a Macro --',
-			choices: COFFEEPUB.arrMACROCHOICES
+			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
 		});
 		// ** PRAISE **
 
@@ -351,7 +363,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: COFFEEPUB.strDEFAULTCARDTHEME,
-			choices: COFFEEPUB.arrTHEMECHOICES
+			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
 		});
 		// -- Praise Table --
 		game.settings.register(MODULE.ID,'praiseTable', {
@@ -361,7 +373,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
-			choices: COFFEEPUB.arrTABLECHOICES
+			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
 		});
 		// -- Praise Macro --
 		game.settings.register(MODULE.ID,'praiseMacro', {
@@ -371,7 +383,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			default: '-- Choose a Macro --',
-			choices: COFFEEPUB.arrMACROCHOICES
+			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
 		});
 
 		// ********** ROLL TABLES **********
@@ -416,7 +428,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: COFFEEPUB.strDEFAULTCARDTHEME,
-			choices: COFFEEPUB.arrTHEMECHOICES
+			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
 		});
 		// -- Investigation Odds --
 		game.settings.register(MODULE.ID,'investigationOdds', {
@@ -456,7 +468,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
-			choices: COFFEEPUB.arrTABLECHOICES
+			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
 		});
 		// -- Investigation Macro --
 		game.settings.register(MODULE.ID,'investigationMacro', {
@@ -466,7 +478,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			default: '-- Choose a Macro --',
-			choices: COFFEEPUB.arrMACROCHOICES
+			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
 		});
 
 
@@ -497,7 +509,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
-			choices: COFFEEPUB.arrTABLECHOICES
+			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
 		});
 
 		// -- Gift Macro --
@@ -508,7 +520,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			default: '-- Choose a Macro --',
-			choices: COFFEEPUB.arrMACROCHOICES
+			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
 		});
 
 		// ---------- SUBHEADING ----------
@@ -538,7 +550,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
-			choices: COFFEEPUB.arrTABLECHOICES
+			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
 		});
 		// -- Shady Goods Macro --
 		game.settings.register(MODULE.ID,'shadygoodsMacro', {
@@ -548,7 +560,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			default: '-- Choose a Macro --',
-			choices: COFFEEPUB.arrMACROCHOICES
+			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
 		});
 
 		// ** CRITICAL **
@@ -580,7 +592,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: COFFEEPUB.strDEFAULTCARDTHEME,
-			choices: COFFEEPUB.arrTHEMECHOICES
+			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
 		});
 		// -- Critical Table --
 		game.settings.register(MODULE.ID,'criticalTable', {
@@ -590,7 +602,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
-			choices: COFFEEPUB.arrTABLECHOICES
+			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
 		});
 		// -- Critical Macro --
 		game.settings.register(MODULE.ID,'criticalMacro', {
@@ -600,7 +612,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			default: '-- Choose a Macro --',
-			choices: COFFEEPUB.arrMACROCHOICES
+			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
 		});
 
 		// ** FUMBLE **
@@ -633,7 +645,7 @@ export const registerSettings = () => {
 			requiresReload: false,
 			type: String,
 			default: COFFEEPUB.strDEFAULTCARDTHEME,
-			choices: COFFEEPUB.arrTHEMECHOICES
+			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
 		});
 		// -- Fumble Table --
 		game.settings.register(MODULE.ID,'fumbleTable', {
@@ -643,7 +655,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
-			choices: COFFEEPUB.arrTABLECHOICES
+			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
 		});
 		// -- Fumble Macro --
 		game.settings.register(MODULE.ID,'fumbleMacro', {
@@ -653,7 +665,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			default: '-- Choose a Macro --',
-			choices: COFFEEPUB.arrMACROCHOICES
+			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
 		});
 
 
@@ -686,7 +698,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: COFFEEPUB.strDEFAULTCARDTHEME,
-			choices: COFFEEPUB.arrTHEMECHOICES
+			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
 		});
 		// -- Inspiration Table --
 		game.settings.register(MODULE.ID,'inspirationTable', {
@@ -696,7 +708,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
-			choices: COFFEEPUB.arrTABLECHOICES
+			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
 		});
 		// -- Inspiration Macro --
 		game.settings.register(MODULE.ID,'inspirationMacro', {
@@ -706,7 +718,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			default: '-- Choose a Macro --',
-			choices: COFFEEPUB.arrMACROCHOICES
+			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
 		});
 
 
@@ -739,7 +751,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: COFFEEPUB.strDEFAULTCARDTHEME,
-			choices: COFFEEPUB.arrTHEMECHOICES
+			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
 		});
 		// -- DOMT Table --
 		game.settings.register(MODULE.ID,'domtTable', {
@@ -749,7 +761,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
-			choices: COFFEEPUB.arrTABLECHOICES
+			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
 		});
 		// -- DOMT Macro --
 		game.settings.register(MODULE.ID,'domtMacro', {
@@ -759,7 +771,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			default: '-- Choose a Macro --',
-			choices: COFFEEPUB.arrMACROCHOICES
+			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
 		});
 
 		// ********** ENCOUNTERS **********
@@ -796,7 +808,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: COFFEEPUB.strDEFAULTCARDTHEME,
-			choices: COFFEEPUB.arrTHEMECHOICES
+			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
 		});
 		// -- Encounter Odds --
 		game.settings.register(MODULE.ID,'encounterOdds', {
@@ -835,7 +847,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
-			choices: COFFEEPUB.arrTABLECHOICES
+			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
 		}); 
 		game.settings.register(MODULE.ID,'encounterTableBefore', {
 			name: MODULE.ID + '.encounterTableBefore-Label',
@@ -844,7 +856,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
-			choices: COFFEEPUB.arrTABLECHOICES
+			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
 		}); 
 		game.settings.register(MODULE.ID,'encounterTableReveal', {
 			name: MODULE.ID + '.encounterTableReveal-Label',
@@ -853,7 +865,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
-			choices: COFFEEPUB.arrTABLECHOICES
+			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
 		}); 
 		game.settings.register(MODULE.ID,'encounterTableAfter', {
 			name: MODULE.ID + '.encounterTableAfter-Label',
@@ -862,7 +874,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
-			choices: COFFEEPUB.arrTABLECHOICES
+			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
 		}); 
 		// ---------- SUBHEADING ----------
 		game.settings.register(MODULE.ID, "headingH3simpleGeneralEncounters", {
@@ -892,7 +904,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
-			choices: COFFEEPUB.arrTABLECHOICES
+			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
 		}); 
 		game.settings.register(MODULE.ID,'encounterMacroGeneral', {
 			name: MODULE.ID + '.encounterMacroGeneral-Label',
@@ -901,7 +913,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			default: '-- Choose a Macro --',
-			choices: COFFEEPUB.arrMACROCHOICES
+			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
 		});
 
 		// -- Cave Encounter --
@@ -932,7 +944,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
-			choices: COFFEEPUB.arrTABLECHOICES
+			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
 		});
 		game.settings.register(MODULE.ID,'encounterMacroCave', {
 			name: MODULE.ID + '.encounterMacroCave-Label',
@@ -941,7 +953,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			default: '-- Choose a Macro --',
-			choices: COFFEEPUB.arrMACROCHOICES
+			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
 		});
 		// -- Desert Encounter --
 
@@ -971,7 +983,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
-			choices: COFFEEPUB.arrTABLECHOICES
+			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
 		});
 		game.settings.register(MODULE.ID,'encounterMacroDesert', {
 			name: MODULE.ID + '.encounterMacroDesert-Label',
@@ -980,7 +992,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			default: '-- Choose a Macro --',
-			choices: COFFEEPUB.arrMACROCHOICES
+			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
 		});
 
 		// -- Dungeon Encounter --
@@ -1011,7 +1023,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
-			choices: COFFEEPUB.arrTABLECHOICES
+			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
 		});
 		game.settings.register(MODULE.ID,'encounterMacroDungeon', {
 			name: MODULE.ID + '.encounterMacroDungeon-Label',
@@ -1020,7 +1032,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			default: '-- Choose a Macro --',
-			choices: COFFEEPUB.arrMACROCHOICES
+			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
 		});
 		// -- Forest Encounter --
 		// ---------- SUBHEADING ----------
@@ -1049,7 +1061,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
-			choices: COFFEEPUB.arrTABLECHOICES
+			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
 		});
 		game.settings.register(MODULE.ID,'encounterMacroForest', {
 			name: MODULE.ID + '.encounterMacroForest-Label',
@@ -1058,7 +1070,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			default: '-- Choose a Macro --',
-			choices: COFFEEPUB.arrMACROCHOICES
+			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
 		});
 		// -- Mountain Encounter --
 		// ---------- SUBHEADING ----------
@@ -1087,7 +1099,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
-			choices: COFFEEPUB.arrTABLECHOICES
+			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
 		});
 		game.settings.register(MODULE.ID,'encounterMacroMountain', {
 			name: MODULE.ID + '.encounterMacroMountain-Label',
@@ -1096,7 +1108,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			default: '-- Choose a Macro --',
-			choices: COFFEEPUB.arrMACROCHOICES
+			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
 		});
 		// -- Sky Encounter --
 		// ---------- SUBHEADING ----------
@@ -1125,7 +1137,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
-			choices: COFFEEPUB.arrTABLECHOICES
+			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
 		});
 		game.settings.register(MODULE.ID,'encounterMacroSky', {
 			name: MODULE.ID + '.encounterMacroSky-Label',
@@ -1134,7 +1146,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			default: '-- Choose a Macro --',
-			choices: COFFEEPUB.arrMACROCHOICES
+			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
 		});
 		// -- Snow Encounter --
 		// ---------- SUBHEADING ----------
@@ -1163,7 +1175,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
-			choices: COFFEEPUB.arrTABLECHOICES
+			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
 		});
 		game.settings.register(MODULE.ID,'encounterMacroSnow', {
 			name: MODULE.ID + '.encounterMacroSnow-Label',
@@ -1172,7 +1184,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			default: '-- Choose a Macro --',
-			choices: COFFEEPUB.arrMACROCHOICES
+			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
 		});
 		// -- Urban Encounter --
 		// ---------- SUBHEADING ----------
@@ -1201,7 +1213,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
-			choices: COFFEEPUB.arrTABLECHOICES
+			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
 		});
 		game.settings.register(MODULE.ID,'encounterMacroUrban', {
 			name: MODULE.ID + '.encounterMacroUrban-Label',
@@ -1210,7 +1222,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			default: '-- Choose a Macro --',
-			choices: COFFEEPUB.arrMACROCHOICES
+			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
 		});
 		// -- Water Encounter --
 		// ---------- SUBHEADING ----------
@@ -1239,7 +1251,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
-			choices: COFFEEPUB.arrTABLECHOICES
+			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
 		});
 		game.settings.register(MODULE.ID,'encounterMacroWater', {
 			name: MODULE.ID + '.encounterMacroWater-Label',
@@ -1248,7 +1260,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			default: '-- Choose a Macro --',
-			choices: COFFEEPUB.arrMACROCHOICES
+			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
 		});
 
 
@@ -1297,7 +1309,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Compendium --',
-			choices: COFFEEPUB.arrCOMPENDIUMCHOICES
+			choices: getBlacksmithChoices('arrCompendiumChoices', 'No compendiums found. Try reloading Foundry after all modules are enabled.')
 		});
 
 		// -- Party Message Theme --
@@ -1308,7 +1320,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: COFFEEPUB.strDEFAULTCARDTHEME,
-			choices: COFFEEPUB.arrTHEMECHOICES
+			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
 		});
 
 
@@ -1332,7 +1344,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: 'none',
-			choices: COFFEEPUB.arrSOUNDCHOICES
+			choices: getBlacksmithChoices('arrSoundChoices', 'No sounds found. Try reloading Foundry after all modules are enabled.')
 		});
 
 		// -- Injury Sound VOlume --
@@ -1369,7 +1381,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			default: '-- Choose a Macro --',
-			choices: COFFEEPUB.arrMACROCHOICES
+			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
 		});
 
 		
