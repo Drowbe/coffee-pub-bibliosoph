@@ -13,6 +13,12 @@ function getBlacksmith() {
     return game.modules.get('coffee-pub-blacksmith')?.api;
 }
 
+// Helper function to safely get BlacksmithUtils
+function getBlacksmithUtils() {
+    return game.modules.get('coffee-pub-blacksmith')?.api?.BlacksmithUtils;
+}
+
+
 // Function to validate all mandatory settings and provide consolidated feedback
 function validateMandatorySettings() {
     const missingSettings = [];
@@ -1379,7 +1385,7 @@ async function createChatCardGeneral(strRollTableName) {
     if (strRollTableName){
         //There is a roll table... get the data from it.
         let arrRollTableResults = await getRollTable(strRollTableName);
-        rollCoffeePubDice(arrRollTableResults.roll);
+        getBlacksmithUtils()?.rollCoffeePubDice(arrRollTableResults.roll);
         // postConsoleAndNotification("BIBLIOSOPH: createChatCardGeneral arrRollTableResults", arrRollTableResults, false, true, false);
         strTableName = arrRollTableResults.strTableName;
         strTableImage = arrRollTableResults.strTableImage;
@@ -1418,7 +1424,7 @@ async function createChatCardGeneral(strRollTableName) {
         strRecipients: strRecipients, //used for the hidden input for replies
     }; 
     // Play the Sound
-    playSound(strSound,strVolume);
+    getBlacksmith()?.utils?.playSound(strSound,strVolume);
     // POST DEBUG
     //postConsoleAndNotification("CARDDATA.content" , CARDDATA.content, false, true, true);
     // Return the template
@@ -1450,7 +1456,7 @@ async function createChatCardInjury(category) {
     // roll some fake dice "for show" -- this is not used for anything real
     let rollIsInjury = await new Roll("1d100").evaluate();
     // Show the fake Dice So Nice roll
-    rollCoffeePubDice(rollIsInjury);
+    getBlacksmithUtils()?.rollCoffeePubDice(rollIsInjury);
 
     // Set the defaults
     var strJournalType = "";
@@ -1653,7 +1659,7 @@ async function createChatCardInjury(category) {
         arreffect: strStringifiedEFFECTDATA, // Stringify the EFFECTDATA array
     }; 
     // Play the Sound
-    playSound(strSound,strVolume);
+    getBlacksmith()?.utils?.playSound(strSound,strVolume);
     // Return the template
 
     //postConsoleAndNotification("*** LINE 1682 CARDDATA",  CARDDATA, false, true, false);
@@ -1705,7 +1711,7 @@ async function createChatCardEncounter(strRollTableName) {
     let rollIsEncounter = await new Roll("1d100").evaluate();
     const intRollIsEncounter = rollIsEncounter.total;
     // Show the fake Dice So Nice roll
-    rollCoffeePubDice(rollIsEncounter);
+    getBlacksmithUtils()?.rollCoffeePubDice(rollIsEncounter);
     postConsoleAndNotification("intRollIsEncounter", intRollIsEncounter, false, true, false);
     postConsoleAndNotification("intEncounterOdds", intEncounterOdds, false, true, false);
     if (intRollIsEncounter > intEncounterOdds) {
@@ -1793,7 +1799,7 @@ async function createChatCardEncounter(strRollTableName) {
         let rollNumMonster = await new Roll(intEncounterDice).evaluate();
         //postConsoleAndNotification("BIBLIOSOPH: rollResults" , rollResults, false, true, false);
         // show the dice.
-        rollCoffeePubDice(rollNumMonster);
+        getBlacksmithUtils()?.rollCoffeePubDice(rollNumMonster);
         intQuantity = rollNumMonster.total;
         // make the monster plural if needed
         if (intQuantity > 1) {
@@ -1828,7 +1834,7 @@ async function createChatCardEncounter(strRollTableName) {
         link:  strCompendiumLink
     }; 
     // Play the Sound
-    playSound(strSound,strVolume);
+    getBlacksmith()?.utils?.playSound(strSound,strVolume);
     // Return the template
     return template(CARDDATA);
 }
@@ -1897,7 +1903,7 @@ async function createChatCardSearch(strRollTableName) {
     }
     // Check to see if they beat the search odds
     let rollIsSearch = await new Roll("1d100").evaluate();
-    rollCoffeePubDice(rollIsSearch);
+    getBlacksmithUtils()?.rollCoffeePubDice(rollIsSearch);
     const intRollIsSearch = rollIsSearch.total;
     //postConsoleAndNotification("intRollIsSearch", intRollIsSearch, false, true, false);
     //postConsoleAndNotification("intSearchOdds", intSearchOdds, false, true, false);
@@ -1995,13 +2001,13 @@ async function createChatCardSearch(strRollTableName) {
         // Roll to find the number of items
         let rollQuantity = await new Roll(intSearchDice).evaluate();
         // show the dice.
-        rollCoffeePubDice(rollQuantity);
+        getBlacksmithUtils()?.rollCoffeePubDice(rollQuantity);
         intQuantity = rollQuantity.total;
 
         // // -- Call our dice function -- 
         // var intQuantity = 0;
         // var strDiceFormula = intSearchDice;
-        // rollCoffeePubDice(strDiceFormula).then(result => {
+        // getBlacksmithUtils()?.rollCoffeePubDice(strDiceFormula).then(result => {
         //     intQuantity = result;
         // });
 
@@ -2047,7 +2053,7 @@ async function createChatCardSearch(strRollTableName) {
         value: strValue,
     }; 
     // Play the Sound
-    playSound(strSound,strVolume);
+    getBlacksmith()?.utils?.playSound(strSound,strVolume);
     // Return the template
     return template(CARDDATA);
 }
@@ -2091,7 +2097,7 @@ async function getRollTable(tableName) {
     // Map the results for the returned array
     let rollResults = await table.roll({rollMode: CONST.DICE_ROLL_MODES.BLIND});
     // show the dice.
-    rollCoffeePubDice(rollResults.roll);
+    getBlacksmithUtils()?.rollCoffeePubDice(rollResults.roll);
     // Fix parse the text as needed
     strContent = rollResults.results[0].text;
     strTitle = grabTextBetweenStrings(strContent, "**", "**");
@@ -2764,7 +2770,7 @@ async function createChatCardInjurySelector(compendiumName) {
         injurybutton: arrInjuryButtons,
     }; 
     // Play the sound
-    playSound(strSound,strVolume);
+    getBlacksmith()?.utils?.playSound(strSound,strVolume);
     // Return the template
     return template(CARDDATA);
 } 
