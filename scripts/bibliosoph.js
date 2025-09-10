@@ -35,47 +35,6 @@ Hooks.once('ready', async () => {
 // ================================================================== 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// *** BEGIN: BLACKSMITH API INTEGRATION ***
-// Blacksmith API will be accessed locally in each hook as needed
-
-// Helper function to safely get Blacksmith API
-function getBlacksmith() {
-    return game.modules.get('coffee-pub-blacksmith')?.api;
-}
-
-// Helper function to safely get BlacksmithUtils
-function getBlacksmithUtils() {
-    return game.modules.get('coffee-pub-blacksmith')?.api?.BlacksmithUtils;
-}
-
 // ================================================================== 
 // ===== TOOLBAR DIALOG FUNCTIONS ==================================
 // ================================================================== 
@@ -112,10 +71,9 @@ function openPrivateMessageDialog() {
 
 // Trigger investigation macro (for toolbar integration)
 function triggerInvestigationMacro() {
-    const blacksmith = getBlacksmith();
-    const macroName = blacksmith?.utils?.getSettingSafely(MODULE.ID, 'investigationMacro', '') || '';
+    const macroName = BlacksmithUtils.getSettingSafely(MODULE.ID, 'investigationMacro', '') || '';
     if (!macroName || macroName === '-- Choose a Macro --' || macroName === 'none') {
-        blacksmith?.utils?.postConsoleAndNotification(MODULE.NAME, "Investigation macro not configured", "", false, false);
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Investigation macro not configured", "", false, false);
         return;
     }
     
@@ -123,16 +81,15 @@ function triggerInvestigationMacro() {
     if (macro) {
         macro.execute();
     } else {
-        blacksmith?.utils?.postConsoleAndNotification(MODULE.NAME, `Investigation macro "${macroName}" not found`, "", false, false);
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Investigation macro "${macroName}" not found`, "", false, false);
     }
 }
 
 // Trigger critical hit macro (for toolbar integration)
 function triggerCriticalMacro() {
-    const blacksmith = getBlacksmith();
-    const macroName = blacksmith?.utils?.getSettingSafely(MODULE.ID, 'criticalMacro', '') || '';
+    const macroName = BlacksmithUtils.getSettingSafely(MODULE.ID, 'criticalMacro', '') || '';
     if (!macroName || macroName === '-- Choose a Macro --' || macroName === 'none') {
-        blacksmith?.utils?.postConsoleAndNotification(MODULE.NAME, "Critical hit macro not configured", "", false, false);
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Critical hit macro not configured", "", false, false);
         return;
     }
     
@@ -140,16 +97,15 @@ function triggerCriticalMacro() {
     if (macro) {
         macro.execute();
     } else {
-        blacksmith?.utils?.postConsoleAndNotification(MODULE.NAME, `Critical hit macro "${macroName}" not found`, "", false, false);
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Critical hit macro "${macroName}" not found`, "", false, false);
     }
 }
 
 // Trigger fumble macro (for toolbar integration)
 function triggerFumbleMacro() {
-    const blacksmith = getBlacksmith();
-    const macroName = blacksmith?.utils?.getSettingSafely(MODULE.ID, 'fumbleMacro', '') || '';
+    const macroName = BlacksmithUtils.getSettingSafely(MODULE.ID, 'fumbleMacro', '') || '';
     if (!macroName || macroName === '-- Choose a Macro --' || macroName === 'none') {
-        blacksmith?.utils?.postConsoleAndNotification(MODULE.NAME, "Fumble macro not configured", "", false, false);
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Fumble macro not configured", "", false, false);
         return;
     }
     
@@ -157,7 +113,7 @@ function triggerFumbleMacro() {
     if (macro) {
         macro.execute();
     } else {
-        blacksmith?.utils?.postConsoleAndNotification(MODULE.NAME, `Fumble macro "${macroName}" not found`, "", false, false);
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Fumble macro "${macroName}" not found`, "", false, false);
     }
 }
 
@@ -218,7 +174,7 @@ function validateMandatorySettings() {
     // If there are issues, show consolidated notification and console details
     if (missingSettings.length > 0 || invalidMacros.length > 0) {
         // Single user notification
-        getBlacksmith()?.utils?.postConsoleAndNotification(
+        BlacksmithUtils.postConsoleAndNotification(
             MODULE.NAME, 
             "Bibliosoph setup is not complete: Please set the required information in settings.", 
             "See console for more details.", 
@@ -265,47 +221,25 @@ registerSettings();
 // ***** INIT *****
 // Hook that loads as the module loads
 Hooks.once('init', async function() {
-    // Register with Coffee Pub Blacksmith
-    const blacksmith = game.modules.get('coffee-pub-blacksmith')?.api;
-    if (!blacksmith?.registerModule) {
-        console.error("BIBLIOSOPH | Required dependency 'coffee-pub-blacksmith' not found or not ready!");
-        return;
-    }
-
-    // Register this module with Blacksmith
-    blacksmith.registerModule('coffee-pub-bibliosoph', {
-        name: 'BIBLIOSOPH',
-        version: '0.1.03',
-        features: [
-            {
-                type: 'chatPanelIcon',
-                data: {
-                    icon: 'fas fa-book-open',
-                    tooltip: 'Bibliosoph - Rolltable card formatting',
-                    onClick: () => {
-                        // TODO: Implement click handler for chat panel icon
-                        // Removed unnecessary console.log - this is just a placeholder
-                    }
-                }
-            }
-        ]
-    });
-
-    // This is a system message - user should know registration succeeded
-    blacksmith?.utils?.postConsoleAndNotification(MODULE.NAME, "Successfully registered with Coffee Pub Blacksmith", "", false, false);
+    // Module initialization - Blacksmith registration is now handled by the proper API import
+    console.log(MODULE.ID + ' | Module initialized');
 });
 
 // ***** READY *****
 // Hook that fires after everything is loaded and ready
 Hooks.once('ready', () => {
+    BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "TOOLBAR | Ready hook triggered, attempting to register toolbar tools", "", true, false);
+    
     // Register toolbar tools when everything is ready
     if (typeof registerToolbarTools === 'function') {
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "TOOLBAR | registerToolbarTools function is available, calling it", "", true, false);
         try {
             registerToolbarTools();
         } catch (error) {
-            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Toolbar registration error: ${error.message}`, "", false, false);
-            console.error("BIBLIOSOPH registerToolbarTools error:", error);
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `TOOLBAR | Error during toolbar registration: ${error.message}`, "", true, false);
         }
+    } else {
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "TOOLBAR | registerToolbarTools function is NOT available", "", true, false);
     }
 });
 
@@ -333,21 +267,18 @@ Hooks.on('renderChatLog', (app, html, data) => {
 Hooks.on("ready", async () => {
 
     // ********  VERIFY BLACKSMITH  **********
-    // Re-access Blacksmith API to ensure availability
-    const blacksmith = game.modules.get('coffee-pub-blacksmith')?.api;
-    
-    // Verify Blacksmith API is available
-    if (!blacksmith?.utils?.getSettingSafely) {
+    // Verify Blacksmith API is available via global objects
+    if (!BlacksmithUtils?.getSettingSafely) {
         console.error("BIBLIOSOPH | Blacksmith API not fully initialized! Module may not function properly.");
         console.warn("BIBLIOSOPH | Will use fallback values for settings");
         return;
     }
 
     // Use Blacksmith's safe console logging - system message for initialization
-    blacksmith.utils.postConsoleAndNotification(MODULE.NAME, "Initializing Blacksmith connections...", "", false, false);
+    BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Initializing Blacksmith connections...", "", false, false);
     
     if (game.modules.get("coffee-pub-blacksmith")?.active) {
-        blacksmith.utils.postConsoleAndNotification(MODULE.NAME, "Coffee Pub Blacksmith is installed and connected.", "", false, false);
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Coffee Pub Blacksmith is installed and connected.", "", false, false);
         
         // Validate all mandatory settings and provide consolidated feedback
         // Add a small delay to ensure UI is stable before showing notifications
@@ -366,9 +297,9 @@ Hooks.on("ready", async () => {
     
     // Create safe settings helper function (final version)
     const getSetting = (settingKey, defaultValue) => {
-        if (blacksmith?.utils?.getSettingSafely) {
+        if (BlacksmithUtils?.getSettingSafely) {
             // Use Blacksmith's safe settings access
-            return blacksmith.utils.getSettingSafely(MODULE.ID, settingKey, defaultValue);
+            return BlacksmithUtils.getSettingSafely(MODULE.ID, settingKey, defaultValue);
         } else {
             // Fallback to standard FoundryVTT settings
             try {
@@ -383,9 +314,9 @@ Hooks.on("ready", async () => {
 
     // Create safe settings setter function
     const setSetting = (settingKey, value) => {
-        if (blacksmith?.utils?.setSettingSafely) {
+        if (BlacksmithUtils?.setSettingSafely) {
             // Use Blacksmith's safe settings modification
-            return blacksmith.utils.setSettingSafely(MODULE.ID, settingKey, value);
+            return BlacksmithUtils.setSettingSafely(MODULE.ID, settingKey, value);
         } else {
             // Fallback to standard FoundryVTT settings
             try {
@@ -487,7 +418,7 @@ Hooks.on("ready", async () => {
             //postConsoleAndNotification("INJURY BUTTON PRESSED", "", false, false, false);
 
             var strEffectData = event.target.getAttribute('data-effect');
-            var arrEffectData = getBlacksmithUtils()?.stringToObject(strEffectData) || JSON.parse(strEffectData);
+            var arrEffectData = BlacksmithUtils.stringToObject(strEffectData) || JSON.parse(strEffectData);
 
             //postConsoleAndNotification("arrEffectData: ", arrEffectData, false, true, false);
         
@@ -521,11 +452,11 @@ Hooks.on("ready", async () => {
                 };
             } else {
                 // User needs to know about macro configuration issues
-                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `General Encounter: Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `General Encounter: Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
                     } else {
                 // They haven't set this macro - consolidated validation handles this
-                // getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for General Encounters not set.`, "", false, false);
+                // BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for General Encounters not set.`, "", false, false);
             }
      }
     // *** CAVE ***
@@ -543,11 +474,11 @@ Hooks.on("ready", async () => {
                 };
             } else {
                 // User needs to know about macro configuration issues
-                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `"${strCaveMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `"${strCaveMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Cave Encounters not set.`, "", false, false);
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Cave Encounters not set.`, "", false, false);
         }
     }
     // *** DESERT ***
@@ -565,11 +496,11 @@ Hooks.on("ready", async () => {
                 };
             } else {
                 // User needs to know about macro configuration issues
-                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `"${strDesertMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `"${strDesertMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Desert Encounters not set.`, "", false, false);
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Desert Encounters not set.`, "", false, false);
         }
     }   
     // *** DUNGEON ***
@@ -587,11 +518,11 @@ Hooks.on("ready", async () => {
                 };
             } else {
                 // User needs to know about macro configuration issues
-                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `"${strDungeonMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `"${strDungeonMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Dungeon Encounters not set.`, "", false, false);
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Dungeon Encounters not set.`, "", false, false);
         }
     }   
     // *** FOREST ***
@@ -609,11 +540,11 @@ Hooks.on("ready", async () => {
                 };
             } else {
                 // User needs to know about macro configuration issues
-                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `"${strForestMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `"${strForestMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Forest Encounters not set.`, "", false, false);
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Forest Encounters not set.`, "", false, false);
         }
     }
     // *** MOUNTAIN ***
@@ -631,11 +562,11 @@ Hooks.on("ready", async () => {
                 };
             } else {
                 // User needs to know about macro configuration issues
-                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `"${strMountainMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `"${strMountainMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Mountain Encounters not set.`, "", false, true);
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Mountain Encounters not set.`, "", false, true);
         }
     }
     // *** SKY ***
@@ -653,11 +584,11 @@ Hooks.on("ready", async () => {
                 };
             } else {
                 // User needs to know about macro configuration issues
-                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `"${strSkyMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `"${strSkyMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Sky Encounters not set.`, "", false, true);
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Sky Encounters not set.`, "", false, true);
         }
     }
     // *** SNOW ***
@@ -675,11 +606,11 @@ Hooks.on("ready", async () => {
                 };
             } else {
                 // User needs to know about macro configuration issues
-                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `"${strSnowMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `"${strSnowMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Snow Encounters not set.`, "", false, false);
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Snow Encounters not set.`, "", false, false);
         }
     }
     // *** URBAN ***
@@ -697,11 +628,11 @@ Hooks.on("ready", async () => {
                 };
             } else {
                 // User needs to know about macro configuration issues
-                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `"${strUrbanMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `"${strUrbanMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Urban Encounters not set.`, "", false, false);
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Urban Encounters not set.`, "", false, false);
         }
     }
     // *** WATER ***
@@ -719,11 +650,11 @@ Hooks.on("ready", async () => {
                 };
             } else {
                 // User needs to know about macro configuration issues
-                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `"${strWaterMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `"${strWaterMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Water Encounters not set.`, "", false, false);
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Water Encounters not set.`, "", false, false);
         }
     }
     //************* ITEM ROLLS *************
@@ -743,11 +674,11 @@ Hooks.on("ready", async () => {
                 };
             } else {
                 // User needs to know about macro configuration issues
-                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Investigation Macro "${strInvestigationMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Investigation Macro "${strInvestigationMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Investigations is not set.`, "", false, false);
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Investigations is not set.`, "", false, false);
         }
     }
     // *** GIFTS ***
@@ -766,11 +697,11 @@ Hooks.on("ready", async () => {
                 };
             } else {
                 // User needs to know about macro configuration issues
-                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Gifts Macro "${strGiftMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Gifts Macro "${strGiftMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Gifts not set.`, "", false, false);
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Gifts not set.`, "", false, false);
         }
     }
     // *** SHADY GOODS ***
@@ -789,11 +720,11 @@ Hooks.on("ready", async () => {
                 };
             } else {
                 // User needs to know about macro configuration issues
-                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Shady Goods Macro "${strShadygoodsMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Shady Goods Macro "${strShadygoodsMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Shady Goods not set.`, "", false, false);
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Shady Goods not set.`, "", false, false);
         }
     }
     // ************* CRITS AND FUMBLES *************
@@ -813,11 +744,11 @@ Hooks.on("ready", async () => {
                 };
             } else {
                 // User needs to know about macro configuration issues
-                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Critical Hits Macro "${strCriticalMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Critical Hits Macro "${strCriticalMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Critical Hits not set.`, "", false, false);
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Critical Hits not set.`, "", false, false);
         }
     }
     // *** FUMBLE ***
@@ -836,11 +767,11 @@ Hooks.on("ready", async () => {
                 };
             } else {
                 // User needs to know about macro configuration issues
-                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Fumble Macro "${strFumbleMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Fumble Macro "${strFumbleMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Fumbles not set.`, "", false, false);
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Fumbles not set.`, "", false, false);
         }
     }
     // ************* CARD ROLLS *************
@@ -860,11 +791,11 @@ Hooks.on("ready", async () => {
                 };
             } else {
                 // User needs to know about macro configuration issues
-                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Inspiration Macro "${strInspirationMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Inspiration Macro "${strInspirationMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Inspiration not set.`, "", false, false);
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Inspiration not set.`, "", false, false);
         }
     }
     // *** DOMT ***
@@ -883,11 +814,11 @@ Hooks.on("ready", async () => {
                 };
             } else {
                 // User needs to know about macro configuration issues
-                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Deck of Many Things Macro "${strDOMTMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Deck of Many Things Macro "${strDOMTMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Deck of Many Things not set.`, "", false, false);
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Deck of Many Things not set.`, "", false, false);
         }
     }
     // ************* PARTY MESSAGES *************
@@ -907,11 +838,11 @@ Hooks.on("ready", async () => {
                 };
             } else {
                 // User needs to know about macro configuration issues
-                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Beverage Break Macro "${strBeverageMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Beverage Break Macro "${strBeverageMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Beverage Break not set.`, "", false, false);
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Beverage Break not set.`, "", false, false);
         }
     }
     // *** BIO ***
@@ -930,11 +861,11 @@ Hooks.on("ready", async () => {
                 };
             } else {
                 // User needs to know about macro configuration issues
-                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Bio Break Macro "${strBioMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Bio Break Macro "${strBioMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Bio Break not set.`, "", false, false);
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Bio Break not set.`, "", false, false);
         }
     }
     // *** MESSAGES ***
@@ -955,11 +886,11 @@ Hooks.on("ready", async () => {
                 };
             } else {
                 // User needs to know about macro configuration issues
-                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Insult Macro "${strInsultMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Insult Macro "${strInsultMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Insults not set.`, "", false, false);
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Insults not set.`, "", false, false);
         } 
     }
     // *** PRAISE ***
@@ -978,11 +909,11 @@ Hooks.on("ready", async () => {
                 };
             } else {
                 // User needs to know about macro configuration issues
-                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Praise Macro "${strPraiseMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Praise Macro "${strPraiseMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Praise not set.`, "", false, false);
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Praise not set.`, "", false, false);
         } 
     }
     // *** Public Message ***
@@ -1011,11 +942,11 @@ Hooks.on("ready", async () => {
                 };
             } else {
                 // User needs to know about macro configuration issues
-                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Party Message Macro "${strPartyMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Party Message Macro "${strPartyMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Party Message not set.`, "", false, false);
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Party Message not set.`, "", false, false);
         } 
     }
     // *** Private Message ***
@@ -1044,11 +975,11 @@ Hooks.on("ready", async () => {
                 };
             } else {
                 // User needs to know about macro configuration issues
-                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Private Message Macro "${strPrivateMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Private Message Macro "${strPrivateMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for Private Message not set.`, "", false, false);
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Private Message not set.`, "", false, false);
         } 
     }
 
@@ -1074,11 +1005,11 @@ Hooks.on("ready", async () => {
                 };
             } else {
                 // User needs to know about macro configuration issues
-                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `"${strWaterMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `"${strWaterMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
         } else {
             // They haven't set this macro
-            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Macro for General Injuries not set.`, "", false, false);
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for General Injuries not set.`, "", false, false);
         }
     }
 
@@ -1097,12 +1028,11 @@ Hooks.on('blacksmithUpdated', (newBlacksmith) => {
         // console.log("BIBLIOSOPH | Blacksmith data updated:", newBlacksmith);
         
         // Re-verify API is ready - useful if this is the first time Blacksmith is fully initialized
-        const blacksmith = game.modules.get('coffee-pub-blacksmith')?.api;
-        if (blacksmith?.utils?.getSettingSafely) {
+        if (BlacksmithUtils?.getSettingSafely) {
             // This is debug info - only log if really needed for troubleshooting
             // console.log("BIBLIOSOPH | Blacksmith API now fully available via blacksmithUpdated hook");
-            // console.log("BIBLIOSOPH | getSettingSafely available:", typeof blacksmith.utils.getSettingSafely);
-            // console.log("BIBLIOSOPH | setSettingSafely available:", typeof blacksmith.utils.setSettingSafely);
+            // console.log("BIBLIOSOPH | getSettingSafely available:", typeof BlacksmithUtils.getSettingSafely);
+            // console.log("BIBLIOSOPH | setSettingSafely available:", typeof BlacksmithUtils.setSettingSafely);
         }
     }
 });
@@ -1333,7 +1263,7 @@ async function publishChatCard() {
     else
     {   
         // NOTHING
-        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "Card Type: No Card Type Set", "", true, false);
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Card Type: No Card Type Set", "", true, false);
     }
     //user, speaker, timestamp, flavor, whisper, blind, roll, sound, emote, flags, content
     //these are the types: OTHER (Uncategorized), OOC (Out of Char), IC (In Character), EMOTE (e.g. "waves hand"), WHISPER (Private), ROLL (Dice Roll)
@@ -1361,7 +1291,7 @@ async function publishChatCard() {
             });
         } else {
             // Post Debug - This is debug info, only log if really needed for troubleshooting
-            // getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "No User Selected: No users to send a whisper to.", "", true, true);
+            // BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "No User Selected: No users to send a whisper to.", "", true, true);
         }
     } else {
         // If there is content, send it.
@@ -1378,7 +1308,7 @@ async function publishChatCard() {
     }
 
     // Reset everything for the next time - This is a system message
-    getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "The card has been delivered, so we are clearing our variables for next time.", "", false, false);
+    BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "The card has been delivered, so we are clearing our variables for next time.", "", false, false);
     resetBibliosophVars();
 }
 
@@ -1559,7 +1489,7 @@ async function createChatCardGeneral(strRollTableName) {
     if (strRollTableName){
         //There is a roll table... get the data from it.
         let arrRollTableResults = await getRollTable(strRollTableName);
-        getBlacksmithUtils()?.rollCoffeePubDice(arrRollTableResults.roll);
+        BlacksmithUtils.rollCoffeePubDice(arrRollTableResults.roll);
         // postConsoleAndNotification("BIBLIOSOPH: createChatCardGeneral arrRollTableResults", arrRollTableResults, false, true, false);
         strTableName = arrRollTableResults.strTableName;
         strTableImage = arrRollTableResults.strTableImage;
@@ -1598,7 +1528,7 @@ async function createChatCardGeneral(strRollTableName) {
         strRecipients: strRecipients, //used for the hidden input for replies
     }; 
     // Play the Sound
-    getBlacksmith()?.utils?.playSound(strSound,strVolume);
+    BlacksmithUtils.playSound(strSound,strVolume);
     // POST DEBUG
     //postConsoleAndNotification("CARDDATA.content" , CARDDATA.content, false, true, true);
     // Return the template
@@ -1630,7 +1560,7 @@ async function createChatCardInjury(category) {
     // roll some fake dice "for show" -- this is not used for anything real
     let rollIsInjury = await new Roll("1d100").evaluate();
     // Show the fake Dice So Nice roll
-    getBlacksmithUtils()?.rollCoffeePubDice(rollIsInjury);
+    BlacksmithUtils.rollCoffeePubDice(rollIsInjury);
 
     // Set the defaults
     var strJournalType = "";
@@ -1653,7 +1583,7 @@ async function createChatCardInjury(category) {
     // get the journal data
     let objInjuryData = await getJournalCategoryPageData(compendiumName,strCategory) ;
     if (!objInjuryData) {
-        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "objInjuryData is null or undefined", "", true, false);
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "objInjuryData is null or undefined", "", true, false);
     } else {
         strJournalType = objInjuryData.journaltype; // not used
         strInjuryCategory = objInjuryData.category;
@@ -1776,7 +1706,7 @@ async function createChatCardInjury(category) {
         } else {
             // Data was returned
             // Convert seconds to words
-            strInjuryDuration = getBlacksmithUtils()?.convertSecondsToString(intInjuryDuration) || "Unknown Duration";
+            strInjuryDuration = BlacksmithUtils.convertSecondsToString(intInjuryDuration) || "Unknown Duration";
         }
 
         if (!strStatusEffect) {
@@ -1803,7 +1733,7 @@ async function createChatCardInjury(category) {
     const templateText = await response.text();
     const template = Handlebars.compile(templateText);
     // Stringify the EFFECTDATA array
-    var strStringifiedEFFECTDATA = getBlacksmithUtils()?.objectToString(EFFECTDATA) || JSON.stringify(EFFECTDATA);
+    var strStringifiedEFFECTDATA = BlacksmithUtils.objectToString(EFFECTDATA) || JSON.stringify(EFFECTDATA);
     //postConsoleAndNotification("EFFECTDATA converted to STRING as strStringifiedEFFECTDATA: ",strStringifiedEFFECTDATA, false, true, false);
     // if they have the image off in settings, hide it
     var strCardImage = "";
@@ -1833,7 +1763,7 @@ async function createChatCardInjury(category) {
         arreffect: strStringifiedEFFECTDATA, // Stringify the EFFECTDATA array
     }; 
     // Play the Sound
-    getBlacksmith()?.utils?.playSound(strSound,strVolume);
+    BlacksmithUtils.playSound(strSound,strVolume);
     // Return the template
 
     //postConsoleAndNotification("*** LINE 1682 CARDDATA",  CARDDATA, false, true, false);
@@ -1885,9 +1815,9 @@ async function createChatCardEncounter(strRollTableName) {
     let rollIsEncounter = await new Roll("1d100").evaluate();
     const intRollIsEncounter = rollIsEncounter.total;
     // Show the fake Dice So Nice roll
-    getBlacksmithUtils()?.rollCoffeePubDice(rollIsEncounter);
-    getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "intRollIsEncounter", intRollIsEncounter, false, false);
-    getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "intEncounterOdds", intEncounterOdds, false, false);
+    BlacksmithUtils.rollCoffeePubDice(rollIsEncounter);
+    BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "intRollIsEncounter", intRollIsEncounter, false, false);
+    BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "intEncounterOdds", intEncounterOdds, false, false);
     if (intRollIsEncounter > intEncounterOdds) {
         // There is no encounter
         strSound = "modules/coffee-pub-blacksmith/sounds/rustling-grass.mp3";
@@ -1895,7 +1825,7 @@ async function createChatCardEncounter(strRollTableName) {
         let tableNoEncounter = game.tables.getName(strTableNoEncounter);
         if (!tableNoEncounter) {
             // POST DEBUG
-            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "You need to choose a roll table for Encounter Descriptions (No Encounter) in settings.", "", false, false);
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "You need to choose a roll table for Encounter Descriptions (No Encounter) in settings.", "", false, false);
             return;
         }
         let rollNoEncounter = await tableNoEncounter.roll();
@@ -1919,7 +1849,7 @@ async function createChatCardEncounter(strRollTableName) {
         let arrTable = game.tables.getName(strRollTableName);
         if (!arrTable) {
             // POST DEBUG
-            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "You need to choose a roll table for Encounter Monsters in settings.", strRollTableName, false, false);
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "You need to choose a roll table for Encounter Monsters in settings.", strRollTableName, false, false);
             return;
         }
         // Get the monster
@@ -1946,7 +1876,7 @@ async function createChatCardEncounter(strRollTableName) {
         let tableDescBefore = game.tables.getName(strTableBefore);
         if (!tableDescBefore) {
             // POST DEBUG
-            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "You need to choose a roll table for Encounter Descriptions (Before) in settings.", "", false, false);
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "You need to choose a roll table for Encounter Descriptions (Before) in settings.", "", false, false);
             return;
         }
         let rollDescBeforeResults = await tableDescBefore.roll();
@@ -1955,7 +1885,7 @@ async function createChatCardEncounter(strRollTableName) {
         let tableDescReveal = game.tables.getName(strTableReveal);
         if (!tableDescReveal) {
             // POST DEBUG
-            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "You need to choose a roll table for Encounter Descriptions (Reveal) in settings.", "", false, false);
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "You need to choose a roll table for Encounter Descriptions (Reveal) in settings.", "", false, false);
             return;
         }
         let rollDescRevealResults = await tableDescReveal.roll();
@@ -1964,7 +1894,7 @@ async function createChatCardEncounter(strRollTableName) {
         let tableDescAfter = game.tables.getName(strTableAfter);
         if (!tableDescAfter) {
             // POST DEBUG
-            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "You need to choose a roll table for Encounter Descriptions (After) in settings.", "", false, false);
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "You need to choose a roll table for Encounter Descriptions (After) in settings.", "", false, false);
             return;
         }
         let rollDescAfterResults = await tableDescAfter.roll();
@@ -1973,7 +1903,7 @@ async function createChatCardEncounter(strRollTableName) {
         let rollNumMonster = await new Roll(intEncounterDice).evaluate();
         //postConsoleAndNotification("BIBLIOSOPH: rollResults" , rollResults, false, true, false);
         // show the dice.
-        getBlacksmithUtils()?.rollCoffeePubDice(rollNumMonster);
+        BlacksmithUtils.rollCoffeePubDice(rollNumMonster);
         intQuantity = rollNumMonster.total;
         // make the monster plural if needed
         if (intQuantity > 1) {
@@ -2008,7 +1938,7 @@ async function createChatCardEncounter(strRollTableName) {
         link:  strCompendiumLink
     }; 
     // Play the Sound
-    getBlacksmith()?.utils?.playSound(strSound,strVolume);
+    BlacksmithUtils.playSound(strSound,strVolume);
     // Return the template
     return template(CARDDATA);
 }
@@ -2077,7 +2007,7 @@ async function createChatCardSearch(strRollTableName) {
     }
     // Check to see if they beat the search odds
     let rollIsSearch = await new Roll("1d100").evaluate();
-    getBlacksmithUtils()?.rollCoffeePubDice(rollIsSearch);
+    BlacksmithUtils.rollCoffeePubDice(rollIsSearch);
     const intRollIsSearch = rollIsSearch.total;
     //postConsoleAndNotification("intRollIsSearch", intRollIsSearch, false, true, false);
     //postConsoleAndNotification("intSearchOdds", intSearchOdds, false, true, false);
@@ -2088,7 +2018,7 @@ async function createChatCardSearch(strRollTableName) {
         let tableNoSearch = game.tables.getName("Search Descriptions: Nothing");
         if (!tableNoSearch) {
             // POST DEBUG
-            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "You need to choose a roll table for Investigation Descriptions (Nothing Found) in settings.", "", false, false);
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "You need to choose a roll table for Investigation Descriptions (Nothing Found) in settings.", "", false, false);
             return;
         }
         let rollNoSearch = await tableNoSearch.roll();
@@ -2100,14 +2030,14 @@ async function createChatCardSearch(strRollTableName) {
     }
     else
     {
-        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "In the odds check...", intRollIsSearch, false, false);
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "In the odds check...", intRollIsSearch, false, false);
         // Call roll table
         strSound = "modules/coffee-pub-blacksmith/sounds/chest-treasure.mp3";
         // let's start passing in the roll table name once this works.
         let arrTable = game.tables.getName(strRollTableName);
         if (!arrTable) {
             // POST DEBUG
-            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "You need to choose a roll table for investigation items in settings.", strRollTableName, false, false);
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "You need to choose a roll table for investigation items in settings.", strRollTableName, false, false);
             return;
         }
         // Get the search item
@@ -2141,7 +2071,7 @@ async function createChatCardSearch(strRollTableName) {
         if (BIBLIOSOPH.CARDTYPEINVESTIGATION){
             let tableDescBefore = game.tables.getName("Search Descriptions: Before");
             if (!tableDescBefore) {
-                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "You need to choose a roll table for Investigation Descriptions (Before) in settings.", "", false, false); 
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "You need to choose a roll table for Investigation Descriptions (Before) in settings.", "", false, false); 
                 return;
             }
             let rollDescBeforeResults = await tableDescBefore.roll();
@@ -2149,7 +2079,7 @@ async function createChatCardSearch(strRollTableName) {
             // Get the reveal text
             let tableDescReveal = game.tables.getName("Search Descriptions: Reveal");
             if (!tableDescReveal) {
-                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "You need to choose a roll table for Investigation Descriptions (Reveal) in settings.", "", false, false); 
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "You need to choose a roll table for Investigation Descriptions (Reveal) in settings.", "", false, false); 
                 return;
             }
             let rollDescRevealResults = await tableDescReveal.roll();
@@ -2157,7 +2087,7 @@ async function createChatCardSearch(strRollTableName) {
             // Get the after desription parts
             let tableDescAfter = game.tables.getName("Search Descriptions: After");
             if (!tableDescAfter) {
-                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "You need to choose a roll table for Investigation Descriptions (After) in settings.", "", false, false); 
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "You need to choose a roll table for Investigation Descriptions (After) in settings.", "", false, false); 
                 return;
             }
             let rollDescAfterResults = await tableDescAfter.roll();
@@ -2175,13 +2105,13 @@ async function createChatCardSearch(strRollTableName) {
         // Roll to find the number of items
         let rollQuantity = await new Roll(intSearchDice).evaluate();
         // show the dice.
-        getBlacksmithUtils()?.rollCoffeePubDice(rollQuantity);
+        BlacksmithUtils.rollCoffeePubDice(rollQuantity);
         intQuantity = rollQuantity.total;
 
         // // -- Call our dice function -- 
         // var intQuantity = 0;
         // var strDiceFormula = intSearchDice;
-        // getBlacksmithUtils()?.rollCoffeePubDice(strDiceFormula).then(result => {
+        // BlacksmithUtils.rollCoffeePubDice(strDiceFormula).then(result => {
         //     intQuantity = result;
         // });
 
@@ -2227,7 +2157,7 @@ async function createChatCardSearch(strRollTableName) {
         value: strValue,
     }; 
     // Play the Sound
-    getBlacksmith()?.utils?.playSound(strSound,strVolume);
+    BlacksmithUtils.playSound(strSound,strVolume);
     // Return the template
     return template(CARDDATA);
 }
@@ -2251,7 +2181,7 @@ async function getRollTable(tableName) {
 
     // Check to see if the table is valid
     if (!table) {
-        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "Roll Table not Found. Did you set one in settings?", "", false, false); 
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Roll Table not Found. Did you set one in settings?", "", false, false); 
         return;
     }
     
@@ -2271,7 +2201,7 @@ async function getRollTable(tableName) {
     // Map the results for the returned array
     let rollResults = await table.roll({rollMode: CONST.DICE_ROLL_MODES.BLIND});
     // show the dice.
-    getBlacksmithUtils()?.rollCoffeePubDice(rollResults.roll);
+    BlacksmithUtils.rollCoffeePubDice(rollResults.roll);
     // Fix parse the text as needed
     strContent = rollResults.results[0].text;
     strTitle = grabTextBetweenStrings(strContent, "**", "**");
@@ -2458,7 +2388,7 @@ function buildPrivateList(arrPlayers) {
                 strPlayerAvatar = tokenDetails.strPlayerAvatar;
             } else {
                 // POST DEBUG
-                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "No owned tokens for this user: " + strPlayerName, "", false, false);
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "No owned tokens for this user: " + strPlayerName, "", false, false);
             }
             // build the HTML block
             if (blnCompressedList) {
@@ -2516,7 +2446,7 @@ if (user && user.character) {
     // Return character details
     return characterDetails;
 } else {
-    getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "User with that username does not exist or the user has no character.", "", false, false); 
+    BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "User with that username does not exist or the user has no character.", "", false, false); 
 }
 }
 
@@ -2533,7 +2463,7 @@ function getUserIdByPlayerName(playerName) {
         return user.id;
     } else {
         // Handle the case where the user is not found
-        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "User with that username does not exist or the user has no character: " + playerName, "", false, false); 
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "User with that username does not exist or the user has no character: " + playerName, "", false, false); 
         return null;
     }
 }
@@ -2546,7 +2476,7 @@ function getUserActiveTokenDetails(playerId) {
     // Find the user object for the given player ID
     const user = game.users.get(playerId);
     if (!user) {
-        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "User not found with ID: " + playerId, "", false, false);
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "User not found with ID: " + playerId, "", false, false);
         return null;
     }
 
@@ -2563,7 +2493,7 @@ function getUserActiveTokenDetails(playerId) {
         };
     } else {
         // Handle the case where the user does not own any tokens
-        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "No owned tokens found for user with ID: " + playerId, "", false, false); 
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "No owned tokens found for user with ID: " + playerId, "", false, false); 
         return null;
     }
 }
@@ -2581,7 +2511,7 @@ function getCharacterImageByName(characterName) {
     } else {
         // Handle the case where no character is found
         // POST DEBUG
-        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "Character not found: " + characterName, "", false, false); 
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Character not found: " + characterName, "", false, false); 
         return null;
     }
 }
@@ -2640,7 +2570,7 @@ function numToWord(intNumber) {
     try {
         return translate(intNumber).trim();
     } catch(err) {
-        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "Error occurred", err.toString(), false, false);
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Error occurred", err.toString(), false, false);
     }
 }
 
@@ -2944,7 +2874,7 @@ async function createChatCardInjurySelector(compendiumName) {
         injurybutton: arrInjuryButtons,
     }; 
     // Play the sound
-    getBlacksmith()?.utils?.playSound(strSound,strVolume);
+    BlacksmithUtils.playSound(strSound,strVolume);
     // Return the template
     return template(CARDDATA);
 } 
@@ -3032,13 +2962,13 @@ async function getCompendiumJournalList(compendiumName) {
     // set vars
     const strCompendiumName = compendiumName;
     if (!strCompendiumName) {
-        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "Compendium not supplied: " + strCompendiumName, "", false, false); 
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Compendium not supplied: " + strCompendiumName, "", false, false); 
         return;
     }
     // grab data
     const pack = game.packs.get(strCompendiumName);
     if (!pack) {
-        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "Compendium not found: " + strCompendiumName, "", false, false); 
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Compendium not found: " + strCompendiumName, "", false, false); 
         return;
     }
     // Get all entries from the compendium 
@@ -3170,7 +3100,7 @@ function getHTMLMetadata(html){
         return metadata;
         
     } catch (error) {
-        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "getHTMLMetadata error: " + error.message, "", false, false);
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "getHTMLMetadata error: " + error.message, "", false, false);
     }
 }
 
@@ -3240,7 +3170,7 @@ async function getInjuryDataFromJournalPages(compendiumName, journalName) {
         return { category, label, icon, damage, duration, description, treatment, action, statuseffect };
     } else {
         // there is an issue with the journal.
-        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "No content found for entry " + journalName + " in compendium " + compendiumName, "", false, false);
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "No content found for entry " + journalName + " in compendium " + compendiumName, "", false, false);
     }
 }
 
@@ -3263,7 +3193,7 @@ async function getInjuryDataFromJournalPages(compendiumName, journalName) {
     * @param {string} [strStatusEffect] - An optional additional status effect.
 */
 async function applyActiveEffect(strLabel, strIcon, intDamage, intDuration, strStatusEffect) {
-    getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "Applying active effects: " + strLabel, "", false, false);
+    BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Applying active effects: " + strLabel, "", false, false);
     
     // Get the selected token
     const token = canvas.tokens.controlled[0];
@@ -3283,7 +3213,7 @@ async function applyActiveEffect(strLabel, strIcon, intDamage, intDuration, strS
                 }
             }
             if (!existingEffect) {
-                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "Applying active effects on " + token.actor.name + ": " + strLabel, "", false, false);
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Applying active effects on " + token.actor.name + ": " + strLabel, "", false, false);
                 // Create the effect data
                 const effectData = {
                     name: strLabel,
@@ -3306,9 +3236,9 @@ async function applyActiveEffect(strLabel, strIcon, intDamage, intDuration, strS
                 // Now create the embedded document
                 await token.actor.createEmbeddedDocuments("ActiveEffect", [cleanEffectData]);
                 
-                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "Applied " + strLabel + " to " + token.actor.name, "", false, false);
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Applied " + strLabel + " to " + token.actor.name, "", false, false);
             } else {
-                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "Active effect already present on " + token.actor.name + ", skipping: " + strLabel, "", false, false);
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Active effect already present on " + token.actor.name + ", skipping: " + strLabel, "", false, false);
             }
         }
         // --- Apply Status Effects, if needed ---
@@ -3320,12 +3250,12 @@ async function applyActiveEffect(strLabel, strIcon, intDamage, intDuration, strS
                     if (!hasEffect){
                         game.dfreds.effectInterface.toggleEffect(statusEffectName, token.actor);
                         console.log(`Toggled ${statusEffectName} for ${token.actor.name}`);
-                        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "Added status effect " + statusEffectName + " to " + token.actor.name, "", false, false);
+                        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Added status effect " + statusEffectName + " to " + token.actor.name, "", false, false);
                     } else {
-                        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, token.actor.name + " already has status effect " + statusEffectName + ". Skipping adding the status effect.", "", false, false);
+                        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, token.actor.name + " already has status effect " + statusEffectName + ". Skipping adding the status effect.", "", false, false);
                     }
                 } catch (err) {
-                    getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "Error while toggling status effect " + statusEffectName + ": " + err.toString(), "", false, false);
+                    BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Error while toggling status effect " + statusEffectName + ": " + err.toString(), "", false, false);
                 }
             }
         } else {

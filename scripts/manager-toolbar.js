@@ -6,14 +6,9 @@
 import { MODULE, BIBLIOSOPH  } from './const.js';
 import { BiblioWindowChat } from './window.js';
 
-// Helper function to safely get Blacksmith API
-function getBlacksmith() {
-    return game.modules.get('coffee-pub-blacksmith')?.api;
-}
-
 // Helper function to get setting value using Blacksmith API
 function getSetting(key, defaultValue) {
-    const blacksmith = getBlacksmith();
+    const blacksmith = game.modules.get('coffee-pub-blacksmith')?.api;
     if (blacksmith?.utils?.getSettingSafely) {
         return blacksmith.utils.getSettingSafely(MODULE.ID, key, defaultValue);
     }
@@ -53,7 +48,8 @@ const TOOLBAR_TOOLS = {
             if (typeof window.openPrivateMessageDialog === 'function') {
                 window.openPrivateMessageDialog();
             } else {
-                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.ID, "Private message dialog function not available", "", false, false);
+                const blacksmith = game.modules.get('coffee-pub-blacksmith')?.api;
+                blacksmith?.utils?.postConsoleAndNotification(MODULE.ID, "Private message dialog function not available", "", false, false);
             }
         }
     },
@@ -70,7 +66,8 @@ const TOOLBAR_TOOLS = {
             if (typeof window.triggerInvestigationMacro === 'function') {
                 window.triggerInvestigationMacro();
             } else {
-                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.ID, "Investigation function not available", "", false, false);
+                const blacksmith = game.modules.get('coffee-pub-blacksmith')?.api;
+                blacksmith?.utils?.postConsoleAndNotification(MODULE.ID, "Investigation function not available", "", false, false);
             }
         }
     },
@@ -87,7 +84,8 @@ const TOOLBAR_TOOLS = {
             if (typeof window.triggerCriticalMacro === 'function') {
                 window.triggerCriticalMacro();
             } else {
-                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.ID, "Critical hit function not available", "", false, false);
+                const blacksmith = game.modules.get('coffee-pub-blacksmith')?.api;
+                blacksmith?.utils?.postConsoleAndNotification(MODULE.ID, "Critical hit function not available", "", false, false);
             }
         }
     },
@@ -104,7 +102,8 @@ const TOOLBAR_TOOLS = {
             if (typeof window.triggerFumbleMacro === 'function') {
                 window.triggerFumbleMacro();
             } else {
-                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.ID, "Fumble function not available", "", false, false);
+                const blacksmith = game.modules.get('coffee-pub-blacksmith')?.api;
+                blacksmith?.utils?.postConsoleAndNotification(MODULE.ID, "Fumble function not available", "", false, false);
             }
         }
     }
@@ -115,36 +114,54 @@ let registeredToolIds = new Set();
 
 // Register toolbar tools with Blacksmith
 function registerToolbarTools() {
-    const blacksmith = getBlacksmith();
+    const blacksmith = game.modules.get('coffee-pub-blacksmith')?.api;
+    blacksmith?.utils?.postConsoleAndNotification(MODULE.ID, "TOOLBAR | Starting toolbar registration...", "", true, false);
     
-    // Check if toolbar API is available
+    // Check if toolbar API is available (following the official documentation pattern)
     if (!blacksmith?.registerToolbarTool) {
-        // Don't spam console with "API not available" messages
+        blacksmith?.utils?.postConsoleAndNotification(MODULE.ID, "TOOLBAR | Blacksmith toolbar API not available. registerToolbarTool:", blacksmith?.registerToolbarTool ? "YES" : "NO", true, false);
+        blacksmith?.utils?.postConsoleAndNotification(MODULE.ID, "TOOLBAR | Available methods on blacksmith API:", Object.keys(blacksmith || {}).join(", "), true, false);
         return;
     }
+    
+    blacksmith?.utils?.postConsoleAndNotification(MODULE.ID, "TOOLBAR | Blacksmith toolbar API is available", "", true, false);
 
     let registeredCount = 0;
     let skippedCount = 0;
     
+    blacksmith?.utils?.postConsoleAndNotification(MODULE.ID, `TOOLBAR | Processing ${Object.keys(TOOLBAR_TOOLS).length} toolbar tools`, "", true, false);
+    
     Object.entries(TOOLBAR_TOOLS).forEach(([toolId, toolConfig]) => {
+        blacksmith?.utils?.postConsoleAndNotification(MODULE.ID, `TOOLBAR | Processing tool: ${toolId}`, "", true, false);
+        
         // Skip if already registered
         if (registeredToolIds.has(toolId)) {
+            blacksmith?.utils?.postConsoleAndNotification(MODULE.ID, `TOOLBAR | Tool ${toolId} already registered, skipping`, "", true, false);
             skippedCount++;
             return;
         }
 
         // Check if tool should be enabled
-        if (toolConfig.enabled && !toolConfig.enabled()) {
+        const isEnabled = toolConfig.enabled ? toolConfig.enabled() : true;
+        blacksmith?.utils?.postConsoleAndNotification(MODULE.ID, `TOOLBAR | Tool ${toolId} enabled check:`, isEnabled ? "ENABLED" : "DISABLED", true, false);
+        
+        if (toolConfig.enabled && !isEnabled) {
+            blacksmith?.utils?.postConsoleAndNotification(MODULE.ID, `TOOLBAR | Tool ${toolId} is disabled, skipping`, "", true, false);
             skippedCount++;
             return; // Skip disabled tools
         }
 
         // Check if tool is already registered in Blacksmith
-        if (blacksmith.isToolRegistered && blacksmith.isToolRegistered(toolId)) {
+        const isAlreadyRegistered = blacksmith.isToolRegistered && blacksmith.isToolRegistered(toolId);
+        blacksmith?.utils?.postConsoleAndNotification(MODULE.ID, `TOOLBAR | Tool ${toolId} already registered in Blacksmith:`, isAlreadyRegistered ? "YES" : "NO", true, false);
+        
+        if (isAlreadyRegistered) {
             registeredToolIds.add(toolId);
             skippedCount++;
             return;
         }
+
+        blacksmith?.utils?.postConsoleAndNotification(MODULE.ID, `TOOLBAR | Registering tool ${toolId}`, `Zone: ${toolConfig.zone}, Order: ${toolConfig.order}`, true, false);
 
         // Register the tool
         const success = blacksmith.registerToolbarTool(toolId, {
@@ -159,22 +176,29 @@ function registerToolbarTools() {
             onClick: toolConfig.onClick
         });
 
+        blacksmith?.utils?.postConsoleAndNotification(MODULE.ID, `TOOLBAR | Tool ${toolId} registration result:`, success ? "SUCCESS" : "FAILED", true, false);
+
         if (success) {
             registeredToolIds.add(toolId);
             registeredCount++;
+            blacksmith?.utils?.postConsoleAndNotification(MODULE.ID, `TOOLBAR | Successfully registered tool: ${toolId}`, "", true, false);
         } else {
-            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.ID, `Failed to register toolbar tool: ${toolId}`, "", false, false);
+            blacksmith?.utils?.postConsoleAndNotification(MODULE.ID, `TOOLBAR | Failed to register tool: ${toolId}`, "", true, false);
         }
     });
 
+    blacksmith?.utils?.postConsoleAndNotification(MODULE.ID, `TOOLBAR | Registration complete. Registered: ${registeredCount}, Skipped: ${skippedCount}`, "", true, false);
+    
     if (registeredCount > 0) {
-        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.ID, `Registered ${registeredCount} toolbar tool(s)`, "", false, false);
+        blacksmith?.utils?.postConsoleAndNotification(MODULE.ID, `TOOLBAR | Successfully registered ${registeredCount} toolbar tool(s)`, "", true, false);
+    } else {
+        blacksmith?.utils?.postConsoleAndNotification(MODULE.ID, "TOOLBAR | No tools were registered!", "", true, false);
     }
 }
 
 // Unregister all toolbar tools
 function unregisterToolbarTools() {
-    const blacksmith = getBlacksmith();
+    const blacksmith = game.modules.get('coffee-pub-blacksmith')?.api;
     if (!blacksmith?.unregisterToolbarTool) {
         return;
     }
@@ -191,7 +215,8 @@ function unregisterToolbarTools() {
 function openPartyMessageDialog() {
     // Check if party messaging is enabled
     if (!getSetting('partyMessageEnabled', false)) {
-        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.ID, "Party messaging is not enabled in settings", "", false, false);
+        const blacksmith = game.modules.get('coffee-pub-blacksmith')?.api;
+        blacksmith?.utils?.postConsoleAndNotification(MODULE.ID, "Party messaging is not enabled in settings", "", false, false);
         return;
     }
 
@@ -199,7 +224,8 @@ function openPartyMessageDialog() {
     if (typeof window.openPartyMessageDialog === 'function') {
         window.openPartyMessageDialog();
     } else {
-        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.ID, "Party message dialog function not available", "", false, false);
+        const blacksmith = game.modules.get('coffee-pub-blacksmith')?.api;
+        blacksmith?.utils?.postConsoleAndNotification(MODULE.ID, "Party message dialog function not available", "", false, false);
     }
 }
 
