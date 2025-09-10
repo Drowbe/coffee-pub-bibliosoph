@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [12.1.1] - 2024-12-19 - Bug Fixes
+
+### Fixed
+- Fixed playSound API calls to use direct Blacksmith API access instead of helper functions
+- Updated all 5 playSound calls in chat card functions to use `getBlacksmith()?.utils?.playSound()` pattern
+- Removed unnecessary playSound helper function wrapper
+
+### Technical
+- All playSound calls now follow the same direct API pattern as other Blacksmith utilities
+- Maintains consistency with rollCoffeePubDice and other API integrations
+
 ## [12.1.0] - MAJOR UPDATE - Blacksmith API Migration
 
 ### Added
