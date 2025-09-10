@@ -18,6 +18,29 @@ function getBlacksmithUtils() {
     return game.modules.get('coffee-pub-blacksmith')?.api?.BlacksmithUtils;
 }
 
+// ================================================================== 
+// ===== TOOLBAR DIALOG FUNCTIONS ==================================
+// ================================================================== 
+
+// Open party message dialog directly (for toolbar integration)
+function openPartyMessageDialog() {
+    // Reset variables and set up for party message
+    resetBibliosophVars();
+    BIBLIOSOPH.CARDTYPEMESSAGE = true;
+    BIBLIOSOPH.CARDTYPE = "Message";
+    BIBLIOSOPH.MESSAGES_FORMTITLE = "Party Message";
+    
+    // Open the dialog
+    var blankForm = new BiblioWindowChat();
+    blankForm.onFormSubmit = publishChatCard;
+    blankForm.isPublic = true;
+    blankForm.render(true);
+}
+
+// Make function globally available for toolbar manager
+window.openPartyMessageDialog = openPartyMessageDialog;
+
+
 
 // Function to validate all mandatory settings and provide consolidated feedback
 function validateMandatorySettings() {
@@ -97,6 +120,7 @@ function validateMandatorySettings() {
 import { registerSettings } from './settings.js';
 // Grab windows
 import { BiblioWindowChat } from './window.js';
+import { registerToolbarTools, unregisterToolbarTools } from './manager-toolbar.js';
 
 // ================================================================== 
 // ===== REGISTER COMMON ============================================
@@ -141,6 +165,35 @@ Hooks.once('init', async function() {
 
     // This is a system message - user should know registration succeeded
     blacksmith?.utils?.postConsoleAndNotification(MODULE.NAME, "Successfully registered with Coffee Pub Blacksmith", "", false, false);
+});
+
+// ***** READY *****
+// Hook that fires after everything is loaded and ready
+Hooks.once('ready', () => {
+    // Debug: Log when hook fires
+    getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "ready hook fired, registering toolbar tools", "", false, false);
+    
+    // Debug: Check if function exists
+    if (typeof registerToolbarTools === 'function') {
+        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "registerToolbarTools function found, calling it", "", false, false);
+        try {
+            registerToolbarTools();
+            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "registerToolbarTools completed successfully", "", false, false);
+        } catch (error) {
+            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `registerToolbarTools ERROR: ${error.message}`, "", false, false);
+            console.error("BIBLIOSOPH registerToolbarTools error:", error);
+        }
+    } else {
+        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "registerToolbarTools function NOT found!", "", false, false);
+    }
+});
+
+// ***** MODULE DISABLE *****
+// Clean up toolbar tools when module is disabled
+Hooks.once('disableModule', (moduleId) => {
+    if (moduleId === 'coffee-pub-bibliosoph') {
+        unregisterToolbarTools();
+    }
 });
 
 // ***** CHAT CLICKS *****
