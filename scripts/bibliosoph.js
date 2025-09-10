@@ -37,8 +37,78 @@ function openPartyMessageDialog() {
     blankForm.render(true);
 }
 
-// Make function globally available for toolbar manager
+// Open private message dialog directly (for toolbar integration)
+function openPrivateMessageDialog() {
+    // Reset variables and set up for private message
+    resetBibliosophVars();
+    BIBLIOSOPH.CARDTYPEWHISPER = true;
+    BIBLIOSOPH.CARDTYPE = "Message";
+    BIBLIOSOPH.MESSAGES_FORMTITLE = "Private Message";
+    
+    // Open the dialog
+    var blankForm = new BiblioWindowChat();
+    blankForm.onFormSubmit = publishChatCard;
+    blankForm.isPublic = false;
+    blankForm.render(true);
+}
+
+// Trigger investigation macro (for toolbar integration)
+function triggerInvestigationMacro() {
+    const blacksmith = getBlacksmith();
+    const macroName = blacksmith?.utils?.getSettingSafely(MODULE.ID, 'investigationMacro', '') || '';
+    if (!macroName || macroName === '-- Choose a Macro --' || macroName === 'none') {
+        blacksmith?.utils?.postConsoleAndNotification(MODULE.NAME, "Investigation macro not configured", "", false, false);
+        return;
+    }
+    
+    const macro = game.macros.getName(macroName);
+    if (macro) {
+        macro.execute();
+    } else {
+        blacksmith?.utils?.postConsoleAndNotification(MODULE.NAME, `Investigation macro "${macroName}" not found`, "", false, false);
+    }
+}
+
+// Trigger critical hit macro (for toolbar integration)
+function triggerCriticalMacro() {
+    const blacksmith = getBlacksmith();
+    const macroName = blacksmith?.utils?.getSettingSafely(MODULE.ID, 'criticalMacro', '') || '';
+    if (!macroName || macroName === '-- Choose a Macro --' || macroName === 'none') {
+        blacksmith?.utils?.postConsoleAndNotification(MODULE.NAME, "Critical hit macro not configured", "", false, false);
+        return;
+    }
+    
+    const macro = game.macros.getName(macroName);
+    if (macro) {
+        macro.execute();
+    } else {
+        blacksmith?.utils?.postConsoleAndNotification(MODULE.NAME, `Critical hit macro "${macroName}" not found`, "", false, false);
+    }
+}
+
+// Trigger fumble macro (for toolbar integration)
+function triggerFumbleMacro() {
+    const blacksmith = getBlacksmith();
+    const macroName = blacksmith?.utils?.getSettingSafely(MODULE.ID, 'fumbleMacro', '') || '';
+    if (!macroName || macroName === '-- Choose a Macro --' || macroName === 'none') {
+        blacksmith?.utils?.postConsoleAndNotification(MODULE.NAME, "Fumble macro not configured", "", false, false);
+        return;
+    }
+    
+    const macro = game.macros.getName(macroName);
+    if (macro) {
+        macro.execute();
+    } else {
+        blacksmith?.utils?.postConsoleAndNotification(MODULE.NAME, `Fumble macro "${macroName}" not found`, "", false, false);
+    }
+}
+
+// Make functions globally available for toolbar manager
 window.openPartyMessageDialog = openPartyMessageDialog;
+window.openPrivateMessageDialog = openPrivateMessageDialog;
+window.triggerInvestigationMacro = triggerInvestigationMacro;
+window.triggerCriticalMacro = triggerCriticalMacro;
+window.triggerFumbleMacro = triggerFumbleMacro;
 
 
 
@@ -170,21 +240,14 @@ Hooks.once('init', async function() {
 // ***** READY *****
 // Hook that fires after everything is loaded and ready
 Hooks.once('ready', () => {
-    // Debug: Log when hook fires
-    getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "ready hook fired, registering toolbar tools", "", false, false);
-    
-    // Debug: Check if function exists
+    // Register toolbar tools when everything is ready
     if (typeof registerToolbarTools === 'function') {
-        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "registerToolbarTools function found, calling it", "", false, false);
         try {
             registerToolbarTools();
-            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "registerToolbarTools completed successfully", "", false, false);
         } catch (error) {
-            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `registerToolbarTools ERROR: ${error.message}`, "", false, false);
+            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, `Toolbar registration error: ${error.message}`, "", false, false);
             console.error("BIBLIOSOPH registerToolbarTools error:", error);
         }
-    } else {
-        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "registerToolbarTools function NOT found!", "", false, false);
     }
 });
 
@@ -1655,7 +1718,7 @@ async function createChatCardInjury(category) {
         } else {
             // Data was returned
             // Convert seconds to words
-            strInjuryDuration = convertSecondsToString(intInjuryDuration);
+            strInjuryDuration = getBlacksmithUtils()?.convertSecondsToString(intInjuryDuration) || "Unknown Duration";
         }
 
         if (!strStatusEffect) {
@@ -1765,8 +1828,8 @@ async function createChatCardEncounter(strRollTableName) {
     const intRollIsEncounter = rollIsEncounter.total;
     // Show the fake Dice So Nice roll
     getBlacksmithUtils()?.rollCoffeePubDice(rollIsEncounter);
-    postConsoleAndNotification("intRollIsEncounter", intRollIsEncounter, false, true, false);
-    postConsoleAndNotification("intEncounterOdds", intEncounterOdds, false, true, false);
+    getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "intRollIsEncounter", intRollIsEncounter, false, false);
+    getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "intEncounterOdds", intEncounterOdds, false, false);
     if (intRollIsEncounter > intEncounterOdds) {
         // There is no encounter
         strSound = "modules/coffee-pub-blacksmith/sounds/rustling-grass.mp3";
@@ -1774,7 +1837,7 @@ async function createChatCardEncounter(strRollTableName) {
         let tableNoEncounter = game.tables.getName(strTableNoEncounter);
         if (!tableNoEncounter) {
             // POST DEBUG
-            postConsoleAndNotification("BIBLIOSOPH: You need to choose a roll table for Encounter Descriptios (No Encounter) in settings." , "", false, true, true);
+            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "You need to choose a roll table for Encounter Descriptions (No Encounter) in settings.", "", false, false);
             return;
         }
         let rollNoEncounter = await tableNoEncounter.roll();
@@ -1798,7 +1861,7 @@ async function createChatCardEncounter(strRollTableName) {
         let arrTable = game.tables.getName(strRollTableName);
         if (!arrTable) {
             // POST DEBUG
-            postConsoleAndNotification("BIBLIOSOPH: You need to choose a roll table for Encounter Monsters in settings." , strRollTableName, false, true, true);
+            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "You need to choose a roll table for Encounter Monsters in settings.", strRollTableName, false, false);
             return;
         }
         // Get the monster
@@ -2020,7 +2083,7 @@ async function createChatCardSearch(strRollTableName) {
         if (BIBLIOSOPH.CARDTYPEINVESTIGATION){
             let tableDescBefore = game.tables.getName("Search Descriptions: Before");
             if (!tableDescBefore) {
-                postConsoleAndNotification("You need to choose a roll table for Investigation Descriptions (Before) in settings.", "", false, false, false); 
+                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "You need to choose a roll table for Investigation Descriptions (Before) in settings.", "", false, false); 
                 return;
             }
             let rollDescBeforeResults = await tableDescBefore.roll();
@@ -2028,7 +2091,7 @@ async function createChatCardSearch(strRollTableName) {
             // Get the reveal text
             let tableDescReveal = game.tables.getName("Search Descriptions: Reveal");
             if (!tableDescReveal) {
-                postConsoleAndNotification("You need to choose a roll table for Investigation Descriptions (Reveal) in settings.", "", false, false, false); 
+                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "You need to choose a roll table for Investigation Descriptions (Reveal) in settings.", "", false, false); 
                 return;
             }
             let rollDescRevealResults = await tableDescReveal.roll();
@@ -2036,7 +2099,7 @@ async function createChatCardSearch(strRollTableName) {
             // Get the after desription parts
             let tableDescAfter = game.tables.getName("Search Descriptions: After");
             if (!tableDescAfter) {
-                postConsoleAndNotification("You need to choose a roll table for Investigation Descriptions (After) in settings.", "", false, false, false); 
+                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "You need to choose a roll table for Investigation Descriptions (After) in settings.", "", false, false); 
                 return;
             }
             let rollDescAfterResults = await tableDescAfter.roll();
@@ -2130,7 +2193,7 @@ async function getRollTable(tableName) {
 
     // Check to see if the table is valid
     if (!table) {
-        postConsoleAndNotification("Roll Table not Found. Did you set one in settings?", "", false, false, false); 
+        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "Roll Table not Found. Did you set one in settings?", "", false, false); 
         return;
     }
     
@@ -2395,7 +2458,7 @@ if (user && user.character) {
     // Return character details
     return characterDetails;
 } else {
-    postConsoleAndNotification("User with that username does not exist or the user has no character." , "", false, true, true); 
+    getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "User with that username does not exist or the user has no character.", "", false, false); 
 }
 }
 
@@ -2412,7 +2475,7 @@ function getUserIdByPlayerName(playerName) {
         return user.id;
     } else {
         // Handle the case where the user is not found
-        postConsoleAndNotification("User with that username does not exist or the user has no character: " , playerName, false, true, true); 
+        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "User with that username does not exist or the user has no character: " + playerName, "", false, false); 
         return null;
     }
 }
@@ -2425,7 +2488,7 @@ function getUserActiveTokenDetails(playerId) {
     // Find the user object for the given player ID
     const user = game.users.get(playerId);
     if (!user) {
-        postConsoleAndNotification("User not found with ID: " , playerId, false, true, true);
+        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "User not found with ID: " + playerId, "", false, false);
         return null;
     }
 
@@ -2442,7 +2505,7 @@ function getUserActiveTokenDetails(playerId) {
         };
     } else {
         // Handle the case where the user does not own any tokens
-        postConsoleAndNotification("No owned tokens found for user with ID: " , playerId, false, true, true); 
+        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "No owned tokens found for user with ID: " + playerId, "", false, false); 
         return null;
     }
 }
@@ -2460,7 +2523,7 @@ function getCharacterImageByName(characterName) {
     } else {
         // Handle the case where no character is found
         // POST DEBUG
-        postConsoleAndNotification("Character not found" , characterName, false, true, false); 
+        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "Character not found: " + characterName, "", false, false); 
         return null;
     }
 }

@@ -3,7 +3,7 @@
 // ================================================================== 
 
 // Import required dependencies
-import { BIBLIOSOPH } from './const.js';
+import { MODULE, BIBLIOSOPH  } from './const.js';
 import { BiblioWindowChat } from './window.js';
 
 // Helper function to safely get Blacksmith API
@@ -11,16 +11,16 @@ function getBlacksmith() {
     return game.modules.get('coffee-pub-blacksmith')?.api;
 }
 
-// Helper function to get setting value
+// Helper function to get setting value using Blacksmith API
 function getSetting(key, defaultValue) {
+    const blacksmith = getBlacksmith();
+    if (blacksmith?.utils?.getSettingSafely) {
+        return blacksmith.utils.getSettingSafely(MODULE.ID, key, defaultValue);
+    }
+    // Fallback if Blacksmith API not available
     try {
-        const value = game.settings.get('coffee-pub-bibliosoph', key) ?? defaultValue;
-        // Debug: Log the setting value
-        console.log(`BIBLIOSOPH DEBUG: Setting ${key} = ${value}`);
-        return value;
+        return game.settings.get(MODULE.ID, key) ?? defaultValue;
     } catch (error) {
-        // Setting not registered yet, return default
-        console.log(`BIBLIOSOPH DEBUG: Setting ${key} not registered yet, using default: ${defaultValue}`);
         return defaultValue;
     }
 }
@@ -39,11 +39,75 @@ const TOOLBAR_TOOLS = {
             // Directly open party message dialog
             openPartyMessageDialog();
         }
+    },
+    'bibliosoph-private-message': {
+        icon: "fa-solid fa-user-secret",
+        name: "bibliosoph-private-message",
+        title: "Private Message",
+        zone: "communication",
+        order: 10,
+        moduleId: "coffee-pub-bibliosoph",
+        enabled: () => getSetting('privateMessageEnabled', false),
+        onClick: () => {
+            // Call the global function that handles opening the dialog
+            if (typeof window.openPrivateMessageDialog === 'function') {
+                window.openPrivateMessageDialog();
+            } else {
+                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.ID, "Private message dialog function not available", "", false, false);
+            }
+        }
+    },
+    'bibliosoph-investigation': {
+        icon: "fa-solid fa-search",
+        name: "bibliosoph-investigation",
+        title: "Investigation",
+        zone: "rolls",
+        order: 5,
+        moduleId: "coffee-pub-bibliosoph",
+        enabled: () => getSetting('investigationEnabled', false),
+        onClick: () => {
+            // Call the global function that handles investigation
+            if (typeof window.triggerInvestigationMacro === 'function') {
+                window.triggerInvestigationMacro();
+            } else {
+                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.ID, "Investigation function not available", "", false, false);
+            }
+        }
+    },
+    'bibliosoph-critical': {
+        icon: "fas fa-burst",
+        name: "bibliosoph-critical",
+        title: "Critical Hit",
+        zone: "rolls",
+        order: 10,
+        moduleId: "coffee-pub-bibliosoph",
+        enabled: () => getSetting('criticalEnabled', false),
+        onClick: () => {
+            // Call the global function that handles critical hit
+            if (typeof window.triggerCriticalMacro === 'function') {
+                window.triggerCriticalMacro();
+            } else {
+                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.ID, "Critical hit function not available", "", false, false);
+            }
+        }
+    },
+    'bibliosoph-fumble': {
+        icon: "fas fa-heart-crack",
+        name: "bibliosoph-fumble",
+        title: "Fumble",
+        zone: "rolls",
+        order: 15,
+        moduleId: "coffee-pub-bibliosoph",
+        enabled: () => getSetting('fumbleEnabled', false),
+        onClick: () => {
+            // Call the global function that handles fumble
+            if (typeof window.triggerFumbleMacro === 'function') {
+                window.triggerFumbleMacro();
+            } else {
+                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.ID, "Fumble function not available", "", false, false);
+            }
+        }
     }
-    // Future tools can be added here:
-    // 'bibliosoph-private-message': { ... },
-    // 'bibliosoph-encounter': { ... },
-    // etc.
 };
 
 // Track which tools have been registered to prevent duplicates
@@ -51,26 +115,13 @@ let registeredToolIds = new Set();
 
 // Register toolbar tools with Blacksmith
 function registerToolbarTools() {
-    console.log("BIBLIOSOPH DEBUG: registerToolbarTools function started");
-    
     const blacksmith = getBlacksmith();
-    console.log("BIBLIOSOPH DEBUG: blacksmith object:", blacksmith);
-    console.log("BIBLIOSOPH DEBUG: blacksmith keys:", Object.keys(blacksmith));
-    
-    // Try different possible API paths
-    console.log("BIBLIOSOPH DEBUG: blacksmith.api:", blacksmith?.api);
-    console.log("BIBLIOSOPH DEBUG: blacksmith.registerToolbarTool:", blacksmith?.registerToolbarTool);
-    console.log("BIBLIOSOPH DEBUG: blacksmith.toolbar:", blacksmith?.toolbar);
     
     // Check if toolbar API is available
     if (!blacksmith?.registerToolbarTool) {
-        console.log("BIBLIOSOPH DEBUG: Blacksmith toolbar API not available");
-        console.log("BIBLIOSOPH DEBUG: registerToolbarTool exists:", !!blacksmith?.registerToolbarTool);
         // Don't spam console with "API not available" messages
         return;
     }
-    
-    console.log("BIBLIOSOPH DEBUG: Blacksmith toolbar API is available, proceeding with registration");
 
     let registeredCount = 0;
     let skippedCount = 0;
@@ -83,14 +134,9 @@ function registerToolbarTools() {
         }
 
         // Check if tool should be enabled
-        if (toolConfig.enabled) {
-            const isEnabled = toolConfig.enabled();
-            console.log(`BIBLIOSOPH DEBUG: Tool ${toolId} enabled check = ${isEnabled}`);
-            if (!isEnabled) {
-                getBlacksmith()?.utils?.postConsoleAndNotification("BIBLIOSOPH", `Tool ${toolId} is disabled in settings`, "", false, false);
-                skippedCount++;
-                return; // Skip disabled tools
-            }
+        if (toolConfig.enabled && !toolConfig.enabled()) {
+            skippedCount++;
+            return; // Skip disabled tools
         }
 
         // Check if tool is already registered in Blacksmith
@@ -101,18 +147,6 @@ function registerToolbarTools() {
         }
 
         // Register the tool
-        console.log(`BIBLIOSOPH DEBUG: Attempting to register tool ${toolId} with data:`, {
-            icon: toolConfig.icon,
-            name: toolConfig.name,
-            title: toolConfig.title,
-            button: true,
-            visible: true,
-            zone: toolConfig.zone,
-            order: toolConfig.order,
-            moduleId: toolConfig.moduleId,
-            onClick: typeof toolConfig.onClick
-        });
-        
         const success = blacksmith.registerToolbarTool(toolId, {
             icon: toolConfig.icon,
             name: toolConfig.name,
@@ -125,26 +159,16 @@ function registerToolbarTools() {
             onClick: toolConfig.onClick
         });
 
-        console.log(`BIBLIOSOPH DEBUG: Registration result for ${toolId}:`, success);
-
         if (success) {
             registeredToolIds.add(toolId);
             registeredCount++;
-            console.log(`BIBLIOSOPH DEBUG: Successfully registered ${toolId}`);
         } else {
-            getBlacksmith()?.utils?.postConsoleAndNotification("BIBLIOSOPH", `Failed to register toolbar tool: ${toolId}`, "", false, false);
-            console.log(`BIBLIOSOPH DEBUG: Failed to register ${toolId}`);
+            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.ID, `Failed to register toolbar tool: ${toolId}`, "", false, false);
         }
     });
 
-    // Debug: Always show what happened
-    getBlacksmith()?.utils?.postConsoleAndNotification("BIBLIOSOPH", `Toolbar registration: ${registeredCount} registered, ${skippedCount} skipped`, "", false, false);
-    
-    // Debug: Check what tools are actually registered
-    if (blacksmith.getRegisteredTools) {
-        const allTools = blacksmith.getRegisteredTools();
-        console.log("BIBLIOSOPH DEBUG: All registered tools:", allTools);
-        console.log("BIBLIOSOPH DEBUG: Our tool exists:", blacksmith.isToolRegistered('bibliosoph-party-message'));
+    if (registeredCount > 0) {
+        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.ID, `Registered ${registeredCount} toolbar tool(s)`, "", false, false);
     }
 }
 
@@ -167,7 +191,7 @@ function unregisterToolbarTools() {
 function openPartyMessageDialog() {
     // Check if party messaging is enabled
     if (!getSetting('partyMessageEnabled', false)) {
-        getBlacksmith()?.utils?.postConsoleAndNotification("BIBLIOSOPH", "Party messaging is not enabled in settings", "", false, false);
+        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.ID, "Party messaging is not enabled in settings", "", false, false);
         return;
     }
 
@@ -175,7 +199,7 @@ function openPartyMessageDialog() {
     if (typeof window.openPartyMessageDialog === 'function') {
         window.openPartyMessageDialog();
     } else {
-        getBlacksmith()?.utils?.postConsoleAndNotification("BIBLIOSOPH", "Party message dialog function not available", "", false, false);
+        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.ID, "Party message dialog function not available", "", false, false);
     }
 }
 
