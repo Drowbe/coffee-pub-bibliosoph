@@ -429,7 +429,7 @@ Hooks.on("ready", async () => {
             //postConsoleAndNotification("INJURY BUTTON PRESSED", "", false, false, false);
 
             var strEffectData = event.target.getAttribute('data-effect');
-            var arrEffectData = stringToObject(strEffectData);
+            var arrEffectData = getBlacksmithUtils()?.stringToObject(strEffectData) || JSON.parse(strEffectData);
 
             //postConsoleAndNotification("arrEffectData: ", arrEffectData, false, true, false);
         
@@ -1745,7 +1745,7 @@ async function createChatCardInjury(category) {
     const templateText = await response.text();
     const template = Handlebars.compile(templateText);
     // Stringify the EFFECTDATA array
-    var strStringifiedEFFECTDATA = objectToString(EFFECTDATA);
+    var strStringifiedEFFECTDATA = getBlacksmithUtils()?.objectToString(EFFECTDATA) || JSON.stringify(EFFECTDATA);
     //postConsoleAndNotification("EFFECTDATA converted to STRING as strStringifiedEFFECTDATA: ",strStringifiedEFFECTDATA, false, true, false);
     // if they have the image off in settings, hide it
     var strCardImage = "";
