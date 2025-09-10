@@ -106,6 +106,25 @@ const TOOLBAR_TOOLS = {
                 blacksmith?.utils?.postConsoleAndNotification(MODULE.ID, "Fumble function not available", "", false, false);
             }
         }
+    },
+    'bibliosoph-injuries': {
+        icon: "fas fa-bandage",
+        name: "bibliosoph-injuries",
+        title: "Injuries",
+        zone: "rolls",
+        order: 20,
+        moduleId: "coffee-pub-bibliosoph",
+        gmOnly: true,  // Only GMs can see this tool
+        enabled: () => getSetting('injuriesEnabledGlobal', false),
+        onClick: () => {
+            // Call the global function that handles injuries
+            if (typeof window.triggerInjuriesMacro === 'function') {
+                window.triggerInjuriesMacro();
+            } else {
+                const blacksmith = game.modules.get('coffee-pub-blacksmith')?.api;
+                blacksmith?.utils?.postConsoleAndNotification(MODULE.ID, "Injuries function not available", "", false, false);
+            }
+        }
     }
 };
 

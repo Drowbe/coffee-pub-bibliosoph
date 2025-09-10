@@ -56,65 +56,103 @@ function openPartyMessageDialog() {
 
 // Open private message dialog directly (for toolbar integration)
 function openPrivateMessageDialog() {
-    // Reset variables and set up for private message
+    // Run the same code that fires when the private message macro is clicked
+    const strPrivateMacro = BlacksmithUtils.getSettingSafely(MODULE.ID, 'privateMessageMacro', '') || '';
+    const strPrivateMacroID = getMacroIdByName(strPrivateMacro);
+    
+    if (!strPrivateMacro || strPrivateMacro === '-- Choose a Macro --' || strPrivateMacro === 'none') {
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Private message macro not configured", "", false, false);
+        return;
+    }
+
+    // Build the chat message (same as macro click handler)
     resetBibliosophVars();
     BIBLIOSOPH.CARDTYPEWHISPER = true;
     BIBLIOSOPH.CARDTYPE = "Message";
-    BIBLIOSOPH.MESSAGES_FORMTITLE = "Private Message";
+    BIBLIOSOPH.MESSAGES_FORMTITLE = strPrivateMacro;
+    BIBLIOSOPH.MACRO_ID = strPrivateMacroID;
     
-    // Open the dialog
+    // Open the form and get the data
     var blankForm = new BiblioWindowChat();
+    // submits calls the card function after form is submitted
     blankForm.onFormSubmit = publishChatCard;
+    // SET THE FORM VARIABLES
     blankForm.isPublic = false;
+    var recipientArray = ""; // not a reply
+    blankForm.optionList = buildPlayerList(recipientArray);
     blankForm.render(true);
 }
 
 // Trigger investigation macro (for toolbar integration)
 function triggerInvestigationMacro() {
-    const macroName = BlacksmithUtils.getSettingSafely(MODULE.ID, 'investigationMacro', '') || '';
-    if (!macroName || macroName === '-- Choose a Macro --' || macroName === 'none') {
+    // Run the same code that fires when the investigation macro is clicked
+    const strInvestigationMacro = BlacksmithUtils.getSettingSafely(MODULE.ID, 'investigationMacro', '') || '';
+    
+    if (!strInvestigationMacro || strInvestigationMacro === '-- Choose a Macro --' || strInvestigationMacro === 'none') {
         BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Investigation macro not configured", "", false, false);
         return;
     }
-    
-    const macro = game.macros.getName(macroName);
-    if (macro) {
-        macro.execute();
-    } else {
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Investigation macro "${macroName}" not found`, "", false, false);
-    }
+
+    // Build the chat message (same as macro click handler)
+    resetBibliosophVars();
+    BIBLIOSOPH.CARDTYPEINVESTIGATION = true;
+    BIBLIOSOPH.CARDTYPE = "Investigation";
+    // Build the card
+    publishChatCard();
 }
 
 // Trigger critical hit macro (for toolbar integration)
 function triggerCriticalMacro() {
-    const macroName = BlacksmithUtils.getSettingSafely(MODULE.ID, 'criticalMacro', '') || '';
-    if (!macroName || macroName === '-- Choose a Macro --' || macroName === 'none') {
+    // Run the same code that fires when the critical macro is clicked
+    const strCriticalMacro = BlacksmithUtils.getSettingSafely(MODULE.ID, 'criticalMacro', '') || '';
+    
+    if (!strCriticalMacro || strCriticalMacro === '-- Choose a Macro --' || strCriticalMacro === 'none') {
         BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Critical hit macro not configured", "", false, false);
         return;
     }
-    
-    const macro = game.macros.getName(macroName);
-    if (macro) {
-        macro.execute();
-    } else {
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Critical hit macro "${macroName}" not found`, "", false, false);
-    }
+
+    // Build the chat message (same as macro click handler)
+    resetBibliosophVars();
+    BIBLIOSOPH.CARDTYPECRIT = true;
+    BIBLIOSOPH.CARDTYPE = "Critical";
+    // Build the card
+    publishChatCard();
 }
 
 // Trigger fumble macro (for toolbar integration)
 function triggerFumbleMacro() {
-    const macroName = BlacksmithUtils.getSettingSafely(MODULE.ID, 'fumbleMacro', '') || '';
-    if (!macroName || macroName === '-- Choose a Macro --' || macroName === 'none') {
+    // Run the same code that fires when the fumble macro is clicked
+    const strFumbleMacro = BlacksmithUtils.getSettingSafely(MODULE.ID, 'fumbleMacro', '') || '';
+    
+    if (!strFumbleMacro || strFumbleMacro === '-- Choose a Macro --' || strFumbleMacro === 'none') {
         BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Fumble macro not configured", "", false, false);
         return;
     }
+
+    // Build the chat message (same as macro click handler)
+    resetBibliosophVars();
+    BIBLIOSOPH.CARDTYPEFUMBLE = true;
+    BIBLIOSOPH.CARDTYPE = "Fumble";
+    // Build the card
+    publishChatCard();
+}
+
+// Trigger injuries macro (for toolbar integration)
+function triggerInjuriesMacro() {
+    // Run the same code that fires when the injuries macro is clicked
+    const strInjuriesMacroGlobal = BlacksmithUtils.getSettingSafely(MODULE.ID, 'injuriesMacroGlobal', '') || '';
     
-    const macro = game.macros.getName(macroName);
-    if (macro) {
-        macro.execute();
-    } else {
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Fumble macro "${macroName}" not found`, "", false, false);
+    if (!strInjuriesMacroGlobal || strInjuriesMacroGlobal === '-- Choose a Macro --' || strInjuriesMacroGlobal === 'none') {
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Injuries macro not configured", "", false, false);
+        return;
     }
+
+    // Build the chat message (same as macro click handler)
+    resetBibliosophVars();
+    BIBLIOSOPH.CARDTYPEINJURY = true;
+    BIBLIOSOPH.CARDTYPE = "General";
+    // Build the card
+    publishChatCard();
 }
 
 // Make functions globally available for toolbar manager
@@ -123,6 +161,7 @@ window.openPrivateMessageDialog = openPrivateMessageDialog;
 window.triggerInvestigationMacro = triggerInvestigationMacro;
 window.triggerCriticalMacro = triggerCriticalMacro;
 window.triggerFumbleMacro = triggerFumbleMacro;
+window.triggerInjuriesMacro = triggerInjuriesMacro;
 
 
 
