@@ -5,6 +5,64 @@
 // Grab the module data
 import { MODULE, BIBLIOSOPH  } from './const.js';
 
+
+
+
+
+
+// ================================================================== 
+// ===== BEGIN: REGISTER BLACKSMITH API =============================
+// ================================================================== 
+import { BlacksmithAPI } from '/modules/coffee-pub-blacksmith/api/blacksmith-api.js';
+// Register your module with Blacksmith (use 'ready' instead of 'init')
+Hooks.once('ready', async () => {
+    try {
+        // Get the module manager
+        const moduleManager = BlacksmithModuleManager;
+        // Register your module
+        moduleManager.registerModule(MODULE.ID, {
+            name: MODULE.NAME,
+            version: MODULE.VERSION
+        });
+        // Log success
+        console.log(MODULE.ID + ' | ✅ Module ' + MODULE.NAME + ' registered with Blacksmith successfully');
+    } catch (error) {
+        console.error(MODULE.ID + ' | ❌ Failed to register ' + MODULE.NAME + ' with Blacksmith:', error);
+    }
+});
+// ================================================================== 
+// ===== END: REGISTER BLACKSMITH API ===============================
+// ================================================================== 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // *** BEGIN: BLACKSMITH API INTEGRATION ***
 // Blacksmith API will be accessed locally in each hook as needed
 
@@ -1888,7 +1946,7 @@ async function createChatCardEncounter(strRollTableName) {
         let tableDescBefore = game.tables.getName(strTableBefore);
         if (!tableDescBefore) {
             // POST DEBUG
-            postConsoleAndNotification("BIBLIOSOPH: You need to choose a roll table for Encounter Descriptions (Before) in settings." , "", false, true, true);
+            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "You need to choose a roll table for Encounter Descriptions (Before) in settings.", "", false, false);
             return;
         }
         let rollDescBeforeResults = await tableDescBefore.roll();
@@ -1897,7 +1955,7 @@ async function createChatCardEncounter(strRollTableName) {
         let tableDescReveal = game.tables.getName(strTableReveal);
         if (!tableDescReveal) {
             // POST DEBUG
-            postConsoleAndNotification("BIBLIOSOPH: You need to choose a roll table for Encounter Descriptions (Reveal) in settings." , "", false, true, true);
+            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "You need to choose a roll table for Encounter Descriptions (Reveal) in settings.", "", false, false);
             return;
         }
         let rollDescRevealResults = await tableDescReveal.roll();
@@ -1906,7 +1964,7 @@ async function createChatCardEncounter(strRollTableName) {
         let tableDescAfter = game.tables.getName(strTableAfter);
         if (!tableDescAfter) {
             // POST DEBUG
-            postConsoleAndNotification("BIBLIOSOPH: You need to choose a roll table for Encounter Descriptions (After) in settings." , "", false, true, true);
+            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "You need to choose a roll table for Encounter Descriptions (After) in settings.", "", false, false);
             return;
         }
         let rollDescAfterResults = await tableDescAfter.roll();
@@ -2030,7 +2088,7 @@ async function createChatCardSearch(strRollTableName) {
         let tableNoSearch = game.tables.getName("Search Descriptions: Nothing");
         if (!tableNoSearch) {
             // POST DEBUG
-            postConsoleAndNotification("BIBLIOSOPH: You need to choose a roll table for Investigation Descriptions (Nothing Found) in settings." , "", false, true, true);
+            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "You need to choose a roll table for Investigation Descriptions (Nothing Found) in settings.", "", false, false);
             return;
         }
         let rollNoSearch = await tableNoSearch.roll();
@@ -2042,14 +2100,14 @@ async function createChatCardSearch(strRollTableName) {
     }
     else
     {
-        postConsoleAndNotification("In the odds check... ", intRollIsSearch, false, true, false);
+        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "In the odds check...", intRollIsSearch, false, false);
         // Call roll table
         strSound = "modules/coffee-pub-blacksmith/sounds/chest-treasure.mp3";
         // let's start passing in the roll table name once this works.
         let arrTable = game.tables.getName(strRollTableName);
         if (!arrTable) {
             // POST DEBUG
-            postConsoleAndNotification("You need to choose a roll table for investigation items in settings." , strRollTableName, false, true, true);
+            getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "You need to choose a roll table for investigation items in settings.", strRollTableName, false, false);
             return;
         }
         // Get the search item
@@ -2400,7 +2458,7 @@ function buildPrivateList(arrPlayers) {
                 strPlayerAvatar = tokenDetails.strPlayerAvatar;
             } else {
                 // POST DEBUG
-                postConsoleAndNotification("No owned tokens for this user." , strPlayerName, false, true, true);
+                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "No owned tokens for this user: " + strPlayerName, "", false, false);
             }
             // build the HTML block
             if (blnCompressedList) {
@@ -2582,7 +2640,7 @@ function numToWord(intNumber) {
     try {
         return translate(intNumber).trim();
     } catch(err) {
-        postConsoleAndNotification(err);
+        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "Error occurred", err.toString(), false, false);
     }
 }
 
@@ -2974,13 +3032,13 @@ async function getCompendiumJournalList(compendiumName) {
     // set vars
     const strCompendiumName = compendiumName;
     if (!strCompendiumName) {
-        postConsoleAndNotification("Compendium not supplied." , strCompendiumName, false, false, false); 
+        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "Compendium not supplied: " + strCompendiumName, "", false, false); 
         return;
     }
     // grab data
     const pack = game.packs.get(strCompendiumName);
     if (!pack) {
-        postConsoleAndNotification("Compendium not found." , strCompendiumName, false, false, false); 
+        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "Compendium not found: " + strCompendiumName, "", false, false); 
         return;
     }
     // Get all entries from the compendium 
@@ -3112,7 +3170,7 @@ function getHTMLMetadata(html){
         return metadata;
         
     } catch (error) {
-        postConsoleAndNotification("getHTMLMetadata", error.message);
+        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "getHTMLMetadata error: " + error.message, "", false, false);
     }
 }
 
@@ -3182,7 +3240,7 @@ async function getInjuryDataFromJournalPages(compendiumName, journalName) {
         return { category, label, icon, damage, duration, description, treatment, action, statuseffect };
     } else {
         // there is an issue with the journal.
-        postConsoleAndNotification("No content found for entry ", journalName + " in compendium " + compendiumName, false, true, false);
+        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "No content found for entry " + journalName + " in compendium " + compendiumName, "", false, false);
     }
 }
 
@@ -3205,7 +3263,7 @@ async function getInjuryDataFromJournalPages(compendiumName, journalName) {
     * @param {string} [strStatusEffect] - An optional additional status effect.
 */
 async function applyActiveEffect(strLabel, strIcon, intDamage, intDuration, strStatusEffect) {
-    postConsoleAndNotification("Applying active effects: ",strLabel, false, false, false);
+    getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "Applying active effects: " + strLabel, "", false, false);
     
     // Get the selected token
     const token = canvas.tokens.controlled[0];
@@ -3225,7 +3283,7 @@ async function applyActiveEffect(strLabel, strIcon, intDamage, intDuration, strS
                 }
             }
             if (!existingEffect) {
-                postConsoleAndNotification("Applying active effects on " + token.actor.name + ".", strLabel, false, false, false);
+                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "Applying active effects on " + token.actor.name + ": " + strLabel, "", false, false);
                 // Create the effect data
                 const effectData = {
                     name: strLabel,
@@ -3248,9 +3306,9 @@ async function applyActiveEffect(strLabel, strIcon, intDamage, intDuration, strS
                 // Now create the embedded document
                 await token.actor.createEmbeddedDocuments("ActiveEffect", [cleanEffectData]);
                 
-                postConsoleAndNotification("Applied " + strLabel + " ", token.actor.name, false, false, false);
+                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "Applied " + strLabel + " to " + token.actor.name, "", false, false);
             } else {
-                postConsoleAndNotification("Active effect already present on " + token.actor.name + ", skipping. ", strLabel, false, false, false);
+                getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "Active effect already present on " + token.actor.name + ", skipping: " + strLabel, "", false, false);
             }
         }
         // --- Apply Status Effects, if needed ---
@@ -3262,12 +3320,12 @@ async function applyActiveEffect(strLabel, strIcon, intDamage, intDuration, strS
                     if (!hasEffect){
                         game.dfreds.effectInterface.toggleEffect(statusEffectName, token.actor);
                         console.log(`Toggled ${statusEffectName} for ${token.actor.name}`);
-                        postConsoleAndNotification("Added status effect " + statusEffectName + ".",token.actor.name, false, false, false);
+                        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "Added status effect " + statusEffectName + " to " + token.actor.name, "", false, false);
                     } else {
-                        postConsoleAndNotification(token.actor.name + " already has status effect " + statusEffectName + ".","Skipping adding the status effect.", false, false, false);
+                        getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, token.actor.name + " already has status effect " + statusEffectName + ". Skipping adding the status effect.", "", false, false);
                     }
                 } catch (err) {
-                    postConsoleAndNotification("Error while toggling status effect " + statusEffectName + ": ",err, false, false, false);
+                    getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "Error while toggling status effect " + statusEffectName + ": " + err.toString(), "", false, false);
                 }
             }
         } else {
