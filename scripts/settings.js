@@ -71,7 +71,7 @@ export const registerSettings = () => {
 		game.settings.register(MODULE.ID, "headingH3PartyMessage", {
 			name: MODULE.ID + '.headingH3PartyMessage-Label',
 			hint: MODULE.ID + '.headingH3PartyMessage-Hint',
-			scope: "world",
+			scope: "client",
 			config: true,
 			default: "",
 			type: String,
@@ -85,6 +85,26 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			scope: 'world',
+			default: false,
+		});
+		// -- Party Message Coffee Pub Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarCoffeePubPartyMessageEnabled', {
+			name: MODULE.ID + '.toolbarCoffeePubPartyMessageEnabled-Label',
+			hint: MODULE.ID + '.toolbarCoffeePubPartyMessageEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
+			default: true,
+		});
+		// -- Party Message Foundry Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarFoundryPartyMessageEnabled', {
+			name: MODULE.ID + '.toolbarFoundryPartyMessageEnabled-Label',
+			hint: MODULE.ID + '.toolbarFoundryPartyMessageEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
 			default: false,
 		});
 		// -- Party Message Macro --
@@ -112,7 +132,7 @@ export const registerSettings = () => {
 		game.settings.register(MODULE.ID, "headingH3PrivateMessage", {
 			name: MODULE.ID + '.headingH3PrivateMessage-Label',
 			hint: MODULE.ID + '.headingH3PrivateMessage-Hint',
-			scope: "world",
+			scope: "client",
 			config: true,
 			default: "",
 			type: String,
@@ -125,6 +145,26 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			scope: 'world',
+			default: false,
+		});
+		// -- Private Message Coffee Pub Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarCoffeePubPrivateMessageEnabled', {
+			name: MODULE.ID + '.toolbarCoffeePubPrivateMessageEnabled-Label',
+			hint: MODULE.ID + '.toolbarCoffeePubPrivateMessageEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
+			default: true,
+		});
+		// -- Private Message Foundry Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarFoundryPrivateMessageEnabled', {
+			name: MODULE.ID + '.toolbarFoundryPrivateMessageEnabled-Label',
+			hint: MODULE.ID + '.toolbarFoundryPrivateMessageEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
 			default: false,
 		});
 		// -- Private Message Macro --
@@ -166,7 +206,7 @@ export const registerSettings = () => {
 		game.settings.register(MODULE.ID, "headingH3Beverage", {
 			name: MODULE.ID + '.headingH3Beverage-Label',
 			hint: MODULE.ID + '.headingH3Beverage-Hint',
-			scope: "world",
+			scope: "client",
 			config: true,
 			default: "",
 			type: String,
@@ -179,6 +219,26 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			scope: 'world',
+			default: false,
+		});
+		// -- Beverage Coffee Pub Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarCoffeePubBeverageEnabled', {
+			name: MODULE.ID + '.toolbarCoffeePubBeverageEnabled-Label',
+			hint: MODULE.ID + '.toolbarCoffeePubBeverageEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
+			default: true,
+		});
+		// -- Beverage Foundry Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarFoundryBeverageEnabled', {
+			name: MODULE.ID + '.toolbarFoundryBeverageEnabled-Label',
+			hint: MODULE.ID + '.toolbarFoundryBeverageEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
 			default: false,
 		});
 		// -- Beverage Theme --
@@ -218,7 +278,7 @@ export const registerSettings = () => {
 		game.settings.register(MODULE.ID, "headingH3Bio", {
 			name: MODULE.ID + '.headingH3Bio-Label',
 			hint: MODULE.ID + '.headingH3Bio-Hint',
-			scope: "world",
+			scope: "client",
 			config: true,
 			default: "",
 			type: String,
@@ -231,6 +291,26 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			scope: 'world',
+			default: false,
+		});
+		// -- Bio Coffee Pub Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarCoffeePubBioEnabled', {
+			name: MODULE.ID + '.toolbarCoffeePubBioEnabled-Label',
+			hint: MODULE.ID + '.toolbarCoffeePubBioEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
+			default: true,
+		});
+		// -- Bio Foundry Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarFoundryBioEnabled', {
+			name: MODULE.ID + '.toolbarFoundryBioEnabled-Label',
+			hint: MODULE.ID + '.toolbarFoundryBioEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
 			default: false,
 		});
 		// -- Bio Theme --
@@ -270,7 +350,7 @@ export const registerSettings = () => {
 		game.settings.register(MODULE.ID, "headingH3Insults", {
 			name: MODULE.ID + '.headingH3Insults-Label',
 			hint: MODULE.ID + '.headingH3Insults-Hint',
-			scope: "world",
+			scope: "client",
 			config: true,
 			default: "",
 			type: String,
@@ -283,6 +363,26 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			scope: 'world',
+			default: false,
+		});
+		// -- Insults Coffee Pub Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarCoffeePubInsultsEnabled', {
+			name: MODULE.ID + '.toolbarCoffeePubInsultsEnabled-Label',
+			hint: MODULE.ID + '.toolbarCoffeePubInsultsEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
+			default: true,
+		});
+		// -- Insults Foundry Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarFoundryInsultsEnabled', {
+			name: MODULE.ID + '.toolbarFoundryInsultsEnabled-Label',
+			hint: MODULE.ID + '.toolbarFoundryInsultsEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
 			default: false,
 		});
 		// -- Insults Theme --
@@ -321,7 +421,7 @@ export const registerSettings = () => {
 		game.settings.register(MODULE.ID, "headingH3Praise", {
 			name: MODULE.ID + '.headingH3Praise-Label',
 			hint: MODULE.ID + '.headingH3Praise-Hint',
-			scope: "world",
+			scope: "client",
 			config: true,
 			default: "",
 			type: String,
@@ -334,6 +434,26 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			scope: 'world',
+			default: false,
+		});
+		// -- Praise Coffee Pub Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarCoffeePubPraiseEnabled', {
+			name: MODULE.ID + '.toolbarCoffeePubPraiseEnabled-Label',
+			hint: MODULE.ID + '.toolbarCoffeePubPraiseEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
+			default: true,
+		});
+		// -- Praise Foundry Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarFoundryPraiseEnabled', {
+			name: MODULE.ID + '.toolbarFoundryPraiseEnabled-Label',
+			hint: MODULE.ID + '.toolbarFoundryPraiseEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
 			default: false,
 		});
 		// -- Praise Theme --
@@ -386,7 +506,7 @@ export const registerSettings = () => {
 			game.settings.register(MODULE.ID, "headingH3Investigation", {
 			name: MODULE.ID + '.headingH3Investigation-Label',
 			hint: MODULE.ID + '.headingH3Investigation-Hint',
-			scope: "world",
+			scope: "client",
 			config: true,
 			default: "",
 			type: String,
@@ -399,6 +519,26 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			scope: 'world',
+			default: false,
+		});
+		// -- Investigation Coffee Pub Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarCoffeePubInvestigationEnabled', {
+			name: MODULE.ID + '.toolbarCoffeePubInvestigationEnabled-Label',
+			hint: MODULE.ID + '.toolbarCoffeePubInvestigationEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
+			default: true,
+		});
+		// -- Investigation Foundry Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarFoundryInvestigationEnabled', {
+			name: MODULE.ID + '.toolbarFoundryInvestigationEnabled-Label',
+			hint: MODULE.ID + '.toolbarFoundryInvestigationEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
 			default: false,
 		});
 		// -- Investigation Theme --
@@ -467,7 +607,7 @@ export const registerSettings = () => {
 		game.settings.register(MODULE.ID, "headingH3Gifts", {
 			name: MODULE.ID + '.headingH3Gifts-Label',
 			hint: MODULE.ID + '.headingH3Gifts-Hint',
-			scope: "world",
+			scope: "client",
 			config: true,
 			default: "",
 			type: String,
@@ -480,6 +620,26 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			scope: 'world',
+			default: false,
+		});
+		// -- Gift Coffee Pub Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarCoffeePubGiftEnabled', {
+			name: MODULE.ID + '.toolbarCoffeePubGiftEnabled-Label',
+			hint: MODULE.ID + '.toolbarCoffeePubGiftEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
+			default: true,
+		});
+		// -- Gift Foundry Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarFoundryGiftEnabled', {
+			name: MODULE.ID + '.toolbarFoundryGiftEnabled-Label',
+			hint: MODULE.ID + '.toolbarFoundryGiftEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
 			default: false,
 		});
 		// -- Gift Table --
@@ -508,7 +668,7 @@ export const registerSettings = () => {
 		game.settings.register(MODULE.ID, "headingH3ShadyGoods", {
 			name: MODULE.ID + '.headingH3ShadyGoods-Label',
 			hint: MODULE.ID + '.headingH3ShadyGoods-Hint',
-			scope: "world",
+			scope: "client",
 			config: true,
 			default: "",
 			type: String,
@@ -521,6 +681,26 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			scope: 'world',
+			default: false,
+		});
+		// -- Shady Goods Coffee Pub Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarCoffeePubShadygoodsEnabled', {
+			name: MODULE.ID + '.toolbarCoffeePubShadygoodsEnabled-Label',
+			hint: MODULE.ID + '.toolbarCoffeePubShadygoodsEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
+			default: true,
+		});
+		// -- Shady Goods Foundry Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarFoundryShadygoodsEnabled', {
+			name: MODULE.ID + '.toolbarFoundryShadygoodsEnabled-Label',
+			hint: MODULE.ID + '.toolbarFoundryShadygoodsEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
 			default: false,
 		});
 		// -- Shady Goods Table --
@@ -550,7 +730,7 @@ export const registerSettings = () => {
 		game.settings.register(MODULE.ID, "headingH3Critical", {
 			name: MODULE.ID + '.headingH3Critical-Label',
 			hint: MODULE.ID + '.headingH3Critical-Hint',
-			scope: "world",
+			scope: "client",
 			config: true,
 			default: "",
 			type: String,
@@ -563,6 +743,26 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			scope: 'world',
+			default: false,
+		});
+		// -- Critical Coffee Pub Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarCoffeePubCriticalEnabled', {
+			name: MODULE.ID + '.toolbarCoffeePubCriticalEnabled-Label',
+			hint: MODULE.ID + '.toolbarCoffeePubCriticalEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
+			default: true,
+		});
+		// -- Critical Foundry Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarFoundryCriticalEnabled', {
+			name: MODULE.ID + '.toolbarFoundryCriticalEnabled-Label',
+			hint: MODULE.ID + '.toolbarFoundryCriticalEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
 			default: false,
 		});
 		// -- Critical Theme --
@@ -602,7 +802,7 @@ export const registerSettings = () => {
 		game.settings.register(MODULE.ID, "headingH3Fumbles", {
 			name: MODULE.ID + '.headingH3Fumbles-Label',
 			hint: MODULE.ID + '.headingH3Fumbles-Hint',
-			scope: "world",
+			scope: "client",
 			config: true,
 			default: "",
 			type: String,
@@ -615,6 +815,26 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			scope: 'world',
+			default: false,
+		});
+		// -- Fumble Coffee Pub Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarCoffeePubFumbleEnabled', {
+			name: MODULE.ID + '.toolbarCoffeePubFumbleEnabled-Label',
+			hint: MODULE.ID + '.toolbarCoffeePubFumbleEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
+			default: true,
+		});
+		// -- Fumble Foundry Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarFoundryFumbleEnabled', {
+			name: MODULE.ID + '.toolbarFoundryFumbleEnabled-Label',
+			hint: MODULE.ID + '.toolbarFoundryFumbleEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
 			default: false,
 		});
 		// -- Fumble Theme --
@@ -656,7 +876,7 @@ export const registerSettings = () => {
 		game.settings.register(MODULE.ID, "headingH3Inspiration", {
 			name: MODULE.ID + '.headingH3Inspiration-Label',
 			hint: MODULE.ID + '.headingH3Inspiration-Hint',
-			scope: "world",
+			scope: "client",
 			config: true,
 			default: "",
 			type: String,
@@ -669,6 +889,26 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			scope: 'world',
+			default: false,
+		});
+		// -- Inspiration Coffee Pub Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarCoffeePubInspirationEnabled', {
+			name: MODULE.ID + '.toolbarCoffeePubInspirationEnabled-Label',
+			hint: MODULE.ID + '.toolbarCoffeePubInspirationEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
+			default: true,
+		});
+		// -- Inspiration Foundry Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarFoundryInspirationEnabled', {
+			name: MODULE.ID + '.toolbarFoundryInspirationEnabled-Label',
+			hint: MODULE.ID + '.toolbarFoundryInspirationEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
 			default: false,
 		});
 		// -- Inspiration Theme --
@@ -709,7 +949,7 @@ export const registerSettings = () => {
 		game.settings.register(MODULE.ID, "headingH3DOMT", {
 			name: MODULE.ID + '.headingH3DOMT-Label',
 			hint: MODULE.ID + '.headingH3DOMT-Hint',
-			scope: "world",
+			scope: "client",
 			config: true,
 			default: "",
 			type: String,
@@ -1281,6 +1521,26 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			scope: 'world',
+			default: false,
+		});
+		// -- Injuries Coffee Pub Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarCoffeePubInjuriesEnabled', {
+			name: MODULE.ID + '.toolbarCoffeePubInjuriesEnabled-Label',
+			hint: MODULE.ID + '.toolbarCoffeePubInjuriesEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
+			default: true,
+		});
+		// -- Injuries Foundry Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarFoundryInjuriesEnabled', {
+			name: MODULE.ID + '.toolbarFoundryInjuriesEnabled-Label',
+			hint: MODULE.ID + '.toolbarFoundryInjuriesEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
 			default: false,
 		});
 		game.settings.register(MODULE.ID,'injuryCompendium', {
