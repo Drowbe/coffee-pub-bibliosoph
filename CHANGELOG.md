@@ -5,6 +5,54 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [12.1.2] - Toolbar Integration
+
+### Added
+- Complete toolbar integration with Coffee Pub Blacksmith
+- 23 toolbar tools across 3 zones (communication, rolls, roleplay)
+- Toolbar visibility controls for Coffee Pub and Foundry toolbars
+- Support for all existing Bibliosoph features in toolbar format
+
+#### Communication Tools
+- Party Message dialog
+- Private Message dialog
+
+#### Roll Tools
+- Investigation rolls
+- Critical Hit rolls
+- Fumble rolls
+- Injuries (GM only)
+- All 10 encounter types (General, Cave, Desert, Dungeon, Forest, Mountain, Sky, Snow, Urban, Water)
+
+#### Roleplay Tools
+- Beverage Break messages
+- Bio Break messages
+- Random Insults
+- Random Praise
+- Random Gifts
+- Shady Goods
+- Inspiration
+
+### Changed
+- Moved toolbar settings to proper locations in module settings
+- Toolbar checkboxes now appear directly below their respective "enable" checkboxes
+- All encounter tools use "rolls" zone for proper toolbar organization
+- Improved settings organization and user experience
+
+### Fixed
+- Toolbar buttons not showing due to incorrect API access pattern
+- Timing issues with Blacksmith API initialization
+- Missing toolbar visibility settings for encounters and injuries
+- Duplicate settings entries in localization files
+
+### Technical
+- Created trigger functions for all encounter types and roleplay features
+- Added proper window object exposure for all toolbar functions
+- Implemented proper settings validation and error handling
+- Added comprehensive localization strings for all toolbar settings
+- Fixed zone assignment to use valid Blacksmith toolbar zones
+
 ## [12.1.1] - Bug Fixes
 
 ### Fixed
