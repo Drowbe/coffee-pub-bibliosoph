@@ -173,6 +173,305 @@ function triggerInjuriesMacro() {
     publishChatCard();
 }
 
+// Trigger beverage macro (for toolbar integration)
+function triggerBeverageMacro() {
+    const strBeverageMacro = BlacksmithUtils.getSettingSafely(MODULE.ID, 'beverageMacro', '') || '';
+    
+    if (!strBeverageMacro || strBeverageMacro === '-- Choose a Macro --' || strBeverageMacro === 'none') {
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Beverage macro not configured", "", false, false);
+        return;
+    }
+
+    // Build the chat message (same as macro click handler)
+    resetBibliosophVars();
+    BIBLIOSOPH.CARDTYPEBEVERAGE = true;
+    BIBLIOSOPH.CARDTYPE = "General";
+    // Build the card
+    publishChatCard();
+}
+
+// Trigger bio macro (for toolbar integration)
+function triggerBioMacro() {
+    const strBioMacro = BlacksmithUtils.getSettingSafely(MODULE.ID, 'bioMacro', '') || '';
+    
+    if (!strBioMacro || strBioMacro === '-- Choose a Macro --' || strBioMacro === 'none') {
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Bio macro not configured", "", false, false);
+        return;
+    }
+
+    // Build the chat message (same as macro click handler)
+    resetBibliosophVars();
+    BIBLIOSOPH.CARDTYPEBIO = true;
+    BIBLIOSOPH.CARDTYPE = "General";
+    // Build the card
+    publishChatCard();
+}
+
+// Trigger insults macro (for toolbar integration)
+function triggerInsultsMacro() {
+    const strInsultsMacro = BlacksmithUtils.getSettingSafely(MODULE.ID, 'insultsMacro', '') || '';
+    
+    if (!strInsultsMacro || strInsultsMacro === '-- Choose a Macro --' || strInsultsMacro === 'none') {
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Insults macro not configured", "", false, false);
+        return;
+    }
+
+    // Build the chat message (same as macro click handler)
+    resetBibliosophVars();
+    BIBLIOSOPH.CARDTYPEINSULTS = true;
+    BIBLIOSOPH.CARDTYPE = "General";
+    // Build the card
+    publishChatCard();
+}
+
+// Trigger praise macro (for toolbar integration)
+function triggerPraiseMacro() {
+    const strPraiseMacro = BlacksmithUtils.getSettingSafely(MODULE.ID, 'praiseMacro', '') || '';
+    
+    if (!strPraiseMacro || strPraiseMacro === '-- Choose a Macro --' || strPraiseMacro === 'none') {
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Praise macro not configured", "", false, false);
+        return;
+    }
+
+    // Build the chat message (same as macro click handler)
+    resetBibliosophVars();
+    BIBLIOSOPH.CARDTYPEPRAISE = true;
+    BIBLIOSOPH.CARDTYPE = "General";
+    // Build the card
+    publishChatCard();
+}
+
+// Trigger gift macro (for toolbar integration)
+function triggerGiftMacro() {
+    const strGiftMacro = BlacksmithUtils.getSettingSafely(MODULE.ID, 'giftMacro', '') || '';
+    
+    if (!strGiftMacro || strGiftMacro === '-- Choose a Macro --' || strGiftMacro === 'none') {
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Gift macro not configured", "", false, false);
+        return;
+    }
+
+    // Build the chat message (same as macro click handler)
+    resetBibliosophVars();
+    BIBLIOSOPH.CARDTYPEGIFT = true;
+    BIBLIOSOPH.CARDTYPE = "General";
+    // Build the card
+    publishChatCard();
+}
+
+// Trigger shadygoods macro (for toolbar integration)
+function triggerShadygoodsMacro() {
+    const strShadygoodsMacro = BlacksmithUtils.getSettingSafely(MODULE.ID, 'shadygoodsMacro', '') || '';
+    
+    if (!strShadygoodsMacro || strShadygoodsMacro === '-- Choose a Macro --' || strShadygoodsMacro === 'none') {
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Shadygoods macro not configured", "", false, false);
+        return;
+    }
+
+    // Build the chat message (same as macro click handler)
+    resetBibliosophVars();
+    BIBLIOSOPH.CARDTYPESHADYGOODS = true;
+    BIBLIOSOPH.CARDTYPE = "General";
+    // Build the card
+    publishChatCard();
+}
+
+// Trigger inspiration macro (for toolbar integration)
+function triggerInspirationMacro() {
+    const strInspirationMacro = BlacksmithUtils.getSettingSafely(MODULE.ID, 'inspirationMacro', '') || '';
+    
+    if (!strInspirationMacro || strInspirationMacro === '-- Choose a Macro --' || strInspirationMacro === 'none') {
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Inspiration macro not configured", "", false, false);
+        return;
+    }
+
+    // Build the chat message (same as macro click handler)
+    resetBibliosophVars();
+    BIBLIOSOPH.CARDTYPEINSPIRATION = true;
+    BIBLIOSOPH.CARDTYPE = "General";
+    // Build the card
+    publishChatCard();
+}
+
+// Trigger general encounter macro (for toolbar integration)
+function triggerGeneralEncounterMacro() {
+    const strGeneralMacro = BlacksmithUtils.getSettingSafely(MODULE.ID, 'encounterMacroGeneral', '') || '';
+    
+    if (!strGeneralMacro || strGeneralMacro === '-- Choose a Macro --' || strGeneralMacro === 'none') {
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "General encounter macro not configured", "", false, false);
+        return;
+    }
+
+    // Build the chat message (same as macro click handler)
+    resetBibliosophVars();
+    BIBLIOSOPH.CARDTYPEENCOUNTER = true;
+    BIBLIOSOPH.CARDTYPE = "General";
+    BIBLIOSOPH.ENCOUNTER_TYPE = "General";
+    // Build the card
+    publishChatCard();
+}
+
+// Trigger cave encounter macro (for toolbar integration)
+function triggerCaveEncounterMacro() {
+    const strCaveMacro = BlacksmithUtils.getSettingSafely(MODULE.ID, 'encounterMacroCave', '') || '';
+    
+    if (!strCaveMacro || strCaveMacro === '-- Choose a Macro --' || strCaveMacro === 'none') {
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Cave encounter macro not configured", "", false, false);
+        return;
+    }
+
+    // Build the chat message (same as macro click handler)
+    resetBibliosophVars();
+    BIBLIOSOPH.CARDTYPEENCOUNTER = true;
+    BIBLIOSOPH.CARDTYPE = "General";
+    BIBLIOSOPH.ENCOUNTER_TYPE = "Cave";
+    // Build the card
+    publishChatCard();
+}
+
+// Trigger desert encounter macro (for toolbar integration)
+function triggerDesertEncounterMacro() {
+    const strDesertMacro = BlacksmithUtils.getSettingSafely(MODULE.ID, 'encounterMacroDesert', '') || '';
+    
+    if (!strDesertMacro || strDesertMacro === '-- Choose a Macro --' || strDesertMacro === 'none') {
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Desert encounter macro not configured", "", false, false);
+        return;
+    }
+
+    // Build the chat message (same as macro click handler)
+    resetBibliosophVars();
+    BIBLIOSOPH.CARDTYPEENCOUNTER = true;
+    BIBLIOSOPH.CARDTYPE = "General";
+    BIBLIOSOPH.ENCOUNTER_TYPE = "Desert";
+    // Build the card
+    publishChatCard();
+}
+
+// Trigger dungeon encounter macro (for toolbar integration)
+function triggerDungeonEncounterMacro() {
+    const strDungeonMacro = BlacksmithUtils.getSettingSafely(MODULE.ID, 'encounterMacroDungeon', '') || '';
+    
+    if (!strDungeonMacro || strDungeonMacro === '-- Choose a Macro --' || strDungeonMacro === 'none') {
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Dungeon encounter macro not configured", "", false, false);
+        return;
+    }
+
+    // Build the chat message (same as macro click handler)
+    resetBibliosophVars();
+    BIBLIOSOPH.CARDTYPEENCOUNTER = true;
+    BIBLIOSOPH.CARDTYPE = "General";
+    BIBLIOSOPH.ENCOUNTER_TYPE = "Dungeon";
+    // Build the card
+    publishChatCard();
+}
+
+// Trigger forest encounter macro (for toolbar integration)
+function triggerForestEncounterMacro() {
+    const strForestMacro = BlacksmithUtils.getSettingSafely(MODULE.ID, 'encounterMacroForest', '') || '';
+    
+    if (!strForestMacro || strForestMacro === '-- Choose a Macro --' || strForestMacro === 'none') {
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Forest encounter macro not configured", "", false, false);
+        return;
+    }
+
+    // Build the chat message (same as macro click handler)
+    resetBibliosophVars();
+    BIBLIOSOPH.CARDTYPEENCOUNTER = true;
+    BIBLIOSOPH.CARDTYPE = "General";
+    BIBLIOSOPH.ENCOUNTER_TYPE = "Forest";
+    // Build the card
+    publishChatCard();
+}
+
+// Trigger mountain encounter macro (for toolbar integration)
+function triggerMountainEncounterMacro() {
+    const strMountainMacro = BlacksmithUtils.getSettingSafely(MODULE.ID, 'encounterMacroMountain', '') || '';
+    
+    if (!strMountainMacro || strMountainMacro === '-- Choose a Macro --' || strMountainMacro === 'none') {
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Mountain encounter macro not configured", "", false, false);
+        return;
+    }
+
+    // Build the chat message (same as macro click handler)
+    resetBibliosophVars();
+    BIBLIOSOPH.CARDTYPEENCOUNTER = true;
+    BIBLIOSOPH.CARDTYPE = "General";
+    BIBLIOSOPH.ENCOUNTER_TYPE = "Mountain";
+    // Build the card
+    publishChatCard();
+}
+
+// Trigger sky encounter macro (for toolbar integration)
+function triggerSkyEncounterMacro() {
+    const strSkyMacro = BlacksmithUtils.getSettingSafely(MODULE.ID, 'encounterMacroSky', '') || '';
+    
+    if (!strSkyMacro || strSkyMacro === '-- Choose a Macro --' || strSkyMacro === 'none') {
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Sky encounter macro not configured", "", false, false);
+        return;
+    }
+
+    // Build the chat message (same as macro click handler)
+    resetBibliosophVars();
+    BIBLIOSOPH.CARDTYPEENCOUNTER = true;
+    BIBLIOSOPH.CARDTYPE = "General";
+    BIBLIOSOPH.ENCOUNTER_TYPE = "Sky";
+    // Build the card
+    publishChatCard();
+}
+
+// Trigger snow encounter macro (for toolbar integration)
+function triggerSnowEncounterMacro() {
+    const strSnowMacro = BlacksmithUtils.getSettingSafely(MODULE.ID, 'encounterMacroSnow', '') || '';
+    
+    if (!strSnowMacro || strSnowMacro === '-- Choose a Macro --' || strSnowMacro === 'none') {
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Snow encounter macro not configured", "", false, false);
+        return;
+    }
+
+    // Build the chat message (same as macro click handler)
+    resetBibliosophVars();
+    BIBLIOSOPH.CARDTYPEENCOUNTER = true;
+    BIBLIOSOPH.CARDTYPE = "General";
+    BIBLIOSOPH.ENCOUNTER_TYPE = "Snow";
+    // Build the card
+    publishChatCard();
+}
+
+// Trigger urban encounter macro (for toolbar integration)
+function triggerUrbanEncounterMacro() {
+    const strUrbanMacro = BlacksmithUtils.getSettingSafely(MODULE.ID, 'encounterMacroUrban', '') || '';
+    
+    if (!strUrbanMacro || strUrbanMacro === '-- Choose a Macro --' || strUrbanMacro === 'none') {
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Urban encounter macro not configured", "", false, false);
+        return;
+    }
+
+    // Build the chat message (same as macro click handler)
+    resetBibliosophVars();
+    BIBLIOSOPH.CARDTYPEENCOUNTER = true;
+    BIBLIOSOPH.CARDTYPE = "General";
+    BIBLIOSOPH.ENCOUNTER_TYPE = "Urban";
+    // Build the card
+    publishChatCard();
+}
+
+// Trigger water encounter macro (for toolbar integration)
+function triggerWaterEncounterMacro() {
+    const strWaterMacro = BlacksmithUtils.getSettingSafely(MODULE.ID, 'encounterMacroWater', '') || '';
+    
+    if (!strWaterMacro || strWaterMacro === '-- Choose a Macro --' || strWaterMacro === 'none') {
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Water encounter macro not configured", "", false, false);
+        return;
+    }
+
+    // Build the chat message (same as macro click handler)
+    resetBibliosophVars();
+    BIBLIOSOPH.CARDTYPEENCOUNTER = true;
+    BIBLIOSOPH.CARDTYPE = "General";
+    BIBLIOSOPH.ENCOUNTER_TYPE = "Water";
+    // Build the card
+    publishChatCard();
+}
+
 // Make functions globally available for toolbar manager
 window.openPartyMessageDialog = openPartyMessageDialog;
 window.openPrivateMessageDialog = openPrivateMessageDialog;
@@ -180,6 +479,23 @@ window.triggerInvestigationMacro = triggerInvestigationMacro;
 window.triggerCriticalMacro = triggerCriticalMacro;
 window.triggerFumbleMacro = triggerFumbleMacro;
 window.triggerInjuriesMacro = triggerInjuriesMacro;
+window.triggerBeverageMacro = triggerBeverageMacro;
+window.triggerBioMacro = triggerBioMacro;
+window.triggerInsultsMacro = triggerInsultsMacro;
+window.triggerPraiseMacro = triggerPraiseMacro;
+window.triggerGiftMacro = triggerGiftMacro;
+window.triggerShadygoodsMacro = triggerShadygoodsMacro;
+window.triggerInspirationMacro = triggerInspirationMacro;
+window.triggerGeneralEncounterMacro = triggerGeneralEncounterMacro;
+window.triggerCaveEncounterMacro = triggerCaveEncounterMacro;
+window.triggerDesertEncounterMacro = triggerDesertEncounterMacro;
+window.triggerDungeonEncounterMacro = triggerDungeonEncounterMacro;
+window.triggerForestEncounterMacro = triggerForestEncounterMacro;
+window.triggerMountainEncounterMacro = triggerMountainEncounterMacro;
+window.triggerSkyEncounterMacro = triggerSkyEncounterMacro;
+window.triggerSnowEncounterMacro = triggerSnowEncounterMacro;
+window.triggerUrbanEncounterMacro = triggerUrbanEncounterMacro;
+window.triggerWaterEncounterMacro = triggerWaterEncounterMacro;
 
 
 

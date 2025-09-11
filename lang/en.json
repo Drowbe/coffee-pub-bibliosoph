@@ -352,6 +352,56 @@
 		"headingH3simpleInjuriesGlobal-Hint": "Adjust the injury possibilities to fit your narrative, choose the graphical representation that best matches your storytelling style, and determine the severity of wounds your characters can sustain. This module empowers you to customize the level of risk and visual aspects of your game for an immersive experience.",
 
 		"injuriesMacroGlobal-Label": "Macro Name",
-		"injuriesMacroGlobal-Hint": "The name of the macro that should trigger the Global injury roll. This will grab a random injury from any category."
+		"injuriesMacroGlobal-Hint": "The name of the macro that should trigger the Global injury roll. This will grab a random injury from any category.",
+
+		"toolbarCoffeePubGeneralEncounterEnabled-Label": "Show in the Coffee Pub toolbar",
+		"toolbarCoffeePubGeneralEncounterEnabled-Hint": "Show General Encounter button in the Coffee Pub toolbar (default: true).",
+		"toolbarFoundryGeneralEncounterEnabled-Label": "Show in the Foundry toolbar",
+		"toolbarFoundryGeneralEncounterEnabled-Hint": "Show General Encounter button in the Foundry toolbar (default: false).",
+
+		"toolbarCoffeePubCaveEncounterEnabled-Label": "Show in the Coffee Pub toolbar",
+		"toolbarCoffeePubCaveEncounterEnabled-Hint": "Show Cave Encounter button in the Coffee Pub toolbar (default: true).",
+		"toolbarFoundryCaveEncounterEnabled-Label": "Show in the Foundry toolbar",
+		"toolbarFoundryCaveEncounterEnabled-Hint": "Show Cave Encounter button in the Foundry toolbar (default: false).",
+
+		"toolbarCoffeePubDesertEncounterEnabled-Label": "Show in the Coffee Pub toolbar",
+		"toolbarCoffeePubDesertEncounterEnabled-Hint": "Show Desert Encounter button in the Coffee Pub toolbar (default: true).",
+		"toolbarFoundryDesertEncounterEnabled-Label": "Show in the Foundry toolbar",
+		"toolbarFoundryDesertEncounterEnabled-Hint": "Show Desert Encounter button in the Foundry toolbar (default: false).",
+
+		"toolbarCoffeePubDungeonEncounterEnabled-Label": "Show in the Coffee Pub toolbar",
+		"toolbarCoffeePubDungeonEncounterEnabled-Hint": "Show Dungeon Encounter button in the Coffee Pub toolbar (default: true).",
+		"toolbarFoundryDungeonEncounterEnabled-Label": "Show in the Foundry toolbar",
+		"toolbarFoundryDungeonEncounterEnabled-Hint": "Show Dungeon Encounter button in the Foundry toolbar (default: false).",
+
+		"toolbarCoffeePubForestEncounterEnabled-Label": "Show in the Coffee Pub toolbar",
+		"toolbarCoffeePubForestEncounterEnabled-Hint": "Show Forest Encounter button in the Coffee Pub toolbar (default: true).",
+		"toolbarFoundryForestEncounterEnabled-Label": "Show in the Foundry toolbar",
+		"toolbarFoundryForestEncounterEnabled-Hint": "Show Forest Encounter button in the Foundry toolbar (default: false).",
+
+		"toolbarCoffeePubMountainEncounterEnabled-Label": "Show in the Coffee Pub toolbar",
+		"toolbarCoffeePubMountainEncounterEnabled-Hint": "Show Mountain Encounter button in the Coffee Pub toolbar (default: true).",
+		"toolbarFoundryMountainEncounterEnabled-Label": "Show in the Foundry toolbar",
+		"toolbarFoundryMountainEncounterEnabled-Hint": "Show Mountain Encounter button in the Foundry toolbar (default: false).",
+
+		"toolbarCoffeePubSkyEncounterEnabled-Label": "Show in the Coffee Pub toolbar",
+		"toolbarCoffeePubSkyEncounterEnabled-Hint": "Show Sky Encounter button in the Coffee Pub toolbar (default: true).",
+		"toolbarFoundrySkyEncounterEnabled-Label": "Show in the Foundry toolbar",
+		"toolbarFoundrySkyEncounterEnabled-Hint": "Show Sky Encounter button in the Foundry toolbar (default: false).",
+
+		"toolbarCoffeePubSnowEncounterEnabled-Label": "Show in the Coffee Pub toolbar",
+		"toolbarCoffeePubSnowEncounterEnabled-Hint": "Show Snow Encounter button in the Coffee Pub toolbar (default: true).",
+		"toolbarFoundrySnowEncounterEnabled-Label": "Show in the Foundry toolbar",
+		"toolbarFoundrySnowEncounterEnabled-Hint": "Show Snow Encounter button in the Foundry toolbar (default: false).",
+
+		"toolbarCoffeePubUrbanEncounterEnabled-Label": "Show in the Coffee Pub toolbar",
+		"toolbarCoffeePubUrbanEncounterEnabled-Hint": "Show Urban Encounter button in the Coffee Pub toolbar (default: true).",
+		"toolbarFoundryUrbanEncounterEnabled-Label": "Show in the Foundry toolbar",
+		"toolbarFoundryUrbanEncounterEnabled-Hint": "Show Urban Encounter button in the Foundry toolbar (default: false).",
+
+		"toolbarCoffeePubWaterEncounterEnabled-Label": "Show in the Coffee Pub toolbar",
+		"toolbarCoffeePubWaterEncounterEnabled-Hint": "Show Water Encounter button in the Coffee Pub toolbar (default: true).",
+		"toolbarFoundryWaterEncounterEnabled-Label": "Show in the Foundry toolbar",
+		"toolbarFoundryWaterEncounterEnabled-Hint": "Show Water Encounter button in the Foundry toolbar (default: false)."
 	}
 }

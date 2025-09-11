@@ -911,6 +911,7 @@ export const registerSettings = () => {
 			scope: 'client',
 			default: false,
 		});
+
 		// -- Inspiration Theme --
 		game.settings.register(MODULE.ID, 'cardThemeInspiration', {
 			name: MODULE.ID + '.cardThemeInspiration-Label',
@@ -1118,6 +1119,26 @@ export const registerSettings = () => {
 			scope: 'world',
 			default: false,
 		});
+		// -- General Encounter Coffee Pub Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarCoffeePubGeneralEncounterEnabled', {
+			name: MODULE.ID + '.toolbarCoffeePubGeneralEncounterEnabled-Label',
+			hint: MODULE.ID + '.toolbarCoffeePubGeneralEncounterEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
+			default: true,
+		});
+		// -- General Encounter Foundry Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarFoundryGeneralEncounterEnabled', {
+			name: MODULE.ID + '.toolbarFoundryGeneralEncounterEnabled-Label',
+			hint: MODULE.ID + '.toolbarFoundryGeneralEncounterEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
+			default: false,
+		});
 		game.settings.register(MODULE.ID,'encounterTableGeneral', {
 			name: MODULE.ID + '.encounterTableGeneral-Label',
 			hint: MODULE.ID + '.encounterTableGeneral-Hint',
@@ -1158,6 +1179,26 @@ export const registerSettings = () => {
 			scope: 'world',
 			default: false,
 		});
+		// -- Cave Encounter Coffee Pub Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarCoffeePubCaveEncounterEnabled', {
+			name: MODULE.ID + '.toolbarCoffeePubCaveEncounterEnabled-Label',
+			hint: MODULE.ID + '.toolbarCoffeePubCaveEncounterEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
+			default: true,
+		});
+		// -- Cave Encounter Foundry Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarFoundryCaveEncounterEnabled', {
+			name: MODULE.ID + '.toolbarFoundryCaveEncounterEnabled-Label',
+			hint: MODULE.ID + '.toolbarFoundryCaveEncounterEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
+			default: false,
+		});
 		game.settings.register(MODULE.ID,'encounterTableCave', {
 			name: MODULE.ID + '.encounterTableCave-Label',
 			hint: MODULE.ID + '.encounterTableCave-Hint',
@@ -1195,6 +1236,26 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			scope: 'world',
+			default: false,
+		});
+		// -- Desert Encounter Coffee Pub Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarCoffeePubDesertEncounterEnabled', {
+			name: MODULE.ID + '.toolbarCoffeePubDesertEncounterEnabled-Label',
+			hint: MODULE.ID + '.toolbarCoffeePubDesertEncounterEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
+			default: true,
+		});
+		// -- Desert Encounter Foundry Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarFoundryDesertEncounterEnabled', {
+			name: MODULE.ID + '.toolbarFoundryDesertEncounterEnabled-Label',
+			hint: MODULE.ID + '.toolbarFoundryDesertEncounterEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
 			default: false,
 		});
 		game.settings.register(MODULE.ID,'encounterTableDesert', {
@@ -1237,6 +1298,26 @@ export const registerSettings = () => {
 			scope: 'world',
 			default: false,
 		});
+		// -- Dungeon Encounter Coffee Pub Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarCoffeePubDungeonEncounterEnabled', {
+			name: MODULE.ID + '.toolbarCoffeePubDungeonEncounterEnabled-Label',
+			hint: MODULE.ID + '.toolbarCoffeePubDungeonEncounterEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
+			default: true,
+		});
+		// -- Dungeon Encounter Foundry Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarFoundryDungeonEncounterEnabled', {
+			name: MODULE.ID + '.toolbarFoundryDungeonEncounterEnabled-Label',
+			hint: MODULE.ID + '.toolbarFoundryDungeonEncounterEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
+			default: false,
+		});
 		game.settings.register(MODULE.ID,'encounterTableDungeon', {
 			name: MODULE.ID + '.encounterTableDungeon-Label',
 			hint: MODULE.ID + '.encounterTableDungeon-Hint',
@@ -1273,6 +1354,26 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			scope: 'world',
+			default: false,
+		});
+		// -- Forest Encounter Coffee Pub Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarCoffeePubForestEncounterEnabled', {
+			name: MODULE.ID + '.toolbarCoffeePubForestEncounterEnabled-Label',
+			hint: MODULE.ID + '.toolbarCoffeePubForestEncounterEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
+			default: true,
+		});
+		// -- Forest Encounter Foundry Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarFoundryForestEncounterEnabled', {
+			name: MODULE.ID + '.toolbarFoundryForestEncounterEnabled-Label',
+			hint: MODULE.ID + '.toolbarFoundryForestEncounterEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
 			default: false,
 		});
 		game.settings.register(MODULE.ID,'encounterTableForest', {
@@ -1313,6 +1414,26 @@ export const registerSettings = () => {
 			scope: 'world',
 			default: false,
 		});
+		// -- Mountain Encounter Coffee Pub Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarCoffeePubMountainEncounterEnabled', {
+			name: MODULE.ID + '.toolbarCoffeePubMountainEncounterEnabled-Label',
+			hint: MODULE.ID + '.toolbarCoffeePubMountainEncounterEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
+			default: true,
+		});
+		// -- Mountain Encounter Foundry Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarFoundryMountainEncounterEnabled', {
+			name: MODULE.ID + '.toolbarFoundryMountainEncounterEnabled-Label',
+			hint: MODULE.ID + '.toolbarFoundryMountainEncounterEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
+			default: false,
+		});
 		game.settings.register(MODULE.ID,'encounterTableMountain', {
 			name: MODULE.ID + '.encounterTableMountain-Label',
 			hint: MODULE.ID + '.encounterTableMountain-Hint',
@@ -1349,6 +1470,26 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			scope: 'world',
+			default: false,
+		});
+		// -- Sky Encounter Coffee Pub Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarCoffeePubSkyEncounterEnabled', {
+			name: MODULE.ID + '.toolbarCoffeePubSkyEncounterEnabled-Label',
+			hint: MODULE.ID + '.toolbarCoffeePubSkyEncounterEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
+			default: true,
+		});
+		// -- Sky Encounter Foundry Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarFoundrySkyEncounterEnabled', {
+			name: MODULE.ID + '.toolbarFoundrySkyEncounterEnabled-Label',
+			hint: MODULE.ID + '.toolbarFoundrySkyEncounterEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
 			default: false,
 		});
 		game.settings.register(MODULE.ID,'encounterTableSky', {
@@ -1389,6 +1530,26 @@ export const registerSettings = () => {
 			scope: 'world',
 			default: false,
 		});
+		// -- Snow Encounter Coffee Pub Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarCoffeePubSnowEncounterEnabled', {
+			name: MODULE.ID + '.toolbarCoffeePubSnowEncounterEnabled-Label',
+			hint: MODULE.ID + '.toolbarCoffeePubSnowEncounterEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
+			default: true,
+		});
+		// -- Snow Encounter Foundry Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarFoundrySnowEncounterEnabled', {
+			name: MODULE.ID + '.toolbarFoundrySnowEncounterEnabled-Label',
+			hint: MODULE.ID + '.toolbarFoundrySnowEncounterEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
+			default: false,
+		});
 		game.settings.register(MODULE.ID,'encounterTableSnow', {
 			name: MODULE.ID + '.encounterTableSnow-Label',
 			hint: MODULE.ID + '.encounterTableSnow-Hint',
@@ -1427,6 +1588,26 @@ export const registerSettings = () => {
 			scope: 'world',
 			default: false,
 		});
+		// -- Urban Encounter Coffee Pub Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarCoffeePubUrbanEncounterEnabled', {
+			name: MODULE.ID + '.toolbarCoffeePubUrbanEncounterEnabled-Label',
+			hint: MODULE.ID + '.toolbarCoffeePubUrbanEncounterEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
+			default: true,
+		});
+		// -- Urban Encounter Foundry Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarFoundryUrbanEncounterEnabled', {
+			name: MODULE.ID + '.toolbarFoundryUrbanEncounterEnabled-Label',
+			hint: MODULE.ID + '.toolbarFoundryUrbanEncounterEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
+			default: false,
+		});
 		game.settings.register(MODULE.ID,'encounterTableUrban', {
 			name: MODULE.ID + '.encounterTableUrban-Label',
 			hint: MODULE.ID + '.encounterTableUrban-Hint',
@@ -1463,6 +1644,26 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			scope: 'world',
+			default: false,
+		});
+		// -- Water Encounter Coffee Pub Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarCoffeePubWaterEncounterEnabled', {
+			name: MODULE.ID + '.toolbarCoffeePubWaterEncounterEnabled-Label',
+			hint: MODULE.ID + '.toolbarCoffeePubWaterEncounterEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
+			default: true,
+		});
+		// -- Water Encounter Foundry Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarFoundryWaterEncounterEnabled', {
+			name: MODULE.ID + '.toolbarFoundryWaterEncounterEnabled-Label',
+			hint: MODULE.ID + '.toolbarFoundryWaterEncounterEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'client',
 			default: false,
 		});
 		game.settings.register(MODULE.ID,'encounterTableWater', {
