@@ -14,7 +14,7 @@ import { MODULE, BIBLIOSOPH  } from './const.js';
 // ===== BEGIN: REGISTER BLACKSMITH API =============================
 // ================================================================== 
 import { BlacksmithAPI } from '/modules/coffee-pub-blacksmith/api/blacksmith-api.js';
-// Register your module with Blacksmith (use 'ready' instead of 'init')
+// Register your module with Blacksmith and then register toolbar tools
 Hooks.once('ready', async () => {
     try {
         // Get the module manager
@@ -26,6 +26,24 @@ Hooks.once('ready', async () => {
         });
         // Log success
         console.log(MODULE.ID + ' | ✅ Module ' + MODULE.NAME + ' registered with Blacksmith successfully');
+        
+        // NOW register toolbar tools after module registration is complete
+        // Add a small delay to ensure Blacksmith API is fully ready
+        setTimeout(() => {
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "TOOLBAR | Ready hook triggered, attempting to register toolbar tools", "", true, false);
+            
+            if (typeof registerToolbarTools === 'function') {
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "TOOLBAR | registerToolbarTools function is available, calling it", "", true, false);
+                try {
+                    registerToolbarTools();
+                } catch (error) {
+                    BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `TOOLBAR | Error during toolbar registration: ${error.message}`, "", true, false);
+                }
+            } else {
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "TOOLBAR | registerToolbarTools function is NOT available", "", true, false);
+            }
+        }, 100); // Small delay to ensure API is ready
+        
     } catch (error) {
         console.error(MODULE.ID + ' | ❌ Failed to register ' + MODULE.NAME + ' with Blacksmith:', error);
     }
@@ -266,21 +284,7 @@ Hooks.once('init', async function() {
 
 // ***** READY *****
 // Hook that fires after everything is loaded and ready
-Hooks.once('ready', () => {
-    BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "TOOLBAR | Ready hook triggered, attempting to register toolbar tools", "", true, false);
-    
-    // Register toolbar tools when everything is ready
-    if (typeof registerToolbarTools === 'function') {
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "TOOLBAR | registerToolbarTools function is available, calling it", "", true, false);
-        try {
-            registerToolbarTools();
-        } catch (error) {
-            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `TOOLBAR | Error during toolbar registration: ${error.message}`, "", true, false);
-        }
-    } else {
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "TOOLBAR | registerToolbarTools function is NOT available", "", true, false);
-    }
-});
+// Note: Toolbar registration is now handled in the Blacksmith API registration block above
 
 // ***** MODULE DISABLE *****
 // Clean up toolbar tools when module is disabled
@@ -422,7 +426,7 @@ Hooks.on("ready", async () => {
     var blnInspirationEnabled = getSetting('inspirationEnabled', false);
     var blndomtEnabled = getSetting('domtEnabled', false);
     var blninjuriesEnabledGlobal = getSetting('injuriesEnabledGlobal', false);
-    
+
     // BUTTON PRESSES IN CHAT
     document.addEventListener('click', function(event) {
         if(event.target.classList.contains('coffee-pub-bibliosoph-button-reply')) {
@@ -493,10 +497,10 @@ Hooks.on("ready", async () => {
                 // User needs to know about macro configuration issues
                 BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `General Encounter: Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
             }
-                    } else {
+        } else {
                 // They haven't set this macro - consolidated validation handles this
                 // BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for General Encounters not set.`, "", false, false);
-            }
+        }
      }
     // *** CAVE ***
     if (blnCaveEnabled) {
