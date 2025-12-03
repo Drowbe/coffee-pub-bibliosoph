@@ -2,7 +2,7 @@
   "id": "coffee-pub-bibliosoph",
   "title": "Coffee Pub Bibliosoph",
   "description": "Rolltable card formatting goodness.",
-  "version": "12.1.3",
+  "version": "13.0.0",
 
   "manifest": "https://github.com/Drowbe/coffee-pub-bibliosoph/releases/latest/download/module.json",
   "download": "https://github.com/Drowbe/coffee-pub-bibliosoph/releases/latest/download/coffee-pub-bibliosoph.zip",
@@ -13,9 +13,9 @@
   "license": "LICENSE",
 
   "compatibility": {
-    "minimum": "12",
-    "verified": "12",
-    "maximum": "12"
+    "minimum": "13",
+    "verified": "13",
+    "maximum": "13"
   },
   "socket": {},
   "library": {},
