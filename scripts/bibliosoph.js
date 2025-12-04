@@ -2488,17 +2488,31 @@ async function createChatCardSearch(strRollTableName) {
             strCompendiumLink = "@UUID[" + documentUuid + "]{" + strName + "}";
             
             // Parse UUID to extract compendium info if needed
+            // UUID format: "Compendium.pack-name.Item.id" or "Item.id"
             if (documentUuid.startsWith("Compendium.")) {
-                // Format: Compendium.pack-name.Item.id
-                const uuidParts = documentUuid.split(".");
-                if (uuidParts.length >= 4) {
-                    strCompendiumName = uuidParts.slice(1, -2).join("."); // Everything between "Compendium" and document type
-                    strCompendiumID = uuidParts[uuidParts.length - 1]; // Last part is the ID
+                // Extract compendium pack name from UUID
+                // UUID format: Compendium.pack-name.documentType.id (pack-name can have dots)
+                // Match pattern: Compendium.{everything}.{Actor|Item}.{id}
+                const match = documentUuid.match(/^Compendium\.(.+?)\.(Actor|Item|JournalEntry|Macro|Playlist|RollTable|Scene|Item)\.(.+)$/);
+                if (match) {
+                    strCompendiumName = match[1]; // Pack name (may contain dots)
+                    strCompendiumID = match[3]; // Document ID
+                } else {
+                    // Try to extract using Foundry's UUID parsing if available
+                    try {
+                        const parsed = foundry.utils.parseUuid(documentUuid);
+                        if (parsed && parsed.collection) {
+                            strCompendiumName = parsed.collection;
+                            strCompendiumID = parsed.id;
+                        }
+                    } catch (e) {
+                        // If parsing fails, continue without pack validation
+                    }
                 }
             } else if (documentUuid.startsWith("Item.")) {
                 // World item
                 strCompendiumName = "Item";
-                strCompendiumID = documentUuid.split(".")[1];
+                strCompendiumID = documentUuid.replace("Item.", "");
             }
         } else {
             // Fallback for v12 compatibility (deprecated properties)
