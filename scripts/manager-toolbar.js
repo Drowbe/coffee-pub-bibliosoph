@@ -81,7 +81,7 @@ const TOOLBAR_TOOLS = {
         }
     },
     'bibliosoph-critical': {
-        icon: "fas fa-burst",
+        icon: "fa-solid fa-burst",
         name: "bibliosoph-critical",
         title: "Critical Hit",
         zone: "rolls",
@@ -102,7 +102,7 @@ const TOOLBAR_TOOLS = {
         }
     },
     'bibliosoph-fumble': {
-        icon: "fas fa-heart-crack",
+        icon: "fa-solid fa-heart-crack",
         name: "bibliosoph-fumble",
         title: "Fumble",
         zone: "rolls",
@@ -123,7 +123,7 @@ const TOOLBAR_TOOLS = {
         }
     },
     'bibliosoph-injuries': {
-        icon: "fas fa-bandage",
+        icon: "fa-solid fa-bandage",
         name: "bibliosoph-injuries",
         title: "Injuries",
         zone: "rolls",
@@ -145,7 +145,7 @@ const TOOLBAR_TOOLS = {
         }
     },
     'bibliosoph-beverage': {
-        icon: "fas fa-mug-hot",
+        icon: "fa-solid fa-mug-hot",
         name: "bibliosoph-beverage",
         title: "Beverage Break",
         zone: "roleplay",
@@ -165,7 +165,7 @@ const TOOLBAR_TOOLS = {
         }
     },
     'bibliosoph-bio': {
-        icon: "fas fa-restroom",
+        icon: "fa-solid fa-restroom",
         name: "bibliosoph-bio",
         title: "Bio Break",
         zone: "roleplay",
@@ -185,7 +185,7 @@ const TOOLBAR_TOOLS = {
         }
     },
     'bibliosoph-insults': {
-        icon: "fas fa-face-angry",
+        icon: "fa-solid fa-face-angry",
         name: "bibliosoph-insults",
         title: "Insults",
         zone: "roleplay",
@@ -205,7 +205,7 @@ const TOOLBAR_TOOLS = {
         }
     },
     'bibliosoph-praise': {
-        icon: "fas fa-face-smile",
+        icon: "fa-solid fa-face-smile",
         name: "bibliosoph-praise",
         title: "Praise",
         zone: "roleplay",
@@ -225,7 +225,7 @@ const TOOLBAR_TOOLS = {
         }
     },
     'bibliosoph-gift': {
-        icon: "fas fa-gift",
+        icon: "fa-solid fa-gift",
         name: "bibliosoph-gift",
         title: "Gifts",
         zone: "roleplay",
@@ -245,7 +245,7 @@ const TOOLBAR_TOOLS = {
         }
     },
     'bibliosoph-shadygoods': {
-        icon: "fas fa-mask",
+        icon: "fa-solid fa-mask",
         name: "bibliosoph-shadygoods",
         title: "Shady Goods",
         zone: "roleplay",
@@ -265,7 +265,7 @@ const TOOLBAR_TOOLS = {
         }
     },
     'bibliosoph-inspiration': {
-        icon: "fas fa-lightbulb",
+        icon: "fa-solid fa-lightbulb",
         name: "bibliosoph-inspiration",
         title: "Inspiration",
         zone: "roleplay",
@@ -285,7 +285,7 @@ const TOOLBAR_TOOLS = {
         }
     },
     'bibliosoph-general-encounter': {
-        icon: "fas fa-dice-d20",
+        icon: "fa-solid fa-dice-d20",
         name: "bibliosoph-general-encounter",
         title: "General Encounter",
         zone: "rolls",
@@ -305,7 +305,7 @@ const TOOLBAR_TOOLS = {
         }
     },
     'bibliosoph-cave-encounter': {
-        icon: "fas fa-mountain",
+        icon: "fa-solid fa-mountain",
         name: "bibliosoph-cave-encounter",
         title: "Cave Encounter",
         zone: "rolls",
@@ -325,7 +325,7 @@ const TOOLBAR_TOOLS = {
         }
     },
     'bibliosoph-desert-encounter': {
-        icon: "fas fa-sun",
+        icon: "fa-solid fa-sun",
         name: "bibliosoph-desert-encounter",
         title: "Desert Encounter",
         zone: "rolls",
@@ -345,7 +345,7 @@ const TOOLBAR_TOOLS = {
         }
     },
     'bibliosoph-dungeon-encounter': {
-        icon: "fas fa-dungeon",
+        icon: "fa-solid fa-dungeon",
         name: "bibliosoph-dungeon-encounter",
         title: "Dungeon Encounter",
         zone: "rolls",
@@ -365,7 +365,7 @@ const TOOLBAR_TOOLS = {
         }
     },
     'bibliosoph-forest-encounter': {
-        icon: "fas fa-tree",
+        icon: "fa-solid fa-tree",
         name: "bibliosoph-forest-encounter",
         title: "Forest Encounter",
         zone: "rolls",
@@ -385,7 +385,7 @@ const TOOLBAR_TOOLS = {
         }
     },
     'bibliosoph-mountain-encounter': {
-        icon: "fas fa-mountain",
+        icon: "fa-solid fa-mountain",
         name: "bibliosoph-mountain-encounter",
         title: "Mountain Encounter",
         zone: "rolls",
@@ -405,7 +405,7 @@ const TOOLBAR_TOOLS = {
         }
     },
     'bibliosoph-sky-encounter': {
-        icon: "fas fa-cloud",
+        icon: "fa-solid fa-cloud",
         name: "bibliosoph-sky-encounter",
         title: "Sky Encounter",
         zone: "rolls",
@@ -425,7 +425,7 @@ const TOOLBAR_TOOLS = {
         }
     },
     'bibliosoph-snow-encounter': {
-        icon: "fas fa-snowflake",
+        icon: "fa-solid fa-snowflake",
         name: "bibliosoph-snow-encounter",
         title: "Snow Encounter",
         zone: "rolls",
@@ -445,7 +445,7 @@ const TOOLBAR_TOOLS = {
         }
     },
     'bibliosoph-urban-encounter': {
-        icon: "fas fa-city",
+        icon: "fa-solid fa-city",
         name: "bibliosoph-urban-encounter",
         title: "Urban Encounter",
         zone: "rolls",
@@ -465,7 +465,7 @@ const TOOLBAR_TOOLS = {
         }
     },
     'bibliosoph-water-encounter': {
-        icon: "fas fa-water",
+        icon: "fa-solid fa-water",
         name: "bibliosoph-water-encounter",
         title: "Water Encounter",
         zone: "rolls",

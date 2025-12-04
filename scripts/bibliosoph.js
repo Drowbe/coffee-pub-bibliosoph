@@ -4,6 +4,7 @@
 
 // Grab the module data
 import { MODULE, BIBLIOSOPH  } from './const.js';
+import { registerToolbarTools, unregisterToolbarTools } from './manager-toolbar.js';
 
 
 
@@ -28,21 +29,36 @@ Hooks.once('ready', async () => {
         console.log(MODULE.ID + ' | ✅ Module ' + MODULE.NAME + ' registered with Blacksmith successfully');
         
         // NOW register toolbar tools after module registration is complete
-        // Add a small delay to ensure Blacksmith API is fully ready
-        setTimeout(() => {
-            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "TOOLBAR | Ready hook triggered, attempting to register toolbar tools", "", true, false);
+        // In v13, we need to wait for Blacksmith to be fully ready
+        // Try multiple times with increasing delays to ensure API is available
+        let attempts = 0;
+        const maxAttempts = 10;
+        const checkInterval = 200; // Start with 200ms, increase if needed
+        
+        const tryRegisterTools = () => {
+            attempts++;
+            const blacksmith = game.modules.get('coffee-pub-blacksmith')?.api;
             
-            if (typeof registerToolbarTools === 'function') {
-                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "TOOLBAR | registerToolbarTools function is available, calling it", "", true, false);
+            if (blacksmith?.registerToolbarTool && typeof registerToolbarTools === 'function') {
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `TOOLBAR | Blacksmith API ready (attempt ${attempts}), registering toolbar tools`, "", true, false);
                 try {
                     registerToolbarTools();
                 } catch (error) {
                     BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `TOOLBAR | Error during toolbar registration: ${error.message}`, "", true, false);
+                    console.error(MODULE.ID + ' | Toolbar registration error:', error);
                 }
+            } else if (attempts < maxAttempts) {
+                // Blacksmith not ready yet, try again
+                setTimeout(tryRegisterTools, checkInterval);
             } else {
-                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "TOOLBAR | registerToolbarTools function is NOT available", "", true, false);
+                // Max attempts reached
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `TOOLBAR | Failed to register tools after ${maxAttempts} attempts. Blacksmith API may not be available.`, "", false, false);
+                console.error(MODULE.ID + ' | Failed to register toolbar tools - Blacksmith API not available');
             }
-        }, 100); // Small delay to ensure API is ready
+        };
+        
+        // Start trying after initial delay
+        setTimeout(tryRegisterTools, checkInterval);
         
     } catch (error) {
         console.error(MODULE.ID + ' | ❌ Failed to register ' + MODULE.NAME + ' with Blacksmith:', error);
@@ -577,7 +593,6 @@ function validateMandatorySettings() {
 import { registerSettings } from './settings.js';
 // Grab windows
 import { BiblioWindowChat } from './window.js';
-import { registerToolbarTools, unregisterToolbarTools } from './manager-toolbar.js';
 
 // ================================================================== 
 // ===== REGISTER COMMON ============================================
@@ -612,8 +627,18 @@ Hooks.once('disableModule', (moduleId) => {
 
 // ***** CHAT CLICKS *****
 Hooks.on('renderChatLog', (app, html, data) => {
-    $('#optionChatType > i').on('click', function() {
-        let chosenValue = $(this).attr("value");
+    // v13: Detect and convert jQuery to native DOM if needed
+    let nativeHtml = html;
+    if (html && (html.jquery || typeof html.find === 'function')) {
+        nativeHtml = html[0] || html.get?.(0) || html;
+    }
+    
+    const icons = nativeHtml.querySelectorAll('#optionChatType > i');
+    icons.forEach(icon => {
+        icon.addEventListener('click', (event) => {
+            let chosenValue = event.currentTarget.getAttribute("value");
+            // Handle icon click if needed
+        });
     });
 });
 
@@ -1401,28 +1426,37 @@ Hooks.on('blacksmithUpdated', (newBlacksmith) => {
 // ************************************
 
 Hooks.on("renderChatMessage", (message, html) => {
-    html.find(".category-button").click(async (event) => {
-        event.preventDefault();
-        
-        // Removed unnecessary debug logging - button clicks don't need console spam
+    // v13: Detect and convert jQuery to native DOM if needed
+    let nativeHtml = html;
+    if (html && (html.jquery || typeof html.find === 'function')) {
+        nativeHtml = html[0] || html.get?.(0) || html;
+    }
+    
+    const buttons = nativeHtml.querySelectorAll(".category-button");
+    buttons.forEach(button => {
+        button.addEventListener('click', async (event) => {
+            event.preventDefault();
+            
+            // Removed unnecessary debug logging - button clicks don't need console spam
 
-        // Retrieve the category from button value
-        let strInjuryCategory = event.currentTarget.value;
-        
-        // Create the card
-        let compiledHtml = await createChatCardInjury(strInjuryCategory);
-        
-        let chatData = {
-            user: game.user.id,
-            content: compiledHtml,
-            speaker: ChatMessage.getSpeaker()
-        };
+            // Retrieve the category from button value
+            let strInjuryCategory = event.currentTarget.value;
+            
+            // Create the card
+            let compiledHtml = await createChatCardInjury(strInjuryCategory);
+            
+            let chatData = {
+                user: game.user.id,
+                content: compiledHtml,
+                speaker: ChatMessage.getSpeaker()
+            };
 
-        // Delete the original chat message before creating a new one
-        await message.delete();
+            // Delete the original chat message before creating a new one
+            await message.delete();
 
-        // Send the message to the chat window
-        ChatMessage.create(chatData);
+            // Send the message to the chat window
+            ChatMessage.create(chatData);
+        });
     });
 });
 

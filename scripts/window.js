@@ -49,39 +49,63 @@ export class BiblioWindowChat extends FormApplication {
         }
     }
     
+    /**
+     * Get native DOM element from this.element (handles jQuery conversion)
+     * @returns {HTMLElement|null} Native DOM element
+     */
+    _getNativeElement() {
+        if (!this.element) return null;
+        // v13: Detect and convert jQuery to native DOM if needed
+        if (this.element.jquery || typeof this.element.find === 'function') {
+            return this.element[0] || this.element.get?.(0) || this.element;
+        }
+        return this.element;
+    }
+    
     // ************************************
     // ** FORM Manage selecting Divs
     // ************************************
     activateListeners(html) {
         super.activateListeners(html);
         
+        // v13: Detect and convert jQuery to native DOM if needed
+        let nativeHtml = html;
+        if (html && (html.jquery || typeof html.find === 'function')) {
+            nativeHtml = html[0] || html.get?.(0) || html;
+        }
+        
         // ** SELECTING IMAGES **
         // Look for selected images
-        html.find('#optionChatType > img').on('click', (event) => { 
-            let chosenValue = event.currentTarget.getAttribute("value");
+        const images = nativeHtml.querySelectorAll('#optionChatType > img');
+        images.forEach(img => {
+            img.addEventListener('click', (event) => {
+                let chosenValue = event.currentTarget.getAttribute("value");
 
-            // Highlight the chosen option
-            html.find('#optionChatType > img').removeClass('bibliosoph-option-image-selected');
-            event.currentTarget.classList.add('bibliosoph-option-image-selected');
-    
-            // Save the selection in a hidden form field
-            html.find('#hiddenOptionChatType').val(chosenValue);
+                // Highlight the chosen option
+                images.forEach(i => i.classList.remove('bibliosoph-option-image-selected'));
+                event.currentTarget.classList.add('bibliosoph-option-image-selected');
+        
+                // Save the selection in a hidden form field
+                const hiddenInput = nativeHtml.querySelector('#hiddenOptionChatType');
+                if (hiddenInput) hiddenInput.value = chosenValue;
+            });
         });
 
         // ** SELECTING DIVS **
         // Private List Divs
-        html.find('div[name="selectable-div"]').on('click', (event) => {
-
-            let divValue = $(event.currentTarget).attr('value'); // get value attribute of the clicked div
-            // Toggle the 'selected' class on the clicked div
-            $(event.currentTarget).toggleClass('bibliosoph-option-div-selected');
-            // Update this.selectedDivs array
-            if (this.selectedDivs.includes(divValue)) {
-                this.selectedDivs = this.selectedDivs.filter(value => value !== divValue); // deselect
-            } else {
-                this.selectedDivs.push(divValue); // select
-            }
-
+        const selectableDivs = nativeHtml.querySelectorAll('div[name="selectable-div"]');
+        selectableDivs.forEach(div => {
+            div.addEventListener('click', (event) => {
+                let divValue = event.currentTarget.getAttribute('value'); // get value attribute of the clicked div
+                // Toggle the 'selected' class on the clicked div
+                event.currentTarget.classList.toggle('bibliosoph-option-div-selected');
+                // Update this.selectedDivs array
+                if (this.selectedDivs.includes(divValue)) {
+                    this.selectedDivs = this.selectedDivs.filter(value => value !== divValue); // deselect
+                } else {
+                    this.selectedDivs.push(divValue); // select
+                }
+            });
         });
     }
 
@@ -110,16 +134,24 @@ export class BiblioWindowChat extends FormApplication {
         }
         // Clear input field after form submission
         // check to see if they sent it to anyone before clearing
+        // v13: Detect and convert jQuery to native DOM if needed
+        let nativeForm = event.currentTarget;
+        if (event.currentTarget && (event.currentTarget.jquery || typeof event.currentTarget.find === 'function')) {
+            nativeForm = event.currentTarget[0] || event.currentTarget.get?.(0) || event.currentTarget;
+        }
+        
         if (BIBLIOSOPH.CARDTYPEWHISPER) {
             // Only clear if they chose recipients
             if (BIBLIOSOPH.MESSAGES_LIST_TO_PRIVATE.length === 0) {
                 // do not clear the form
             } else {
-                $(event.currentTarget).find('textarea#inputMessage').val('');
+                const textarea = nativeForm.querySelector('textarea#inputMessage');
+                if (textarea) textarea.value = '';
             }
         } else {
             // Clear the form
-            $(event.currentTarget).find('textarea#inputMessage').val('');
+            const textarea = nativeForm.querySelector('textarea#inputMessage');
+            if (textarea) textarea.value = '';
         }        
     }
 }

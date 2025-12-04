@@ -2,7 +2,7 @@
 <div id="cards-wrapper-{{cardStyle}}">
     <!-- CARD TITLE -->
     <div id="cards-title-{{cardStyle}}">
-        <i class="fas {{iconStyle}}" id="cards-icon-{{cardStyle}}"></i>{{cardTitle}}
+        <i class="fa-solid {{iconStyle}}" id="cards-icon-{{cardStyle}}"></i>{{cardTitle}}
     </div>
     <!-- SENDER -->
     {{#if userName}}
@@ -30,7 +30,7 @@
     <!-- CARD SUBTITLE -->
     {{#if cardSubTitle}}
         <div id="cards-title-{{cardStyle}}">
-            <i class="fas {{iconSubStyle}}" id="cards-icon-{{cardStyle}}"></i>{{cardSubTitle}}
+            <i class="fa-solid {{iconSubStyle}}" id="cards-icon-{{cardStyle}}"></i>{{cardSubTitle}}
         </div>
     {{/if}}
     <!-- LARGE IMAGE -->
@@ -64,8 +64,8 @@
             <section class="card-header description collapsible collapsed">
                 <!-- TREATMENT TITLE -->
                 <header class="summary">
-                    <h2><i class="fas fa-heart-pulse" id="cards-icon-{{cardStyle}}"></i>Treatment</h2>
-                    <i class="fas fa-chevron-down fa-fw"></i>
+                    <h2><i class="fa-solid fa-heart-pulse" id="cards-icon-{{cardStyle}}"></i>Treatment</h2>
+                    <i class="fa-solid fa-chevron-down fa-fw"></i>
                 </header>
                 <!-- TREATMENT CONTENT -->
                 <section class="details collapsible-content card-content">
@@ -79,13 +79,13 @@
     <!-- INJURY DETAILS -->
     {{#if duration}}
     <div id="cards-content-dark-{{cardStyle}}">
-        <p><i class="fas fa-hourglass-half" id="cards-icon-{{cardStyle}}"></i><strong>{{duration}}</strong></p>
+        <p><i class="fa-solid fa-hourglass-half" id="cards-icon-{{cardStyle}}"></i><strong>{{duration}}</strong></p>
     </div>
     <div id="cards-content-dark-{{cardStyle}}">
-        <p><i class="fas fa-heart-crack" id="cards-icon-{{cardStyle}}"></i><strong>{{damage}}</strong></p>
+        <p><i class="fa-solid fa-heart-crack" id="cards-icon-{{cardStyle}}"></i><strong>{{damage}}</strong></p>
     </div>
     <div id="cards-content-dark-{{cardStyle}}">
-        <p><i class="fas fa-sparkles" id="cards-icon-{{cardStyle}}"></i><strong>{{statuseffect}}</strong></p>
+        <p><i class="fa-solid fa-sparkles" id="cards-icon-{{cardStyle}}"></i><strong>{{statuseffect}}</strong></p>
     </div>
     {{/if}}
     <!-- COMPENDIUM LINK -->
@@ -115,18 +115,18 @@
     <!-- INJURY BUTTON -->
     {{#if injurybutton}}
         {{#each injurybutton}}
-            <button id="cards-button-{{this.cardStyle}}" class="category-button" style="text-align: left;" value="{{this.category}}"><i class="fas {{this.buttonicon}}" id="cards-icon-{{this.cardStyle}}"></i>{{this.category}}</button>
+            <button id="cards-button-{{this.cardStyle}}" class="category-button" style="text-align: left;" value="{{this.category}}"><i class="fa-solid {{this.buttonicon}}" id="cards-icon-{{this.cardStyle}}"></i>{{this.category}}</button>
         {{/each}}
     {{/if}}
     <!-- INJURY BUTTON -->
     {{#if arreffect}}
         <!-- Reply Button -->
-        <button id="cards-button-{{cardStyle}}" title="Apply this injury to the selected token..." class="coffee-pub-bibliosoph-button-injury" data-effect="{{arreffect}}"><i class="fas {{iconStyle}}" id="cards-icon-{{cardStyle}}"></i>{{button}}</button>
+        <button id="cards-button-{{cardStyle}}" title="Apply this injury to the selected token..." class="coffee-pub-bibliosoph-button-injury" data-effect="{{arreffect}}"><i class="fa-solid {{iconStyle}}" id="cards-icon-{{cardStyle}}"></i>{{button}}</button>
     {{/if}}
     <!-- PRIVATE MESSAGE -->
     {{#if arrToPrivate}}
         <!-- Reply Button -->
-        <button id="cards-button-{{cardStyle}}" title="Reply to this message..." class="coffee-pub-bibliosoph-button-reply" data-recipient="{{strRecipients}}"><i class="fas fa-circle-up" id="cards-icon-{{cardStyle}}"></i>Reply All</button>
+        <button id="cards-button-{{cardStyle}}" title="Reply to this message..." class="coffee-pub-bibliosoph-button-reply" data-recipient="{{strRecipients}}"><i class="fa-solid fa-circle-up" id="cards-icon-{{cardStyle}}"></i>Reply All</button>
     {{/if}}
 </div>
 
