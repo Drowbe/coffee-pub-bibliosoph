@@ -338,7 +338,7 @@ function triggerCaveEncounterMacro() {
     // Build the chat message (same as macro click handler)
     resetBibliosophVars();
     BIBLIOSOPH.CARDTYPEENCOUNTER = true;
-    BIBLIOSOPH.CARDTYPE = "General";
+    BIBLIOSOPH.CARDTYPE = "Cave";
     BIBLIOSOPH.ENCOUNTER_TYPE = "Cave";
     // Build the card
     publishChatCard();
@@ -356,7 +356,7 @@ function triggerDesertEncounterMacro() {
     // Build the chat message (same as macro click handler)
     resetBibliosophVars();
     BIBLIOSOPH.CARDTYPEENCOUNTER = true;
-    BIBLIOSOPH.CARDTYPE = "General";
+    BIBLIOSOPH.CARDTYPE = "Desert";
     BIBLIOSOPH.ENCOUNTER_TYPE = "Desert";
     // Build the card
     publishChatCard();
@@ -374,7 +374,7 @@ function triggerDungeonEncounterMacro() {
     // Build the chat message (same as macro click handler)
     resetBibliosophVars();
     BIBLIOSOPH.CARDTYPEENCOUNTER = true;
-    BIBLIOSOPH.CARDTYPE = "General";
+    BIBLIOSOPH.CARDTYPE = "Dungeon";
     BIBLIOSOPH.ENCOUNTER_TYPE = "Dungeon";
     // Build the card
     publishChatCard();
@@ -392,7 +392,7 @@ function triggerForestEncounterMacro() {
     // Build the chat message (same as macro click handler)
     resetBibliosophVars();
     BIBLIOSOPH.CARDTYPEENCOUNTER = true;
-    BIBLIOSOPH.CARDTYPE = "General";
+    BIBLIOSOPH.CARDTYPE = "Forest";
     BIBLIOSOPH.ENCOUNTER_TYPE = "Forest";
     // Build the card
     publishChatCard();
@@ -410,7 +410,7 @@ function triggerMountainEncounterMacro() {
     // Build the chat message (same as macro click handler)
     resetBibliosophVars();
     BIBLIOSOPH.CARDTYPEENCOUNTER = true;
-    BIBLIOSOPH.CARDTYPE = "General";
+    BIBLIOSOPH.CARDTYPE = "Mountain";
     BIBLIOSOPH.ENCOUNTER_TYPE = "Mountain";
     // Build the card
     publishChatCard();
@@ -428,7 +428,7 @@ function triggerSkyEncounterMacro() {
     // Build the chat message (same as macro click handler)
     resetBibliosophVars();
     BIBLIOSOPH.CARDTYPEENCOUNTER = true;
-    BIBLIOSOPH.CARDTYPE = "General";
+    BIBLIOSOPH.CARDTYPE = "Sky";
     BIBLIOSOPH.ENCOUNTER_TYPE = "Sky";
     // Build the card
     publishChatCard();
@@ -446,7 +446,7 @@ function triggerSnowEncounterMacro() {
     // Build the chat message (same as macro click handler)
     resetBibliosophVars();
     BIBLIOSOPH.CARDTYPEENCOUNTER = true;
-    BIBLIOSOPH.CARDTYPE = "General";
+    BIBLIOSOPH.CARDTYPE = "Snow";
     BIBLIOSOPH.ENCOUNTER_TYPE = "Snow";
     // Build the card
     publishChatCard();
@@ -464,7 +464,7 @@ function triggerUrbanEncounterMacro() {
     // Build the chat message (same as macro click handler)
     resetBibliosophVars();
     BIBLIOSOPH.CARDTYPEENCOUNTER = true;
-    BIBLIOSOPH.CARDTYPE = "General";
+    BIBLIOSOPH.CARDTYPE = "Urban";
     BIBLIOSOPH.ENCOUNTER_TYPE = "Urban";
     // Build the card
     publishChatCard();
@@ -482,7 +482,7 @@ function triggerWaterEncounterMacro() {
     // Build the chat message (same as macro click handler)
     resetBibliosophVars();
     BIBLIOSOPH.CARDTYPEENCOUNTER = true;
-    BIBLIOSOPH.CARDTYPE = "General";
+    BIBLIOSOPH.CARDTYPE = "Water";
     BIBLIOSOPH.ENCOUNTER_TYPE = "Water";
     // Build the card
     publishChatCard();
@@ -1574,6 +1574,12 @@ async function publishChatCard() {
             default:
                 strRollTableName = game.settings.get(MODULE.ID, 'encounterTableGeneral');
         }
+
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "BIBLIOSOPH.CARDTYPEENCOUNTER", BIBLIOSOPH.CARDTYPEENCOUNTER, true, false);
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "BIBLIOSOPH.CARDTYPE", BIBLIOSOPH.CARDTYPE, true, false);
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "BIBLIOSOPH.ENCOUNTER_TYPE", BIBLIOSOPH.ENCOUNTER_TYPE, true, false);
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "strRollTableName", strRollTableName, true, false);
+
         compiledHtml = await createChatCardEncounter(strRollTableName);
     } else if (BIBLIOSOPH.CARDTYPEINVESTIGATION) {
         // SEARCH
@@ -2249,20 +2255,63 @@ async function createChatCardEncounter(strRollTableName) {
         strTableImage = arrTable.img;
         strTableName = arrTable.name;
         let rollResults = await arrTable.roll();
-        strName = rollResults.results[0].text;
+        // v13: Use .name instead of deprecated .text
+        strName = rollResults.results[0].name || rollResults.results[0].description || rollResults.results[0].text;
         strImage = rollResults.results[0].img;
-        strCompendiumName = rollResults.results[0].documentCollection;
-        //postConsoleAndNotification("Roll resulots from " + strCompendiumName + " roll table: ", rollResults.results[0], false, true, false);
-        // Build the monster link.
-        if (strCompendiumName == "Actor") {
-            // it is an actor in the world
-            strCompendiumID = rollResults.results[0].documentId;
-            strCompendiumLink = "@UUID[Actor." + strCompendiumID +"]{" + strName + "}";
+        
+        // v13: Use .uuid instead of deprecated .documentCollection and .documentId
+        const resultUuid = rollResults.results[0].uuid;
+        if (resultUuid) {
+            // Use the UUID directly for the link (it contains all needed info)
+            strCompendiumLink = "@UUID[" + resultUuid + "]{" + strName + "}";
+            
+            // Parse UUID to extract pack info if needed for validation
+            // UUID format: "Compendium.pack-name.Actor.id" or "Actor.id"
+            if (resultUuid.startsWith("Compendium.")) {
+                // Extract compendium pack name from UUID
+                // UUID format: Compendium.pack-name.documentType.id (pack-name can have dots)
+                // Match pattern: Compendium.{everything}.{Actor|Item}.{id}
+                const match = resultUuid.match(/^Compendium\.(.+?)\.(Actor|Item|JournalEntry|Macro|Playlist|RollTable|Scene|Item)\.(.+)$/);
+                if (match) {
+                    strCompendiumName = match[1]; // Pack name (may contain dots)
+                    strCompendiumID = match[3]; // Document ID
+                } else {
+                    // Try to extract using Foundry's UUID parsing if available
+                    try {
+                        const parsed = foundry.utils.parseUuid(resultUuid);
+                        if (parsed && parsed.collection) {
+                            strCompendiumName = parsed.collection;
+                            strCompendiumID = parsed.id;
+                        }
+                    } catch (e) {
+                        // If parsing fails, continue without pack validation
+                        console.warn(MODULE.ID + " | Could not parse UUID: " + resultUuid, e);
+                    }
+                }
+            } else if (resultUuid.startsWith("Actor.")) {
+                // World actor
+                strCompendiumName = "Actor";
+                strCompendiumID = resultUuid.replace("Actor.", "");
+            }
         } else {
-            // it is in a compendium
-            const index = game.packs.get(strCompendiumName).index;
-            strCompendiumID = index.find(i => i.name === strName)._id;
-            strCompendiumLink = "@UUID[Compendium." + strCompendiumName + ".Actor." + strCompendiumID +"]{" + strName + "}";
+            // Fallback for v12 compatibility (deprecated properties)
+            strCompendiumName = rollResults.results[0].documentCollection || "";
+            if (strCompendiumName == "Actor") {
+                strCompendiumID = rollResults.results[0].documentId;
+                strCompendiumLink = "@UUID[Actor." + strCompendiumID +"]{" + strName + "}";
+            } else if (strCompendiumName) {
+                strCompendiumID = rollResults.results[0].documentId;
+                strCompendiumLink = "@UUID[Compendium." + strCompendiumName + ".Actor." + strCompendiumID +"]{" + strName + "}";
+            }
+        }
+        
+        // If we have a compendium name, verify the pack exists (optional validation)
+        if (strCompendiumName && strCompendiumName !== "Actor") {
+            const pack = game.packs.get(strCompendiumName);
+            if (!pack) {
+                // Log warning but don't block - UUID link should still work
+                console.warn(MODULE.ID + ` | Compendium pack "${strCompendiumName}" not found, but UUID link may still work`);
+            }
         }
         
         // Get the before desription parts
@@ -2437,21 +2486,41 @@ async function createChatCardSearch(strRollTableName) {
         strTableImage = arrTable.img;
         strTableName = arrTable.name;
         let rollResults = await arrTable.roll();
-        strName = rollResults.results[0].text;
+        // v13: Use .name instead of deprecated .text
+        strName = rollResults.results[0].name || rollResults.results[0].description || rollResults.results[0].text;
         strImage = rollResults.results[0].img;
-        strCompendiumName = rollResults.results[0].documentCollection;
-        strCompendiumID = rollResults.results[0].documentId;
         strCompendiumType = "Item";
-        // Build the link.
-        // FORMAT: @UUID[Compendium.ddb-shared-compendium.ddb-items.Item.0cB9YDGqCckguRTn]{Barrel}
-        // FORMAT: @UUID[Item.0cB9YDGqCckguRTn]{Barrel}
-        if (strCompendiumName == "Item"){
-            // It is an item in the world
-            strCompendiumLink = "@UUID[" + strCompendiumType + "." + strCompendiumID + "]{" + strName + "}";
-        }else{
-            // It is a compendium
-            strCompendiumLink = "@UUID[Compendium." + strCompendiumName + "." + strCompendiumType + "." + strCompendiumID + "]{" + strName + "}";
-
+        
+        // v13: Use .uuid instead of deprecated .documentCollection and .documentId
+        const resultUuid = rollResults.results[0].uuid;
+        if (resultUuid) {
+            // UUID contains all the information we need
+            strCompendiumLink = "@UUID[" + resultUuid + "]{" + strName + "}";
+            
+            // Parse UUID to extract compendium info if needed
+            if (resultUuid.startsWith("Compendium.")) {
+                // Format: Compendium.pack-name.Item.id
+                const uuidParts = resultUuid.split(".");
+                if (uuidParts.length >= 4) {
+                    strCompendiumName = uuidParts.slice(1, -2).join("."); // Everything between "Compendium" and document type
+                    strCompendiumID = uuidParts[uuidParts.length - 1]; // Last part is the ID
+                }
+            } else if (resultUuid.startsWith("Item.")) {
+                // World item
+                strCompendiumName = "Item";
+                strCompendiumID = resultUuid.split(".")[1];
+            }
+        } else {
+            // Fallback for v12 compatibility (deprecated properties)
+            strCompendiumName = rollResults.results[0].documentCollection || "";
+            strCompendiumID = rollResults.results[0].documentId;
+            if (strCompendiumName == "Item"){
+                // It is an item in the world
+                strCompendiumLink = "@UUID[" + strCompendiumType + "." + strCompendiumID + "]{" + strName + "}";
+            }else{
+                // It is a compendium
+                strCompendiumLink = "@UUID[Compendium." + strCompendiumName + "." + strCompendiumType + "." + strCompendiumID + "]{" + strName + "}";
+            }
         }
         // const item = await game.items.get(strCompendiumID);
         var ITEMDATA = getItemDataById(strCompendiumID);
