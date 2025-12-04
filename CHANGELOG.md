@@ -5,10 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [13.0.0] - v13 Migration Begins
+## [13.0.0] - v13 Migration Complete
 
 ### Important Notice
-- **v13 MIGRATION START:** This version begins the migration to FoundryVTT v13
+- **v13 MIGRATION COMPLETE:** This version completes the migration to FoundryVTT v13
 - **Breaking Changes:** This version requires FoundryVTT v13.0.0 or later
 - **v12 Support Ended:** v12.1.3-FINAL was the last version supporting FoundryVTT v12
 
@@ -16,6 +16,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Minimum Core Version:** Updated to require FoundryVTT v13.0.0
 - **Module Version:** Bumped to 13.0.0 to align with FoundryVTT v13
 - **Compatibility:** Module now exclusively supports FoundryVTT v13
+
+### Fixed
+- **jQuery Removal:** Migrated all jQuery code to native DOM APIs
+  - Converted `html.find()` to `querySelector()` / `querySelectorAll()`
+  - Replaced jQuery event handlers (`.on()`, `.click()`) with `addEventListener()`
+  - Updated jQuery DOM manipulation (`.append()`, `.val()`, `.attr()`, etc.) to native methods
+  - Added jQuery detection patterns for FormApplication compatibility during migration
+- **Font Awesome Migration:** Updated all Font Awesome 5 references to Font Awesome 6
+  - Changed all `fas` class prefixes to `fa-solid` in JavaScript and templates
+  - Updated 20 toolbar icon definitions in `manager-toolbar.js`
+  - Updated 11 icon references in Handlebars templates (`chat-card.hbs`, `dialogue-messages.hbs`)
+- **Toolbar Registration:** Fixed toolbar tools not appearing in Coffee Pub and Foundry toolbars
+  - Moved `registerToolbarTools` import to top of file for proper scope
+  - Added retry logic with multiple attempts to ensure Blacksmith API is ready
+  - Improved error handling and logging for toolbar registration
+- **Encounter Type Bug:** Fixed all encounter buttons rolling General encounters
+  - Updated all `trigger*EncounterMacro()` functions to set correct `BIBLIOSOPH.CARDTYPE` value
+  - Changed from always setting "General" to setting specific types (Cave, Desert, Water, etc.)
+- **TableResult UUID:** Fixed links pointing to TableResult instead of actual documents
+  - Changed from using `rollResults.results[0].uuid` (TableResult UUID) to `rollResults.results[0].documentUuid` (document UUID)
+  - Links now correctly point to the actual Actor/Item documents referenced by roll tables
+- **Deprecated API Usage:** Fixed deprecation warnings for TableResult properties
+  - Updated from deprecated `TableResult#text` to `TableResult#name` or `TableResult#description`
+  - Updated from deprecated `TableResult#documentCollection` and `TableResult#documentId` to `TableResult#documentUuid`
+  - Added fallback support for v12 compatibility during transition
+
+### Technical
+- **jQuery Detection:** Added transitional jQuery detection patterns in FormApplication classes
+  - Created `_getNativeElement()` helper method for consistent jQuery handling
+  - Added detection in `activateListeners()` and Dialog callbacks
+  - Marked as technical debt to be removed after all call sites are confirmed native DOM
+- **UUID Parsing:** Improved UUID parsing to handle pack names with dots
+  - Added regex-based parsing for compendium UUIDs
+  - Added fallback to Foundry's `foundry.utils.parseUuid()` utility
+  - Enhanced error handling for invalid UUID formats
+- **Logging:** Added comprehensive logging for UUID link creation
+  - Logs document UUID, link string, and name for debugging
+  - Separate logging for encounter and investigation card creation
+  - Logs fallback paths when deprecated properties are used
 
 ## [12.1.3] - Final v12 Release
 

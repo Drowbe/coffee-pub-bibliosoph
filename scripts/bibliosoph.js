@@ -1575,10 +1575,6 @@ async function publishChatCard() {
                 strRollTableName = game.settings.get(MODULE.ID, 'encounterTableGeneral');
         }
 
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "BIBLIOSOPH.CARDTYPEENCOUNTER", BIBLIOSOPH.CARDTYPEENCOUNTER, true, false);
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "BIBLIOSOPH.CARDTYPE", BIBLIOSOPH.CARDTYPE, true, false);
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "BIBLIOSOPH.ENCOUNTER_TYPE", BIBLIOSOPH.ENCOUNTER_TYPE, true, false);
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "strRollTableName", strRollTableName, true, false);
 
         compiledHtml = await createChatCardEncounter(strRollTableName);
     } else if (BIBLIOSOPH.CARDTYPEINVESTIGATION) {
@@ -2215,8 +2211,6 @@ async function createChatCardEncounter(strRollTableName) {
     const intRollIsEncounter = rollIsEncounter.total;
     // Show the fake Dice So Nice roll
     BlacksmithUtils.rollCoffeePubDice(rollIsEncounter);
-    BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "intRollIsEncounter", intRollIsEncounter, false, false);
-    BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "intEncounterOdds", intEncounterOdds, false, false);
     if (intRollIsEncounter > intEncounterOdds) {
         // There is no encounter
         strSound = "modules/coffee-pub-blacksmith/sounds/rustling-grass.mp3";
@@ -2264,9 +2258,6 @@ async function createChatCardEncounter(strRollTableName) {
         if (documentUuid) {
             // Use the document UUID directly for the link (it contains all needed info)
             strCompendiumLink = "@UUID[" + documentUuid + "]{" + strName + "}";
-            console.log(MODULE.ID + " | ENCOUNTER | Created UUID link:", strCompendiumLink);
-            console.log(MODULE.ID + " | ENCOUNTER | Document UUID:", documentUuid);
-            console.log(MODULE.ID + " | ENCOUNTER | Name:", strName);
             
             // Parse UUID to extract pack info if needed for validation
             // UUID format: "Compendium.pack-name.Actor.id" or "Actor.id"
@@ -2288,7 +2279,6 @@ async function createChatCardEncounter(strRollTableName) {
                         }
                     } catch (e) {
                         // If parsing fails, continue without pack validation
-                        console.warn(MODULE.ID + " | Could not parse UUID: " + documentUuid, e);
                     }
                 }
             } else if (documentUuid.startsWith("Actor.")) {
@@ -2298,28 +2288,20 @@ async function createChatCardEncounter(strRollTableName) {
             }
         } else {
             // Fallback for v12 compatibility (deprecated properties)
-            console.log(MODULE.ID + " | ENCOUNTER | No UUID found, using fallback (deprecated properties)");
             strCompendiumName = rollResults.results[0].documentCollection || "";
             if (strCompendiumName == "Actor") {
                 strCompendiumID = rollResults.results[0].documentId;
                 strCompendiumLink = "@UUID[Actor." + strCompendiumID +"]{" + strName + "}";
-                console.log(MODULE.ID + " | ENCOUNTER | Fallback - World Actor link:", strCompendiumLink);
             } else if (strCompendiumName) {
                 strCompendiumID = rollResults.results[0].documentId;
                 strCompendiumLink = "@UUID[Compendium." + strCompendiumName + ".Actor." + strCompendiumID +"]{" + strName + "}";
-                console.log(MODULE.ID + " | ENCOUNTER | Fallback - Compendium link:", strCompendiumLink);
-            } else {
-                console.log(MODULE.ID + " | ENCOUNTER | No compendium link created (no UUID or documentCollection)");
             }
         }
         
         // If we have a compendium name, verify the pack exists (optional validation)
         if (strCompendiumName && strCompendiumName !== "Actor") {
             const pack = game.packs.get(strCompendiumName);
-            if (!pack) {
-                // Log warning but don't block - UUID link should still work
-                console.warn(MODULE.ID + ` | Compendium pack "${strCompendiumName}" not found, but UUID link may still work`);
-            }
+            // Pack validation - UUID link should still work even if pack not found
         }
         
         // Get the before desription parts
@@ -2387,7 +2369,6 @@ async function createChatCardEncounter(strRollTableName) {
         tablename: strTableName,
         link:  strCompendiumLink
     };
-    console.log(MODULE.ID + " | ENCOUNTER | Final link being passed to template:", strCompendiumLink); 
     // Play the Sound
     BlacksmithUtils.playSound(strSound,strVolume);
     // Return the template
@@ -2505,9 +2486,6 @@ async function createChatCardSearch(strRollTableName) {
         if (documentUuid) {
             // Use the document UUID directly for the link (it contains all needed info)
             strCompendiumLink = "@UUID[" + documentUuid + "]{" + strName + "}";
-            console.log(MODULE.ID + " | INVESTIGATION | Created UUID link:", strCompendiumLink);
-            console.log(MODULE.ID + " | INVESTIGATION | Document UUID:", documentUuid);
-            console.log(MODULE.ID + " | INVESTIGATION | Name:", strName);
             
             // Parse UUID to extract compendium info if needed
             if (documentUuid.startsWith("Compendium.")) {
@@ -2524,17 +2502,14 @@ async function createChatCardSearch(strRollTableName) {
             }
         } else {
             // Fallback for v12 compatibility (deprecated properties)
-            console.log(MODULE.ID + " | INVESTIGATION | No UUID found, using fallback (deprecated properties)");
             strCompendiumName = rollResults.results[0].documentCollection || "";
             strCompendiumID = rollResults.results[0].documentId;
             if (strCompendiumName == "Item"){
                 // It is an item in the world
                 strCompendiumLink = "@UUID[" + strCompendiumType + "." + strCompendiumID + "]{" + strName + "}";
-                console.log(MODULE.ID + " | INVESTIGATION | Fallback - World Item link:", strCompendiumLink);
             }else{
                 // It is a compendium
                 strCompendiumLink = "@UUID[Compendium." + strCompendiumName + "." + strCompendiumType + "." + strCompendiumID + "]{" + strName + "}";
-                console.log(MODULE.ID + " | INVESTIGATION | Fallback - Compendium link:", strCompendiumLink);
             }
         }
         // const item = await game.items.get(strCompendiumID);
@@ -2633,7 +2608,6 @@ async function createChatCardSearch(strRollTableName) {
         rarity: strRarity,
         value: strValue,
     };
-    console.log(MODULE.ID + " | INVESTIGATION | Final link being passed to template:", strCompendiumLink); 
     // Play the Sound
     BlacksmithUtils.playSound(strSound,strVolume);
     // Return the template

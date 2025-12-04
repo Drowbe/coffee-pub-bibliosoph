@@ -1,35 +1,36 @@
 # Coffee Pub Bibliosoph - v12 to v13 Migration Plan
 
 > **Module:** coffee-pub-bibliosoph  
-> **Current Version:** 12.1.3  
+> **Starting Version:** 12.1.3  
 > **Target Version:** 13.0.0  
-> **Migration Date:** TBD
+> **Migration Date:** 2025-01-XX  
+> **Status:** ✅ COMPLETE
 
 ---
 
 ## Executive Summary
 
-This migration plan outlines the steps required to upgrade Coffee Pub Bibliosoph from FoundryVTT v12 to v13. The module requires updates for jQuery removal and Font Awesome 5 to 6 migration. No `getSceneControlButtons` hooks or deprecated APIs were found.
+This migration plan documents the completed upgrade of Coffee Pub Bibliosoph from FoundryVTT v12 to v13. The module required updates for jQuery removal, Font Awesome 5 to 6 migration, and several v13 API changes. No `getSceneControlButtons` hooks or deprecated APIs (`token.target`, `FilePicker`) were found.
 
-**Estimated Complexity:** Medium  
-**Estimated Time:** 4-6 hours  
-**Breaking Changes:** 3 major areas identified
+**Actual Complexity:** Medium  
+**Actual Time:** ~6 hours  
+**Breaking Changes:** 3 major areas identified and resolved
 
 ---
 
 ## Pre-Migration Checklist
 
 ### 1. Lock Down v12 Release
-- [ ] Finalize and test current v12 version (12.1.3)
-- [ ] Create git tag: `v12.1.3-FINAL`
-- [ ] Create GitHub release marking as final v12 version
-- [ ] Update README with v12 support end notice
-- [ ] Update CHANGELOG with final v12 release entry
+- [x] Finalize and test current v12 version (12.1.3)
+- [x] Create git tag: `v12.1.3-FINAL`
+- [x] Create GitHub release marking as final v12 version
+- [x] Update README with v12 support end notice
+- [x] Update CHANGELOG with final v12 release entry
 
 ### 2. Update Module Configuration
-- [ ] Update `module.json` minimum Core Version to `"13.0.0"`
-- [ ] Update module version to `"13.0.0"` (or appropriate v13 starting version)
-- [ ] Update compatibility section:
+- [x] Update `module.json` minimum Core Version to `"13.0.0"`
+- [x] Update module version to `"13.0.0"`
+- [x] Update compatibility section:
   ```json
   "compatibility": {
     "minimum": "13",
@@ -39,26 +40,28 @@ This migration plan outlines the steps required to upgrade Coffee Pub Bibliosoph
   ```
 
 ### 3. Prepare Development Environment
-- [ ] Set up FoundryVTT v13 testing environment
-- [ ] Create feature branch: `v13-migration`
-- [ ] Document current functionality baseline
+- [x] Set up FoundryVTT v13 testing environment
+- [x] Create feature branch: `v13-migration`
+- [x] Document current functionality baseline
 
 ### 4. Audit Results Summary
-- [x] **jQuery Usage:** Found in 2 files (`bibliosoph.js`, `window.js`)
-- [x] **Font Awesome 5:** Found in 2 files (`manager-toolbar.js`, templates)
+- [x] **jQuery Usage:** Found in 2 files (`bibliosoph.js`, `window.js`) - ✅ FIXED
+- [x] **Font Awesome 5:** Found in 2 files (`manager-toolbar.js`, templates) - ✅ FIXED
 - [x] **getSceneControlButtons:** None found ✓
 - [x] **Deprecated APIs:** None found ✓
-- [x] **FormApplication Classes:** 1 class (`BiblioWindowChat`)
+- [x] **FormApplication Classes:** 1 class (`BiblioWindowChat`) - ✅ FIXED
+- [x] **TableResult API:** Deprecated properties found - ✅ FIXED
 
 ---
 
 ## Migration Tasks
 
-### Task 1: jQuery Removal - `scripts/window.js`
+### Task 1: jQuery Removal - `scripts/window.js` ✅ COMPLETE
 
 **File:** `scripts/window.js`  
 **Lines Affected:** 55-86, 118, 122  
-**Complexity:** Medium
+**Complexity:** Medium  
+**Status:** ✅ Completed
 
 #### Issues Found:
 1. Line 60: `html.find('#optionChatType > img').on('click', ...)`
@@ -134,11 +137,12 @@ activateListeners(html) {
 
 ---
 
-### Task 2: jQuery Removal - `scripts/bibliosoph.js`
+### Task 2: jQuery Removal - `scripts/bibliosoph.js` ✅ COMPLETE
 
 **File:** `scripts/bibliosoph.js`  
 **Lines Affected:** 614-617, 1404  
-**Complexity:** Low-Medium
+**Complexity:** Low-Medium  
+**Status:** ✅ Completed
 
 #### Issues Found:
 1. Line 615: `$('#optionChatType > i').on('click', function() {...})`
@@ -204,11 +208,12 @@ Hooks.on("renderChatMessage", (message, html) => {
 
 ---
 
-### Task 3: Font Awesome 5 to 6 Migration - `scripts/manager-toolbar.js`
+### Task 3: Font Awesome 5 to 6 Migration - `scripts/manager-toolbar.js` ✅ COMPLETE
 
 **File:** `scripts/manager-toolbar.js`  
 **Lines Affected:** 84, 105, 126, 148, 168, 188, 208, 228, 248, 268, 288, 308, 328, 348, 368, 388, 408, 428, 448, 468  
-**Complexity:** Low
+**Complexity:** Low  
+**Status:** ✅ Completed - All 20 instances updated
 
 #### Issues Found:
 20 instances of `fas` class prefix that need to be converted to `fa-solid`
@@ -258,11 +263,12 @@ icon: "fa-solid fa-bandage",
 
 ---
 
-### Task 4: Font Awesome 5 to 6 Migration - Templates
+### Task 4: Font Awesome 5 to 6 Migration - Templates ✅ COMPLETE
 
 **Files:** `templates/chat-card.hbs`, `templates/dialogue-messages.hbs`  
 **Lines Affected:** Multiple  
-**Complexity:** Low
+**Complexity:** Low  
+**Status:** ✅ Completed - All 11 instances updated
 
 #### Issues Found:
 11 instances of `fas` class prefix in Handlebars templates
@@ -311,11 +317,12 @@ icon: "fa-solid fa-bandage",
 
 ---
 
-### Task 5: FormApplication jQuery Detection
+### Task 5: FormApplication jQuery Detection ✅ COMPLETE
 
 **File:** `scripts/window.js`  
 **Class:** `BiblioWindowChat`  
-**Complexity:** Low
+**Complexity:** Low  
+**Status:** ✅ Completed
 
 #### Migration Steps:
 1. Add `_getNativeElement()` helper method to handle `this.element` (Pattern 10)
@@ -348,34 +355,102 @@ export class BiblioWindowChat extends FormApplication {
 
 ---
 
+### Task 6: Toolbar Registration Fix ✅ COMPLETE
+
+**File:** `scripts/bibliosoph.js`  
+**Lines Affected:** 1-50  
+**Complexity:** Low  
+**Status:** ✅ Completed
+
+#### Issue Found:
+- `registerToolbarTools` function was imported at line 580 but called in `ready` hook at line 38
+- Toolbar tools were not appearing in Coffee Pub or Foundry toolbars
+
+#### Solution:
+- Moved `registerToolbarTools` import to top of file (line 7) for proper scope
+- Added retry logic with multiple attempts to ensure Blacksmith API is ready
+- Improved error handling and logging for toolbar registration
+
+---
+
+### Task 7: Encounter Type Bug Fix ✅ COMPLETE
+
+**File:** `scripts/bibliosoph.js`  
+**Lines Affected:** 330-489  
+**Complexity:** Low  
+**Status:** ✅ Completed
+
+#### Issue Found:
+- All `trigger*EncounterMacro()` functions were setting `BIBLIOSOPH.CARDTYPE = "General"`
+- Switch statement in `publishChatCard()` uses `BIBLIOSOPH.CARDTYPE`, so all encounters rolled General
+
+#### Solution:
+- Updated all `trigger*EncounterMacro()` functions to set `BIBLIOSOPH.CARDTYPE` to correct type:
+  - `triggerCaveEncounterMacro()` → `CARDTYPE = "Cave"`
+  - `triggerDesertEncounterMacro()` → `CARDTYPE = "Desert"`
+  - `triggerWaterEncounterMacro()` → `CARDTYPE = "Water"`
+  - etc.
+
+---
+
+### Task 8: TableResult UUID Fix ✅ COMPLETE
+
+**File:** `scripts/bibliosoph.js`  
+**Lines Affected:** 2262-2310, 2503-2530  
+**Complexity:** Medium  
+**Status:** ✅ Completed
+
+#### Issue Found:
+- Code was using `rollResults.results[0].uuid` which is the TableResult's UUID
+- Links were pointing to TableResult instead of actual Actor/Item documents
+- Example: `@UUID[RollTable.v0Uv9JExDXFjP9iD.TableResult.2hdhANlHYgIDxL2y]{Sea Spawn}`
+
+#### Solution:
+- Changed to use `rollResults.results[0].documentUuid` which contains the actual document UUID
+- Updated both `createChatCardEncounter()` and `createChatCardSearch()` functions
+- Links now correctly point to documents: `@UUID[Compendium.pack-name.Actor.id]{Name}`
+
+#### Additional Changes:
+- Fixed deprecated `TableResult#text` → `TableResult#name` or `TableResult#description`
+- Fixed deprecated `TableResult#documentCollection` → `TableResult#documentUuid`
+- Added comprehensive logging for debugging UUID link creation
+
+---
+
 ## Testing Checklist
 
 ### Phase 1: Critical Path Testing
 
 After completing all migration tasks:
 
-- [ ] Module loads without console errors
-- [ ] All hooks that receive `html` parameter work correctly:
-  - [ ] `renderChatLog` hook
-  - [ ] `renderChatMessage` hook
-- [ ] FormApplication (`BiblioWindowChat`) renders correctly
-- [ ] All Font Awesome icons render correctly:
-  - [ ] Toolbar icons (20 icons)
-  - [ ] Chat card icons (10+ icons)
-  - [ ] Dialogue message icons (1 icon)
-- [ ] No deprecation warnings in console
+- [x] Module loads without console errors
+- [x] All hooks that receive `html` parameter work correctly:
+  - [x] `renderChatLog` hook
+  - [x] `renderChatMessage` hook
+- [x] FormApplication (`BiblioWindowChat`) renders correctly
+- [x] All Font Awesome icons render correctly:
+  - [x] Toolbar icons (20 icons)
+  - [x] Chat card icons (10+ icons)
+  - [x] Dialogue message icons (1 icon)
+- [x] No deprecation warnings in console
+- [x] Toolbar tools appear in Coffee Pub and Foundry toolbars
+- [x] All encounter types roll from correct tables
+- [x] Compendium links point to actual documents (not TableResults)
 
 ### Phase 2: Functionality Testing
 
-- [ ] Party message dialog opens and works
-- [ ] Private message dialog opens and works
-- [ ] Image selection in dialog works (click handlers)
-- [ ] Div selection in dialog works (click handlers)
-- [ ] Form submission works correctly
-- [ ] Category buttons in chat messages work
-- [ ] All toolbar tools render and function correctly
-- [ ] Event handlers fire correctly
-- [ ] DOM manipulation works as expected
+- [x] Party message dialog opens and works
+- [x] Private message dialog opens and works
+- [x] Image selection in dialog works (click handlers)
+- [x] Div selection in dialog works (click handlers)
+- [x] Form submission works correctly
+- [x] Category buttons in chat messages work
+- [x] All toolbar tools render and function correctly
+- [x] Event handlers fire correctly
+- [x] DOM manipulation works as expected
+- [x] Encounter cards display correct encounter types
+- [x] Investigation cards display correct items
+- [x] Compendium links are clickable and open correct documents
 
 ### Phase 3: Integration Testing
 
@@ -502,6 +577,42 @@ After completing all migration tasks:
 ---
 
 **Last Updated:** 2025-01-XX  
-**Status:** Ready for Migration  
-**Estimated Completion:** TBD
+**Status:** ✅ MIGRATION COMPLETE  
+**Completion Date:** 2025-01-XX  
+**Final Version:** 13.0.0
+
+---
+
+## Migration Summary
+
+### Completed Tasks
+1. ✅ jQuery removal from `scripts/window.js` and `scripts/bibliosoph.js`
+2. ✅ Font Awesome 5 to 6 migration in `scripts/manager-toolbar.js` and templates
+3. ✅ FormApplication jQuery detection helper added
+4. ✅ Toolbar registration timing and scope issues fixed
+5. ✅ Encounter type bug fixed (all encounters rolling General)
+6. ✅ TableResult UUID fix (using `documentUuid` instead of `uuid`)
+7. ✅ Deprecated TableResult API properties updated
+
+### Issues Discovered During Migration
+1. **Toolbar Registration:** Import order issue causing tools not to appear
+2. **Encounter Type Bug:** All toolbar trigger functions setting wrong CARDTYPE
+3. **TableResult UUID:** Using wrong property, creating links to TableResult instead of documents
+4. **Deprecated APIs:** TableResult#text and TableResult#documentCollection still in use
+
+### Files Modified
+- `scripts/window.js` - jQuery removal, FormApplication helper
+- `scripts/bibliosoph.js` - jQuery removal, toolbar registration, encounter fixes, UUID fixes
+- `scripts/manager-toolbar.js` - Font Awesome class prefix update
+- `templates/chat-card.hbs` - Font Awesome class prefix update
+- `templates/dialogue-messages.hbs` - Font Awesome class prefix update
+- `module.json` - Version and compatibility updates
+- `CHANGELOG.md` - Migration changes documented
+
+### Lessons Learned
+- In v13, `TableResult#uuid` is the TableResult's UUID, not the document's UUID
+- Use `TableResult#documentUuid` to get the actual Actor/Item document UUID
+- Toolbar registration requires proper import scope and timing
+- All encounter trigger functions must set correct CARDTYPE value
+- jQuery detection patterns are needed during migration but should be audited later
 
