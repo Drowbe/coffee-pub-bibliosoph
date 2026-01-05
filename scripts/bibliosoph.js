@@ -1884,7 +1884,9 @@ async function createChatCardGeneral(strRollTableName) {
     if (strRollTableName){
         //There is a roll table... get the data from it.
         let arrRollTableResults = await getRollTable(strRollTableName);
-        BlacksmithUtils.rollCoffeePubDice(arrRollTableResults.roll);
+        if (game.settings.get(MODULE.ID, 'showDiceRolls')) {
+            BlacksmithUtils.rollCoffeePubDice(arrRollTableResults.roll);
+        }
         // postConsoleAndNotification("BIBLIOSOPH: createChatCardGeneral arrRollTableResults", arrRollTableResults, false, true, false);
         strTableName = arrRollTableResults.strTableName;
         strTableImage = arrRollTableResults.strTableImage;
@@ -1955,7 +1957,9 @@ async function createChatCardInjury(category) {
     // roll some fake dice "for show" -- this is not used for anything real
     let rollIsInjury = await new Roll("1d100").evaluate();
     // Show the fake Dice So Nice roll
-    BlacksmithUtils.rollCoffeePubDice(rollIsInjury);
+    if (game.settings.get(MODULE.ID, 'showDiceRolls')) {
+        BlacksmithUtils.rollCoffeePubDice(rollIsInjury);
+    }
 
     // Set the defaults
     var strJournalType = "";
@@ -2222,7 +2226,9 @@ async function createChatCardEncounter(strRollTableName) {
     let rollIsEncounter = await new Roll("1d100").evaluate();
     const intRollIsEncounter = rollIsEncounter.total;
     // Show the fake Dice So Nice roll
-    BlacksmithUtils.rollCoffeePubDice(rollIsEncounter);
+    if (game.settings.get(MODULE.ID, 'showDiceRolls')) {
+        BlacksmithUtils.rollCoffeePubDice(rollIsEncounter);
+    }
     if (intRollIsEncounter > intEncounterOdds) {
         // There is no encounter
         strSound = "modules/coffee-pub-blacksmith/sounds/rustling-grass.mp3";
@@ -2347,7 +2353,9 @@ async function createChatCardEncounter(strRollTableName) {
         let rollNumMonster = await new Roll(intEncounterDice).evaluate();
         //postConsoleAndNotification("BIBLIOSOPH: rollResults" , rollResults, false, true, false);
         // show the dice.
-        BlacksmithUtils.rollCoffeePubDice(rollNumMonster);
+        if (game.settings.get(MODULE.ID, 'showDiceRolls')) {
+            BlacksmithUtils.rollCoffeePubDice(rollNumMonster);
+        }
         intQuantity = rollNumMonster.total;
         // make the monster plural if needed
         if (intQuantity > 1) {
@@ -2451,7 +2459,9 @@ async function createChatCardSearch(strRollTableName) {
     }
     // Check to see if they beat the search odds
     let rollIsSearch = await new Roll("1d100").evaluate();
-    BlacksmithUtils.rollCoffeePubDice(rollIsSearch);
+    if (game.settings.get(MODULE.ID, 'showDiceRolls')) {
+        BlacksmithUtils.rollCoffeePubDice(rollIsSearch);
+    }
     const intRollIsSearch = rollIsSearch.total;
     //postConsoleAndNotification("intRollIsSearch", intRollIsSearch, false, true, false);
     //postConsoleAndNotification("intSearchOdds", intSearchOdds, false, true, false);
@@ -2583,7 +2593,9 @@ async function createChatCardSearch(strRollTableName) {
         // Roll to find the number of items
         let rollQuantity = await new Roll(intSearchDice).evaluate();
         // show the dice.
-        BlacksmithUtils.rollCoffeePubDice(rollQuantity);
+        if (game.settings.get(MODULE.ID, 'showDiceRolls')) {
+            BlacksmithUtils.rollCoffeePubDice(rollQuantity);
+        }
         intQuantity = rollQuantity.total;
 
         // // -- Call our dice function -- 
@@ -2679,7 +2691,9 @@ async function getRollTable(tableName) {
     // Map the results for the returned array
     let rollResults = await table.roll({rollMode: CONST.DICE_ROLL_MODES.BLIND});
     // show the dice.
-    BlacksmithUtils.rollCoffeePubDice(rollResults.roll);
+    if (game.settings.get(MODULE.ID, 'showDiceRolls')) {
+        BlacksmithUtils.rollCoffeePubDice(rollResults.roll);
+    }
     // Fix parse the text as needed
     strContent = rollResults.results[0].text;
     strTitle = grabTextBetweenStrings(strContent, "**", "**");
