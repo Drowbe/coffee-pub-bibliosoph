@@ -1435,27 +1435,27 @@ Hooks.on("renderChatMessage", (message, html) => {
     const buttons = nativeHtml.querySelectorAll(".category-button");
     buttons.forEach(button => {
         button.addEventListener('click', async (event) => {
-            event.preventDefault();
-            
-            // Removed unnecessary debug logging - button clicks don't need console spam
+        event.preventDefault();
+        
+        // Removed unnecessary debug logging - button clicks don't need console spam
 
-            // Retrieve the category from button value
-            let strInjuryCategory = event.currentTarget.value;
-            
-            // Create the card
-            let compiledHtml = await createChatCardInjury(strInjuryCategory);
-            
-            let chatData = {
-                user: game.user.id,
-                content: compiledHtml,
-                speaker: ChatMessage.getSpeaker()
-            };
+        // Retrieve the category from button value
+        let strInjuryCategory = event.currentTarget.value;
+        
+        // Create the card
+        let compiledHtml = await createChatCardInjury(strInjuryCategory);
+        
+        let chatData = {
+            user: game.user.id,
+            content: compiledHtml,
+            speaker: ChatMessage.getSpeaker()
+        };
 
-            // Delete the original chat message before creating a new one
-            await message.delete();
+        // Delete the original chat message before creating a new one
+        await message.delete();
 
-            // Send the message to the chat window
-            ChatMessage.create(chatData);
+        // Send the message to the chat window
+        ChatMessage.create(chatData);
         });
     });
 });
@@ -1993,6 +1993,7 @@ async function createChatCardInjury(category) {
         intInjuryDamage = objInjuryData.damage;
         intInjuryDuration = objInjuryData.duration;
         strInjuryAction = objInjuryData.action;
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "DEBUG: objInjuryData.action raw value: ", strInjuryAction, false, true, false);
         strStatusEffect = objInjuryData.statuseffect;
         if (!strInjuryCategory) {
             strInjuryCategory = "General";
@@ -2138,6 +2139,7 @@ async function createChatCardInjury(category) {
         strCardImage = strInjuryImage;
     }
     // Pass the data to the template
+    BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "DEBUG: strInjuryAction before CARDDATA: ", strInjuryAction, false, true, false);
     const CARDDATA = {
         cardStyle: strCardStyle,
         iconStyle: strIconStyle,
@@ -2153,7 +2155,7 @@ async function createChatCardInjury(category) {
         image: strCardImage,
         duration: strInjuryDuration,
         damage: strInjuryDamage,
-        button: strInjuryAction,
+        buttontext: strInjuryAction,
         statuseffect: strStatusEffect.toUpperCase(), // This one is used on the chat card
         arreffect: strStringifiedEFFECTDATA, // Stringify the EFFECTDATA array
     }; 
@@ -2163,8 +2165,18 @@ async function createChatCardInjury(category) {
 
     //postConsoleAndNotification("*** LINE 1682 CARDDATA",  CARDDATA, false, true, false);
 
-
-    return template(CARDDATA);
+    const compiledHtml = template(CARDDATA);
+    // Find the button in the compiled HTML to see what's actually being rendered
+    const buttonMatch = compiledHtml.match(/<button[^>]*class="coffee-pub-bibliosoph-button-injury"[^>]*>([\s\S]*?)<\/button>/);
+    if (buttonMatch) {
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "DEBUG: Button HTML content: ", buttonMatch[0], false, true, false);
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "DEBUG: Button inner content: ", buttonMatch[1], false, true, false);
+    } else {
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "DEBUG: Button not found in compiled HTML", "", false, true, false);
+        // Fallback: log last 2000 chars
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "DEBUG: Last 2000 chars of compiled HTML: ", compiledHtml.substring(Math.max(0, compiledHtml.length - 2000)), false, true, false);
+    }
+    return compiledHtml;
 }
 
 
@@ -2289,12 +2301,12 @@ async function createChatCardEncounter(strRollTableName) {
         } else {
             // Fallback for v12 compatibility (deprecated properties)
             strCompendiumName = rollResults.results[0].documentCollection || "";
-            if (strCompendiumName == "Actor") {
-                strCompendiumID = rollResults.results[0].documentId;
-                strCompendiumLink = "@UUID[Actor." + strCompendiumID +"]{" + strName + "}";
+        if (strCompendiumName == "Actor") {
+            strCompendiumID = rollResults.results[0].documentId;
+            strCompendiumLink = "@UUID[Actor." + strCompendiumID +"]{" + strName + "}";
             } else if (strCompendiumName) {
                 strCompendiumID = rollResults.results[0].documentId;
-                strCompendiumLink = "@UUID[Compendium." + strCompendiumName + ".Actor." + strCompendiumID +"]{" + strName + "}";
+            strCompendiumLink = "@UUID[Compendium." + strCompendiumName + ".Actor." + strCompendiumID +"]{" + strName + "}";
             }
         }
         
@@ -2368,7 +2380,7 @@ async function createChatCardEncounter(strRollTableName) {
         quantityword: strQuantity,
         tablename: strTableName,
         link:  strCompendiumLink
-    };
+    }; 
     // Play the Sound
     BlacksmithUtils.playSound(strSound,strVolume);
     // Return the template
@@ -2518,12 +2530,12 @@ async function createChatCardSearch(strRollTableName) {
             // Fallback for v12 compatibility (deprecated properties)
             strCompendiumName = rollResults.results[0].documentCollection || "";
             strCompendiumID = rollResults.results[0].documentId;
-            if (strCompendiumName == "Item"){
-                // It is an item in the world
-                strCompendiumLink = "@UUID[" + strCompendiumType + "." + strCompendiumID + "]{" + strName + "}";
-            }else{
-                // It is a compendium
-                strCompendiumLink = "@UUID[Compendium." + strCompendiumName + "." + strCompendiumType + "." + strCompendiumID + "]{" + strName + "}";
+        if (strCompendiumName == "Item"){
+            // It is an item in the world
+            strCompendiumLink = "@UUID[" + strCompendiumType + "." + strCompendiumID + "]{" + strName + "}";
+        }else{
+            // It is a compendium
+            strCompendiumLink = "@UUID[Compendium." + strCompendiumName + "." + strCompendiumType + "." + strCompendiumID + "]{" + strName + "}";
             }
         }
         // const item = await game.items.get(strCompendiumID);
@@ -2621,7 +2633,7 @@ async function createChatCardSearch(strRollTableName) {
         details: strDetails,
         rarity: strRarity,
         value: strValue,
-    };
+    }; 
     // Play the Sound
     BlacksmithUtils.playSound(strSound,strVolume);
     // Return the template
@@ -3559,6 +3571,7 @@ function getHTMLMetadata(html){
             
             const label = strongElement.textContent.replace(':', '');  // Remove colon
             const value = li.textContent.replace(strongElement.textContent, '').trim();
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `DEBUG getHTMLMetadata: label="${label}", value="${value}", li.textContent="${li.textContent}", strongElement.textContent="${strongElement.textContent}"`, "", false, true, false);
             
             metadata[label] = value;
         });
