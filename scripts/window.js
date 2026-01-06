@@ -26,7 +26,7 @@ export class BiblioWindowChat extends FormApplication {
         const defaults = super.defaultOptions
         const overrides = {
             height: 'auto',
-            width: 'auto',
+            width: 600,
             id: "coffee-pub-bibliosoph",
             //id: "coffee-pub-bibliosoph-message-dialogue",
             template: BIBLIOSOPH.WINDOW_CHAT_TEMPLATE,
@@ -91,19 +91,35 @@ export class BiblioWindowChat extends FormApplication {
             });
         });
 
-        // ** SELECTING DIVS **
-        // Private List Divs
-        const selectableDivs = nativeHtml.querySelectorAll('div[name="selectable-div"]');
-        selectableDivs.forEach(div => {
-            div.addEventListener('click', (event) => {
-                let divValue = event.currentTarget.getAttribute('value'); // get value attribute of the clicked div
-                // Toggle the 'selected' class on the clicked div
-                event.currentTarget.classList.toggle('bibliosoph-option-div-selected');
-                // Update this.selectedDivs array
-                if (this.selectedDivs.includes(divValue)) {
-                    this.selectedDivs = this.selectedDivs.filter(value => value !== divValue); // deselect
+        // ** SELECTING DIVS/IMAGES **
+        // Private List Divs (full layout) and Images (compressed layout)
+        const selectableDivs = nativeHtml.querySelectorAll('div[name="selectable-div"], img[name="selectable-div"]');
+        selectableDivs.forEach(element => {
+            // Pre-select elements if they're in the selectedDivs array (for reply functionality)
+            let elementValue = element.getAttribute('value');
+            if (this.selectedDivs && Array.isArray(this.selectedDivs) && this.selectedDivs.includes(elementValue)) {
+                if (element.tagName === 'IMG') {
+                    element.classList.add('bibliosoph-option-image-selected');
                 } else {
-                    this.selectedDivs.push(divValue); // select
+                    element.classList.add('bibliosoph-option-div-selected');
+                }
+            }
+            
+            element.addEventListener('click', (event) => {
+                let elementValue = event.currentTarget.getAttribute('value'); // get value attribute of the clicked element
+                // Toggle the 'selected' class - handle both div and image layouts
+                if (event.currentTarget.tagName === 'IMG') {
+                    // Compressed layout: use image selected class
+                    event.currentTarget.classList.toggle('bibliosoph-option-image-selected');
+                } else {
+                    // Full layout: use div selected class
+                    event.currentTarget.classList.toggle('bibliosoph-option-div-selected');
+                }
+                // Update this.selectedDivs array
+                if (this.selectedDivs.includes(elementValue)) {
+                    this.selectedDivs = this.selectedDivs.filter(value => value !== elementValue); // deselect
+                } else {
+                    this.selectedDivs.push(elementValue); // select
                 }
             });
         });

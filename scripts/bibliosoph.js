@@ -773,7 +773,7 @@ Hooks.on("ready", async () => {
         if(event.target.classList.contains('coffee-pub-bibliosoph-button-reply')) {
             //postConsoleAndNotification("Button Pressed", "Be sure to verify the recipients.", false, true, false);
             var recipients = event.target.getAttribute('data-recipient');
-            var recipientArray = recipients.split(',');
+            var recipientArray = recipients.split(',').map(r => r.trim()).filter(r => r !== '');
             // Use the recipientArray
             //postConsoleAndNotification("Inside document.addEventListener. The recipient array: ", recipientArray, false, true, false);
             // Let's see if the sam stuff from the macro work.
@@ -791,7 +791,8 @@ Hooks.on("ready", async () => {
             // sET THE FORM VARIABLES
             blankForm.isPublic = false;
             blankForm.optionList = buildPlayerList(recipientArray);
-            blankForm.selectedDivs = recipientArray;
+            // Ensure selectedDivs is an array for pre-selection
+            blankForm.selectedDivs = Array.isArray(recipientArray) ? recipientArray : [];
             //blankForm.formTitle = 'Private Message';
             blankForm.render(true);
         }
@@ -2736,13 +2737,16 @@ function buildPlayerList(recipients) {
 
     let strUser = game.user.name;
     let strPortrait = game.user.avatar;
-    var arrRecipients = recipients;
+    // Ensure arrRecipients is always an array
+    var arrRecipients = Array.isArray(recipients) ? recipients : (recipients ? [recipients] : []);
     var defaultToCharacter = false; //"true" means the dialog will select a character to speak as by default; "false" means the dialog will select to speak as you, the player, by default.
     var activePlayersOnly = false; //"true" means the dialog is only populated with active players currently in the session; "false" means the dialog is populated with all players in the world.
     var warnIfNoTargets = true; //"true" means your whisper will not be posted if you did not select a player; "false" means your whisper will be posted for all players to see if you do not select a player.
     var userConfigCharacterOnly = true; //Changes what appears when you hover on a player's name. "true" shows only the name of the character bound to them in their User Configuration; "false" shows a list of names for all characters they own. GMs and Assistant GMs do not get character lists regardless; they're labeled with their position.
     var strSound = "modules/coffee-pub-blacksmith/sounds/fire-candle-blow.mp3";
     
+    // Check if compressed window layout is enabled
+    var blnCompressedWindow = BlacksmithUtils.getSettingSafely(MODULE.ID, 'privateMessageCompressedWindow', false);
 
     // Build the "whisper to" checkboxes
     var characters = game.actors;
@@ -2807,22 +2811,25 @@ function buildPlayerList(recipients) {
                         }
                     });
                 }
-                // if the player is select, mark them as such
-                let strSelected = "";
-                if(arrRecipients.includes(player.name)){
-                    strSelected = "-selected'";
-                }else{
-                    strSelected = "";
+                // Build the selectable divs - compressed or full layout
+                // Note: Selection is handled in activateListeners, not in initial HTML generation
+                if (blnCompressedWindow) {
+                    // Compressed layout: just portrait images in horizontal row (like party buttons)
+                    // Same styling as party buttons - let them wrap naturally
+                    checkOptions += "<img name='selectable-div' class='bibliosoph-option-image' title='" + player.name + " (" + ownedCharacters + ")' src='" + player.avatar + "' value='" + player.name + "' />";
+                } else {
+                    // Full layout: portrait with name and character info
+                    // Width set to ~33.33% to allow 3 per row (with gap)
+                    // Note: Selection is handled in activateListeners, not in initial HTML generation
+                    checkOptions += "<div name='selectable-div' id='cards-user-" + strCardStyle + "' value='" + player.name + "' class='bibliosoph-option-div' style='flex: 0 0 calc(33.33% - 5px);'>";
+                    checkOptions += "   <img id='cards-token-image-" + strCardStyle + "' src='" + player.avatar + "' />";
+                    checkOptions += "   <div id='cards-token-text-wrapper-" + strCardStyle + "'>";
+                    checkOptions += "       <span id='cards-token-name-" + strCardStyle + "'>" + player.name + "</span>";
+                    checkOptions += "       <br />";
+                    checkOptions += "       <span id='cards-token-character-" + strCardStyle + "'>" + ownedCharacters + "</span>";
+                    checkOptions += "   </div>";
+                    checkOptions += "</div>";
                 }
-                // Build the selectable divs
-                checkOptions += "<div name='selectable-div' id='cards-user-" + strCardStyle + "' value='" + player.name + "' class='bibliosoph-option-div" + strSelected + "'>";
-                checkOptions += "   <img id='cards-token-image-" + strCardStyle + "' src='" + player.avatar + "' />";
-                checkOptions += "   <div id='cards-token-text-wrapper-" + strCardStyle + "'>";
-                checkOptions += "       <span id='cards-token-name-" + strCardStyle + "'>" + player.name + "</span>";
-                checkOptions += "       <br />";
-                checkOptions += "       <span id='cards-token-character-" + strCardStyle + "'>" + ownedCharacters + "</span>";
-                checkOptions += "   </div>";
-                checkOptions += "</div>";
 
             }
         }

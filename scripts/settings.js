@@ -198,6 +198,7 @@ export const registerSettings = () => {
 			type: String,
 		});
 		// -------------------------------------
+		
 		game.settings.register(MODULE.ID, 'privateMessageEnabled', {
 			name: MODULE.ID + '.privateMessageEnabled-Label',
 			hint: MODULE.ID + '.privateMessageEnabled-Hint',

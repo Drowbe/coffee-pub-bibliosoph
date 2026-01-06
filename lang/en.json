@@ -7,6 +7,13 @@
 		"headingH4Introduction-Label": "Introduction",
 		"headingH4Introduction-Hint": "With Bibliosoph, you  can send messages, roll special tables, and generate encounters, all through the simple push of a macro button. Forget the hassle of complex operations, Bibliosoph delivers all results and communication in engaging, thematic cards. This module not only simplifies in-game processes, but also enhances your overall storytelling, bringing your world to life in a visually appealing way. Make your gaming experience more immersive and streamlined with the robust functionalities of the Bibliosoph module.",
 
+		"headingH2General-Label": "General",
+		"headingH2General-Hint": "",
+
+		"showDiceRolls-Label": "Show Dice Rolls",
+		"showDiceRolls-Hint": "Show virtual dice rolls when cards are generated.",
+
+
 		"headingH2Communications-Label": "Communications",
 		"headingH2Communications-Hint": "",
 
@@ -26,7 +33,7 @@
 
 		"privateMessageEnabled-Label": "Private Messaging Enabled",
 		"privateMessageEnabled-Hint": "",
-		"toolbarCoffeePubPrivateMessageEnabled-Label": "",
+		"toolbarCoffeePubPrivateMessageEnabled-Label": "Show in the Coffee Pub toolbar",
 		"toolbarCoffeePubPrivateMessageEnabled-Hint": "",
 		"toolbarFoundryPrivateMessageEnabled-Label": "Show in the Foundry toolbar",
 		"toolbarFoundryPrivateMessageEnabled-Hint": "",
