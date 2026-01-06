@@ -1949,7 +1949,7 @@ async function createChatCardInjury(category) {
     var strVolume = game.settings.get(MODULE.ID, 'injurySoundVolume');
     var strCardStyle = game.settings.get(MODULE.ID, 'cardThemeInjury');
     var strBanner = "modules/coffee-pub-blacksmith/images/banners/banners-damage-oops-6.webp";
-    var strIconStyle = "fa-skull"; // default... specific overrides happen below.
+    var strIconStyle = "fa-droplet"; // default... specific overrides happen below.
     var iconSubStyle = "";
     var strType = BIBLIOSOPH.CARDTYPE + " Injury";
     var strImageBackground = "cobblestone";
@@ -1998,16 +1998,15 @@ async function createChatCardInjury(category) {
         intInjuryDamage = objInjuryData.damage;
         intInjuryDuration = objInjuryData.duration;
         strInjuryAction = objInjuryData.action;
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "DEBUG: objInjuryData.action raw value: ", strInjuryAction, false, true, false);
         strStatusEffect = objInjuryData.statuseffect;
         if (!strInjuryCategory) {
             strInjuryCategory = "General";
-            strIconStyle = "fa-skull";
+            strIconStyle = "fa-droplet";
         } else {
             // Data was returned
             switch(strInjuryCategory.toLowerCase()) {
                 case "acid":
-                    iconSubStyle = "fa-droplet";
+                    iconSubStyle = "fa-splotch";
                     strBanner = "modules/coffee-pub-blacksmith/images/banners/banners-damage-acid-1.webp";
                     break;
                 case "bludgeoning":
@@ -2059,7 +2058,7 @@ async function createChatCardInjury(category) {
                     strBanner = "modules/coffee-pub-blacksmith/images/banners/banners-damage-thunder-2.webp";
                     break;
                 default:
-                    iconSubStyle = "fa-skull";
+                    iconSubStyle = "fa-droplet";
                     strBanner = "modules/coffee-pub-blacksmith/images/banners/banners-damage-oops-6.webp";
            }
         }
@@ -2144,19 +2143,23 @@ async function createChatCardInjury(category) {
         strCardImage = strInjuryImage;
     }
     // Pass the data to the template
-    BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "DEBUG: strInjuryAction before CARDDATA: ", strInjuryAction, false, true, false);
     const CARDDATA = {
         cardStyle: strCardStyle,
-        iconStyle: strIconStyle,
-        cardTitle: strInjuryCategory,
+        iconStyle: strIconStyle, 
+        // cardTitle: strInjuryCategory, // simplifying this for now
+        cardTitle: strInjuryTitle,
         iconSubStyle: iconSubStyle,
-        cardSubTitle: strInjuryTitle,
+        // cardSubTitle: strInjuryTitle, // simplifying this for now
+        cardSubTitle: "",
         imageBackground: strImageBackground,
         imageScale: strImageScale,
         title: "",
         content: strInjuryDescription,
+        injurycategory: strInjuryCategory, // added for new injury category
+        injurycategoryicon: iconSubStyle, // added for new injury category
         treatment: strInjuryTreatment,
-        banner: strBanner,
+        // banner: strBanner, // simplifying this for now
+        banner: "",
         image: strCardImage,
         duration: strInjuryDuration,
         damage: strInjuryDamage,
@@ -2171,16 +2174,6 @@ async function createChatCardInjury(category) {
     //postConsoleAndNotification("*** LINE 1682 CARDDATA",  CARDDATA, false, true, false);
 
     const compiledHtml = template(CARDDATA);
-    // Find the button in the compiled HTML to see what's actually being rendered
-    const buttonMatch = compiledHtml.match(/<button[^>]*class="coffee-pub-bibliosoph-button-injury"[^>]*>([\s\S]*?)<\/button>/);
-    if (buttonMatch) {
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "DEBUG: Button HTML content: ", buttonMatch[0], false, true, false);
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "DEBUG: Button inner content: ", buttonMatch[1], false, true, false);
-    } else {
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "DEBUG: Button not found in compiled HTML", "", false, true, false);
-        // Fallback: log last 2000 chars
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "DEBUG: Last 2000 chars of compiled HTML: ", compiledHtml.substring(Math.max(0, compiledHtml.length - 2000)), false, true, false);
-    }
     return compiledHtml;
 }
 
@@ -3596,7 +3589,6 @@ function getHTMLMetadata(html){
             
             const label = strongElement.textContent.replace(':', '');  // Remove colon
             const value = li.textContent.replace(strongElement.textContent, '').trim();
-            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `DEBUG getHTMLMetadata: label="${label}", value="${value}", li.textContent="${li.textContent}", strongElement.textContent="${strongElement.textContent}"`, "", false, true, false);
             
             metadata[label] = value;
         });

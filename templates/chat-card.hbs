@@ -56,24 +56,17 @@
             {{#if descriptionReveal}}<p><strong>{{quantityword}} {{title}}</strong> {{descriptionReveal}}</p>{{/if}}
             {{#if descriptionAfter}}<p>{{descriptionAfter}}</p>{{/if}}
         </div>
-    {{/if}}
+    {{/if}}    
     <!-- INJURY TREATMENT -->
+    {{#if injurycategory}}
+        <div id="cards-content-dark-{{cardStyle}}">
+            <p><i class="fa-solid {{injurycategoryicon}}" id="cards-icon-{{cardStyle}}"></i><strong>{{injurycategory}}</strong></p>
+        </div>
+    {{/if}}
     {{#if treatment}}
-        <!-- <div class="dnd5e2 chat-card" id="cards-content-light-{{cardStyle}}"> -->
-        <div class="dnd5e2 chat-card">
-            <section class="card-header description collapsible collapsed">
-                <!-- TREATMENT TITLE -->
-                <header class="summary">
-                    <h2><i class="fa-solid fa-heart-pulse" id="cards-icon-{{cardStyle}}"></i>Treatment</h2>
-                    <i class="fa-solid fa-chevron-down fa-fw"></i>
-                </header>
-                <!-- TREATMENT CONTENT -->
-                <section class="details collapsible-content card-content">
-                    <div class="wrapper">
-                    {{treatment}}
-                    </div>
-                </section>
-            </section>      
+        <div id="cards-content-dark-{{cardStyle}}">
+            <p><i class="fa-solid fa-heart-pulse" id="cards-icon-{{cardStyle}}"></i><strong>Treatment</strong></p>
+            <p>{{treatment}}</p>
         </div>
     {{/if}}
     <!-- INJURY DETAILS -->
