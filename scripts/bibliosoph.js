@@ -2772,6 +2772,10 @@ function buildPlayerList(recipients) {
     players.forEach(player => {
         if (player.id !== game.user.id) {
             if (player.name !== "Cameraman" && player.name !== "DeveloperXXX" && player.name !== "AuthorXXX") {
+                // Only show party members (users with assigned characters)
+                if (player.character === null || player.character === undefined) {
+                    return; // Skip users without characters (not party members)
+                }
 
                 var blnPlayerSelected = false;
                 var checked = "";

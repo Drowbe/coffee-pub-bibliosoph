@@ -249,7 +249,7 @@ export const registerSettings = () => {
 			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
 		});
 
-		// -- Private Message Layout --
+		// -- Private Message Chat Layout --
 		game.settings.register(MODULE.ID, 'cardLayoutPrivateMessage', {
 			name: MODULE.ID + '.cardLayoutPrivateMessage-Label',
 			hint: MODULE.ID + '.cardLayoutPrivateMessage-Hint',
@@ -259,6 +259,20 @@ export const registerSettings = () => {
 			scope: 'world',
 			default: false,
 		});
+
+
+		// -- Private Message Window Layout --
+		game.settings.register(MODULE.ID, 'privateMessageCompressedWindow', {
+			name: MODULE.ID + '.privateMessageCompressedWindow-Label',
+			hint: MODULE.ID + '.privateMessageCompressedWindow-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: false,
+			scope: 'client',
+			default: false,
+		});
+
+
 
 		// ** BEVERAGE **
 

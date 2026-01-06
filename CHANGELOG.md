@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [13.0.2] - Dice Roll Control
+
+### Added
+- **Dice Roll Toggle:** Added `showDiceRolls` setting to control whether virtual dice are rolled when cards are generated
+  - Client-scoped setting (per-user preference)
+  - Default: enabled (true)
+  - Requires Dice So Nice module for visual dice effects
+  - Applies to all card types: encounters, investigations, injuries, and general roll tables
+
+### Changed
+- **Settings Organization:** Reorganized settings structure with new "General" section
+  - Added `headingH2General` heading for better settings organization
+  - Moved dice roll setting to General section
+- **Party Message Dialog Layout:** Moved message type buttons to horizontal row at top of dialog
+  - Changed from vertical column on left side to horizontal flexbox layout at top
+  - Buttons (Party Message, Party Plan, Agree, Disagree, Praise, Insult) now display in a row
+  - Improved visual organization and user experience
+
+### Fixed
+- **Dice Roll Control:** All virtual dice rolls now respect the `showDiceRolls` setting
+  - Updated 7 dice roll locations to check setting before rolling
+  - Applies to: general cards, injury cards, encounter checks, encounter monster quantity, investigation checks, investigation item quantity, and roll table results
+
 ## [13.0.1] - Quick Fix
 ### Fixed
 - **Logging:** Was passing the wrong parameter to the loggin tool.

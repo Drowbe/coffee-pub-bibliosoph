@@ -36,8 +36,11 @@
 		"privateMessageMacro-Hint": "",
 		"cardThemePrivateMessage-Label": "Card Style",
 		"cardThemePrivateMessage-Hint": "",
-		"cardLayoutPrivateMessage-Label": "Compressed Layout",
-		"cardLayoutPrivateMessage-Hint": "",
+		"cardLayoutPrivateMessage-Label": "Compressed Chat Card Layout",
+		"cardLayoutPrivateMessage-Hint": "Shows only recipient portraits in the chat card.",
+		"privateMessageCompressedWindow-Label": "Compressed Chat Window Layout",
+		"privateMessageCompressedWindow-Hint": "Shows only recipient portraits in the chat window.",
+
 
 		"beverageEnabled-Label": "Beverage Breaks Enabled",
 		"beverageEnabled-Hint": "",
