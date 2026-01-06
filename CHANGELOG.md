@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Default: enabled (true)
   - Requires Dice So Nice module for visual dice effects
   - Applies to all card types: encounters, investigations, injuries, and general roll tables
+- **Private Message Compressed Layout:** Added `privateMessageCompressedWindow` setting for compact recipient display
+  - Client-scoped setting (per-user preference)
+  - Default: disabled (false)
+  - When enabled, shows only portrait images in horizontal row (similar to party message buttons)
+  - When disabled, shows full recipient cards with names and character info (3 per row)
 
 ### Changed
 - **Settings Organization:** Reorganized settings structure with new "General" section
@@ -23,11 +28,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Changed from vertical column on left side to horizontal flexbox layout at top
   - Buttons (Party Message, Party Plan, Agree, Disagree, Praise, Insult) now display in a row
   - Improved visual organization and user experience
+- **Private Message Dialog:** Improved layout and functionality
+  - Window width set to 600px for better sizing
+  - Non-compressed layout displays 3 recipients per row with full details
+  - Compressed layout displays portrait images that wrap naturally
+  - Reply button in chat cards now spans full width
 
 ### Fixed
 - **Dice Roll Control:** All virtual dice rolls now respect the `showDiceRolls` setting
   - Updated 7 dice roll locations to check setting before rolling
   - Applies to: general cards, injury cards, encounter checks, encounter monster quantity, investigation checks, investigation item quantity, and roll table results
+- **Private Message Recipients:** Fixed recipient list to only show party members
+  - Now filters to only display users with assigned characters (party members)
+  - Excludes observers and users without characters
+  - Improves clarity of who can receive private messages
+- **Private Message Reply Functionality:** Fixed reply button to properly pre-select recipients
+  - Reply button now correctly opens dialog with recipients pre-selected
+  - Fixed recipient array handling to ensure proper selection state
+  - Fixed compressed mode portrait sizing when replying
+  - Selection state now handled consistently in activateListeners
 
 ## [13.0.1] - Quick Fix
 ### Fixed
