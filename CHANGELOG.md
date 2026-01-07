@@ -48,6 +48,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Fixed compressed mode portrait sizing when replying
   - Selection state now handled consistently in activateListeners
 
+### Removed
+- **Debug Logging:** Removed all debug logging statements from production code
+  - Removed DEBUG statements from injury card creation function
+  - Removed button HTML matching debug code
+  - Removed metadata extraction debug logging
+  - Cleaned up console spam for cleaner production experience
+
 ## [13.0.1] - Quick Fix
 ### Fixed
 - **Logging:** Was passing the wrong parameter to the loggin tool.
