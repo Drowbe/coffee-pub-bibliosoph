@@ -1899,7 +1899,7 @@ async function createChatCardGeneral(strRollTableName) {
     } else {
         // Not getting data from a table, set it accordingly
         // No Tabel content so assume message
-        strContent = markdownToHtml(BIBLIOSOPH.MESSAGES_CONTENT);
+        strContent = BlacksmithUtils.markdownToHtml(BIBLIOSOPH.MESSAGES_CONTENT);
     }
     const templatePath = BIBLIOSOPH.MESSAGE_TEMPLATE_CARD;
     const response = await fetch(templatePath);
@@ -3129,115 +3129,6 @@ function getMacroIdByName(name) {
     }
     // If no match was found, return null
     return null;
-}
-
-// ************************************
-// ** UTILITY Convert Markdown to HTML
-// ************************************
-// Move this to the other functions so it can be used elsewhere
-function markdownToHtml(text) {
-    const lines = text.split('\n');
-    let html = [];
-    let inList = false;
-    let inBlockquote = false;
-    let inOrderedList = false;
-
-    for (let i = 0; i < lines.length; i++) {
-        let line = lines[i];
-        let content = line;
-
-        if (line.trim() === '>' || line.trim() === '') {
-            continue;
-        }
-
-        if (line.startsWith('---')) {
-            html.push('<hr class="coffee-pub-bibliosoph-markdown-hr" />');
-            continue;
-        }
-
-        if (line.includes("*") || line.includes("_")) {
-            content = content.replace(/(\*\*|__)(.*?)\1/g, "<b>$2</b>");
-            content = content.replace(/(\*|_)(.*?)\1/g, "<i>$2</i>");
-        }
-
-        if (line[0] === '#') {
-            const level = line.split(" ")[0].length;
-            content = content.slice(level);
-            html.push(`<h${level} class="coffee-pub-bibliosoph-markdown-h${level}">${content}</h${level}>`);
-        } else if (line.startsWith("* ") || line.startsWith("- ")) {
-            if (!inList) {
-                html.push('<ul class="coffee-pub-bibliosoph-markdown-ul">');
-                inList = true;
-            }
-            content = content.slice(2);
-            html.push(`<li class="coffee-pub-bibliosoph-markdown-li">${content}</li>`);
-            if (i < lines.length - 1 && !/^(- |\* )/.test(lines[i + 1])) {
-                html.push('</ul>');
-                inList = false;
-            }
-        } else if (/^\d+\.\s/.test(line)) {
-            if (!inOrderedList) {
-                html.push('<ol class="coffee-pub-bibliosoph-markdown-ol">');
-                inOrderedList = true;
-            }
-            content = content.replace(/^\d+\.\s/, '');
-            html.push(`<li class="coffee-pub-bibliosoph-markdown-li">${content}</li>`);
-            if (i < lines.length - 1 && !/^\d+\.\s/.test(lines[i + 1])) {
-                html.push('</ol>');
-                inOrderedList = false;
-            }
-        } else if (line.startsWith("> ")) {
-            if (!inBlockquote) {
-                html.push('<blockquote class="coffee-pub-bibliosoph-markdown-blockquote">');
-                inBlockquote = true;
-            }
-            content = content.slice(2);
-            html.push(`<p class="coffee-pub-bibliosoph-markdown-p">${content}</p>`);
-        } else {
-            if (inList) {
-                html.push('</ul>');
-                inList = false;
-            }
-            if (inOrderedList) {
-                html.push('</ol>');
-                inOrderedList = false;
-            }
-            if (inBlockquote) {
-                html.push('</blockquote>');
-                inBlockquote = false;
-            }
-            html.push(`<p class="coffee-pub-bibliosoph-markdown-p">${content}</p>`);
-        }
-
-        // Now we'll check the next line, if it does not start with ">", close the blockquote.
-        if (inBlockquote && i < lines.length - 1 && !lines[i + 1].startsWith("> ")) {
-            html.push('</blockquote>');
-            inBlockquote = false;
-        }
-    }
-
-    if (inList) {
-        html.push('</ul>');
-    }
-
-    if (inBlockquote) {
-        html.push('</blockquote>');
-    }
-
-    if (inOrderedList) {
-        html.push('</ol>');
-    }
-
-    var strTemp = html.join('\n');
-    //postConsoleAndNotification("strTemp" , strTemp, false, true, false);
-    //postConsoleAndNotification("strTemp.length" , strTemp.length, false, true, false);
-
-    if (strTemp.length === 0) {
-        strTemp = ``;
-    } else {
-        strTemp = `<div class="coffee-pub-bibliosoph-markdown-wrapper">${strTemp}</div>`;
-    }
-    return strTemp;
 }
 
 // ************************************
