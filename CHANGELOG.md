@@ -6,6 +6,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [13.0.3] - GM-Only Encounters & User Scope Migration
+
+### Changed
+- **Encounter Buttons:** All encounter toolbar buttons are now GM-only
+  - Added `gmOnly: true` to all 10 encounter button configurations (General, Cave, Desert, Dungeon, Forest, Mountain, Sky, Snow, Urban, Water)
+  - Players can no longer see or access encounter buttons in the toolbar
+  - Only Game Masters can trigger random encounters
+- **Encounter Settings:** All encounter-related settings are now GM-only
+  - Added `restricted: true` to all encounter settings in the module configuration
+  - Players can no longer see encounter settings in the module settings UI
+  - Includes: global encounter settings, all encounter type settings, toolbar preferences, tables, and macros
+- **Settings Scope Migration:** Migrated user preference settings from `scope: 'client'` to `scope: 'user'` (Foundry v13)
+  - All toolbar visibility preferences (`toolbarCoffeePub*Enabled` and `toolbarFoundry*Enabled`) now use `scope: 'user'`
+  - UI layout preferences (`privateMessageCompressedWindow`, `showDiceRolls`) now use `scope: 'user'`
+  - Settings now persist across devices for each user, following them when they log in from different machines
+  - Total of 32 settings migrated to user scope
+
+### Technical
+- **Foundry v13 User Scope:** Leverages new `scope: 'user'` feature introduced in FoundryVTT v13
+  - User scope settings are per-user, per-world, and persist across devices
+  - Replaces client scope for personal preferences that should follow the user
+  - Maintains client scope for visual separator headings (no meaningful data)
+
 ## [13.0.2] - Dice Roll Control
 
 ### Added

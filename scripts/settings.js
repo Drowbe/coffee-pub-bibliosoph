@@ -111,8 +111,8 @@ export const registerSettings = () => {
 			type: Boolean,
 			config: true,
 			requiresReload: false,
-			scope: 'client',
-			default: true,
+			scope: 'user',
+			default: false,
 		});
 
 
@@ -154,7 +154,7 @@ export const registerSettings = () => {
 			type: Boolean,
 			config: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'user',
 			default: true,
 		});
 		// -- Party Message Foundry Toolbar --
@@ -164,8 +164,8 @@ export const registerSettings = () => {
 			type: Boolean,
 			config: true,
 			requiresReload: true,
-			scope: 'client',
-			default: false,
+			scope: 'user',
+			default: true,
 		});
 		// -- Party Message Macro --
 		game.settings.register(MODULE.ID,'partyMessageMacro', {
@@ -215,7 +215,7 @@ export const registerSettings = () => {
 			type: Boolean,
 			config: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'user',
 			default: true,
 		});
 		// -- Private Message Foundry Toolbar --
@@ -225,8 +225,8 @@ export const registerSettings = () => {
 			type: Boolean,
 			config: true,
 			requiresReload: true,
-			scope: 'client',
-			default: false,
+			scope: 'user',
+			default: true,
 		});
 		// -- Private Message Macro --
 		game.settings.register(MODULE.ID,'privateMessageMacro', {
@@ -269,7 +269,7 @@ export const registerSettings = () => {
 			type: Boolean,
 			config: true,
 			requiresReload: false,
-			scope: 'client',
+			scope: 'user',
 			default: false,
 		});
 
@@ -303,7 +303,7 @@ export const registerSettings = () => {
 			type: Boolean,
 			config: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'user',
 			default: true,
 		});
 		// -- Beverage Foundry Toolbar --
@@ -313,8 +313,8 @@ export const registerSettings = () => {
 			type: Boolean,
 			config: true,
 			requiresReload: true,
-			scope: 'client',
-			default: false,
+			scope: 'user',
+			default: true,
 		});
 		// -- Beverage Theme --
 		game.settings.register(MODULE.ID, 'cardThemeBeverage', {
@@ -375,7 +375,7 @@ export const registerSettings = () => {
 			type: Boolean,
 			config: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'user',
 			default: true,
 		});
 		// -- Bio Foundry Toolbar --
@@ -385,7 +385,7 @@ export const registerSettings = () => {
 			type: Boolean,
 			config: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'user',
 			default: false,
 		});
 		// -- Bio Theme --
@@ -447,7 +447,7 @@ export const registerSettings = () => {
 			type: Boolean,
 			config: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'user',
 			default: true,
 		});
 		// -- Insults Foundry Toolbar --
@@ -457,7 +457,7 @@ export const registerSettings = () => {
 			type: Boolean,
 			config: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'user',
 			default: false,
 		});
 		// -- Insults Theme --
@@ -518,7 +518,7 @@ export const registerSettings = () => {
 			type: Boolean,
 			config: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'user',
 			default: true,
 		});
 		// -- Praise Foundry Toolbar --
@@ -528,7 +528,7 @@ export const registerSettings = () => {
 			type: Boolean,
 			config: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'user',
 			default: false,
 		});
 		// -- Praise Theme --
@@ -603,7 +603,7 @@ export const registerSettings = () => {
 			type: Boolean,
 			config: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'user',
 			default: true,
 		});
 		// -- Investigation Foundry Toolbar --
@@ -613,8 +613,8 @@ export const registerSettings = () => {
 			type: Boolean,
 			config: true,
 			requiresReload: true,
-			scope: 'client',
-			default: false,
+			scope: 'user',
+			default: true,
 		});
 		// -- Investigation Theme --
 		game.settings.register(MODULE.ID, 'cardThemeInvestigation', {
@@ -704,7 +704,7 @@ export const registerSettings = () => {
 			type: Boolean,
 			config: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'user',
 			default: true,
 		});
 		// -- Gift Foundry Toolbar --
@@ -714,7 +714,7 @@ export const registerSettings = () => {
 			type: Boolean,
 			config: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'user',
 			default: false,
 		});
 		// -- Gift Table --
@@ -765,7 +765,7 @@ export const registerSettings = () => {
 			type: Boolean,
 			config: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'user',
 			default: true,
 		});
 		// -- Shady Goods Foundry Toolbar --
@@ -775,7 +775,7 @@ export const registerSettings = () => {
 			type: Boolean,
 			config: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'user',
 			default: false,
 		});
 		// -- Shady Goods Table --
@@ -827,7 +827,7 @@ export const registerSettings = () => {
 			type: Boolean,
 			config: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'user',
 			default: true,
 		});
 		// -- Critical Foundry Toolbar --
@@ -837,8 +837,8 @@ export const registerSettings = () => {
 			type: Boolean,
 			config: true,
 			requiresReload: true,
-			scope: 'client',
-			default: false,
+			scope: 'user',
+			default: true,
 		});
 		// -- Critical Theme --
 		game.settings.register(MODULE.ID, 'cardThemeCritical', {
@@ -899,7 +899,7 @@ export const registerSettings = () => {
 			type: Boolean,
 			config: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'user',
 			default: true,
 		});
 		// -- Fumble Foundry Toolbar --
@@ -909,8 +909,8 @@ export const registerSettings = () => {
 			type: Boolean,
 			config: true,
 			requiresReload: true,
-			scope: 'client',
-			default: false,
+			scope: 'user',
+			default: true,
 		});
 		// -- Fumble Theme --
 		game.settings.register(MODULE.ID, 'cardThemeFumble', {
@@ -973,7 +973,7 @@ export const registerSettings = () => {
 			type: Boolean,
 			config: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'user',
 			default: true,
 		});
 		// -- Inspiration Foundry Toolbar --
@@ -983,7 +983,7 @@ export const registerSettings = () => {
 			type: Boolean,
 			config: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'user',
 			default: false,
 		});
 
@@ -1108,7 +1108,7 @@ export const registerSettings = () => {
 			type: Boolean,
 			config: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'user',
 			default: true,
 		});
 		// -- Injuries Foundry Toolbar --
@@ -1118,7 +1118,7 @@ export const registerSettings = () => {
 			type: Boolean,
 			config: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'user',
 			default: false,
 		});
 		game.settings.register(MODULE.ID,'injuryCompendium', {
@@ -1201,7 +1201,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.headingH2Encounters-Hint',
 			scope: "world",
 			config: true,
-			restricted: true,
 			default: "",
 			type: String,
 		});
@@ -1215,7 +1214,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.headingH3EncounterSettings-Hint',
 			scope: "world",
 			config: true,
-			restricted: true,
 			default: "",
 			type: String,
 		});
@@ -1227,7 +1225,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.cardThemeEncounter-Hint',
 			scope: 'world',
 			config: true,
-			restricted: true,
 			requiresReload: false,
 			default: getBlacksmithDefault('strDefaultCardTheme', 'default'), // Get default from Blacksmith API
 			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
@@ -1238,7 +1235,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.encounterOdds-Hint',
 			scope: "world",
 			config: true,
-			restricted: true,
 			requiresReload: false,
 			type: Number,
 			range: {
@@ -1254,7 +1250,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.encounterDice-Hint',
 			scope: "world",
 			config: true,
-			restricted: true,
 			requiresReload: false,
 			type: Number,
 			range: {
@@ -1269,7 +1264,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.encounterTableNoEncounter-Hint',
 			scope: "world",
 			config: true,
-			restricted: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
 			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
@@ -1279,7 +1273,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.encounterTableBefore-Hint',
 			scope: "world",
 			config: true,
-			restricted: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
 			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
@@ -1289,7 +1282,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.encounterTableReveal-Hint',
 			scope: "world",
 			config: true,
-			restricted: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
 			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
@@ -1299,7 +1291,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.encounterTableAfter-Hint',
 			scope: "world",
 			config: true,
-			restricted: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
 			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
@@ -1310,7 +1301,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.headingH3simpleGeneralEncounters-Hint',
 			scope: "world",
 			config: true,
-			restricted: true,
 			default: "",
 			type: String,
 		});
@@ -1322,7 +1312,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.encounterEnabledGeneral-Hint',
 			type: Boolean,
 			config: true,
-			restricted: true,
 			requiresReload: true,
 			scope: 'world',
 			default: false,
@@ -1333,9 +1322,8 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.toolbarCoffeePubGeneralEncounterEnabled-Hint',
 			type: Boolean,
 			config: true,
-			restricted: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'world',
 			default: true,
 		});
 		// -- General Encounter Foundry Toolbar --
@@ -1344,9 +1332,8 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.toolbarFoundryGeneralEncounterEnabled-Hint',
 			type: Boolean,
 			config: true,
-			restricted: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'world',
 			default: false,
 		});
 		game.settings.register(MODULE.ID,'encounterTableGeneral', {
@@ -1354,7 +1341,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.encounterTableGeneral-Hint',
 			scope: "world",
 			config: true,
-			restricted: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
 			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
@@ -1364,7 +1350,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.encounterMacroGeneral-Hint',
 			scope: "world",
 			config: true,
-			restricted: true,
 			requiresReload: true,
 			default: '-- Choose a Macro --',
 			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
@@ -1378,7 +1363,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.headingH3simpleCaveEncounters-Hint',
 			scope: "world",
 			config: true,
-			restricted: true,
 			default: "",
 			type: String,
 		});
@@ -1388,7 +1372,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.encounterEnabledCave-Hint',
 			type: Boolean,
 			config: true,
-			restricted: true,
 			requiresReload: true,
 			scope: 'world',
 			default: false,
@@ -1399,9 +1382,8 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.toolbarCoffeePubCaveEncounterEnabled-Hint',
 			type: Boolean,
 			config: true,
-			restricted: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'world',
 			default: true,
 		});
 		// -- Cave Encounter Foundry Toolbar --
@@ -1410,9 +1392,8 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.toolbarFoundryCaveEncounterEnabled-Hint',
 			type: Boolean,
 			config: true,
-			restricted: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'world',
 			default: false,
 		});
 		game.settings.register(MODULE.ID,'encounterTableCave', {
@@ -1420,7 +1401,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.encounterTableCave-Hint',
 			scope: "world",
 			config: true,
-			restricted: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
 			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
@@ -1430,7 +1410,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.encounterMacroCave-Hint',
 			scope: "world",
 			config: true,
-			restricted: true,
 			requiresReload: true,
 			default: '-- Choose a Macro --',
 			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
@@ -1443,7 +1422,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.headingH3simpleDesertEncounters-Hint',
 			scope: "world",
 			config: true,
-			restricted: true,
 			default: "",
 			type: String,
 		});
@@ -1453,7 +1431,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.encounterEnabledDesert-Hint',
 			type: Boolean,
 			config: true,
-			restricted: true,
 			requiresReload: true,
 			scope: 'world',
 			default: false,
@@ -1464,9 +1441,8 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.toolbarCoffeePubDesertEncounterEnabled-Hint',
 			type: Boolean,
 			config: true,
-			restricted: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'world',
 			default: true,
 		});
 		// -- Desert Encounter Foundry Toolbar --
@@ -1475,9 +1451,8 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.toolbarFoundryDesertEncounterEnabled-Hint',
 			type: Boolean,
 			config: true,
-			restricted: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'world',
 			default: false,
 		});
 		game.settings.register(MODULE.ID,'encounterTableDesert', {
@@ -1485,7 +1460,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.encounterTableDesert-Hint',
 			scope: "world",
 			config: true,
-			restricted: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
 			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
@@ -1495,7 +1469,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.encounterMacroDesert-Hint',
 			scope: "world",
 			config: true,
-			restricted: true,
 			requiresReload: true,
 			default: '-- Choose a Macro --',
 			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
@@ -1509,7 +1482,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.headingH3simpleDungeonEncounters-Hint',
 			scope: "world",
 			config: true,
-			restricted: true,
 			default: "",
 			type: String,
 		});
@@ -1519,7 +1491,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.encounterEnabledDungeon-Hint',
 			type: Boolean,
 			config: true,
-			restricted: true,
 			requiresReload: true,
 			scope: 'world',
 			default: false,
@@ -1530,9 +1501,8 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.toolbarCoffeePubDungeonEncounterEnabled-Hint',
 			type: Boolean,
 			config: true,
-			restricted: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'world',
 			default: true,
 		});
 		// -- Dungeon Encounter Foundry Toolbar --
@@ -1541,9 +1511,8 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.toolbarFoundryDungeonEncounterEnabled-Hint',
 			type: Boolean,
 			config: true,
-			restricted: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'world',
 			default: false,
 		});
 		game.settings.register(MODULE.ID,'encounterTableDungeon', {
@@ -1551,7 +1520,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.encounterTableDungeon-Hint',
 			scope: "world",
 			config: true,
-			restricted: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
 			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
@@ -1561,7 +1529,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.encounterMacroDungeon-Hint',
 			scope: "world",
 			config: true,
-			restricted: true,
 			requiresReload: true,
 			default: '-- Choose a Macro --',
 			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
@@ -1573,7 +1540,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.headingH3simpleForestEncounters-Hint',
 			scope: "world",
 			config: true,
-			restricted: true,
 			default: "",
 			type: String,
 		});
@@ -1583,7 +1549,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.encounterEnabledForest-Hint',
 			type: Boolean,
 			config: true,
-			restricted: true,
 			requiresReload: true,
 			scope: 'world',
 			default: false,
@@ -1594,9 +1559,8 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.toolbarCoffeePubForestEncounterEnabled-Hint',
 			type: Boolean,
 			config: true,
-			restricted: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'world',
 			default: true,
 		});
 		// -- Forest Encounter Foundry Toolbar --
@@ -1605,9 +1569,8 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.toolbarFoundryForestEncounterEnabled-Hint',
 			type: Boolean,
 			config: true,
-			restricted: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'world',
 			default: false,
 		});
 		game.settings.register(MODULE.ID,'encounterTableForest', {
@@ -1615,7 +1578,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.encounterTableForest-Hint',
 			scope: "world",
 			config: true,
-			restricted: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
 			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
@@ -1625,7 +1587,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.encounterMacroForest-Hint',
 			scope: "world",
 			config: true,
-			restricted: true,
 			requiresReload: true,
 			default: '-- Choose a Macro --',
 			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
@@ -1637,7 +1598,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.headingH3simpleMountainEncounters-Hint',
 			scope: "world",
 			config: true,
-			restricted: true,
 			default: "",
 			type: String,
 		});
@@ -1647,7 +1607,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.encounterEnabledMountain-Hint',
 			type: Boolean,
 			config: true,
-			restricted: true,
 			requiresReload: true,
 			scope: 'world',
 			default: false,
@@ -1658,9 +1617,8 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.toolbarCoffeePubMountainEncounterEnabled-Hint',
 			type: Boolean,
 			config: true,
-			restricted: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'world',
 			default: true,
 		});
 		// -- Mountain Encounter Foundry Toolbar --
@@ -1669,9 +1627,8 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.toolbarFoundryMountainEncounterEnabled-Hint',
 			type: Boolean,
 			config: true,
-			restricted: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'world',
 			default: false,
 		});
 		game.settings.register(MODULE.ID,'encounterTableMountain', {
@@ -1679,7 +1636,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.encounterTableMountain-Hint',
 			scope: "world",
 			config: true,
-			restricted: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
 			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
@@ -1689,7 +1645,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.encounterMacroMountain-Hint',
 			scope: "world",
 			config: true,
-			restricted: true,
 			requiresReload: true,
 			default: '-- Choose a Macro --',
 			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
@@ -1701,7 +1656,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.headingH3simpleSkyEncounters-Hint',
 			scope: "world",
 			config: true,
-			restricted: true,
 			default: "",
 			type: String,
 		});
@@ -1711,7 +1665,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.encounterEnabledSky-Hint',
 			type: Boolean,
 			config: true,
-			restricted: true,
 			requiresReload: true,
 			scope: 'world',
 			default: false,
@@ -1722,9 +1675,8 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.toolbarCoffeePubSkyEncounterEnabled-Hint',
 			type: Boolean,
 			config: true,
-			restricted: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'world',
 			default: true,
 		});
 		// -- Sky Encounter Foundry Toolbar --
@@ -1733,9 +1685,8 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.toolbarFoundrySkyEncounterEnabled-Hint',
 			type: Boolean,
 			config: true,
-			restricted: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'world',
 			default: false,
 		});
 		game.settings.register(MODULE.ID,'encounterTableSky', {
@@ -1743,7 +1694,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.encounterTableSky-Hint',
 			scope: "world",
 			config: true,
-			restricted: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
 			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
@@ -1753,7 +1703,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.encounterMacroSky-Hint',
 			scope: "world",
 			config: true,
-			restricted: true,
 			requiresReload: true,
 			default: '-- Choose a Macro --',
 			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
@@ -1765,7 +1714,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.headingH3simpleSnowEncounters-Hint',
 			scope: "world",
 			config: true,
-			restricted: true,
 			default: "",
 			type: String,
 		});
@@ -1775,7 +1723,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.encounterEnabledSnow-Hint',
 			type: Boolean,
 			config: true,
-			restricted: true,
 			requiresReload: true,
 			scope: 'world',
 			default: false,
@@ -1786,9 +1733,8 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.toolbarCoffeePubSnowEncounterEnabled-Hint',
 			type: Boolean,
 			config: true,
-			restricted: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'world',
 			default: true,
 		});
 		// -- Snow Encounter Foundry Toolbar --
@@ -1797,9 +1743,8 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.toolbarFoundrySnowEncounterEnabled-Hint',
 			type: Boolean,
 			config: true,
-			restricted: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'world',
 			default: false,
 		});
 		game.settings.register(MODULE.ID,'encounterTableSnow', {
@@ -1807,7 +1752,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.encounterTableSnow-Hint',
 			scope: "world",
 			config: true,
-			restricted: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
 			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
@@ -1817,7 +1761,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.encounterMacroSnow-Hint',
 			scope: "world",
 			config: true,
-			restricted: true,
 			requiresReload: true,
 			default: '-- Choose a Macro --',
 			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
@@ -1829,7 +1772,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.headingH3simpleUrbanEncounters-Hint',
 			scope: "world",
 			config: true,
-			restricted: true,
 			default: "",
 			type: String,
 		});
@@ -1839,7 +1781,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.encounterEnabledUrban-Hint',
 			type: Boolean,
 			config: true,
-			restricted: true,
 			requiresReload: true,
 			scope: 'world',
 			default: false,
@@ -1850,9 +1791,8 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.toolbarCoffeePubUrbanEncounterEnabled-Hint',
 			type: Boolean,
 			config: true,
-			restricted: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'world',
 			default: true,
 		});
 		// -- Urban Encounter Foundry Toolbar --
@@ -1861,9 +1801,8 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.toolbarFoundryUrbanEncounterEnabled-Hint',
 			type: Boolean,
 			config: true,
-			restricted: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'world',
 			default: false,
 		});
 		game.settings.register(MODULE.ID,'encounterTableUrban', {
@@ -1871,7 +1810,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.encounterTableUrban-Hint',
 			scope: "world",
 			config: true,
-			restricted: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
 			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
@@ -1881,7 +1819,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.encounterMacroUrban-Hint',
 			scope: "world",
 			config: true,
-			restricted: true,
 			requiresReload: true,
 			default: '-- Choose a Macro --',
 			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
@@ -1893,7 +1830,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.headingH3simpleWaterEncounters-Hint',
 			scope: "world",
 			config: true,
-			restricted: true,
 			default: "",
 			type: String,
 		});
@@ -1903,7 +1839,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.encounterEnabledWater-Hint',
 			type: Boolean,
 			config: true,
-			restricted: true,
 			requiresReload: true,
 			scope: 'world',
 			default: false,
@@ -1914,9 +1849,8 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.toolbarCoffeePubWaterEncounterEnabled-Hint',
 			type: Boolean,
 			config: true,
-			restricted: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'world',
 			default: true,
 		});
 		// -- Water Encounter Foundry Toolbar --
@@ -1925,9 +1859,8 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.toolbarFoundryWaterEncounterEnabled-Hint',
 			type: Boolean,
 			config: true,
-			restricted: true,
 			requiresReload: true,
-			scope: 'client',
+			scope: 'world',
 			default: false,
 		});
 		game.settings.register(MODULE.ID,'encounterTableWater', {
@@ -1935,7 +1868,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.encounterTableWater-Hint',
 			scope: "world",
 			config: true,
-			restricted: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
 			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
@@ -1945,7 +1877,6 @@ export const registerSettings = () => {
 			hint: MODULE.ID + '.encounterMacroWater-Hint',
 			scope: "world",
 			config: true,
-			restricted: true,
 			requiresReload: true,
 			default: '-- Choose a Macro --',
 			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
