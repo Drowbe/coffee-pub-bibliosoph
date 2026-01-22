@@ -291,6 +291,7 @@ const TOOLBAR_TOOLS = {
         zone: "rolls",
         order: 5,
         moduleId: "coffee-pub-bibliosoph",
+        gmOnly: true,  // Only GMs can see this tool
         enabled: () => getSetting('encounterEnabledGeneral', false),
         onCoffeePub: () => getSetting('toolbarCoffeePubGeneralEncounterEnabled', true),
         onFoundry: () => getSetting('toolbarFoundryGeneralEncounterEnabled', false),
@@ -311,6 +312,7 @@ const TOOLBAR_TOOLS = {
         zone: "rolls",
         order: 10,
         moduleId: "coffee-pub-bibliosoph",
+        gmOnly: true,  // Only GMs can see this tool
         enabled: () => getSetting('encounterEnabledCave', false),
         onCoffeePub: () => getSetting('toolbarCoffeePubCaveEncounterEnabled', true),
         onFoundry: () => getSetting('toolbarFoundryCaveEncounterEnabled', false),
@@ -331,6 +333,7 @@ const TOOLBAR_TOOLS = {
         zone: "rolls",
         order: 15,
         moduleId: "coffee-pub-bibliosoph",
+        gmOnly: true,  // Only GMs can see this tool
         enabled: () => getSetting('encounterEnabledDesert', false),
         onCoffeePub: () => getSetting('toolbarCoffeePubDesertEncounterEnabled', true),
         onFoundry: () => getSetting('toolbarFoundryDesertEncounterEnabled', false),
@@ -351,6 +354,7 @@ const TOOLBAR_TOOLS = {
         zone: "rolls",
         order: 20,
         moduleId: "coffee-pub-bibliosoph",
+        gmOnly: true,  // Only GMs can see this tool
         enabled: () => getSetting('encounterEnabledDungeon', false),
         onCoffeePub: () => getSetting('toolbarCoffeePubDungeonEncounterEnabled', true),
         onFoundry: () => getSetting('toolbarFoundryDungeonEncounterEnabled', false),
@@ -371,6 +375,7 @@ const TOOLBAR_TOOLS = {
         zone: "rolls",
         order: 25,
         moduleId: "coffee-pub-bibliosoph",
+        gmOnly: true,  // Only GMs can see this tool
         enabled: () => getSetting('encounterEnabledForest', false),
         onCoffeePub: () => getSetting('toolbarCoffeePubForestEncounterEnabled', true),
         onFoundry: () => getSetting('toolbarFoundryForestEncounterEnabled', false),
@@ -391,6 +396,7 @@ const TOOLBAR_TOOLS = {
         zone: "rolls",
         order: 30,
         moduleId: "coffee-pub-bibliosoph",
+        gmOnly: true,  // Only GMs can see this tool
         enabled: () => getSetting('encounterEnabledMountain', false),
         onCoffeePub: () => getSetting('toolbarCoffeePubMountainEncounterEnabled', true),
         onFoundry: () => getSetting('toolbarFoundryMountainEncounterEnabled', false),
@@ -411,6 +417,7 @@ const TOOLBAR_TOOLS = {
         zone: "rolls",
         order: 35,
         moduleId: "coffee-pub-bibliosoph",
+        gmOnly: true,  // Only GMs can see this tool
         enabled: () => getSetting('encounterEnabledSky', false),
         onCoffeePub: () => getSetting('toolbarCoffeePubSkyEncounterEnabled', true),
         onFoundry: () => getSetting('toolbarFoundrySkyEncounterEnabled', false),
@@ -431,6 +438,7 @@ const TOOLBAR_TOOLS = {
         zone: "rolls",
         order: 40,
         moduleId: "coffee-pub-bibliosoph",
+        gmOnly: true,  // Only GMs can see this tool
         enabled: () => getSetting('encounterEnabledSnow', false),
         onCoffeePub: () => getSetting('toolbarCoffeePubSnowEncounterEnabled', true),
         onFoundry: () => getSetting('toolbarFoundrySnowEncounterEnabled', false),
@@ -451,6 +459,7 @@ const TOOLBAR_TOOLS = {
         zone: "rolls",
         order: 45,
         moduleId: "coffee-pub-bibliosoph",
+        gmOnly: true,  // Only GMs can see this tool
         enabled: () => getSetting('encounterEnabledUrban', false),
         onCoffeePub: () => getSetting('toolbarCoffeePubUrbanEncounterEnabled', true),
         onFoundry: () => getSetting('toolbarFoundryUrbanEncounterEnabled', false),
@@ -471,6 +480,7 @@ const TOOLBAR_TOOLS = {
         zone: "rolls",
         order: 50,
         moduleId: "coffee-pub-bibliosoph",
+        gmOnly: true,  // Only GMs can see this tool
         enabled: () => getSetting('encounterEnabledWater', false),
         onCoffeePub: () => getSetting('toolbarCoffeePubWaterEncounterEnabled', true),
         onFoundry: () => getSetting('toolbarFoundryWaterEncounterEnabled', false),
