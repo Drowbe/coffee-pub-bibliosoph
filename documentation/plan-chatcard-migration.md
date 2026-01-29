@@ -182,3 +182,10 @@ This document assesses the current Bibliosoph chat card implementation against t
 - **Card creation:** `scripts/bibliosoph.js` — `createChatCardGeneral`, `createChatCardInjury`, `createChatCardEncounter`, `createChatCardSearch`, `createChatCardInjurySelector`
 - **Theme settings:** `scripts/settings.js` — all `cardTheme*` registrations
 - **Constants:** `scripts/const.js` — `BIBLIOSOPH.MESSAGE_TEMPLATE_CARD`, etc.
+
+## 7. Migration Status
+
+- **Phase 1 (Settings and theme API):** Done — Theme choices use Chat Cards API `getCardThemeChoicesWithClassNames()`; defaults `theme-default`; fallback to `getBlacksmithChoices('arrThemeChoices')` with warning when API unavailable.
+- **Phase 2 (Template structure):** Done — `chat-card.hbs` uses `blacksmith-card {{cardTheme}}`, `.card-header`, `.section-content`; content and buttons under `.section-content`; Bibliosoph IDs/classes; `cardTheme` passed from all createChatCard*.
+- **Phase 3 (Layout components):** Optional polish — `.section-header` used for subtitle; injury/content blocks use semantic classes; full section-table conversion deferred.
+- **Phase 4 (Rendering and cleanup):** Done — All card rendering uses `foundry.applications.handlebars.renderTemplate()`; legacy theme handling removed; private/whisper HTML uses `bibliosoph-*` classes.
