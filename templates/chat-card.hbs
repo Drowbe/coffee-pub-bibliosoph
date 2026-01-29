@@ -1,9 +1,9 @@
 <span style="visibility: hidden">coffeepub-hide-header</span>
-<div id="cards-wrapper-{{cardStyle}}">
-    <!-- CARD TITLE -->
-    <div id="cards-title-{{cardStyle}}">
+<div class="blacksmith-card {{cardStyle}}">
+    <div class="card-header">
         <i class="fa-solid {{iconStyle}}" id="cards-icon-{{cardStyle}}"></i>{{cardTitle}}
     </div>
+    <div class="section-content">
     <!-- SENDER -->
     {{#if userName}}
         <div id="cards-user-{{cardStyle}}">
@@ -121,5 +121,6 @@
         <!-- Reply Button -->
         <button id="cards-button-{{cardStyle}}" title="Reply to this message..." class="coffee-pub-bibliosoph-button-reply" data-recipient="{{strRecipients}}" style="width: 100%;"><i class="fa-solid fa-circle-up" id="cards-icon-{{cardStyle}}"></i>Reply All</button>
     {{/if}}
+    </div>
 </div>
 
