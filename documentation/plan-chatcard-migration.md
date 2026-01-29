@@ -1,6 +1,6 @@
 # Chat Card Migration Plan — Bibliosoph to Blacksmith Card System
 
-This document assesses the current Bibliosoph chat card implementation against the [Coffee Pub Blacksmith Chat Card Migration Guide](documentation/guide-chat-card-migration.md) and outlines a phased plan to migrate to the new card system.
+This document assesses the current Bibliosoph chat card implementation against the [Coffee Pub Blacksmith Chat Card Migration Guide](guide-chat-card-migration.md) and outlines a phased plan to migrate to the new card system.
 
 ---
 
