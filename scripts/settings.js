@@ -3,7 +3,8 @@
 // ================================================================== 
 
 // Grab the module data
-import { MODULE, BIBLIOSOPH  } from './const.js';
+import { MODULE, BIBLIOSOPH } from './const.js';
+import { BlacksmithAPI } from '/modules/coffee-pub-blacksmith/api/blacksmith-api.js';
 
 // ================================================================== 
 // ===== EXPORTS ====================================================
@@ -65,6 +66,41 @@ export const registerSettings = () => {
 			const blacksmith = getBlacksmith();
 			return blacksmith?.BLACKSMITH?.[defaultType] ?? fallbackValue;
 		};
+
+		/**
+		 * Get Blacksmith theme choices for chat cards using Chat Cards API.
+		 * Returns card themes with CSS class names as keys.
+		 */
+		async function getCardThemeChoices() {
+			try {
+				const blacksmith = await BlacksmithAPI.get();
+				const chatCardsAPI = blacksmith?.chatCards;
+
+				if (!chatCardsAPI) {
+					console.warn(MODULE.ID + ': Blacksmith Chat Cards API not available, using fallback');
+					return getCardThemeChoicesFallback();
+				}
+
+				if (typeof chatCardsAPI.getCardThemeChoicesWithClassNames !== "function") {
+					console.warn(MODULE.ID + ': getCardThemeChoicesWithClassNames not available, using fallback');
+					return getCardThemeChoicesFallback();
+				}
+
+				return chatCardsAPI.getCardThemeChoicesWithClassNames();
+			} catch (error) {
+				console.error(MODULE.ID + ': Error getting card theme choices from API:', error);
+				return getCardThemeChoicesFallback();
+			}
+		}
+
+		/** Fallback theme choices if Chat Cards API is unavailable. */
+		function getCardThemeChoicesFallback() {
+			return {
+				"theme-default": "Default"
+			};
+		}
+
+		const themeChoices = await getCardThemeChoices();
 
 		// Register settings...
 		// This is a system message - user should know settings are being registered
@@ -184,8 +220,8 @@ export const registerSettings = () => {
 			scope: 'world',
 			config: true,
 			requiresReload: false,
-			default: getBlacksmithDefault('strDefaultCardTheme', 'default'), // Get default from Blacksmith API
-			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
+			default: 'theme-default',
+			choices: themeChoices
 		});
 
 		// ---------- SUBHEADING ----------
@@ -246,8 +282,8 @@ export const registerSettings = () => {
 			scope: 'world',
 			config: true,
 			requiresReload: false,
-			default: getBlacksmithDefault('strDefaultCardTheme', 'default'), // Get default from Blacksmith API
-			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
+			default: 'theme-default',
+			choices: themeChoices
 		});
 
 		// -- Private Message Chat Layout --
@@ -323,8 +359,8 @@ export const registerSettings = () => {
 			scope: 'world',
 			config: true,
 			requiresReload: false,
-			default: getBlacksmithDefault('strDefaultCardTheme', 'default'), // Get default from Blacksmith API
-			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
+			default: 'theme-default',
+			choices: themeChoices
 		});
 		// -- Beverage Table --
 		game.settings.register(MODULE.ID,'beverageTable', {
@@ -395,8 +431,8 @@ export const registerSettings = () => {
 			scope: 'world',
 			config: true,
 			requiresReload: false,
-			default: getBlacksmithDefault('strDefaultCardTheme', 'default'), // Get default from Blacksmith API
-			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
+			default: 'theme-default',
+			choices: themeChoices
 		});
 		// -- Bio Table --
 		game.settings.register(MODULE.ID,'bioTable', {
@@ -467,8 +503,8 @@ export const registerSettings = () => {
 			scope: 'world',
 			config: true,
 			requiresReload: false,
-			default: getBlacksmithDefault('strDefaultCardTheme', 'default'), // Get default from Blacksmith API
-			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
+			default: 'theme-default',
+			choices: themeChoices
 		});
 		// -- Insults Table --
 		game.settings.register(MODULE.ID,'insultsTable', {
@@ -538,8 +574,8 @@ export const registerSettings = () => {
 			scope: 'world',
 			config: true,
 			requiresReload: false,
-			default: getBlacksmithDefault('strDefaultCardTheme', 'default'), // Get default from Blacksmith API
-			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
+			default: 'theme-default',
+			choices: themeChoices
 		});
 		// -- Praise Table --
 		game.settings.register(MODULE.ID,'praiseTable', {
@@ -623,8 +659,8 @@ export const registerSettings = () => {
 			scope: 'world',
 			config: true,
 			requiresReload: false,
-			default: getBlacksmithDefault('strDefaultCardTheme', 'default'), // Get default from Blacksmith API
-			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
+			default: 'theme-default',
+			choices: themeChoices
 		});
 		// -- Investigation Odds --
 		game.settings.register(MODULE.ID,'investigationOdds', {
@@ -847,8 +883,8 @@ export const registerSettings = () => {
 			scope: 'world',
 			config: true,
 			requiresReload: false,
-			default: getBlacksmithDefault('strDefaultCardTheme', 'default'), // Get default from Blacksmith API
-			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
+			default: 'theme-default',
+			choices: themeChoices
 		});
 		// -- Critical Table --
 		game.settings.register(MODULE.ID,'criticalTable', {
@@ -920,8 +956,8 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			type: String,
-			default: getBlacksmithDefault('strDefaultCardTheme', 'default'), // Get default from Blacksmith API
-			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
+			default: 'theme-default',
+			choices: themeChoices
 		});
 		// -- Fumble Table --
 		game.settings.register(MODULE.ID,'fumbleTable', {
@@ -994,8 +1030,8 @@ export const registerSettings = () => {
 			scope: 'world',
 			config: true,
 			requiresReload: false,
-			default: getBlacksmithDefault('strDefaultCardTheme', 'default'), // Get default from Blacksmith API
-			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
+			default: 'theme-default',
+			choices: themeChoices
 		});
 		// -- Inspiration Table --
 		game.settings.register(MODULE.ID,'inspirationTable', {
@@ -1047,8 +1083,8 @@ export const registerSettings = () => {
 			scope: 'world',
 			config: true,
 			requiresReload: false,
-			default: getBlacksmithDefault('strDefaultCardTheme', 'default'), // Get default from Blacksmith API
-			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
+			default: 'theme-default',
+			choices: themeChoices
 		});
 		// -- DOMT Table --
 		game.settings.register(MODULE.ID,'domtTable', {
@@ -1148,8 +1184,8 @@ export const registerSettings = () => {
 			scope: 'world',
 			config: true,
 			requiresReload: false,
-			default: getBlacksmithDefault('strDefaultCardTheme', 'default'), // Get default from Blacksmith API
-			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
+			default: 'theme-default',
+			choices: themeChoices
 		});
 
 
@@ -1226,8 +1262,8 @@ export const registerSettings = () => {
 			scope: 'world',
 			config: true,
 			requiresReload: false,
-			default: getBlacksmithDefault('strDefaultCardTheme', 'default'), // Get default from Blacksmith API
-			choices: getBlacksmithChoices('arrThemeChoices', 'No themes found. Try reloading Foundry after all modules are enabled.')
+			default: 'theme-default',
+			choices: themeChoices
 		});
 		// -- Encounter Odds --
 		game.settings.register(MODULE.ID,'encounterOdds', {

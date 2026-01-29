@@ -1721,7 +1721,7 @@ async function createChatCardGeneral(strRollTableName) {
     // Card defaults
     var strSound = "";
     var strVolume = "0.7";
-    var strCardStyle = "";
+    var strTheme = "";
     var strIconStyle = "";
     var strCardTitle = ""
     var strImageBackground = "themecolor";
@@ -1737,7 +1737,8 @@ async function createChatCardGeneral(strRollTableName) {
     var strActionLabel = "";
     // NEW or Reworked Variable as part of unification
     var arrTable = "";
-    var arrToPrivate = ""; // Not Wired yet 
+    var arrPrivateRecipients = [];
+    var privateRecipientsCompressed = false; 
     var strRecipients = "";
     // ** Set Gloobal Data used by all **
     strUserName = game.user.name;
@@ -1757,28 +1758,28 @@ async function createChatCardGeneral(strRollTableName) {
      switch(true) {
         case (BIBLIOSOPH.CARDTYPECRIT):
             // CRITICAL
-            strCardStyle = game.settings.get(MODULE.ID, 'cardThemeCritical');
+            strTheme = game.settings.get(MODULE.ID, 'cardThemeCritical');
             strSound = "modules/coffee-pub-blacksmith/sounds/reaction-yay.mp3";
             strIconStyle = "fa-burst";
             strActionLabel = "Action";
             break;
         case (BIBLIOSOPH.CARDTYPEFUMBLE):
             // FUMBLE
-            strCardStyle = game.settings.get(MODULE.ID, 'cardThemeFumble');
+            strTheme = game.settings.get(MODULE.ID, 'cardThemeFumble');
             strSound = "modules/coffee-pub-blacksmith/sounds/sadtrombone.mp3";
             strIconStyle = "fa-heart-crack";
             strActionLabel = "Action";
             break;
         case (BIBLIOSOPH.CARDTYPEINSPIRATION):
             // INSPIRATION
-            strCardStyle = game.settings.get(MODULE.ID, 'cardThemeInspiration');
+            strTheme = game.settings.get(MODULE.ID, 'cardThemeInspiration');
             strSound = "modules/coffee-pub-blacksmith/sounds/spell-magic-circle.mp3";
             strIconStyle = "fa-sparkles";
             strActionLabel = "Card";
             break;
         case (BIBLIOSOPH.CARDTYPEINSULT):
             // INSULT
-            strCardStyle = game.settings.get(MODULE.ID, 'cardThemeInsults');
+            strTheme = game.settings.get(MODULE.ID, 'cardThemeInsults');
             // this is from a user
             strUserName = strUserName; //where used?
             strSound = "modules/coffee-pub-blacksmith/sounds/reaction-oooooh.mp3";
@@ -1787,34 +1788,34 @@ async function createChatCardGeneral(strRollTableName) {
             break;
         case (BIBLIOSOPH.CARDTYPEPRAISE):
             // PRAISE
-            strCardStyle = game.settings.get(MODULE.ID, 'cardThemePraise');
+            strTheme = game.settings.get(MODULE.ID, 'cardThemePraise');
             strSound = "modules/coffee-pub-blacksmith/sounds/reaction-ahhhhh.mp3";
             strIconStyle = "fa-flower-tulip";
             strActionLabel = "Action";
             break;
         case (BIBLIOSOPH.CARDTYPEDOMT):
             // DECK OF MANY THINGS
-            strCardStyle = game.settings.get(MODULE.ID, 'cardThemeDOMT');
+            strTheme = game.settings.get(MODULE.ID, 'cardThemeDOMT');
             strSound = "modules/coffee-pub-blacksmith/sounds/fanfare-harp.mp3";
             strIconStyle = "fa-cards-blank";
             strActionLabel = "Action";
             break;
         case (BIBLIOSOPH.CARDTYPEBEVERAGE):
             // BEVERAGE
-            strCardStyle = game.settings.get(MODULE.ID, 'cardThemeBeverage');
+            strTheme = game.settings.get(MODULE.ID, 'cardThemeBeverage');
             strSound = "modules/coffee-pub-blacksmith/sounds/general-cocktail-ice.mp3";
             strIconStyle = "fa-martini-glass-citrus";
             strActionLabel = "Action";
             break;
         case (BIBLIOSOPH.CARDTYPEBIO):
             // BIO
-            strCardStyle = game.settings.get(MODULE.ID, 'cardThemeBio');
+            strTheme = game.settings.get(MODULE.ID, 'cardThemeBio');
             strSound = "modules/coffee-pub-blacksmith/sounds/general-toilet-flushing.mp3";
             strIconStyle = "fa-toilet";
             strActionLabel = "Action";
             break;
         case (BIBLIOSOPH.CARDTYPEMESSAGE):
-            strCardStyle = game.settings.get(MODULE.ID, 'cardThemePartyMessage');
+            strTheme = game.settings.get(MODULE.ID, 'cardThemePartyMessage');
             switch (true) {
                 case (BIBLIOSOPH.MESSAGES_TITLE == "messageVote"):
                     strCardTitle = "Party Plan";
@@ -1835,7 +1836,7 @@ async function createChatCardGeneral(strRollTableName) {
                     strIconStyle = "fa-solid fa-thumbs-down";
                     break;
                 case (BIBLIOSOPH.MESSAGES_TITLE == "messagePraise"):
-                    strCardStyle = game.settings.get(MODULE.ID, 'cardThemePraise');
+                    strTheme = game.settings.get(MODULE.ID, 'cardThemePraise');
                     strCardTitle = "Praise";
                     strImage = "icons/magic/life/heart-shadow-red.webp";
                     strSound = "modules/coffee-pub-blacksmith/sounds/reaction-ahhhhh.mp3";
@@ -1843,7 +1844,7 @@ async function createChatCardGeneral(strRollTableName) {
                     strActionLabel = "Action";
                     break;
                 case (BIBLIOSOPH.MESSAGES_TITLE == "messageInsult"):
-                    strCardStyle = game.settings.get(MODULE.ID, 'cardThemeInsults');
+                    strTheme = game.settings.get(MODULE.ID, 'cardThemeInsults');
                     strCardTitle = "Defamation";
                     strImage = "icons/skills/wounds/injury-face-impact-orange.webp";
                     strSound = "modules/coffee-pub-blacksmith/sounds/reaction-oooooh.mp3";
@@ -1860,7 +1861,7 @@ async function createChatCardGeneral(strRollTableName) {
             strActionLabel = "Reply";
             break;
         case (BIBLIOSOPH.CARDTYPEWHISPER):
-            strCardStyle = game.settings.get(MODULE.ID, 'cardThemePrivateMessage');
+            strTheme = game.settings.get(MODULE.ID, 'cardThemePrivateMessage');
             strCardTitle = "Private Message";
             // set the image to the user avatar
             strImage = strUserAvatar;
@@ -1869,7 +1870,9 @@ async function createChatCardGeneral(strRollTableName) {
             strActionLabel = "";
             //strAction = "@UUID[Macro." + BIBLIOSOPH.MACRO_ID + "]{" + strCardTitle + "}";
             strAction = ""; // not using the macro now
-            arrToPrivate = buildPrivateList(BIBLIOSOPH.MESSAGES_LIST_TO_PRIVATE);
+            const privateData = buildPrivateList(BIBLIOSOPH.MESSAGES_LIST_TO_PRIVATE);
+            arrPrivateRecipients = privateData.recipients;
+            privateRecipientsCompressed = privateData.compressed;
             strRecipients = BIBLIOSOPH.MESSAGES_LIST_TO_PRIVATE;
             //postConsoleAndNotification("Private TO List: ", BIBLIOSOPH.MESSAGES_LIST_TO_PRIVATE, false, true, false);
             break;
@@ -1911,7 +1914,7 @@ async function createChatCardGeneral(strRollTableName) {
         userAvatar: strUserAvatar,
         playerType: strPlayerType,
         characterName: strCharacterName,
-        cardStyle: strCardStyle,
+        theme: strTheme,
         iconStyle: strIconStyle,
         cardTitle: strCardTitle,
         imageBackground: strImageBackground,
@@ -1922,8 +1925,9 @@ async function createChatCardGeneral(strRollTableName) {
         actionlabel: strActionLabel,
         image: strImage,
         tablename: strTableName,
-        arrToPrivate: arrToPrivate, //ADDED
-        strRecipients: strRecipients, //used for the hidden input for replies
+        arrPrivateRecipients,
+        privateRecipientsCompressed,
+        strRecipients, //used for the hidden input for replies
     }; 
     // Play the Sound
     BlacksmithUtils.playSound(strSound,strVolume);
@@ -1947,7 +1951,7 @@ async function createChatCardInjury(category) {
     let strCategory = category; // we will use this to fileter the compendium
     var strSound = game.settings.get(MODULE.ID, 'injurySound');
     var strVolume = game.settings.get(MODULE.ID, 'injurySoundVolume');
-    var strCardStyle = game.settings.get(MODULE.ID, 'cardThemeInjury');
+    var strTheme = game.settings.get(MODULE.ID, 'cardThemeInjury');
     var strBanner = "modules/coffee-pub-blacksmith/images/banners/banners-damage-oops-6.webp";
     var strIconStyle = "fa-droplet"; // default... specific overrides happen below.
     var iconSubStyle = "";
@@ -2144,7 +2148,7 @@ async function createChatCardInjury(category) {
     }
     // Pass the data to the template
     const CARDDATA = {
-        cardStyle: strCardStyle,
+        theme: strTheme,
         iconStyle: strIconStyle, 
         // cardTitle: strInjuryCategory, // simplifying this for now
         cardTitle: strInjuryTitle,
@@ -2195,7 +2199,7 @@ async function createChatCardEncounter(strRollTableName) {
     var strTableBefore = game.settings.get(MODULE.ID, 'encounterTableBefore');
     var strTableAfter = game.settings.get(MODULE.ID, 'encounterTableAfter');
     var strNoEncounter = "";
-    var strCardStyle = game.settings.get(MODULE.ID, 'cardThemeEncounter');
+    var strTheme = game.settings.get(MODULE.ID, 'cardThemeEncounter');
     var strIconStyle = "fa-swords";
     var strType = BIBLIOSOPH.CARDTYPE + " Encounter";
     var strImageBackground = "cobblestone";
@@ -2368,7 +2372,7 @@ async function createChatCardEncounter(strRollTableName) {
 
     // Pass the data to the template
     const CARDDATA = {
-        cardStyle: strCardStyle,
+        theme: strTheme,
         iconStyle: strIconStyle,
         cardTitle: strType,
         imageBackground: strImageBackground,
@@ -2404,7 +2408,7 @@ async function createChatCardSearch(strRollTableName) {
     var intSearchOdds = "";
     var intSearchDice = "1d" + game.settings.get(MODULE.ID, 'investigationDice');
     var strNoSearch = "";
-    var strCardStyle = game.settings.get(MODULE.ID, 'cardThemeInvestigation');
+    var strTheme = game.settings.get(MODULE.ID, 'cardThemeInvestigation');
     var strIconStyle = "fa-eye";
     var strType = BIBLIOSOPH.CARDTYPE;
     var strImageBackground = "themecolor";
@@ -2620,7 +2624,7 @@ async function createChatCardSearch(strRollTableName) {
         userAvatar: strUserAvatar,
         playerType: strPlayerType,
         characterName: strCharacterName,
-        cardStyle: strCardStyle,
+        theme: strTheme,
         iconStyle: strIconStyle,
         cardTitle: strType,
         imageBackground: strImageBackground,
@@ -2776,7 +2780,7 @@ function buildPlayerList(recipients) {
 
                 var blnPlayerSelected = false;
                 var checked = "";
-                var strCardStyle = "cardsdark";
+                var strTheme = "cardsdark";
                 if (targets.length > 0) {
                     for (let i = 0; i < targets.length; i++) {
                         const actor = game.actors.get(targets[i].data.actorId);
@@ -2814,12 +2818,12 @@ function buildPlayerList(recipients) {
                     // Full layout: portrait with name and character info
                     // Width set to ~33.33% to allow 3 per row (with gap)
                     // Note: Selection is handled in activateListeners, not in initial HTML generation
-                    checkOptions += "<div name='selectable-div' id='cards-user-" + strCardStyle + "' value='" + player.name + "' class='bibliosoph-option-div' style='flex: 0 0 calc(33.33% - 5px);'>";
-                    checkOptions += "   <img id='cards-token-image-" + strCardStyle + "' src='" + player.avatar + "' />";
-                    checkOptions += "   <div id='cards-token-text-wrapper-" + strCardStyle + "'>";
-                    checkOptions += "       <span id='cards-token-name-" + strCardStyle + "'>" + player.name + "</span>";
+                    checkOptions += "<div name='selectable-div' id='cards-user-" + strTheme + "' value='" + player.name + "' class='bibliosoph-option-div' style='flex: 0 0 calc(33.33% - 5px);'>";
+                    checkOptions += "   <img id='cards-token-image-" + strTheme + "' src='" + player.avatar + "' />";
+                    checkOptions += "   <div id='cards-token-text-wrapper-" + strTheme + "'>";
+                    checkOptions += "       <span id='cards-token-name-" + strTheme + "'>" + player.name + "</span>";
                     checkOptions += "       <br />";
-                    checkOptions += "       <span id='cards-token-character-" + strCardStyle + "'>" + ownedCharacters + "</span>";
+                    checkOptions += "       <span id='cards-token-character-" + strTheme + "'>" + ownedCharacters + "</span>";
                     checkOptions += "   </div>";
                     checkOptions += "</div>";
                 }
@@ -2836,85 +2840,38 @@ function buildPlayerList(recipients) {
 // ** UTILITY Whisper Private List
 // ************************************
 
-// Function to build the player list for the whisper
+/**
+ * Build private message recipient data for the template (no HTML).
+ * Returns { recipients: [{ playerName, playerAvatar, characterName }, ...], compressed: boolean }.
+ */
 function buildPrivateList(arrPlayers) {
-    // TESTING
-    const arrPrivateList = new Array();
-    var blnCompressedList = game.settings.get(MODULE.ID, 'cardLayoutPrivateMessage');;
-    var strRecipients = "";
-    var strHTMLBlock = "";
-    var intPlayerID = "";
-    var strPlayerName = "";
-    var strPlayerAvatar = "";
-    var strPlayerPortraitImage = "";
-    var strCharacterName = "";
-    var intCharacterID = "";
-    var strCharacterTokenImage = "";
-    var strCharacterPortraitImage = "";
-    var strCardStyle = game.settings.get(MODULE.ID, 'cardThemePrivateMessage');
-    let intArrayCounter = 0;
-    let intItemCounter = 0;
-    while (intArrayCounter < arrPlayers.length) {
-        // check for selected players
-        if (arrPlayers[intArrayCounter]){
-            // reset the html block
-            if (!blnCompressedList) {
-                strHTMLBlock = "";
-            }
-            // set the player data
-            strPlayerName = arrPlayers[intArrayCounter];
-            // Set the user ID
-            intPlayerID = getUserIdByPlayerName(strPlayerName)
-            // Set the character name
-            let playerId = intPlayerID; // Replace with the actual user ID
-            // this version looks for tokens on the canvas owned by the user,
-            // but we would need to remap the variables with tht new names
-            // let tokenDetails = getUserActiveTokenDetails(playerId);
-            // this version looks for tokens on the canvas owned by the user
-            let tokenDetails = getUserCharacterDetails(strPlayerName);
-            if (tokenDetails) {
-                strCharacterName = tokenDetails.strCharacterName;
-                intCharacterID = tokenDetails.intCharacterID;
-                strCharacterTokenImage = tokenDetails.strCharacterTokenImage;
-                if (!strCharacterTokenImage) {
-                    strCharacterTokenImage = BIBLIOSOPH.PORTRAIT_NOIMAGE;
-                }
-                strCharacterPortraitImage = tokenDetails.strCharacterPortraitImage;
-                strPlayerName = tokenDetails.strPlayerName;
-                strPlayerAvatar = tokenDetails.strPlayerAvatar;
-            } else {
-                // POST DEBUG
-                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "No owned tokens for this user: " + strPlayerName, "", false, false);
-            }
-            // build the HTML block
-            if (blnCompressedList) {
-                strHTMLBlock += '<img id="cards-token-image-' + strCardStyle + '" src="' + strPlayerAvatar + '" title="' + strPlayerName + '" />';
-            } else {
-                strHTMLBlock = '<div id="cards-user-' + strCardStyle + '">';
-                strHTMLBlock += '<img id="cards-token-image-' + strCardStyle + '" src="' + strPlayerAvatar + '" title="' + strPlayerName + '" />';
-                strHTMLBlock += '<div id="cards-token-text-wrapper-' + strCardStyle + '">';
-                strHTMLBlock += '<span id="cards-token-name-' + strCardStyle + '">' + strPlayerName + '</span>';
-                strHTMLBlock += '<br />';
-                strHTMLBlock += '<span id="cards-token-character-' + strCardStyle + '">' + strCharacterName + '</span>';
-                strHTMLBlock += '</div>';
-                strHTMLBlock += '</div>';
-                // set the data to the arrays since it is not compressed
-                arrPrivateList[intItemCounter] = strHTMLBlock;
-            }
-            // increment the item counter
-            intItemCounter++;
+    const recipients = [];
+    const blnCompressedList = game.settings.get(MODULE.ID, "cardLayoutPrivateMessage");
+
+    for (let i = 0; i < arrPlayers.length; i++) {
+        if (!arrPlayers[i]) continue;
+
+        let strPlayerName = arrPlayers[i];
+        let strPlayerAvatar = "";
+        let strCharacterName = "";
+
+        const tokenDetails = getUserCharacterDetails(strPlayerName);
+        if (tokenDetails) {
+            strCharacterName = tokenDetails.strCharacterName;
+            strPlayerName = tokenDetails.strPlayerName;
+            strPlayerAvatar = tokenDetails.strPlayerAvatar || "";
+        } else {
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "No owned tokens for this user: " + strPlayerName, "", false, false);
         }
-        // increment the loop counter
-        intArrayCounter++;
+
+        recipients.push({
+            playerName: strPlayerName,
+            playerAvatar: strPlayerAvatar,
+            characterName: strCharacterName
+        });
     }
-    // If compressed the array isa simple one item array
-    if (blnCompressedList) {
-        strHTMLBlock = '<div id="cards-user-' + strCardStyle + '">' + strHTMLBlock + '</div>';
-        // set the data to the arrays
-        arrPrivateList[0] = strHTMLBlock; 
-    }
-    // Return the options
-    return arrPrivateList
+
+    return { recipients, compressed: blnCompressedList };
 }
 
 // ************************************
@@ -3228,7 +3185,7 @@ async function checkAndCreateMacro(settingName) {
 async function createChatCardInjurySelector(compendiumName) {
     
     const pack = game.packs.get(compendiumName);
-    var strCardStyle = game.settings.get(MODULE.ID, 'cardThemeInjury');
+    var strTheme = game.settings.get(MODULE.ID, 'cardThemeInjury');
     var strIconStyle = "fa-skull";
     var strCardTitle = "Select Injury";
     var strTitle = "";
@@ -3252,7 +3209,7 @@ async function createChatCardInjurySelector(compendiumName) {
     const template = Handlebars.compile(templateText);
     // Pass the data to the template
     const CARDDATA = {
-        cardStyle: strCardStyle,
+        theme: strTheme,
         cardTitle: strCardTitle,
         iconStyle: strIconStyle,
         banner: strBanner,
@@ -3275,7 +3232,7 @@ async function getCategoryButtons(categories){
 
     var strButtonIcon = "";
     var arrCategories = categories;
-    var strCardStyle = game.settings.get(MODULE.ID, 'cardThemeInjury');
+    var strTheme = game.settings.get(MODULE.ID, 'cardThemeInjury');
     var arrInjuryButtons = [];
     // Set the appripriate icon based on the array.
     if (arrCategories) {
@@ -3326,7 +3283,7 @@ async function getCategoryButtons(categories){
            }
             // building the object for handlebars
             let buttonObject = {
-                cardStyle: strCardStyle,
+                theme: strTheme,
                 category: category,
                 buttonicon: strButtonIcon
             };

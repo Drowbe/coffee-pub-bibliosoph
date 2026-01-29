@@ -1,47 +1,62 @@
 <span style="visibility: hidden">coffeepub-hide-header</span>
-<div class="blacksmith-card {{cardStyle}}">
+<div class="blacksmith-card {{theme}}" >
     <div class="card-header">
-        <i class="fa-solid {{iconStyle}}" id="cards-icon-{{cardStyle}}"></i>{{cardTitle}}
+        <i class="fa-solid {{iconStyle}}" id="cards-icon-cardsdark"></i>{{cardTitle}}
     </div>
     <div class="section-content">
     <!-- SENDER -->
     {{#if userName}}
-        <div id="cards-user-{{cardStyle}}">
-            <img id="cards-token-image-{{cardStyle}}" src="{{userAvatar}}" />
-            <div id="cards-token-text-wrapper-{{cardStyle}}">
-                <span id="cards-token-name-{{cardStyle}}">{{userName}}</span>
+        <div class="container-user">
+            <img class="token-image" src="{{userAvatar}}" alt="" />
+            <div class="token-text-wrapper">
+                <span class="token-name">{{userName}}</span>
                 <br />
-                <span id="cards-token-character-{{cardStyle}}">{{characterName}}</span>
+                <span class="token-character">{{characterName}}</span>
             </div>
         </div>
     {{/if}}
-    <!-- PRIVATE MESSAGE -->
-    {{#if arrToPrivate}}
-        {{#each arrToPrivate}}
-            {{{this}}}
-        {{/each}}
+    <!-- PRIVATE MESSAGE RECIPIENTS -->
+    {{#if arrPrivateRecipients}}
+        {{#if privateRecipientsCompressed}}
+            <div class="container-user">
+                {{#each arrPrivateRecipients}}
+                    <img class="token-image" src="{{playerAvatar}}" title="{{playerName}}" alt="" />
+                {{/each}}
+            </div>
+        {{else}}
+            {{#each arrPrivateRecipients}}
+                <div class="container-user">
+                    <img class="token-image" src="{{playerAvatar}}" alt="" />
+                    <div class="token-text-wrapper">
+                        <span class="token-name">{{playerName}}</span>
+                        <br />
+                        <span class="token-character">{{characterName}}</span>
+                    </div>
+                </div>
+            {{/each}}
+        {{/if}}
     {{/if}}
     <!-- BANNER IMAGE -->
     {{#if banner}}
-        <div id="cards-image-{{cardStyle}}">
+        <div id="cards-image-cardsdark">
             <img style="width: 100%;" src="{{banner}}" />
         </div>
     {{/if}}
     <!-- CARD SUBTITLE -->
     {{#if cardSubTitle}}
-        <div id="cards-title-{{cardStyle}}">
-            <i class="fa-solid {{iconSubStyle}}" id="cards-icon-{{cardStyle}}"></i>{{cardSubTitle}}
+        <div id="cards-title-cardsdark">
+            <i class="fa-solid {{iconSubStyle}}" id="cards-icon-cardsdark"></i>{{cardSubTitle}}
         </div>
     {{/if}}
     <!-- LARGE IMAGE -->
     {{#if image}}
-        <div id="cards-image-{{cardStyle}}">
+        <div id="cards-image-cardsdark">
             <img class="token-background-{{imageBackground}}" style="width: {{imageScale}}%;" src="{{image}}" />
         </div>
     {{/if}}
     <!-- CARD CONTENT -->
     {{#if (or content descriptionReveal descriptionBefore descriptionAfter)}}
-        <div id="cards-content-light-{{cardStyle}}">
+        <div id="cards-content-light-cardsdark">
             <!-- CONTENT TITLE -->
             {{#if title}}
                 <h1>{{title}}</h1>
@@ -59,37 +74,37 @@
     {{/if}}    
     <!-- INJURY TREATMENT -->
     {{#if injurycategory}}
-        <div id="cards-content-dark-{{cardStyle}}">
-            <p><i class="fa-solid {{injurycategoryicon}}" id="cards-icon-{{cardStyle}}"></i><strong>{{injurycategory}}</strong></p>
+        <div id="cards-content-light-cardsdark">
+            <p><i class="fa-solid {{injurycategoryicon}}" id="cards-icon-cardsdark"></i><strong>{{injurycategory}}</strong></p>
         </div>
     {{/if}}
     {{#if treatment}}
-        <div id="cards-content-dark-{{cardStyle}}">
-            <p><i class="fa-solid fa-heart-pulse" id="cards-icon-{{cardStyle}}"></i><strong>Treatment</strong></p>
+        <div id="cards-content-light-cardsdark">
+            <p><i class="fa-solid fa-heart-pulse" id="cards-icon-cardsdark"></i><strong>Treatment</strong></p>
             <p>{{treatment}}</p>
         </div>
     {{/if}}
     <!-- INJURY DETAILS -->
     {{#if duration}}
-    <div id="cards-content-dark-{{cardStyle}}">
-        <p><i class="fa-solid fa-hourglass-half" id="cards-icon-{{cardStyle}}"></i><strong>{{duration}}</strong></p>
+    <div id="cards-content-light-cardsdark">
+        <p><i class="fa-solid fa-hourglass-half" id="cards-icon-cardsdark"></i><strong>{{duration}}</strong></p>
     </div>
-    <div id="cards-content-dark-{{cardStyle}}">
-        <p><i class="fa-solid fa-heart-crack" id="cards-icon-{{cardStyle}}"></i><strong>{{damage}}</strong></p>
+    <div id="cards-content-light-cardsdark">
+        <p><i class="fa-solid fa-heart-crack" id="cards-icon-cardsdark"></i><strong>{{damage}}</strong></p>
     </div>
-    <div id="cards-content-dark-{{cardStyle}}">
-        <p><i class="fa-solid fa-sparkles" id="cards-icon-{{cardStyle}}"></i><strong>{{statuseffect}}</strong></p>
+    <div id="cards-content-light-cardsdark">
+        <p><i class="fa-solid fa-sparkles" id="cards-icon-cardsdark"></i><strong>{{statuseffect}}</strong></p>
     </div>
     {{/if}}
     <!-- COMPENDIUM LINK -->
     {{#if link}}
-    <div id="cards-content-dark-{{cardStyle}}">
+    <div id="cards-content-light-cardsdark">
         <p>{{link}} x <strong>{{quantitynum}}</strong></p>
     </div>
     {{/if}}
     <!-- RARITY -->
     {{#if (or kind rarity value details)}}
-    <div id="cards-content-light-{{cardStyle}}">
+    <div id="cards-content-light-cardsdark">
         <h2>Additional Details</h2>
         <ul>
             {{#if kind}}<li><strong>Type:</strong> {{kind}}</li>{{/if}}
@@ -101,25 +116,25 @@
     {{/if}}
     <!-- ACTIONS -->
     {{#if action}}
-        <div id="cards-content-dark-{{cardStyle}}">
+        <div id="cards-content-light-cardsdark">
             <p>{{#if actionlabel}}{{actionlabel}} {{/if}}{{action}}</p>
         </div>
     {{/if}}
     <!-- INJURY BUTTON -->
     {{#if injurybutton}}
         {{#each injurybutton}}
-            <button id="cards-button-{{this.cardStyle}}" class="category-button" style="text-align: left; width: 100%; display: flex; justify-content: flex-start; align-items: center;" value="{{this.category}}"><i class="fa-solid {{this.buttonicon}}" id="cards-icon-{{this.cardStyle}}"></i>{{this.category}}</button>
+            <button id="cards-button-cardsdark" class="category-button" style="text-align: left; width: 100%; display: flex; justify-content: flex-start; align-items: center;" value="{{this.category}}"><i class="fa-solid {{this.buttonicon}}" id="cards-icon-cardsdark"></i>{{this.category}}</button>
         {{/each}}
     {{/if}}
     <!-- INJURY BUTTON -->
     {{#if arreffect}}
         <!-- Reply Button -->
-        <button id="cards-button-{{cardStyle}}" title="Apply this injury to the selected token..." class="coffee-pub-bibliosoph-button-injury" data-effect="{{arreffect}}" style="width: 100%;"><i class="fa-solid {{iconStyle}}" id="cards-icon-{{cardStyle}}"></i>{{buttontext}}</button>
+        <button id="cards-button-cardsdark" title="Apply this injury to the selected token..." class="coffee-pub-bibliosoph-button-injury" data-effect="{{arreffect}}" style="width: 100%;"><i class="fa-solid {{iconStyle}}" id="cards-icon-cardsdark"></i>{{buttontext}}</button>
     {{/if}}
     <!-- PRIVATE MESSAGE -->
-    {{#if arrToPrivate}}
+    {{#if arrPrivateRecipients}}
         <!-- Reply Button -->
-        <button id="cards-button-{{cardStyle}}" title="Reply to this message..." class="coffee-pub-bibliosoph-button-reply" data-recipient="{{strRecipients}}" style="width: 100%;"><i class="fa-solid fa-circle-up" id="cards-icon-{{cardStyle}}"></i>Reply All</button>
+        <button id="cards-button-cardsdark" title="Reply to this message..." class="coffee-pub-bibliosoph-button-reply" data-recipient="{{strRecipients}}" style="width: 100%;"><i class="fa-solid fa-circle-up" id="cards-icon-cardsdark"></i>Reply All</button>
     {{/if}}
     </div>
 </div>
