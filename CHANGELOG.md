@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [13.0.5]
+
+### Changed
+- **Chat Cards:** Migrated all cards to the unified Chat Cards system in Coffee Pub Blacksmith
+  - All card types (general, injury, injury selector, encounter, investigation) now use the shared Blacksmith card structure, theme API, and styling
+  - Card template uses `blacksmith-card` and theme from Blacksmith's `getCardThemeChoicesWithClassNames()`; settings provide theme choices from Blacksmith
+- **Chat Card Section Content:** The actions/buttons section of the chat card now only renders when it has content
+  - Wrapped the section-content block in `{{#if hasSectionContent}}` in the chat card template
+  - Added `hasSectionContent` to card data in general cards (action text or private recipients), injury apply cards (effect data), and injury category selector cards (category buttons)
+  - Cards without actions, injury buttons, or reply options no longer show an empty section-content area
+
 ## [13.0.4] 
 
 ### Changed
