@@ -1725,7 +1725,6 @@ async function createChatCardGeneral(strRollTableName) {
     var strIconStyle = "";
     var strCardTitle = ""
     var strImageBackground = "themecolor";
-    var strImageScale = "100";
     // Table info
     var strTableName = "";
     var strTableImage = "";
@@ -1918,7 +1917,6 @@ async function createChatCardGeneral(strRollTableName) {
         iconStyle: strIconStyle,
         cardTitle: strCardTitle,
         imageBackground: strImageBackground,
-        imageScale: strImageScale,
         title: strTitle,
         content: strContent,
         action: strAction,
@@ -1928,6 +1926,7 @@ async function createChatCardGeneral(strRollTableName) {
         arrPrivateRecipients,
         privateRecipientsCompressed,
         strRecipients, //used for the hidden input for replies
+        hasSectionContent: !!(strAction || (arrPrivateRecipients && arrPrivateRecipients.length)),
     }; 
     // Play the Sound
     BlacksmithUtils.playSound(strSound,strVolume);
@@ -1957,7 +1956,6 @@ async function createChatCardInjury(category) {
     var iconSubStyle = "";
     var strType = BIBLIOSOPH.CARDTYPE + " Injury";
     var strImageBackground = "cobblestone";
-    var strImageScale = "100";
 
     // roll some fake dice "for show" -- this is not used for anything real
     let rollIsInjury = await new Roll("1d100").evaluate();
@@ -2156,7 +2154,6 @@ async function createChatCardInjury(category) {
         // cardSubTitle: strInjuryTitle, // simplifying this for now
         cardSubTitle: "",
         imageBackground: strImageBackground,
-        imageScale: strImageScale,
         title: "",
         content: strInjuryDescription,
         injurycategory: strInjuryCategory, // added for new injury category
@@ -2170,7 +2167,8 @@ async function createChatCardInjury(category) {
         buttontext: strInjuryAction,
         statuseffect: strStatusEffect.toUpperCase(), // This one is used on the chat card
         arreffect: strStringifiedEFFECTDATA, // Stringify the EFFECTDATA array
-    }; 
+        hasSectionContent: !!strStringifiedEFFECTDATA,
+    };
     // Play the Sound
     BlacksmithUtils.playSound(strSound,strVolume);
     // Return the template
@@ -2203,7 +2201,6 @@ async function createChatCardEncounter(strRollTableName) {
     var strIconStyle = "fa-swords";
     var strType = BIBLIOSOPH.CARDTYPE + " Encounter";
     var strImageBackground = "cobblestone";
-    var strImageScale = "100";
     var strDescriptionBefore = "";
     var strDescriptionReveal = "";
     var strDescriptionAfter = "";
@@ -2376,7 +2373,6 @@ async function createChatCardEncounter(strRollTableName) {
         iconStyle: strIconStyle,
         cardTitle: strType,
         imageBackground: strImageBackground,
-        imageScale: strImageScale,
         descriptionBefore: strDescriptionBefore,
         descriptionReveal: strDescriptionReveal,
         descriptionAfter: strDescriptionAfter, 
@@ -2412,7 +2408,6 @@ async function createChatCardSearch(strRollTableName) {
     var strIconStyle = "fa-eye";
     var strType = BIBLIOSOPH.CARDTYPE;
     var strImageBackground = "themecolor";
-    var strImageScale = "100";
     var strDescriptionBefore = "";
     var strDescriptionReveal = "";
     var strDescriptionAfter = "";
@@ -2628,7 +2623,6 @@ async function createChatCardSearch(strRollTableName) {
         iconStyle: strIconStyle,
         cardTitle: strType,
         imageBackground: strImageBackground,
-        imageScale: strImageScale,
         descriptionBefore: strDescriptionBefore,
         descriptionReveal: strDescriptionReveal,
         descriptionAfter: strDescriptionAfter, 
@@ -2780,7 +2774,7 @@ function buildPlayerList(recipients) {
 
                 var blnPlayerSelected = false;
                 var checked = "";
-                var strTheme = "cardsdark";
+                var strTheme = "";
                 if (targets.length > 0) {
                     for (let i = 0; i < targets.length; i++) {
                         const actor = game.actors.get(targets[i].data.actorId);
@@ -2818,12 +2812,12 @@ function buildPlayerList(recipients) {
                     // Full layout: portrait with name and character info
                     // Width set to ~33.33% to allow 3 per row (with gap)
                     // Note: Selection is handled in activateListeners, not in initial HTML generation
-                    checkOptions += "<div name='selectable-div' id='cards-user-" + strTheme + "' value='" + player.name + "' class='bibliosoph-option-div' style='flex: 0 0 calc(33.33% - 5px);'>";
-                    checkOptions += "   <img id='cards-token-image-" + strTheme + "' src='" + player.avatar + "' />";
-                    checkOptions += "   <div id='cards-token-text-wrapper-" + strTheme + "'>";
-                    checkOptions += "       <span id='cards-token-name-" + strTheme + "'>" + player.name + "</span>";
+                    checkOptions += "<div name='selectable-div' id='bib-window-user-wrapper' value='" + player.name + "' class='bibliosoph-option-div' style='flex: 0 0 calc(33.33% - 5px);'>";
+                    checkOptions += "   <img id='bib-window-user-portrait' src='" + player.avatar + "' />";
+                    checkOptions += "   <div id='bib-window-user-nameplate-container'>";
+                    checkOptions += "       <span id='bib-window-user-nameplate-name'>" + player.name + "</span>";
                     checkOptions += "       <br />";
-                    checkOptions += "       <span id='cards-token-character-" + strTheme + "'>" + ownedCharacters + "</span>";
+                    checkOptions += "       <span id='bib-window-user-nameplate-description'>" + ownedCharacters + "</span>";
                     checkOptions += "   </div>";
                     checkOptions += "</div>";
                 }
@@ -3216,6 +3210,7 @@ async function createChatCardInjurySelector(compendiumName) {
         title: strTitle,
         content: strContent,
         injurybutton: arrInjuryButtons,
+        hasSectionContent: !!(arrInjuryButtons && arrInjuryButtons.length),
     }; 
     // Play the sound
     BlacksmithUtils.playSound(strSound,strVolume);

@@ -1,3 +1,91 @@
 /* ------------------------------------------------------- */
 /* --- ALL CSS HANDLED IN COFFEE PUB BLACKSMITH ---------- */
 /* ------------------------------------------------------- */
+
+
+
+
+
+/* ------------------------------------------------------- */
+/* --- LEGACY STYLES FOR BACKWARDS COMPATIBILITY ---------- */
+/* ------------------------------------------------------- */
+
+/* We need to keep these styles for backwards compatibility with the private chat window. */
+
+/* User Cards on the chat window */
+
+#bib-window-user-wrapper {
+	color: #faf6e6;
+    background: #121212;
+    border-radius: 4px;
+    padding: 6px;
+    margin: 5px 0;
+	display: flex;
+}
+/* token Image */
+#bib-window-user-portrait {
+    border-radius: 4px !important;
+    height: 40px;
+    padding: 0;
+    margin: 0 8px 0 0;
+	vertical-align: middle;
+	float: left;
+}
+/* token Text Wrapper */
+#bib-window-user-nameplate-container {
+    padding: 0;
+    margin: 4px 0 0 0;
+	/* Use a flexbox layout */
+	display: block;
+	flex-direction: column;
+	align-items: left;
+}
+/* token Text Name */
+#bib-window-user-nameplate-name {
+	font-weight:100;
+    font-size: 1.1em;
+    padding: 0;
+    margin: 0;
+}
+/* token Text Character */
+#bib-window-user-nameplate-description {
+	font-weight:100;
+    font-size: 0.7em;
+    padding: 0;
+    margin: 0;
+}
+
+/* --------------------------------------- */
+
+/* Button */
+#cards-button-cardsdark {
+    background-color: rgba(204, 197, 193, 0.9);
+    color: rgba(89, 74, 60, 0.9);
+    border: 1px solid rgba(89, 74, 60, 0.6);
+    text-transform: uppercase;
+    border-radius: 4px;
+    padding: 5px 10px;
+    margin: 5px 0 0 0;
+}
+#cards-button-cardsdark:hover {
+    background-color: rgba(183, 178, 174, 0.9);
+    color: rgba(89, 74, 60, 0.9);
+    border: 1px solid rgba(89, 74, 60, 0.6);
+    box-shadow: 0 0 8px rgba(128, 123, 120, 0.6);
+}
+
+/* Inline Rolls */
+#cards-content-light-cardsdark a.inline-result {
+    color: rgba(0, 0, 0, 0.9);
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(209, 80, 6, 0.4);
+    border-radius: 3px;
+    padding: 1px 4px;
+    margin: 1px 2px;
+    text-decoration: none;
+}
+#cards-content-light-cardsdark a.inline-result i {
+    padding: 0px 0px;
+    margin: 0px 0px 0px 0px;
+}
+
