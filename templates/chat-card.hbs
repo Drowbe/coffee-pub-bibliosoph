@@ -38,7 +38,8 @@
         {{/if}}
     {{/if}}
 
-    <!-- MAIN CONTENT -->
+    <!-- MAIN CONTENT - only show section when it has content -->
+    {{#if (or banner cardSubTitle image injurycategory content descriptionReveal descriptionBefore descriptionAfter)}}
     <div class="section-content">
 
         <!-- BANNER IMAGE -->
@@ -83,12 +84,15 @@
             {{#if descriptionReveal}}<p><strong>{{quantityword}} {{title}}</strong> {{descriptionReveal}}</p>{{/if}}
             {{#if descriptionAfter}}<p>{{descriptionAfter}}</p>{{/if}}
 
-        {{/if}}    
+        {{/if}}
 
 
     </div>
-    <div class="section-content section-dark">
+    {{/if}}
 
+    <!-- DARK SECTION - only show when it has content -->
+    {{#if (or treatment duration link kind rarity value details)}}
+    <div class="section-content section-dark">
 
         <!-- INJURY TREATMENT -->
         {{#if treatment}}
@@ -120,35 +124,35 @@
             </div>
         {{/if}}
 
-
     </div>
+    {{/if}}
     {{#if hasSectionContent}}
-    <div class="section-content">
+        <div class="section-content">
 
-        <!-- ACTIONS -->
-        {{#if action}}
-            <p>{{#if actionlabel}}{{actionlabel}} {{/if}}{{action}}</p>
-        {{/if}}
+            <!-- ACTIONS -->
+            {{#if action}}
+                <p>{{#if actionlabel}}{{actionlabel}} {{/if}}{{action}}</p>
+            {{/if}}
 
-        <!-- INJURY BUTTON -->
-        {{#if injurybutton}}
-            {{#each injurybutton}}
-                <button id="cards-button-cardsdark" class="category-button" style="text-align: left; width: 100%; display: flex; justify-content: flex-start; align-items: center;" value="{{this.category}}"><i class="fa-solid {{this.buttonicon}}"></i>{{this.category}}</button>
-            {{/each}}
-        {{/if}}
+            <!-- INJURY BUTTON -->
+            {{#if injurybutton}}
+                {{#each injurybutton}}
+                    <button id="cards-button-cardsdark" class="category-button" style="text-align: left; width: 100%; display: flex; justify-content: flex-start; align-items: center;" value="{{this.category}}"><i class="fa-solid {{this.buttonicon}}"></i>{{this.category}}</button>
+                {{/each}}
+            {{/if}}
 
-        <!-- INJURY BUTTON -->
-        {{#if arreffect}}
-            <!-- Reply Button -->
-            <button id="cards-button-cardsdark" title="Apply this injury to the selected token..." class="coffee-pub-bibliosoph-button-injury" data-effect="{{arreffect}}" style="width: 100%;"><i class="fa-solid {{iconStyle}}"></i>{{buttontext}}</button>
-        {{/if}}
+            <!-- INJURY BUTTON -->
+            {{#if arreffect}}
+                <!-- Reply Button -->
+                <button id="cards-button-cardsdark" title="Apply this injury to the selected token..." class="coffee-pub-bibliosoph-button-injury" data-effect="{{arreffect}}" style="width: 100%;"><i class="fa-solid {{iconStyle}}"></i>{{buttontext}}</button>
+            {{/if}}
 
-        <!-- PRIVATE MESSAGE -->
-        {{#if arrPrivateRecipients}}
-            <!-- Reply Button -->
-            <button id="cards-button-cardsdark" title="Reply to this message..." class="coffee-pub-bibliosoph-button-reply" data-recipient="{{strRecipients}}" style="width: 100%;"><i class="fa-solid fa-circle-up"></i>Reply All</button>
-        {{/if}}
-    </div>
+            <!-- PRIVATE MESSAGE -->
+            {{#if arrPrivateRecipients}}
+                <!-- Reply Button -->
+                <button id="cards-button-cardsdark" title="Reply to this message..." class="coffee-pub-bibliosoph-button-reply" data-recipient="{{strRecipients}}" style="width: 100%;"><i class="fa-solid fa-circle-up"></i>Reply All</button>
+            {{/if}}
+        </div>
     {{/if}}
 </div>
 
