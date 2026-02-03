@@ -6,6 +6,30 @@
 import { MODULE, BIBLIOSOPH  } from './const.js';
 import { registerToolbarTools, unregisterToolbarTools } from './manager-toolbar.js';
 
+// Resolve a macro reference (UUID, id, or name) to a Macro document
+const getMacroByIdOrName = (macroKey) => {
+    if (!macroKey) return null;
+
+    // 1) Direct id from world collection
+    let macro = game.macros.get(macroKey);
+    if (macro) return macro;
+
+    // 2) UUID (e.g., "Macro.abc123" or compendium UUID)
+    if (typeof macroKey === "string" && macroKey.includes(".")) {
+        if (typeof fromUuidSync === "function") {
+            macro = fromUuidSync(macroKey);
+            if (macro) return macro;
+        }
+        // If only async resolver exists, skip because we need sync assignment here.
+    }
+
+    // 3) Fallback to name lookup (legacy behavior)
+    return game.macros.getName(macroKey);
+};
+
+// Lightweight logger to trace macro bindings/execution
+const logMacroFix = (msg) => console.log(`MACRO FIX ${msg}`);
+
 
 
 
@@ -553,7 +577,7 @@ function validateMandatorySettings() {
             missingSettings.push(check.name);
         } else if (check.setting && check.setting !== '-- Choose a Macro --' && check.setting !== 'none') {
             // Check if the macro actually exists
-            const macro = game.macros.getName(check.setting);
+            const macro = getMacroByIdOrName(check.setting);
             if (!macro) {
                 invalidMacros.push(`${check.name}: "${check.setting}"`);
             }
@@ -650,6 +674,8 @@ Hooks.on('renderChatLog', (app, html, data) => {
 
 Hooks.on("ready", async () => {
 
+    logMacroFix("ready hook start");
+
     // ********  VERIFY BLACKSMITH  **********
     // Verify Blacksmith API is available via global objects
     if (!BlacksmithUtils?.getSettingSafely) {
@@ -712,7 +738,262 @@ Hooks.on("ready", async () => {
             }
         }
     };
-    
+
+    // --- Macro binding helpers -------------------------------------------------
+    const macroBindings = [];
+
+    const bindSimpleMacro = ({ label, enabledKey, macroKey, onExecute }) => {
+        const enabled = getSetting(enabledKey, false);
+        const macroName = getSetting(macroKey, '');
+
+        logMacroFix(`bind attempt: ${label} enabled=${enabled}, macro="${macroName}"`);
+
+        if (!enabled) return;
+        if (!macroName || macroName === '-- Choose a Macro --' || macroName === 'none') {
+            logMacroFix(`binding skipped: ${label} macro setting empty`);
+            return;
+        }
+
+        const macro = getMacroByIdOrName(macroName);
+        if (!macro) {
+            logMacroFix(`binding failed: no macro found for "${macroName}"`);
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `${label} Macro "${macroName}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
+            return;
+        }
+
+        macro.execute = async () => {
+            logMacroFix(`execute: ${label} macro handler reached`);
+            await onExecute();
+        };
+
+        logMacroFix(`bound ${label} macro (${macroName})`);
+    };
+
+    const bindAllMacros = () => {
+        // Encounter macros
+        const encounterTypes = [
+            { label: "Encounter General", enabledKey: 'encounterEnabledGeneral', macroKey: 'encounterMacroGeneral', type: "General" },
+            { label: "Encounter Cave", enabledKey: 'encounterEnabledCave', macroKey: 'encounterMacroCave', type: "Cave" },
+            { label: "Encounter Desert", enabledKey: 'encounterEnabledDesert', macroKey: 'encounterMacroDesert', type: "Desert" },
+            { label: "Encounter Dungeon", enabledKey: 'encounterEnabledDungeon', macroKey: 'encounterMacroDungeon', type: "Dungeon" },
+            { label: "Encounter Forest", enabledKey: 'encounterEnabledForest', macroKey: 'encounterMacroForest', type: "Forest" },
+            { label: "Encounter Mountain", enabledKey: 'encounterEnabledMountain', macroKey: 'encounterMacroMountain', type: "Mountain" },
+            { label: "Encounter Sky", enabledKey: 'encounterEnabledSky', macroKey: 'encounterMacroSky', type: "Sky" },
+            { label: "Encounter Snow", enabledKey: 'encounterEnabledSnow', macroKey: 'encounterMacroSnow', type: "Snow" },
+            { label: "Encounter Urban", enabledKey: 'encounterEnabledUrban', macroKey: 'encounterMacroUrban', type: "Urban" },
+            { label: "Encounter Water", enabledKey: 'encounterEnabledWater', macroKey: 'encounterMacroWater', type: "Water" }
+        ];
+
+        encounterTypes.forEach(cfg => {
+            bindSimpleMacro({
+                label: cfg.label,
+                enabledKey: cfg.enabledKey,
+                macroKey: cfg.macroKey,
+                onExecute: async () => {
+                    resetBibliosophVars();
+                    BIBLIOSOPH.CARDTYPEENCOUNTER = true;
+                    BIBLIOSOPH.CARDTYPE = cfg.type;
+                    BIBLIOSOPH.ENCOUNTER_TYPE = cfg.type;
+                    publishChatCard();
+                }
+            });
+        });
+
+        // Item / message macros
+        bindSimpleMacro({
+            label: "Investigation",
+            enabledKey: 'investigationEnabled',
+            macroKey: 'investigationMacro',
+            onExecute: async () => {
+                resetBibliosophVars();
+                BIBLIOSOPH.CARDTYPEINVESTIGATION = true;
+                BIBLIOSOPH.CARDTYPE = "Investigation";
+                publishChatCard();
+            }
+        });
+
+        bindSimpleMacro({
+            label: "Gift",
+            enabledKey: 'giftEnabled',
+            macroKey: 'giftMacro',
+            onExecute: async () => {
+                resetBibliosophVars();
+                BIBLIOSOPH.CARDTYPEGIFT = true;
+                BIBLIOSOPH.CARDTYPE = "Gift";
+                publishChatCard();
+            }
+        });
+
+        bindSimpleMacro({
+            label: "Shady Goods",
+            enabledKey: 'shadygoodsEnabled',
+            macroKey: 'shadygoodsMacro',
+            onExecute: async () => {
+                resetBibliosophVars();
+                BIBLIOSOPH.CARDTYPESHADYGOODS = true;
+                BIBLIOSOPH.CARDTYPE = "General";
+                publishChatCard();
+            }
+        });
+
+        bindSimpleMacro({
+            label: "Critical Hit",
+            enabledKey: 'criticalEnabled',
+            macroKey: 'criticalMacro',
+            onExecute: async () => {
+                resetBibliosophVars();
+                BIBLIOSOPH.CARDTYPECRIT = true;
+                BIBLIOSOPH.CARDTYPE = "Critical";
+                publishChatCard();
+            }
+        });
+
+        bindSimpleMacro({
+            label: "Fumble",
+            enabledKey: 'fumbleEnabled',
+            macroKey: 'fumbleMacro',
+            onExecute: async () => {
+                resetBibliosophVars();
+                BIBLIOSOPH.CARDTYPEFUMBLE = true;
+                BIBLIOSOPH.CARDTYPE = "Fumble";
+                publishChatCard();
+            }
+        });
+
+        bindSimpleMacro({
+            label: "Inspiration",
+            enabledKey: 'inspirationEnabled',
+            macroKey: 'inspirationMacro',
+            onExecute: async () => {
+                resetBibliosophVars();
+                BIBLIOSOPH.CARDTYPEINSPIRATION = true;
+                BIBLIOSOPH.CARDTYPE = "General";
+                publishChatCard();
+            }
+        });
+
+        bindSimpleMacro({
+            label: "Deck of Many Things",
+            enabledKey: 'domtEnabled',
+            macroKey: 'domtMacro',
+            onExecute: async () => {
+                resetBibliosophVars();
+                BIBLIOSOPH.CARDTYPEDOMT = true;
+                BIBLIOSOPH.CARDTYPE = "General";
+                publishChatCard();
+            }
+        });
+
+        bindSimpleMacro({
+            label: "Beverage",
+            enabledKey: 'beverageEnabled',
+            macroKey: 'beverageMacro',
+            onExecute: async () => {
+                resetBibliosophVars();
+                BIBLIOSOPH.CARDTYPEBEVERAGE = true;
+                BIBLIOSOPH.CARDTYPE = "General";
+                publishChatCard();
+            }
+        });
+
+        bindSimpleMacro({
+            label: "Bio",
+            enabledKey: 'bioEnabled',
+            macroKey: 'bioMacro',
+            onExecute: async () => {
+                resetBibliosophVars();
+                BIBLIOSOPH.CARDTYPEBIO = true;
+                BIBLIOSOPH.CARDTYPE = "General";
+                publishChatCard();
+            }
+        });
+
+        bindSimpleMacro({
+            label: "Insults",
+            enabledKey: 'insultsEnabled',
+            macroKey: 'insultsMacro',
+            onExecute: async () => {
+                resetBibliosophVars();
+                BIBLIOSOPH.CARDTYPEINSULTS = true;
+                BIBLIOSOPH.CARDTYPE = "General";
+                publishChatCard();
+            }
+        });
+
+        bindSimpleMacro({
+            label: "Praise",
+            enabledKey: 'praiseEnabled',
+            macroKey: 'praiseMacro',
+            onExecute: async () => {
+                resetBibliosophVars();
+                BIBLIOSOPH.CARDTYPEPRAISE = true;
+                BIBLIOSOPH.CARDTYPE = "General";
+                publishChatCard();
+            }
+        });
+
+        bindSimpleMacro({
+            label: "Party Message",
+            enabledKey: 'partyMessageEnabled',
+            macroKey: 'partyMessageMacro',
+            onExecute: async () => {
+                resetBibliosophVars();
+                BIBLIOSOPH.CARDTYPEMESSAGE = true;
+                BIBLIOSOPH.CARDTYPE = "Message";
+                BIBLIOSOPH.MESSAGES_FORMTITLE = "Party Message";
+                const form = new BiblioWindowChat();
+                form.onFormSubmit = publishChatCard;
+                form.isPublic = true;
+                form.render(true);
+            }
+        });
+
+        bindSimpleMacro({
+            label: "Private Message",
+            enabledKey: 'privateMessageEnabled',
+            macroKey: 'privateMessageMacro',
+            onExecute: async () => {
+                const macroName = getSetting('privateMessageMacro', '');
+                const macroId = getMacroIdByName(macroName);
+                resetBibliosophVars();
+                BIBLIOSOPH.CARDTYPEWHISPER = true;
+                BIBLIOSOPH.CARDTYPE = "Message";
+                BIBLIOSOPH.MESSAGES_FORMTITLE = macroName;
+                BIBLIOSOPH.MACRO_ID = macroId;
+                const form = new BiblioWindowChat();
+                form.onFormSubmit = publishChatCard;
+                form.isPublic = false;
+                const recipientArray = "";
+                form.optionList = buildPlayerList(recipientArray);
+                form.render(true);
+            }
+        });
+
+        bindSimpleMacro({
+            label: "General Injuries",
+            enabledKey: 'injuriesEnabledGlobal',
+            macroKey: 'injuriesMacroGlobal',
+            onExecute: async () => {
+                resetBibliosophVars();
+                BIBLIOSOPH.CARDTYPEINJURY = true;
+                BIBLIOSOPH.CARDTYPE = "General";
+                publishChatCard();
+            }
+        });
+    };
+
+    // initial + delayed binds to catch late settings load
+    bindAllMacros();
+    setTimeout(bindAllMacros, 500);
+    setTimeout(bindAllMacros, 2000);
+
+    // Rebind when our settings change
+    Hooks.on("updateSetting", (setting) => {
+        if (setting?.namespace !== MODULE.ID) return;
+        bindAllMacros();
+    });
+
+    // Resolve a macro value (name or id) to a Macro document
     // SET VARIABLES using Blacksmith's safe settings access
     var strGeneralMacro = getSetting('encounterMacroGeneral', '');
     var strCaveMacro = getSetting('encounterMacroCave', '');
@@ -759,7 +1040,6 @@ Hooks.on("ready", async () => {
     var blnBioEnabled = getSetting('bioEnabled', false);
     var blnInsultsEnabled = getSetting('insultsEnabled', false);
     var blnPraiseEnabled = getSetting('praiseEnabled', false);
-    var blnInvestigationEnabled = getSetting('investigationEnabled', false);
     var blnGiftEnabled = getSetting('giftEnabled', false);
     var blnShadygoodsEnabled = getSetting('shadygoodsEnabled', false);
     var blnCriticalEnabled = getSetting('criticalEnabled', false);
@@ -767,6 +1047,7 @@ Hooks.on("ready", async () => {
     var blnInspirationEnabled = getSetting('inspirationEnabled', false);
     var blndomtEnabled = getSetting('domtEnabled', false);
     var blninjuriesEnabledGlobal = getSetting('injuriesEnabledGlobal', false);
+    // NOTE: investigation settings are re-fetched inside bindInvestigation() for fresh values
 
     // BUTTON PRESSES IN CHAT
     document.addEventListener('click', function(event) {
@@ -825,7 +1106,7 @@ Hooks.on("ready", async () => {
      // *** GENERAL ***
      if (blnGeneralEnabled) {
         if(strGeneralMacro) {
-            let GeneralMacro = game.macros.getName(strGeneralMacro);
+            let GeneralMacro = getMacroByIdOrName(strGeneralMacro);
             if(GeneralMacro) {
                 GeneralMacro.execute = async () => {
                     // Build the chat message
@@ -847,7 +1128,7 @@ Hooks.on("ready", async () => {
     // *** CAVE ***
     if (blnCaveEnabled) {
         if(strCaveMacro) {
-            let CaveMacro = game.macros.getName(strCaveMacro);
+            let CaveMacro = getMacroByIdOrName(strCaveMacro);
             if(CaveMacro) {
                 CaveMacro.execute = async () => {
                     // Build the chat message
@@ -869,7 +1150,7 @@ Hooks.on("ready", async () => {
     // *** DESERT ***
     if (blnDesertEnabled) {
         if(strDesertMacro) {
-            let DesertMacro = game.macros.getName(strDesertMacro);
+            let DesertMacro = getMacroByIdOrName(strDesertMacro);
             if(DesertMacro) {
                 DesertMacro.execute = async () => {
                     // Build the chat message
@@ -891,7 +1172,7 @@ Hooks.on("ready", async () => {
     // *** DUNGEON ***
     if (blnDungeonEnabled) {
         if(strDungeonMacro) {
-            let DungeonMacro = game.macros.getName(strDungeonMacro);
+            let DungeonMacro = getMacroByIdOrName(strDungeonMacro);
             if(DungeonMacro) {
                 DungeonMacro.execute = async () => {
                     // Build the chat message
@@ -913,7 +1194,7 @@ Hooks.on("ready", async () => {
     // *** FOREST ***
     if (blnForestEnabled) {
         if(strForestMacro) {
-            let ForestMacro = game.macros.getName(strForestMacro);
+            let ForestMacro = getMacroByIdOrName(strForestMacro);
             if(ForestMacro) {
                 ForestMacro.execute = async () => {
                     // Build the chat message
@@ -935,7 +1216,7 @@ Hooks.on("ready", async () => {
     // *** MOUNTAIN ***
     if (blnMountainEnabled) {
         if(strMountainMacro) {
-            let MountainMacro = game.macros.getName(strMountainMacro);
+            let MountainMacro = getMacroByIdOrName(strMountainMacro);
             if(MountainMacro) {
                 MountainMacro.execute = async () => {
                     // Build the chat message
@@ -957,7 +1238,7 @@ Hooks.on("ready", async () => {
     // *** SKY ***
     if (blnSkyEnabled) {
         if(strSkyMacro) {
-            let SkyMacro = game.macros.getName(strSkyMacro);
+            let SkyMacro = getMacroByIdOrName(strSkyMacro);
             if(SkyMacro) {
                 SkyMacro.execute = async () => {
                     // Build the chat message
@@ -979,7 +1260,7 @@ Hooks.on("ready", async () => {
     // *** SNOW ***
     if (blnSnowEnabled) {
         if(strSnowMacro) {
-            let SnowMacro = game.macros.getName(strSnowMacro);
+            let SnowMacro = getMacroByIdOrName(strSnowMacro);
             if(SnowMacro) {
                 SnowMacro.execute = async () => {
                     // Build the chat message
@@ -1001,7 +1282,7 @@ Hooks.on("ready", async () => {
     // *** URBAN ***
     if (blnUrbanEnabled) {
         if(strUrbanMacro) {
-            let UrbanMacro = game.macros.getName(strUrbanMacro);
+            let UrbanMacro = getMacroByIdOrName(strUrbanMacro);
             if(UrbanMacro) {
                 UrbanMacro.execute = async () => {
                     // Build the chat message
@@ -1023,7 +1304,7 @@ Hooks.on("ready", async () => {
     // *** WATER ***
     if (blnWaterEnabled) {
         if(strWaterMacro) {
-            let WaterMacro = game.macros.getName(strWaterMacro);
+            let WaterMacro = getMacroByIdOrName(strWaterMacro);
             if(WaterMacro) {
                 WaterMacro.execute = async () => {
                     // Build the chat message
@@ -1044,32 +1325,51 @@ Hooks.on("ready", async () => {
     }
     //************* ITEM ROLLS *************
     // *** INVESTIGATION ***
-    if (blnInvestigationEnabled) {
-        if (strInvestigationMacro) {
-            let InvestigationMacro = game.macros.getName(strInvestigationMacro);
-            if(InvestigationMacro) {
-                InvestigationMacro.execute = async () => {
-                    //postConsoleAndNotification("Macro Clicked: ", "Investigation", false, true, false);
-                    // Build the chat message
-                    resetBibliosophVars();
-                    BIBLIOSOPH.CARDTYPEINVESTIGATION = true;
-                    BIBLIOSOPH.CARDTYPE = "Investigation";
-                    // Build the card
-                    publishChatCard();
-                };
-            } else {
-                // User needs to know about macro configuration issues
-                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Investigation Macro "${strInvestigationMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
-            }
-        } else {
-            // They haven't set this macro
-            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Investigations is not set.`, "", false, false);
+    // Bind Investigation macro (fetch settings fresh each time)
+    const bindInvestigation = () => {
+        const enabled = getSetting('investigationEnabled', false);
+        const macroKey = getSetting('investigationMacro', '');
+        logMacroFix(`bind attempt: investigationEnabled=${enabled}, macro="${macroKey}"`);
+
+        if (!enabled) return;
+        if (!macroKey || macroKey === '-- Choose a Macro --' || macroKey === 'none') {
+            logMacroFix("binding skipped: investigation macro setting empty");
+            return;
         }
-    }
+
+        const InvestigationMacro = getMacroByIdOrName(macroKey);
+        if (InvestigationMacro) {
+            logMacroFix(`bound Investigation macro (${macroKey})`);
+            InvestigationMacro.execute = async () => {
+                logMacroFix('execute: Investigation macro handler reached');
+                resetBibliosophVars();
+                BIBLIOSOPH.CARDTYPEINVESTIGATION = true;
+                BIBLIOSOPH.CARDTYPE = "Investigation";
+                publishChatCard();
+            };
+        } else {
+            logMacroFix(`binding failed: no macro found for "${macroKey}"`);
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Investigation Macro "${macroKey}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
+        }
+    };
+
+    // Initial and delayed bind attempts to catch late-loaded settings/choices
+    bindInvestigation();
+    setTimeout(bindInvestigation, 500);
+    setTimeout(bindInvestigation, 2000);
+
+    // Rebind when settings change
+    Hooks.on("updateSetting", (setting) => {
+        if (setting?.key === 'investigationEnabled' || setting?.key === 'investigationMacro') {
+            if (setting?.namespace === MODULE.ID) {
+                bindInvestigation();
+            }
+        }
+    });
     // *** GIFTS ***
     if (blnGiftEnabled) {
         if (strGiftMacro) {
-            let GiftMacro = game.macros.getName(strGiftMacro);
+            let GiftMacro = getMacroByIdOrName(strGiftMacro);
             if(GiftMacro) {
                 GiftMacro.execute = async () => {
                     //postConsoleAndNotification("Macro Clicked: ", "Gift", false, true, false);
@@ -1092,7 +1392,7 @@ Hooks.on("ready", async () => {
     // *** SHADY GOODS ***
     if (blnShadygoodsEnabled) {
         if (strShadygoodsMacro) {
-            let ShadygoodsMacro = game.macros.getName(strShadygoodsMacro);
+            let ShadygoodsMacro = getMacroByIdOrName(strShadygoodsMacro);
             if(ShadygoodsMacro) {
                 ShadygoodsMacro.execute = async () => {
                     //postConsoleAndNotification("Macro Clicked: ", "Shady Goods", false, true, false);
@@ -1116,7 +1416,7 @@ Hooks.on("ready", async () => {
     // *** CRITICAL ***
     if (blnCriticalEnabled) {
         if (strCriticalMacro) {
-            let CriticalMacro = game.macros.getName(strCriticalMacro);
+            let CriticalMacro = getMacroByIdOrName(strCriticalMacro);
             if(CriticalMacro) {
                 CriticalMacro.execute = async () => {
                     //postConsoleAndNotification("Macro Clicked: ", "Critical", false, true, false);
@@ -1139,7 +1439,7 @@ Hooks.on("ready", async () => {
     // *** FUMBLE ***
     if (blnFumbleEnabled) {
         if(strFumbleMacro) {
-            let FumbleMacro = game.macros.getName(strFumbleMacro);
+            let FumbleMacro = getMacroByIdOrName(strFumbleMacro);
             if(FumbleMacro) {
                 FumbleMacro.execute = async () => {
                     //postConsoleAndNotification("Macro Clicked: ", "Fumble", false, true, false);
@@ -1163,7 +1463,7 @@ Hooks.on("ready", async () => {
     // *** INSPIRATION ***
     if (blnInspirationEnabled) {
         if(strInspirationMacro) {
-            let InspirationMacro = game.macros.getName(strInspirationMacro);
+            let InspirationMacro = getMacroByIdOrName(strInspirationMacro);
             if(InspirationMacro) {
                 InspirationMacro.execute = async () => {
                     //postConsoleAndNotification("Macro Clicked: ", "Inspiration", false, true, false);
@@ -1186,7 +1486,7 @@ Hooks.on("ready", async () => {
     // *** DOMT ***
     if (blndomtEnabled) {
         if(strDOMTMacro) {
-            let DOMTMacro = game.macros.getName(strDOMTMacro);
+            let DOMTMacro = getMacroByIdOrName(strDOMTMacro);
             if(DOMTMacro) {
                 DOMTMacro.execute = async () => {
                     //postConsoleAndNotification("Macro Clicked: ", "Deck of Many Things", false, true, false);
@@ -1210,7 +1510,7 @@ Hooks.on("ready", async () => {
     // *** BEVERAGE ***
     if (blnBeverageEnabled) {
         if(strBeverageMacro) {
-            let BeverageMacro = game.macros.getName(strBeverageMacro);
+            let BeverageMacro = getMacroByIdOrName(strBeverageMacro);
             if(BeverageMacro) {
                 BeverageMacro.execute = async () => {
                     //postConsoleAndNotification("Macro Clicked: ", "Beverage", false, true, false);
@@ -1233,7 +1533,7 @@ Hooks.on("ready", async () => {
     // *** BIO ***
     if (blnBioEnabled) {
         if(strBioMacro) {
-            let BioMacro = game.macros.getName(strBioMacro);
+            let BioMacro = getMacroByIdOrName(strBioMacro);
             if(BioMacro) {
                 BioMacro.execute = async () => {
                     //postConsoleAndNotification("Macro Clicked: ", "Bio", false, true, false);
@@ -1258,7 +1558,7 @@ Hooks.on("ready", async () => {
     // *** INSULT ***
     if (blnInsultsEnabled) {
         if(strInsultMacro) {
-            let InsultMacro = game.macros.getName(strInsultMacro);
+            let InsultMacro = getMacroByIdOrName(strInsultMacro);
             if(InsultMacro) {
                 InsultMacro.execute = async () => {
                     //postConsoleAndNotification("Macro Clicked: ", "Insult", false, true, false);
@@ -1281,7 +1581,7 @@ Hooks.on("ready", async () => {
     // *** PRAISE ***
     if (blnPraiseEnabled) {
         if(strPraiseMacro) {
-            let PraiseMacro = game.macros.getName(strPraiseMacro);
+            let PraiseMacro = getMacroByIdOrName(strPraiseMacro);
             if(PraiseMacro) {
                 PraiseMacro.execute = async () => {
                     //postConsoleAndNotification("Macro Clicked: ", "Praise", false, true, false);
@@ -1304,7 +1604,7 @@ Hooks.on("ready", async () => {
     // *** Public Message ***
     if (blnPartyMessageEnabled) {
         if(strPartyMacro) {
-            let PartyMacro = game.macros.getName(strPartyMacro);
+            let PartyMacro = getMacroByIdOrName(strPartyMacro);
             if(PartyMacro) {
                 PartyMacro.execute = async () => {
                     //postConsoleAndNotification("Macro Clicked: ", "Party Message", false, true, false);
@@ -1337,7 +1637,7 @@ Hooks.on("ready", async () => {
     // *** Private Message ***
     if (blnPrivateMessageEnabled) {
         if(strPrivateMacro) {
-            let PartyMacro = game.macros.getName(strPrivateMacro);
+            let PartyMacro = getMacroByIdOrName(strPrivateMacro);
             if(PartyMacro) {
                 PartyMacro.execute = async () => {
                     //postConsoleAndNotification("Macro Clicked: ", "Private Message", false, true, false);
@@ -1374,7 +1674,7 @@ Hooks.on("ready", async () => {
         //postConsoleAndNotification("blninjuriesEnabledGlobal: ", blninjuriesEnabledGlobal, false, true, false);
 
         if(strInjuriesMacroGlobal) {
-            let InjuryMacro = game.macros.getName(strInjuriesMacroGlobal);
+            let InjuryMacro = getMacroByIdOrName(strInjuriesMacroGlobal);
 
             //postConsoleAndNotification("InjuryMacro: ", InjuryMacro, false, true, false);
 
@@ -3630,3 +3930,4 @@ function resetBibliosophVars() {
     BIBLIOSOPH.MESSAGES_LIST_TO_PRIVATE = "";
     BIBLIOSOPH.MACRO_ID = "";
 }
+
