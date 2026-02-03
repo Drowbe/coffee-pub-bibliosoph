@@ -80,13 +80,12 @@
                 <p>{{{content}}}</p>
             {{/if}}
             <!-- CONTENT - SEARCH -->
-            {{#if descriptionBefore}}<p>{{descriptionBefore}}</p>{{/if}}
-            {{#if descriptionReveal}}<p>{{descriptionReveal}} <strong>{{quantityword}} {{title}}</strong></p>{{/if}}
-            {{#if descriptionAfter}}<p>{{descriptionAfter}}</p>{{/if}}
-
+            <p>
+                {{#if descriptionBefore}}{{descriptionBefore}} {{/if}}
+                {{#if descriptionReveal}}{{descriptionReveal}} <strong>{{quantityword}} {{title}}</strong>{{/if}}
+            </p>
+            <!-- {{#if descriptionAfter}}<p>{{descriptionAfter}}</p>{{/if}} -->
         {{/if}}
-
-
     </div>
     {{/if}}
 
@@ -106,13 +105,12 @@
             <p><i class="fa-solid fa-sparkles"></i><strong>{{statuseffect}}</strong></p>
         {{/if}}
 
-        <!-- INVESTIGATION: added to inventory message, or compendium link -->
+        <!-- INVESTIGATION: added to inventory message and/or compendium link -->
         {{#if inventoryAddedMessage}}
             <p><i class="fa-solid fa-bag-shopping"></i> {{inventoryAddedMessage}}</p>
-        {{else}}
-            {{#if link}}
-                <p>{{link}} x <strong>{{quantitynum}}</strong></p>
-            {{/if}}
+        {{/if}}
+        {{#if link}}
+            <p>{{link}} x <strong>{{quantitynum}}</strong></p>
         {{/if}}
 
         <!-- RARITY -->
