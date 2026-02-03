@@ -2723,6 +2723,7 @@ async function createChatCardSearch(strRollTableName) {
     var strValue = "";
     var intQuantity = "";
     var strQuantity = "";
+    var strInventoryAddedMessage = "";
     // Compendium or item datas
     var strCompendiumName = ""
     var strCompendiumID = ""
@@ -2906,6 +2907,43 @@ async function createChatCardSearch(strRollTableName) {
         // make the number a word
         strQuantity = numToWord(intQuantity);
 
+        // Add the found item to the character's inventory (when investigation finds something)
+        const uuidToAdd = rollResults?.results?.[0]?.documentUuid;
+        const actor = game.user.character ?? canvas.tokens?.controlled?.[0]?.actor;
+        const qty = Math.max(1, Number(intQuantity) || 1);
+
+        if (uuidToAdd && actor) {
+            try {
+                const itemDoc = await fromUuid(uuidToAdd);
+                if (!(itemDoc instanceof Item)) {
+                    console.warn(MODULE.ID + " | UUID did not resolve to an Item:", uuidToAdd, itemDoc);
+                } else {
+                    const baseData = itemDoc.toObject();
+                    delete baseData._id;
+                    const hasQuantity = foundry.utils.getProperty(baseData, "system.quantity") !== undefined;
+                    let toCreate;
+                    if (hasQuantity) {
+                        foundry.utils.setProperty(baseData, "system.quantity", qty);
+                        toCreate = [baseData];
+                    } else {
+                        toCreate = Array.from({ length: qty }, () => {
+                            const d = itemDoc.toObject();
+                            delete d._id;
+                            return d;
+                        });
+                    }
+                    await actor.createEmbeddedDocuments("Item", toCreate);
+                    const actorName = actor.name;
+                    strInventoryAddedMessage = qty === 1
+                        ? `1 ${strName} was added to ${actorName}'s inventory.`
+                        : `${qty} ${strName} were added to ${actorName}'s inventory.`;
+                }
+            } catch (err) {
+                console.warn(MODULE.ID + " | Could not add investigation item to inventory:", err);
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Could not add item to inventory.", err?.message ?? String(err), false, false);
+            }
+        }
+
     }
 
     // Set the template type to Search
@@ -2932,12 +2970,13 @@ async function createChatCardSearch(strRollTableName) {
         quantityword: strQuantity,
         tablename: strTableName,
         link: strCompendiumLink,
+        inventoryAddedMessage: strInventoryAddedMessage,
         // Item Specific
         kind: strKind,
         details: strDetails,
         rarity: strRarity,
         value: strValue,
-    }; 
+    };
     // Play the Sound
     BlacksmithUtils.playSound(strSound,strVolume);
     // Return the template

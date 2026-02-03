@@ -81,7 +81,7 @@
             {{/if}}
             <!-- CONTENT - SEARCH -->
             {{#if descriptionBefore}}<p>{{descriptionBefore}}</p>{{/if}}
-            {{#if descriptionReveal}}<p><strong>{{quantityword}} {{title}}</strong> {{descriptionReveal}}</p>{{/if}}
+            {{#if descriptionReveal}}<p>{{descriptionReveal}} <strong>{{quantityword}} {{title}}</strong></p>{{/if}}
             {{#if descriptionAfter}}<p>{{descriptionAfter}}</p>{{/if}}
 
         {{/if}}
@@ -91,7 +91,7 @@
     {{/if}}
 
     <!-- DARK SECTION - only show when it has content -->
-    {{#if (or treatment duration link kind rarity value details)}}
+    {{#if (or treatment duration link kind rarity value details inventoryAddedMessage)}}
     <div class="section-content section-dark">
 
         <!-- INJURY TREATMENT -->
@@ -106,9 +106,13 @@
             <p><i class="fa-solid fa-sparkles"></i><strong>{{statuseffect}}</strong></p>
         {{/if}}
 
-        <!-- COMPENDIUM LINK -->
-        {{#if link}}
-            <p>{{link}} x <strong>{{quantitynum}}</strong></p>
+        <!-- INVESTIGATION: added to inventory message, or compendium link -->
+        {{#if inventoryAddedMessage}}
+            <p><i class="fa-solid fa-bag-shopping"></i> {{inventoryAddedMessage}}</p>
+        {{else}}
+            {{#if link}}
+                <p>{{link}} x <strong>{{quantitynum}}</strong></p>
+            {{/if}}
         {{/if}}
 
         <!-- RARITY -->
