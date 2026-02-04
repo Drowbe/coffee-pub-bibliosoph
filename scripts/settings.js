@@ -695,37 +695,9 @@ export const registerSettings = () => {
 		});
 
 
-		// -- Investigation Odds --
-		game.settings.register(MODULE.ID,'investigationOdds', {
-			name: MODULE.ID + '.investigationOdds-Label',
-			hint: MODULE.ID + '.investigationOdds-Hint',
-			scope: "world",
-			config: true,
-			requiresReload: false,
-			type: Number,
-			range: {
-			min: 0,
-			max: 100,
-			step: 1,
-			},
-			default: 20,
-		});
 
-		// -- Investigation Dice - SLOTS --
-		game.settings.register(MODULE.ID,'investigationDice', {
-			name: MODULE.ID + '.investigationDice-Label',
-			hint: MODULE.ID + '.investigationDice-Hint',
-			scope: "world",
-			config: true,
-			requiresReload: false,
-			type: Number,
-			range: {
-			min: 1,
-			max: 20,
-			step: 1,
-			},
-			default: 3,
-		});
+
+
 
 		// -- Investigation: Odds of Finding Coins --
 		game.settings.register(MODULE.ID, 'investigationCoinsOdds', {
@@ -796,6 +768,44 @@ export const registerSettings = () => {
 
 
 
+		// -- Investigation Odds --
+		game.settings.register(MODULE.ID,'investigationOdds', {
+			name: MODULE.ID + '.investigationOdds-Label',
+			hint: MODULE.ID + '.investigationOdds-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: false,
+			type: Number,
+			range: {
+			min: 0,
+			max: 100,
+			step: 1,
+			},
+			default: 20,
+		});
+
+		// -- Investigation Dice - SLOTS --
+		game.settings.register(MODULE.ID,'investigationDice', {
+			name: MODULE.ID + '.investigationDice-Label',
+			hint: MODULE.ID + '.investigationDice-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: false,
+			type: Number,
+			range: {
+			min: 1,
+			max: 20,
+			step: 1,
+			},
+			default: 3,
+		});
+
+
+
+
+
+
+
 
 		// -- Investigation Table - COMMON --
 		game.settings.register(MODULE.ID,'investigationTableCommon', {
@@ -816,12 +826,8 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			type: Number,
-			range: {	
-				min: 0,
-				max: 100,
-				step: 0.5,
-			},
-			default: 80,
+			range: { min: 0, max: 1000, step: 1 },
+			default: 1000,
 		});
 
 		// -- Investigation Table - UNCOMMON	 --
@@ -843,12 +849,8 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			type: Number,
-			range: {	
-				min: 0,
-				max: 100,
-				step: 0.5,
-			},
-			default: 20,
+			range: { min: 0, max: 1000, step: 1 },
+			default: 120,
 		});
 
 
@@ -871,12 +873,8 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			type: Number,
-			range: {	
-				min: 0,
-				max: 100,
-				step: 0.5,
-			},
-			default: 5,
+			range: { min: 0, max: 1000, step: 1 },
+			default: 50,
 		});
 
 		// -- Investigation Table - VERY RARE	 --
@@ -898,12 +896,8 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			type: Number,
-			range: {	
-				min: 0,
-				max: 100,
-				step: 0.5,
-			},
-			default: 2,
+			range: { min: 0, max: 1000, step: 1 },
+			default: 5,
 		});
 
 		// -- Investigation Table - LEGENDARY	 --
@@ -925,13 +919,19 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			type: Number,
-			range: {	
-				min: 0,
-				max: 100,
-				step: 0.5,
-			},
-			default: 0.5,
+			range: { min: 0, max: 1000, step: 1 },
+			default: 1,
 		});
+
+
+
+
+
+
+
+
+
+
 
 		// ---------- SUBHEADING ----------
 		game.settings.register(MODULE.ID, "headingH3Gifts", {

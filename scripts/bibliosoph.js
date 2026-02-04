@@ -2692,6 +2692,7 @@ async function createChatCardEncounter(strRollTableName) {
 // ** CREATE Investigation Card (new flow: narrative + slots + per-rarity tables)
 // ************************************
 async function createChatCardInvestigation() {
+    ui.notifications.info(game.i18n.localize("coffee-pub-bibliosoph.investigationNotificationStart"), { permanent: false });
     const strTheme = game.settings.get(MODULE.ID, 'cardThemeInvestigation');
     const strIconStyle = "fa-eye";
     const strUserName = game.user.name;
@@ -2769,7 +2770,9 @@ async function createChatCardInvestigation() {
     const rollFind = await new Roll("1d100").evaluate();
     if (game.settings.get(MODULE.ID, 'showDiceRolls')) BlacksmithUtils.rollCoffeePubDice(rollFind);
     if (rollFind.total > investigationOdds) {
-        const entry = pickEntry(foundNothingEntries);
+        // No items this time; use "found something" narrative if they found coins, else "found nothing"
+        const foundAnything = !!coinsFound;
+        const entry = pickEntry(foundAnything ? foundSomethingEntries : foundNothingEntries);
         const CARDDATA = {
             isInvestigationCard: true,
             userName: strUserName,
@@ -2778,7 +2781,7 @@ async function createChatCardInvestigation() {
             theme: strTheme,
             iconStyle: strIconStyle,
             cardTitle: "Investigation",
-            narrativeTitle: entry.title || "Nothing Found",
+            narrativeTitle: entry.title || (foundAnything ? "Search Results" : "Nothing Found"),
             narrativeDescription: entry.description || "",
             narrativeIcon: entry.icon || "<i class=\"fa-solid fa-dice\"></i>",
             itemsByRarity: [],
@@ -2790,7 +2793,7 @@ async function createChatCardInvestigation() {
         const response = await fetch(BIBLIOSOPH.MESSAGE_TEMPLATE_CARD);
         const templateText = await response.text();
         const template = Handlebars.compile(templateText);
-        BlacksmithUtils.playSound("modules/coffee-pub-blacksmith/sounds/chest-open.mp3", "0.7");
+        BlacksmithUtils.playSound(foundAnything ? "modules/coffee-pub-blacksmith/sounds/chest-treasure.mp3" : "modules/coffee-pub-blacksmith/sounds/chest-open.mp3", "0.7");
         return template(CARDDATA);
     }
 
