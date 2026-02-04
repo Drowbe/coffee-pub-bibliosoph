@@ -1,10 +1,11 @@
 # Coffee Pub Bibliosoph
 
-![Foundry v12](https://img.shields.io/badge/foundry-v12-green)
+![Foundry v12](https://img.shields.io/badge/foundry-v12-yellow)
+![Foundry v13](https://img.shields.io/badge/foundry-v13-green)
 ![Latest Release](https://img.shields.io/github/v/release/Drowbe/coffee-pub-bibliosoph)
-![MIT License](https://img.shields.io/badge/license-MIT-blue)
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/Drowbe/coffee-pub-bibliosoph/release.yml)
 ![GitHub all releases](https://img.shields.io/github/downloads/Drowbe/coffee-pub-bibliosoph/total)
+![MIT License](https://img.shields.io/badge/license-MIT-blue)
 
 A comprehensive chat and encounter management module for Foundry VTT, designed to enhance your game's narrative and mechanical elements through a variety of specialized chat cards and automated features.
 
