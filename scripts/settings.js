@@ -652,6 +652,18 @@ export const registerSettings = () => {
 			scope: 'world',
 			default: false,
 		});
+
+		game.settings.register(MODULE.ID, 'investigationPlayerSkill', {
+			name: MODULE.ID + '.investigationPlayerSkill-Label',
+			hint: MODULE.ID + '.investigationPlayerSkill-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'world',
+			default: true,
+		});
+
+
 		// -- Investigation Coffee Pub Toolbar --
 		game.settings.register(MODULE.ID, 'toolbarCoffeePubInvestigationEnabled', {
 			name: MODULE.ID + '.toolbarCoffeePubInvestigationEnabled-Label',

@@ -114,6 +114,8 @@
 
 		"investigationEnabled-Label": "Investigations Enabled",
 		"investigationEnabled-Hint": "",
+		"investigationPlayerSkill-Label": "Use Player Skill Bonus",
+		"investigationPlayerSkill-Hint": "",
 		"toolbarCoffeePubInvestigationEnabled-Label": "Show in the Coffee Pub toolbar",
 		"toolbarCoffeePubInvestigationEnabled-Hint": "",
 		"toolbarFoundryInvestigationEnabled-Label": "Show in the Foundry toolbar",
