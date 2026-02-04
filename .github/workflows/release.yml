@@ -33,6 +33,7 @@ jobs:
             templates/ \
             lang/ \
             images/ \
+            resources/ \
             sounds/ \
             -x "*.git*" -x "*.github*" -x "*node_modules*" -x "*.vscode*"
 
