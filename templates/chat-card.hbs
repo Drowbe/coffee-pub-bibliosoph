@@ -4,7 +4,44 @@
         <i class="fa-solid {{iconStyle}}"></i>{{cardTitle}}
     </div>
 
-
+    {{#if isInvestigationCard}}
+    <!-- INVESTIGATION CARD: narrative + item rows + inventory summary -->
+    {{#if userName}}
+        <div class="container-user">
+            <img class="token-image" src="{{userAvatar}}" alt="" />
+            <div class="token-text-wrapper">
+                <span class="token-name">{{userName}}</span>
+                <span class="token-character">{{characterName}}</span>
+            </div>
+        </div>
+    {{/if}}
+    {{#if narrativeTitle}}
+        <div class="section-header investigation-narrative-title">
+            <i class="fa-solid {{iconStyle}}"></i> {{narrativeTitle}}
+        </div>
+    {{/if}}
+    <hr class="investigation-separator" />
+    {{#if narrativeDescription}}
+        <p class="investigation-narrative-description">{{narrativeDescription}}</p>
+    {{/if}}
+    {{#if foundItems}}
+        <div class="investigation-items">
+            {{#each foundItems}}
+                <div class="investigation-item-row">
+                    {{#if img}}<img class="investigation-item-img" src="{{img}}" alt="" />{{/if}}
+                    <span class="investigation-item-name">{{{link}}}</span>
+                    {{#if rarity}}<span class="investigation-item-rarity">({{rarity}})</span>{{/if}}
+                </div>
+            {{/each}}
+        </div>
+    {{/if}}
+    {{#if inventorySummaryLine}}
+        <div class="section-content section-dark">
+            <p><i class="fa-solid fa-bag-shopping"></i> {{inventorySummaryLine}}</p>
+        </div>
+    {{/if}}
+    {{else}}
+    <!-- STANDARD CARD (Encounter, Gift, Shady, Crit, etc.) -->
     <!-- SENDER -->
     {{#if userName}}
         <div class="container-user">
@@ -155,6 +192,7 @@
                 <button id="cards-button-cardsdark" title="Reply to this message..." class="coffee-pub-bibliosoph-button-reply" data-recipient="{{strRecipients}}" style="width: 100%;"><i class="fa-solid fa-circle-up"></i>Reply All</button>
             {{/if}}
         </div>
+    {{/if}}
     {{/if}}
 </div>
 

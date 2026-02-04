@@ -1,0 +1,16 @@
+{
+  "foundNothing": [
+    {
+      "title": "Nothing Found",
+      "tags": [],
+      "description": "You carefully search the area but find nothing of interest."
+    }
+  ],
+  "foundSomething": [
+    {
+      "title": "Search Results",
+      "tags": [],
+      "description": "You carefully examine your surroundings, your gaze sweeping across the area. Your thoroughness has been advantageous."
+    }
+  ]
+}

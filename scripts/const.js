@@ -49,6 +49,7 @@ export const BIBLIOSOPH = {
     DEBUGON: true,
     //ID: MODULE.ID,
     MESSAGE_TEMPLATE_CARD: `modules/${MODULE.ID}/templates/chat-card.hbs`,
+    INVESTIGATION_NARRATIVE_PATH: `modules/${MODULE.ID}/resources/investigation-narrative.json`,
     WINDOW_CHAT_TEMPLATE: `modules/${MODULE.ID}/templates/dialogue-messages.hbs`,
     PATH_SOUND:`modules/${MODULE.ID}/sounds/`,
     PATH_IMAGES:`modules/${MODULE.ID}/images/`,

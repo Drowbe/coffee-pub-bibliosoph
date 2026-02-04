@@ -89,3 +89,35 @@
     margin: 0px 0px 0px 0px;
 }
 
+/* Investigation card: narrative + item rows */
+.investigation-narrative-title {
+    margin-top: 0.5em;
+}
+.investigation-separator {
+    border: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
+    margin: 0.5em 0;
+}
+.investigation-narrative-description {
+    margin: 0.5em 0;
+}
+.investigation-items {
+    margin: 0.5em 0;
+}
+.investigation-item-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    margin: 0.25em 0;
+}
+.investigation-item-img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    border-radius: 4px;
+}
+.investigation-item-rarity {
+    font-size: 0.9em;
+    opacity: 0.85;
+}
+

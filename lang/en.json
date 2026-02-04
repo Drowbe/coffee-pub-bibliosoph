@@ -122,14 +122,45 @@
 		"headingH3Investigation-Hint": "",
 		"cardThemeInvestigation-Label": "Card Style",
 		"cardThemeInvestigation-Hint": "",
+		"investigationMacro-Label": "Macro Name",
+		"investigationMacro-Hint": "",
 		"investigationOdds-Label": "Odds of Success",
 		"investigationOdds-Hint": "",
 		"investigationDice-Label": "Upper Limit of Items",
 		"investigationDice-Hint": "",
-		"investigationTable-Label": "Roll Table Name",
-		"investigationTable-Hint": "",
-		"investigationMacro-Label": "Macro Name",
-		"investigationMacro-Hint": "",
+		"investigationTableCommon-Label": "Common Roll Table Name",
+		"investigationTableCommon-Hint": "",
+		"investigationOddsCommon-Label": "Common Odds",
+		"investigationOddsCommon-Hint": "",
+
+		"investigationTableUncommon-Label": "Uncommon Roll Table Name",
+		"investigationTableUncommon-Hint": "",
+		"investigationOddsUncommon-Label": "Uncommon Odds",
+		"investigationOddsUncommon-Hint": "",
+		
+		"investigationTableRare-Label": "Rare Roll Table Name",
+		"investigationTableRare-Hint": "",
+		"investigationOddsRare-Label": "Rare Odds",
+		"investigationOddsRare-Hint": "",
+		
+		"investigationTableVeryRare-Label": "Very Rare Roll Table Name",
+		"investigationTableVeryRare-Hint": "",
+		"investigationOddsVeryRare-Label": "Very Rare Odds",
+		"investigationOddsVeryRare-Hint": "",
+		
+		"investigationTableLegendary-Label": "Legendary Roll Table Name",
+		"investigationTableLegendary-Hint": "",
+		"investigationOddsLegendary-Label": "Legendary Odds",
+		"investigationOddsLegendary-Hint": "",
+		"investigationInventorySummary": "We added {items} to {character}'s inventory.",
+		"investigationInventorySummaryNoActor": "No character or token selected; items were not added to inventory.",
+
+
+
+
+
+
+
 
 		"giftEnabled-Label": "Random Gifts Enabled",
 		"giftEnabled-Hint": "",

@@ -1879,9 +1879,8 @@ async function publishChatCard() {
 
         compiledHtml = await createChatCardEncounter(strRollTableName);
     } else if (BIBLIOSOPH.CARDTYPEINVESTIGATION) {
-        // SEARCH
-        strRollTableName = game.settings.get(MODULE.ID, 'investigationTable');
-        compiledHtml = await createChatCardSearch(strRollTableName);
+        // INVESTIGATION (new flow: narrative + slots + per-rarity tables)
+        compiledHtml = await createChatCardInvestigation();
     }
     else if (BIBLIOSOPH.CARDTYPEGIFT) {
         // GIFTS
@@ -2690,7 +2689,161 @@ async function createChatCardEncounter(strRollTableName) {
 }
 
 // ************************************
-// ** CREATE Investigation Card
+// ** CREATE Investigation Card (new flow: narrative + slots + per-rarity tables)
+// ************************************
+async function createChatCardInvestigation() {
+    const strTheme = game.settings.get(MODULE.ID, 'cardThemeInvestigation');
+    const strIconStyle = "fa-eye";
+    const strUserName = game.user.name;
+    const strUserAvatar = game.user.avatar;
+    const strCharacterName = game.user.character?.name ?? "No Character Set";
+    const investigationOdds = Number(game.settings.get(MODULE.ID, 'investigationOdds')) || 20;
+    const maxSlots = Math.max(1, Math.min(20, Number(game.settings.get(MODULE.ID, 'investigationDice')) || 3));
+
+    let narrativeJson;
+    try {
+        const res = await fetch(BIBLIOSOPH.INVESTIGATION_NARRATIVE_PATH);
+        if (!res.ok) throw new Error(res.statusText);
+        narrativeJson = await res.json();
+    } catch (e) {
+        console.warn(MODULE.ID + " | Could not load investigation narrative:", e);
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Could not load investigation narrative. Check resources/investigation-narrative.json.", e?.message ?? String(e), false, false);
+        return "";
+    }
+
+    const foundNothingEntries = narrativeJson.foundNothing ?? [];
+    const foundSomethingEntries = narrativeJson.foundSomething ?? [];
+    const pickEntry = (arr) => (arr.length ? arr[Math.floor(Math.random() * arr.length)] : { title: "", tags: [], description: "" });
+
+    // Roll: find something or not
+    const rollFind = await new Roll("1d100").evaluate();
+    if (game.settings.get(MODULE.ID, 'showDiceRolls')) BlacksmithUtils.rollCoffeePubDice(rollFind);
+    if (rollFind.total > investigationOdds) {
+        const entry = pickEntry(foundNothingEntries);
+        const CARDDATA = {
+            isInvestigationCard: true,
+            userName: strUserName,
+            userAvatar: strUserAvatar,
+            characterName: strCharacterName,
+            theme: strTheme,
+            iconStyle: strIconStyle,
+            cardTitle: "Investigation",
+            narrativeTitle: entry.title || "Nothing Found",
+            narrativeDescription: entry.description || "",
+            foundItems: [],
+            inventorySummaryLine: "",
+        };
+        const response = await fetch(BIBLIOSOPH.MESSAGE_TEMPLATE_CARD);
+        const templateText = await response.text();
+        const template = Handlebars.compile(templateText);
+        BlacksmithUtils.playSound("modules/coffee-pub-blacksmith/sounds/chest-open.mp3", "0.7");
+        return template(CARDDATA);
+    }
+
+    // Roll number of slots
+    const rollSlots = await new Roll(`1d${maxSlots}`).evaluate();
+    if (game.settings.get(MODULE.ID, 'showDiceRolls')) BlacksmithUtils.rollCoffeePubDice(rollSlots);
+    const numSlots = Math.max(1, Math.min(maxSlots, rollSlots.total));
+
+    // Per-rarity odds (normalize to 100 for bands)
+    const rarityKeys = ["Common", "Uncommon", "Rare", "VeryRare", "Legendary"];
+    const oddsRaw = rarityKeys.map((r) => {
+        const key = "investigationOdds" + r;
+        return Math.max(0, Number(game.settings.get(MODULE.ID, key)) || 0);
+    });
+    const sum = oddsRaw.reduce((a, b) => a + b, 0) || 1;
+    let cumul = 0;
+    const bands = [0];
+    oddsRaw.forEach((o) => {
+        cumul += (o / sum) * 100;
+        bands.push(cumul);
+    });
+    if (bands[bands.length - 1] < 100) bands[bands.length - 1] = 100;
+
+    const actor = game.user.character ?? canvas.tokens?.controlled?.[0]?.actor;
+    const foundItems = [];
+
+    for (let i = 0; i < numSlots; i++) {
+        const rollRarity = await new Roll("1d100").evaluate();
+        if (game.settings.get(MODULE.ID, 'showDiceRolls')) BlacksmithUtils.rollCoffeePubDice(rollRarity);
+        const r100 = Math.min(100, Math.max(0, rollRarity.total));
+        let bandIndex = rarityKeys.length - 1;
+        for (let b = 0; b < rarityKeys.length; b++) {
+            if (r100 >= bands[b] && r100 < bands[b + 1]) {
+                bandIndex = b;
+                break;
+            }
+        }
+        const rarityLabel = rarityKeys[bandIndex];
+        const tableName = game.settings.get(MODULE.ID, "investigationTable" + rarityLabel);
+        if (!tableName || tableName === "-- Choose a Roll Table --") continue;
+        const table = game.tables.getName(tableName);
+        if (!table) continue;
+        const rollResult = await table.roll();
+        if (game.settings.get(MODULE.ID, 'showDiceRolls') && rollResult.roll) BlacksmithUtils.rollCoffeePubDice(rollResult.roll);
+        const result = rollResult.results?.[0];
+        const documentUuid = result?.documentUuid;
+        if (!documentUuid) continue;
+        let itemDoc;
+        try {
+            itemDoc = await fromUuid(documentUuid);
+        } catch (_) {
+            continue;
+        }
+        if (!(itemDoc instanceof Item)) continue;
+        const name = itemDoc.name || result?.name || result?.text || "Item";
+        const img = result?.img ?? itemDoc.img ?? "";
+        const link = `@UUID[${documentUuid}]{${name}}`;
+        const rarity = itemDoc.system?.rarity?.value ?? rarityLabel;
+
+        if (actor) {
+            try {
+                const baseData = itemDoc.toObject();
+                delete baseData._id;
+                const hasQty = foundry.utils.getProperty(baseData, "system.quantity") !== undefined;
+                if (hasQty) foundry.utils.setProperty(baseData, "system.quantity", 1);
+                await actor.createEmbeddedDocuments("Item", [baseData]);
+            } catch (err) {
+                console.warn(MODULE.ID + " | Could not add investigation item to inventory:", err);
+            }
+        }
+        foundItems.push({ name, img, link, rarity });
+    }
+
+    const entry = pickEntry(foundSomethingEntries);
+    let inventorySummaryLine = "";
+    if (foundItems.length && actor) {
+        const names = foundItems.map((f) => f.name);
+        const counts = {};
+        names.forEach((n) => { counts[n] = (counts[n] || 0) + 1; });
+        const parts = Object.entries(counts).map(([n, c]) => (c > 1 ? `${c} ${n}` : n));
+        inventorySummaryLine = game.i18n.format("coffee-pub-bibliosoph.investigationInventorySummary", { items: parts.join(", "), character: actor.name });
+    } else if (foundItems.length && !actor) {
+        inventorySummaryLine = game.i18n.format("coffee-pub-bibliosoph.investigationInventorySummaryNoActor", {});
+    }
+
+    const CARDDATA = {
+        isInvestigationCard: true,
+        userName: strUserName,
+        userAvatar: strUserAvatar,
+        characterName: strCharacterName,
+        theme: strTheme,
+        iconStyle: strIconStyle,
+        cardTitle: "Investigation",
+        narrativeTitle: entry.title || "Search Results",
+        narrativeDescription: entry.description || "",
+        foundItems,
+        inventorySummaryLine,
+    };
+    const response = await fetch(BIBLIOSOPH.MESSAGE_TEMPLATE_CARD);
+    const templateText = await response.text();
+    const template = Handlebars.compile(templateText);
+    BlacksmithUtils.playSound("modules/coffee-pub-blacksmith/sounds/chest-treasure.mp3", "0.7");
+    return template(CARDDATA);
+}
+
+// ************************************
+// ** CREATE Search Card (Gift / Shady Goods — single table, single item)
 // ************************************
 async function createChatCardSearch(strRollTableName) {  
     // User Info
@@ -2699,254 +2852,108 @@ async function createChatCardSearch(strRollTableName) {
     var strPlayerType = "";
     var strCharacterName = "";
     // Set the defaults
-    var strSound = "modules/coffee-pub-blacksmith/sounds/chest-open.mp3";
+    var strSound = "modules/coffee-pub-blacksmith/sounds/chest-treasure.mp3";
     var strVolume = "0.7";
-    var intSearchOdds = "";
-    var intSearchDice = "1d" + game.settings.get(MODULE.ID, 'investigationDice');
-    var strNoSearch = "";
-    var strTheme = game.settings.get(MODULE.ID, 'cardThemeInvestigation');
+    var strTheme = BIBLIOSOPH.CARDTYPEGIFT
+        ? (game.settings.get(MODULE.ID, 'cardThemeGift') ?? 'theme-default')
+        : (game.settings.get(MODULE.ID, 'cardThemeShadygoods') ?? 'theme-default');
     var strIconStyle = "fa-eye";
     var strType = BIBLIOSOPH.CARDTYPE;
     var strImageBackground = "themecolor";
     var strDescriptionBefore = "";
     var strDescriptionReveal = "";
     var strDescriptionAfter = "";
-    // Table info
     var strTableName = "";
     var strTableImage = "";
-    // Roll reuslts
     var strName = "";
     var strImage = "";
     var strDetails = "";
     var strKind = "";
     var strRarity = "";
     var strValue = "";
-    var intQuantity = "";
-    var strQuantity = "";
+    var intQuantity = 1;
+    var strQuantity = "one";
     var strInventoryAddedMessage = "";
-    // Compendium or item datas
-    var strCompendiumName = ""
-    var strCompendiumID = ""
-    var strCompendiumType = ""
+    var strCompendiumName = "";
+    var strCompendiumID = "";
+    var strCompendiumType = "Item";
     var strCompendiumLink = "";
-    // Set the basics
     strUserName = game.user.name;
     strUserAvatar = game.user.avatar;
-    if (game.user.isTheGM){
+    if (game.user.isTheGM) {
         strPlayerType = "Gamemaster";
         strCharacterName = "Cocktail Craftsman and Moderator";
     } else {
         strPlayerType = "Player";
-        if(game.user.character) {
-            strCharacterName = game.user.character.name;
-        } else {
-            strCharacterName = "No Character Set";
-        }
+        strCharacterName = game.user.character?.name ?? "No Character Set";
     }
-    // Set the odds
-    if (BIBLIOSOPH.CARDTYPEINVESTIGATION){
-        intSearchOdds = game.settings.get(MODULE.ID, 'investigationOdds');
-        intSearchDice = "1d" + game.settings.get(MODULE.ID, 'investigationDice');
+
+    // Gift / Shady Goods: single table roll, single item
+    let arrTable = game.tables.getName(strRollTableName);
+    if (!arrTable) {
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "You need to choose a roll table in settings.", strRollTableName, false, false);
+        return "";
+    }
+    strTableImage = arrTable.img;
+    strTableName = arrTable.name;
+    let rollResults = await arrTable.roll();
+    if (game.settings.get(MODULE.ID, 'showDiceRolls') && rollResults.roll) {
+        BlacksmithUtils.rollCoffeePubDice(rollResults.roll);
+    }
+    strName = rollResults.results[0].name || rollResults.results[0].description || rollResults.results[0].text;
+    strImage = rollResults.results[0].img;
+    const documentUuid = rollResults.results[0].documentUuid;
+    if (documentUuid) {
+        strCompendiumLink = "@UUID[" + documentUuid + "]{" + strName + "}";
+        if (documentUuid.startsWith("Compendium.")) {
+            const match = documentUuid.match(/^Compendium\.(.+?)\.(Actor|Item|JournalEntry|Macro|Playlist|RollTable|Scene|Item)\.(.+)$/);
+            if (match) {
+                strCompendiumName = match[1];
+                strCompendiumID = match[3];
+            } else {
+                try {
+                    const parsed = foundry.utils.parseUuid(documentUuid);
+                    if (parsed?.collection) {
+                        strCompendiumName = parsed.collection;
+                        strCompendiumID = parsed.id;
+                    }
+                } catch (e) {}
+            }
+        } else if (documentUuid.startsWith("Item.")) {
+            strCompendiumName = "Item";
+            strCompendiumID = documentUuid.replace("Item.", "");
+        }
     } else {
-        intSearchOdds = "100";
-        intSearchDice = "1d1";
+        strCompendiumName = rollResults.results[0].documentCollection || "";
+        strCompendiumID = rollResults.results[0].documentId;
+        strCompendiumLink = strCompendiumName === "Item"
+            ? "@UUID[" + strCompendiumType + "." + strCompendiumID + "]{" + strName + "}"
+            : "@UUID[Compendium." + strCompendiumName + "." + strCompendiumType + "." + strCompendiumID + "]{" + strName + "}";
     }
-    // Check to see if they beat the search odds
-    let rollIsSearch = await new Roll("1d100").evaluate();
-    if (game.settings.get(MODULE.ID, 'showDiceRolls')) {
-        BlacksmithUtils.rollCoffeePubDice(rollIsSearch);
-    }
-    const intRollIsSearch = rollIsSearch.total;
-    //postConsoleAndNotification("intRollIsSearch", intRollIsSearch, false, true, false);
-    //postConsoleAndNotification("intSearchOdds", intSearchOdds, false, true, false);
-    if (intRollIsSearch > intSearchOdds) {
-        // There is no Search
-        strSound = "modules/coffee-pub-blacksmith/sounds/chest-open.mp3";
-        // Get the no encoutner description
-        let tableNoSearch = game.tables.getName("Search Descriptions: Nothing");
-        if (!tableNoSearch) {
-            // POST DEBUG
-            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "You need to choose a roll table for Investigation Descriptions (Nothing Found) in settings.", "", false, false);
-            return;
-        }
-        let rollNoSearch = await tableNoSearch.roll();
-        strNoSearch = rollNoSearch.results[0].text;
-        strDescriptionBefore = strNoSearch;
-        strName = "Nothing Found";
-        strImage = "icons/tools/scribal/magnifying-glass.webp";
-        //strTableName = strRollTableName;
-    }
-    else
-    {
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "In the odds check...", intRollIsSearch, false, false);
-        // Call roll table
-        strSound = "modules/coffee-pub-blacksmith/sounds/chest-treasure.mp3";
-        // let's start passing in the roll table name once this works.
-        let arrTable = game.tables.getName(strRollTableName);
-        if (!arrTable) {
-            // POST DEBUG
-            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "You need to choose a roll table for investigation items in settings.", strRollTableName, false, false);
-            return;
-        }
-        // Get the search item
-        strTableImage = arrTable.img;
-        strTableName = arrTable.name;
-        let rollResults = await arrTable.roll();
-        // v13: Use .name instead of deprecated .text
-        strName = rollResults.results[0].name || rollResults.results[0].description || rollResults.results[0].text;
-        strImage = rollResults.results[0].img;
-        strCompendiumType = "Item";
-        
-        // v13: Use .documentUuid to get the actual document UUID (not the TableResult UUID)
-        const documentUuid = rollResults.results[0].documentUuid;
-        if (documentUuid) {
-            // Use the document UUID directly for the link (it contains all needed info)
-            strCompendiumLink = "@UUID[" + documentUuid + "]{" + strName + "}";
-            
-            // Parse UUID to extract compendium info if needed
-            // UUID format: "Compendium.pack-name.Item.id" or "Item.id"
-            if (documentUuid.startsWith("Compendium.")) {
-                // Extract compendium pack name from UUID
-                // UUID format: Compendium.pack-name.documentType.id (pack-name can have dots)
-                // Match pattern: Compendium.{everything}.{Actor|Item}.{id}
-                const match = documentUuid.match(/^Compendium\.(.+?)\.(Actor|Item|JournalEntry|Macro|Playlist|RollTable|Scene|Item)\.(.+)$/);
-                if (match) {
-                    strCompendiumName = match[1]; // Pack name (may contain dots)
-                    strCompendiumID = match[3]; // Document ID
-                } else {
-                    // Try to extract using Foundry's UUID parsing if available
-                    try {
-                        const parsed = foundry.utils.parseUuid(documentUuid);
-                        if (parsed && parsed.collection) {
-                            strCompendiumName = parsed.collection;
-                            strCompendiumID = parsed.id;
-                        }
-                    } catch (e) {
-                        // If parsing fails, continue without pack validation
-                    }
-                }
-            } else if (documentUuid.startsWith("Item.")) {
-                // World item
-                strCompendiumName = "Item";
-                strCompendiumID = documentUuid.replace("Item.", "");
+    const ITEMDATA = getItemDataById(strCompendiumID);
+    strKind = ITEMDATA?.strKind ?? "";
+    strDetails = ITEMDATA?.strDescritption ?? "";
+    strRarity = ITEMDATA?.strRarity ?? "";
+    strValue = ITEMDATA?.strValue ?? "";
+
+    const actor = game.user.character ?? canvas.tokens?.controlled?.[0]?.actor;
+    if (documentUuid && actor) {
+        try {
+            const itemDoc = await fromUuid(documentUuid);
+            if (itemDoc instanceof Item) {
+                const baseData = itemDoc.toObject();
+                delete baseData._id;
+                const hasQuantity = foundry.utils.getProperty(baseData, "system.quantity") !== undefined;
+                if (hasQuantity) foundry.utils.setProperty(baseData, "system.quantity", 1);
+                await actor.createEmbeddedDocuments("Item", [baseData]);
+                strInventoryAddedMessage = `1 ${strName} was added to ${actor.name}'s inventory.`;
             }
-        } else {
-            // Fallback for v12 compatibility (deprecated properties)
-            strCompendiumName = rollResults.results[0].documentCollection || "";
-            strCompendiumID = rollResults.results[0].documentId;
-        if (strCompendiumName == "Item"){
-            // It is an item in the world
-            strCompendiumLink = "@UUID[" + strCompendiumType + "." + strCompendiumID + "]{" + strName + "}";
-        }else{
-            // It is a compendium
-            strCompendiumLink = "@UUID[Compendium." + strCompendiumName + "." + strCompendiumType + "." + strCompendiumID + "]{" + strName + "}";
-            }
+        } catch (err) {
+            console.warn(MODULE.ID + " | Could not add item to inventory:", err);
         }
-        // const item = await game.items.get(strCompendiumID);
-        var ITEMDATA = getItemDataById(strCompendiumID);
-        strKind = ITEMDATA.strKind;
-        strDetails = ITEMDATA.strDescritption;
-        strRarity = ITEMDATA.strRarity;
-        strValue = ITEMDATA.strValue;
-
-        // Get the before desription parts
-        if (BIBLIOSOPH.CARDTYPEINVESTIGATION){
-            let tableDescBefore = game.tables.getName("Search Descriptions: Before");
-            if (!tableDescBefore) {
-                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "You need to choose a roll table for Investigation Descriptions (Before) in settings.", "", false, false); 
-                return;
-            }
-            let rollDescBeforeResults = await tableDescBefore.roll();
-            strDescriptionBefore = rollDescBeforeResults.results[0].text;
-            // Get the reveal text
-            let tableDescReveal = game.tables.getName("Search Descriptions: Reveal");
-            if (!tableDescReveal) {
-                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "You need to choose a roll table for Investigation Descriptions (Reveal) in settings.", "", false, false); 
-                return;
-            }
-            let rollDescRevealResults = await tableDescReveal.roll();
-            strDescriptionReveal = rollDescRevealResults.results[0].text;
-            // Get the after desription parts
-            let tableDescAfter = game.tables.getName("Search Descriptions: After");
-            if (!tableDescAfter) {
-                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "You need to choose a roll table for Investigation Descriptions (After) in settings.", "", false, false); 
-                return;
-            }
-            let rollDescAfterResults = await tableDescAfter.roll();
-            strDescriptionAfter = rollDescAfterResults.results[0].text;
-
-        } else {
-            strDescriptionBefore = "";
-            strDescriptionReveal = "";
-            strDescriptionAfter = "";
-        }
-
-        // Roll to find the number of items
-
-
-        // Roll to find the number of items
-        let rollQuantity = await new Roll(intSearchDice).evaluate();
-        // show the dice.
-        if (game.settings.get(MODULE.ID, 'showDiceRolls')) {
-            BlacksmithUtils.rollCoffeePubDice(rollQuantity);
-        }
-        intQuantity = rollQuantity.total;
-
-        // // -- Call our dice function -- 
-        // var intQuantity = 0;
-        // var strDiceFormula = intSearchDice;
-        // BlacksmithUtils.rollCoffeePubDice(strDiceFormula).then(result => {
-        //     intQuantity = result;
-        // });
-
-
-        // make the monster plural if needed
-        if (intQuantity > 1) {
-            strName = strName + "s";
-        }
-        // make the number a word
-        strQuantity = numToWord(intQuantity);
-
-        // Add the found item to the character's inventory (when investigation finds something)
-        const uuidToAdd = rollResults?.results?.[0]?.documentUuid;
-        const actor = game.user.character ?? canvas.tokens?.controlled?.[0]?.actor;
-        const qty = Math.max(1, Number(intQuantity) || 1);
-
-        if (uuidToAdd && actor) {
-            try {
-                const itemDoc = await fromUuid(uuidToAdd);
-                if (!(itemDoc instanceof Item)) {
-                    console.warn(MODULE.ID + " | UUID did not resolve to an Item:", uuidToAdd, itemDoc);
-                } else {
-                    const baseData = itemDoc.toObject();
-                    delete baseData._id;
-                    const hasQuantity = foundry.utils.getProperty(baseData, "system.quantity") !== undefined;
-                    let toCreate;
-                    if (hasQuantity) {
-                        foundry.utils.setProperty(baseData, "system.quantity", qty);
-                        toCreate = [baseData];
-                    } else {
-                        toCreate = Array.from({ length: qty }, () => {
-                            const d = itemDoc.toObject();
-                            delete d._id;
-                            return d;
-                        });
-                    }
-                    await actor.createEmbeddedDocuments("Item", toCreate);
-                    const actorName = actor.name;
-                    strInventoryAddedMessage = qty === 1
-                        ? `1 ${strName} was added to ${actorName}'s inventory.`
-                        : `${qty} ${strName} were added to ${actorName}'s inventory.`;
-                }
-            } catch (err) {
-                console.warn(MODULE.ID + " | Could not add investigation item to inventory:", err);
-                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Could not add item to inventory.", err?.message ?? String(err), false, false);
-            }
-        }
-
     }
 
-    // Set the template type to Search
+    // Set the template type to Search (Gift / Shady Goods)
     const templatePath = BIBLIOSOPH.MESSAGE_TEMPLATE_CARD;
     const response = await fetch(templatePath);
     const templateText = await response.text();

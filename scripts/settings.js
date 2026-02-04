@@ -609,10 +609,28 @@ export const registerSettings = () => {
 			default: "",
 			type: String,
 		});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		// -------------------------------------
-
 		// ** INVESTIGATION **
-
 		// ---------- SUBHEADING ----------
 			game.settings.register(MODULE.ID, "headingH3Investigation", {
 			name: MODULE.ID + '.headingH3Investigation-Label',
@@ -623,6 +641,8 @@ export const registerSettings = () => {
 			type: String,
 		});
 		// -------------------------------------
+
+
 		game.settings.register(MODULE.ID, 'investigationEnabled', {
 			name: MODULE.ID + '.investigationEnabled-Label',
 			hint: MODULE.ID + '.investigationEnabled-Hint',
@@ -662,6 +682,19 @@ export const registerSettings = () => {
 			default: 'theme-default',
 			choices: themeChoices
 		});
+
+		// -- Investigation Macro --
+		game.settings.register(MODULE.ID,'investigationMacro', {
+			name: MODULE.ID + '.investigationMacro-Label',
+			hint: MODULE.ID + '.investigationMacro-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: true,
+			default: '-- Choose a Macro --',
+			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
+		});
+
+
 		// -- Investigation Odds --
 		game.settings.register(MODULE.ID,'investigationOdds', {
 			name: MODULE.ID + '.investigationOdds-Label',
@@ -677,7 +710,8 @@ export const registerSettings = () => {
 			},
 			default: 20,
 		});
-		// -- Investigation Dice --
+
+		// -- Investigation Dice - SLOTS --
 		game.settings.register(MODULE.ID,'investigationDice', {
 			name: MODULE.ID + '.investigationDice-Label',
 			hint: MODULE.ID + '.investigationDice-Hint',
@@ -692,27 +726,148 @@ export const registerSettings = () => {
 			},
 			default: 3,
 		});
-		// -- Investigation Table --
-		game.settings.register(MODULE.ID,'investigationTable', {
-			name: MODULE.ID + '.investigationTable-Label',
-			hint: MODULE.ID + '.investigationTable-Hint',
+
+
+
+
+
+
+
+		// -- Investigation Table - COMMON --
+		game.settings.register(MODULE.ID,'investigationTableCommon', {
+			name: MODULE.ID + '.investigationTableCommon-Label',
+			hint: MODULE.ID + '.investigationTableCommon-Hint',
 			scope: "world",
 			config: true,
 			requiresReload: false,
 			default: '-- Choose a Roll Table --',
 			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
 		});
-		// -- Investigation Macro --
-		game.settings.register(MODULE.ID,'investigationMacro', {
-			name: MODULE.ID + '.investigationMacro-Label',
-			hint: MODULE.ID + '.investigationMacro-Hint',
+
+		// -- Investigation Odds - COMMON --
+		game.settings.register(MODULE.ID,'investigationOddsCommon', {
+			name: MODULE.ID + '.investigationOddsCommon-Label',
+			hint: MODULE.ID + '.investigationOddsCommon-Hint',
 			scope: "world",
 			config: true,
-			requiresReload: true,
-			default: '-- Choose a Macro --',
-			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
+			requiresReload: false,
+			type: Number,
+			range: {	
+				min: 0,
+				max: 100,
+				step: 0.5,
+			},
+			default: 80,
 		});
 
+		// -- Investigation Table - UNCOMMON	 --
+		game.settings.register(MODULE.ID,'investigationTableUncommon', {
+			name: MODULE.ID + '.investigationTableUncommon-Label',
+			hint: MODULE.ID + '.investigationTableUncommon-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: false,
+			default: '-- Choose a Roll Table --',
+			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
+		});
+
+		// -- Investigation Odds - UNCOMMON --
+		game.settings.register(MODULE.ID,'investigationOddsUncommon', {
+			name: MODULE.ID + '.investigationOddsUncommon-Label',
+			hint: MODULE.ID + '.investigationOddsUncommon-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: false,
+			type: Number,
+			range: {	
+				min: 0,
+				max: 100,
+				step: 0.5,
+			},
+			default: 20,
+		});
+
+
+		// -- Investigation Table - RARE	 --
+		game.settings.register(MODULE.ID,'investigationTableRare', {
+			name: MODULE.ID + '.investigationTableRare-Label',
+			hint: MODULE.ID + '.investigationTableRare-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: false,
+			default: '-- Choose a Roll Table --',
+			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
+		});
+
+		// -- Investigation Odds - RARE --
+		game.settings.register(MODULE.ID,'investigationOddsRare', {
+			name: MODULE.ID + '.investigationOddsRare-Label',
+			hint: MODULE.ID + '.investigationOddsRare-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: false,
+			type: Number,
+			range: {	
+				min: 0,
+				max: 100,
+				step: 0.5,
+			},
+			default: 5,
+		});
+
+		// -- Investigation Table - VERY RARE	 --
+		game.settings.register(MODULE.ID,'investigationTableVeryRare', {
+			name: MODULE.ID + '.investigationTableVeryRare-Label',
+			hint: MODULE.ID + '.investigationTableVeryRare-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: false,
+			default: '-- Choose a Roll Table --',
+			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
+		});
+
+		// -- Investigation Odds - VERY RARE --
+		game.settings.register(MODULE.ID,'investigationOddsVeryRare', {
+			name: MODULE.ID + '.investigationOddsVeryRare-Label',
+			hint: MODULE.ID + '.investigationOddsVeryRare-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: false,
+			type: Number,
+			range: {	
+				min: 0,
+				max: 100,
+				step: 0.5,
+			},
+			default: 2,
+		});
+
+		// -- Investigation Table - LEGENDARY	 --
+		game.settings.register(MODULE.ID,'investigationTableLegendary', {
+			name: MODULE.ID + '.investigationTableLegendary-Label',
+			hint: MODULE.ID + '.investigationTableLegendary-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: false,
+			default: '-- Choose a Roll Table --',
+			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
+		});
+
+		// -- Investigation Odds - LEGENDARY --
+		game.settings.register(MODULE.ID,'investigationOddsLegendary', {
+			name: MODULE.ID + '.investigationOddsLegendary-Label',
+			hint: MODULE.ID + '.investigationOddsLegendary-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: false,
+			type: Number,
+			range: {	
+				min: 0,
+				max: 100,
+				step: 0.5,
+			},
+			default: 0.5,
+		});
 
 		// ---------- SUBHEADING ----------
 		game.settings.register(MODULE.ID, "headingH3Gifts", {
