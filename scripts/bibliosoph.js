@@ -2766,10 +2766,19 @@ async function createChatCardInvestigation() {
         }
     }
 
-    // Roll: find something (items) or not
+    // Roll: find something (items) or not — 1d100, or 1d100 + INT + PROF when player skill is used
     const rollFind = await new Roll("1d100").evaluate();
     if (game.settings.get(MODULE.ID, 'showDiceRolls')) BlacksmithUtils.rollCoffeePubDice(rollFind);
-    if (rollFind.total > investigationOdds) {
+    let findItemsRollSucceeds;
+    if (game.settings.get(MODULE.ID, 'investigationPlayerSkill') && actor && game.system?.id === "dnd5e") {
+        const intMod = Number(actor.system?.abilities?.int?.mod) ?? 0;
+        const prof = Number(actor.system?.attributes?.prof) ?? 0;
+        const findTotal = rollFind.total + intMod + prof;
+        findItemsRollSucceeds = findTotal > (100 - investigationOdds);
+    } else {
+        findItemsRollSucceeds = rollFind.total <= investigationOdds;
+    }
+    if (!findItemsRollSucceeds) {
         // No items this time; use "found something" narrative if they found coins, else "found nothing"
         const foundAnything = !!coinsFound;
         const entry = pickEntry(foundAnything ? foundSomethingEntries : foundNothingEntries);

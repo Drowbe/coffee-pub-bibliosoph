@@ -167,9 +167,9 @@
 		"investigationOddsLegendary-Label": "Legendary Weighting",
 		"investigationOddsLegendary-Hint": "Relative weight for Legendary when rolling rarity.",
 		"investigationNotificationStart": "Running investigation check...",
-		"investigationInventorySummary": "We added {items} to {character}'s inventory.",
+		"investigationInventorySummary": "{items} have been added to {character}'s inventory.",
 		"investigationInventorySummaryNoActor": "No character or token selected; items were not added to inventory.",
-		"investigationCoinsSummary": "Added {coins} to {character}'s purse.",
+		"investigationCoinsSummary": "Added {coins} to {character}'s coin purse.",
 		"investigationCoinsSummaryNoActor": "No character or token selected; coins were not added.",
 
 
