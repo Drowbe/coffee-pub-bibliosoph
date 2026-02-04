@@ -1,16 +1,259 @@
 {
-  "foundNothing": [
-    {
-      "title": "Nothing Found",
-      "tags": [],
-      "description": "You carefully search the area but find nothing of interest."
-    }
-  ],
-  "foundSomething": [
-    {
-      "title": "Search Results",
-      "tags": [],
-      "description": "You carefully examine your surroundings, your gaze sweeping across the area. Your thoroughness has been advantageous."
-    }
-  ]
+    "foundNothing": [
+      {
+        "title": "Nothing Found",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "failure", "neutral"],
+        "description": "You carefully search the area but find nothing of interest."
+      },
+      {
+        "title": "No Luck",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "failure", "light"],
+        "description": "Your search yields nothing but dust and cobwebs."
+      },
+      {
+        "title": "Empty-Handed",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "failure", "neutral"],
+        "description": "Despite a thorough search, there is nothing here worth taking."
+      },
+      {
+        "title": "No Items of Significance",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "failure", "thorough"],
+        "description": "Even after meticulously searching, you uncover no items of significance."
+      },
+      {
+        "title": "Nothing Noteworthy",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "failure", "methodical"],
+        "description": "Your thorough examination yields no noteworthy findings."
+      },
+      {
+        "title": "Nothing Remarkable",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "failure", "neutral"],
+        "description": "Despite your diligent efforts, nothing remarkable comes to light."
+      },
+      {
+        "title": "No Items of Intrigue",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "failure", "focused"],
+        "description": "Your intensive search turns up empty, revealing no items of intrigue."
+      },
+      {
+        "title": "Devoid of Interest",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "failure", "clinical"],
+        "description": "After an exhaustive investigation, you find nothing that sparks curiosity."
+      },
+      {
+        "title": "False Promise",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "failure", "narrative"],
+        "description": "For a moment it seems promising, but closer inspection reveals nothing of value."
+      },
+      {
+        "title": "Cold Trail",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "failure", "dramatic"],
+        "description": "Every lead fizzles out, leaving you with the sense that this path leads nowhere."
+      },
+      {
+        "title": "Dead End",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "failure", "narrative"],
+        "description": "However carefully you search, there is simply nothing here to uncover."
+      },
+      {
+        "title": "Only Appearances",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "failure", "subtle"],
+        "description": "At first glance it feels meaningful, but closer scrutiny reveals only the ordinary."
+      },
+      {
+        "title": "Missed Opportunity",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "failure", "regret"],
+        "description": "If something was once here, it has long since been taken or erased."
+      },
+      {
+        "title": "Silence Answers Back",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "failure", "atmosphere"],
+        "description": "You search carefully, but the space offers no answers in return."
+      },
+      {
+        "title": "Nothing to Grasp",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "failure", "abstract"],
+        "description": "Your efforts reveal no clues, no tools, no threads to pull."
+      },
+      {
+        "title": "Unrewarded Effort",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "failure", "neutral"],
+        "description": "The search is thorough, but ultimately unrewarding."
+      },
+      {
+        "title": "All Clear",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "failure", "clean"],
+        "description": "There is nothing hidden here, and nothing left behind."
+      },
+      {
+        "title": "Careful but Fruitless",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "failure", "measured"],
+        "description": "You take your time, double-checking your work, yet find nothing of note."
+      },
+      {
+        "title": "Nothing Out of Place",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "failure", "observant"],
+        "description": "Everything appears exactly as it should. No clues stand out."
+      },
+      {
+        "title": "A Quiet Search",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "failure", "atmosphere"],
+        "description": "Your careful inspection reveals only silence and stillness."
+      },
+      {
+        "title": "No Hidden Truths",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "failure", "final"],
+        "description": "Whatever secrets might exist are not here to be found."
+      }
+    ],
+    "foundSomething": [
+      {
+        "title": "Search Results",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "success", "neutral"],
+        "description": "You carefully examine your surroundings, your gaze sweeping across everything. Your thoroughness proves advantageous."
+      },
+      {
+        "title": "Findings",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "success", "light"],
+        "description": "Your search pays off. You've turned up a few things of interest."
+      },
+      {
+        "title": "What's Here",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "success", "neutral"],
+        "description": "A careful look around reveals some items worth noting."
+      },
+      {
+        "title": "Methodical Search",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "success", "thorough"],
+        "description": "With meticulous care, you scour every nook and cranny, leaving no stone unturned."
+      },
+      {
+        "title": "Keen Eye",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "success", "perceptive"],
+        "description": "You comb through the space with a keen eye, attuned to even the slightest irregularity."
+      },
+      {
+        "title": "Careful Inspection",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "success", "methodical"],
+        "description": "Your eyes move deliberately over every detail, searching for anything out of the ordinary."
+      },
+      {
+        "title": "Hidden Details",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "success", "subtle"],
+        "description": "A careful examination brings subtle details into focus, hinting at something worth attention."
+      },
+      {
+        "title": "Focused Effort",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "success", "intent"],
+        "description": "You investigate with unwavering focus, uncovering what lies just beneath the surface."
+      },
+      {
+        "title": "Something Stirs",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "success", "narrative"],
+        "description": "At first it blends in, but closer inspection reveals something that doesn't quite belong."
+      },
+      {
+        "title": "Promising Discovery",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "success", "anticipation"],
+        "description": "Your careful approach is rewarded with a promising discovery."
+      },
+      {
+        "title": "Clue Unearthed",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "success", "clue"],
+        "description": "A small but meaningful detail catches your attention."
+      },
+      {
+        "title": "Worth a Second Look",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "success", "subtle"],
+        "description": "Something here stands out once you take a closer look."
+      },
+      {
+        "title": "Quiet Revelation",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "success", "atmosphere"],
+        "description": "In the stillness, a hidden detail quietly reveals itself."
+      },
+      {
+        "title": "Uneasy Detail",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "success", "ominous"],
+        "description": "One small detail feels wrong, and it draws your attention immediately."
+      },
+      {
+        "title": "Trace Evidence",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "success", "clue"],
+        "description": "Though subtle, there is clear evidence that something happened here."
+      },
+      {
+        "title": "Care Rewards You",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "success", "measured"],
+        "description": "Your patience and attention to detail pay off."
+      },
+      {
+        "title": "Hidden in Plain Sight",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "success", "clever"],
+        "description": "What you find was easy to miss, but impossible to ignore once noticed."
+      },
+      {
+        "title": "Telling Detail",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "success", "narrative"],
+        "description": "A single detail tells a much larger story."
+      },
+      {
+        "title": "Subtle Clue",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "success", "quiet"],
+        "description": "It's not obvious, but it’s definitely meaningful."
+      },
+      {
+        "title": "Something Left Behind",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "success", "mystery"],
+        "description": "Someone missed this, or assumed no one would look closely enough."
+      },
+      {
+        "title": "Worth Investigating Further",
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "tags": ["investigation", "success", "hook"],
+        "description": "What you uncover raises more questions than answers."
+      }
+    ]
 }
+  

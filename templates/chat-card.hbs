@@ -17,27 +17,38 @@
     {{/if}}
     {{#if narrativeTitle}}
         <div class="section-header investigation-narrative-title">
-            <i class="fa-solid {{iconStyle}}"></i> {{narrativeTitle}}
+            {{{narrativeIcon}}} {{narrativeTitle}}
         </div>
     {{/if}}
     <hr class="investigation-separator" />
     {{#if narrativeDescription}}
         <p class="investigation-narrative-description">{{narrativeDescription}}</p>
     {{/if}}
-    {{#if foundItems}}
-        <div class="investigation-items">
-            {{#each foundItems}}
-                <div class="investigation-item-row">
-                    {{#if img}}<img class="investigation-item-img" src="{{img}}" alt="" />{{/if}}
-                    <span class="investigation-item-name">{{{link}}}</span>
-                    {{#if rarity}}<span class="investigation-item-rarity">({{rarity}})</span>{{/if}}
-                </div>
-            {{/each}}
-        </div>
+    {{#if coinsFound}}
+        <div class="section-header"><i class="fa-solid fa-coins"></i> Coins</div>
+        <p class="investigation-coins">{{coinsDisplayLine}}</p>
     {{/if}}
-    {{#if inventorySummaryLine}}
+    {{#if itemsByRarity}}
+        {{#each itemsByRarity}}
+            <div class="section-header"><i class="fa-solid {{icon}}"></i> {{rarity}}</div>
+            <div class="investigation-items">
+                {{#each items}}
+                    <div class="investigation-item-row">
+                        {{#if img}}<img class="investigation-item-img" src="{{img}}" alt="" />{{/if}}
+                        <span class="investigation-item-name">{{{link}}}</span>
+                    </div>
+                {{/each}}
+            </div>
+        {{/each}}
+    {{/if}}
+    {{#if (or inventorySummaryLine coinsSummaryLine)}}
         <div class="section-content section-dark">
-            <p><i class="fa-solid fa-bag-shopping"></i> {{inventorySummaryLine}}</p>
+            {{#if inventorySummaryLine}}
+                <p><i class="fa-solid fa-bag-shopping"></i> {{inventorySummaryLine}}</p>
+            {{/if}}
+            {{#if coinsSummaryLine}}
+                <p><i class="fa-solid fa-coins"></i> {{coinsSummaryLine}}</p>
+            {{/if}}
         </div>
     {{/if}}
     {{else}}

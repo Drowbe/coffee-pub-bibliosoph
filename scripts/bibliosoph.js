@@ -2715,7 +2715,57 @@ async function createChatCardInvestigation() {
     const foundSomethingEntries = narrativeJson.foundSomething ?? [];
     const pickEntry = (arr) => (arr.length ? arr[Math.floor(Math.random() * arr.length)] : { title: "", tags: [], description: "" });
 
-    // Roll: find something or not
+    const actor = game.user.character ?? canvas.tokens?.controlled?.[0]?.actor;
+
+    // Roll: find coins or not (independent of items)
+    let coinsFound = null;
+    let coinsDisplayLine = "";
+    let coinsSummaryLine = "";
+    const coinsOdds = Math.max(0, Math.min(100, Number(game.settings.get(MODULE.ID, 'investigationCoinsOdds')) ?? 20));
+    const rollCoins = await new Roll("1d100").evaluate();
+    if (game.settings.get(MODULE.ID, 'showDiceRolls')) BlacksmithUtils.rollCoffeePubDice(rollCoins);
+    if (rollCoins.total <= coinsOdds) {
+        const maxPp = Math.max(0, Number(game.settings.get(MODULE.ID, 'investigationCoinsMaxPlatinum')) ?? 0);
+        const maxGp = Math.max(0, Number(game.settings.get(MODULE.ID, 'investigationCoinsMaxGold')) ?? 0);
+        const maxSp = Math.max(0, Number(game.settings.get(MODULE.ID, 'investigationCoinsMaxSilver')) ?? 0);
+        const maxEp = Math.max(0, Number(game.settings.get(MODULE.ID, 'investigationCoinsMaxElectrum')) ?? 0);
+        const maxCp = Math.max(0, Number(game.settings.get(MODULE.ID, 'investigationCoinsMaxCopper')) ?? 0);
+        const pp = maxPp > 0 ? Math.floor(Math.random() * (maxPp + 1)) : 0;
+        const gp = maxGp > 0 ? Math.floor(Math.random() * (maxGp + 1)) : 0;
+        const sp = maxSp > 0 ? Math.floor(Math.random() * (maxSp + 1)) : 0;
+        const ep = maxEp > 0 ? Math.floor(Math.random() * (maxEp + 1)) : 0;
+        const cp = maxCp > 0 ? Math.floor(Math.random() * (maxCp + 1)) : 0;
+            if (pp + gp + sp + ep + cp > 0) {
+            coinsFound = { pp, gp, ep, sp, cp };
+            const coinParts = [];
+            if (pp) coinParts.push(`${pp} pp`);
+            if (gp) coinParts.push(`${gp} gp`);
+            if (ep) coinParts.push(`${ep} ep`);
+            if (sp) coinParts.push(`${sp} sp`);
+            if (cp) coinParts.push(`${cp} cp`);
+            coinsDisplayLine = coinParts.join(" · ");
+            if (actor?.system?.currency) {
+                try {
+                    const cur = actor.system.currency;
+                    await actor.update({
+                        "system.currency.pp": (Number(cur.pp) || 0) + pp,
+                        "system.currency.gp": (Number(cur.gp) || 0) + gp,
+                        "system.currency.ep": (Number(cur.ep) || 0) + ep,
+                        "system.currency.sp": (Number(cur.sp) || 0) + sp,
+                        "system.currency.cp": (Number(cur.cp) || 0) + cp,
+                    });
+                    coinsSummaryLine = game.i18n.format("coffee-pub-bibliosoph.investigationCoinsSummary", { coins: coinParts.join(", "), character: actor.name });
+                } catch (err) {
+                    console.warn(MODULE.ID + " | Could not add coins to actor:", err);
+                    coinsSummaryLine = game.i18n.format("coffee-pub-bibliosoph.investigationCoinsSummaryNoActor", {});
+                }
+            } else {
+                coinsSummaryLine = game.i18n.format("coffee-pub-bibliosoph.investigationCoinsSummaryNoActor", {});
+            }
+        }
+    }
+
+    // Roll: find something (items) or not
     const rollFind = await new Roll("1d100").evaluate();
     if (game.settings.get(MODULE.ID, 'showDiceRolls')) BlacksmithUtils.rollCoffeePubDice(rollFind);
     if (rollFind.total > investigationOdds) {
@@ -2730,8 +2780,12 @@ async function createChatCardInvestigation() {
             cardTitle: "Investigation",
             narrativeTitle: entry.title || "Nothing Found",
             narrativeDescription: entry.description || "",
-            foundItems: [],
+            narrativeIcon: entry.icon || "<i class=\"fa-solid fa-dice\"></i>",
+            itemsByRarity: [],
             inventorySummaryLine: "",
+            coinsFound,
+            coinsDisplayLine,
+            coinsSummaryLine,
         };
         const response = await fetch(BIBLIOSOPH.MESSAGE_TEMPLATE_CARD);
         const templateText = await response.text();
@@ -2760,7 +2814,6 @@ async function createChatCardInvestigation() {
     });
     if (bands[bands.length - 1] < 100) bands[bands.length - 1] = 100;
 
-    const actor = game.user.character ?? canvas.tokens?.controlled?.[0]?.actor;
     const foundItems = [];
 
     for (let i = 0; i < numSlots; i++) {
@@ -2822,6 +2875,29 @@ async function createChatCardInvestigation() {
         inventorySummaryLine = game.i18n.format("coffee-pub-bibliosoph.investigationInventorySummaryNoActor", {});
     }
 
+    const RARITY_ORDER = ["Common", "Uncommon", "Rare", "Very Rare", "Legendary", "Other"];
+    const RARITY_ICONS = {
+        "Common": "fa-box",
+        "Uncommon": "fa-treasure-chest",
+        "Rare": "fa-axe-battle",
+        "Very Rare": "fa-trophy",
+        "Legendary": "fa-gem",
+        "Other": "fa-crate-apple",
+    };
+    const normalizeRarity = (s) => (s && typeof s === "string") ? s.replace(/\b\w/g, (c) => c.toUpperCase()) : "Common";
+    const byRarity = {};
+    foundItems.forEach((item) => {
+        const r = normalizeRarity(item.rarity);
+        const key = RARITY_ORDER.includes(r) ? r : "Other";
+        if (!byRarity[key]) byRarity[key] = [];
+        byRarity[key].push(item);
+    });
+    const itemsByRarity = RARITY_ORDER.filter((r) => byRarity[r]?.length).map((rarity) => ({
+        rarity,
+        icon: RARITY_ICONS[rarity] || RARITY_ICONS["Other"],
+        items: byRarity[rarity],
+    }));
+
     const CARDDATA = {
         isInvestigationCard: true,
         userName: strUserName,
@@ -2832,8 +2908,12 @@ async function createChatCardInvestigation() {
         cardTitle: "Investigation",
         narrativeTitle: entry.title || "Search Results",
         narrativeDescription: entry.description || "",
-        foundItems,
+        narrativeIcon: entry.icon || "<i class=\"fa-solid fa-dice\"></i>",
+        itemsByRarity,
         inventorySummaryLine,
+        coinsFound,
+        coinsDisplayLine,
+        coinsSummaryLine,
     };
     const response = await fetch(BIBLIOSOPH.MESSAGE_TEMPLATE_CARD);
     const templateText = await response.text();

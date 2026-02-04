@@ -727,6 +727,70 @@ export const registerSettings = () => {
 			default: 3,
 		});
 
+		// -- Investigation: Odds of Finding Coins --
+		game.settings.register(MODULE.ID, 'investigationCoinsOdds', {
+			name: MODULE.ID + '.investigationCoinsOdds-Label',
+			hint: MODULE.ID + '.investigationCoinsOdds-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: false,
+			type: Number,
+			range: { min: 0, max: 100, step: 1 },
+			default: 20,
+		});
+
+		// -- Investigation: Max coin amounts (upper limit when rolling found coins) --
+		game.settings.register(MODULE.ID, 'investigationCoinsMaxPlatinum', {
+			name: MODULE.ID + '.investigationCoinsMaxPlatinum-Label',
+			hint: MODULE.ID + '.investigationCoinsMaxPlatinum-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: false,
+			type: Number,
+			range: { min: 0, max: 100, step: 1 },
+			default: 0,
+		});
+		game.settings.register(MODULE.ID, 'investigationCoinsMaxGold', {
+			name: MODULE.ID + '.investigationCoinsMaxGold-Label',
+			hint: MODULE.ID + '.investigationCoinsMaxGold-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: false,
+			type: Number,
+			range: { min: 0, max: 100, step: 1 },
+			default: 10,
+		});
+		game.settings.register(MODULE.ID, 'investigationCoinsMaxSilver', {
+			name: MODULE.ID + '.investigationCoinsMaxSilver-Label',
+			hint: MODULE.ID + '.investigationCoinsMaxSilver-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: false,
+			type: Number,
+			range: { min: 0, max: 100, step: 1 },
+			default: 45,
+		});
+		game.settings.register(MODULE.ID, 'investigationCoinsMaxElectrum', {
+			name: MODULE.ID + '.investigationCoinsMaxElectrum-Label',
+			hint: MODULE.ID + '.investigationCoinsMaxElectrum-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: false,
+			type: Number,
+			range: { min: 0, max: 100, step: 1 },
+			default: 10,
+		});
+		game.settings.register(MODULE.ID, 'investigationCoinsMaxCopper', {
+			name: MODULE.ID + '.investigationCoinsMaxCopper-Label',
+			hint: MODULE.ID + '.investigationCoinsMaxCopper-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: false,
+			type: Number,
+			range: { min: 0, max: 100, step: 1 },
+			default: 100,
+		});
+
 
 
 

@@ -128,6 +128,18 @@
 		"investigationOdds-Hint": "",
 		"investigationDice-Label": "Upper Limit of Items",
 		"investigationDice-Hint": "",
+		"investigationCoinsOdds-Label": "Odds of Finding Coins",
+		"investigationCoinsOdds-Hint": "Chance (0–100) to find coins when investigating. Roll 1d100 ≤ this value to find coins.",
+		"investigationCoinsMaxPlatinum-Label": "Max Platinum Amount",
+		"investigationCoinsMaxPlatinum-Hint": "Maximum platinum pieces that can be found (0–max rolled).",
+		"investigationCoinsMaxGold-Label": "Max Gold Amount",
+		"investigationCoinsMaxGold-Hint": "Maximum gold pieces that can be found (0–max rolled).",
+		"investigationCoinsMaxSilver-Label": "Max Silver Amount",
+		"investigationCoinsMaxSilver-Hint": "Maximum silver pieces that can be found (0–max rolled).",
+		"investigationCoinsMaxElectrum-Label": "Max Electrum Amount",
+		"investigationCoinsMaxElectrum-Hint": "Maximum electrum pieces that can be found (0–max rolled).",
+		"investigationCoinsMaxCopper-Label": "Max Copper Amount",
+		"investigationCoinsMaxCopper-Hint": "Maximum copper pieces that can be found (0–max rolled).",
 		"investigationTableCommon-Label": "Common Roll Table Name",
 		"investigationTableCommon-Hint": "",
 		"investigationOddsCommon-Label": "Common Odds",
@@ -154,6 +166,8 @@
 		"investigationOddsLegendary-Hint": "",
 		"investigationInventorySummary": "We added {items} to {character}'s inventory.",
 		"investigationInventorySummaryNoActor": "No character or token selected; items were not added to inventory.",
+		"investigationCoinsSummary": "Added {coins} to {character}'s purse.",
+		"investigationCoinsSummaryNoActor": "No character or token selected; coins were not added.",
 
 
 
