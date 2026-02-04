@@ -93,11 +93,7 @@
 .investigation-narrative-title {
     margin-top: 0.5em;
 }
-.investigation-separator {
-    border: 0;
-    border-top: 1px solid rgba(0, 0, 0, 0.2);
-    margin: 0.5em 0;
-}
+
 .investigation-narrative-description {
     margin: 0.5em 0;
 }
@@ -115,6 +111,17 @@
     height: 32px;
     object-fit: contain;
     border-radius: 4px;
+    flex-shrink: 0;
+}
+.investigation-item-name {
+    min-width: 0;
+    overflow: hidden;
+}
+.investigation-item-name a.content-link {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .investigation-item-rarity {
     font-size: 0.9em;
