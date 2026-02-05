@@ -84,7 +84,7 @@ export class WindowEncounter extends Base {
     static DEFAULT_OPTIONS = foundry.utils.mergeObject(super.DEFAULT_OPTIONS ?? {}, {
         id: WINDOW_ENCOUNTER_APP_ID,
         classes: ['window-encounter', 'bibliosoph-window'],
-        position: { width: 720, height: 560 },
+        position: { width: 500, height: 750 },
         window: {
             title: 'Quick Encounter',
             resizable: true,
@@ -202,6 +202,38 @@ export class WindowEncounter extends Base {
     async _onFirstRender(_context, options) {
         await super._onFirstRender?.(_context, options);
         this._attachDelegationOnce();
+    }
+
+    /**
+     * Persist window position/size when the user moves or resizes (Application V2 calls this).
+     * @param {ApplicationPosition} position - Current position (left, top, width, height, etc.)
+     */
+    _onPosition(position) {
+        super._onPosition?.(position);
+        this._saveWindowBounds(position);
+    }
+
+    /** Save current window bounds to client settings (used on position change and close). */
+    _saveWindowBounds(position) {
+        if (!game.settings?.get || typeof game.settings.get !== 'function') return;
+        const pos = position ?? this.position;
+        const bounds = {};
+        if (typeof pos?.left === 'number') bounds.left = pos.left;
+        if (typeof pos?.top === 'number') bounds.top = pos.top;
+        if (typeof pos?.width === 'number') bounds.width = pos.width;
+        else if (this.options?.position?.width != null) bounds.width = this.options.position.width;
+        if (typeof pos?.height === 'number') bounds.height = pos.height;
+        else if (this.options?.position?.height != null) bounds.height = this.options.position.height;
+        if (Object.keys(bounds).length > 0) {
+            const current = game.settings.get(MODULE.ID, 'quickEncounterWindowBounds') ?? {};
+            game.settings.set(MODULE.ID, 'quickEncounterWindowBounds', { ...current, ...bounds });
+        }
+    }
+
+    /** Save bounds when closing so final size/position are remembered. */
+    async _preClose(options) {
+        await super._preClose?.(options);
+        this._saveWindowBounds();
     }
 
     /**

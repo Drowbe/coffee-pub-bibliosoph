@@ -108,6 +108,14 @@ export const registerSettings = () => {
 		// Debug: Post the Blacksmith choice arrays - This is debug info, only log if really needed for troubleshooting
 		const blacksmith = game.modules.get('coffee-pub-blacksmith')?.api;
 
+		// Quick Encounter window position/size (client; not shown in config)
+		game.settings.register(MODULE.ID, 'quickEncounterWindowBounds', {
+			scope: 'client',
+			config: false,
+			type: Object,
+			default: { width: 500, height: 750 },
+		});
+
 		// ---------- TITLE ----------
 		game.settings.register(MODULE.ID, "headingH1Bibliosoph", {
 			name: MODULE.ID + '.headingH1Bibliosoph-Label',

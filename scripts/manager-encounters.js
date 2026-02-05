@@ -33,7 +33,17 @@ export function openEncounterWindow() {
         }
         return _encounterWindow;
     }
-    _encounterWindow = new WindowEncounter({ id: WINDOW_ENCOUNTER_APP_ID });
+    let position = { width: 500, height: 750 };
+    try {
+        const savedBounds = game.settings.get(MODULE.ID, 'quickEncounterWindowBounds');
+        if (savedBounds && typeof savedBounds === 'object' && (savedBounds.width != null || savedBounds.height != null || savedBounds.left != null || savedBounds.top != null)) {
+            position = { ...position, ...savedBounds };
+        }
+    } catch (_) {}
+    _encounterWindow = new WindowEncounter({
+        id: WINDOW_ENCOUNTER_APP_ID,
+        position
+    });
     _encounterWindow.render(true);
     if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
         BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: new window rendered', '', true, false);
