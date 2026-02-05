@@ -5,6 +5,7 @@
 // Import required dependencies
 import { MODULE, BIBLIOSOPH  } from './const.js';
 import { BiblioWindowChat } from './window.js';
+import { openEncounterWindow } from './manager-encounters.js';
 import { BlacksmithAPI } from '/modules/coffee-pub-blacksmith/api/blacksmith-api.js';
 
 // Helper function to get setting value using Blacksmith API
@@ -493,6 +494,19 @@ const TOOLBAR_TOOLS = {
                 }
             }
         }
+    },
+    'bibliosoph-quick-encounter': {
+        icon: "fa-solid fa-swords",
+        name: "bibliosoph-quick-encounter",
+        title: "Quick Encounter",
+        zone: "rolls",
+        order: 0,
+        moduleId: "coffee-pub-bibliosoph",
+        gmOnly: true,
+        enabled: () => getSetting('quickEncounterEnabled', true),
+        onCoffeePub: () => getSetting('toolbarCoffeePubQuickEncounterEnabled', true),
+        onFoundry: () => getSetting('toolbarFoundryQuickEncounterEnabled', false),
+        onClick: () => openEncounterWindow()
     }
 };
 

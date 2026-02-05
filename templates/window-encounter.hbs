@@ -1,0 +1,67 @@
+<div class="window-encounter">
+    <header class="window-encounter-header">
+        <div class="window-encounter-header-content">
+            <div class="window-encounter-header-icon">
+                <i class="fa-solid fa-swords"></i>
+            </div>
+            <div class="window-encounter-header-title">{{title}}</div>
+            <div class="window-encounter-header-controls">
+                <button type="button" class="window-encounter-close" title="Close">
+                    <i class="fa-solid fa-times"></i> Close
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section class="window-encounter-canvas">
+        <h3 class="window-encounter-section-title">Canvas</h3>
+        <div class="window-encounter-cr-row">
+            <span class="window-encounter-cr-badge" title="Party Challenge Rating">Party CR: {{partyCRDisplay}}</span>
+            <span class="window-encounter-cr-badge" title="Monster Challenge Rating">Monster CR: {{monsterCRDisplay}}</span>
+            <span class="window-encounter-cr-badge window-encounter-difficulty-badge" title="Current difficulty">Difficulty: {{difficulty}}{{#if difficultyClass}} ({{difficultyClass}}){{/if}}</span>
+        </div>
+    </section>
+
+    <section class="window-encounter-filters">
+        <h3 class="window-encounter-section-title">Search filters</h3>
+        <div class="window-encounter-habitats">
+            {{#each habitats}}
+            <button type="button" class="window-encounter-habitat {{#if selected}}active{{/if}}" data-habitat="{{name}}">{{name}}</button>
+            {{/each}}
+        </div>
+        <div class="window-encounter-difficulty-row">
+            <label for="{{appId}}-encounter-difficulty">Difficulty</label>
+            <select id="{{appId}}-encounter-difficulty" class="window-encounter-difficulty">
+                <option value="">— Any —</option>
+                {{#each difficulties}}
+                <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+                {{/each}}
+            </select>
+        </div>
+        <button type="button" class="window-encounter-recommend">
+            <i class="fa-solid fa-magnifying-glass"></i> Recommend monsters
+        </button>
+    </section>
+
+    <section class="window-encounter-results">
+        <h3 class="window-encounter-section-title">Matching results</h3>
+        {{#if hasRecommendations}}
+        <div class="window-encounter-results-grid">
+            {{#each recommendations}}
+            <div class="window-encounter-result-card" data-actor-id="{{id}}">
+                <img class="window-encounter-result-img" src="{{img}}" alt="{{name}}" />
+                <div class="window-encounter-result-name">{{name}}</div>
+                <div class="window-encounter-result-cr">CR {{cr}}</div>
+            </div>
+            {{/each}}
+        </div>
+        {{else}}
+        <p class="window-encounter-results-empty">Set habitat and difficulty, then click <strong>Recommend monsters</strong>.</p>
+        {{/if}}
+    </section>
+
+    <section class="window-encounter-deploy">
+        <h3 class="window-encounter-section-title">Deploy</h3>
+        <p class="window-encounter-deploy-hint">Select monsters above and deploy to canvas (coming soon).</p>
+    </section>
+</div>

@@ -55,7 +55,8 @@
     }
   ],
   "styles": [
-    "styles/default.css"
+    "styles/default.css",
+    "styles/window-encounter.css"
   ],
   "esmodules": [
     "scripts/bibliosoph.js"

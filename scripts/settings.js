@@ -2130,6 +2130,34 @@ export const registerSettings = () => {
 			scope: 'world',
 			default: false,
 		});
+		// -- Quick Encounter (CR-aware tool) --
+		game.settings.register(MODULE.ID, 'quickEncounterEnabled', {
+			name: MODULE.ID + '.quickEncounterEnabled-Label',
+			hint: MODULE.ID + '.quickEncounterEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'world',
+			default: true,
+		});
+		game.settings.register(MODULE.ID, 'toolbarCoffeePubQuickEncounterEnabled', {
+			name: MODULE.ID + '.toolbarCoffeePubQuickEncounterEnabled-Label',
+			hint: MODULE.ID + '.toolbarCoffeePubQuickEncounterEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'world',
+			default: true,
+		});
+		game.settings.register(MODULE.ID, 'toolbarFoundryQuickEncounterEnabled', {
+			name: MODULE.ID + '.toolbarFoundryQuickEncounterEnabled-Label',
+			hint: MODULE.ID + '.toolbarFoundryQuickEncounterEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'world',
+			default: false,
+		});
 		game.settings.register(MODULE.ID,'encounterTableWater', {
 			name: MODULE.ID + '.encounterTableWater-Label',
 			hint: MODULE.ID + '.encounterTableWater-Hint',

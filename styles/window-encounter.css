@@ -1,0 +1,268 @@
+/* ----- Quick Encounter Window (Blacksmith-style) ----- */
+/* Variables aligned with Squire/Blacksmith window model */
+#coffee-pub-bibliosoph-quick-encounter {
+    --encounter-border-color: #444;
+    --encounter-accent-color: #ac9f81;
+    --encounter-background: #232323;
+    --encounter-header-bg: rgba(0, 0, 0, 0.7);
+    --encounter-content-bg: #232323;
+}
+
+#coffee-pub-bibliosoph-quick-encounter,
+#coffee-pub-bibliosoph-quick-encounter .window-content {
+    background: var(--encounter-background) !important;
+    border: 1px solid var(--encounter-border-color) !important;
+    color: #e0e0e0;
+    font-family: "Signika", sans-serif;
+}
+
+/* Force content area visible (Application V2 may not give it height otherwise) */
+#coffee-pub-bibliosoph-quick-encounter .window-content {
+    min-height: 420px !important;
+    overflow: auto !important;
+    padding: 0 !important;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-header {
+    background: var(--encounter-header-bg) !important;
+    border-bottom: 1px solid var(--encounter-border-color) !important;
+    color: var(--encounter-accent-color) !important;
+}
+
+/* ----- Window structure (scope under app so part content is styled) ----- */
+#coffee-pub-bibliosoph-quick-encounter .window-encounter {
+    display: flex;
+    flex-direction: column;
+    min-height: 400px;
+    height: 100%;
+    padding: 0;
+    overflow: auto;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-header {
+    flex-shrink: 0;
+    background: var(--encounter-header-bg);
+    border-bottom: 1px solid var(--encounter-border-color);
+    padding: 8px 12px;
+    min-height: 50px;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-header-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-header-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid rgba(172, 159, 129, 0.9);
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-header-icon i {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.4em;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-header-title {
+    flex: 1;
+    font-size: 1.2em;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: var(--encounter-accent-color);
+    letter-spacing: 0.02em;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-close {
+    background: transparent;
+    border: 1px solid var(--encounter-accent-color);
+    color: var(--encounter-accent-color);
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-close:hover {
+    color: #fff;
+    background: rgba(172, 159, 129, 0.2);
+}
+
+/* ----- Sections (scrollable body) ----- */
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-canvas,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-filters,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-results,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-deploy {
+    flex-shrink: 0;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--encounter-border-color);
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-section-title {
+    margin: 0 0 8px 0;
+    font-size: 0.9em;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--encounter-accent-color);
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--encounter-border-color);
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-difficulty-badge {
+    border-color: rgba(172, 159, 129, 0.6);
+}
+
+/* ----- Habitat filter buttons ----- */
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-habitats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-habitat {
+    padding: 4px 10px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--encounter-border-color);
+    border-radius: 4px;
+    color: #e0e0e0;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.85em;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-habitat:hover {
+    border-color: var(--encounter-accent-color);
+    color: var(--encounter-accent-color);
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-habitat.active {
+    background: rgba(172, 159, 129, 0.25);
+    border-color: var(--encounter-accent-color);
+    color: #fff;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-difficulty-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-difficulty-row label {
+    font-size: 0.9em;
+    color: var(--encounter-accent-color);
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-difficulty {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--encounter-border-color);
+    border-radius: 4px;
+    color: #e0e0e0;
+    padding: 4px 8px;
+    font-family: inherit;
+    min-width: 120px;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-recommend {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: rgba(172, 159, 129, 0.3);
+    border: 1px solid var(--encounter-accent-color);
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.95em;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-recommend:hover {
+    background: rgba(172, 159, 129, 0.5);
+}
+
+/* ----- Results grid ----- */
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-results {
+    flex: 1;
+    min-height: 120px;
+    overflow: auto;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-results-empty {
+    margin: 0;
+    font-size: 0.9em;
+    color: #999;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 8px;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-result-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 6px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--encounter-border-color);
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-result-card:hover {
+    border-color: var(--encounter-accent-color);
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-result-img {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 4px;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-result-name {
+    font-size: 0.75em;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-result-cr {
+    font-size: 0.7em;
+    color: var(--encounter-accent-color);
+}
+
+/* ----- Deploy section ----- */
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-deploy-hint {
+    margin: 0;
+    font-size: 0.9em;
+    color: #999;
+}

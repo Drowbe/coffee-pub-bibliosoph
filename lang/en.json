@@ -446,6 +446,12 @@
 		"toolbarCoffeePubWaterEncounterEnabled-Label": "Show in the Coffee Pub toolbar",
 		"toolbarCoffeePubWaterEncounterEnabled-Hint": "Water Encounter button in the Coffee Pub toolbar (default: true).",
 		"toolbarFoundryWaterEncounterEnabled-Label": "Show in the Foundry toolbar",
-		"toolbarFoundryWaterEncounterEnabled-Hint": "Water Encounter button in the Foundry toolbar (default: false)."
+		"toolbarFoundryWaterEncounterEnabled-Hint": "Water Encounter button in the Foundry toolbar (default: false).",
+		"quickEncounterEnabled-Label": "Quick Encounter enabled",
+		"quickEncounterEnabled-Hint": "Show the Quick Encounter tool (CR-aware encounter builder) in the toolbar.",
+		"toolbarCoffeePubQuickEncounterEnabled-Label": "Show in the Coffee Pub toolbar",
+		"toolbarCoffeePubQuickEncounterEnabled-Hint": "Quick Encounter button in the Coffee Pub toolbar (default: true).",
+		"toolbarFoundryQuickEncounterEnabled-Label": "Show in the Foundry toolbar",
+		"toolbarFoundryQuickEncounterEnabled-Hint": "Quick Encounter button in the Foundry toolbar (default: false)."
 	}
 }
