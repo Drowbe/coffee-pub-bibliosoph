@@ -13,42 +13,66 @@
         </div>
     </header>
 
-    <section class="window-encounter-canvas">
-        <h3 class="window-encounter-section-title">Canvas</h3>
-        <div class="window-encounter-cr-row">
-            <span class="window-encounter-cr-badge" title="Party Challenge Rating">Party CR: {{partyCRDisplay}}</span>
-            <span class="window-encounter-cr-badge" title="Monster Challenge Rating">Monster CR: {{monsterCRDisplay}}</span>
-            <span class="window-encounter-cr-badge window-encounter-difficulty-badge" title="Current difficulty">Difficulty: {{difficulty}}{{#if difficultyClass}} ({{difficultyClass}}){{/if}}</span>
+    <section class="window-encounter-cr-panel">
+        <h3 class="window-encounter-section-title">Challenge rating</h3>
+        <div class="window-encounter-cr-boxes">
+            <div class="window-encounter-cr-box" title="Party (hero) Challenge Rating">
+                <span class="window-encounter-cr-box-label">HERO CR</span>
+                <span class="window-encounter-cr-box-value">{{heroCRDisplay}}</span>
+            </div>
+            <div class="window-encounter-cr-box" title="Current monsters on canvas">
+                <span class="window-encounter-cr-box-label">MONSTER CR</span>
+                <span class="window-encounter-cr-box-value">{{monsterCRDisplay}}</span>
+            </div>
+            <div class="window-encounter-cr-box window-encounter-cr-box-gap" title="Remaining CR to reach target">
+                <span class="window-encounter-cr-box-label">MONSTER GAP</span>
+                <span class="window-encounter-cr-box-value">{{monsterGapDisplay}}</span>
+            </div>
+            <div class="window-encounter-cr-box window-encounter-cr-box-target" title="Target encounter CR (from slider)">
+                <span class="window-encounter-cr-box-label">ENCOUNTER CR</span>
+                <span class="window-encounter-cr-box-value">{{encounterCRDisplay}}</span>
+            </div>
+        </div>
+        <div class="window-encounter-difficulty-badge-large {{difficultyClass}}" title="Current difficulty setting">
+            <i class="fa-solid fa-dragon window-encounter-difficulty-icon"></i>
+            <span class="window-encounter-difficulty-label">{{difficulty}}</span>
+        </div>
+        <div class="window-encounter-cr-slider-row">
+            <i class="fa-solid fa-rabbit window-encounter-slider-icon" title="Easier"></i>
+            <input type="range" class="window-encounter-cr-slider" min="{{crSliderMin}}" max="{{crSliderMax}}" value="{{crSliderIndex}}" step="1" list="{{appId}}-cr-steps" aria-label="Encounter difficulty: Easy to Deadly" />
+            <datalist id="{{appId}}-cr-steps">
+                <option value="0" label="Easy"></option>
+                <option value="1" label="Medium"></option>
+                <option value="2" label="Hard"></option>
+                <option value="3" label="Deadly"></option>
+            </datalist>
+            <i class="fa-solid fa-skull window-encounter-slider-icon" title="Harder"></i>
         </div>
     </section>
 
     <section class="window-encounter-filters">
-        <h3 class="window-encounter-section-title">Search filters</h3>
+        <h3 class="window-encounter-section-title">Habitat</h3>
         <div class="window-encounter-habitats">
             {{#each habitats}}
             <button type="button" class="window-encounter-habitat {{#if selected}}active{{/if}}" data-habitat="{{name}}">{{name}}</button>
             {{/each}}
         </div>
-        <div class="window-encounter-difficulty-row">
-            <label for="{{appId}}-encounter-difficulty">Difficulty</label>
-            <select id="{{appId}}-encounter-difficulty" class="window-encounter-difficulty">
-                <option value="">— Any —</option>
-                {{#each difficulties}}
-                <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
-                {{/each}}
-            </select>
-        </div>
-        <button type="button" class="window-encounter-recommend">
+        <button type="button" class="window-encounter-recommend" {{#if recommendLoading}}disabled{{/if}} title="{{#if recommendLoading}}Searching…{{else}}Search compendiums for matching monsters{{/if}}">
             <i class="fa-solid fa-magnifying-glass"></i> Recommend monsters
         </button>
     </section>
 
     <section class="window-encounter-results">
         <h3 class="window-encounter-section-title">Matching results</h3>
-        {{#if hasRecommendations}}
+        {{#if recommendLoading}}
+        <div class="window-encounter-results-loading" aria-busy="true">
+            <i class="fa-solid fa-spinner fa-spin window-encounter-spinner"></i>
+            <span class="window-encounter-loading-text">Searching compendiums…</span>
+        </div>
+        {{else if hasRecommendations}}
         <div class="window-encounter-results-grid">
             {{#each recommendations}}
-            <div class="window-encounter-result-card" data-actor-id="{{id}}">
+            <div class="window-encounter-result-card {{#if selected}}selected{{/if}}" data-actor-id="{{id}}" title="Click to select for deploy">
                 <img class="window-encounter-result-img" src="{{img}}" alt="{{name}}" />
                 <div class="window-encounter-result-name">{{name}}</div>
                 <div class="window-encounter-result-cr">CR {{cr}}</div>
@@ -56,12 +80,30 @@
             {{/each}}
         </div>
         {{else}}
+        {{#if recommendAttempted}}
+        <p class="window-encounter-results-empty">No monsters found. Try a different habitat or difficulty.</p>
+        {{else}}
         <p class="window-encounter-results-empty">Set habitat and difficulty, then click <strong>Recommend monsters</strong>.</p>
+        {{/if}}
         {{/if}}
     </section>
 
     <section class="window-encounter-deploy">
         <h3 class="window-encounter-section-title">Deploy</h3>
-        <p class="window-encounter-deploy-hint">Select monsters above and deploy to canvas (coming soon).</p>
+        <p class="window-encounter-deploy-hint">Click result cards to select, then deploy. You will be prompted to click on the canvas to place tokens.</p>
+        <div class="window-encounter-deploy-options">
+            <div class="window-encounter-deploy-patterns">
+                {{#each deploymentPatterns}}
+                <button type="button" class="window-encounter-deploy-pattern {{#if selected}}active{{/if}}" data-pattern="{{value}}" title="Deploy tokens in {{label}} pattern">{{label}}</button>
+                {{/each}}
+            </div>
+            <label class="window-encounter-deploy-visible-label">
+                <input type="checkbox" class="window-encounter-deploy-visible" {{#unless deploymentHidden}}checked{{/unless}} />
+                <span>Visible</span>
+            </label>
+        </div>
+        <button type="button" class="window-encounter-deploy-btn" {{#unless hasDeploySelection}}disabled{{/unless}} title="{{#if hasDeploySelection}}Deploy selected monsters to canvas{{else}}Select monsters above first{{/if}}">
+            <i class="fa-solid fa-map-location-dot"></i> Deploy selected ({{deploySelectedCount}})
+        </button>
     </section>
 </div>
