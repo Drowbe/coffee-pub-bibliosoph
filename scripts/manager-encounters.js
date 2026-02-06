@@ -10,8 +10,12 @@ import { WindowEncounter, WINDOW_ENCOUNTER_APP_ID } from './window-encounter.js'
 let _encounterWindow = null;
 
 const MAX_RECOMMENDATIONS = 24;
-/** Cap actors loaded per compendium to keep lookup under ~10–15s. */
+/** Cap actors loaded per compendium when not using cache. */
 const MAX_ACTORS_PER_PACK = 200;
+/** Cache version for migrations; bump when schema changes. */
+const ENCOUNTER_CACHE_VERSION = 1;
+/** World setting key for the encounter monster cache. */
+const ENCOUNTER_CACHE_SETTING = 'quickEncounterCache';
 const OFFICIAL_HABITATS = new Set([
     'Any', 'Arctic', 'Coastal', 'Desert', 'Forest', 'Grassland',
     'Hill', 'Mountain', 'Planar', 'Swamp', 'Underdark', 'Underwater', 'Urban'
@@ -122,10 +126,152 @@ function actorMatchesHabitat(doc, habitat) {
 }
 
 /**
- * Load candidate actors from all compendiums in parallel, capped per pack for speed.
- * @returns {Promise<Array<{ doc: Actor, id: string, cr: number, xp: number }>>}
+ * Extract habitat tags (lowercase) from D&D 5e environment for cache.
+ * @param {*} env - system.details.environment (array or string)
+ * @returns {string[]}
+ */
+function extractHabitatTags(env) {
+    if (env == null) return [];
+    const raw = Array.isArray(env) ? env : [env];
+    const tags = new Set();
+    for (const e of raw) {
+        const s = String(e).toLowerCase().trim();
+        if (!s) continue;
+        // One tag per value; optionally split on comma for "Mountain, Hill"
+        for (const part of s.split(/\s*,\s*/)) {
+            if (part) tags.add(part);
+        }
+    }
+    return [...tags];
+}
+
+/**
+ * Read encounter cache from settings. Valid only if compendium list matches and entries exist.
+ * @returns {{ valid: boolean, entries: Array<{id, name, img, cr, xp, habitats}>, compendiumIds: string[] }}
+ */
+function getEncounterCache() {
+    try {
+        const raw = game.settings.get(MODULE.ID, ENCOUNTER_CACHE_SETTING);
+        if (!raw || typeof raw !== 'object') return { valid: false, entries: [], compendiumIds: [] };
+        const version = raw.version ?? 0;
+        if (version !== ENCOUNTER_CACHE_VERSION) return { valid: false, entries: raw.entries ?? [], compendiumIds: raw.compendiumIds ?? [] };
+        const compendiumIds = getMonsterCompendiums();
+        const cachedIds = raw.compendiumIds ?? [];
+        const sameList = Array.isArray(cachedIds) && Array.isArray(compendiumIds)
+            && cachedIds.length === compendiumIds.length
+            && cachedIds.every((id, i) => id === compendiumIds[i]);
+        const entries = Array.isArray(raw.entries) ? raw.entries : [];
+        const valid = sameList && entries.length > 0;
+        return { valid, entries, compendiumIds };
+    } catch (_) {
+        return { valid: false, entries: [], compendiumIds: [] };
+    }
+}
+
+/**
+ * Public cache status for UI (valid + count).
+ * @returns {{ valid: boolean, count: number }}
+ */
+export function getEncounterCacheStatus() {
+    const { valid, entries } = getEncounterCache();
+    return { valid, count: entries.length };
+}
+
+/**
+ * Build encounter cache from current Blacksmith compendium list: load all NPC/character actors,
+ * extract id, name, img, cr, xp, habitats, and save to world setting. Optional progress callback.
+ * @param {(packIndex: number, totalPacks: number, entryCount: number) => void} [progressCallback]
+ * @returns {Promise<{ count: number }>}
+ */
+export async function buildEncounterCache(progressCallback) {
+    const compendiumIds = getMonsterCompendiums();
+    if (compendiumIds.length === 0) {
+        if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: No compendiums to cache', '', true, false);
+        }
+        return { count: 0 };
+    }
+
+    const allEntries = [];
+    const total = compendiumIds.length;
+
+    for (let p = 0; p < compendiumIds.length; p++) {
+        const compendiumId = compendiumIds[p];
+        const pack = game.packs.get(compendiumId);
+        if (!pack) {
+            if (typeof progressCallback === 'function') progressCallback(p + 1, total, allEntries.length);
+            continue;
+        }
+        try {
+            let docs = [];
+            const index = await pack.getIndex();
+            const entries = Array.isArray(index) ? index : (index?.index ?? index?.entries ?? []);
+            const ids = (Array.isArray(entries) ? entries : []).map((e) => e?._id ?? e?.id).filter(Boolean);
+            if (ids.length > 0) {
+                docs = await pack.getDocuments({ _id__in: ids });
+            } else {
+                docs = await pack.getDocuments();
+            }
+            docs = Array.isArray(docs) ? docs : [];
+            for (const doc of docs) {
+                if (doc?.type !== 'npc' && doc?.type !== 'character') continue;
+                const crNum = getActorCR(doc);
+                const xp = getActorXP(doc);
+                if (Number.isNaN(crNum) || Number.isNaN(xp)) continue;
+                const id = doc.uuid ?? `${compendiumId}.${doc.id}`;
+                const env = doc?.system?.details?.environment;
+                const habitats = extractHabitatTags(env);
+                allEntries.push({
+                    id,
+                    compendiumId,
+                    docId: doc.id,
+                    name: doc.name ?? 'Unknown',
+                    img: doc.img ?? '',
+                    cr: crNum,
+                    xp,
+                    habitats
+                });
+            }
+        } catch (e) {
+            if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Quick Encounter: Cache failed for ${compendiumId}`, e?.message ?? '', true, false);
+            }
+        }
+        if (typeof progressCallback === 'function') progressCallback(p + 1, total, allEntries.length);
+    }
+
+    const payload = {
+        version: ENCOUNTER_CACHE_VERSION,
+        compendiumIds,
+        builtAt: Date.now(),
+        entries: allEntries
+    };
+    await game.settings.set(MODULE.ID, ENCOUNTER_CACHE_SETTING, payload);
+    if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: Cache built', `${allEntries.length} monsters from ${total} compendium(s)`, true, false);
+    }
+    return { count: allEntries.length };
+}
+
+/**
+ * Load candidate actors: use cache when valid (fast), otherwise load from compendiums (slower).
+ * @returns {Promise<Array<{ doc: { img, name }, id: string, cr: number, xp: number }>>}
  */
 async function getCandidatesWithXP(habitat) {
+    const cache = getEncounterCache();
+    if (cache.valid && cache.entries.length > 0) {
+        const habitatLower = (habitat && habitat !== 'Any') ? String(habitat).toLowerCase() : null;
+        const filtered = habitatLower
+            ? cache.entries.filter((e) => !Array.isArray(e.habitats) || e.habitats.length === 0 || e.habitats.some((h) => h.includes(habitatLower) || habitatLower.includes(h)))
+            : cache.entries;
+        return filtered.map((e) => ({
+            doc: { img: e.img ?? '', name: e.name ?? 'Unknown' },
+            id: e.id,
+            cr: e.cr,
+            xp: e.xp
+        }));
+    }
+
     const compendiumIds = getMonsterCompendiums();
     if (compendiumIds.length === 0) return [];
 
@@ -422,4 +568,6 @@ if (typeof window !== 'undefined') {
     window.bibliosophEncounterRecommend = encounterRecommend;
     window.bibliosophRollForEncounter = rollForEncounter;
     window.bibliosophPostEncounterDeployCard = postEncounterDeployCardToChat;
+    window.bibliosophBuildEncounterCache = buildEncounterCache;
+    window.bibliosophGetEncounterCacheStatus = getEncounterCacheStatus;
 }

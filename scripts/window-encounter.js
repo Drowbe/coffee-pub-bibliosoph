@@ -92,6 +92,10 @@ export class WindowEncounter extends Base {
     /** Blacksmith deployMonsters options: pattern and visibility. */
     _deploymentPattern = 'sequential';
     _deploymentHidden = false;
+    /** True while building/refreshing the encounter cache. */
+    _cacheBuilding = false;
+    /** Progress text during cache build (e.g. "2/5 compendiums"). */
+    _cacheBuildingText = '';
 
     /** AppV2: parts go here so Foundry injects template into .window-content (not in DEFAULT_OPTIONS). */
     static PARTS = {
@@ -190,7 +194,11 @@ export class WindowEncounter extends Base {
                 { value: 'scatter', label: 'Scatter', selected: this._deploymentPattern === 'scatter' },
                 { value: 'grid', label: 'Grid', selected: this._deploymentPattern === 'grid' }
             ],
-            deploymentHidden: this._deploymentHidden
+            deploymentHidden: this._deploymentHidden,
+            cacheBuilding: this._cacheBuilding,
+            cacheBuildingText: this._cacheBuildingText,
+            cacheStatusText: this._getCacheStatusText(),
+            cacheStatusTitle: this._getCacheStatusTitle()
         };
     }
 
@@ -239,6 +247,42 @@ export class WindowEncounter extends Base {
     _onPosition(position) {
         super._onPosition?.(position);
         this._saveWindowBounds(position);
+    }
+
+    /** Cache status line for UI. */
+    _getCacheStatusText() {
+        if (this._cacheBuilding) return '';
+        if (typeof window.bibliosophGetEncounterCacheStatus !== 'function') return '';
+        const { valid, count } = window.bibliosophGetEncounterCacheStatus();
+        if (valid && count > 0) return game.i18n?.format?.('coffee-pub-bibliosoph.quickEncounterCacheStatus-Label', { count }) ?? `Cache: ${count} monsters`;
+        return game.i18n?.localize?.('coffee-pub-bibliosoph.quickEncounterCacheNone-Label') ?? 'No cache — click Refresh to build';
+    }
+
+    /** Cache status tooltip. */
+    _getCacheStatusTitle() {
+        if (this._cacheBuilding) return '';
+        if (typeof window.bibliosophGetEncounterCacheStatus !== 'function') return '';
+        const { valid, count } = window.bibliosophGetEncounterCacheStatus();
+        if (valid && count > 0) return game.i18n?.localize?.('coffee-pub-bibliosoph.quickEncounterCacheStatusTitle-Hint') ?? 'Recommend and Roll use cached data for speed.';
+        return game.i18n?.localize?.('coffee-pub-bibliosoph.quickEncounterCacheNoneTitle-Hint') ?? 'Build a cache to make Recommend and Roll much faster.';
+    }
+
+    /** Build or refresh the monster cache; updates progress and re-renders. */
+    async _onRefreshCache() {
+        if (this._cacheBuilding || typeof window.bibliosophBuildEncounterCache !== 'function') return;
+        this._cacheBuilding = true;
+        this._cacheBuildingText = game.i18n?.localize?.('coffee-pub-bibliosoph.quickEncounterCacheBuilding-Label') ?? 'Building cache…';
+        this.render();
+        try {
+            await window.bibliosophBuildEncounterCache((packIndex, totalPacks, entryCount) => {
+                this._cacheBuildingText = game.i18n?.format?.('coffee-pub-bibliosoph.quickEncounterCacheBuildingProgress-Label', { current: packIndex, total: totalPacks, count: entryCount }) ?? `${packIndex}/${totalPacks} compendiums, ${entryCount} monsters`;
+                this.render();
+            });
+        } finally {
+            this._cacheBuilding = false;
+            this._cacheBuildingText = '';
+            this.render();
+        }
     }
 
     /** Save current window bounds to client settings (used on position change and close). */
@@ -297,6 +341,11 @@ export class WindowEncounter extends Base {
             const recommendBtn = e.target?.closest?.('.window-encounter-recommend');
             if (recommendBtn) {
                 this._onRecommend();
+                return;
+            }
+            const refreshCacheBtn = e.target?.closest?.('.window-encounter-refresh-cache');
+            if (refreshCacheBtn) {
+                this._onRefreshCache();
                 return;
             }
             const resultCard = e.target?.closest?.('.window-encounter-result-card');
@@ -416,6 +465,7 @@ export class WindowEncounter extends Base {
         });
         root.querySelector('.window-encounter-roll')?.addEventListener('click', () => this._onRollForEncounter());
         root.querySelector('.window-encounter-recommend')?.addEventListener('click', () => this._onRecommend());
+        root.querySelector('.window-encounter-refresh-cache')?.addEventListener('click', () => this._onRefreshCache());
         root.querySelectorAll('.window-encounter-result-card').forEach(card => {
             card.addEventListener('click', () => {
                 const uuid = card.dataset?.actorId;

@@ -383,6 +383,27 @@
     cursor: not-allowed;
 }
 
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cache-status {
+    font-size: 0.85em;
+    color: rgba(255, 255, 255, 0.75);
+    margin-bottom: 6px;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cache-building {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-btn-secondary {
+    background: rgba(0, 0, 0, 0.25);
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-btn-secondary:hover:not(:disabled) {
+    background: rgba(0, 0, 0, 0.4);
+}
+
 /* ----- Results grid ----- */
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-results {
     flex: 1;

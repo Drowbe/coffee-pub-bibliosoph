@@ -60,12 +60,22 @@
             <button type="button" class="window-encounter-habitat {{#if selected}}active{{/if}}" data-habitat="{{name}}">{{name}}</button>
             {{/each}}
         </div>
+        <div class="window-encounter-cache-status" title="{{cacheStatusTitle}}">
+            {{#if cacheBuilding}}
+                <span class="window-encounter-cache-building"><i class="fa-solid fa-spinner fa-spin"></i> {{cacheBuildingText}}</span>
+            {{else}}
+                <span class="window-encounter-cache-info">{{cacheStatusText}}</span>
+            {{/if}}
+        </div>
         <div class="window-encounter-action-buttons">
             <button type="button" class="window-encounter-roll window-encounter-btn" {{#if rollLoading}}disabled{{/if}} title="Roll for encounter using Global Encounter Settings (odds and dice); posts a card and may recommend monsters">
                 <i class="fa-solid fa-dice"></i> Roll for Encounter
             </button>
             <button type="button" class="window-encounter-recommend window-encounter-btn" {{#if recommendLoading}}disabled{{/if}} title="{{#if recommendLoading}}Searching…{{else}}Search compendiums for matching monsters{{/if}}">
                 <i class="fa-solid fa-magnifying-glass"></i> Recommend monsters
+            </button>
+            <button type="button" class="window-encounter-refresh-cache window-encounter-btn window-encounter-btn-secondary" {{#if cacheBuilding}}disabled{{/if}} title="Build or refresh the monster cache for faster searches">
+                <i class="fa-solid fa-database"></i> {{localize "coffee-pub-bibliosoph.quickEncounterRefreshCache-Label"}}
             </button>
         </div>
     </section>

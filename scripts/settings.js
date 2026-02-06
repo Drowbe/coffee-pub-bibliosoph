@@ -115,6 +115,13 @@ export const registerSettings = () => {
 			type: Object,
 			default: { width: 500, height: 750 },
 		});
+		// Quick Encounter monster cache (world; built on demand, used for fast Recommend/Roll)
+		game.settings.register(MODULE.ID, 'quickEncounterCache', {
+			scope: 'world',
+			config: false,
+			type: Object,
+			default: null,
+		});
 
 		// ---------- TITLE ----------
 		game.settings.register(MODULE.ID, "headingH1Bibliosoph", {
