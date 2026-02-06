@@ -13,6 +13,15 @@
         </div>
     </header>
 
+    <section class="window-encounter-configure">
+        <h3 class="window-encounter-section-title">{{localize "coffee-pub-bibliosoph.quickEncounterConfigureEncounter-Label"}}</h3>
+        <div class="window-encounter-odds-row">
+            <label class="window-encounter-odds-label" for="{{appId}}-odds">{{localize "coffee-pub-bibliosoph.encounterOdds-Label"}}</label>
+            <span class="window-encounter-odds-value">{{oddsOfEncounter}}</span>
+            <input type="range" id="{{appId}}-odds" class="window-encounter-odds-slider" min="0" max="100" value="{{oddsOfEncounter}}" step="1" aria-label="Odds of encounter (0–100)" />
+        </div>
+    </section>
+
     <section class="window-encounter-cr-panel">
         <h3 class="window-encounter-section-title">Challenge rating</h3>
         <div class="window-encounter-cr-boxes">
@@ -38,15 +47,9 @@
             <span class="window-encounter-difficulty-label">{{difficulty}}</span>
         </div>
         <div class="window-encounter-cr-slider-row">
-            <i class="fa-solid fa-rabbit window-encounter-slider-icon" title="Easier"></i>
-            <input type="range" class="window-encounter-cr-slider" min="{{crSliderMin}}" max="{{crSliderMax}}" value="{{crSliderIndex}}" step="1" list="{{appId}}-cr-steps" aria-label="Encounter difficulty: Easy to Deadly" />
-            <datalist id="{{appId}}-cr-steps">
-                <option value="0" label="Easy"></option>
-                <option value="1" label="Medium"></option>
-                <option value="2" label="Hard"></option>
-                <option value="3" label="Deadly"></option>
-            </datalist>
-            <i class="fa-solid fa-skull window-encounter-slider-icon" title="Harder"></i>
+            <i class="fa-solid fa-rabbit window-encounter-slider-icon" title="Lower CR"></i>
+            <input type="range" class="window-encounter-cr-slider" min="{{crSliderMin}}" max="{{crSliderMax}}" value="{{targetCRValue}}" step="0.25" aria-label="Target Encounter CR" />
+            <i class="fa-solid fa-skull window-encounter-slider-icon" title="Higher CR"></i>
         </div>
     </section>
 
@@ -57,14 +60,19 @@
             <button type="button" class="window-encounter-habitat {{#if selected}}active{{/if}}" data-habitat="{{name}}">{{name}}</button>
             {{/each}}
         </div>
-        <button type="button" class="window-encounter-recommend" {{#if recommendLoading}}disabled{{/if}} title="{{#if recommendLoading}}Searching…{{else}}Search compendiums for matching monsters{{/if}}">
-            <i class="fa-solid fa-magnifying-glass"></i> Recommend monsters
-        </button>
+        <div class="window-encounter-action-buttons">
+            <button type="button" class="window-encounter-roll window-encounter-btn" {{#if rollLoading}}disabled{{/if}} title="Roll for encounter using Global Encounter Settings (odds and dice); posts a card and may recommend monsters">
+                <i class="fa-solid fa-dice"></i> Roll for Encounter
+            </button>
+            <button type="button" class="window-encounter-recommend window-encounter-btn" {{#if recommendLoading}}disabled{{/if}} title="{{#if recommendLoading}}Searching…{{else}}Search compendiums for matching monsters{{/if}}">
+                <i class="fa-solid fa-magnifying-glass"></i> Recommend monsters
+            </button>
+        </div>
     </section>
 
     <section class="window-encounter-results">
         <h3 class="window-encounter-section-title">Matching results</h3>
-        {{#if recommendLoading}}
+        {{#if showSearchingSpinner}}
         <div class="window-encounter-results-loading" aria-busy="true">
             <i class="fa-solid fa-spinner fa-spin window-encounter-spinner"></i>
             <span class="window-encounter-loading-text">Searching compendiums…</span>
@@ -72,9 +80,9 @@
         {{else if hasRecommendations}}
         <div class="window-encounter-results-grid">
             {{#each recommendations}}
-            <div class="window-encounter-result-card {{#if selected}}selected{{/if}}" data-actor-id="{{id}}" title="Click to select for deploy">
+            <div class="window-encounter-result-card {{#if selected}}selected{{/if}}{{#if count}} window-encounter-result-row-built{{/if}}" data-actor-id="{{id}}" data-count="{{count}}" title="{{#if count}}Part of built encounter — deploy below{{else}}Click to select for deploy{{/if}}">
                 <img class="window-encounter-result-img" src="{{img}}" alt="{{name}}" />
-                <div class="window-encounter-result-name">{{name}}</div>
+                <div class="window-encounter-result-name">{{#if count}}{{count}} × {{/if}}{{name}}</div>
                 <div class="window-encounter-result-cr">CR {{cr}}</div>
             </div>
             {{/each}}
@@ -102,8 +110,8 @@
                 <span>Visible</span>
             </label>
         </div>
-        <button type="button" class="window-encounter-deploy-btn" {{#unless hasDeploySelection}}disabled{{/unless}} title="{{#if hasDeploySelection}}Deploy selected monsters to canvas{{else}}Select monsters above first{{/if}}">
-            <i class="fa-solid fa-map-location-dot"></i> Deploy selected ({{deploySelectedCount}})
+        <button type="button" class="window-encounter-deploy-btn" {{#unless hasDeploySelection}}disabled{{/unless}} title="{{#if hasDeploySelection}}{{#if isBuiltEncounter}}Deploy built encounter to canvas{{else}}Deploy selected monsters to canvas{{/if}}{{else}}Select monsters above first{{/if}}">
+            <i class="fa-solid fa-map-location-dot"></i> {{#if isBuiltEncounter}}Deploy encounter ({{deploySelectedCount}}){{else}}Deploy selected ({{deploySelectedCount}}){{/if}}
         </button>
     </section>
 </div>

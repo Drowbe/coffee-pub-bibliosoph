@@ -4,7 +4,29 @@
         <i class="fa-solid {{iconStyle}}"></i>{{cardTitle}}
     </div>
 
-    {{#if isInvestigationCard}}
+    {{#if isEncounterCard}}
+    <!-- ENCOUNTER CARD: narrative (no encounter / intro / reveal) -->
+    {{#if userName}}
+        <div class="container-user">
+            <img class="token-image" src="{{userAvatar}}" alt="" />
+            <div class="token-text-wrapper">
+                <span class="token-name">{{userName}}</span>
+                <span class="token-character">{{characterName}}</span>
+            </div>
+        </div>
+    {{/if}}
+    {{#if narrativeTitle}}
+        <div class="section-header encounter-narrative-title">
+            {{{narrativeIcon}}} {{narrativeTitle}}
+        </div>
+    {{/if}}
+    {{#if narrativeImage}}
+        <img class="encounter-narrative-image" src="{{narrativeImage}}" alt="" />
+    {{/if}}
+    {{#if narrativeDescription}}
+        <p class="encounter-narrative-description">{{narrativeDescription}}</p>
+    {{/if}}
+    {{else if isInvestigationCard}}
     <!-- INVESTIGATION CARD: narrative + item rows + inventory summary -->
     {{#if userName}}
         <div class="container-user">

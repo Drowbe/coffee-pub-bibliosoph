@@ -15,9 +15,22 @@ export const WINDOW_ENCOUNTER_APP_ID = `${MODULE.ID}-quick-encounter`;
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 const Base = HandlebarsApplicationMixin(ApplicationV2);
 
-/** Difficulty slider steps: 0=Easy, 1=Medium, 2=Hard, 3=Deadly. CR offset from party. */
-const DIFFICULTY_OFFSETS = [-2, 0, 2, 4];
-const DIFFICULTY_LABELS = ['Easy', 'Medium', 'Hard', 'Deadly'];
+/**
+ * Compute difficulty label and CSS class from Party CR and Target CR (like encounter worksheet).
+ * Ratio = targetCR / (partyCR || 1). Trivial < 0.25, Easy < 0.5, Moderate < 1, Hard < 1.5, Deadly < 2, else Impossible.
+ * @param {number} partyCR - Party (hero) CR
+ * @param {number} targetCR - Target encounter CR
+ * @returns {{ label: string, class: string }}
+ */
+function getDifficultyFromPartyAndTarget(partyCR, targetCR) {
+    const ratio = (partyCR && targetCR >= 0) ? targetCR / (partyCR || 1) : 0;
+    if (ratio < 0.25) return { label: 'Trivial', class: 'trivial' };
+    if (ratio < 0.5) return { label: 'Easy', class: 'easy' };
+    if (ratio < 1) return { label: 'Moderate', class: 'moderate' };
+    if (ratio < 1.5) return { label: 'Hard', class: 'hard' };
+    if (ratio < 2) return { label: 'Deadly', class: 'deadly' };
+    return { label: 'Impossible', class: 'impossible' };
+}
 
 /**
  * Parse numeric CR from assessment (partyCR/monsterCR) or display string (e.g. "1/2", "5").
@@ -62,14 +75,18 @@ export class WindowEncounter extends Base {
         'Hill', 'Mountain', 'Planar', 'Swamp', 'Underdark', 'Underwater', 'Urban'
     ];
     _selectedHabitat = 'Any';
-    /** Slider index 0–3: Easy, Medium, Hard, Deadly. Replaces dropdown. */
-    _crSliderIndex = 1;
-    _selectedDifficulty = 'Medium';
+    /** Target encounter CR (slider value). Difficulty is derived from party CR vs this. */
+    _targetCR = null;
     _recommendations = [];
     /** True while recommend request is in progress (show spinner). */
     _recommendLoading = false;
+    /** True while roll-for-encounter is in progress. */
+    _rollLoading = false;
     /** True after at least one recommend run (so we can show "No monsters found" vs initial hint). */
     _recommendAttempted = false;
+    /** After "Roll for Encounter" had an encounter: post deploy card when user clicks Deploy. */
+    _lastRollHadEncounter = false;
+    _lastRollIntroEntry = null;
     /** UUIDs of recommendation cards selected for deploy. */
     _selectedForDeploy = new Set();
     /** Blacksmith deployMonsters options: pattern and visibility. */
@@ -116,22 +133,29 @@ export class WindowEncounter extends Base {
         const heroCRDisplay = formatCRDisplay(heroCRNum);
         const monsterCRDisplay = formatCRDisplay(monsterCRNum);
 
-        const offset = DIFFICULTY_OFFSETS[this._crSliderIndex] ?? 0;
         const partyBase = Number.isNaN(heroCRNum) ? 5 : heroCRNum;
-        const encounterCRNum = Math.max(0, partyBase + offset);
-        const monsterGapNum = Number.isNaN(monsterCRNum) ? encounterCRNum : Math.max(0, encounterCRNum - monsterCRNum);
-        const encounterCRDisplay = formatCRDisplay(encounterCRNum);
+        if (this._targetCR == null || this._targetCR === undefined) {
+            this._targetCR = partyBase;
+        }
+        const targetCRNum = Number(this._targetCR);
+        const monsterGapNum = Number.isNaN(monsterCRNum) ? targetCRNum : Math.max(0, targetCRNum - monsterCRNum);
+        const encounterCRDisplay = formatCRDisplay(targetCRNum);
         const monsterGapDisplay = formatCRDisplay(monsterGapNum);
 
-        const difficultyLabel = DIFFICULTY_LABELS[this._crSliderIndex] ?? 'Medium';
-        const difficultyClass = difficultyLabel.toLowerCase();
+        const difficultyInfo = getDifficultyFromPartyAndTarget(partyBase, targetCRNum);
+        const difficultyLabel = difficultyInfo.label;
+        const difficultyClass = difficultyInfo.class;
 
         const recommendations = Array.isArray(this._recommendations) ? this._recommendations : [];
+        const isBuiltEncounter = recommendations.length > 0 && recommendations.every(r => typeof r.count === 'number' && r.count >= 1);
         const recommendationsWithSelection = recommendations.map(r => ({
             ...r,
-            selected: this._selectedForDeploy.has(r.id)
+            selected: isBuiltEncounter ? true : this._selectedForDeploy.has(r.id)
         }));
-        const deploySelectedCount = this._selectedForDeploy.size;
+        const deploySelectedCount = isBuiltEncounter
+            ? recommendations.reduce((s, r) => s + (r.count ?? 1), 0)
+            : this._selectedForDeploy.size;
+        const hasDeploySelection = deploySelectedCount > 0;
 
         return {
             appId: this.id || WINDOW_ENCOUNTER_APP_ID,
@@ -145,16 +169,20 @@ export class WindowEncounter extends Base {
             encounterCRDisplay,
             difficulty: difficultyLabel,
             difficultyClass,
-            crSliderIndex: this._crSliderIndex,
+            oddsOfEncounter: Math.max(0, Math.min(100, Number(game.settings.get(MODULE.ID, 'encounterOdds')) ?? 20)),
+            targetCRValue: Math.max(0, Number(this._targetCR) || 0),
             crSliderMin: 0,
-            crSliderMax: 3,
+            crSliderMax: (partyBase || monsterCRNum) ? Math.min(200, Math.max(20, Math.max(partyBase || 0, monsterCRNum || 0) * 2.5 + 10)) : 200,
             habitats: this._habitats.map(h => ({ name: h, selected: h === this._selectedHabitat })),
             recommendations: recommendationsWithSelection,
             hasRecommendations: recommendations.length > 0,
+            showSearchingSpinner: this._recommendLoading || this._rollLoading,
             recommendLoading: this._recommendLoading,
+            rollLoading: this._rollLoading,
             recommendAttempted: this._recommendAttempted,
+            isBuiltEncounter,
             deploySelectedCount,
-            hasDeploySelection: deploySelectedCount > 0,
+            hasDeploySelection,
             deploymentPatterns: [
                 { value: 'sequential', label: 'Sequential', selected: this._deploymentPattern === 'sequential' },
                 { value: 'circle', label: 'Circle', selected: this._deploymentPattern === 'circle' },
@@ -261,6 +289,11 @@ export class WindowEncounter extends Base {
                 this.render();
                 return;
             }
+            const rollBtn = e.target?.closest?.('.window-encounter-roll');
+            if (rollBtn) {
+                this._onRollForEncounter();
+                return;
+            }
             const recommendBtn = e.target?.closest?.('.window-encounter-recommend');
             if (recommendBtn) {
                 this._onRecommend();
@@ -297,25 +330,38 @@ export class WindowEncounter extends Base {
             }
         });
         appEl.addEventListener('input', (e) => {
-            const slider = e.target?.closest?.('.window-encounter-cr-slider');
-            if (slider) {
-                const idx = parseInt(slider.value, 10);
-                if (!Number.isNaN(idx) && idx >= 0 && idx <= 3) {
-                    this._crSliderIndex = idx;
-                    this._selectedDifficulty = DIFFICULTY_LABELS[idx];
-                    log('Quick Encounter: CR slider', this._selectedDifficulty, false);
+            const oddsSlider = e.target?.closest?.('.window-encounter-odds-slider');
+            if (oddsSlider) {
+                const val = Math.max(0, Math.min(100, parseInt(oddsSlider.value, 10) || 0));
+                game.settings.set(MODULE.ID, 'encounterOdds', val);
+                log('Quick Encounter: odds of encounter', val, false);
+                this.render();
+                return;
+            }
+            const crSlider = e.target?.closest?.('.window-encounter-cr-slider');
+            if (crSlider) {
+                const raw = parseFloat(crSlider.value);
+                if (!Number.isNaN(raw) && raw >= 0) {
+                    this._targetCR = raw;
+                    log('Quick Encounter: target CR', this._targetCR, false);
                     this.render();
                 }
             }
         });
         appEl.addEventListener('change', (e) => {
-            const slider = e.target?.closest?.('.window-encounter-cr-slider');
-            if (slider) {
-                const idx = parseInt(slider.value, 10);
-                if (!Number.isNaN(idx) && idx >= 0 && idx <= 3) {
-                    this._crSliderIndex = idx;
-                    this._selectedDifficulty = DIFFICULTY_LABELS[idx];
-                    log('Quick Encounter: difficulty set', this._selectedDifficulty, false);
+            const oddsSlider = e.target?.closest?.('.window-encounter-odds-slider');
+            if (oddsSlider) {
+                const val = Math.max(0, Math.min(100, parseInt(oddsSlider.value, 10) || 0));
+                game.settings.set(MODULE.ID, 'encounterOdds', val);
+                this.render();
+                return;
+            }
+            const crSlider = e.target?.closest?.('.window-encounter-cr-slider');
+            if (crSlider) {
+                const raw = parseFloat(crSlider.value);
+                if (!Number.isNaN(raw) && raw >= 0) {
+                    this._targetCR = raw;
+                    log('Quick Encounter: target CR set', this._targetCR, false);
                     this.render();
                 }
             }
@@ -344,22 +390,31 @@ export class WindowEncounter extends Base {
                 this.render();
             });
         });
+        root.querySelector('.window-encounter-odds-slider')?.addEventListener('input', (e) => {
+            const val = Math.max(0, Math.min(100, parseInt(e.target?.value, 10) || 0));
+            game.settings.set(MODULE.ID, 'encounterOdds', val);
+            this.render();
+        });
+        root.querySelector('.window-encounter-odds-slider')?.addEventListener('change', (e) => {
+            const val = Math.max(0, Math.min(100, parseInt(e.target?.value, 10) || 0));
+            game.settings.set(MODULE.ID, 'encounterOdds', val);
+            this.render();
+        });
         root.querySelector('.window-encounter-cr-slider')?.addEventListener('input', (e) => {
-            const idx = parseInt(e.target?.value, 10);
-            if (!Number.isNaN(idx) && idx >= 0 && idx <= 3) {
-                this._crSliderIndex = idx;
-                this._selectedDifficulty = DIFFICULTY_LABELS[idx];
+            const raw = parseFloat(e.target?.value);
+            if (!Number.isNaN(raw) && raw >= 0) {
+                this._targetCR = raw;
                 this.render();
             }
         });
         root.querySelector('.window-encounter-cr-slider')?.addEventListener('change', (e) => {
-            const idx = parseInt(e.target?.value, 10);
-            if (!Number.isNaN(idx) && idx >= 0 && idx <= 3) {
-                this._crSliderIndex = idx;
-                this._selectedDifficulty = DIFFICULTY_LABELS[idx];
+            const raw = parseFloat(e.target?.value);
+            if (!Number.isNaN(raw) && raw >= 0) {
+                this._targetCR = raw;
                 this.render();
             }
         });
+        root.querySelector('.window-encounter-roll')?.addEventListener('click', () => this._onRollForEncounter());
         root.querySelector('.window-encounter-recommend')?.addEventListener('click', () => this._onRecommend());
         root.querySelectorAll('.window-encounter-result-card').forEach(card => {
             card.addEventListener('click', () => {
@@ -387,8 +442,46 @@ export class WindowEncounter extends Base {
         });
     }
 
+    /**
+     * Roll for encounter using Global Encounter Settings; post card and optionally run recommend.
+     */
+    async _onRollForEncounter() {
+        log('Quick Encounter: Roll for Encounter clicked', `habitat=${this._selectedHabitat}`, false);
+        if (typeof window.bibliosophRollForEncounter !== 'function') {
+            log('Quick Encounter: roll', 'bibliosophRollForEncounter not available', true);
+            return;
+        }
+        this._rollLoading = true;
+        this._recommendLoading = true;
+        this.render();
+        try {
+            const targetCR = Math.max(0, Number(this._targetCR) || 5);
+            const partyBase = parseCR(this._assessment?.partyCR ?? this._assessment?.partyCRDisplay);
+            const difficultyLabel = getDifficultyFromPartyAndTarget(partyBase, targetCR).label;
+            const result = await window.bibliosophRollForEncounter(
+                this._selectedHabitat,
+                difficultyLabel,
+                targetCR
+            );
+            this._lastRollHadEncounter = result.encounter === true;
+            this._lastRollIntroEntry = result.introEntry ?? null;
+            if (result.encounter && Array.isArray(result.recommendations)) {
+                this._recommendations = result.recommendations;
+                this._recommendAttempted = true;
+            }
+            log('Quick Encounter: roll complete', result.encounter ? `${result.recommendations?.length ?? 0} types` : 'no encounter', false);
+        } finally {
+            this._rollLoading = false;
+            this._recommendLoading = false;
+            this.render();
+        }
+    }
+
     async _onRecommend() {
-        log('Quick Encounter: Recommend clicked', `habitat=${this._selectedHabitat}, difficulty=${this._selectedDifficulty || 'Any'}`, false);
+        const targetCR = Math.max(0, Number(this._targetCR) || 5);
+        const partyBase = parseCR(this._assessment?.partyCR ?? this._assessment?.partyCRDisplay);
+        const difficultyLabel = getDifficultyFromPartyAndTarget(partyBase, targetCR).label;
+        log('Quick Encounter: Recommend clicked', `habitat=${this._selectedHabitat}, targetCR=${targetCR}, difficulty=${difficultyLabel}`, false);
         if (typeof window.bibliosophEncounterRecommend !== 'function') {
             log('Quick Encounter: recommend', 'bibliosophEncounterRecommend not available', true);
             return;
@@ -396,12 +489,9 @@ export class WindowEncounter extends Base {
         this._recommendLoading = true;
         this.render();
         try {
-            const partyBase = parseCR(this._assessment?.partyCR ?? this._assessment?.partyCRDisplay);
-            const offset = DIFFICULTY_OFFSETS[this._crSliderIndex] ?? 0;
-            const targetCR = Number.isNaN(partyBase) ? 5 + offset : Math.max(0, partyBase + offset);
             this._recommendations = await window.bibliosophEncounterRecommend(
                 this._selectedHabitat,
-                this._selectedDifficulty,
+                difficultyLabel,
                 targetCR
             );
             log('Quick Encounter: recommend returned', `${this._recommendations?.length ?? 0} results`, false);
@@ -417,7 +507,11 @@ export class WindowEncounter extends Base {
      * When position is not provided, the user is prompted to click on the canvas.
      */
     async _onDeploy() {
-        const uuids = Array.from(this._selectedForDeploy);
+        const recommendations = Array.isArray(this._recommendations) ? this._recommendations : [];
+        const isBuiltEncounter = recommendations.length > 0 && recommendations.every(r => typeof r.count === 'number' && r.count >= 1);
+        const uuids = isBuiltEncounter
+            ? recommendations.flatMap(r => Array(r.count ?? 1).fill(r.id))
+            : Array.from(this._selectedForDeploy);
         if (uuids.length === 0) {
             log('Quick Encounter: deploy', 'No monsters selected', true);
             return;
@@ -443,6 +537,11 @@ export class WindowEncounter extends Base {
                 }
             }
             this._selectedForDeploy.clear();
+            if (this._lastRollHadEncounter && typeof window.bibliosophPostEncounterDeployCard === 'function') {
+                await window.bibliosophPostEncounterDeployCard(this._lastRollIntroEntry);
+                this._lastRollHadEncounter = false;
+                this._lastRollIntroEntry = null;
+            }
             this.render();
         } catch (e) {
             console.error(MODULE.NAME, 'Quick Encounter: deploy failed', e);

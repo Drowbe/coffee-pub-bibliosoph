@@ -3,70 +3,70 @@
           {
             "title": "Peaceful Quiet",
             "icon": "<i class=\"fa-solid fa-dice\"></i>",
-            "image": "icons/svg/pawprint.svg",
+            "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-forest-1.webp",
             "tags": ["encounter", "failure"],
             "description": "As you make your way through the area, a peaceful quiet settles around you. The only sounds are the occasional rustle of wildlife and the gentle movement of the trees. There's a sense of calm that pervades the environment, offering a moment of respite."
           },
           {
             "title": "Silence and Stillness",
             "icon": "<i class=\"fa-solid fa-dice\"></i>",
-            "image": "icons/svg/pawprint.svg",
+            "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-forest-2.webp",
             "tags": ["encounter", "failure"],
             "description": "You traverse the path with caution, expecting danger at every turn, but find only silence and stillness. The anticipation of an encounter lingers, but as time passes, it becomes clear that today, at least, the journey favors you with uneventful progress."
           },
           {
             "title": "Surprisingly Serene",
             "icon": "<i class=\"fa-solid fa-dice\"></i>",
-            "image": "icons/svg/pawprint.svg",
+            "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-forest-3.webp",
             "tags": ["encounter", "failure"],
             "description": "The environment around you is surprisingly serene. The usual signs of danger are absent, replaced by the mundane yet comforting aspects of nature. Birds chirp in the distance, and a gentle breeze carries the scent of earth and leaves."
           },
           {
-            "title": "No Rhreat Emerges",
+            "title": "No Threat Emerges",
             "icon": "<i class=\"fa-solid fa-dice\"></i>",
-            "image": "icons/svg/pawprint.svg",
+            "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-forest-1.webp",
             "tags": ["encounter", "failure"],
             "description": "Tension hangs in the air as you navigate the terrain, but no threat emerges. The usual rustlings and movements of the wilderness continue, suggesting that the path ahead is clear and free from danger."
           },
           {
             "title": "Unexpected Peace",
             "icon": "<i class=\"fa-solid fa-dice\"></i>",
-            "image": "icons/svg/pawprint.svg",
+            "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-forest-2.webp",
             "tags": ["encounter", "failure"],
             "description": "An unexpected peace surrounds you in the wilderness. The foreboding atmosphere is absent, replaced by tranquil quietude, allowing you to enjoy the natural beauty around you."
           },
           {
             "title": "Remarkably Unremarkable",
             "icon": "<i class=\"fa-solid fa-dice\"></i>",
-            "image": "icons/svg/pawprint.svg",
+            "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-forest-3.webp",
             "tags": ["encounter", "failure"],
             "description": "Your journey is remarkably unremarkable. The path before you unfolds without incident, and the hours pass with only the occasional call of a distant bird to mark the passage of time."
           },
           {
             "title": "Peaceful Progress",
             "icon": "<i class=\"fa-solid fa-dice\"></i>",
-            "image": "icons/svg/pawprint.svg",
+            "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-forest-1.webp",
             "tags": ["encounter", "failure"],
             "description": "Your trek is greeted with nothing but peaceful progress. The usual signs of danger or hidden threats are noticeably absent, allowing a rare moment of unguarded travel."
           },
           {
             "title": "Nothing out of the ordinary",
             "icon": "<i class=\"fa-solid fa-dice\"></i>",
-            "image": "icons/svg/pawprint.svg",
+            "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-forest-2.webp",
             "tags": ["encounter", "failure"],
             "description": "Anticipation builds, yet nothing out of the ordinary occurs. The landscape changes subtly, but these changes bring no surprises. It's an anticlimactic advance, but welcome in its own right."
           },
           {
             "title": "Serenity",
             "icon": "<i class=\"fa-solid fa-dice\"></i>",
-            "image": "icons/svg/pawprint.svg",
+            "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-forest-3.webp",
             "tags": ["encounter", "failure"],
             "description": "Your path is marked by serenity rather than the thrill of danger. The calm is almost surreal, contrasting with the usual perilous nature of your adventures, offering a moment to gather your thoughts."
           },
           {
             "title": "All Quiet ",
             "icon": "<i class=\"fa-solid fa-dice\"></i>",
-            "image": "icons/svg/pawprint.svg",
+            "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-forest-1.webp",
             "tags": ["encounter", "failure"],
             "description": "The silence around you is not oppressive but rather a quiet watchfulness of nature as you pass through. Your senses remain alert, but it becomes evident that this part of your journey will be marked by peace rather than conflict."
           }
@@ -75,7 +75,7 @@
       {
         "title": "Something Stirs!",    
         "icon": "<i class=\"fa-solid fa-dice\"></i>",
-        "image": "icons/svg/pawprint.svg",
+        "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
         "tags": ["encounter", "success"],
         "description": "You feel nervous as faint shuffling sounds reach your ears. The air turns cold and a sense of watchfulness makes you anxious."
       }

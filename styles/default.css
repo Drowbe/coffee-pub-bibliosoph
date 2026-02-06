@@ -97,6 +97,21 @@
 .investigation-narrative-description {
     margin: 0.5em 0;
 }
+
+/* Encounter card: narrative (no encounter / intro / deploy) */
+.encounter-narrative-title {
+    margin-top: 0.5em;
+}
+.encounter-narrative-description {
+    margin: 0.5em 0;
+}
+.encounter-narrative-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin: 0.5em 0;
+}
+
 .investigation-items {
     margin: 0.5em 0;
 }

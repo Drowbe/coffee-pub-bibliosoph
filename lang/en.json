@@ -447,6 +447,7 @@
 		"toolbarCoffeePubWaterEncounterEnabled-Hint": "Water Encounter button in the Coffee Pub toolbar (default: true).",
 		"toolbarFoundryWaterEncounterEnabled-Label": "Show in the Foundry toolbar",
 		"toolbarFoundryWaterEncounterEnabled-Hint": "Water Encounter button in the Foundry toolbar (default: false).",
+		"quickEncounterConfigureEncounter-Label": "Configure Encounter",
 		"quickEncounterEnabled-Label": "Quick Encounter enabled",
 		"quickEncounterEnabled-Hint": "Show the Quick Encounter tool (CR-aware encounter builder) in the toolbar.",
 		"toolbarCoffeePubQuickEncounterEnabled-Label": "Show in the Coffee Pub toolbar",

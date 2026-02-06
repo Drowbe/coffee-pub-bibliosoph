@@ -98,6 +98,7 @@
 }
 
 /* ----- Sections (scrollable body) ----- */
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-configure,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-panel,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-filters,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-results,
@@ -105,6 +106,30 @@
     flex-shrink: 0;
     padding: 10px 12px;
     border-bottom: 1px solid var(--encounter-border-color);
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-label {
+    flex-shrink: 0;
+    font-size: 0.85em;
+    color: #c0c0c0;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-value {
+    min-width: 2em;
+    font-weight: 600;
+    color: #fff;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider {
+    flex: 1;
+    min-width: 0;
+    height: 8px;
 }
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-section-title {
@@ -181,12 +206,18 @@
     color: #fff;
 }
 
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-difficulty-badge-large.trivial {
+    background: rgba(60, 80, 100, 0.7);
+    border: 1px solid rgba(80, 110, 140, 0.9);
+}
+
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-difficulty-badge-large.easy {
     background: rgba(50, 100, 60, 0.8);
     border: 1px solid rgba(80, 140, 90, 0.9);
 }
 
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-difficulty-badge-large.medium {
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-difficulty-badge-large.medium,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-difficulty-badge-large.moderate {
     background: rgba(100, 90, 50, 0.8);
     border: 1px solid rgba(160, 140, 80, 0.9);
 }
@@ -199,6 +230,11 @@
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-difficulty-badge-large.deadly {
     background: rgba(80, 30, 30, 0.95);
     border: 1px solid rgba(140, 50, 50, 0.95);
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-difficulty-badge-large.impossible {
+    background: rgba(50, 20, 20, 0.95);
+    border: 1px solid rgba(120, 40, 40, 0.95);
 }
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-difficulty-icon {
@@ -313,7 +349,15 @@
     min-width: 120px;
 }
 
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-recommend {
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-btn,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-recommend,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-roll {
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -327,8 +371,16 @@
     font-size: 0.95em;
 }
 
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-recommend:hover {
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-btn:hover:not(:disabled),
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-recommend:hover:not(:disabled),
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-roll:hover:not(:disabled) {
     background: rgba(172, 159, 129, 0.5);
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-btn:disabled,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-roll:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 /* ----- Results grid ----- */
