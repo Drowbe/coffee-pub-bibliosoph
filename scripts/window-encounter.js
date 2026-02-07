@@ -102,16 +102,20 @@ export class WindowEncounter extends Base {
         content: { template: WINDOW_ENCOUNTER_TEMPLATE }
     };
 
-    static DEFAULT_OPTIONS = foundry.utils.mergeObject(super.DEFAULT_OPTIONS ?? {}, {
-        id: WINDOW_ENCOUNTER_APP_ID,
-        classes: ['window-encounter', 'bibliosoph-window'],
-        position: { width: 500, height: 750 },
-        window: {
-            title: 'Quick Encounter',
-            resizable: true,
-            minimizable: true
-        }
-    });
+    static DEFAULT_OPTIONS = foundry.utils.mergeObject(
+        super.DEFAULT_OPTIONS ?? {},
+        {
+            id: WINDOW_ENCOUNTER_APP_ID,
+            classes: ['window-encounter', 'bibliosoph-window'],
+            position: { width: 500, height: 750 },
+            window: {
+                title: 'Quick Encounter',
+                resizable: true,
+                minimizable: true
+            }
+        },
+        { inplace: false }
+    );
 
     /**
      * Shared context for all parts: include our getData() so part templates receive it.
