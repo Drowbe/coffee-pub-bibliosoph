@@ -126,10 +126,67 @@
     color: #fff;
 }
 
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider {
+/* Shared range slider style: purple/magenta track, white square thumb, easy to drag */
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider {
     flex: 1;
     min-width: 0;
-    height: 8px;
+    height: 10px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    outline: none;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider::-webkit-slider-runnable-track,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-webkit-slider-runnable-track {
+    height: 10px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, rgba(100, 50, 120, 0.6), rgba(160, 80, 180, 0.8));
+    border: 1px solid rgba(180, 100, 200, 0.5);
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider::-moz-range-track,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-moz-range-track {
+    height: 10px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, rgba(100, 50, 120, 0.6), rgba(160, 80, 180, 0.8));
+    border: 1px solid rgba(180, 100, 200, 0.5);
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider::-webkit-slider-thumb,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    border: 1px solid rgba(180, 100, 200, 0.8);
+    border-radius: 3px;
+    cursor: grab;
+    margin-top: -5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider::-webkit-slider-thumb:active,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-webkit-slider-thumb:active {
+    cursor: grabbing;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider::-moz-range-thumb,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    border: 1px solid rgba(180, 100, 200, 0.8);
+    border-radius: 3px;
+    cursor: grab;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider::-moz-range-thumb:active,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-moz-range-thumb:active {
+    cursor: grabbing;
 }
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-section-title {
@@ -252,50 +309,6 @@
     font-size: 1.1em;
 }
 
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider {
-    flex: 1;
-    min-width: 0;
-    height: 8px;
-    -webkit-appearance: none;
-    appearance: none;
-    background: rgba(0, 0, 0, 0.5);
-    border-radius: 4px;
-    outline: none;
-}
-
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 18px;
-    height: 18px;
-    background: #a0a0a0;
-    border: 1px solid #666;
-    border-radius: 2px;
-    cursor: pointer;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-}
-
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-moz-range-thumb {
-    width: 18px;
-    height: 18px;
-    background: #a0a0a0;
-    border: 1px solid #666;
-    border-radius: 2px;
-    cursor: pointer;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-}
-
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-webkit-slider-runnable-track {
-    height: 8px;
-    border-radius: 4px;
-    background: rgba(0, 0, 0, 0.5);
-}
-
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-moz-range-track {
-    height: 8px;
-    border-radius: 4px;
-    background: rgba(0, 0, 0, 0.5);
-}
 
 /* ----- Habitat filter buttons ----- */
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-habitats {
@@ -446,6 +459,7 @@
 }
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-result-card {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -461,9 +475,25 @@
 }
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-result-card.selected {
-    background: rgba(172, 159, 129, 0.2);
-    border-color: var(--encounter-accent-color);
-    box-shadow: 0 0 0 2px rgba(172, 159, 129, 0.4);
+    background: rgba(180, 100, 50, 0.35);
+    border: 2px solid var(--encounter-accent-color);
+    box-shadow: 0 0 0 2px rgba(172, 159, 129, 0.5), inset 0 0 12px rgba(200, 120, 60, 0.2);
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-result-card .window-encounter-result-selected-badge {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    background: var(--encounter-accent-color);
+    color: #fff;
+    border-radius: 50%;
+    font-size: 0.65em;
+    z-index: 1;
 }
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-result-img {
@@ -529,6 +559,12 @@
     background: rgba(172, 159, 129, 0.25);
     border-color: var(--encounter-accent-color);
     color: #fff;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-deploy-pattern:disabled,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-deploy-pattern.window-encounter-deploy-pattern-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-deploy-visible-label {

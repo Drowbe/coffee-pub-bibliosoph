@@ -347,8 +347,9 @@ export async function encounterRecommend(habitat, difficulty, targetCR) {
         } catch (_) {}
         if (Number.isNaN(centerCR)) centerCR = 5;
     }
-    const crMin = Math.max(0, centerCR - 2);
-    const crMax = centerCR + 3;
+    // Wider band so Recommend returns results even when few monsters at exact target CR
+    const crMin = Math.max(0, centerCR - 8);
+    const crMax = centerCR + 9;
 
     const results = [];
     for (const { doc, id, cr: crNum } of candidates) {
@@ -360,6 +361,20 @@ export async function encounterRecommend(habitat, difficulty, targetCR) {
             name: doc.name ?? 'Unknown',
             cr: formatCR(crNum)
         });
+    }
+
+    // If no monsters in band (e.g. high target CR, compendium has low CR only), show closest by CR
+    if (results.length === 0 && candidates.length > 0) {
+        const sorted = [...candidates].sort((a, b) => Math.abs(a.cr - centerCR) - Math.abs(b.cr - centerCR));
+        for (const { doc, id, cr: crNum } of sorted) {
+            if (results.length >= MAX_RECOMMENDATIONS) break;
+            results.push({
+                id,
+                img: doc.img ?? '',
+                name: doc.name ?? 'Unknown',
+                cr: formatCR(crNum)
+            });
+        }
     }
 
     if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {

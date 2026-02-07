@@ -154,12 +154,12 @@ export class WindowEncounter extends Base {
         const isBuiltEncounter = recommendations.length > 0 && recommendations.every(r => typeof r.count === 'number' && r.count >= 1);
         const recommendationsWithSelection = recommendations.map(r => ({
             ...r,
-            selected: isBuiltEncounter ? true : this._selectedForDeploy.has(r.id)
+            selected: this._selectedForDeploy.has(r.id)
         }));
         const deploySelectedCount = isBuiltEncounter
-            ? recommendations.reduce((s, r) => s + (r.count ?? 1), 0)
-            : this._selectedForDeploy.size;
-        const hasDeploySelection = deploySelectedCount > 0;
+            ? recommendations.filter(r => this._selectedForDeploy.has(r.id)).reduce((s, r) => s + (r.count ?? 1), 0)
+            : (this._selectedForDeploy.size > 0 ? this._selectedForDeploy.size : recommendations.length);
+        const hasDeploySelection = recommendations.length > 0;
 
         return {
             appId: this.id || WINDOW_ENCOUNTER_APP_ID,
@@ -309,113 +309,121 @@ export class WindowEncounter extends Base {
     }
 
     /**
-     * Attach click/change delegation on the app element once. Safe to call multiple times.
+     * Return the root element that contains our window content (for event delegation).
+     * Application V2 may render parts in a structure where this.element doesn't contain the part.
+     */
+    _getEncounterRoot() {
+        const byId = document.getElementById(WINDOW_ENCOUNTER_APP_ID);
+        if (byId) return byId;
+        const byClass = document.querySelector('.bibliosoph-window.window-encounter') ?? document.querySelector('.window-encounter');
+        return byClass ?? this.element ?? null;
+    }
+
+    /**
+     * Attach click/change delegation once. Uses document so we catch events however the app is rendered.
      * This is the reliable path for PARTS-based apps where activateListeners may not run.
      */
     _attachDelegationOnce() {
         if (this._encounterDelegationAttached) return;
-        const appEl = this.element ?? document.getElementById(WINDOW_ENCOUNTER_APP_ID);
-        if (!appEl) {
-            requestAnimationFrame(() => this._attachDelegationOnce());
-            return;
-        }
         this._encounterDelegationAttached = true;
-        appEl.addEventListener('click', (e) => {
-            const closeBtn = e.target?.closest?.('.window-encounter-close');
-            if (closeBtn) {
-                this.close();
-                return;
-            }
+        const self = this;
+        document.addEventListener('click', function _encounterDelegation(e) {
+            const root = self._getEncounterRoot();
+            if (!root || !root.contains(e.target)) return;
             const habitatBtn = e.target?.closest?.('.window-encounter-habitat');
             if (habitatBtn?.dataset?.habitat) {
-                this._selectedHabitat = habitatBtn.dataset.habitat;
-                log('Quick Encounter: habitat selected', this._selectedHabitat, false);
-                this.render();
+                self._selectedHabitat = habitatBtn.dataset.habitat;
+                log('Quick Encounter: habitat selected', self._selectedHabitat, false);
+                self.render();
                 return;
             }
             const rollBtn = e.target?.closest?.('.window-encounter-roll');
             if (rollBtn) {
-                this._onRollForEncounter();
+                self._onRollForEncounter();
                 return;
             }
             const recommendBtn = e.target?.closest?.('.window-encounter-recommend');
             if (recommendBtn) {
-                this._onRecommend();
+                self._onRecommend();
                 return;
             }
             const refreshCacheBtn = e.target?.closest?.('.window-encounter-refresh-cache');
             if (refreshCacheBtn) {
-                this._onRefreshCache();
+                self._onRefreshCache();
                 return;
             }
             const resultCard = e.target?.closest?.('.window-encounter-result-card');
-            if (resultCard?.dataset?.actorId) {
-                const uuid = resultCard.dataset.actorId;
-                if (this._selectedForDeploy.has(uuid)) this._selectedForDeploy.delete(uuid);
-                else this._selectedForDeploy.add(uuid);
-                log('Quick Encounter: selection toggled', `${this._selectedForDeploy.size} selected`, false);
-                this.render();
-                return;
-            }
-            const deployBtn = e.target?.closest?.('.window-encounter-deploy-btn');
-            if (deployBtn) {
-                this._onDeploy();
+            const uuid = resultCard?.getAttribute?.('data-actor-id') ?? resultCard?.dataset?.actorId;
+            if (resultCard && uuid) {
+                if (self._selectedForDeploy.has(uuid)) self._selectedForDeploy.delete(uuid);
+                else self._selectedForDeploy.add(uuid);
+                log('Quick Encounter: selection toggled', `${self._selectedForDeploy.size} selected`, false);
+                self.render();
                 return;
             }
             const patternBtn = e.target?.closest?.('.window-encounter-deploy-pattern');
-            if (patternBtn?.dataset?.pattern) {
-                this._deploymentPattern = patternBtn.dataset.pattern;
-                log('Quick Encounter: deployment pattern', this._deploymentPattern, false);
-                this.render();
+            if (patternBtn?.getAttribute?.('data-pattern') && !patternBtn.disabled) {
+                self._deploymentPattern = patternBtn.getAttribute('data-pattern') ?? patternBtn.dataset.pattern;
+                log('Quick Encounter: deploy with pattern', self._deploymentPattern, false);
+                self._onDeploy();
                 return;
             }
         });
-        appEl.addEventListener('change', (e) => {
+        document.addEventListener('change', function _encounterChange(e) {
+            const root = self._getEncounterRoot();
+            if (!root || !root.contains(e.target)) return;
             const visibleCheck = e.target?.closest?.('.window-encounter-deploy-visible');
             if (visibleCheck) {
-                this._deploymentHidden = !visibleCheck.checked;
+                self._deploymentHidden = !visibleCheck.checked;
                 log('Quick Encounter: deploy visible', visibleCheck.checked ? 'visible' : 'hidden', false);
-                this.render();
+                self.render();
             }
         });
-        appEl.addEventListener('input', (e) => {
+        // Sliders: only update and re-render on 'change' (mouseup / keyup) so drag stays responsive
+        document.addEventListener('change', function _encounterSliderChange(e) {
+            const root = self._getEncounterRoot();
+            if (!root || !root.contains(e.target)) return;
             const oddsSlider = e.target?.closest?.('.window-encounter-odds-slider');
             if (oddsSlider) {
                 const val = Math.max(0, Math.min(100, parseInt(oddsSlider.value, 10) || 0));
                 game.settings.set(MODULE.ID, 'encounterOdds', val);
                 log('Quick Encounter: odds of encounter', val, false);
-                this.render();
+                self.render();
                 return;
             }
             const crSlider = e.target?.closest?.('.window-encounter-cr-slider');
             if (crSlider) {
                 const raw = parseFloat(crSlider.value);
                 if (!Number.isNaN(raw) && raw >= 0) {
-                    this._targetCR = raw;
-                    log('Quick Encounter: target CR', this._targetCR, false);
-                    this.render();
+                    self._targetCR = raw;
+                    log('Quick Encounter: target CR', self._targetCR, false);
+                    self.render();
                 }
             }
         });
-        appEl.addEventListener('change', (e) => {
+        // Update displayed value during drag without full re-render (keeps drag responsive)
+        document.addEventListener('input', function _encounterSliderInput(e) {
+            const root = self._getEncounterRoot();
+            if (!root || !root.contains(e.target)) return;
             const oddsSlider = e.target?.closest?.('.window-encounter-odds-slider');
             if (oddsSlider) {
                 const val = Math.max(0, Math.min(100, parseInt(oddsSlider.value, 10) || 0));
                 game.settings.set(MODULE.ID, 'encounterOdds', val);
-                this.render();
+                const span = oddsSlider.parentElement?.querySelector('.window-encounter-odds-value');
+                if (span) span.textContent = val;
                 return;
             }
             const crSlider = e.target?.closest?.('.window-encounter-cr-slider');
             if (crSlider) {
                 const raw = parseFloat(crSlider.value);
                 if (!Number.isNaN(raw) && raw >= 0) {
-                    this._targetCR = raw;
-                    log('Quick Encounter: target CR set', this._targetCR, false);
-                    this.render();
+                    self._targetCR = raw;
+                    const box = root?.querySelector('.window-encounter-cr-box-target .window-encounter-cr-box-value');
+                    if (box) box.textContent = raw === 0.5 ? '1/2' : String(Math.round(raw * 100) / 100);
                 }
             }
         });
-        log('Quick Encounter: delegation listeners attached', 'close, habitat, recommend, CR slider, card toggle, deploy', false);
+        log('Quick Encounter: delegation listeners attached', 'habitat, recommend, roll, refresh cache, pattern deploy, sliders', false);
     }
 
     /**
@@ -429,7 +437,6 @@ export class WindowEncounter extends Base {
         const root = html?.matches?.('.window-encounter') ? html : html?.querySelector?.('.window-encounter');
         if (!root) return;
 
-        root.querySelector('.window-encounter-close')?.addEventListener('click', () => this.close());
         root.querySelectorAll('.window-encounter-habitat').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const habitat = e.currentTarget?.dataset?.habitat;
@@ -439,22 +446,10 @@ export class WindowEncounter extends Base {
                 this.render();
             });
         });
-        root.querySelector('.window-encounter-odds-slider')?.addEventListener('input', (e) => {
-            const val = Math.max(0, Math.min(100, parseInt(e.target?.value, 10) || 0));
-            game.settings.set(MODULE.ID, 'encounterOdds', val);
-            this.render();
-        });
         root.querySelector('.window-encounter-odds-slider')?.addEventListener('change', (e) => {
             const val = Math.max(0, Math.min(100, parseInt(e.target?.value, 10) || 0));
             game.settings.set(MODULE.ID, 'encounterOdds', val);
             this.render();
-        });
-        root.querySelector('.window-encounter-cr-slider')?.addEventListener('input', (e) => {
-            const raw = parseFloat(e.target?.value);
-            if (!Number.isNaN(raw) && raw >= 0) {
-                this._targetCR = raw;
-                this.render();
-            }
         });
         root.querySelector('.window-encounter-cr-slider')?.addEventListener('change', (e) => {
             const raw = parseFloat(e.target?.value);
@@ -465,10 +460,10 @@ export class WindowEncounter extends Base {
         });
         root.querySelector('.window-encounter-roll')?.addEventListener('click', () => this._onRollForEncounter());
         root.querySelector('.window-encounter-recommend')?.addEventListener('click', () => this._onRecommend());
-        root.querySelector('.window-encounter-refresh-cache')?.addEventListener('click', () => this._onRefreshCache());
+        root.querySelectorAll('.window-encounter-refresh-cache').forEach(btn => btn.addEventListener('click', () => this._onRefreshCache()));
         root.querySelectorAll('.window-encounter-result-card').forEach(card => {
             card.addEventListener('click', () => {
-                const uuid = card.dataset?.actorId;
+                const uuid = card.getAttribute?.('data-actor-id') ?? card.dataset?.actorId;
                 if (!uuid) return;
                 if (this._selectedForDeploy.has(uuid)) this._selectedForDeploy.delete(uuid);
                 else this._selectedForDeploy.add(uuid);
@@ -476,13 +471,13 @@ export class WindowEncounter extends Base {
                 this.render();
             });
         });
-        root.querySelector('.window-encounter-deploy-btn')?.addEventListener('click', () => this._onDeploy());
         root.querySelectorAll('.window-encounter-deploy-pattern').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                const pattern = e.currentTarget?.dataset?.pattern;
+                if (btn.disabled) return;
+                const pattern = e.currentTarget?.getAttribute?.('data-pattern') ?? e.currentTarget?.dataset?.pattern;
                 if (pattern) {
                     this._deploymentPattern = pattern;
-                    this.render();
+                    this._onDeploy();
                 }
             });
         });
@@ -544,6 +539,7 @@ export class WindowEncounter extends Base {
                 difficultyLabel,
                 targetCR
             );
+            this._selectedForDeploy = new Set((this._recommendations || []).map(r => r.id).filter(Boolean));
             log('Quick Encounter: recommend returned', `${this._recommendations?.length ?? 0} results`, false);
         } finally {
             this._recommendLoading = false;
@@ -559,9 +555,15 @@ export class WindowEncounter extends Base {
     async _onDeploy() {
         const recommendations = Array.isArray(this._recommendations) ? this._recommendations : [];
         const isBuiltEncounter = recommendations.length > 0 && recommendations.every(r => typeof r.count === 'number' && r.count >= 1);
-        const uuids = isBuiltEncounter
-            ? recommendations.flatMap(r => Array(r.count ?? 1).fill(r.id))
-            : Array.from(this._selectedForDeploy);
+        let uuids;
+        if (isBuiltEncounter) {
+            const selected = recommendations.filter(r => this._selectedForDeploy.has(r.id));
+            uuids = selected.flatMap(r => Array(r.count ?? 1).fill(r.id));
+        } else if (this._selectedForDeploy.size > 0) {
+            uuids = Array.from(this._selectedForDeploy);
+        } else {
+            uuids = recommendations.map(r => r.id).filter(Boolean);
+        }
         if (uuids.length === 0) {
             log('Quick Encounter: deploy', 'No monsters selected', true);
             return;

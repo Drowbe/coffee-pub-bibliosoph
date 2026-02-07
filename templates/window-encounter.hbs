@@ -6,19 +6,22 @@
             </div>
             <div class="window-encounter-header-title">{{title}}</div>
             <div class="window-encounter-header-controls">
-                <button type="button" class="window-encounter-close" title="Close">
-                    <i class="fa-solid fa-times"></i> Close
+                <button type="button" class="window-encounter-refresh-cache window-encounter-btn window-encounter-btn-secondary" {{#if cacheBuilding}}disabled{{/if}} title="Build or refresh the monster cache for faster searches">
+                    <i class="fa-solid fa-database"></i> {{localize "coffee-pub-bibliosoph.quickEncounterRefreshCache-Label"}}
                 </button>
             </div>
         </div>
     </header>
 
     <section class="window-encounter-configure">
-        <h3 class="window-encounter-section-title">{{localize "coffee-pub-bibliosoph.quickEncounterConfigureEncounter-Label"}}</h3>
+        <h3 class="window-encounter-section-title">{{localize "coffee-pub-bibliosoph.quickEncounterConfigureEncounter-Label"}} </h3>
         <div class="window-encounter-odds-row">
-            <label class="window-encounter-odds-label" for="{{appId}}-odds">{{localize "coffee-pub-bibliosoph.encounterOdds-Label"}}</label>
-            <span class="window-encounter-odds-value">{{oddsOfEncounter}}</span>
+            <label class="window-encounter-odds-label" for="{{appId}}-odds">{{localize "coffee-pub-bibliosoph.encounterOdds-Label"}} <span class="window-encounter-odds-value">{{oddsOfEncounter}}%</span></label>
+        </div>
+        <div class="window-encounter-odds-row">
+            <span class="window-encounter-odds-value">0%</span>
             <input type="range" id="{{appId}}-odds" class="window-encounter-odds-slider" min="0" max="100" value="{{oddsOfEncounter}}" step="1" aria-label="Odds of encounter (0–100)" />
+            <span class="window-encounter-odds-value">100%</span>
         </div>
     </section>
 
@@ -74,9 +77,6 @@
             <button type="button" class="window-encounter-recommend window-encounter-btn" {{#if recommendLoading}}disabled{{/if}} title="{{#if recommendLoading}}Searching…{{else}}Search compendiums for matching monsters{{/if}}">
                 <i class="fa-solid fa-magnifying-glass"></i> Recommend monsters
             </button>
-            <button type="button" class="window-encounter-refresh-cache window-encounter-btn window-encounter-btn-secondary" {{#if cacheBuilding}}disabled{{/if}} title="Build or refresh the monster cache for faster searches">
-                <i class="fa-solid fa-database"></i> {{localize "coffee-pub-bibliosoph.quickEncounterRefreshCache-Label"}}
-            </button>
         </div>
     </section>
 
@@ -91,6 +91,7 @@
         <div class="window-encounter-results-grid">
             {{#each recommendations}}
             <div class="window-encounter-result-card {{#if selected}}selected{{/if}}{{#if count}} window-encounter-result-row-built{{/if}}" data-actor-id="{{id}}" data-count="{{count}}" title="{{#if count}}Part of built encounter — deploy below{{else}}Click to select for deploy{{/if}}">
+                {{#if selected}}<span class="window-encounter-result-selected-badge" aria-hidden="true"><i class="fa-solid fa-check"></i></span>{{/if}}
                 <img class="window-encounter-result-img" src="{{img}}" alt="{{name}}" />
                 <div class="window-encounter-result-name">{{#if count}}{{count}} × {{/if}}{{name}}</div>
                 <div class="window-encounter-result-cr">CR {{cr}}</div>
@@ -108,11 +109,11 @@
 
     <section class="window-encounter-deploy">
         <h3 class="window-encounter-section-title">Deploy</h3>
-        <p class="window-encounter-deploy-hint">Click result cards to select, then deploy. You will be prompted to click on the canvas to place tokens.</p>
+        <p class="window-encounter-deploy-hint">Click result cards to select (or use a built encounter). Click a pattern to deploy to the canvas.</p>
         <div class="window-encounter-deploy-options">
             <div class="window-encounter-deploy-patterns">
                 {{#each deploymentPatterns}}
-                <button type="button" class="window-encounter-deploy-pattern {{#if selected}}active{{/if}}" data-pattern="{{value}}" title="Deploy tokens in {{label}} pattern">{{label}}</button>
+                <button type="button" class="window-encounter-deploy-pattern {{#if selected}}active{{/if}} {{#unless ../hasDeploySelection}}window-encounter-deploy-pattern-disabled{{/unless}}" data-pattern="{{value}}" {{#unless ../hasDeploySelection}}disabled{{/unless}} title="{{#if ../hasDeploySelection}}Deploy using {{label}} pattern{{else}}Select monsters above first{{/if}}">{{label}}</button>
                 {{/each}}
             </div>
             <label class="window-encounter-deploy-visible-label">
@@ -120,8 +121,5 @@
                 <span>Visible</span>
             </label>
         </div>
-        <button type="button" class="window-encounter-deploy-btn" {{#unless hasDeploySelection}}disabled{{/unless}} title="{{#if hasDeploySelection}}{{#if isBuiltEncounter}}Deploy built encounter to canvas{{else}}Deploy selected monsters to canvas{{/if}}{{else}}Select monsters above first{{/if}}">
-            <i class="fa-solid fa-map-location-dot"></i> {{#if isBuiltEncounter}}Deploy encounter ({{deploySelectedCount}}){{else}}Deploy selected ({{deploySelectedCount}}){{/if}}
-        </button>
     </section>
 </div>
