@@ -409,8 +409,8 @@ export class WindowEncounter extends Base {
             if (oddsSlider) {
                 const val = Math.max(0, Math.min(100, parseInt(oddsSlider.value, 10) || 0));
                 game.settings.set(MODULE.ID, 'encounterOdds', val);
-                const span = oddsSlider.parentElement?.querySelector('.window-encounter-odds-value');
-                if (span) span.textContent = val;
+                const currentEl = root?.querySelector('.window-encounter-odds-current');
+                if (currentEl) currentEl.textContent = `${val}%`;
                 return;
             }
             const crSlider = e.target?.closest?.('.window-encounter-cr-slider');

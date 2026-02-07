@@ -120,10 +120,24 @@
     color: #c0c0c0;
 }
 
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-value {
-    min-width: 2em;
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-current {
+    min-width: 2.5em;
     font-weight: 600;
     color: #fff;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-endpoint {
+    flex-shrink: 0;
+    color: #b0b0b0;
+    font-size: 1.1em;
+    min-width: 2.25em;
+    text-align: center;
 }
 
 /* Shared range slider style: purple/magenta track, white square thumb, easy to drag */

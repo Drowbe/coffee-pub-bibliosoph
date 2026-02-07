@@ -14,14 +14,14 @@
     </header>
 
     <section class="window-encounter-configure">
-        <h3 class="window-encounter-section-title">{{localize "coffee-pub-bibliosoph.quickEncounterConfigureEncounter-Label"}} </h3>
+        <h3 class="window-encounter-section-title">{{localize "coffee-pub-bibliosoph.quickEncounterConfigureEncounter-Label"}}</h3>
         <div class="window-encounter-odds-row">
-            <label class="window-encounter-odds-label" for="{{appId}}-odds">{{localize "coffee-pub-bibliosoph.encounterOdds-Label"}} <span class="window-encounter-odds-value">{{oddsOfEncounter}}%</span></label>
+            <label class="window-encounter-odds-label" for="{{appId}}-odds">{{localize "coffee-pub-bibliosoph.encounterOdds-Label"}} <span class="window-encounter-odds-current">{{oddsOfEncounter}}%</span></label>
         </div>
-        <div class="window-encounter-odds-row">
-            <span class="window-encounter-odds-value">0%</span>
+        <div class="window-encounter-odds-slider-row">
+            <span class="window-encounter-odds-endpoint">0%</span>
             <input type="range" id="{{appId}}-odds" class="window-encounter-odds-slider" min="0" max="100" value="{{oddsOfEncounter}}" step="1" aria-label="Odds of encounter (0–100)" />
-            <span class="window-encounter-odds-value">100%</span>
+            <span class="window-encounter-odds-endpoint">100%</span>
         </div>
     </section>
 
