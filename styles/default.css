@@ -111,6 +111,30 @@
     border-radius: 4px;
     margin: 0.5em 0;
 }
+.encounter-monsters {
+    margin: 0.5em 0;
+}
+.encounter-monster-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    margin: 0.25em 0;
+}
+.encounter-monster-img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+.encounter-monster-name {
+    flex: 1;
+    min-width: 0;
+}
+.encounter-monster-cr {
+    flex-shrink: 0;
+    opacity: 0.9;
+}
 
 .investigation-items {
     margin: 0.5em 0;

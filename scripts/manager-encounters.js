@@ -466,13 +466,14 @@ async function loadEncounterNarrative() {
  * @param {Object} entry - { title, icon, image?, description }
  * @param {string} theme - card theme (e.g. from cardThemeEncounter)
  * @param {string} [cardTitle] - e.g. "Encounter" or "No Encounter"
+ * @param {Array<{name: string, count?: number, cr: string, img?: string}>} [encounterMonsters] - optional list to show on card
  * @returns {Object} CARDDATA for template
  */
-function buildEncounterCardData(entry, theme, cardTitle = 'Encounter') {
+function buildEncounterCardData(entry, theme, cardTitle = 'Encounter', encounterMonsters = null) {
     const strUserName = game.user?.name ?? '';
     const strUserAvatar = game.user?.avatar ?? '';
     const strCharacterName = game.user?.character?.name ?? game.i18n?.localize?.('coffee-pub-bibliosoph.NoCharacterSet') ?? 'No Character Set';
-    return {
+    const data = {
         isEncounterCard: true,
         userName: strUserName,
         userAvatar: strUserAvatar,
@@ -485,6 +486,20 @@ function buildEncounterCardData(entry, theme, cardTitle = 'Encounter') {
         narrativeIcon: entry?.icon ?? '<i class="fa-solid fa-dice"></i>',
         narrativeImage: entry?.image ?? null
     };
+    if (Array.isArray(encounterMonsters) && encounterMonsters.length > 0) {
+        data.encounterMonsters = encounterMonsters.map((m) => {
+            const name = m.name ?? 'Unknown';
+            const count = typeof m.count === 'number' && m.count >= 1 ? m.count : 1;
+            return {
+                name,
+                count,
+                displayName: count > 1 ? `${count} × ${name}` : name,
+                cr: m.cr ?? '—',
+                img: m.img ?? ''
+            };
+        });
+    }
+    return data;
 }
 
 /**
@@ -550,12 +565,6 @@ export async function rollForEncounter(habitat, difficulty, targetCR) {
     }
 
     const introEntry = pickEntry(encounterTrueEntries);
-    const introCardData = buildEncounterCardData(introEntry, theme, 'Encounter');
-    await postEncounterCardToChat(introCardData);
-    if (typeof BlacksmithUtils?.playSound === 'function') {
-        BlacksmithUtils.playSound('modules/coffee-pub-blacksmith/sounds/weapon-sword-blade-swish.mp3', '0.7');
-    }
-
     const recommendations = await buildEncounter(habitat, targetCR);
     if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
         const n = recommendations.reduce((s, r) => s + (r.count ?? 1), 0);
@@ -565,16 +574,17 @@ export async function rollForEncounter(habitat, difficulty, targetCR) {
 }
 
 /**
- * Post the "encounter deploy" card to chat (when user deploys after a roll-for-encounter).
- * Uses the same intro entry or a simple deploy message.
+ * Post the encounter deploy card to chat with the selected monster list, then place is done by the caller.
+ * Card shows narrative (optional intro) plus the list of monsters being placed.
  * @param {Object} [introEntry] - optional narrative entry from roll (title, description, icon, image)
+ * @param {Array<{name: string, count?: number, cr: string, img?: string}>} [selectedMonsters] - monsters being deployed (for card list)
  */
-export async function postEncounterDeployCardToChat(introEntry) {
+export async function postEncounterDeployCardToChat(introEntry, selectedMonsters = null) {
     const theme = game.settings.get(MODULE.ID, 'cardThemeEncounter') ?? 'theme-default';
     const entry = introEntry
-        ? { ...introEntry, description: introEntry.description ? `${introEntry.description} Monsters have been deployed to the canvas.` : 'Monsters have been deployed to the canvas.' }
-        : { title: 'Encounter Deployed', icon: '<i class="fa-solid fa-map-location-dot"></i>', description: 'Monsters have been deployed to the canvas.' };
-    const cardData = buildEncounterCardData(entry, theme, 'Encounter');
+        ? { ...introEntry, description: introEntry.description ? `${introEntry.description} The following have been placed on the canvas.` : 'The following have been placed on the canvas.' }
+        : { title: 'Encounter Deployed', icon: '<i class="fa-solid fa-map-location-dot"></i>', description: 'The following have been placed on the canvas.' };
+    const cardData = buildEncounterCardData(entry, theme, 'Encounter', selectedMonsters);
     await postEncounterCardToChat(cardData);
 }
 

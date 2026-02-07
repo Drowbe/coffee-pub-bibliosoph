@@ -26,6 +26,18 @@
     {{#if narrativeDescription}}
         <p class="encounter-narrative-description">{{narrativeDescription}}</p>
     {{/if}}
+    {{#if encounterMonsters}}
+        <div class="section-header"><i class="fa-solid fa-dragon"></i> Encounter</div>
+        <div class="encounter-monsters">
+            {{#each encounterMonsters}}
+                <div class="encounter-monster-row">
+                    {{#if img}}<img class="encounter-monster-img" src="{{img}}" alt="" />{{/if}}
+                    <span class="encounter-monster-name">{{displayName}}</span>
+                    <span class="encounter-monster-cr">CR {{cr}}</span>
+                </div>
+            {{/each}}
+        </div>
+    {{/if}}
     {{else if isInvestigationCard}}
     <!-- INVESTIGATION CARD: narrative + item rows + inventory summary -->
     {{#if userName}}

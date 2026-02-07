@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+## [13.0.10]
+
+### Added
+
+- **Quick Encounter deploy card with monster list:** When you deploy after a roll-for-encounter, a single chat card is posted that lists the selected monsters (name, count, CR, optional image) and states that they have been placed. No separate intro card is posted at roll time.
+
+### Changed
+
+- **Quick Encounter workflow:** Roll → encounter → select monsters → deploy. On deploy, one card is generated (narrative + monster list) and tokens are placed at the same time. The intro card that previously appeared when an encounter was rolled is no longer posted; the only encounter card is the deploy card with the monster list.
+- **Encounter card template:** `buildEncounterCardData` accepts an optional `encounterMonsters` array; the encounter card template renders an "Encounter" section with monster rows (display name, CR) when present. Deploy card copy updated to "The following have been placed on the canvas."
+
 ## [13.0.9]
 
 ### Added

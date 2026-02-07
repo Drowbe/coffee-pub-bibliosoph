@@ -559,10 +559,10 @@ export class WindowEncounter extends Base {
     async _onDeploy() {
         const recommendations = Array.isArray(this._recommendations) ? this._recommendations : [];
         const isBuiltEncounter = recommendations.length > 0 && recommendations.every(r => typeof r.count === 'number' && r.count >= 1);
+        const selectedRecommendations = recommendations.filter(r => this._selectedForDeploy.has(r.id));
         let uuids;
         if (isBuiltEncounter) {
-            const selected = recommendations.filter(r => this._selectedForDeploy.has(r.id));
-            uuids = selected.flatMap(r => Array(r.count ?? 1).fill(r.id));
+            uuids = selectedRecommendations.flatMap(r => Array(r.count ?? 1).fill(r.id));
         } else if (this._selectedForDeploy.size > 0) {
             uuids = Array.from(this._selectedForDeploy);
         } else {
@@ -572,12 +572,23 @@ export class WindowEncounter extends Base {
             log('Quick Encounter: deploy', 'No monsters selected', true);
             return;
         }
+        const selectedMonsters = selectedRecommendations.map(r => ({
+            name: r.name ?? 'Unknown',
+            count: r.count ?? 1,
+            cr: r.cr ?? '—',
+            img: r.img ?? ''
+        }));
         const metadata = { monsters: uuids, npcs: [] };
         const options = {
             deploymentPattern: this._deploymentPattern,
             deploymentHidden: this._deploymentHidden
         };
         try {
+            if (this._lastRollHadEncounter && typeof window.bibliosophPostEncounterDeployCard === 'function') {
+                await window.bibliosophPostEncounterDeployCard(this._lastRollIntroEntry, selectedMonsters);
+                this._lastRollHadEncounter = false;
+                this._lastRollIntroEntry = null;
+            }
             const api = game.modules.get('coffee-pub-blacksmith')?.api;
             if (api?.deployMonsters) {
                 const tokens = await api.deployMonsters(metadata, options);
@@ -593,11 +604,6 @@ export class WindowEncounter extends Base {
                 }
             }
             this._selectedForDeploy.clear();
-            if (this._lastRollHadEncounter && typeof window.bibliosophPostEncounterDeployCard === 'function') {
-                await window.bibliosophPostEncounterDeployCard(this._lastRollIntroEntry);
-                this._lastRollHadEncounter = false;
-                this._lastRollIntroEntry = null;
-            }
             this.render();
         } catch (e) {
             console.error(MODULE.NAME, 'Quick Encounter: deploy failed', e);
