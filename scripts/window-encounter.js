@@ -347,11 +347,11 @@ export class WindowEncounter extends Base {
             deploySelectedCount,
             hasDeploySelection,
             deploymentPatterns: [
-                { value: 'sequential', label: 'Sequential', selected: this._deploymentPattern === 'sequential' },
-                { value: 'circle', label: 'Circle', selected: this._deploymentPattern === 'circle' },
-                { value: 'line', label: 'Line', selected: this._deploymentPattern === 'line' },
-                { value: 'scatter', label: 'Scatter', selected: this._deploymentPattern === 'scatter' },
-                { value: 'grid', label: 'Grid', selected: this._deploymentPattern === 'grid' }
+                { value: 'sequential', label: 'Sequential', selected: false },
+                { value: 'circle', label: 'Circle', selected: false },
+                { value: 'line', label: 'Line', selected: false },
+                { value: 'scatter', label: 'Scatter', selected: false },
+                { value: 'grid', label: 'Grid', selected: false }
             ],
             deploymentHidden: this._deploymentHidden,
             cacheBuilding: this._cacheBuilding,
