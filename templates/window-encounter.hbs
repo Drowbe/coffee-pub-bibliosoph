@@ -11,6 +11,10 @@
                 </button>
             </div>
         </div>
+        <div class="window-encounter-difficulty-badge-large {{difficultyClass}}" title="Current difficulty setting">
+            <i class="fa-solid fa-dragon window-encounter-difficulty-icon"></i>
+            <span class="window-encounter-difficulty-label">{{difficulty}}</span>
+        </div>
     </header>
 
     <section class="window-encounter-configure">
@@ -45,10 +49,7 @@
                 <span class="window-encounter-cr-box-value">{{encounterCRDisplay}}</span>
             </div>
         </div>
-        <div class="window-encounter-difficulty-badge-large {{difficultyClass}}" title="Current difficulty setting">
-            <i class="fa-solid fa-dragon window-encounter-difficulty-icon"></i>
-            <span class="window-encounter-difficulty-label">{{difficulty}}</span>
-        </div>
+
         <div class="window-encounter-cr-slider-row">
             <i class="fa-solid fa-rabbit window-encounter-slider-icon" title="Lower CR"></i>
             <input type="range" class="window-encounter-cr-slider" min="{{crSliderMin}}" max="{{crSliderMax}}" value="{{targetCRValue}}" step="0.25" aria-label="Target Encounter CR" />
