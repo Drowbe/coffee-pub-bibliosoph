@@ -15,6 +15,9 @@ export const WINDOW_ENCOUNTER_APP_ID = `${MODULE.ID}-quick-encounter`;
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 const Base = HandlebarsApplicationMixin(ApplicationV2);
 
+/** Minimum allowed gap between min/max CR sliders. */
+const MIN_CR_GAP = 1;
+
 /**
  * Compute difficulty label and CSS class from Party CR and Target CR (like encounter worksheet).
  * Ratio = targetCR / (partyCR || 1). Trivial < 0.25, Easy < 0.5, Moderate < 1, Hard < 1.5, Deadly < 2, else Impossible.
@@ -225,17 +228,36 @@ export class WindowEncounter extends Base {
             this._targetCR = partyBase;
         }
         if (this._minCR == null || this._minCR === undefined) {
-            const partyCRFromChars = getPartyAverageCRFromCharacters();
-            this._minCR = partyCRFromChars != null ? Math.max(0, Math.min(30, partyCRFromChars)) : 0;
+            const saved = Number(game.settings.get?.(MODULE.ID, 'quickEncounterMinCR'));
+            if (!Number.isNaN(saved)) {
+                this._minCR = Math.max(0, Math.min(30, saved));
+            } else {
+                const partyCRFromChars = getPartyAverageCRFromCharacters();
+                this._minCR = partyCRFromChars != null ? Math.max(0, Math.min(30, partyCRFromChars)) : 0;
+            }
         }
         if (this._maxCR == null || this._maxCR === undefined) {
-            this._maxCR = 30;
+            const saved = Number(game.settings.get?.(MODULE.ID, 'quickEncounterMaxCR'));
+            this._maxCR = Number.isNaN(saved) ? 30 : Math.max(0, Math.min(30, saved));
+        }
+        // Enforce a minimum gap so thumbs cannot cross
+        if (this._minCR > 29) this._minCR = 29;
+        if (this._maxCR < 1) this._maxCR = 1;
+        if (this._minCR > this._maxCR - MIN_CR_GAP) {
+            this._minCR = Math.max(0, this._maxCR - MIN_CR_GAP);
+        }
+        if (this._maxCR < this._minCR + MIN_CR_GAP) {
+            this._maxCR = Math.min(30, this._minCR + MIN_CR_GAP);
         }
         const targetCRNum = Number(this._targetCR);
         const minCRValue = Math.max(0, Math.min(30, Number(this._minCR) ?? 0));
         const minCRDisplay = formatCRDisplay(minCRValue);
         const maxCRValue = Math.max(0, Math.min(30, Number(this._maxCR) ?? 30));
         const maxCRDisplay = formatCRDisplay(maxCRValue);
+        const crSliderMin = 0;
+        const crSliderMax = (partyBase || monsterCRNum)
+            ? Math.min(200, Math.max(20, Math.max(partyBase || 0, monsterCRNum || 0) * 2.5 + 10))
+            : 200;
         const crRangeMax = 30;
         const crRangeHighlightLeft = Math.min(100, (minCRValue / crRangeMax) * 100);
         const crRangeHighlightWidth = Math.max(0, Math.min(100 - crRangeHighlightLeft, ((maxCRValue - minCRValue) / crRangeMax) * 100));
@@ -250,6 +272,12 @@ export class WindowEncounter extends Base {
         const monsterGapNum = Number.isNaN(monsterCRNum) ? targetCRNum : Math.max(0, targetCRNum - monsterCRNum);
         const encounterCRDisplay = formatCRDisplay(targetCRNum);
         const monsterGapDisplay = formatCRDisplay(monsterGapNum);
+        const crSliderFill = (() => {
+            const min = Number(crSliderMin);
+            const max = Number(crSliderMax);
+            const span = Math.max(1, max - min);
+            return Math.max(0, Math.min(100, ((targetCRNum - min) / span) * 100));
+        })();
 
         const difficultyInfo = getDifficultyFromPartyAndTarget(partyBase, targetCRNum);
         const difficultyLabel = difficultyInfo.label;
@@ -281,8 +309,8 @@ export class WindowEncounter extends Base {
             difficultyClass,
             oddsOfEncounter: Math.max(0, Math.min(100, Number(game.settings.get(MODULE.ID, 'encounterOdds')) ?? 20)),
             targetCRValue: Math.max(0, Number(this._targetCR) || 0),
-            crSliderMin: 0,
-            crSliderMax: (partyBase || monsterCRNum) ? Math.min(200, Math.max(20, Math.max(partyBase || 0, monsterCRNum || 0) * 2.5 + 10)) : 200,
+            crSliderMin,
+            crSliderMax,
             minCRValue,
             minCRDisplay,
             minCRSliderMin: 0,
@@ -299,6 +327,7 @@ export class WindowEncounter extends Base {
             crRangeMinInputWidth,
             crRangeMaxInputLeft,
             crRangeMaxInputWidth,
+            crSliderFill,
             habitats: this._habitats.map(h => ({ name: h, selected: h === this._selectedHabitat })),
             recommendations: recommendationsWithSelection,
             hasRecommendations: recommendations.length > 0,
@@ -600,9 +629,11 @@ export class WindowEncounter extends Base {
             if (minCRSlider) {
                 const raw = parseFloat(minCRSlider.value);
                 if (!Number.isNaN(raw) && raw >= 0) {
-                    const v = Math.min(30, Math.max(0, raw));
-                    self._minCR = Math.min(v, self._maxCR ?? 30);
-                    if (self._minCR > (self._maxCR ?? 30)) self._maxCR = self._minCR;
+                    const v = Math.min(29, Math.max(0, raw));
+                    const currentMax = Math.max(MIN_CR_GAP, Math.min(30, Number(self._maxCR) ?? 30));
+                    self._minCR = Math.min(v, currentMax - MIN_CR_GAP);
+                    self._maxCR = Math.max(self._maxCR ?? 30, self._minCR + MIN_CR_GAP);
+                    game.settings.set?.(MODULE.ID, 'quickEncounterMinCR', self._minCR);
                     log('Quick Encounter: minimum CR', self._minCR, false);
                     self.render();
                 }
@@ -612,9 +643,11 @@ export class WindowEncounter extends Base {
             if (maxCRSlider) {
                 const raw = parseFloat(maxCRSlider.value);
                 if (!Number.isNaN(raw) && raw >= 0) {
-                    const v = Math.min(30, Math.max(0, raw));
-                    self._maxCR = Math.max(v, self._minCR ?? 0);
-                    if (self._maxCR < (self._minCR ?? 0)) self._minCR = self._maxCR;
+                    const v = Math.min(30, Math.max(MIN_CR_GAP, raw));
+                    const currentMin = Math.max(0, Math.min(29, Number(self._minCR) ?? 0));
+                    self._maxCR = Math.max(v, currentMin + MIN_CR_GAP);
+                    self._minCR = Math.min(self._minCR ?? 0, self._maxCR - MIN_CR_GAP);
+                    game.settings.set?.(MODULE.ID, 'quickEncounterMaxCR', self._maxCR);
                     log('Quick Encounter: maximum CR', self._maxCR, false);
                     self.render();
                 }
@@ -639,6 +672,11 @@ export class WindowEncounter extends Base {
                     self._targetCR = raw;
                     const box = root?.querySelector('.window-encounter-cr-box-target .window-encounter-cr-box-value');
                     if (box) box.textContent = raw === 0.5 ? '1/2' : String(Math.round(raw * 100) / 100);
+                    const min = parseFloat(crSlider.min ?? '0') || 0;
+                    const max = parseFloat(crSlider.max ?? '100') || 100;
+                    const span = Math.max(1, max - min);
+                    const pct = Math.max(0, Math.min(100, ((raw - min) / span) * 100));
+                    crSlider.style.setProperty('--cr-fill', `${pct}%`);
                 }
                 return;
             }
@@ -646,10 +684,12 @@ export class WindowEncounter extends Base {
             if (minCRSlider) {
                 const raw = parseFloat(minCRSlider.value);
                 if (!Number.isNaN(raw) && raw >= 0) {
-                    const v = Math.min(30, Math.max(0, raw));
+                    const v = Math.min(29, Math.max(0, raw));
                     const maxVal = parseFloat(root?.querySelector('.window-encounter-max-cr-slider')?.value ?? 30);
-                    const minVal = Math.min(v, maxVal);
-                    const maxVal2 = Math.max(v, maxVal);
+                    const clampedMax = Math.max(MIN_CR_GAP, Math.min(30, maxVal));
+                    const minVal = Math.min(v, clampedMax - MIN_CR_GAP);
+                    const maxVal2 = Math.max(clampedMax, minVal + MIN_CR_GAP);
+                    if (Number(minCRSlider.value) !== minVal) minCRSlider.value = minVal;
                     self._updateCRRangeDisplay(root, minVal, maxVal2);
                 }
                 return;
@@ -658,10 +698,12 @@ export class WindowEncounter extends Base {
             if (maxCRSlider) {
                 const raw = parseFloat(maxCRSlider.value);
                 if (!Number.isNaN(raw) && raw >= 0) {
-                    const v = Math.min(30, Math.max(0, raw));
+                    const v = Math.min(30, Math.max(MIN_CR_GAP, raw));
                     const minVal = parseFloat(root?.querySelector('.window-encounter-min-cr-slider')?.value ?? 0);
-                    const minVal2 = Math.min(v, minVal);
-                    const maxVal2 = Math.max(v, minVal);
+                    const clampedMin = Math.max(0, Math.min(29, minVal));
+                    const maxVal2 = Math.max(v, clampedMin + MIN_CR_GAP);
+                    const minVal2 = Math.min(clampedMin, maxVal2 - MIN_CR_GAP);
+                    if (Number(maxCRSlider.value) !== maxVal2) maxCRSlider.value = maxVal2;
                     self._updateCRRangeDisplay(root, minVal2, maxVal2);
                 }
             }
@@ -758,6 +800,28 @@ export class WindowEncounter extends Base {
         root.querySelector('.window-encounter-deploy-visible')?.addEventListener('change', (e) => {
             this._deploymentHidden = !e.target?.checked;
             this.render();
+        });
+        root.querySelector('.window-encounter-min-cr-slider')?.addEventListener('change', (e) => {
+            const raw = parseFloat(e.target?.value);
+            if (!Number.isNaN(raw) && raw >= 0) {
+                const v = Math.min(29, Math.max(0, raw));
+                const currentMax = Math.max(MIN_CR_GAP, Math.min(30, Number(this._maxCR) ?? 30));
+                this._minCR = Math.min(v, currentMax - MIN_CR_GAP);
+                this._maxCR = Math.max(this._maxCR ?? 30, this._minCR + MIN_CR_GAP);
+                game.settings.set?.(MODULE.ID, 'quickEncounterMinCR', this._minCR);
+                this.render();
+            }
+        });
+        root.querySelector('.window-encounter-max-cr-slider')?.addEventListener('change', (e) => {
+            const raw = parseFloat(e.target?.value);
+            if (!Number.isNaN(raw) && raw >= 0) {
+                const v = Math.min(30, Math.max(MIN_CR_GAP, raw));
+                const currentMin = Math.max(0, Math.min(29, Number(this._minCR) ?? 0));
+                this._maxCR = Math.max(v, currentMin + MIN_CR_GAP);
+                this._minCR = Math.min(this._minCR ?? 0, this._maxCR - MIN_CR_GAP);
+                game.settings.set?.(MODULE.ID, 'quickEncounterMaxCR', this._maxCR);
+                this.render();
+            }
         });
     }
 

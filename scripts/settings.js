@@ -2155,6 +2155,18 @@ export const registerSettings = () => {
 			scope: 'world',
 			default: true,
 		});
+		game.settings.register(MODULE.ID, 'quickEncounterMinCR', {
+			scope: 'client',
+			config: false,
+			type: Number,
+			default: 0,
+		});
+		game.settings.register(MODULE.ID, 'quickEncounterMaxCR', {
+			scope: 'client',
+			config: false,
+			type: Number,
+			default: 30,
+		});
 		game.settings.register(MODULE.ID, 'toolbarCoffeePubQuickEncounterEnabled', {
 			name: MODULE.ID + '.toolbarCoffeePubQuickEncounterEnabled-Label',
 			hint: MODULE.ID + '.toolbarCoffeePubQuickEncounterEnabled-Hint',
