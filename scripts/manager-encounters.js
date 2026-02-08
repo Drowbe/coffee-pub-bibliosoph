@@ -340,10 +340,13 @@ async function getCandidatesWithXP(habitat) {
 /**
  * Recommend monsters: search Blacksmith-configured compendiums, filter by habitat and CR.
  * Uses parallel pack loading and per-pack cap for speed.
+ * @param {number} [minCR=0] - floor only: do not return any monster with CR below this value (no other effect)
  * @returns {Promise<Array<{id: string, img: string, name: string, cr: string}>>}
  */
-export async function encounterRecommend(habitat, difficulty, targetCR) {
-    const candidates = await getCandidatesWithXP(habitat);
+export async function encounterRecommend(habitat, difficulty, targetCR, minCR = 0) {
+    let candidates = await getCandidatesWithXP(habitat);
+    const minCRNum = typeof minCR === 'number' && !Number.isNaN(minCR) ? Math.max(0, minCR) : 0;
+    if (minCRNum > 0) candidates = candidates.filter((c) => c.cr >= minCRNum);
     if (candidates.length === 0) {
         if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
             BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: No monster compendiums or no matching actors', '', true, true);
@@ -406,10 +409,13 @@ export async function encounterRecommend(habitat, difficulty, targetCR) {
  * Returns array of { id, img, name, cr, count } with count >= 1.
  * @param {string} habitat
  * @param {number} targetCR - target encounter CR (used for XP budget)
+ * @param {number} [minCR=0] - floor only: do not use any monster with CR below this value (no other effect)
  * @returns {Promise<Array<{id: string, img: string, name: string, cr: string, count: number}>>}
  */
-export async function buildEncounter(habitat, targetCR) {
-    const candidates = await getCandidatesWithXP(habitat);
+export async function buildEncounter(habitat, targetCR, minCR = 0) {
+    let candidates = await getCandidatesWithXP(habitat);
+    const minCRNum = typeof minCR === 'number' && !Number.isNaN(minCR) ? Math.max(0, minCR) : 0;
+    if (minCRNum > 0) candidates = candidates.filter((c) => c.cr >= minCRNum);
     if (candidates.length === 0) return [];
 
     const budget = CR_TO_XP[Math.min(Math.max(0, Math.floor(targetCR) + 3), CR_TO_XP.length - 1)] ?? 1800;
@@ -545,9 +551,10 @@ async function postEncounterCardToChat(cardData) {
  * @param {string} habitat - e.g. "Any", "Forest"
  * @param {string} difficulty - "Easy" | "Medium" | "Hard" | "Deadly"
  * @param {number} targetCR - target encounter CR for recommend
+ * @param {number} [minCR=0] - floor only: do not use any monster with CR below this value (no other effect)
  * @returns {Promise<{ encounter: boolean, recommendations: Array, introEntry?: Object }>}
  */
-export async function rollForEncounter(habitat, difficulty, targetCR) {
+export async function rollForEncounter(habitat, difficulty, targetCR, minCR = 0) {
     let narrativeJson;
     try {
         narrativeJson = await loadEncounterNarrative();
@@ -583,7 +590,7 @@ export async function rollForEncounter(habitat, difficulty, targetCR) {
     }
 
     const introEntry = pickEntry(encounterTrueEntries);
-    const recommendations = await buildEncounter(habitat, targetCR);
+    const recommendations = await buildEncounter(habitat, targetCR, minCR);
     if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
         const n = recommendations.reduce((s, r) => s + (r.count ?? 1), 0);
         BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: Roll for Encounter', `${recommendations.length} types, ${n} tokens`, false, false);

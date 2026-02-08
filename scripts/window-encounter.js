@@ -79,6 +79,43 @@ function xpToEffectiveCR(totalXp) {
     return idx < 4 ? [0, 0.125, 0.25, 0.5][idx] : idx - 1;
 }
 
+/**
+ * Compute party CR from character actors using the standard formula:
+ * PC_CR = (Level / 4) + MartialBonus; Party CR = sum(PC_CR).
+ * MartialBonus = +0.25 per: Barbarian, Fighter, Paladin, Moon Druid; cap +0.5 per character.
+ * Used only as the default for the Minimum CR slider.
+ * @returns {number|null} Party CR or null if no characters / not dnd5e
+ */
+function getPartyAverageCRFromCharacters() {
+    const system = game.system?.id;
+    if (system !== 'dnd5e') return null;
+    // Only player-owned characters (the party), not every character in the world
+    const characters = game.actors?.filter((a) => a.type === 'character' && a.hasPlayerOwner) ?? [];
+    if (characters.length === 0) return null;
+    let partyCR = 0;
+    for (const actor of characters) {
+        const level = Math.max(1, Math.min(20, Number(actor.system?.details?.level) || 1));
+        const baseCR = level / 4;
+        let martialBonus = 0;
+        const classes = actor.system?.classes ?? {};
+        if (typeof classes !== 'object' || Array.isArray(classes)) continue;
+        const classKeys = Object.keys(classes).map((k) => String(k).toLowerCase());
+        const has = (name) => classKeys.some((k) => k.includes(name) || name.includes(k));
+        if (has('barbarian')) martialBonus += 0.25;
+        if (martialBonus < 0.5 && has('fighter')) martialBonus += 0.25;
+        if (martialBonus < 0.5 && has('paladin')) martialBonus += 0.25;
+        if (martialBonus < 0.5 && has('druid')) {
+            const druidEntry = Object.entries(classes).find(([k]) => k.toLowerCase().includes('druid'));
+            const druidData = druidEntry?.[1];
+            const sub = String(druidData?.subclass ?? druidData?.subclassIdentifier ?? '').toLowerCase();
+            if (sub.includes('moon')) martialBonus += 0.25;
+        }
+        martialBonus = Math.min(0.5, martialBonus);
+        partyCR += baseCR + martialBonus;
+    }
+    return partyCR;
+}
+
 /** Log to console and optionally show notification (when Blacksmith available). */
 function log(msg, detail = '', showNotification = false) {
     if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
@@ -101,6 +138,8 @@ export class WindowEncounter extends Base {
     _selectedHabitat = 'Any';
     /** Target encounter CR (slider value). Difficulty is derived from party CR vs this. */
     _targetCR = null;
+    /** Minimum CR for creatures in Recommend/Roll; defaults to party CR. */
+    _minCR = null;
     _recommendations = [];
     /** True while recommend request is in progress (show spinner). */
     _recommendLoading = false;
@@ -181,7 +220,13 @@ export class WindowEncounter extends Base {
         if (this._targetCR == null || this._targetCR === undefined) {
             this._targetCR = partyBase;
         }
+        if (this._minCR == null || this._minCR === undefined) {
+            const partyCRFromChars = getPartyAverageCRFromCharacters();
+            this._minCR = partyCRFromChars != null ? Math.max(0, Math.min(30, partyCRFromChars)) : 0;
+        }
         const targetCRNum = Number(this._targetCR);
+        const minCRValue = Math.max(0, Math.min(30, Number(this._minCR) ?? 0));
+        const minCRDisplay = formatCRDisplay(minCRValue);
         const monsterGapNum = Number.isNaN(monsterCRNum) ? targetCRNum : Math.max(0, targetCRNum - monsterCRNum);
         const encounterCRDisplay = formatCRDisplay(targetCRNum);
         const monsterGapDisplay = formatCRDisplay(monsterGapNum);
@@ -217,6 +262,10 @@ export class WindowEncounter extends Base {
             targetCRValue: Math.max(0, Number(this._targetCR) || 0),
             crSliderMin: 0,
             crSliderMax: (partyBase || monsterCRNum) ? Math.min(200, Math.max(20, Math.max(partyBase || 0, monsterCRNum || 0) * 2.5 + 10)) : 200,
+            minCRValue,
+            minCRDisplay,
+            minCRSliderMin: 0,
+            minCRSliderMax: 30,
             habitats: this._habitats.map(h => ({ name: h, selected: h === this._selectedHabitat })),
             recommendations: recommendationsWithSelection,
             hasRecommendations: recommendations.length > 0,
@@ -440,6 +489,16 @@ export class WindowEncounter extends Base {
                     log('Quick Encounter: target CR', self._targetCR, false);
                     self.render();
                 }
+                return;
+            }
+            const minCRSlider = e.target?.closest?.('.window-encounter-min-cr-slider');
+            if (minCRSlider) {
+                const raw = parseFloat(minCRSlider.value);
+                if (!Number.isNaN(raw) && raw >= 0) {
+                    self._minCR = Math.min(30, Math.max(0, raw));
+                    log('Quick Encounter: minimum CR', self._minCR, false);
+                    self.render();
+                }
             }
         });
         // Update displayed value during drag without full re-render (keeps drag responsive)
@@ -461,6 +520,16 @@ export class WindowEncounter extends Base {
                     self._targetCR = raw;
                     const box = root?.querySelector('.window-encounter-cr-box-target .window-encounter-cr-box-value');
                     if (box) box.textContent = raw === 0.5 ? '1/2' : String(Math.round(raw * 100) / 100);
+                }
+                return;
+            }
+            const minCRSlider = e.target?.closest?.('.window-encounter-min-cr-slider');
+            if (minCRSlider) {
+                const raw = parseFloat(minCRSlider.value);
+                if (!Number.isNaN(raw) && raw >= 0) {
+                    self._minCR = Math.min(30, Math.max(0, raw));
+                    const currentEl = root?.querySelector('.window-encounter-min-cr-current');
+                    if (currentEl) currentEl.textContent = raw === 0.5 ? '1/2' : String(Math.round(raw * 100) / 100);
                 }
             }
         });
@@ -544,10 +613,12 @@ export class WindowEncounter extends Base {
             const targetCR = Math.max(0, Number(this._targetCR) || 5);
             const partyBase = parseCR(this._assessment?.partyCR ?? this._assessment?.partyCRDisplay);
             const difficultyLabel = getDifficultyFromPartyAndTarget(partyBase, targetCR).label;
+            const minCR = Math.max(0, Math.min(30, Number(this._minCR) ?? 0));
             const result = await window.bibliosophRollForEncounter(
                 this._selectedHabitat,
                 difficultyLabel,
-                targetCR
+                targetCR,
+                minCR
             );
             this._lastRollHadEncounter = result.encounter === true;
             this._lastRollIntroEntry = result.introEntry ?? null;
@@ -575,10 +646,12 @@ export class WindowEncounter extends Base {
         this._recommendLoading = true;
         this.render();
         try {
+            const minCR = Math.max(0, Math.min(30, Number(this._minCR) ?? 0));
             const newRecommendations = await window.bibliosophEncounterRecommend(
                 this._selectedHabitat,
                 difficultyLabel,
-                targetCR
+                targetCR,
+                minCR
             );
             const existing = Array.isArray(this._recommendations) ? this._recommendations : [];
             const existingIds = new Set(existing.map(r => r.id).filter(Boolean));
@@ -596,7 +669,7 @@ export class WindowEncounter extends Base {
                 log('Quick Encounter: recommend (add more)', `${(newRecommendations || []).length} new, ${combined.length} total`, false);
             } else {
                 this._recommendations = newRecommendations || [];
-                this._selectedForDeploy = new Set((this._recommendations || []).map(r => r.id).filter(Boolean));
+                this._selectedForDeploy = new Set();
                 log('Quick Encounter: recommend returned', `${this._recommendations?.length ?? 0} results`, false);
             }
         } finally {

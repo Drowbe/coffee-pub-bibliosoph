@@ -55,6 +55,13 @@
             <input type="range" class="window-encounter-cr-slider" min="{{crSliderMin}}" max="{{crSliderMax}}" value="{{targetCRValue}}" step="0.25" aria-label="Target Encounter CR" />
             <i class="fa-solid fa-skull window-encounter-slider-icon" title="Higher CR"></i>
         </div>
+        <div class="window-encounter-min-cr-row">
+            <label class="window-encounter-min-cr-label" for="{{appId}}-min-cr">Minimum Monster CR <span class="window-encounter-min-cr-current">{{minCRDisplay}}</span></label>
+            <div class="window-encounter-cr-slider-row">
+                <input type="range" id="{{appId}}-min-cr" class="window-encounter-min-cr-slider" min="{{minCRSliderMin}}" max="{{minCRSliderMax}}" value="{{minCRValue}}" step="0.25" aria-label="Minimum creature CR (creatures below excluded)" />
+            </div>
+            <p class="window-encounter-min-cr-hint">Creatures below this CR are excluded from Recommend and Roll.</p>
+        </div>
     </section>
 
     <section class="window-encounter-filters">

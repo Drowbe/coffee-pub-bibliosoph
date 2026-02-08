@@ -151,7 +151,7 @@
     text-align: center;
 }
 
-/* Shared range slider */
+/* Shared range slider (do NOT add .window-encounter-min-cr-slider here - it has its own handlers) */
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider {
     flex: 1;
@@ -163,9 +163,19 @@
     outline: none;
 }
 
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-slider {
+    flex: 1;
+    min-width: 0;
+    height: 16px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    outline: none;
+}
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider::-moz-range-track,
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-moz-range-track {
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-moz-range-track,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-slider::-moz-range-track {
     height: 12px;
     border-radius: 4px;
     background: rgba(111, 39, 39, 0.6);
@@ -174,7 +184,8 @@
 
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider::-webkit-slider-runnable-track,
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-webkit-slider-runnable-track {
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-webkit-slider-runnable-track,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-slider::-webkit-slider-runnable-track {
     height: 12px;
     border-radius: 4px;
     background: rgba(111, 39, 39, 0.6);
@@ -185,7 +196,8 @@
 /* THUMB GRIP */
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider::-webkit-slider-thumb,
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-webkit-slider-thumb {
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-webkit-slider-thumb,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
     width: 20px;
@@ -199,14 +211,16 @@
 }
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider::-webkit-slider-thumb:active,
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-webkit-slider-thumb:active {
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-webkit-slider-thumb:active,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-slider::-webkit-slider-thumb:active {
     cursor: grabbing;
     border: 1px solid rgba(255, 100, 0, 0.6);
     background: rgba(255, 100, 0, 0.6);
 }
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider::-webkit-slider-thumb:hover,
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-webkit-slider-thumb:hover{
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-webkit-slider-thumb:hover,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-slider::-webkit-slider-thumb:hover {
     cursor: grabbing;
     border: 1px solid rgba(255, 100, 0, 0.6);
     background: rgba(255, 100, 0, 0.6);
@@ -214,7 +228,8 @@
 
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider::-moz-range-thumb,
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-moz-range-thumb {
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-moz-range-thumb,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-slider::-moz-range-thumb {
   -webkit-appearance: none;
     appearance: none;
     width: 20px;
@@ -228,14 +243,16 @@
 }
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider::-moz-range-thumb:active,
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-moz-range-thumb:active {
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-moz-range-thumb:active,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-slider::-moz-range-thumb:active {
     cursor: grabbing;
     border: 1px solid rgba(255, 100, 0, 0.6);
     background: rgba(255, 100, 0, 0.6);
 }
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider::-moz-range-thumb:hover,
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-moz-range-thumb:hover{
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-moz-range-thumb:hover,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-slider::-moz-range-thumb:hover {
     cursor: grabbing;
     border: 1px solid rgba(255, 100, 0, 0.6);
     background: rgba(255, 100, 0, 0.6);
@@ -372,6 +389,32 @@
     font-size: 1.1em;
 }
 
+/* ----- Minimum CR slider ----- */
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-row {
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.9em;
+    color: #d0d0d0;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-current {
+    font-weight: 600;
+    color: #e8c090;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-hint {
+    font-size: 0.78em;
+    opacity: 0.85;
+    margin-top: 6px;
+    margin-bottom: 0;
+    color: #b0b0b0;
+}
 
 /* ----- Habitat filter buttons ----- */
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-habitats {
