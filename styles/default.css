@@ -119,7 +119,7 @@
     align-items: center;
     gap: 0.5em;
     margin: 0.25em 0;
-    padding: 6px 8px;
+    padding: 4px 4px;
     background: rgba(0, 0, 0, 0.06);
     border: 1px solid rgba(0, 0, 0, 0.12);
     border-radius: 6px;
@@ -130,14 +130,12 @@
     object-fit: contain;
     border-radius: 4px;
     flex-shrink: 0;
+    background: rgba(0, 0, 0, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    padding: 2px;
 }
 .encounter-monster-name {
-    flex: 1;
-    min-width: 0;
-}
-.encounter-monster-cr {
-    flex-shrink: 0;
-    opacity: 0.9;
+
 }
 
 .investigation-items {
@@ -160,12 +158,7 @@
     min-width: 0;
     overflow: hidden;
 }
-.investigation-item-name a.content-link {
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
+
 .investigation-item-rarity {
     font-size: 0.9em;
     opacity: 0.85;

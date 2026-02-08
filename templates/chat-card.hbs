@@ -31,9 +31,8 @@
         <div class="encounter-monsters">
             {{#each encounterMonsters}}
                 <div class="encounter-monster-row">
-                    {{#if img}}<img class="encounter-monster-img" src="{{img}}" alt="" />{{/if}}
+                    {{#if img}}<img class="encounter-monster-img" src="{{img}}" alt="" data-tooltip="{{#if ../isGM}}CR {{cr}}{{/if}}" />{{/if}}
                     <span class="encounter-monster-name">{{{displayNameLink}}}</span>
-                    <span class="encounter-monster-cr">CR {{cr}}</span>
                 </div>
             {{/each}}
         </div>

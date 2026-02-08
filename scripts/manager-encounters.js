@@ -516,6 +516,7 @@ function buildEncounterCardData(entry, theme, cardTitle = 'Encounter', encounter
     const strCharacterName = game.user?.character?.name ?? game.i18n?.localize?.('coffee-pub-bibliosoph.NoCharacterSet') ?? 'No Character Set';
     const data = {
         isEncounterCard: true,
+        isGM: game.user?.isGM ?? false,
         userName: strUserName,
         userAvatar: strUserAvatar,
         characterName: strCharacterName,
@@ -540,7 +541,7 @@ function buildEncounterCardData(entry, theme, cardTitle = 'Encounter', encounter
                 displayName,
                 displayNameLink,
                 cr: m.cr ?? '—',
-                img: m.img ?? ''
+                img: m.img ?? m.portrait ?? m.tokenImg ?? ''
             };
         });
     }

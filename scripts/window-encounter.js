@@ -5,6 +5,7 @@
 // Options follow ApplicationV2 (v13): PARTS (what injects into .window-content), DEFAULT_OPTIONS (sizing, title).
 
 import { MODULE } from './const.js';
+import { postConsoleAndNotification } from './common.js';
 
 /** Template path for the encounter window. */
 export const WINDOW_ENCOUNTER_TEMPLATE = `modules/${MODULE.ID}/templates/window-encounter.hbs`;
@@ -119,15 +120,6 @@ function getPartyAverageCRFromCharacters() {
     return partyCR;
 }
 
-/** Log to console and optionally show notification (when Blacksmith available). */
-function log(msg, detail = '', showNotification = false) {
-    if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, msg, detail, true, showNotification);
-    } else {
-        console.log(MODULE.NAME, msg, detail !== '' ? detail : '');
-    }
-}
-
 /**
  * Quick Encounter configuration window — Application V2 + HandlebarsApplicationMixin.
  * Blacksmith-style layout: header, canvas CR, filters (habitat, difficulty), results grid, deployment.
@@ -193,7 +185,7 @@ export class WindowEncounter extends Base {
     async _prepareContext(options = {}) {
         const base = await super._prepareContext?.(options) ?? {};
         const ourData = await this.getData(options);
-        log('Quick Encounter: prepareContext', `habitats=${ourData.habitats?.length ?? 0}, assessment=${ourData.partyCRDisplay ?? '—'}`, false);
+        postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: prepareContext', `habitats=${ourData.habitats?.length ?? 0}, assessment=${ourData.partyCRDisplay ?? '—'}`, true, false);
         return foundry.utils.mergeObject(base, ourData);
     }
 
@@ -378,13 +370,13 @@ export class WindowEncounter extends Base {
             const api = game.modules.get('coffee-pub-blacksmith')?.api;
             if (api?.getCombatAssessment) {
                 this._assessment = await api.getCombatAssessment();
-                log('Quick Encounter: combat assessment', `from API — Party ${this._assessment?.partyCRDisplay ?? '—'}, Monster ${this._assessment?.monsterCRDisplay ?? '—'}`, false);
+                postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: combat assessment', `from API — Party ${this._assessment?.partyCRDisplay ?? '—'}, Monster ${this._assessment?.monsterCRDisplay ?? '—'}`, true, false);
                 return;
             }
             const bridge = await import('modules/coffee-pub-blacksmith/api/blacksmith-api.js').catch(() => null);
             if (bridge?.BlacksmithAPI?.getCombatAssessment) {
                 this._assessment = await bridge.BlacksmithAPI.getCombatAssessment();
-                log('Quick Encounter: combat assessment', `from bridge — Party ${this._assessment?.partyCRDisplay ?? '—'}, Monster ${this._assessment?.monsterCRDisplay ?? '—'}`, false);
+                postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: combat assessment', `from bridge — Party ${this._assessment?.partyCRDisplay ?? '—'}, Monster ${this._assessment?.monsterCRDisplay ?? '—'}`, true, false);
                 return;
             }
         } catch (e) {
@@ -396,7 +388,7 @@ export class WindowEncounter extends Base {
             difficulty: '—',
             difficultyClass: ''
         };
-        log('Quick Encounter: combat assessment', this._assessment.partyCRDisplay !== '—' ? `Party ${this._assessment.partyCRDisplay}, Monster ${this._assessment.monsterCRDisplay}` : 'using fallback (no Blacksmith)', false);
+        postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: combat assessment', this._assessment.partyCRDisplay !== '—' ? `Party ${this._assessment.partyCRDisplay}, Monster ${this._assessment.monsterCRDisplay}` : 'using fallback (no Blacksmith)', true, false);
     }
 
     /**
@@ -540,7 +532,7 @@ export class WindowEncounter extends Base {
             if (habitatBtn?.dataset?.habitat) {
                 self._selectedHabitat = habitatBtn.dataset.habitat;
                 game.settings.set?.(MODULE.ID, 'quickEncounterHabitat', self._selectedHabitat);
-                log('Quick Encounter: habitat selected', self._selectedHabitat, false);
+                postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: habitat selected', self._selectedHabitat, true, false);
                 self.render();
                 return;
             }
@@ -570,7 +562,7 @@ export class WindowEncounter extends Base {
                     } else {
                         self._selectedCounts.set(uuid, n);
                     }
-                    log('Quick Encounter: count', `${uuid.slice(-8)} → ${n <= 0 ? 'removed' : n}`, false);
+                    postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: count', `${uuid.slice(-8)} → ${n <= 0 ? 'removed' : n}`, true, false);
                     self.render();
                 }
                 return;
@@ -581,7 +573,7 @@ export class WindowEncounter extends Base {
                 if (uuid && self._selectedForDeploy.has(uuid)) {
                     const n = Math.min(99, (self._selectedCounts.get(uuid) ?? 1) + 1);
                     self._selectedCounts.set(uuid, n);
-                    log('Quick Encounter: count', `${uuid.slice(-8)} → ${n}`, false);
+                    postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: count', `${uuid.slice(-8)} → ${n}`, true, false);
                     self.render();
                 }
                 return;
@@ -598,14 +590,14 @@ export class WindowEncounter extends Base {
                     const initialCount = rec && typeof rec.count === 'number' && rec.count >= 1 ? rec.count : 1;
                     self._selectedCounts.set(uuid, initialCount);
                 }
-                log('Quick Encounter: selection toggled', `${self._selectedForDeploy.size} selected`, false);
+                postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: selection toggled', `${self._selectedForDeploy.size} selected`, true, false);
                 self.render();
                 return;
             }
             const patternBtn = e.target?.closest?.('.window-encounter-deploy-pattern');
             if (patternBtn?.getAttribute?.('data-pattern') && !patternBtn.disabled) {
                 self._deploymentPattern = patternBtn.getAttribute('data-pattern') ?? patternBtn.dataset.pattern;
-                log('Quick Encounter: deploy with pattern', self._deploymentPattern, false);
+                postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: deploy with pattern', self._deploymentPattern, true, false);
                 self._onDeploy();
                 return;
             }
@@ -616,7 +608,7 @@ export class WindowEncounter extends Base {
             const visibleCheck = e.target?.closest?.('.window-encounter-deploy-visible');
             if (visibleCheck) {
                 self._deploymentHidden = !visibleCheck.checked;
-                log('Quick Encounter: deploy visible', visibleCheck.checked ? 'visible' : 'hidden', false);
+                postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: deploy visible', visibleCheck.checked ? 'visible' : 'hidden', true, false);
                 self.render();
             }
         });
@@ -628,7 +620,7 @@ export class WindowEncounter extends Base {
             if (oddsSlider) {
                 const val = Math.max(0, Math.min(100, parseInt(oddsSlider.value, 10) || 0));
                 game.settings.set(MODULE.ID, 'encounterOdds', val);
-                log('Quick Encounter: odds of encounter', val, false);
+                postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: odds of encounter', val, true, false);
                 self.render();
                 return;
             }
@@ -637,7 +629,7 @@ export class WindowEncounter extends Base {
                 const raw = parseFloat(crSlider.value);
                 if (!Number.isNaN(raw) && raw >= 0) {
                     self._targetCR = raw;
-                    log('Quick Encounter: target CR', self._targetCR, false);
+                    postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: target CR', self._targetCR, true, false);
                     self.render();
                 }
                 return;
@@ -651,7 +643,7 @@ export class WindowEncounter extends Base {
                     self._minCR = Math.min(v, currentMax - MIN_CR_GAP);
                     self._maxCR = Math.max(self._maxCR ?? 30, self._minCR + MIN_CR_GAP);
                     game.settings.set?.(MODULE.ID, 'quickEncounterMinCR', self._minCR);
-                    log('Quick Encounter: minimum CR', self._minCR, false);
+                    postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: minimum CR', self._minCR, true, false);
                     self.render();
                 }
                 return;
@@ -665,7 +657,7 @@ export class WindowEncounter extends Base {
                     self._maxCR = Math.max(v, currentMin + MIN_CR_GAP);
                     self._minCR = Math.min(self._minCR ?? 0, self._maxCR - MIN_CR_GAP);
                     game.settings.set?.(MODULE.ID, 'quickEncounterMaxCR', self._maxCR);
-                    log('Quick Encounter: maximum CR', self._maxCR, false);
+                    postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: maximum CR', self._maxCR, true, false);
                     self.render();
                 }
             }
@@ -730,7 +722,7 @@ export class WindowEncounter extends Base {
                 }
             }
         });
-        log('Quick Encounter: delegation listeners attached', 'habitat, recommend, roll, refresh cache, pattern deploy, sliders', false);
+        postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: delegation listeners attached', 'habitat, recommend, roll, refresh cache, pattern deploy, sliders', false);
     }
 
     /**
@@ -749,7 +741,7 @@ export class WindowEncounter extends Base {
                 const habitat = e.currentTarget?.dataset?.habitat;
                 if (!habitat) return;
                 this._selectedHabitat = habitat;
-                log('Quick Encounter: habitat selected', habitat, false);
+                postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: habitat selected', habitat, true, false);
                 this.render();
             });
         });
@@ -782,7 +774,7 @@ export class WindowEncounter extends Base {
                     const initialCount = rec && typeof rec.count === 'number' && rec.count >= 1 ? rec.count : 1;
                     this._selectedCounts.set(uuid, initialCount);
                 }
-                log('Quick Encounter: selection toggled', `${this._selectedForDeploy.size} selected`, false);
+                postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: selection toggled', `${this._selectedForDeploy.size} selected`, true, false);
                 this.render();
             });
         });
@@ -851,9 +843,9 @@ export class WindowEncounter extends Base {
      * Roll for encounter using Global Encounter Settings; post card and optionally run recommend.
      */
     async _onRollForEncounter() {
-        log('Quick Encounter: Roll for Encounter clicked', `habitat=${this._selectedHabitat}`, false);
+        postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: Roll for Encounter clicked', `habitat=${this._selectedHabitat}`, true, false);
         if (typeof window.bibliosophRollForEncounter !== 'function') {
-            log('Quick Encounter: roll', 'bibliosophRollForEncounter not available', true);
+            postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: roll', 'bibliosophRollForEncounter not available', true, true);
             return;
         }
         this._rollLoading = true;
@@ -878,7 +870,7 @@ export class WindowEncounter extends Base {
                 this._recommendations = result.recommendations;
                 this._recommendAttempted = true;
             }
-            log('Quick Encounter: roll complete', result.encounter ? `${result.recommendations?.length ?? 0} types` : 'no encounter', false);
+            postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: roll complete', result.encounter ? `${result.recommendations?.length ?? 0} types` : 'no encounter', true, false);
         } finally {
             this._rollLoading = false;
             this._recommendLoading = false;
@@ -890,9 +882,9 @@ export class WindowEncounter extends Base {
         const targetCR = Math.max(0, Number(this._targetCR) || 5);
         const partyBase = parseCR(this._assessment?.partyCR ?? this._assessment?.partyCRDisplay);
         const difficultyLabel = getDifficultyFromPartyAndTarget(partyBase, targetCR).label;
-        log('Quick Encounter: Recommend clicked', `habitat=${this._selectedHabitat}, targetCR=${targetCR} (Encounter CR slider), difficulty=${difficultyLabel}`, false);
+        postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: Recommend clicked', `habitat=${this._selectedHabitat}, targetCR=${targetCR} (Encounter CR slider), difficulty=${difficultyLabel}`, true, false);
         if (typeof window.bibliosophEncounterRecommend !== 'function') {
-            log('Quick Encounter: recommend', 'bibliosophEncounterRecommend not available', true);
+            postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: recommend', 'bibliosophEncounterRecommend not available', true);
             return;
         }
         this._recommendLoading = true;
@@ -922,12 +914,12 @@ export class WindowEncounter extends Base {
                 }
                 this._recommendations = combined;
                 // Selection stays exactly what the GM had selected (only kept items remain selected; new items are not selected)
-                log('Quick Encounter: recommend (add more)', `kept ${kept.length} selected, +${(newRecommendations || []).length} new, ${combined.length} total`, false);
+                postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: recommend (add more)', `kept ${kept.length} selected, +${(newRecommendations || []).length} new, ${combined.length} total`, true, false);
             } else {
                 this._recommendations = newRecommendations || [];
                 this._selectedForDeploy = new Set();
                 this._selectedCounts.clear();
-                log('Quick Encounter: recommend returned', `${this._recommendations?.length ?? 0} results`, false);
+                postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: recommend returned', `${this._recommendations?.length ?? 0} results`, true, false);
             }
         } finally {
             this._recommendLoading = false;
@@ -953,7 +945,7 @@ export class WindowEncounter extends Base {
             uuids = recommendations.map(r => r.id).filter(Boolean);
         }
         if (uuids.length === 0) {
-            log('Quick Encounter: deploy', 'No monsters selected', true);
+            postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: deploy', 'No monsters selected', true, true);
             return;
         }
         const selectedMonsters = selectedRecommendations.map(r => ({
@@ -977,14 +969,14 @@ export class WindowEncounter extends Base {
             const api = game.modules.get('coffee-pub-blacksmith')?.api;
             if (api?.deployMonsters) {
                 const tokens = await api.deployMonsters(metadata, options);
-                log('Quick Encounter: deploy', `Placed ${tokens?.length ?? 0} token(s) via API`, true);
+                postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: deploy', `Placed ${tokens?.length ?? 0} token(s) via API`, true, true);
             } else {
                 const bridge = await import('modules/coffee-pub-blacksmith/api/blacksmith-api.js').catch(() => null);
                 if (bridge?.BlacksmithAPI?.deployMonsters) {
                     const tokens = await bridge.BlacksmithAPI.deployMonsters(metadata, options);
-                    log('Quick Encounter: deploy', `Placed ${tokens?.length ?? 0} token(s) via bridge`, true);
+                    postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: deploy', `Placed ${tokens?.length ?? 0} token(s) via bridge`, true, true);
                 } else {
-                    log('Quick Encounter: deploy', 'Blacksmith deployMonsters not available', true);
+                    postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: deploy', 'Blacksmith deployMonsters not available', true, true);
                     return;
                 }
             }
@@ -993,7 +985,7 @@ export class WindowEncounter extends Base {
             this.render();
         } catch (e) {
             console.error(MODULE.NAME, 'Quick Encounter: deploy failed', e);
-            log('Quick Encounter: deploy', String(e?.message ?? e), true);
+            postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: deploy', String(e?.message ?? e), true, true);
         }
     }
 }
