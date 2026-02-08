@@ -55,6 +55,30 @@ function formatCRDisplay(num) {
     return Number.isInteger(num) ? String(num) : num.toFixed(2);
 }
 
+/** D&D 5e CR to XP (DMG); used to compute effective CR of selected monsters. */
+const CR_TO_XP = [
+    10, 25, 50, 100, 200, 450, 700, 1100, 1800, 2300, 2900, 3900, 5000, 5900, 7200, 8400, 10000, 11500, 13000, 15000, 18000, 20000, 22000, 25000, 33000, 41000, 50000, 62000, 75000, 90000, 105000, 120000, 135000, 155000
+];
+
+function crToXp(crNum) {
+    if (crNum == null || Number.isNaN(crNum) || crNum < 0) return 0;
+    const idx = crNum === 0 ? 0 : crNum <= 0.125 ? 1 : crNum <= 0.25 ? 2 : crNum <= 0.5 ? 3 : Math.min(3 + Math.floor(crNum), CR_TO_XP.length - 1);
+    return CR_TO_XP[Math.max(0, idx)] ?? 0;
+}
+
+/** Convert total XP back to an effective single CR for display (largest CR whose XP <= total). */
+function xpToEffectiveCR(totalXp) {
+    if (totalXp <= 0) return 0;
+    let idx = 0;
+    for (let i = CR_TO_XP.length - 1; i >= 0; i--) {
+        if (CR_TO_XP[i] <= totalXp) {
+            idx = i;
+            break;
+        }
+    }
+    return idx < 4 ? [0, 0.125, 0.25, 0.5][idx] : idx - 1;
+}
+
 /** Log to console and optionally show notification (when Blacksmith available). */
 function log(msg, detail = '', showNotification = false) {
     if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
@@ -137,8 +161,20 @@ export class WindowEncounter extends Base {
 
         const a = this._assessment;
         const heroCRNum = parseCR(a?.partyCR ?? a?.partyCRDisplay);
-        const monsterCRNum = parseCR(a?.monsterCR ?? a?.monsterCRDisplay);
+        const canvasMonsterCRNum = parseCR(a?.monsterCR ?? a?.monsterCRDisplay);
         const heroCRDisplay = formatCRDisplay(heroCRNum);
+
+        const recommendations = Array.isArray(this._recommendations) ? this._recommendations : [];
+        const selectedRecs = recommendations.filter(r => this._selectedForDeploy.has(r.id));
+        let monsterCRNum = canvasMonsterCRNum;
+        if (selectedRecs.length > 0) {
+            const totalXp = selectedRecs.reduce((sum, r) => {
+                const crNum = parseCR(r.cr);
+                const count = typeof r.count === 'number' && r.count >= 1 ? r.count : 1;
+                return sum + count * crToXp(crNum);
+            }, 0);
+            monsterCRNum = xpToEffectiveCR(totalXp);
+        }
         const monsterCRDisplay = formatCRDisplay(monsterCRNum);
 
         const partyBase = Number.isNaN(heroCRNum) ? 5 : heroCRNum;
@@ -154,7 +190,6 @@ export class WindowEncounter extends Base {
         const difficultyLabel = difficultyInfo.label;
         const difficultyClass = difficultyInfo.class;
 
-        const recommendations = Array.isArray(this._recommendations) ? this._recommendations : [];
         const isBuiltEncounter = recommendations.length > 0 && recommendations.every(r => typeof r.count === 'number' && r.count >= 1);
         const recommendationsWithSelection = recommendations.map(r => ({
             ...r,
@@ -164,13 +199,14 @@ export class WindowEncounter extends Base {
             ? recommendations.filter(r => this._selectedForDeploy.has(r.id)).reduce((s, r) => s + (r.count ?? 1), 0)
             : (this._selectedForDeploy.size > 0 ? this._selectedForDeploy.size : recommendations.length);
         const hasDeploySelection = recommendations.length > 0;
+        const monsterCRFromSelection = selectedRecs.length > 0;
 
         return {
             appId: this.id || WINDOW_ENCOUNTER_APP_ID,
             title: this.options.window?.title ?? 'Quick Encounter',
             assessment: this._assessment,
             partyCRDisplay: this._assessment?.partyCRDisplay ?? heroCRDisplay,
-            monsterCRDisplay: this._assessment?.monsterCRDisplay ?? monsterCRDisplay,
+            monsterCRDisplay,
             heroCRDisplay,
             monsterCRDisplayNum: monsterCRDisplay,
             monsterGapDisplay,
@@ -202,7 +238,8 @@ export class WindowEncounter extends Base {
             cacheBuilding: this._cacheBuilding,
             cacheBuildingText: this._cacheBuildingText,
             cacheStatusText: this._getCacheStatusText(),
-            cacheStatusTitle: this._getCacheStatusTitle()
+            cacheStatusTitle: this._getCacheStatusTitle(),
+            monsterCRFromSelection
         };
     }
 
@@ -538,13 +575,30 @@ export class WindowEncounter extends Base {
         this._recommendLoading = true;
         this.render();
         try {
-            this._recommendations = await window.bibliosophEncounterRecommend(
+            const newRecommendations = await window.bibliosophEncounterRecommend(
                 this._selectedHabitat,
                 difficultyLabel,
                 targetCR
             );
-            this._selectedForDeploy = new Set((this._recommendations || []).map(r => r.id).filter(Boolean));
-            log('Quick Encounter: recommend returned', `${this._recommendations?.length ?? 0} results`, false);
+            const existing = Array.isArray(this._recommendations) ? this._recommendations : [];
+            const existingIds = new Set(existing.map(r => r.id).filter(Boolean));
+            if (existing.length > 0 && this._selectedForDeploy.size > 0) {
+                // "More please": keep current list and selection, append new results (dedupe by id), add new ids to selection
+                const combined = [...existing];
+                for (const r of (newRecommendations || [])) {
+                    if (r?.id && !existingIds.has(r.id)) {
+                        combined.push(r);
+                        existingIds.add(r.id);
+                        this._selectedForDeploy.add(r.id);
+                    }
+                }
+                this._recommendations = combined;
+                log('Quick Encounter: recommend (add more)', `${(newRecommendations || []).length} new, ${combined.length} total`, false);
+            } else {
+                this._recommendations = newRecommendations || [];
+                this._selectedForDeploy = new Set((this._recommendations || []).map(r => r.id).filter(Boolean));
+                log('Quick Encounter: recommend returned', `${this._recommendations?.length ?? 0} results`, false);
+            }
         } finally {
             this._recommendLoading = false;
             this._recommendAttempted = true;
