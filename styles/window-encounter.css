@@ -163,7 +163,8 @@
     outline: none;
 }
 
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-slider {
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-slider,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-max-cr-slider {
     flex: 1;
     min-width: 0;
     height: 16px;
@@ -175,7 +176,8 @@
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider::-moz-range-track,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-moz-range-track,
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-slider::-moz-range-track {
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-slider::-moz-range-track,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-max-cr-slider::-moz-range-track {
     height: 12px;
     border-radius: 4px;
     background: rgba(111, 39, 39, 0.6);
@@ -185,7 +187,8 @@
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider::-webkit-slider-runnable-track,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-webkit-slider-runnable-track,
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-slider::-webkit-slider-runnable-track {
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-slider::-webkit-slider-runnable-track,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-max-cr-slider::-webkit-slider-runnable-track {
     height: 12px;
     border-radius: 4px;
     background: rgba(111, 39, 39, 0.6);
@@ -197,7 +200,8 @@
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider::-webkit-slider-thumb,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-webkit-slider-thumb,
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-slider::-webkit-slider-thumb {
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-slider::-webkit-slider-thumb,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-max-cr-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
     width: 20px;
@@ -212,7 +216,8 @@
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider::-webkit-slider-thumb:active,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-webkit-slider-thumb:active,
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-slider::-webkit-slider-thumb:active {
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-slider::-webkit-slider-thumb:active,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-max-cr-slider::-webkit-slider-thumb:active {
     cursor: grabbing;
     border: 1px solid rgba(255, 100, 0, 0.6);
     background: rgba(255, 100, 0, 0.6);
@@ -220,7 +225,8 @@
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider::-webkit-slider-thumb:hover,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-webkit-slider-thumb:hover,
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-slider::-webkit-slider-thumb:hover {
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-slider::-webkit-slider-thumb:hover,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-max-cr-slider::-webkit-slider-thumb:hover {
     cursor: grabbing;
     border: 1px solid rgba(255, 100, 0, 0.6);
     background: rgba(255, 100, 0, 0.6);
@@ -229,7 +235,8 @@
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider::-moz-range-thumb,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-moz-range-thumb,
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-slider::-moz-range-thumb {
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-slider::-moz-range-thumb,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-max-cr-slider::-moz-range-thumb {
   -webkit-appearance: none;
     appearance: none;
     width: 20px;
@@ -244,7 +251,8 @@
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider::-moz-range-thumb:active,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-moz-range-thumb:active,
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-slider::-moz-range-thumb:active {
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-slider::-moz-range-thumb:active,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-max-cr-slider::-moz-range-thumb:active {
     cursor: grabbing;
     border: 1px solid rgba(255, 100, 0, 0.6);
     background: rgba(255, 100, 0, 0.6);
@@ -252,7 +260,8 @@
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider::-moz-range-thumb:hover,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-moz-range-thumb:hover,
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-slider::-moz-range-thumb:hover {
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-slider::-moz-range-thumb:hover,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-max-cr-slider::-moz-range-thumb:hover {
     cursor: grabbing;
     border: 1px solid rgba(255, 100, 0, 0.6);
     background: rgba(255, 100, 0, 0.6);
@@ -389,31 +398,118 @@
     font-size: 1.1em;
 }
 
-/* ----- Minimum CR slider ----- */
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-row {
+/* ----- Monster CR range (one track, two thumbs, highlight between) ----- */
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-row {
     margin-top: 14px;
     padding-top: 10px;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-label {
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-label {
     display: block;
     margin-bottom: 6px;
     font-size: 0.9em;
     color: #d0d0d0;
 }
 
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-current {
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-value {
     font-weight: 600;
     color: #e8c090;
 }
 
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-hint {
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-hint {
     font-size: 0.78em;
     opacity: 0.85;
     margin-top: 6px;
     margin-bottom: 0;
     color: #b0b0b0;
+}
+
+/* Track wrapper */
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-track {
+    position: relative;
+    height: 20px;
+    display: flex;
+    align-items: center;
+}
+
+/* Background + highlight never intercept */
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-track-bg,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-highlight {
+    pointer-events: none;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-track-bg {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 12px;
+    border-radius: 4px;
+    background: rgba(80, 30, 30, 0.6);
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    z-index: 0;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-highlight {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto 0;
+    height: 12px;
+    border-radius: 4px;
+    background: rgba(68, 137, 67, 0.7);
+    border: 1px solid rgba(68, 137, 67, 0.9);
+    z-index: 1;
+}
+
+/* Halves define hit zones: left 0–50%, right 50–100% */
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-half {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    height: 100%;
+    z-index: 2;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-half-left {
+    left: 0;
+    z-index: 2;
+}
+
+/* Right half on top so max thumb wins in right zone; left zone has only left half so min wins */
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-half-right {
+    z-index: 3;
+}
+
+/* Inputs: each half hosts a full-width slider using the 200% trick */
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-half .window-encounter-cr-range-input {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: 0;
+    height: 100%;
+    background: transparent;
+    pointer-events: auto;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-half-left .window-encounter-cr-range-input {
+    left: 0;
+    width: 200%;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-half-right .window-encounter-cr-range-input {
+    left: -100%;
+    width: 200%;
+}
+
+/* Make the native slider tracks invisible so bg/highlight show */
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-track .window-encounter-min-cr-slider::-webkit-slider-runnable-track,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-track .window-encounter-max-cr-slider::-webkit-slider-runnable-track,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-track .window-encounter-min-cr-slider::-moz-range-track,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-track .window-encounter-max-cr-slider::-moz-range-track {
+    background: transparent;
+    border: none;
 }
 
 /* ----- Habitat filter buttons ----- */

@@ -140,6 +140,8 @@ export class WindowEncounter extends Base {
     _targetCR = null;
     /** Minimum CR for creatures in Recommend/Roll; defaults to party CR. */
     _minCR = null;
+    /** Maximum CR for creatures in Recommend/Roll; default 30. */
+    _maxCR = null;
     _recommendations = [];
     /** True while recommend request is in progress (show spinner). */
     _recommendLoading = false;
@@ -226,9 +228,25 @@ export class WindowEncounter extends Base {
             const partyCRFromChars = getPartyAverageCRFromCharacters();
             this._minCR = partyCRFromChars != null ? Math.max(0, Math.min(30, partyCRFromChars)) : 0;
         }
+        if (this._maxCR == null || this._maxCR === undefined) {
+            this._maxCR = 30;
+        }
         const targetCRNum = Number(this._targetCR);
         const minCRValue = Math.max(0, Math.min(30, Number(this._minCR) ?? 0));
         const minCRDisplay = formatCRDisplay(minCRValue);
+        const maxCRValue = Math.max(0, Math.min(30, Number(this._maxCR) ?? 30));
+        const maxCRDisplay = formatCRDisplay(maxCRValue);
+        const crRangeMax = 30;
+        const crRangeHighlightLeft = Math.min(100, (minCRValue / crRangeMax) * 100);
+        const crRangeHighlightWidth = Math.max(0, Math.min(100 - crRangeHighlightLeft, ((maxCRValue - minCRValue) / crRangeMax) * 100));
+        const crRangeLabel = `${minCRDisplay} to ${maxCRDisplay}`;
+        /* Split between thumbs so min can be >50% (e.g. range 80–90%). Boundary = midpoint. */
+        const midpoint = (minCRValue + maxCRValue) / 2;
+        const crRangeSplitPercent = Math.max(10, Math.min(90, (midpoint / crRangeMax) * 100));
+        const crRangeRightWidth = 100 - crRangeSplitPercent;
+        const crRangeMinInputWidth = crRangeSplitPercent > 0 ? (100 / crRangeSplitPercent) * 100 : 100;
+        const crRangeMaxInputLeft = crRangeRightWidth > 0 ? -(crRangeSplitPercent / crRangeRightWidth) * 100 : 0;
+        const crRangeMaxInputWidth = crRangeRightWidth > 0 ? (100 / crRangeRightWidth) * 100 : 100;
         const monsterGapNum = Number.isNaN(monsterCRNum) ? targetCRNum : Math.max(0, targetCRNum - monsterCRNum);
         const encounterCRDisplay = formatCRDisplay(targetCRNum);
         const monsterGapDisplay = formatCRDisplay(monsterGapNum);
@@ -269,6 +287,18 @@ export class WindowEncounter extends Base {
             minCRDisplay,
             minCRSliderMin: 0,
             minCRSliderMax: 30,
+            maxCRValue,
+            maxCRDisplay,
+            maxCRSliderMin: 0,
+            maxCRSliderMax: 30,
+            crRangeHighlightLeft,
+            crRangeHighlightWidth,
+            crRangeLabel,
+            crRangeSplitPercent,
+            crRangeRightWidth,
+            crRangeMinInputWidth,
+            crRangeMaxInputLeft,
+            crRangeMaxInputWidth,
             habitats: this._habitats.map(h => ({ name: h, selected: h === this._selectedHabitat })),
             recommendations: recommendationsWithSelection,
             hasRecommendations: recommendations.length > 0,
@@ -413,6 +443,43 @@ export class WindowEncounter extends Base {
     }
 
     /**
+     * Update the Monster CR range label and highlight bar during slider drag (input event).
+     * @param {HTMLElement} root - Encounter window root
+     * @param {number} minCR - Current min CR value
+     * @param {number} maxCR - Current max CR value
+     */
+    _updateCRRangeDisplay(root, minCR, maxCR) {
+        const labelEl = root?.querySelector?.('.window-encounter-cr-range-value');
+        if (labelEl) labelEl.textContent = `${formatCRDisplay(minCR)} to ${formatCRDisplay(maxCR)}`;
+        const crMax = 30;
+        const left = Math.min(100, (minCR / crMax) * 100);
+        const width = Math.max(0, Math.min(100 - left, ((maxCR - minCR) / crMax) * 100));
+        const highlightEl = root?.querySelector?.('.window-encounter-cr-range-highlight');
+        if (highlightEl) {
+            highlightEl.style.left = `${left}%`;
+            highlightEl.style.width = `${width}%`;
+        }
+        /* Move split between thumbs so both stay grabbable (e.g. min at 80%, max at 90%) */
+        const midpoint = (minCR + maxCR) / 2;
+        const splitPercent = Math.max(10, Math.min(90, (midpoint / crMax) * 100));
+        const rightWidth = 100 - splitPercent;
+        const leftHalf = root?.querySelector?.('.window-encounter-cr-range-half-left');
+        const rightHalf = root?.querySelector?.('.window-encounter-cr-range-half-right');
+        const minInput = root?.querySelector?.('.window-encounter-cr-range-half-left .window-encounter-cr-range-input');
+        const maxInput = root?.querySelector?.('.window-encounter-cr-range-half-right .window-encounter-cr-range-input');
+        if (leftHalf) leftHalf.style.width = `${splitPercent}%`;
+        if (rightHalf) {
+            rightHalf.style.left = `${splitPercent}%`;
+            rightHalf.style.width = `${rightWidth}%`;
+        }
+        if (splitPercent > 0 && minInput) minInput.style.width = `${(100 / splitPercent) * 100}%`;
+        if (rightWidth > 0 && maxInput) {
+            maxInput.style.left = `${-(splitPercent / rightWidth) * 100}%`;
+            maxInput.style.width = `${(100 / rightWidth) * 100}%`;
+        }
+    }
+
+    /**
      * Attach click/change delegation once. Uses document so we catch events however the app is rendered.
      * This is the reliable path for PARTS-based apps where activateListeners may not run.
      */
@@ -420,6 +487,7 @@ export class WindowEncounter extends Base {
         if (this._encounterDelegationAttached) return;
         this._encounterDelegationAttached = true;
         const self = this;
+
         document.addEventListener('click', function _encounterDelegation(e) {
             const root = self._getEncounterRoot();
             if (!root || !root.contains(e.target)) return;
@@ -532,8 +600,22 @@ export class WindowEncounter extends Base {
             if (minCRSlider) {
                 const raw = parseFloat(minCRSlider.value);
                 if (!Number.isNaN(raw) && raw >= 0) {
-                    self._minCR = Math.min(30, Math.max(0, raw));
+                    const v = Math.min(30, Math.max(0, raw));
+                    self._minCR = Math.min(v, self._maxCR ?? 30);
+                    if (self._minCR > (self._maxCR ?? 30)) self._maxCR = self._minCR;
                     log('Quick Encounter: minimum CR', self._minCR, false);
+                    self.render();
+                }
+                return;
+            }
+            const maxCRSlider = e.target?.closest?.('.window-encounter-max-cr-slider');
+            if (maxCRSlider) {
+                const raw = parseFloat(maxCRSlider.value);
+                if (!Number.isNaN(raw) && raw >= 0) {
+                    const v = Math.min(30, Math.max(0, raw));
+                    self._maxCR = Math.max(v, self._minCR ?? 0);
+                    if (self._maxCR < (self._minCR ?? 0)) self._minCR = self._maxCR;
+                    log('Quick Encounter: maximum CR', self._maxCR, false);
                     self.render();
                 }
             }
@@ -564,9 +646,23 @@ export class WindowEncounter extends Base {
             if (minCRSlider) {
                 const raw = parseFloat(minCRSlider.value);
                 if (!Number.isNaN(raw) && raw >= 0) {
-                    self._minCR = Math.min(30, Math.max(0, raw));
-                    const currentEl = root?.querySelector('.window-encounter-min-cr-current');
-                    if (currentEl) currentEl.textContent = raw === 0.5 ? '1/2' : String(Math.round(raw * 100) / 100);
+                    const v = Math.min(30, Math.max(0, raw));
+                    const maxVal = parseFloat(root?.querySelector('.window-encounter-max-cr-slider')?.value ?? 30);
+                    const minVal = Math.min(v, maxVal);
+                    const maxVal2 = Math.max(v, maxVal);
+                    self._updateCRRangeDisplay(root, minVal, maxVal2);
+                }
+                return;
+            }
+            const maxCRSlider = e.target?.closest?.('.window-encounter-max-cr-slider');
+            if (maxCRSlider) {
+                const raw = parseFloat(maxCRSlider.value);
+                if (!Number.isNaN(raw) && raw >= 0) {
+                    const v = Math.min(30, Math.max(0, raw));
+                    const minVal = parseFloat(root?.querySelector('.window-encounter-min-cr-slider')?.value ?? 0);
+                    const minVal2 = Math.min(v, minVal);
+                    const maxVal2 = Math.max(v, minVal);
+                    self._updateCRRangeDisplay(root, minVal2, maxVal2);
                 }
             }
         });
@@ -682,11 +778,13 @@ export class WindowEncounter extends Base {
             const partyBase = parseCR(this._assessment?.partyCR ?? this._assessment?.partyCRDisplay);
             const difficultyLabel = getDifficultyFromPartyAndTarget(partyBase, targetCR).label;
             const minCR = Math.max(0, Math.min(30, Number(this._minCR) ?? 0));
+            const maxCR = Math.max(0, Math.min(30, Number(this._maxCR) ?? 30));
             const result = await window.bibliosophRollForEncounter(
                 this._selectedHabitat,
                 difficultyLabel,
                 targetCR,
-                minCR
+                minCR,
+                maxCR
             );
             this._lastRollHadEncounter = result.encounter === true;
             this._lastRollIntroEntry = result.introEntry ?? null;
@@ -715,11 +813,13 @@ export class WindowEncounter extends Base {
         this.render();
         try {
             const minCR = Math.max(0, Math.min(30, Number(this._minCR) ?? 0));
+            const maxCR = Math.max(0, Math.min(30, Number(this._maxCR) ?? 30));
             const newRecommendations = await window.bibliosophEncounterRecommend(
                 this._selectedHabitat,
                 difficultyLabel,
                 targetCR,
-                minCR
+                minCR,
+                maxCR
             );
             const existing = Array.isArray(this._recommendations) ? this._recommendations : [];
             const hadSelection = this._selectedForDeploy.size > 0;

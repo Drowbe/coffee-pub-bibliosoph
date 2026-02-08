@@ -55,12 +55,19 @@
             <input type="range" class="window-encounter-cr-slider" min="{{crSliderMin}}" max="{{crSliderMax}}" value="{{targetCRValue}}" step="0.25" aria-label="Target Encounter CR" />
             <i class="fa-solid fa-skull window-encounter-slider-icon" title="Higher CR"></i>
         </div>
-        <div class="window-encounter-min-cr-row">
-            <label class="window-encounter-min-cr-label" for="{{appId}}-min-cr">Minimum Monster CR <span class="window-encounter-min-cr-current">{{minCRDisplay}}</span></label>
-            <div class="window-encounter-cr-slider-row">
-                <input type="range" id="{{appId}}-min-cr" class="window-encounter-min-cr-slider" min="{{minCRSliderMin}}" max="{{minCRSliderMax}}" value="{{minCRValue}}" step="0.25" aria-label="Minimum creature CR (creatures below excluded)" />
+        <div class="window-encounter-cr-range-row">
+            <label class="window-encounter-cr-range-label" for="{{appId}}-min-cr">Monster CR range <span class="window-encounter-cr-range-value">{{crRangeLabel}}</span></label>
+            <div class="window-encounter-cr-range-track">
+                <div class="window-encounter-cr-range-track-bg" aria-hidden="true"></div>
+                <div class="window-encounter-cr-range-highlight" style="left: {{crRangeHighlightLeft}}%; width: {{crRangeHighlightWidth}}%;" aria-hidden="true"></div>
+                <div class="window-encounter-cr-range-half window-encounter-cr-range-half-left" style="width: {{crRangeSplitPercent}}%;">
+                    <input type="range" id="{{appId}}-min-cr" class="window-encounter-min-cr-slider window-encounter-cr-range-input" style="width: {{crRangeMinInputWidth}}%;" min="{{minCRSliderMin}}" max="{{minCRSliderMax}}" value="{{minCRValue}}" step="0.25" aria-label="Minimum creature CR" />
+                </div>
+                <div class="window-encounter-cr-range-half window-encounter-cr-range-half-right" style="left: {{crRangeSplitPercent}}%; width: {{crRangeRightWidth}}%;">
+                    <input type="range" id="{{appId}}-max-cr" class="window-encounter-max-cr-slider window-encounter-cr-range-input" style="left: {{crRangeMaxInputLeft}}%; width: {{crRangeMaxInputWidth}}%;" min="{{maxCRSliderMin}}" max="{{maxCRSliderMax}}" value="{{maxCRValue}}" step="0.25" aria-label="Maximum creature CR" />
+                </div>
             </div>
-            <p class="window-encounter-min-cr-hint">Creatures below this CR are excluded from Recommend and Roll.</p>
+            <p class="window-encounter-cr-range-hint">Recommend returns a blend in this range.</p>
         </div>
     </section>
 

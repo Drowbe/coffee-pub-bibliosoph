@@ -338,16 +338,18 @@ async function getCandidatesWithXP(habitat) {
 }
 
 /**
- * Recommend monsters: same sourcing as buildEncounter — habitat + Minimum CR floor only.
- * Encounter CR is for total encounter strength (used by buildEncounter); here we just return
- * the same pool of candidates (min CR and above), up to MAX_RECOMMENDATIONS, sorted by CR ascending.
- * @param {number} [minCR=0] - floor only: do not return any monster with CR below this value
+ * Recommend monsters: same sourcing as buildEncounter — habitat + min/max CR.
+ * Returns a blend: up to MAX_RECOMMENDATIONS monsters spread evenly across the CR range (min to max).
+ * @param {number} [minCR=0] - floor: no monster below this CR
+ * @param {number} [maxCR=30] - ceiling: no monster above this CR
  * @returns {Promise<Array<{id: string, img: string, name: string, cr: string}>>}
  */
-export async function encounterRecommend(habitat, difficulty, targetCR, minCR = 0) {
+export async function encounterRecommend(habitat, difficulty, targetCR, minCR = 0, maxCR = 30) {
     let candidates = await getCandidatesWithXP(habitat);
     const minCRNum = typeof minCR === 'number' && !Number.isNaN(minCR) ? Math.max(0, minCR) : 0;
+    const maxCRNum = typeof maxCR === 'number' && !Number.isNaN(maxCR) ? Math.min(30, Math.max(0, maxCR)) : 30;
     if (minCRNum > 0) candidates = candidates.filter((c) => c.cr >= minCRNum);
+    if (maxCRNum < 30) candidates = candidates.filter((c) => c.cr <= maxCRNum);
     if (candidates.length === 0) {
         if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
             BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: No monster compendiums or no matching actors', '', true, true);
@@ -357,8 +359,11 @@ export async function encounterRecommend(habitat, difficulty, targetCR, minCR = 
 
     const sorted = [...candidates].sort((a, b) => a.cr - b.cr);
     const results = [];
-    for (const { doc, id, cr: crNum } of sorted) {
-        if (results.length >= MAX_RECOMMENDATIONS) break;
+    const n = sorted.length;
+    const cap = Math.min(MAX_RECOMMENDATIONS, n);
+    for (let i = 0; i < cap; i++) {
+        const idx = n <= cap ? i : (cap <= 1 ? 0 : Math.round((i / (cap - 1)) * (n - 1)));
+        const { doc, id, cr: crNum } = sorted[idx];
         results.push({
             id,
             img: doc.img ?? '',
@@ -368,7 +373,7 @@ export async function encounterRecommend(habitat, difficulty, targetCR, minCR = 
     }
 
     if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: Recommend', `${results.length} monsters (habitat=${habitat}, min CR ${minCRNum})`, true, false);
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: Recommend', `${results.length} monsters (habitat=${habitat}, CR ${minCRNum}–${maxCRNum} blend)`, true, false);
     }
     return results;
 }
@@ -378,13 +383,16 @@ export async function encounterRecommend(habitat, difficulty, targetCR, minCR = 
  * Returns array of { id, img, name, cr, count } with count >= 1.
  * @param {string} habitat
  * @param {number} targetCR - target encounter CR (used for XP budget)
- * @param {number} [minCR=0] - floor only: do not use any monster with CR below this value (no other effect)
+ * @param {number} [minCR=0] - floor: no monster below this CR
+ * @param {number} [maxCR=30] - ceiling: no monster above this CR
  * @returns {Promise<Array<{id: string, img: string, name: string, cr: string, count: number}>>}
  */
-export async function buildEncounter(habitat, targetCR, minCR = 0) {
+export async function buildEncounter(habitat, targetCR, minCR = 0, maxCR = 30) {
     let candidates = await getCandidatesWithXP(habitat);
     const minCRNum = typeof minCR === 'number' && !Number.isNaN(minCR) ? Math.max(0, minCR) : 0;
+    const maxCRNum = typeof maxCR === 'number' && !Number.isNaN(maxCR) ? Math.min(30, Math.max(0, maxCR)) : 30;
     if (minCRNum > 0) candidates = candidates.filter((c) => c.cr >= minCRNum);
+    if (maxCRNum < 30) candidates = candidates.filter((c) => c.cr <= maxCRNum);
     if (candidates.length === 0) return [];
 
     const budget = CR_TO_XP[Math.min(Math.max(0, Math.floor(targetCR) + 3), CR_TO_XP.length - 1)] ?? 1800;
@@ -446,12 +454,52 @@ export async function buildEncounter(habitat, targetCR, minCR = 0) {
 
 /**
  * Load encounters narrative JSON (encounterFalse / encounterTrue).
- * @returns {Promise<{ encounterFalse: Array, encounterTrue: Array }>}
+ * Structure: { encounterFalse: { [habitat]: { day: [], night: [] } }, encounterTrue: same }.
+ * @returns {Promise<Object>}
  */
 async function loadEncounterNarrative() {
     const res = await fetch(BIBLIOSOPH.ENCOUNTER_NARRATIVE_PATH);
     if (!res.ok) throw new Error(res.statusText);
     return res.json();
+}
+
+/**
+ * Get current time of day from game time (v13 game.time).
+ * Uses calendar hours-per-day so it works with non-24h calendars.
+ * @returns {"day" | "night"}
+ */
+function getTimeOfDay() {
+    if (typeof game === 'undefined' || !game.time?.components) return 'day';
+    const { hour } = game.time.components;
+    const hoursPerDay = game.time.calendar?.config?.days?.hoursPerDay ?? 24;
+    const dayStart = Math.floor(hoursPerDay * 0.25);
+    const nightStart = Math.floor(hoursPerDay * 0.75);
+    return (hour >= dayStart && hour < nightStart) ? 'day' : 'night';
+}
+
+/**
+ * Get narrative entries for a given encounter type, habitat, and time of day.
+ * narrativeJson[encounterKey] is { [habitat]: { day: [], night: [] } }.
+ * @param {Object} narrativeJson - loaded encounters-narrative.json
+ * @param {"encounterFalse" | "encounterTrue"} encounterKey
+ * @param {string} habitat - e.g. "Any", "Forest"
+ * @param {"day" | "night"} timeOfDay
+ * @returns {Array<{ title: string, icon: string, image?: string, description: string }>}
+ */
+function getNarrativeEntriesForHabitatAndTime(narrativeJson, encounterKey, habitat, timeOfDay) {
+    const section = narrativeJson[encounterKey];
+    if (!section || typeof section !== 'object') return [];
+    const habitatKey = (habitat && habitat !== 'Any')
+        ? (Object.keys(section).find((k) => k.toLowerCase() === habitat.toLowerCase()) ?? habitat)
+        : null;
+    const resolvedHabitat = habitatKey ?? (() => {
+        const keys = Object.keys(section).filter((k) => section[k]?.[timeOfDay]);
+        return keys.length ? keys[Math.floor(Math.random() * keys.length)] : null;
+    })();
+    if (!resolvedHabitat) return [];
+    const byTime = section[resolvedHabitat];
+    const entries = byTime?.[timeOfDay];
+    return Array.isArray(entries) ? entries : [];
 }
 
 /**
@@ -520,10 +568,11 @@ async function postEncounterCardToChat(cardData) {
  * @param {string} habitat - e.g. "Any", "Forest"
  * @param {string} difficulty - "Easy" | "Medium" | "Hard" | "Deadly"
  * @param {number} targetCR - target encounter CR for recommend
- * @param {number} [minCR=0] - floor only: do not use any monster with CR below this value (no other effect)
+ * @param {number} [minCR=0] - floor: no monster below this CR
+ * @param {number} [maxCR=30] - ceiling: no monster above this CR
  * @returns {Promise<{ encounter: boolean, recommendations: Array, introEntry?: Object }>}
  */
-export async function rollForEncounter(habitat, difficulty, targetCR, minCR = 0) {
+export async function rollForEncounter(habitat, difficulty, targetCR, minCR = 0, maxCR = 30) {
     let narrativeJson;
     try {
         narrativeJson = await loadEncounterNarrative();
@@ -535,8 +584,9 @@ export async function rollForEncounter(habitat, difficulty, targetCR, minCR = 0)
         return { encounter: false, recommendations: [] };
     }
 
-    const encounterFalseEntries = narrativeJson.encounterFalse ?? [];
-    const encounterTrueEntries = narrativeJson.encounterTrue ?? [];
+    const timeOfDay = getTimeOfDay();
+    const encounterFalseEntries = getNarrativeEntriesForHabitatAndTime(narrativeJson, 'encounterFalse', habitat, timeOfDay);
+    const encounterTrueEntries = getNarrativeEntriesForHabitatAndTime(narrativeJson, 'encounterTrue', habitat, timeOfDay);
     const pickEntry = (arr) => (arr.length ? arr[Math.floor(Math.random() * arr.length)] : { title: '', icon: '<i class="fa-solid fa-dice"></i>', description: '' });
 
     const encounterOdds = Math.max(0, Math.min(100, Number(game.settings.get(MODULE.ID, 'encounterOdds')) ?? 20));
@@ -559,7 +609,7 @@ export async function rollForEncounter(habitat, difficulty, targetCR, minCR = 0)
     }
 
     const introEntry = pickEntry(encounterTrueEntries);
-    const recommendations = await buildEncounter(habitat, targetCR, minCR);
+    const recommendations = await buildEncounter(habitat, targetCR, minCR, maxCR);
     if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
         const n = recommendations.reduce((s, r) => s + (r.count ?? 1), 0);
         BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: Roll for Encounter', `${recommendations.length} types, ${n} tokens`, false, false);
