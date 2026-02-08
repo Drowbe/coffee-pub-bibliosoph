@@ -654,19 +654,21 @@ export class WindowEncounter extends Base {
                 minCR
             );
             const existing = Array.isArray(this._recommendations) ? this._recommendations : [];
-            const existingIds = new Set(existing.map(r => r.id).filter(Boolean));
-            if (existing.length > 0 && this._selectedForDeploy.size > 0) {
-                // "More please": keep current list and selection, append new results (dedupe by id), add new ids to selection
-                const combined = [...existing];
+            const hadSelection = this._selectedForDeploy.size > 0;
+            if (existing.length > 0 && hadSelection) {
+                // Keep only what the GM selected; drop the rest. Then append new Recommend results. Do not auto-select the new ones.
+                const kept = existing.filter((r) => this._selectedForDeploy.has(r.id));
+                const combinedIds = new Set(kept.map((r) => r.id).filter(Boolean));
+                const combined = [...kept];
                 for (const r of (newRecommendations || [])) {
-                    if (r?.id && !existingIds.has(r.id)) {
+                    if (r?.id && !combinedIds.has(r.id)) {
                         combined.push(r);
-                        existingIds.add(r.id);
-                        this._selectedForDeploy.add(r.id);
+                        combinedIds.add(r.id);
                     }
                 }
                 this._recommendations = combined;
-                log('Quick Encounter: recommend (add more)', `${(newRecommendations || []).length} new, ${combined.length} total`, false);
+                // Selection stays exactly what the GM had selected (only kept items remain selected; new items are not selected)
+                log('Quick Encounter: recommend (add more)', `kept ${kept.length} selected, +${(newRecommendations || []).length} new, ${combined.length} total`, false);
             } else {
                 this._recommendations = newRecommendations || [];
                 this._selectedForDeploy = new Set();
