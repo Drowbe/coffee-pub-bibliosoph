@@ -589,8 +589,8 @@
     align-items: center;
     gap: 6px;
     padding: 6px 12px;
-    background: rgba(172, 159, 129, 0.3);
-    border: 1px solid var(--encounter-accent-color);
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--encounter-border-color);
     border-radius: 4px;
     color: #fff;
     cursor: pointer;
@@ -601,7 +601,9 @@
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-btn:hover:not(:disabled),
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-recommend:hover:not(:disabled),
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-roll:hover:not(:disabled) {
-    background: rgba(172, 159, 129, 0.5);
+    border: 1px solid rgba(255, 100, 0, 0.6);
+    background: rgba(255, 100, 0, 0.6);
+    color: rgba(255, 255, 255, 0.9);
 }
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-btn:disabled,
