@@ -174,17 +174,6 @@
     outline: none;
 }
 
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider::-moz-range-track,
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-moz-range-track,
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-slider::-moz-range-track,
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-max-cr-slider::-moz-range-track {
-    height: 12px;
-    border-radius: 4px;
-    background: rgba(111, 39, 39, 0.6);
-    border: 1px solid rgba(0, 0, 0, 0.9);
-}
-
-
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider::-webkit-slider-runnable-track,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-webkit-slider-runnable-track,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-slider::-webkit-slider-runnable-track,
@@ -212,6 +201,8 @@
     cursor: grab;
     margin-top: -5px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    position: relative;
+    z-index: 4; /* keep the thumb visually above the track/highlight */
 }
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider::-webkit-slider-thumb:active,
@@ -231,44 +222,6 @@
     border: 1px solid rgba(255, 100, 0, 0.6);
     background: rgba(255, 100, 0, 0.6);
 }
-
-
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider::-moz-range-thumb,
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-moz-range-thumb,
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-slider::-moz-range-thumb,
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-max-cr-slider::-moz-range-thumb {
-  -webkit-appearance: none;
-    appearance: none;
-    width: 20px;
-    height: 20px;
-    background: rgba(21, 21, 21, 0.9);
-    border: 1px solid rgba(176, 176, 176, 0.6);
-    border-radius: 50%;
-    cursor: grab;
-    margin-top: -5px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
-}
-
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider::-moz-range-thumb:active,
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-moz-range-thumb:active,
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-slider::-moz-range-thumb:active,
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-max-cr-slider::-moz-range-thumb:active {
-    cursor: grabbing;
-    border: 1px solid rgba(255, 100, 0, 0.6);
-    background: rgba(255, 100, 0, 0.6);
-}
-
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider::-moz-range-thumb:hover,
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-moz-range-thumb:hover,
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-slider::-moz-range-thumb:hover,
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-max-cr-slider::-moz-range-thumb:hover {
-    cursor: grabbing;
-    border: 1px solid rgba(255, 100, 0, 0.6);
-    background: rgba(255, 100, 0, 0.6);
-}
-
-
-
 
 
 
@@ -428,9 +381,10 @@
 /* Track wrapper */
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-track {
     position: relative;
-    height: 20px;
+    height: 24px;
     display: flex;
     align-items: center;
+    overflow: visible; /* let thumbs sit fully above the bar */
 }
 
 /* Background + highlight never intercept */
@@ -457,8 +411,9 @@
     margin: auto 0;
     height: 12px;
     border-radius: 4px;
-    background: rgba(68, 137, 67, 0.7);
-    border: 1px solid rgba(68, 137, 67, 0.9);
+    background: rgba(89, 200, 98, 0.9);
+    border: 1px solid rgba(70, 160, 78, 0.95);
+    box-shadow: 0 0 4px rgba(89, 200, 98, 0.6);
     z-index: 1;
 }
 
@@ -474,12 +429,10 @@
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-half-left {
     left: 0;
-    z-index: 2;
 }
 
 /* Right half on top so max thumb wins in right zone; left zone has only left half so min wins */
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-half-right {
-    z-index: 3;
 }
 
 /* Inputs: each half hosts a full-width slider using the 200% trick */
@@ -492,13 +445,10 @@
     background: transparent;
     /* Let thumbs receive events, not the whole track, so the front slider doesn't block the one behind */
     pointer-events: none;
+    z-index: 3; /* keep the control layer above the track */
 }
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-half .window-encounter-cr-range-input::-webkit-slider-thumb {
-    pointer-events: auto;
-}
-
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-half .window-encounter-cr-range-input::-moz-range-thumb {
     pointer-events: auto;
 }
 
@@ -514,9 +464,7 @@
 
 /* Make the native slider tracks invisible so bg/highlight show */
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-track .window-encounter-min-cr-slider::-webkit-slider-runnable-track,
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-track .window-encounter-max-cr-slider::-webkit-slider-runnable-track,
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-track .window-encounter-min-cr-slider::-moz-range-track,
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-track .window-encounter-max-cr-slider::-moz-range-track {
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-track .window-encounter-max-cr-slider::-webkit-slider-runnable-track {
     background: transparent;
     border: none;
 }
