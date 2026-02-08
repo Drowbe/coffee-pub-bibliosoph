@@ -307,20 +307,23 @@
     color: #e8c090;
 }
 
+
+
+
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-difficulty-badge-large {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
     width: 100%;
-    margin: 0 0 10px 0;
+    margin: 10px 0px 10px 0px;
     padding: 8px 16px;
-    border-radius: 8px;
+    border-radius: 3px;
     font-weight: bold;
-    font-size: 1.1em;
+    font-size: 1.0em;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: #fff;
+    color: rgba(255, 255, 255, 0.9);
 }
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-difficulty-badge-large.trivial {
@@ -336,12 +339,12 @@
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-difficulty-badge-large.medium,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-difficulty-badge-large.moderate {
     background: rgba(100, 90, 50, 0.8);
-    border: 1px solid rgba(160, 140, 80, 0.9);
+    border: 1px solid rgba(160, 140, 80, 0.4);
 }
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-difficulty-badge-large.hard {
-    background: rgba(120, 40, 40, 0.9);
-    border: 1px solid rgba(180, 60, 60, 0.9);
+    background: rgba(120, 40, 40, 0.4);
+    border: 1px solid rgba(180, 60, 60, 0.4);
 }
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-difficulty-badge-large.deadly {

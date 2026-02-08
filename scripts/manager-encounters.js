@@ -75,6 +75,23 @@ function getMonsterCompendiums() {
 }
 
 /**
+ * Return true if the actor is eligible for encounter rolls: NPC (monster) only, not CR 0, not vehicle, not player.
+ * D&D 5e: type "npc" = monsters/NPCs, "character" = PC, "vehicle" = vehicle.
+ * @param {Actor} doc
+ * @returns {boolean}
+ */
+function isValidEncounterActor(doc) {
+    if (!doc) return false;
+    const type = doc.type ?? doc.documentName;
+    if (type === 'vehicle') return false;
+    if (type === 'character') return false; // players
+    if (type !== 'npc') return false; // only monsters / NPCs
+    const crNum = getActorCR(doc);
+    if (crNum === 0 || (typeof crNum === 'number' && Number.isNaN(crNum))) return false; // exclude CR 0
+    return true;
+}
+
+/**
  * Get numeric CR from D&D 5e actor (system.details.cr).
  * @param {Actor} doc
  * @returns {number}
@@ -214,7 +231,7 @@ export async function buildEncounterCache(progressCallback) {
             }
             docs = Array.isArray(docs) ? docs : [];
             for (const doc of docs) {
-                if (doc?.type !== 'npc' && doc?.type !== 'character') continue;
+                if (!isValidEncounterActor(doc)) continue;
                 const crNum = getActorCR(doc);
                 const xp = getActorXP(doc);
                 if (Number.isNaN(crNum) || Number.isNaN(xp)) continue;
@@ -261,9 +278,10 @@ async function getCandidatesWithXP(habitat) {
     const cache = getEncounterCache();
     if (cache.valid && cache.entries.length > 0) {
         const habitatLower = (habitat && habitat !== 'Any') ? String(habitat).toLowerCase() : null;
-        const filtered = habitatLower
+        let filtered = habitatLower
             ? cache.entries.filter((e) => !Array.isArray(e.habitats) || e.habitats.length === 0 || e.habitats.some((h) => h.includes(habitatLower) || habitatLower.includes(h)))
             : cache.entries;
+        filtered = filtered.filter((e) => e.cr > 0); // exclude CR 0 (e.g. from older cache)
         return filtered.map((e) => ({
             doc: { img: e.img ?? '', name: e.name ?? 'Unknown' },
             id: e.id,
@@ -294,7 +312,7 @@ async function getCandidatesWithXP(habitat) {
             if (!docs?.length) return [];
             const out = [];
             for (const doc of docs) {
-                if (doc?.type !== 'npc' && doc?.type !== 'character') continue;
+                if (!isValidEncounterActor(doc)) continue;
                 if (!actorMatchesHabitat(doc, habitat)) continue;
                 const crNum = getActorCR(doc);
                 const xp = getActorXP(doc);
@@ -536,7 +554,7 @@ export async function rollForEncounter(habitat, difficulty, targetCR) {
     } catch (e) {
         console.warn(MODULE.ID + ' | Could not load encounter narrative:', e);
         if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
-            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Could not load encounters-narrative.json.', e?.message ?? String(e), false, true);
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Could not load encounters-narrative.json.', e?.message ?? String(e), false, false);
         }
         return { encounter: false, recommendations: [] };
     }

@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Quick Encounter workflow:** Roll → encounter → select monsters → deploy. On deploy, one card is generated (narrative + monster list) and tokens are placed at the same time. The intro card that previously appeared when an encounter was rolled is no longer posted; the only encounter card is the deploy card with the monster list.
 - **Encounter card template:** `buildEncounterCardData` accepts an optional `encounterMonsters` array; the encounter card template renders an "Encounter" section with monster rows (display name, CR) when present. Deploy card copy updated to "The following have been placed on the canvas."
+- **Quick Encounter candidate filter:** When building the cache and when loading candidates, actors excluded from encounters: CR 0, vehicles, players (character type), and non-NPC types. Only NPC-type actors with CR &gt; 0 are used for Recommend and Roll.
+- **Quick Encounter notifications:** Notifications from the encounter manager (e.g. no compendiums, narrative load failure) are now normal and no longer stay open (show briefly then dismiss).
 
 ## [13.0.9]
 
