@@ -960,7 +960,8 @@ export class WindowEncounter extends Base {
             name: r.name ?? 'Unknown',
             count: r.count ?? 1,
             cr: r.cr ?? '—',
-            img: r.img ?? ''
+            img: r.img ?? '',
+            id: r.id
         }));
         const metadata = { monsters: uuids, npcs: [] };
         const options = {

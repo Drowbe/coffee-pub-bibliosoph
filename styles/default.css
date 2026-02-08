@@ -119,6 +119,10 @@
     align-items: center;
     gap: 0.5em;
     margin: 0.25em 0;
+    padding: 6px 8px;
+    background: rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 6px;
 }
 .encounter-monster-img {
     width: 32px;
@@ -169,4 +173,3 @@
 .investigation-coins {
     margin: 0.25em 0 0.5em 0;
 }
-

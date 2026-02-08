@@ -531,10 +531,14 @@ function buildEncounterCardData(entry, theme, cardTitle = 'Encounter', encounter
         data.encounterMonsters = encounterMonsters.map((m) => {
             const name = m.name ?? 'Unknown';
             const count = typeof m.count === 'number' && m.count >= 1 ? m.count : 1;
+            const uuid = m.id || m.uuid || m.actorUuid || m.actorUUID;
+            const displayName = count > 1 ? `${count} × ${name}` : name;
+            const displayNameLink = uuid ? `@UUID[${uuid}]{${displayName}}` : displayName;
             return {
                 name,
                 count,
-                displayName: count > 1 ? `${count} × ${name}` : name,
+                displayName,
+                displayNameLink,
                 cr: m.cr ?? '—',
                 img: m.img ?? ''
             };

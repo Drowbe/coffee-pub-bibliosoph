@@ -32,7 +32,7 @@
             {{#each encounterMonsters}}
                 <div class="encounter-monster-row">
                     {{#if img}}<img class="encounter-monster-img" src="{{img}}" alt="" />{{/if}}
-                    <span class="encounter-monster-name">{{displayName}}</span>
+                    <span class="encounter-monster-name">{{{displayNameLink}}}</span>
                     <span class="encounter-monster-cr">CR {{cr}}</span>
                 </div>
             {{/each}}
