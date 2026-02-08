@@ -2155,6 +2155,12 @@ export const registerSettings = () => {
 			scope: 'world',
 			default: true,
 		});
+		game.settings.register(MODULE.ID, 'quickEncounterHabitat', {
+			scope: 'client',
+			config: false,
+			type: String,
+			default: 'Any',
+		});
 		game.settings.register(MODULE.ID, 'quickEncounterMinCR', {
 			scope: 'client',
 			config: false,

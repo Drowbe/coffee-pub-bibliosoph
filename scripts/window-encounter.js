@@ -209,6 +209,12 @@ export class WindowEncounter extends Base {
         const heroCRNum = parseCR(a?.partyCR ?? a?.partyCRDisplay);
         const canvasMonsterCRNum = parseCR(a?.monsterCR ?? a?.monsterCRDisplay);
         const heroCRDisplay = formatCRDisplay(heroCRNum);
+        if (this._selectedHabitat === 'Any') {
+            const savedHab = game.settings.get?.(MODULE.ID, 'quickEncounterHabitat');
+            if (savedHab && this._habitats.includes(savedHab)) {
+                this._selectedHabitat = savedHab;
+            }
+        }
 
         const recommendations = Array.isArray(this._recommendations) ? this._recommendations : [];
         const selectedRecs = recommendations.filter(r => this._selectedForDeploy.has(r.id));
@@ -533,6 +539,7 @@ export class WindowEncounter extends Base {
             const habitatBtn = e.target?.closest?.('.window-encounter-habitat');
             if (habitatBtn?.dataset?.habitat) {
                 self._selectedHabitat = habitatBtn.dataset.habitat;
+                game.settings.set?.(MODULE.ID, 'quickEncounterHabitat', self._selectedHabitat);
                 log('Quick Encounter: habitat selected', self._selectedHabitat, false);
                 self.render();
                 return;
@@ -673,6 +680,11 @@ export class WindowEncounter extends Base {
                 game.settings.set(MODULE.ID, 'encounterOdds', val);
                 const currentEl = root?.querySelector('.window-encounter-odds-current');
                 if (currentEl) currentEl.textContent = `${val}%`;
+                const min = parseFloat(oddsSlider.min ?? '0') || 0;
+                const max = parseFloat(oddsSlider.max ?? '100') || 100;
+                const span = Math.max(1, max - min);
+                const pct = Math.max(0, Math.min(100, ((val - min) / span) * 100));
+                oddsSlider.style.setProperty('--odds-fill', `${pct}%`);
                 return;
             }
             const crSlider = e.target?.closest?.('.window-encounter-cr-slider');
