@@ -160,7 +160,7 @@ export class WindowEncounter extends Base {
     /** Per-id count when selected (for recommend list; built encounter uses r.count). */
     _selectedCounts = new Map();
     /** Blacksmith deployMonsters options: pattern and visibility. */
-    _deploymentPattern = 'sequential';
+    _deploymentPattern = null;
     _deploymentHidden = false;
     /** True while building/refreshing the encounter cache. */
     _cacheBuilding = false;
@@ -964,7 +964,7 @@ export class WindowEncounter extends Base {
         }));
         const metadata = { monsters: uuids, npcs: [] };
         const options = {
-            deploymentPattern: this._deploymentPattern,
+            deploymentPattern: this._deploymentPattern || 'sequential',
             deploymentHidden: this._deploymentHidden
         };
         try {

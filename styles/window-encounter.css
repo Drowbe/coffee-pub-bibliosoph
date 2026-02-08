@@ -104,6 +104,7 @@
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-configure,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-panel,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-filters,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-buttons,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-results,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-deploy {
     flex-shrink: 0;
@@ -576,10 +577,12 @@
     min-width: 120px;
 }
 
+
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-action-buttons {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
+    margin: 8px 0px 8px 0px;
 }
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-btn,
@@ -588,14 +591,14 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 6px 12px;
-    background: rgba(0, 0, 0, 0.4);
+    padding: 12px 16px;
+    background: rgba(41, 94, 47, 0.9);
     border: 1px solid var(--encounter-border-color);
     border-radius: 4px;
     color: #fff;
     cursor: pointer;
     font-family: inherit;
-    font-size: 0.95em;
+    font-size: 1.0em;
 }
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-btn:hover:not(:disabled),

@@ -94,7 +94,9 @@
             <button type="button" class="window-encounter-habitat {{#if selected}}active{{/if}}" data-habitat="{{name}}">{{name}}</button>
             {{/each}}
         </div>
+    </section>
 
+    <section class="window-encounter-buttons">
         <div class="window-encounter-action-buttons">
             <button type="button" class="window-encounter-roll window-encounter-btn" {{#if rollLoading}}disabled{{/if}} title="Roll for encounter using Global Encounter Settings (odds and dice); posts a card and may recommend monsters">
                 <i class="fa-solid fa-dice"></i> Roll for Encounter
