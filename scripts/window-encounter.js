@@ -152,6 +152,8 @@ export class WindowEncounter extends Base {
     _lastRollIntroEntry = null;
     /** UUIDs of recommendation cards selected for deploy. */
     _selectedForDeploy = new Set();
+    /** Per-id count when selected (for recommend list; built encounter uses r.count). */
+    _selectedCounts = new Map();
     /** Blacksmith deployMonsters options: pattern and visibility. */
     _deploymentPattern = 'sequential';
     _deploymentHidden = false;
@@ -236,13 +238,14 @@ export class WindowEncounter extends Base {
         const difficultyClass = difficultyInfo.class;
 
         const isBuiltEncounter = recommendations.length > 0 && recommendations.every(r => typeof r.count === 'number' && r.count >= 1);
-        const recommendationsWithSelection = recommendations.map(r => ({
-            ...r,
-            selected: this._selectedForDeploy.has(r.id)
-        }));
+        const recommendationsWithSelection = recommendations.map(r => {
+            const selected = this._selectedForDeploy.has(r.id);
+            const selectedCount = selected ? (this._selectedCounts.get(r.id) ?? 1) : 0;
+            return { ...r, selected, selectedCount };
+        });
         const deploySelectedCount = isBuiltEncounter
             ? recommendations.filter(r => this._selectedForDeploy.has(r.id)).reduce((s, r) => s + (r.count ?? 1), 0)
-            : (this._selectedForDeploy.size > 0 ? this._selectedForDeploy.size : recommendations.length);
+            : Array.from(this._selectedForDeploy).reduce((s, id) => s + (this._selectedCounts.get(id) ?? 1), 0);
         const hasDeploySelection = recommendations.length > 0;
         const monsterCRFromSelection = selectedRecs.length > 0;
 
@@ -442,11 +445,45 @@ export class WindowEncounter extends Base {
                 self._onRefreshCache();
                 return;
             }
+            const countMinus = e.target?.closest?.('.window-encounter-result-count-minus');
+            if (countMinus) {
+                const uuid = countMinus.getAttribute?.('data-actor-id') ?? countMinus.dataset?.actorId;
+                if (uuid && self._selectedForDeploy.has(uuid)) {
+                    const n = (self._selectedCounts.get(uuid) ?? 1) - 1;
+                    if (n <= 0) {
+                        self._selectedForDeploy.delete(uuid);
+                        self._selectedCounts.delete(uuid);
+                    } else {
+                        self._selectedCounts.set(uuid, n);
+                    }
+                    log('Quick Encounter: count', `${uuid.slice(-8)} → ${n <= 0 ? 'removed' : n}`, false);
+                    self.render();
+                }
+                return;
+            }
+            const countPlus = e.target?.closest?.('.window-encounter-result-count-plus');
+            if (countPlus) {
+                const uuid = countPlus.getAttribute?.('data-actor-id') ?? countPlus.dataset?.actorId;
+                if (uuid && self._selectedForDeploy.has(uuid)) {
+                    const n = Math.min(99, (self._selectedCounts.get(uuid) ?? 1) + 1);
+                    self._selectedCounts.set(uuid, n);
+                    log('Quick Encounter: count', `${uuid.slice(-8)} → ${n}`, false);
+                    self.render();
+                }
+                return;
+            }
             const resultCard = e.target?.closest?.('.window-encounter-result-card');
             const uuid = resultCard?.getAttribute?.('data-actor-id') ?? resultCard?.dataset?.actorId;
             if (resultCard && uuid) {
-                if (self._selectedForDeploy.has(uuid)) self._selectedForDeploy.delete(uuid);
-                else self._selectedForDeploy.add(uuid);
+                if (self._selectedForDeploy.has(uuid)) {
+                    self._selectedForDeploy.delete(uuid);
+                    self._selectedCounts.delete(uuid);
+                } else {
+                    self._selectedForDeploy.add(uuid);
+                    const rec = (self._recommendations || []).find((r) => r.id === uuid);
+                    const initialCount = rec && typeof rec.count === 'number' && rec.count >= 1 ? rec.count : 1;
+                    self._selectedCounts.set(uuid, initialCount);
+                }
                 log('Quick Encounter: selection toggled', `${self._selectedForDeploy.size} selected`, false);
                 self.render();
                 return;
@@ -572,12 +609,43 @@ export class WindowEncounter extends Base {
         root.querySelector('.window-encounter-recommend')?.addEventListener('click', () => this._onRecommend());
         root.querySelectorAll('.window-encounter-refresh-cache').forEach(btn => btn.addEventListener('click', () => this._onRefreshCache()));
         root.querySelectorAll('.window-encounter-result-card').forEach(card => {
-            card.addEventListener('click', () => {
+            card.addEventListener('click', (e) => {
+                if (e.target?.closest?.('.window-encounter-result-count-btn')) return;
                 const uuid = card.getAttribute?.('data-actor-id') ?? card.dataset?.actorId;
                 if (!uuid) return;
-                if (this._selectedForDeploy.has(uuid)) this._selectedForDeploy.delete(uuid);
-                else this._selectedForDeploy.add(uuid);
+                if (this._selectedForDeploy.has(uuid)) {
+                    this._selectedForDeploy.delete(uuid);
+                    this._selectedCounts.delete(uuid);
+                } else {
+                    this._selectedForDeploy.add(uuid);
+                    const rec = (this._recommendations || []).find((r) => r.id === uuid);
+                    const initialCount = rec && typeof rec.count === 'number' && rec.count >= 1 ? rec.count : 1;
+                    this._selectedCounts.set(uuid, initialCount);
+                }
                 log('Quick Encounter: selection toggled', `${this._selectedForDeploy.size} selected`, false);
+                this.render();
+            });
+        });
+        root.querySelectorAll('.window-encounter-result-count-minus').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const uuid = btn.getAttribute?.('data-actor-id') ?? btn.dataset?.actorId;
+                if (!uuid || !this._selectedForDeploy.has(uuid)) return;
+                const n = (this._selectedCounts.get(uuid) ?? 1) - 1;
+                if (n <= 0) {
+                    this._selectedForDeploy.delete(uuid);
+                    this._selectedCounts.delete(uuid);
+                } else this._selectedCounts.set(uuid, n);
+                this.render();
+            });
+        });
+        root.querySelectorAll('.window-encounter-result-count-plus').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const uuid = btn.getAttribute?.('data-actor-id') ?? btn.dataset?.actorId;
+                if (!uuid || !this._selectedForDeploy.has(uuid)) return;
+                const n = Math.min(99, (this._selectedCounts.get(uuid) ?? 1) + 1);
+                this._selectedCounts.set(uuid, n);
                 this.render();
             });
         });
@@ -638,7 +706,7 @@ export class WindowEncounter extends Base {
         const targetCR = Math.max(0, Number(this._targetCR) || 5);
         const partyBase = parseCR(this._assessment?.partyCR ?? this._assessment?.partyCRDisplay);
         const difficultyLabel = getDifficultyFromPartyAndTarget(partyBase, targetCR).label;
-        log('Quick Encounter: Recommend clicked', `habitat=${this._selectedHabitat}, targetCR=${targetCR}, difficulty=${difficultyLabel}`, false);
+        log('Quick Encounter: Recommend clicked', `habitat=${this._selectedHabitat}, targetCR=${targetCR} (Encounter CR slider), difficulty=${difficultyLabel}`, false);
         if (typeof window.bibliosophEncounterRecommend !== 'function') {
             log('Quick Encounter: recommend', 'bibliosophEncounterRecommend not available', true);
             return;
@@ -672,6 +740,7 @@ export class WindowEncounter extends Base {
             } else {
                 this._recommendations = newRecommendations || [];
                 this._selectedForDeploy = new Set();
+                this._selectedCounts.clear();
                 log('Quick Encounter: recommend returned', `${this._recommendations?.length ?? 0} results`, false);
             }
         } finally {
@@ -693,7 +762,7 @@ export class WindowEncounter extends Base {
         if (isBuiltEncounter) {
             uuids = selectedRecommendations.flatMap(r => Array(r.count ?? 1).fill(r.id));
         } else if (this._selectedForDeploy.size > 0) {
-            uuids = Array.from(this._selectedForDeploy);
+            uuids = selectedRecommendations.flatMap(r => Array(this._selectedCounts.get(r.id) ?? 1).fill(r.id));
         } else {
             uuids = recommendations.map(r => r.id).filter(Boolean);
         }
@@ -733,6 +802,7 @@ export class WindowEncounter extends Base {
                 }
             }
             this._selectedForDeploy.clear();
+            this._selectedCounts.clear();
             this.render();
         } catch (e) {
             console.error(MODULE.NAME, 'Quick Encounter: deploy failed', e);

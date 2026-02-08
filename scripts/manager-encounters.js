@@ -338,9 +338,10 @@ async function getCandidatesWithXP(habitat) {
 }
 
 /**
- * Recommend monsters: search Blacksmith-configured compendiums, filter by habitat and CR.
- * Uses parallel pack loading and per-pack cap for speed.
- * @param {number} [minCR=0] - floor only: do not return any monster with CR below this value (no other effect)
+ * Recommend monsters: same sourcing as buildEncounter — habitat + Minimum CR floor only.
+ * Encounter CR is for total encounter strength (used by buildEncounter); here we just return
+ * the same pool of candidates (min CR and above), up to MAX_RECOMMENDATIONS, sorted by CR ascending.
+ * @param {number} [minCR=0] - floor only: do not return any monster with CR below this value
  * @returns {Promise<Array<{id: string, img: string, name: string, cr: string}>>}
  */
 export async function encounterRecommend(habitat, difficulty, targetCR, minCR = 0) {
@@ -354,28 +355,10 @@ export async function encounterRecommend(habitat, difficulty, targetCR, minCR = 
         return [];
     }
 
-    let centerCR = NaN;
-    if (typeof targetCR === 'number' && !Number.isNaN(targetCR)) {
-        centerCR = Math.max(0, targetCR);
-    }
-    if (Number.isNaN(centerCR)) {
-        try {
-            const api = game.modules.get('coffee-pub-blacksmith')?.api;
-            const assessment = api?.getCombatAssessment ? await api.getCombatAssessment() : null;
-            if (assessment?.partyCR != null) {
-                centerCR = typeof assessment.partyCR === 'number' ? assessment.partyCR : parseFloat(assessment.partyCR);
-            }
-        } catch (_) {}
-        if (Number.isNaN(centerCR)) centerCR = 5;
-    }
-    // Wider band so Recommend returns results even when few monsters at exact target CR
-    const crMin = Math.max(0, centerCR - 8);
-    const crMax = centerCR + 9;
-
+    const sorted = [...candidates].sort((a, b) => a.cr - b.cr);
     const results = [];
-    for (const { doc, id, cr: crNum } of candidates) {
+    for (const { doc, id, cr: crNum } of sorted) {
         if (results.length >= MAX_RECOMMENDATIONS) break;
-        if (crNum < crMin || crNum > crMax) continue;
         results.push({
             id,
             img: doc.img ?? '',
@@ -384,22 +367,8 @@ export async function encounterRecommend(habitat, difficulty, targetCR, minCR = 
         });
     }
 
-    // If no monsters in band (e.g. high target CR, compendium has low CR only), show closest by CR
-    if (results.length === 0 && candidates.length > 0) {
-        const sorted = [...candidates].sort((a, b) => Math.abs(a.cr - centerCR) - Math.abs(b.cr - centerCR));
-        for (const { doc, id, cr: crNum } of sorted) {
-            if (results.length >= MAX_RECOMMENDATIONS) break;
-            results.push({
-                id,
-                img: doc.img ?? '',
-                name: doc.name ?? 'Unknown',
-                cr: formatCR(crNum)
-            });
-        }
-    }
-
     if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: Recommend', `${results.length} monsters (habitat=${habitat}, CR ${crMin}-${crMax})`, true, false);
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: Recommend', `${results.length} monsters (habitat=${habitat}, min CR ${minCRNum})`, true, false);
     }
     return results;
 }

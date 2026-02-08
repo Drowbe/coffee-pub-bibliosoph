@@ -593,22 +593,54 @@
     box-shadow: 0 0 0 2px rgba(172, 159, 129, 0.5), inset 0 0 12px rgba(200, 120, 60, 0.2);
 }
 
-/* Selected Badge */
+/* Selected count: − [badge with count] + */
 
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-result-card .window-encounter-result-selected-badge {
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-result-card .window-encounter-result-count-wrap {
     position: absolute;
     top: 4px;
     right: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 18px;
+    gap: 2px;
+    z-index: 1;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-result-card .window-encounter-result-count-btn {
+    width: 16px;
+    height: 16px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(176, 176, 176, 0.6);
+    border-radius: 50%;
+    background: rgba(21, 21, 21, 0.9);
+    color: #e0e0e0;
+    font-size: 0.9em;
+    line-height: 1;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-result-card .window-encounter-result-count-btn:hover {
+    border-color: rgba(255, 100, 0, 0.8);
+    color: #fff;
+    background: rgba(255, 100, 0, 0.4);
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-result-card .window-encounter-result-selected-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
     height: 18px;
+    padding: 0 4px;
     background: rgba(68, 137, 67, 0.9);
     color: #fff;
     border-radius: 50%;
-    font-size: 0.65em;
-    z-index: 1;
+    font-size: 0.7em;
+    font-weight: 600;
 }
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-result-img {
