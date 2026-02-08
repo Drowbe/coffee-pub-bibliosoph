@@ -52,7 +52,9 @@
 
         <div class="window-encounter-cr-slider-row">
             <i class="fa-solid fa-rabbit window-encounter-slider-icon" title="Lower CR"></i>
-            <input type="range" class="window-encounter-cr-slider" min="{{crSliderMin}}" max="{{crSliderMax}}" value="{{targetCRValue}}" step="0.25" aria-label="Target Encounter CR" style="--cr-fill: {{crSliderFill}}%;" />
+            <div class="window-encounter-cr-slider-wrap">
+                <input type="range" class="window-encounter-cr-slider" min="{{crSliderMin}}" max="{{crSliderMax}}" value="{{targetCRValue}}" step="0.25" aria-label="Target Encounter CR" style="--cr-fill: {{crSliderFill}}%;" />
+            </div>
             <i class="fa-solid fa-skull window-encounter-slider-icon" title="Higher CR"></i>
         </div>
         <div class="window-encounter-cr-range-row">
@@ -60,6 +62,9 @@
             <div class="window-encounter-cr-range-track">
                 <div class="window-encounter-cr-range-track-bg" aria-hidden="true"></div>
                 <div class="window-encounter-cr-range-highlight" style="left: {{crRangeHighlightLeft}}%; width: {{crRangeHighlightWidth}}%;" aria-hidden="true"></div>
+                {{#if crRangePartyMarkerPercent}}
+                <div class="window-encounter-cr-range-marker" style="left: {{crRangePartyMarkerPercent}}%;" title="Party CR (average)"></div>
+                {{/if}}
                 <div class="window-encounter-cr-range-half window-encounter-cr-range-half-left" style="width: {{crRangeSplitPercent}}%;">
                     <input type="range" id="{{appId}}-min-cr" class="window-encounter-min-cr-slider window-encounter-cr-range-input" style="width: {{crRangeMinInputWidth}}%;" min="{{minCRSliderMin}}" max="{{minCRSliderMax}}" value="{{minCRValue}}" step="0.25" aria-label="Minimum creature CR" />
                 </div>

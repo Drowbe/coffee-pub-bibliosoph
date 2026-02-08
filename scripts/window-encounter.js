@@ -258,6 +258,12 @@ export class WindowEncounter extends Base {
         const crSliderMax = (partyBase || monsterCRNum)
             ? Math.min(200, Math.max(20, Math.max(partyBase || 0, monsterCRNum || 0) * 2.5 + 10))
             : 200;
+        const partyCRMarkerPercent = (() => {
+            if (Number.isNaN(heroCRNum)) return null;
+            const span = Math.max(1, crSliderMax - crSliderMin);
+            return Math.max(0, Math.min(100, ((heroCRNum - crSliderMin) / span) * 100));
+        })();
+        const partyAvgCR = getPartyAverageCRFromCharacters();
         const crRangeMax = 30;
         const crRangeHighlightLeft = Math.min(100, (minCRValue / crRangeMax) * 100);
         const crRangeHighlightWidth = Math.max(0, Math.min(100 - crRangeHighlightLeft, ((maxCRValue - minCRValue) / crRangeMax) * 100));
@@ -269,6 +275,8 @@ export class WindowEncounter extends Base {
         const crRangeMinInputWidth = crRangeSplitPercent > 0 ? (100 / crRangeSplitPercent) * 100 : 100;
         const crRangeMaxInputLeft = crRangeRightWidth > 0 ? -(crRangeSplitPercent / crRangeRightWidth) * 100 : 0;
         const crRangeMaxInputWidth = crRangeRightWidth > 0 ? (100 / crRangeRightWidth) * 100 : 100;
+        const markerCR = Number.isFinite(partyAvgCR) ? partyAvgCR : heroCRNum;
+        const crRangePartyMarkerPercent = Number.isNaN(markerCR) ? null : Math.max(0, Math.min(100, (markerCR / crRangeMax) * 100));
         const monsterGapNum = Number.isNaN(monsterCRNum) ? targetCRNum : Math.max(0, targetCRNum - monsterCRNum);
         const encounterCRDisplay = formatCRDisplay(targetCRNum);
         const monsterGapDisplay = formatCRDisplay(monsterGapNum);
@@ -311,6 +319,7 @@ export class WindowEncounter extends Base {
             targetCRValue: Math.max(0, Number(this._targetCR) || 0),
             crSliderMin,
             crSliderMax,
+            partyCRMarkerPercent,
             minCRValue,
             minCRDisplay,
             minCRSliderMin: 0,
@@ -327,6 +336,7 @@ export class WindowEncounter extends Base {
             crRangeMinInputWidth,
             crRangeMaxInputLeft,
             crRangeMaxInputWidth,
+            crRangePartyMarkerPercent,
             crSliderFill,
             habitats: this._habitats.map(h => ({ name: h, selected: h === this._selectedHabitat })),
             recommendations: recommendationsWithSelection,

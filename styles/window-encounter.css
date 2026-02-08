@@ -196,6 +196,20 @@
     box-shadow: 0 0 4px rgba(89, 200, 98, 0.6);
 }
 
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-marker {
+    position: absolute;
+    top: 50%;
+    width: 10px;
+    height: 10px;
+    background: rgba(200, 60, 60, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.9);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    box-shadow: 0 0 4px rgba(200, 60, 60, 0.6);
+    z-index: 3;
+}
+
 
 /* THUMB GRIP */
 
@@ -356,6 +370,10 @@
     display: flex;
     align-items: center;
     gap: 10px;
+}
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider-wrap {
+    position: relative;
+    flex: 1;
 }
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-slider-icon {
@@ -672,15 +690,17 @@
 }
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-result-card .window-encounter-result-count-btn {
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
+    min-width: 14px;
+    min-height: 14px;
     padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgba(176, 176, 176, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 50%;
-    background: rgba(21, 21, 21, 0.9);
+    background: rgba(0, 0, 0, 0.9);
     color: #e0e0e0;
     font-size: 0.9em;
     line-height: 1;
@@ -694,6 +714,7 @@
     background: rgba(255, 100, 0, 0.4);
 }
 
+
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-result-card .window-encounter-result-selected-badge {
     display: flex;
     align-items: center;
@@ -701,7 +722,8 @@
     min-width: 18px;
     height: 18px;
     padding: 0 4px;
-    background: rgba(68, 137, 67, 0.9);
+    background: rgba(45, 94, 47, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     color: #fff;
     border-radius: 50%;
     font-size: 0.7em;
