@@ -11,23 +11,24 @@
             <img class="token-image" src="{{userAvatar}}" alt="" />
             <div class="token-text-wrapper">
                 <span class="token-name">{{userName}}</span>
-                <span class="token-character">{{characterName}}</span>
+                {{#if characterName}}<span class="token-character">{{characterName}}</span>{{/if}}
             </div>
         </div>
+    {{/if}}
+
+    {{#if narrativeImage}}
+        <img class="encounter-narrative-image" src="{{narrativeImage}}" alt="" />
     {{/if}}
     {{#if narrativeTitle}}
         <div class="section-header encounter-narrative-title">
             {{{narrativeIcon}}} {{narrativeTitle}}
         </div>
     {{/if}}
-    {{#if narrativeImage}}
-        <img class="encounter-narrative-image" src="{{narrativeImage}}" alt="" />
-    {{/if}}
     {{#if narrativeDescription}}
         <p class="encounter-narrative-description">{{narrativeDescription}}</p>
     {{/if}}
     {{#if encounterMonsters}}
-        <div class="section-header"><i class="fa-solid fa-dragon"></i> Encounter</div>
+        <div class="section-header"><i class="fa-solid fa-dragon"></i> Adversaries</div>
         <div class="encounter-monsters">
             {{#each encounterMonsters}}
                 <div class="encounter-monster-row">
@@ -44,7 +45,7 @@
             <img class="token-image" src="{{userAvatar}}" alt="" />
             <div class="token-text-wrapper">
                 <span class="token-name">{{userName}}</span>
-                <span class="token-character">{{characterName}}</span>
+                {{#if characterName}}<span class="token-character">{{characterName}}</span>{{/if}}
             </div>
         </div>
     {{/if}}
@@ -91,7 +92,7 @@
             <img class="token-image" src="{{userAvatar}}" alt="" />
             <div class="token-text-wrapper">
                 <span class="token-name">{{userName}}</span>
-                <span class="token-character">{{characterName}}</span>
+                {{#if characterName}}<span class="token-character">{{characterName}}</span>{{/if}}
             </div>
         </div>
     {{/if}}
@@ -110,8 +111,8 @@
                     <img class="token-image" src="{{playerAvatar}}" alt="" />
                     <div class="token-text-wrapper">
                         <span class="token-name">{{playerName}}</span>
-                        <br />
-                        <span class="token-character">{{characterName}}</span>
+                        {{#if characterName}}<br />
+                        <span class="token-character">{{characterName}}</span>{{/if}}
                     </div>
                 </div>
             {{/each}}

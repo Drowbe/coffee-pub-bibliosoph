@@ -1,39 +1,127 @@
 {
   "encounterFalse": {
+
+    "Any": {
+      "day": [
+        {
+          "title": "Nothing Breaks the Rhythm",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "tags": ["encounter", "failure"],
+          "timeOfDay": "day",
+          "description": "The hours pass without interruption. Whatever might have crossed your path does not."
+        },
+        {
+          "title": "An Uneventful Stretch",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "tags": ["encounter", "failure"],
+          "timeOfDay": "day",
+          "description": "You remain alert, but nothing rises to meet that caution."
+        },
+        {
+          "title": "All Seems Normal",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "tags": ["encounter", "failure"],
+          "timeOfDay": "day",
+          "description": "Sounds, movement, and atmosphere remain as expected. No threat presents itself."
+        },
+        {
+          "title": "Quiet Progress",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "tags": ["encounter", "failure"],
+          "timeOfDay": "day",
+          "description": "You move forward steadily, unchallenged and uninterrupted."
+        },
+        {
+          "title": "Nothing Takes Notice",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "tags": ["encounter", "failure"],
+          "timeOfDay": "day",
+          "description": "If anything is nearby, it keeps its distance. Your passage goes unnoticed."
+        }
+      ],
+      "night": [
+        {
+          "title": "A Quiet Night Passes",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "tags": ["encounter", "failure"],
+          "timeOfDay": "night",
+          "description": "Despite the darkness and tension it brings, nothing disturbs the night."
+        },
+        {
+          "title": "Shadows, but No Threat",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "tags": ["encounter", "failure"],
+          "timeOfDay": "night",
+          "description": "Your eyes play tricks in the dark, but nothing proves real or dangerous."
+        },
+        {
+          "title": "Uneventful Watch",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "tags": ["encounter", "failure"],
+          "timeOfDay": "night",
+          "description": "Time stretches as you remain alert. Nothing tests that vigilance."
+        },
+        {
+          "title": "Only the Night Sounds",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "tags": ["encounter", "failure"],
+          "timeOfDay": "night",
+          "description": "You hear the expected noises of the night, and nothing more."
+        },
+        {
+          "title": "Safe Enough, For Now",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "tags": ["encounter", "failure"],
+          "timeOfDay": "night",
+          "description": "The darkness passes without incident, granting you a rare moment of calm."
+        }
+      ]
+    },
+    
     "Arctic": {
       "day": [
         {
           "title": "Still Arctic Air",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-arctic-day-01.webp",
           "tags": ["encounter", "failure"],
           "description": "Cold wind and pale light sweep across a quiet expanse. Nothing challenges your passage."
         },
         {
           "title": "Frozen Calm",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-arctic-day-01.webp",
           "tags": ["encounter", "failure"],
           "description": "The ice holds its silence. Whatever lives here keeps its distance."
         },
         {
           "title": "White Horizon",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-arctic-day-01.webp",
           "tags": ["encounter", "failure"],
           "description": "The landscape stays open and still. No movement draws your attention."
         },
         {
           "title": "Uneventful Trek",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-arctic-day-01.webp",
           "tags": ["encounter", "failure"],
           "description": "Your travel is steady and cautious, but the day offers no trouble."
         },
         {
           "title": "Cold, Clear Passage",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-arctic-day-01.webp",
           "tags": ["encounter", "failure"],
           "description": "Footfalls crunch and breath fogs, yet nothing answers you."
         }
@@ -42,35 +130,35 @@
         {
           "title": "Night Frost Silence",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-arctic-night-01.webp",
           "tags": ["encounter", "failure"],
           "description": "Darkness deepens the cold. The world remains undisturbed."
         },
         {
           "title": "Icebound Quiet",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-arctic-night-01.webp",
           "tags": ["encounter", "failure"],
           "description": "The night feels watchful, but nothing approaches."
         },
         {
           "title": "Stars Over Snow",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-arctic-night-01.webp",
           "tags": ["encounter", "failure"],
           "description": "A hard sky and quiet ice surround you. No threat reveals itself."
         },
         {
           "title": "Cold Watchfulness",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-arctic-night-01.webp",
           "tags": ["encounter", "failure"],
           "description": "You listen for pursuit or prowling. You hear only wind."
         },
         {
           "title": "Uneventful Arctic Night",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-arctic-night-01.webp",
           "tags": ["encounter", "failure"],
           "description": "The hours pass without incident, tense but quiet."
         }
@@ -82,35 +170,35 @@
         {
           "title": "Salt and Sun",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-coastal-day-01.webp",
           "tags": ["encounter", "failure"],
           "description": "Waves and wind keep a steady rhythm. Nothing interrupts your route."
         },
         {
           "title": "Quiet Shoreline",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-coastal-day-01.webp",
           "tags": ["encounter", "failure"],
           "description": "Gulls call in the distance, but no danger follows the sound."
         },
         {
           "title": "Tidewashed Calm",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-coastal-day-01.webp",
           "tags": ["encounter", "failure"],
           "description": "The coast feels open and clear. Your travel remains unchallenged."
         },
         {
           "title": "Breezy Passage",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-coastal-day-01.webp",
           "tags": ["encounter", "failure"],
           "description": "The air tastes of salt and distance. Nothing closes in."
         },
         {
           "title": "No Signs of Trouble",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-coastal-day-01.webp",
           "tags": ["encounter", "failure"],
           "description": "You scan dunes, rocks, and surf. The shoreline stays peaceful."
         }
@@ -119,35 +207,35 @@
         {
           "title": "Moonlit Surf",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-coastal-night-01.webp",
           "tags": ["encounter", "failure"],
           "description": "Waves hiss in the dark. No shadows move toward you."
         },
         {
           "title": "Coastal Night Quiet",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-coastal-night-01.webp",
           "tags": ["encounter", "failure"],
           "description": "The tide rolls in and out like slow breathing. Nothing else stirs."
         },
         {
           "title": "Wind off the Water",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-coastal-night-01.webp",
           "tags": ["encounter", "failure"],
           "description": "A damp chill rides the breeze. The night remains uneventful."
         },
         {
           "title": "Dark Shoreline",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-coastal-night-01.webp",
           "tags": ["encounter", "failure"],
           "description": "You keep to your path, listening. Only the sea answers."
         },
         {
           "title": "Tide and Silence",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-coastal-night-01.webp",
           "tags": ["encounter", "failure"],
           "description": "The coast feels empty under night sky. No threat presents itself."
         }
@@ -159,35 +247,35 @@
         {
           "title": "Heat Haze Calm",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-desert-day-01.webp",
           "tags": ["encounter", "failure"],
           "description": "Shimmering air and open sand offer no surprises today."
         },
         {
           "title": "Sun and Silence",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-desert-day-01.webp",
           "tags": ["encounter", "failure"],
           "description": "The desert stretches out, quiet and indifferent. Nothing follows your trail."
         },
         {
           "title": "Dry, Clear Passage",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-desert-day-01.webp",
           "tags": ["encounter", "failure"],
           "description": "Wind smooths old tracks. The day remains empty of conflict."
         },
         {
           "title": "Uneventful Crossing",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-desert-day-01.webp",
           "tags": ["encounter", "failure"],
           "description": "You keep moving under harsh light, but nothing closes the distance."
         },
         {
           "title": "Only the Wind",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-desert-day-01.webp",
           "tags": ["encounter", "failure"],
           "description": "Sand shifts and whispers. No other presence makes itself known."
         }
@@ -196,35 +284,35 @@
         {
           "title": "Cold Desert Night",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-desert-night-01.webp",
           "tags": ["encounter", "failure"],
           "description": "The heat fades fast, leaving a sharp chill. The night stays quiet."
         },
         {
           "title": "Starlit Dunes",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-desert-night-01.webp",
           "tags": ["encounter", "failure"],
           "description": "Stars burn overhead and the sand lies still. No danger rises."
         },
         {
           "title": "Night Wind Whispers",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-desert-night-01.webp",
           "tags": ["encounter", "failure"],
           "description": "The wind plays tricks on sound and shadow, but nothing approaches."
         },
         {
           "title": "Quiet Under the Stars",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-desert-night-01.webp",
           "tags": ["encounter", "failure"],
           "description": "You move carefully in the dark. The desert gives you space."
         },
         {
           "title": "Uneventful Night Crossing",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-desert-night-01.webp",
           "tags": ["encounter", "failure"],
           "description": "The dunes remain empty. Your travel goes uninterrupted."
         }
@@ -467,35 +555,35 @@
         {
           "title": "High, Clear Air",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-mountains.webp",
           "tags": ["encounter", "failure"],
           "description": "Thin air and hard stone surround you. The route remains quiet."
         },
         {
           "title": "Rock and Silence",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-mountains.webp",
           "tags": ["encounter", "failure"],
           "description": "Loose gravel shifts underfoot, but no threat follows."
         },
         {
           "title": "Uneventful Ascent",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-mountains.webp",
           "tags": ["encounter", "failure"],
           "description": "You climb and traverse without interruption."
         },
         {
           "title": "Echoes Only",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-mountains.webp",
           "tags": ["encounter", "failure"],
           "description": "Sounds bounce off stone, but nothing answers with intent."
         },
         {
           "title": "Clear Mountain Passage",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-mountains.webp",
           "tags": ["encounter", "failure"],
           "description": "The path ahead remains open. No danger claims the heights."
         }
@@ -504,35 +592,35 @@
         {
           "title": "Cold Mountain Night",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-mountains.webp",
           "tags": ["encounter", "failure"],
           "description": "The temperature drops hard. The darkness stays quiet."
         },
         {
           "title": "Night on the Ridge",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-mountains.webp",
           "tags": ["encounter", "failure"],
           "description": "A ridge line cuts the sky. Nothing moves toward you."
         },
         {
           "title": "Stone Shadows",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-mountains.webp",
           "tags": ["encounter", "failure"],
           "description": "Shadows deepen among rocks and ledges, but no threat appears."
         },
         {
           "title": "Wind and Darkness",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-mountains.webp",
           "tags": ["encounter", "failure"],
           "description": "Wind howls through gaps and gullies. It brings no pursuit."
         },
         {
           "title": "Uneventful Night Traverse",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-mountains.webp",
           "tags": ["encounter", "failure"],
           "description": "You keep close and steady. The mountains offer no encounter tonight."
         }
@@ -926,40 +1014,138 @@
   },
 
   "encounterTrue": {
+    
+    "Any": {
+      "day": [
+        {
+          "title": "Something Feels Off",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Any",
+          "timeOfDay": "day",
+          "description": "A subtle shift in the air puts you on edge. Something nearby has noticed you."
+        },
+        {
+          "title": "Movement Catches Your Eye",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Any",
+          "timeOfDay": "day",
+          "description": "You spot motion at the edge of your vision. It disappears when you focus on it."
+        },
+        {
+          "title": "The Quiet Breaks",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Any",
+          "timeOfDay": "day",
+          "description": "A sound cuts through the background noise, sharp enough to demand attention."
+        },
+        {
+          "title": "Too Close for Comfort",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Any",
+          "timeOfDay": "day",
+          "description": "You sense proximity rather than sight or sound. Something is closer than you expected."
+        },
+        {
+          "title": "You Are Not Alone",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Any",
+          "timeOfDay": "day",
+          "description": "The feeling settles in all at once. Whatever is nearby is aware of you."
+        }
+      ],
+      "night": [
+        {
+          "title": "Shadows Shift",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Any",
+          "timeOfDay": "night",
+          "description": "Dark shapes move where they should not. The night feels suddenly active."
+        },
+        {
+          "title": "A Sound in the Dark",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Any",
+          "timeOfDay": "night",
+          "description": "You hear something nearby, then nothing at all. The silence is worse."
+        },
+        {
+          "title": "Eyes Reflect Light",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Any",
+          "timeOfDay": "night",
+          "description": "A brief glint returns your light from the darkness. You are being watched."
+        },
+        {
+          "title": "The Night Goes Still",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Any",
+          "timeOfDay": "night",
+          "description": "Background sounds fade away, leaving an unnatural quiet behind."
+        },
+        {
+          "title": "Something Moves Closer",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Any",
+          "timeOfDay": "night",
+          "description": "You feel a shift in space nearby, as though something has crossed an unseen boundary."
+        }
+      ]
+    },
+
     "Arctic": {
       "day": [
         {
           "title": "Something Stirs in the Cold",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-arctic-day-01.webp",
           "tags": ["encounter", "success"],
           "description": "A disturbance breaks the frozen calm. Something nearby is moving with purpose."
         },
         {
           "title": "Tracks Too Fresh",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-arctic-day-01.webp",
           "tags": ["encounter", "success"],
           "description": "You spot signs of recent movement. Whatever made them is not far."
         },
         {
           "title": "Cold Air, Colder Intent",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-arctic-day-01.webp",
           "tags": ["encounter", "success"],
           "description": "The temperature seems to drop in an instant. You are not alone out here."
         },
         {
           "title": "A Shape on the White",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-arctic-day-01.webp",
           "tags": ["encounter", "success"],
           "description": "A distant form resolves into motion. It is closing, or circling."
         },
         {
           "title": "The Silence Breaks",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-arctic-day-01.webp",
           "tags": ["encounter", "success"],
           "description": "A sharp sound cuts through the quiet. Something has noticed you."
         }
@@ -968,35 +1154,35 @@
         {
           "title": "Arctic Night Movement",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-arctic-night-01.webp",
           "tags": ["encounter", "success"],
           "description": "In the darkness, something shifts. The cold air feels suddenly watchful."
         },
         {
           "title": "Eyes in the Dark",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-arctic-night-01.webp",
           "tags": ["encounter", "success"],
           "description": "You catch a glint where there should be none. Something is observing you."
         },
         {
           "title": "Footsteps on Ice",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-arctic-night-01.webp",
           "tags": ["encounter", "success"],
           "description": "A faint crunch echoes nearby. It is not the wind."
         },
         {
           "title": "Cold Breath Nearby",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-arctic-night-01.webp",
           "tags": ["encounter", "success"],
           "description": "Your breath fogs, and then you see another plume. Something is close."
         },
         {
           "title": "Night Hunt Begins",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-arctic-night-01.webp",
           "tags": ["encounter", "success"],
           "description": "The stillness feels predatory. Whatever is out here has started to move."
         }
@@ -1008,35 +1194,35 @@
         {
           "title": "Waves Hide Movement",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-coastal-day-01.webp",
           "tags": ["encounter", "success"],
           "description": "Something shifts along the shoreline. The surf makes it hard to place."
         },
         {
           "title": "A Call Carries Wrong",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-coastal-day-01.webp",
           "tags": ["encounter", "success"],
           "description": "A sound carries on the wind that does not fit the coast. You tense up."
         },
         {
           "title": "Shadows by the Water",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-coastal-day-01.webp",
           "tags": ["encounter", "success"],
           "description": "You spot movement near the waterline. Someone, or something, is there."
         },
         {
           "title": "Footprints Too Fresh",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-coastal-day-01.webp",
           "tags": ["encounter", "success"],
           "description": "Marks in sand or stone suggest recent presence. It is close."
         },
         {
           "title": "The Wind Shifts",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-coastal-day-01.webp",
           "tags": ["encounter", "success"],
           "description": "The breeze changes and carries a new scent. Something approaches."
         }
@@ -1045,35 +1231,35 @@
         {
           "title": "Moonlit Figures",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-coastal-night-01.webp",
           "tags": ["encounter", "success"],
           "description": "In the moonlight, silhouettes move where there should be none."
         },
         {
           "title": "Surf Covers Footsteps",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-coastal-night-01.webp",
           "tags": ["encounter", "success"],
           "description": "The sea is loud, but you catch a different rhythm underneath it."
         },
         {
           "title": "Something in the Shallows",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-coastal-night-01.webp",
           "tags": ["encounter", "success"],
           "description": "A ripple moves against the current. Something is there, close to shore."
         },
         {
           "title": "A Voice on the Wind",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-coastal-night-01.webp",
           "tags": ["encounter", "success"],
           "description": "You hear something carried by the wind that feels directed, not random."
         },
         {
           "title": "Night Watch Turns Sharp",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-encounter-coastal-night-01.webp",
           "tags": ["encounter", "success"],
           "description": "The hair on your neck rises. Something is moving nearby."
         }
@@ -1085,35 +1271,35 @@
         {
           "title": "Heat Hides Motion",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "image": "modules/coffee-pub-blacksmith/images/bannersbanners-encounter-desert-day-01.webp",
           "tags": ["encounter", "success"],
           "description": "Through the shimmer, something moves with purpose. It is not a mirage."
         },
         {
           "title": "Sand Shifts Nearby",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "image": "modules/coffee-pub-blacksmith/images/bannersbanners-encounter-desert-day-01.webp",
           "tags": ["encounter", "success"],
           "description": "A disturbance runs across the sand. Something is close, above or below."
         },
         {
           "title": "Tracks on the Dune",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "image": "modules/coffee-pub-blacksmith/images/bannersbanners-encounter-desert-day-01.webp",
           "tags": ["encounter", "success"],
           "description": "Fresh signs cut across your route. Whoever made them is not far."
         },
         {
           "title": "The Wind Carries Scent",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "image": "modules/coffee-pub-blacksmith/images/bannersbanners-encounter-desert-day-01.webp",
           "tags": ["encounter", "success"],
           "description": "A new scent rides the wind, sharp and unfamiliar. You ready yourselves."
         },
         {
           "title": "A Shape Breaks the Line",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "image": "modules/coffee-pub-blacksmith/images/bannersbanners-encounter-desert-day-01.webp",
           "tags": ["encounter", "success"],
           "description": "Something rises against the horizon and then moves, deliberate and fast."
         }
@@ -1122,35 +1308,35 @@
         {
           "title": "Starlit Approach",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "image": "modules/coffee-pub-blacksmith/images/bannersbanners-encounter-desert-night-01.webp",
           "tags": ["encounter", "success"],
           "description": "You see motion under the stars. It is not the wind."
         },
         {
           "title": "Sand Crunch Nearby",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "image": "modules/coffee-pub-blacksmith/images/bannersbanners-encounter-desert-night-01.webp",
           "tags": ["encounter", "success"],
           "description": "A soft crunch sounds close by. Something is moving in the dark."
         },
         {
           "title": "Eyes Reflect Light",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "image": "modules/coffee-pub-blacksmith/images/bannersbanners-encounter-desert-night-01.webp",
           "tags": ["encounter", "success"],
           "description": "A faint glimmer returns your light. You are being watched."
         },
         {
           "title": "Night Wind Turns Wrong",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "image": "modules/coffee-pub-blacksmith/images/bannersbanners-encounter-desert-night-01.webp",
           "tags": ["encounter", "success"],
           "description": "The wind changes and the night feels suddenly tighter around you."
         },
         {
           "title": "Movement on the Dunes",
           "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "image": "modules/coffee-pub-blacksmith/images/bannersbanners-encounter-desert-night-01.webp",
           "tags": ["encounter", "success"],
           "description": "A shadow crosses a dune line. Something is closing distance."
         }
@@ -1232,6 +1418,784 @@
           "description": "You hear movement close enough to be real. You prepare to respond."
         }
       ]
+    },
+
+    "Grassland": {
+      "day": [
+        {
+          "title": "Something Moves in the Grass",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Grassland",
+          "timeOfDay": "day",
+          "description": "A ripple runs through the tall grass that is not the wind. Something is moving with purpose nearby."
+        },
+        {
+          "title": "A Shape on the Horizon",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Grassland",
+          "timeOfDay": "day",
+          "description": "A distant figure breaks the clean line of the plains. It shifts position, then starts closing the gap."
+        },
+        {
+          "title": "The Wind Changes",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Grassland",
+          "timeOfDay": "day",
+          "description": "The breeze turns and carries a new scent across open ground. Something is nearby, and it is downwind."
+        },
+        {
+          "title": "Too Quiet All at Once",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Grassland",
+          "timeOfDay": "day",
+          "description": "The usual sounds of the plains fade in an instant. The silence feels like a warning."
+        },
+        {
+          "title": "Fresh Signs Ahead",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Grassland",
+          "timeOfDay": "day",
+          "description": "You spot recent disturbance along your route. Something passed through not long ago and may still be close."
+        }
+      ],
+      "night": [
+        {
+          "title": "Eyes in the Moonlit Grass",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Grassland",
+          "timeOfDay": "night",
+          "description": "A faint glint answers your light from low in the grass. Then it shifts, like something adjusting its stance."
+        },
+        {
+          "title": "Footsteps in the Dark",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Grassland",
+          "timeOfDay": "night",
+          "description": "You catch a soft rhythm beyond the wind. It is measured, moving, and getting closer."
+        },
+        {
+          "title": "A Shadow Crosses the Plain",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Grassland",
+          "timeOfDay": "night",
+          "description": "A dark shape passes between you and the sky for a heartbeat. Whatever it is, it is not far."
+        },
+        {
+          "title": "The Night Falls Silent",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Grassland",
+          "timeOfDay": "night",
+          "description": "The usual night sounds thin out until there is only wind. The quiet feels intentional."
+        },
+        {
+          "title": "Movement All Around",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Grassland",
+          "timeOfDay": "night",
+          "description": "You hear shifting in multiple directions, just out of sight. Something is circling, testing your attention."
+        }
+      ]
+    },
+
+    "Hill": {
+      "day": [
+        {
+          "title": "Movement on the Ridge",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Hill",
+          "timeOfDay": "day",
+          "description": "You spot movement along a nearby ridgeline. Whatever it is, it has a clear view of you."
+        },
+        {
+          "title": "Figures Crest the Hill",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Hill",
+          "timeOfDay": "day",
+          "description": "Silhouettes appear briefly against the sky before dropping out of sight. They are moving with intent."
+        },
+        {
+          "title": "Loose Stone Gives It Away",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Hill",
+          "timeOfDay": "day",
+          "description": "A scatter of falling stone echoes from above. Someone or something is navigating the slopes nearby."
+        },
+        {
+          "title": "The Wind Carries Sound",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Hill",
+          "timeOfDay": "day",
+          "description": "Voices or movement ride the wind from higher ground. You are no longer alone in these hills."
+        },
+        {
+          "title": "Too Many Paths Converge",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Hill",
+          "timeOfDay": "day",
+          "description": "Signs of recent travel intersect near your route. Whatever made them is close, and aware."
+        }
+      ],
+      "night": [
+        {
+          "title": "Shapes Against the Stars",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Hill",
+          "timeOfDay": "night",
+          "description": "Dark forms briefly break the starlight atop a hill. They do not linger, but they are watching."
+        },
+        {
+          "title": "Footsteps on the Slope",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Hill",
+          "timeOfDay": "night",
+          "description": "You hear careful footing on loose ground nearby. The sound is deliberate, not accidental."
+        },
+        {
+          "title": "Lanternlight on High Ground",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Hill",
+          "timeOfDay": "night",
+          "description": "A brief flicker of light appears on a rise, then vanishes. Someone is moving with caution."
+        },
+        {
+          "title": "The Hills Go Quiet",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Hill",
+          "timeOfDay": "night",
+          "description": "The wind dies and distant sounds fade. The sudden silence feels like a signal."
+        },
+        {
+          "title": "Movement All Along the Ridge",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Hill",
+          "timeOfDay": "night",
+          "description": "You sense motion across multiple high points at once. Something is positioning itself around you."
+        }
+      ]
+    },
+  
+    "Mountain": {
+      "day": [
+        {
+          "title": "Movement Along the Cliffs",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-mountains.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Mountain",
+          "timeOfDay": "day",
+          "description": "You catch sight of movement against sheer stone. Whatever it is knows how to navigate this terrain."
+        },
+        {
+          "title": "Echoes Answer Back",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-mountains.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Mountain",
+          "timeOfDay": "day",
+          "description": "A sound you did not make returns from higher ground. Someone else is close enough to hear you."
+        },
+        {
+          "title": "Shadows on the Ridge",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-mountains.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Mountain",
+          "timeOfDay": "day",
+          "description": "Dark shapes move briefly along a ridgeline before disappearing from view."
+        },
+        {
+          "title": "Falling Stone",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-mountains.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Mountain",
+          "timeOfDay": "day",
+          "description": "Loose rock breaks free somewhere above you. The sound is too deliberate to be natural."
+        },
+        {
+          "title": "The Air Feels Watched",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-mountains.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Mountain",
+          "timeOfDay": "day",
+          "description": "The open heights offer many vantage points. You sense eyes on you from above."
+        }
+      ],
+      "night": [
+        {
+          "title": "Silhouettes Against the Peaks",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-mountains.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Mountain",
+          "timeOfDay": "night",
+          "description": "For a moment, dark forms break the outline of the peaks. Then they are gone."
+        },
+        {
+          "title": "Footsteps on Stone",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-mountains.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Mountain",
+          "timeOfDay": "night",
+          "description": "You hear careful movement on rock nearby. Someone is navigating the slopes in the dark."
+        },
+        {
+          "title": "Lanternlight Far Above",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-mountains.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Mountain",
+          "timeOfDay": "night",
+          "description": "A faint glow flickers high above your position, then vanishes behind stone."
+        },
+        {
+          "title": "The Wind Goes Still",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-mountains.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Mountain",
+          "timeOfDay": "night",
+          "description": "The constant mountain wind dies abruptly. The silence feels intentional."
+        },
+        {
+          "title": "Movement Across the Heights",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-mountains.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Mountain",
+          "timeOfDay": "night",
+          "description": "You sense coordinated motion across multiple elevations. Something is taking positions."
+        }
+      ]
+    },
+    
+    "Planar": {
+      "day": [
+        {
+          "title": "Reality Warps Nearby",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Planar",
+          "timeOfDay": "day",
+          "description": "The air bends in a way that draws your eye. Something nearby does not belong to this place."
+        },
+        {
+          "title": "A Presence Pushes Through",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Planar",
+          "timeOfDay": "day",
+          "description": "You feel pressure against your senses, like something forcing its way into reality."
+        },
+        {
+          "title": "The World Feels Thin",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Planar",
+          "timeOfDay": "day",
+          "description": "Colors dull and sharpen at once. The boundary between places weakens nearby."
+        },
+        {
+          "title": "Unnatural Silence Falls",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Planar",
+          "timeOfDay": "day",
+          "description": "Sound fades in a way that feels imposed rather than natural. Something is exerting control."
+        },
+        {
+          "title": "Something Answers Back",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Planar",
+          "timeOfDay": "day",
+          "description": "A distant sensation responds to your presence, as if you have been noticed across worlds."
+        }
+      ],
+      "night": [
+        {
+          "title": "Shadows Behave Incorrectly",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Planar",
+          "timeOfDay": "night",
+          "description": "Shadows stretch and shift without a clear source. Something is moving just out of alignment."
+        },
+        {
+          "title": "Whispers Between Moments",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Planar",
+          "timeOfDay": "night",
+          "description": "You catch fragments of sound that seem to come from nowhere and everywhere at once."
+        },
+        {
+          "title": "The Dark Feels Crowded",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Planar",
+          "timeOfDay": "night",
+          "description": "The night presses in unnaturally. You sense more than one presence nearby."
+        },
+        {
+          "title": "Light Bends and Fails",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Planar",
+          "timeOfDay": "night",
+          "description": "Your light behaves strangely, dimming or stretching as if resisting the space around it."
+        },
+        {
+          "title": "Something Steps Closer",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Planar",
+          "timeOfDay": "night",
+          "description": "You feel a sudden sense of proximity, as though a presence has crossed an unseen threshold."
+        }
+      ]
+    },
+    
+    "Swamp": {
+      "day": [
+        {
+          "title": "Water Ripples Nearby",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Swamp",
+          "timeOfDay": "day",
+          "description": "The dark water stirs where nothing should have disturbed it. Something is moving just out of sight."
+        },
+        {
+          "title": "The Air Turns Heavy",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Swamp",
+          "timeOfDay": "day",
+          "description": "The humidity thickens suddenly, and the swamp feels closer than before."
+        },
+        {
+          "title": "Something Slips Beneath the Surface",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Swamp",
+          "timeOfDay": "day",
+          "description": "You catch a glimpse of movement below the waterline before it vanishes."
+        },
+        {
+          "title": "Buzzing Falls Silent",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Swamp",
+          "timeOfDay": "day",
+          "description": "The constant hum of insects cuts off abruptly. The sudden quiet feels wrong."
+        },
+        {
+          "title": "Fresh Disturbance in the Mire",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Swamp",
+          "timeOfDay": "day",
+          "description": "Mud and water show signs of recent movement. Whatever passed through may still be close."
+        }
+      ],
+      "night": [
+        {
+          "title": "Eyes Glow in the Dark",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Swamp",
+          "timeOfDay": "night",
+          "description": "Small points of reflected light blink from the darkness of the swamp. You are being watched."
+        },
+        {
+          "title": "Something Moves Through the Water",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Swamp",
+          "timeOfDay": "night",
+          "description": "A slow wake pushes through the black water nearby, deliberate and close."
+        },
+        {
+          "title": "The Night Goes Still",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Swamp",
+          "timeOfDay": "night",
+          "description": "Frogs and insects fall silent all at once. Something has their attention."
+        },
+        {
+          "title": "Whispers in the Fog",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Swamp",
+          "timeOfDay": "night",
+          "description": "Fog curls low over the water, carrying faint sounds that seem almost intentional."
+        },
+        {
+          "title": "Movement All Around the Mire",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Swamp",
+          "timeOfDay": "night",
+          "description": "You sense shifting forms and ripples in multiple directions. Something is positioning itself."
+        }
+      ]
+    },
+    
+    
+    "Underdark": {
+      "day": [
+        {
+          "title": "Echoes Answer Back",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Underdark",
+          "timeOfDay": "day",
+          "description": "A sound you did not make returns from the darkness. Something nearby is aware of you."
+        },
+        {
+          "title": "Fresh Tracks in the Stone",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Underdark",
+          "timeOfDay": "day",
+          "description": "Marks and scuffs cut across the cavern floor. Whatever made them passed through recently."
+        },
+        {
+          "title": "The Air Shifts",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Underdark",
+          "timeOfDay": "day",
+          "description": "A faint change in airflow suggests movement deeper in the tunnels."
+        },
+        {
+          "title": "Shadows Move Wrong",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Underdark",
+          "timeOfDay": "day",
+          "description": "Your light catches shadows that shift independently of its source."
+        },
+        {
+          "title": "A Presence Presses Close",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Underdark",
+          "timeOfDay": "day",
+          "description": "You feel a subtle pressure in the darkness, as though something nearby is closing in."
+        }
+      ],
+      "night": [
+        {
+          "title": "Eyes Reflect the Light",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Underdark",
+          "timeOfDay": "night",
+          "description": "Points of reflected light blink briefly at the edge of your vision."
+        },
+        {
+          "title": "Footsteps in the Deep",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Underdark",
+          "timeOfDay": "night",
+          "description": "You hear careful movement somewhere beyond your light. It is deliberate and close."
+        },
+        {
+          "title": "The Cavern Goes Still",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Underdark",
+          "timeOfDay": "night",
+          "description": "Drips and distant sounds fade away, leaving an unnatural silence."
+        },
+        {
+          "title": "Whispers in the Dark",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Underdark",
+          "timeOfDay": "night",
+          "description": "You catch fragments of sound that feel intentional, though you cannot place their source."
+        },
+        {
+          "title": "Movement on All Sides",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Underdark",
+          "timeOfDay": "night",
+          "description": "You sense shifting presence from multiple directions. Something is positioning itself around you."
+        }
+      ]
+    },
+    
+    "Underwater": {
+      "day": [
+        {
+          "title": "A Shape Glides Past",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Underwater",
+          "timeOfDay": "day",
+          "description": "A large shape passes at the edge of visibility, moving with purpose before fading into the water."
+        },
+        {
+          "title": "Currents Shift Suddenly",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Underwater",
+          "timeOfDay": "day",
+          "description": "The water pulls in an unexpected direction, as if something sizable just moved nearby."
+        },
+        {
+          "title": "Disturbed Silt Cloud",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Underwater",
+          "timeOfDay": "day",
+          "description": "A spreading cloud of silt rises ahead, obscuring the view. Something passed through recently."
+        },
+        {
+          "title": "Movement Below",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Underwater",
+          "timeOfDay": "day",
+          "description": "You notice motion beneath you, just beyond clear sight, pacing your advance."
+        },
+        {
+          "title": "The Water Feels Crowded",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Underwater",
+          "timeOfDay": "day",
+          "description": "Pressure and proximity close in around you. Something else is sharing this space."
+        }
+      ],
+      "night": [
+        {
+          "title": "Eyes Reflect in the Dark",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Underwater",
+          "timeOfDay": "night",
+          "description": "Brief flashes of reflected light blink back at you from the surrounding darkness."
+        },
+        {
+          "title": "A Shadow Blocks the Stars",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Underwater",
+          "timeOfDay": "night",
+          "description": "Something large passes overhead, momentarily cutting off what little light reaches this depth."
+        },
+        {
+          "title": "Silent Wake Nearby",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Underwater",
+          "timeOfDay": "night",
+          "description": "You feel the water move against you without sound. Something is swimming close."
+        },
+        {
+          "title": "Dark Shapes Circle",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Underwater",
+          "timeOfDay": "night",
+          "description": "Multiple shadows drift just beyond your light, changing position slowly and deliberately."
+        },
+        {
+          "title": "The Depths Close In",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Underwater",
+          "timeOfDay": "night",
+          "description": "The darkness feels heavier, tighter. Something has drawn near enough to feel."
+        }
+      ]
+    },
+
+    "Urban": {
+      "day": [
+        {
+          "title": "Eyes in the Crowd",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Urban",
+          "timeOfDay": "day",
+          "description": "You catch someone watching you for a moment too long before they look away. The attention feels deliberate."
+        },
+        {
+          "title": "Footsteps Match Yours",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Urban",
+          "timeOfDay": "day",
+          "description": "As you move through the street, another set of footsteps keeps pace just behind you."
+        },
+        {
+          "title": "A Sudden Break in the Flow",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Urban",
+          "timeOfDay": "day",
+          "description": "The normal rhythm of the street shifts. People move aside, creating space around you."
+        },
+        {
+          "title": "Voices Carry Intention",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Urban",
+          "timeOfDay": "day",
+          "description": "Snatches of conversation nearby seem to reference you, though never directly."
+        },
+        {
+          "title": "Someone Steps into Your Path",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Urban",
+          "timeOfDay": "day",
+          "description": "A figure shifts position just ahead, forcing an interaction you cannot easily avoid."
+        }
+      ],
+      "night": [
+        {
+          "title": "Shadows Follow Close",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Urban",
+          "timeOfDay": "night",
+          "description": "Your shadow gains company as another keeps pace just beyond the light."
+        },
+        {
+          "title": "Footsteps in the Dark",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Urban",
+          "timeOfDay": "night",
+          "description": "You hear careful movement behind you, stopping whenever you slow."
+        },
+        {
+          "title": "A Voice from the Alley",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Urban",
+          "timeOfDay": "night",
+          "description": "A low voice calls out from nearby darkness, clearly meant for you."
+        },
+        {
+          "title": "The Street Goes Quiet",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Urban",
+          "timeOfDay": "night",
+          "description": "Doors close and lights dim as the area empties faster than expected."
+        },
+        {
+          "title": "Figures Block the Way",
+          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+          "tags": ["encounter", "success"],
+          "habitat": "Urban",
+          "timeOfDay": "night",
+          "description": "Multiple silhouettes step into view, cutting off easy routes forward or back."
+        }
+      ]
     }
+    
   }
 }

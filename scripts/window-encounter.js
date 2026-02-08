@@ -962,19 +962,19 @@ export class WindowEncounter extends Base {
         };
         try {
             if (this._lastRollHadEncounter && typeof window.bibliosophPostEncounterDeployCard === 'function') {
-                await window.bibliosophPostEncounterDeployCard(this._lastRollIntroEntry, selectedMonsters);
+                await window.bibliosophPostEncounterDeployCard(this._lastRollIntroEntry, selectedMonsters, this._selectedHabitat);
                 this._lastRollHadEncounter = false;
                 this._lastRollIntroEntry = null;
             }
             const api = game.modules.get('coffee-pub-blacksmith')?.api;
             if (api?.deployMonsters) {
                 const tokens = await api.deployMonsters(metadata, options);
-                postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: deploy', `Placed ${tokens?.length ?? 0} token(s) via API`, true, true);
+                postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: deploy', `Placed ${tokens?.length ?? 0} token(s) via API`, true, false);
             } else {
                 const bridge = await import('modules/coffee-pub-blacksmith/api/blacksmith-api.js').catch(() => null);
                 if (bridge?.BlacksmithAPI?.deployMonsters) {
                     const tokens = await bridge.BlacksmithAPI.deployMonsters(metadata, options);
-                    postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: deploy', `Placed ${tokens?.length ?? 0} token(s) via bridge`, true, true);
+                    postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: deploy', `Placed ${tokens?.length ?? 0} token(s) via bridge`, true, false);
                 } else {
                     postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: deploy', 'Blacksmith deployMonsters not available', true, true);
                     return;

@@ -513,7 +513,7 @@ function getNarrativeEntriesForHabitatAndTime(narrativeJson, encounterKey, habit
 function buildEncounterCardData(entry, theme, cardTitle = 'Encounter', encounterMonsters = null) {
     const strUserName = game.user?.name ?? '';
     const strUserAvatar = game.user?.avatar ?? '';
-    const strCharacterName = game.user?.character?.name ?? game.i18n?.localize?.('coffee-pub-bibliosoph.NoCharacterSet') ?? 'No Character Set';
+    const strCharacterName = game.user?.character?.name ?? '';
     const data = {
         isEncounterCard: true,
         isGM: game.user?.isGM ?? false,
@@ -627,13 +627,15 @@ export async function rollForEncounter(habitat, difficulty, targetCR, minCR = 0,
  * Card shows narrative (optional intro) plus the list of monsters being placed.
  * @param {Object} [introEntry] - optional narrative entry from roll (title, description, icon, image)
  * @param {Array<{name: string, count?: number, cr: string, img?: string}>} [selectedMonsters] - monsters being deployed (for card list)
+ * @param {string} [habitat] - e.g. "Mountain"; card title becomes "{habitat} Encounter" when set
  */
-export async function postEncounterDeployCardToChat(introEntry, selectedMonsters = null) {
+export async function postEncounterDeployCardToChat(introEntry, selectedMonsters = null, habitat = '') {
     const theme = game.settings.get(MODULE.ID, 'cardThemeEncounter') ?? 'theme-default';
     const entry = introEntry
-        ? { ...introEntry, description: introEntry.description ? `${introEntry.description} The following have been placed on the canvas.` : 'The following have been placed on the canvas.' }
-        : { title: 'Encounter Deployed', icon: '<i class="fa-solid fa-map-location-dot"></i>', description: 'The following have been placed on the canvas.' };
-    const cardData = buildEncounterCardData(entry, theme, 'Encounter', selectedMonsters);
+        ? { ...introEntry }
+        : { title: 'Encounter Deployed', icon: '<i class="fa-solid fa-map-location-dot"></i>', description: '' };
+    const cardTitle = (habitat && String(habitat).trim()) ? `${String(habitat).trim()} Encounter` : 'Encounter';
+    const cardData = buildEncounterCardData(entry, theme, cardTitle, selectedMonsters);
     await postEncounterCardToChat(cardData);
 }
 
