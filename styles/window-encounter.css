@@ -490,6 +490,15 @@
     margin: 0;
     height: 100%;
     background: transparent;
+    /* Let thumbs receive events, not the whole track, so the front slider doesn't block the one behind */
+    pointer-events: none;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-half .window-encounter-cr-range-input::-webkit-slider-thumb {
+    pointer-events: auto;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-half .window-encounter-cr-range-input::-moz-range-thumb {
     pointer-events: auto;
 }
 
