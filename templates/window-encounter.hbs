@@ -6,6 +6,13 @@
             </div>
             <div class="window-encounter-header-title">{{title}}</div>
             <div class="window-encounter-header-controls">
+                <div class="window-encounter-cache-status" title="{{cacheStatusTitle}}">
+                    {{#if cacheBuilding}}
+                        <span class="window-encounter-cache-building"><i class="fa-solid fa-spinner fa-spin"></i> {{cacheBuildingText}}</span>
+                    {{else}}
+                        <span class="window-encounter-cache-info">{{cacheStatusText}}</span>
+                    {{/if}}
+                </div>
                 <button type="button" class="window-encounter-refresh-cache window-encounter-btn window-encounter-btn-secondary" {{#if cacheBuilding}}disabled{{/if}} title="Build or refresh the monster cache for faster searches">
                     <i class="fa-solid fa-database"></i> {{localize "coffee-pub-bibliosoph.quickEncounterRefreshCache-Label"}}
                 </button>
@@ -59,20 +66,24 @@
         </div>
         <div class="window-encounter-cr-range-row">
             <label class="window-encounter-cr-range-label" for="{{appId}}-min-cr">Monster CR range <span class="window-encounter-cr-range-value">{{crRangeLabel}}</span></label>
-            <div class="window-encounter-cr-range-track">
-                <div class="window-encounter-cr-range-track-bg" aria-hidden="true"></div>
-                <div class="window-encounter-cr-range-highlight" style="left: {{crRangeHighlightLeft}}%; width: {{crRangeHighlightWidth}}%;" aria-hidden="true"></div>
-                {{#if crRangePartyMarkerPercent}}
-                <div class="window-encounter-cr-range-marker" style="left: {{crRangePartyMarkerPercent}}%;" title="Party CR (average)"></div>
-                {{/if}}
-                <div class="window-encounter-cr-range-half window-encounter-cr-range-half-left" style="width: {{crRangeSplitPercent}}%;">
-                    <input type="range" id="{{appId}}-min-cr" class="window-encounter-min-cr-slider window-encounter-cr-range-input" style="width: {{crRangeMinInputWidth}}%;" min="{{minCRSliderMin}}" max="{{minCRSliderMax}}" value="{{minCRValue}}" step="0.25" aria-label="Minimum creature CR" />
+            <div class="window-encounter-cr-range-row-inner">
+                <span class="window-encounter-cr-range-endpoint">0 CR</span>
+                <div class="window-encounter-cr-range-track">
+                    <div class="window-encounter-cr-range-track-bg" aria-hidden="true"></div>
+                    <div class="window-encounter-cr-range-highlight" style="left: {{crRangeHighlightLeft}}%; width: {{crRangeHighlightWidth}}%;" aria-hidden="true"></div>
+                    {{#if crRangePartyMarkerPercent}}
+                    <div class="window-encounter-cr-range-marker" style="left: {{crRangePartyMarkerPercent}}%;" title="Party CR (average)"></div>
+                    {{/if}}
+                    <div class="window-encounter-cr-range-half window-encounter-cr-range-half-left" style="width: {{crRangeSplitPercent}}%;">
+                        <input type="range" id="{{appId}}-min-cr" class="window-encounter-min-cr-slider window-encounter-cr-range-input" style="width: {{crRangeMinInputWidth}}%;" min="{{minCRSliderMin}}" max="{{minCRSliderMax}}" value="{{minCRValue}}" step="0.25" aria-label="Minimum creature CR" />
+                    </div>
+                    <div class="window-encounter-cr-range-half window-encounter-cr-range-half-right" style="left: {{crRangeSplitPercent}}%; width: {{crRangeRightWidth}}%;">
+                        <input type="range" id="{{appId}}-max-cr" class="window-encounter-max-cr-slider window-encounter-cr-range-input" style="left: {{crRangeMaxInputLeft}}%; width: {{crRangeMaxInputWidth}}%;" min="{{maxCRSliderMin}}" max="{{maxCRSliderMax}}" value="{{maxCRValue}}" step="0.25" aria-label="Maximum creature CR" />
+                    </div>
                 </div>
-                <div class="window-encounter-cr-range-half window-encounter-cr-range-half-right" style="left: {{crRangeSplitPercent}}%; width: {{crRangeRightWidth}}%;">
-                    <input type="range" id="{{appId}}-max-cr" class="window-encounter-max-cr-slider window-encounter-cr-range-input" style="left: {{crRangeMaxInputLeft}}%; width: {{crRangeMaxInputWidth}}%;" min="{{maxCRSliderMin}}" max="{{maxCRSliderMax}}" value="{{maxCRValue}}" step="0.25" aria-label="Maximum creature CR" />
-                </div>
+                <span class="window-encounter-cr-range-endpoint">30 CR</span>
             </div>
-            <p class="window-encounter-cr-range-hint">Recommend returns a blend in this range.</p>
+            <p class="window-encounter-cr-range-hint">The red dot represents the average CR of the party.</p>
         </div>
     </section>
 
@@ -83,13 +94,7 @@
             <button type="button" class="window-encounter-habitat {{#if selected}}active{{/if}}" data-habitat="{{name}}">{{name}}</button>
             {{/each}}
         </div>
-        <div class="window-encounter-cache-status" title="{{cacheStatusTitle}}">
-            {{#if cacheBuilding}}
-                <span class="window-encounter-cache-building"><i class="fa-solid fa-spinner fa-spin"></i> {{cacheBuildingText}}</span>
-            {{else}}
-                <span class="window-encounter-cache-info">{{cacheStatusText}}</span>
-            {{/if}}
-        </div>
+
         <div class="window-encounter-action-buttons">
             <button type="button" class="window-encounter-roll window-encounter-btn" {{#if rollLoading}}disabled{{/if}} title="Roll for encounter using Global Encounter Settings (odds and dice); posts a card and may recommend monsters">
                 <i class="fa-solid fa-dice"></i> Roll for Encounter

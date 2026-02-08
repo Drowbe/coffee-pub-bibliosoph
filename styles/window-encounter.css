@@ -144,11 +144,10 @@
 }
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-endpoint {
-    flex-shrink: 0;
-    color: #b0b0b0;
-    font-size: 1.1em;
-    min-width: 2.25em;
-    text-align: center;
+    font-size: 1.0em;
+    font-weight: 900;
+    color: rgba(176, 176, 176, 0.9);
+    white-space: nowrap;
 }
 
 /* Shared range slider (do NOT add .window-encounter-min-cr-slider here - it has its own handlers) */
@@ -429,6 +428,19 @@
     overflow: visible; /* let thumbs sit fully above the bar */
 }
 
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-row-inner {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    column-gap: 10px;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-endpoint {
+    font-size: 1.0em;
+    font-weight: 900;
+    color: rgba(176, 176, 176, 0.9);
+    white-space: nowrap;
+}
 /* Background + highlight never intercept */
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-track-bg,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-highlight {
