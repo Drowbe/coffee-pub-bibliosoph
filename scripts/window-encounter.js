@@ -299,7 +299,9 @@ export class WindowEncounter extends Base {
         const isBuiltEncounter = recommendations.length > 0 && recommendations.every(r => typeof r.count === 'number' && r.count >= 1);
         const recommendationsWithSelection = recommendations.map(r => {
             const selected = this._selectedForDeploy.has(r.id);
-            const selectedCount = selected ? (this._selectedCounts.get(r.id) ?? 1) : 0;
+            const selectedCount = selected
+                ? (this._selectedCounts.get(r.id) ?? (typeof r.count === 'number' && r.count >= 1 ? r.count : 1))
+                : 0;
             return { ...r, selected, selectedCount };
         });
         const deploySelectedCount = isBuiltEncounter
@@ -908,6 +910,15 @@ export class WindowEncounter extends Base {
             if (result.encounter && Array.isArray(result.recommendations)) {
                 this._recommendations = await this._mergeIncludeMonsters(result.recommendations);
                 this._recommendAttempted = true;
+                // Pre-select roll monsters (optimized encounter) and set counts for badge
+                this._selectedForDeploy = new Set();
+                this._selectedCounts.clear();
+                for (const r of this._recommendations) {
+                    if (r?.id && typeof r.count === 'number' && r.count >= 1) {
+                        this._selectedForDeploy.add(r.id);
+                        this._selectedCounts.set(r.id, r.count);
+                    }
+                }
             }
             postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: roll complete', result.encounter ? `${result.recommendations?.length ?? 0} types` : 'no encounter', true, false);
         } finally {

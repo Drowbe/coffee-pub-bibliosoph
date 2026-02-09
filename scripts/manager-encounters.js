@@ -9,7 +9,8 @@ import { WindowEncounter, WINDOW_ENCOUNTER_APP_ID, WINDOW_ENCOUNTER_HEIGHT_COLLA
 
 let _encounterWindow = null;
 
-const MAX_RECOMMENDATIONS = 24;
+/** Max monster types returned by Recommend (random pick; no budget). */
+const MAX_RECOMMENDATIONS = 20;
 /** Cap actors loaded per compendium when not using cache. */
 const MAX_ACTORS_PER_PACK = 200;
 /** Cache version for migrations; bump when schema changes. */
@@ -443,8 +444,8 @@ export async function encounterGetIncludeMonsters(names) {
 }
 
 /**
- * Recommend monsters: same sourcing as buildEncounter — habitat + min/max CR.
- * Returns a blend: up to MAX_RECOMMENDATIONS monsters spread evenly across the CR range (min to max).
+ * Recommend monsters: random pick up to MAX_RECOMMENDATIONS meeting habitat + CR (no budget).
+ * Purpose: suggestions that might augment or inspire an encounter; not pre-selected, no counts.
  * @param {number} [minCR=0] - floor: no monster below this CR
  * @param {number} [maxCR=30] - ceiling: no monster above this CR
  * @returns {Promise<Array<{id: string, img: string, name: string, cr: string}>>}
@@ -462,13 +463,16 @@ export async function encounterRecommend(habitat, difficulty, targetCR, minCR = 
         return [];
     }
 
-    const sorted = [...candidates].sort((a, b) => a.cr - b.cr);
+    // Random pick up to MAX_RECOMMENDATIONS (no budget; ignore XP)
+    const shuffled = [...candidates];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    const cap = Math.min(MAX_RECOMMENDATIONS, shuffled.length);
     const results = [];
-    const n = sorted.length;
-    const cap = Math.min(MAX_RECOMMENDATIONS, n);
     for (let i = 0; i < cap; i++) {
-        const idx = n <= cap ? i : (cap <= 1 ? 0 : Math.round((i / (cap - 1)) * (n - 1)));
-        const { doc, id, cr: crNum } = sorted[idx];
+        const { doc, id, cr: crNum } = shuffled[i];
         results.push({
             id,
             img: doc.img ?? '',
@@ -478,7 +482,7 @@ export async function encounterRecommend(habitat, difficulty, targetCR, minCR = 
     }
 
     if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: Recommend', `${results.length} monsters (habitat=${habitat}, CR ${minCRNum}–${maxCRNum} blend)`, true, false);
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: Recommend', `${results.length} monsters (habitat=${habitat}, CR ${minCRNum}–${maxCRNum}, random)`, true, false);
     }
     return results;
 }
