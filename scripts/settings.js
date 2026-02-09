@@ -2173,6 +2173,18 @@ export const registerSettings = () => {
 			type: Number,
 			default: 30,
 		});
+		game.settings.register(MODULE.ID, 'quickEncounterMaxRecommendations', {
+			scope: 'client',
+			config: false,
+			type: Number,
+			default: 10,
+		});
+		game.settings.register(MODULE.ID, 'quickEncounterVariability', {
+			scope: 'client',
+			config: false,
+			type: Number,
+			default: 3,
+		});
 		game.settings.register(MODULE.ID, 'toolbarCoffeePubQuickEncounterEnabled', {
 			name: MODULE.ID + '.toolbarCoffeePubQuickEncounterEnabled-Label',
 			hint: MODULE.ID + '.toolbarCoffeePubQuickEncounterEnabled-Hint',

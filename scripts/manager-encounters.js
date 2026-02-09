@@ -446,13 +446,14 @@ export async function encounterGetIncludeMonsters(names) {
 }
 
 /**
- * Recommend monsters: random pick up to MAX_RECOMMENDATIONS meeting habitat + CR (no budget).
+ * Recommend monsters: random pick up to maxRecommendations meeting habitat + CR (no budget).
  * Purpose: suggestions that might augment or inspire an encounter; not pre-selected, no counts.
  * @param {number} [minCR=0] - floor: no monster below this CR
  * @param {number} [maxCR=30] - ceiling: no monster above this CR
+ * @param {number} [maxRecommendations=20] - max monster types to return (from UI slider)
  * @returns {Promise<Array<{id: string, img: string, name: string, cr: string}>>}
  */
-export async function encounterRecommend(habitat, difficulty, targetCR, minCR = 0, maxCR = 30) {
+export async function encounterRecommend(habitat, difficulty, targetCR, minCR = 0, maxCR = 30, maxRecommendations = MAX_RECOMMENDATIONS) {
     let candidates = await getCandidatesWithXP(habitat);
     const minCRNum = typeof minCR === 'number' && !Number.isNaN(minCR) ? Math.max(0, minCR) : 0;
     const maxCRNum = typeof maxCR === 'number' && !Number.isNaN(maxCR) ? Math.min(30, Math.max(0, maxCR)) : 30;
@@ -465,13 +466,16 @@ export async function encounterRecommend(habitat, difficulty, targetCR, minCR = 
         return [];
     }
 
-    // Random pick up to MAX_RECOMMENDATIONS (no budget; ignore XP)
+    const capNum = typeof maxRecommendations === 'number' && !Number.isNaN(maxRecommendations)
+        ? Math.max(1, Math.min(100, maxRecommendations))
+        : MAX_RECOMMENDATIONS;
+    // Random pick up to capNum (no budget; ignore XP)
     const shuffled = [...candidates];
     for (let i = shuffled.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
-    const cap = Math.min(MAX_RECOMMENDATIONS, shuffled.length);
+    const cap = Math.min(capNum, shuffled.length);
     const results = [];
     for (let i = 0; i < cap; i++) {
         const { doc, id, cr: crNum } = shuffled[i];

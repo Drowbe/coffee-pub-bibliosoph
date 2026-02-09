@@ -29,11 +29,11 @@
     <section class="window-encounter-configure">
         <h3 class="window-encounter-section-title">{{localize "coffee-pub-bibliosoph.quickEncounterConfigureEncounter-Label"}}</h3>
         <div class="window-encounter-odds-row">
-            <label class="window-encounter-odds-label" for="{{appId}}-odds">{{localize "coffee-pub-bibliosoph.encounterOdds-Label"}} <span class="window-encounter-odds-current">{{oddsOfEncounter}}%</span></label>
+            <label class="window-encounter-odds-label" for="{{appId}}-odds">{{localize "coffee-pub-bibliosoph.encounterOdds-Label"}} <span class="window-encounter-slider-value" data-encounter-setting-value="encounterOdds">{{oddsOfEncounter}}%</span></label>
         </div>
         <div class="window-encounter-odds-slider-row">
             <span class="window-encounter-odds-endpoint">0%</span>
-            <input type="range" id="{{appId}}-odds" class="window-encounter-odds-slider" min="0" max="100" value="{{oddsOfEncounter}}" step="1" aria-label="Odds of encounter (0–100)" style="--odds-fill: {{oddsOfEncounter}}%;" />
+            <input type="range" id="{{appId}}-odds" class="window-encounter-setting-slider" min="0" max="100" value="{{oddsOfEncounter}}" step="1" aria-label="Odds of encounter (0–100)" data-encounter-setting="encounterOdds" data-encounter-setting-min="0" data-encounter-setting-max="100" data-encounter-setting-suffix="%" style="--slider-fill: {{oddsOfEncounter}}%;" />
             <span class="window-encounter-odds-endpoint">100%</span>
         </div>
     </section>
@@ -62,7 +62,7 @@
         <div class="window-encounter-cr-slider-row">
             <i class="fa-solid fa-rabbit window-encounter-slider-icon" title="Lower CR"></i>
             <div class="window-encounter-cr-slider-wrap">
-                <input type="range" class="window-encounter-cr-slider" min="{{crSliderMin}}" max="{{crSliderMax}}" value="{{targetCRValue}}" step="0.25" aria-label="Target Encounter CR" style="--cr-fill: {{crSliderFill}}%;" />
+                <input type="range" class="window-encounter-cr-slider window-encounter-slider-value" min="{{crSliderMin}}" max="{{crSliderMax}}" value="{{targetCRValue}}" step="0.25" aria-label="Target Encounter CR" style="--cr-fill: {{crSliderFill}}%;" />
             </div>
             <i class="fa-solid fa-skull window-encounter-slider-icon" title="Higher CR"></i>
         </div>
@@ -86,6 +86,31 @@
                 <span class="window-encounter-cr-range-endpoint">30 CR</span>
             </div>
             <p class="window-encounter-cr-range-hint">The red dot represents the average CR of the party.</p>
+        </div>
+    </section>
+
+    <section class="window-encounter-recommend-variability">
+        <div class="window-encounter-sliders-row">
+            <div class="window-encounter-slider-cell">
+                <div class="window-encounter-odds-row">
+                    <label class="window-encounter-odds-label" for="{{appId}}-max-recommendations">{{localize "coffee-pub-bibliosoph.quickEncounterMaxRecommendations-Label"}} <span class="window-encounter-slider-value" data-encounter-setting-value="quickEncounterMaxRecommendations">{{maxRecommendationsValue}}</span></label>
+                </div>
+                <div class="window-encounter-odds-slider-row">
+                    <span class="window-encounter-odds-endpoint">5</span>
+                    <input type="range" id="{{appId}}-max-recommendations" class="window-encounter-setting-slider" min="5" max="30" value="{{maxRecommendationsValue}}" step="1" aria-label="Max Recommendations (5–30)" data-encounter-setting="quickEncounterMaxRecommendations" data-encounter-setting-min="5" data-encounter-setting-max="30" data-encounter-setting-suffix="" style="--slider-fill: {{maxRecommendationsFill}}%;" />
+                    <span class="window-encounter-odds-endpoint">30</span>
+                </div>
+            </div>
+            <div class="window-encounter-slider-cell">
+                <div class="window-encounter-odds-row">
+                    <label class="window-encounter-odds-label" for="{{appId}}-variability">{{localize "coffee-pub-bibliosoph.quickEncounterVariability-Label"}} <span class="window-encounter-slider-value" data-encounter-setting-value="quickEncounterVariability">{{variabilityValue}}</span></label>
+                </div>
+                <div class="window-encounter-odds-slider-row">
+                    <span class="window-encounter-odds-endpoint">1</span>
+                    <input type="range" id="{{appId}}-variability" class="window-encounter-setting-slider" min="1" max="10" value="{{variabilityValue}}" step="1" aria-label="Variability (1–10)" data-encounter-setting="quickEncounterVariability" data-encounter-setting-min="1" data-encounter-setting-max="10" data-encounter-setting-suffix="" style="--slider-fill: {{variabilityFill}}%;" />
+                    <span class="window-encounter-odds-endpoint">10</span>
+                </div>
+            </div>
         </div>
     </section>
 

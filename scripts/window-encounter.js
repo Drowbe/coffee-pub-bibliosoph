@@ -323,6 +323,16 @@ export class WindowEncounter extends Base {
             difficulty: difficultyLabel,
             difficultyClass,
             oddsOfEncounter: Math.max(0, Math.min(100, Number(game.settings.get(MODULE.ID, 'encounterOdds')) ?? 20)),
+            maxRecommendationsValue: Math.max(5, Math.min(30, Number(game.settings.get(MODULE.ID, 'quickEncounterMaxRecommendations')) ?? 10)),
+            maxRecommendationsFill: (() => {
+                const v = Math.max(5, Math.min(30, Number(game.settings.get(MODULE.ID, 'quickEncounterMaxRecommendations')) ?? 10));
+                return ((v - 5) / 25) * 100;
+            })(),
+            variabilityValue: Math.max(1, Math.min(10, Number(game.settings.get(MODULE.ID, 'quickEncounterVariability')) ?? 3)),
+            variabilityFill: (() => {
+                const v = Math.max(1, Math.min(10, Number(game.settings.get(MODULE.ID, 'quickEncounterVariability')) ?? 3));
+                return ((v - 1) / 9) * 100;
+            })(),
             targetCRValue: Math.max(0, Number(this._targetCR) || 0),
             crSliderMin,
             crSliderMax,
@@ -654,11 +664,14 @@ export class WindowEncounter extends Base {
         document.addEventListener('change', function _encounterSliderChange(e) {
             const root = self._getEncounterRoot();
             if (!root || !root.contains(e.target)) return;
-            const oddsSlider = e.target?.closest?.('.window-encounter-odds-slider');
-            if (oddsSlider) {
-                const val = Math.max(0, Math.min(100, parseInt(oddsSlider.value, 10) || 0));
-                game.settings.set(MODULE.ID, 'encounterOdds', val);
-                postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: odds of encounter', val, true, false);
+            const settingSlider = e.target?.closest?.('[data-encounter-setting]');
+            if (settingSlider) {
+                const key = settingSlider.getAttribute('data-encounter-setting');
+                const min = parseFloat(settingSlider.getAttribute('data-encounter-setting-min')) || 0;
+                const max = parseFloat(settingSlider.getAttribute('data-encounter-setting-max')) || 100;
+                const val = Math.max(min, Math.min(max, parseInt(settingSlider.value, 10) || min));
+                game.settings.set(MODULE.ID, key, val);
+                postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: setting', `${key}=${val}`, true, false);
                 self.render();
                 return;
             }
@@ -704,17 +717,19 @@ export class WindowEncounter extends Base {
         document.addEventListener('input', function _encounterSliderInput(e) {
             const root = self._getEncounterRoot();
             if (!root || !root.contains(e.target)) return;
-            const oddsSlider = e.target?.closest?.('.window-encounter-odds-slider');
-            if (oddsSlider) {
-                const val = Math.max(0, Math.min(100, parseInt(oddsSlider.value, 10) || 0));
-                game.settings.set(MODULE.ID, 'encounterOdds', val);
-                const currentEl = root?.querySelector('.window-encounter-odds-current');
-                if (currentEl) currentEl.textContent = `${val}%`;
-                const min = parseFloat(oddsSlider.min ?? '0') || 0;
-                const max = parseFloat(oddsSlider.max ?? '100') || 100;
+            const settingSlider = e.target?.closest?.('[data-encounter-setting]');
+            if (settingSlider) {
+                const key = settingSlider.getAttribute('data-encounter-setting');
+                const min = parseFloat(settingSlider.getAttribute('data-encounter-setting-min')) || 0;
+                const max = parseFloat(settingSlider.getAttribute('data-encounter-setting-max')) || 100;
+                const suffix = settingSlider.getAttribute('data-encounter-setting-suffix') || '';
+                const val = Math.max(min, Math.min(max, parseInt(settingSlider.value, 10) || min));
+                game.settings.set(MODULE.ID, key, val);
+                const valueEl = root?.querySelector(`[data-encounter-setting-value="${key}"]`);
+                if (valueEl) valueEl.textContent = val + suffix;
                 const span = Math.max(1, max - min);
                 const pct = Math.max(0, Math.min(100, ((val - min) / span) * 100));
-                oddsSlider.style.setProperty('--odds-fill', `${pct}%`);
+                settingSlider.style.setProperty('--slider-fill', `${pct}%`);
                 return;
             }
             const crSlider = e.target?.closest?.('.window-encounter-cr-slider');
@@ -786,11 +801,7 @@ export class WindowEncounter extends Base {
         root.querySelector('.window-encounter-include-input')?.addEventListener('input', (e) => {
             this._includeMonsterNamesText = e.target?.value ?? '';
         });
-        root.querySelector('.window-encounter-odds-slider')?.addEventListener('change', (e) => {
-            const val = Math.max(0, Math.min(100, parseInt(e.target?.value, 10) || 0));
-            game.settings.set(MODULE.ID, 'encounterOdds', val);
-            this.render();
-        });
+        /* Setting sliders (odds, max recommendations, variability) handled by document listener via [data-encounter-setting] */
         root.querySelector('.window-encounter-cr-slider')?.addEventListener('change', (e) => {
             const raw = parseFloat(e.target?.value);
             if (!Number.isNaN(raw) && raw >= 0) {
@@ -942,12 +953,14 @@ export class WindowEncounter extends Base {
         try {
             const minCR = Math.max(0, Math.min(30, Number(this._minCR) ?? 0));
             const maxCR = Math.max(0, Math.min(30, Number(this._maxCR) ?? 30));
+            const maxRec = Math.max(5, Math.min(30, Number(game.settings.get(MODULE.ID, 'quickEncounterMaxRecommendations')) ?? 10));
             const newRecommendations = await window.bibliosophEncounterRecommend(
                 this._selectedHabitat,
                 difficultyLabel,
                 targetCR,
                 minCR,
-                maxCR
+                maxCR,
+                maxRec
             );
             const existing = Array.isArray(this._recommendations) ? this._recommendations : [];
             const hadSelection = this._selectedForDeploy.size > 0;

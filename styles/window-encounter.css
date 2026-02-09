@@ -144,6 +144,7 @@
 /* ----- Sections (scrollable body) ----- */
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-configure,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-panel,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-recommend-variability,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-filters,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-include,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-buttons,
@@ -167,7 +168,8 @@
     color: #c0c0c0;
 }
 
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-current {
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-current,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-slider-value {
     min-width: 2.5em;
     font-weight: 600;
     color: rgba(105, 213, 104, 0.9);
@@ -186,6 +188,20 @@
     gap: 10px;
 }
 
+/* Max Recommendations + Variability: single row, 50% each (same format as odds) */
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-sliders-row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-slider-cell {
+    flex: 1;
+    min-width: 0;
+}
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-slider-cell .window-encounter-odds-slider-row {
+    margin-top: 2px;
+}
+
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-endpoint {
     font-size: 1.0em;
     font-weight: 900;
@@ -193,8 +209,8 @@
     white-space: nowrap;
 }
 
-/* Shared range slider (do NOT add .window-encounter-min-cr-slider here - it has its own handlers) */
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider,
+/* Setting sliders (odds, max recommendations, variability) + CR slider: shared base. Target by [data-encounter-setting] or .window-encounter-cr-slider in JS. */
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-setting-slider,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider {
     flex: 1;
     min-width: 0;
@@ -216,7 +232,7 @@
     outline: none;
 }
 
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider::-webkit-slider-runnable-track,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-setting-slider::-webkit-slider-runnable-track,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-webkit-slider-runnable-track,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-slider::-webkit-slider-runnable-track,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-max-cr-slider::-webkit-slider-runnable-track {
@@ -226,12 +242,13 @@
     border: 1px solid rgba(0, 0, 0, 0.6);
 }
 
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider::-webkit-slider-runnable-track {
+/* Setting sliders (odds, max rec, variability): one gradient using --slider-fill */
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-setting-slider::-webkit-slider-runnable-track {
     background: linear-gradient(
         to right,
         rgba(43, 101, 49, 0.9) 0%,
-        rgba(43, 101, 49, 0.9) var(--odds-fill, 0%),
-        rgba(111, 39, 39, 0.6) var(--odds-fill, 0%),
+        rgba(43, 101, 49, 0.9) var(--slider-fill, 0%),
+        rgba(111, 39, 39, 0.6) var(--slider-fill, 0%),
         rgba(111, 39, 39, 0.6) 100%
     );
     border: 1px solid rgba(0, 0, 0, 0.9);
@@ -267,7 +284,7 @@
 
 /* THUMB GRIP */
 
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider::-webkit-slider-thumb,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-setting-slider::-webkit-slider-thumb,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-webkit-slider-thumb,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-slider::-webkit-slider-thumb,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-max-cr-slider::-webkit-slider-thumb {
@@ -285,7 +302,7 @@
     z-index: 4; /* keep the thumb visually above the track/highlight */
 }
 
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider::-webkit-slider-thumb:active,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-setting-slider::-webkit-slider-thumb:active,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-webkit-slider-thumb:active,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-slider::-webkit-slider-thumb:active,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-max-cr-slider::-webkit-slider-thumb:active {
@@ -294,7 +311,7 @@
     background: rgba(255, 100, 0, 0.6);
 }
 
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-slider::-webkit-slider-thumb:hover,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-setting-slider::-webkit-slider-thumb:hover,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider::-webkit-slider-thumb:hover,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-min-cr-slider::-webkit-slider-thumb:hover,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-max-cr-slider::-webkit-slider-thumb:hover {
