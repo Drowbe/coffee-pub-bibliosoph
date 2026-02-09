@@ -138,11 +138,7 @@
         <h3 class="window-encounter-section-title">Deploy</h3>
         <p class="window-encounter-deploy-hint">Click result cards to select (or use a built encounter). Click a pattern to deploy to the canvas.</p>
         <div class="window-encounter-deploy-options">
-            <div class="window-encounter-deploy-patterns">
-                {{#each deploymentPatterns}}
-                <button type="button" class="window-encounter-deploy-pattern {{#if selected}}active{{/if}} {{#unless ../hasDeploySelection}}window-encounter-deploy-pattern-disabled{{/unless}}" data-pattern="{{value}}" {{#unless ../hasDeploySelection}}disabled{{/unless}} title="{{#if ../hasDeploySelection}}Deploy using {{label}} pattern{{else}}Select monsters above first{{/if}}">{{label}}</button>
-                {{/each}}
-            </div>
+            
             <label class="window-encounter-deploy-visible-label">
                 <input type="checkbox" class="window-encounter-deploy-visible" {{#unless deploymentHidden}}checked{{/unless}} />
                 <span>Visible</span>
@@ -156,12 +152,24 @@
 
     <section class="window-encounter-buttons window-encounter-buttons-bar">
         <div class="window-encounter-action-buttons">
+            <!-- ACTION Buttons -->
             <button type="button" class="window-encounter-roll window-encounter-btn" {{#if rollLoading}}disabled{{/if}} title="Roll for encounter using Global Encounter Settings (odds and dice); posts a card and may recommend monsters">
                 <i class="fa-solid fa-dice"></i> Roll for Encounter
             </button>
             <button type="button" class="window-encounter-recommend window-encounter-btn" {{#if recommendLoading}}disabled{{/if}} title="{{#if recommendLoading}}Searching…{{else}}Search compendiums for matching monsters{{/if}}">
                 <i class="fa-solid fa-magnifying-glass"></i> Recommend
             </button>
+            <button type="button" class="window-encounter-reset window-encounter-btn window-encounter-btn-secondary" title="Clear results and selection, start over">
+                <i class="fa-solid fa-rotate-left"></i> Reset
+            </button>
+            {{#if hasRecommendations}}
+            <!-- DEPLOY Buttons (only when there are results) -->
+            <div class="window-encounter-deploy-patterns">
+                {{#each deploymentPatterns}}
+                <button type="button" class="window-encounter-deploy-pattern window-encounter-btn window-encounter-btn-secondary {{#if selected}}active{{/if}} {{#unless ../hasDeploySelection}}window-encounter-deploy-pattern-disabled{{/unless}}" data-pattern="{{value}}" {{#unless ../hasDeploySelection}}disabled{{/unless}} title="{{#if ../hasDeploySelection}}Deploy using {{label}} pattern{{else}}Select monsters above first{{/if}}">{{label}}</button>
+                {{/each}}
+            </div>
+            {{/if}}
         </div>
     </section>
 </div>

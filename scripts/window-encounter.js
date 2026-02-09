@@ -219,7 +219,7 @@ export class WindowEncounter extends Base {
         if (selectedRecs.length > 0) {
             const totalXp = selectedRecs.reduce((sum, r) => {
                 const crNum = parseCR(r.cr);
-                const count = typeof r.count === 'number' && r.count >= 1 ? r.count : 1;
+                const count = this._selectedCounts.get(r.id) ?? (typeof r.count === 'number' && r.count >= 1 ? r.count : 1);
                 return sum + count * crToXp(crNum);
             }, 0);
             monsterCRNum = xpToEffectiveCR(totalXp);
@@ -574,6 +574,11 @@ export class WindowEncounter extends Base {
                 self._onRecommend();
                 return;
             }
+            const resetBtn = e.target?.closest?.('.window-encounter-reset');
+            if (resetBtn) {
+                self._onReset();
+                return;
+            }
             const refreshCacheBtn = e.target?.closest?.('.window-encounter-refresh-cache');
             if (refreshCacheBtn) {
                 self._onRefreshCache();
@@ -787,6 +792,7 @@ export class WindowEncounter extends Base {
         });
         root.querySelector('.window-encounter-roll')?.addEventListener('click', () => this._onRollForEncounter());
         root.querySelector('.window-encounter-recommend')?.addEventListener('click', () => this._onRecommend());
+        root.querySelector('.window-encounter-reset')?.addEventListener('click', () => this._onReset());
         root.querySelectorAll('.window-encounter-refresh-cache').forEach(btn => btn.addEventListener('click', () => this._onRefreshCache()));
         root.querySelectorAll('.window-encounter-result-card').forEach(card => {
             card.addEventListener('click', (e) => {
@@ -954,6 +960,21 @@ export class WindowEncounter extends Base {
             this._recommendAttempted = true;
             this.render();
         }
+    }
+
+    /**
+     * Reset: clear results, selection, and roll state; collapse window to config-only.
+     */
+    _onReset() {
+        this._recommendations = [];
+        this._recommendAttempted = false;
+        this._selectedForDeploy = new Set();
+        this._selectedCounts.clear();
+        this._lastRollHadEncounter = false;
+        this._lastRollIntroEntry = null;
+        postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: reset', 'Results and selection cleared', true, false);
+        this.setPosition({ height: WINDOW_ENCOUNTER_HEIGHT_COLLAPSED });
+        this.render();
     }
 
     /**

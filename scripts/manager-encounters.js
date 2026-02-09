@@ -42,8 +42,8 @@ export function openEncounterWindow() {
     let position = { width: 500, height: WINDOW_ENCOUNTER_HEIGHT_COLLAPSED };
     try {
         const savedBounds = game.settings.get(MODULE.ID, 'quickEncounterWindowBounds');
-        if (savedBounds && typeof savedBounds === 'object') {
-            position = { ...position, ...savedBounds, height: WINDOW_ENCOUNTER_HEIGHT_COLLAPSED };
+        if (savedBounds && typeof savedBounds === 'object' && (savedBounds.width != null || savedBounds.height != null || savedBounds.left != null || savedBounds.top != null)) {
+            position = { ...position, ...savedBounds };
         }
     } catch (_) {}
     _encounterWindow = new WindowEncounter({
