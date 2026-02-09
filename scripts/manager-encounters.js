@@ -11,6 +11,8 @@ let _encounterWindow = null;
 
 /** Max monster types returned by Recommend (random pick; no budget). */
 const MAX_RECOMMENDATIONS = 20;
+/** Max distinct monster types in a rolled encounter (then we fill by adding more of same types). */
+const MAX_ENCOUNTER_TYPES = 3;
 /** Cap actors loaded per compendium when not using cache. */
 const MAX_ACTORS_PER_PACK = 200;
 /** Cache version for migrations; bump when schema changes. */
@@ -488,10 +490,10 @@ export async function encounterRecommend(habitat, difficulty, targetCR, minCR = 
 }
 
 /**
- * Build a single encounter: a set of monsters that together meet the target CR (XP budget).
+ * Build a single encounter: up to MAX_ENCOUNTER_TYPES types, then add more of those types to close monster CR gap (without going over target).
  * Returns array of { id, img, name, cr, count } with count >= 1.
  * @param {string} habitat
- * @param {number} targetCR - target encounter CR (used for XP budget)
+ * @param {number} targetCR - target encounter CR; we fill until total monster CR is as close as possible without exceeding this
  * @param {number} [minCR=0] - floor: no monster below this CR
  * @param {number} [maxCR=30] - ceiling: no monster above this CR
  * @returns {Promise<Array<{id: string, img: string, name: string, cr: string, count: number}>>}
@@ -504,61 +506,72 @@ export async function buildEncounter(habitat, targetCR, minCR = 0, maxCR = 30) {
     if (maxCRNum < 30) candidates = candidates.filter((c) => c.cr <= maxCRNum);
     if (candidates.length === 0) return [];
 
-    const budget = CR_TO_XP[Math.min(Math.max(0, Math.floor(targetCR) + 3), CR_TO_XP.length - 1)] ?? 1800;
-    const minMonsters = 1;
-    const maxMonsters = 6;
-    const multiplier = (n) => (n <= 1 ? 1 : n <= 2 ? 1.5 : n <= 6 ? 2 : n <= 10 ? 2.5 : 3);
-
+    const targetCRNum = typeof targetCR === 'number' && !Number.isNaN(targetCR) ? Math.max(0, targetCR) : 0;
+    /** @type {Array<{id: string, img: string, name: string, crNum: number, count: number}>} */
     const encounter = [];
-    let totalAdjustedXP = 0;
-    let monsterCount = 0;
+    let totalCR = 0;
+    const usedIds = new Set();
 
-    while (monsterCount < maxMonsters) {
-        const nextMult = multiplier(monsterCount + 1);
-        const remaining = budget - totalAdjustedXP;
-        if (remaining <= 0) break;
-        const maxSingleXP = Math.ceil(remaining / nextMult);
-        const valid = candidates.filter((c) => c.xp <= maxSingleXP && c.xp >= 10);
+    // Phase 1: pick up to MAX_ENCOUNTER_TYPES types at random, each with count 1, so total CR <= target
+    for (let i = 0; i < MAX_ENCOUNTER_TYPES; i++) {
+        const valid = candidates.filter((c) => !usedIds.has(c.id) && c.cr + totalCR <= targetCRNum);
         if (valid.length === 0) break;
         const pick = valid[Math.floor(Math.random() * valid.length)];
-        const doc = pick.doc;
-        const xpCost = pick.xp * nextMult;
-        if (totalAdjustedXP + xpCost > budget * 1.15) break;
-
-        const existing = encounter.find((e) => e.id === pick.id);
-        if (existing) {
-            existing.count += 1;
-        } else {
-            encounter.push({
-                id: pick.id,
-                img: doc.img ?? '',
-                name: doc.name ?? 'Unknown',
-                cr: formatCR(pick.cr),
-                count: 1
-            });
-        }
-        totalAdjustedXP += xpCost;
-        monsterCount += 1;
+        usedIds.add(pick.id);
+        encounter.push({
+            id: pick.id,
+            img: pick.doc?.img ?? '',
+            name: pick.doc?.name ?? 'Unknown',
+            crNum: pick.cr,
+            count: 1
+        });
+        totalCR += pick.cr;
     }
 
     if (encounter.length === 0) {
-        const fallback = candidates[Math.floor(Math.random() * candidates.length)];
-        if (fallback) {
+        const fallback = candidates.filter((c) => c.cr <= targetCRNum);
+        const pick = fallback.length ? fallback[Math.floor(Math.random() * fallback.length)] : candidates[0];
+        if (pick) {
             encounter.push({
-                id: fallback.id,
-                img: fallback.doc.img ?? '',
-                name: fallback.doc.name ?? 'Unknown',
-                cr: formatCR(fallback.cr),
+                id: pick.id,
+                img: pick.doc?.img ?? '',
+                name: pick.doc?.name ?? 'Unknown',
+                crNum: pick.cr,
                 count: 1
             });
+            totalCR = pick.cr;
         }
     }
 
-    if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
-        const totalTokens = encounter.reduce((s, e) => s + e.count, 0);
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: Built encounter', `${encounter.length} types, ${totalTokens} tokens`, true, false);
+    // Phase 2: add more of an existing type (whichever gets total CR closest to target without going over) until we can't
+    while (true) {
+        let bestEntry = null;
+        let bestNewTotal = totalCR;
+        for (const entry of encounter) {
+            const newTotal = totalCR + entry.crNum;
+            if (newTotal <= targetCRNum && newTotal > bestNewTotal) {
+                bestNewTotal = newTotal;
+                bestEntry = entry;
+            }
+        }
+        if (bestEntry === null) break;
+        bestEntry.count += 1;
+        totalCR = bestNewTotal;
     }
-    return encounter;
+
+    const out = encounter.map((e) => ({
+        id: e.id,
+        img: e.img,
+        name: e.name,
+        cr: formatCR(e.crNum),
+        count: e.count
+    }));
+
+    if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
+        const totalTokens = out.reduce((s, e) => s + e.count, 0);
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: Built encounter', `${out.length} types, ${totalTokens} tokens (CR gap ${(targetCRNum - totalCR).toFixed(2)})`, true, false);
+    }
+    return out;
 }
 
 /**
