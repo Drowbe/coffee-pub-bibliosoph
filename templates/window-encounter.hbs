@@ -24,6 +24,8 @@
         </div>
     </header>
 
+    <div class="window-encounter-body {{#if showResultsSection}}window-encounter-body-with-tray{{/if}}">
+    <div class="window-encounter-main">
     <section class="window-encounter-configure">
         <h3 class="window-encounter-section-title">{{localize "coffee-pub-bibliosoph.quickEncounterConfigureEncounter-Label"}}</h3>
         <div class="window-encounter-odds-row">
@@ -107,8 +109,10 @@
 
         </div>
     </section>
+    </div>
 
     {{#if showResultsSection}}
+    <div class="window-encounter-tray">
     <section class="window-encounter-results">
         <h3 class="window-encounter-section-title">Matching results</h3>
         {{#if showSearchingSpinner}}
@@ -141,8 +145,6 @@
         {{/if}}
         {{/if}}
     </section>
-    {{/if}}
-
     {{#if hasRecommendations}}
     <section class="window-encounter-deploy">
         <h3 class="window-encounter-section-title">Deploy</h3>
@@ -160,4 +162,7 @@
         </div>
     </section>
     {{/if}}
+    </div>
+    {{/if}}
+    </div>
 </div>

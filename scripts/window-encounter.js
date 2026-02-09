@@ -482,8 +482,11 @@ export class WindowEncounter extends Base {
         const showResults = this._recommendLoading || this._rollLoading
             || (this._recommendations?.length > 0) || this._recommendAttempted;
         const currentHeight = this.position?.height ?? 0;
+        const currentWidth = this.position?.width ?? 500;
+        const minWidthWithTray = 820;
         if (showResults && currentHeight < WINDOW_ENCOUNTER_HEIGHT_EXPANDED) {
-            this.setPosition({ height: WINDOW_ENCOUNTER_HEIGHT_EXPANDED });
+            const width = currentWidth < minWidthWithTray ? minWidthWithTray : currentWidth;
+            this.setPosition({ height: WINDOW_ENCOUNTER_HEIGHT_EXPANDED, width });
         }
     }
 

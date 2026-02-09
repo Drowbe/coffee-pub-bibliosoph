@@ -39,7 +39,48 @@
     min-height: 400px;
     height: 100%;
     padding: 0;
+    overflow: hidden;
+}
+
+/* Body: single column (main only) or two columns (main + tray) */
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
     overflow: auto;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-body-with-tray {
+    flex-direction: row;
+    overflow: hidden;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-main {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    overflow: auto;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-body-with-tray .window-encounter-main {
+    flex: 1;
+    min-width: 280px;
+}
+
+/* Right tray: results + deploy when results are present */
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-tray {
+    display: flex;
+    flex-direction: column;
+    width: 320px;
+    min-width: 280px;
+    max-width: 42%;
+    flex-shrink: 0;
+    border-left: 1px solid var(--encounter-border-color);
+    background: rgba(0, 0, 0, 0.25);
+    overflow: hidden;
 }
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-header {
@@ -641,6 +682,26 @@
     flex: 1;
     min-height: 120px;
     overflow: auto;
+}
+
+/* When results live in the tray, let the results area scroll and keep deploy at bottom */
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-tray .window-encounter-results {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-tray .window-encounter-results .window-encounter-results-grid {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-tray .window-encounter-deploy {
+    flex-shrink: 0;
+    border-bottom: none;
 }
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-results-loading {
