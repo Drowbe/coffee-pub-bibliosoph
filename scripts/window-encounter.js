@@ -353,11 +353,11 @@ export class WindowEncounter extends Base {
             hasDeploySelection,
             showResultsSection: this._recommendLoading || this._rollLoading || this._recommendAttempted || recommendations.length > 0,
             deploymentPatterns: [
-                { value: 'sequential', label: 'Sequential', selected: false },
-                { value: 'circle', label: 'Circle', selected: false },
-                { value: 'line', label: 'Line', selected: false },
-                { value: 'scatter', label: 'Scatter', selected: false },
-                { value: 'grid', label: 'Grid', selected: false }
+                { value: 'sequential', label: 'Sequential' },
+                { value: 'circle', label: 'Circle' },
+                { value: 'line', label: 'Line' },
+                { value: 'scatter', label: 'Scatter' },
+                { value: 'grid', label: 'Grid' }
             ],
             deploymentHidden: this._deploymentHidden,
             cacheBuilding: this._cacheBuilding,
@@ -628,7 +628,7 @@ export class WindowEncounter extends Base {
                 return;
             }
             const patternBtn = e.target?.closest?.('.window-encounter-deploy-pattern');
-            if (patternBtn?.getAttribute?.('data-pattern') && !patternBtn.disabled) {
+            if (patternBtn?.getAttribute?.('data-pattern')) {
                 self._deploymentPattern = patternBtn.getAttribute('data-pattern') ?? patternBtn.dataset.pattern;
                 postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: deploy with pattern', self._deploymentPattern, true, false);
                 self._onDeploy();
@@ -837,7 +837,6 @@ export class WindowEncounter extends Base {
         });
         root.querySelectorAll('.window-encounter-deploy-pattern').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                if (btn.disabled) return;
                 const pattern = e.currentTarget?.getAttribute?.('data-pattern') ?? e.currentTarget?.dataset?.pattern;
                 if (pattern) {
                     this._deploymentPattern = pattern;
@@ -973,7 +972,6 @@ export class WindowEncounter extends Base {
         this._lastRollHadEncounter = false;
         this._lastRollIntroEntry = null;
         postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: reset', 'Results and selection cleared', true, false);
-        this.setPosition({ height: WINDOW_ENCOUNTER_HEIGHT_COLLAPSED });
         this.render();
     }
 

@@ -13,7 +13,7 @@
                         <span class="window-encounter-cache-info">{{cacheStatusText}}</span>
                     {{/if}}
                 </div>
-                <button type="button" class="window-encounter-refresh-cache window-encounter-btn window-encounter-btn-secondary" {{#if cacheBuilding}}disabled{{/if}} title="Build or refresh the monster cache for faster searches">
+                <button type="button" class="window-encounter-refresh-cache window-encounter-btn-secondary" {{#if cacheBuilding}}disabled{{/if}} title="Build or refresh the monster cache for faster searches">
                     <i class="fa-solid fa-database"></i> {{localize "coffee-pub-bibliosoph.quickEncounterRefreshCache-Label"}}
                 </button>
             </div>
@@ -120,8 +120,8 @@
                 </span>
                 {{/if}}
                 <img class="window-encounter-result-img" src="{{img}}" alt="{{name}}" />
-                <div class="window-encounter-result-name">{{#if count}}{{count}} x {{/if}}{{name}}</div>
                 <div class="window-encounter-result-cr">CR {{cr}}</div>
+                <div class="window-encounter-result-name">{{name}}</div>
             </div>
             {{/each}}
         </div>
@@ -136,7 +136,6 @@
     {{#if hasRecommendations}}
     <section class="window-encounter-deploy">
         <h3 class="window-encounter-section-title">Deploy</h3>
-        <p class="window-encounter-deploy-hint">Click result cards to select (or use a built encounter). Click a pattern to deploy to the canvas.</p>
         <div class="window-encounter-deploy-options">
             
             <label class="window-encounter-deploy-visible-label">
@@ -153,20 +152,20 @@
     <section class="window-encounter-buttons window-encounter-buttons-bar">
         <div class="window-encounter-action-buttons">
             <!-- ACTION Buttons -->
-            <button type="button" class="window-encounter-roll window-encounter-btn" {{#if rollLoading}}disabled{{/if}} title="Roll for encounter using Global Encounter Settings (odds and dice); posts a card and may recommend monsters">
-                <i class="fa-solid fa-dice"></i> Roll for Encounter
+            <button type="button" class="window-encounter-roll window-encounter-btn-primary" {{#if rollLoading}}disabled{{/if}} title="Roll for encounter using Global Encounter Settings (odds and dice); posts a card and may recommend monsters">
+                <i class="fa-solid fa-dice"></i> Roll
             </button>
-            <button type="button" class="window-encounter-recommend window-encounter-btn" {{#if recommendLoading}}disabled{{/if}} title="{{#if recommendLoading}}Searching…{{else}}Search compendiums for matching monsters{{/if}}">
+            <button type="button" class="window-encounter-recommend window-encounter-btn-primary" {{#if recommendLoading}}disabled{{/if}} title="{{#if recommendLoading}}Searching…{{else}}Search compendiums for matching monsters{{/if}}">
                 <i class="fa-solid fa-magnifying-glass"></i> Recommend
             </button>
-            <button type="button" class="window-encounter-reset window-encounter-btn window-encounter-btn-secondary" title="Clear results and selection, start over">
+            <button type="button" class="window-encounter-reset window-encounter-btn-secondary" title="Clear results and selection, start over">
                 <i class="fa-solid fa-rotate-left"></i> Reset
             </button>
             {{#if hasRecommendations}}
             <!-- DEPLOY Buttons (only when there are results) -->
             <div class="window-encounter-deploy-patterns">
                 {{#each deploymentPatterns}}
-                <button type="button" class="window-encounter-deploy-pattern window-encounter-btn window-encounter-btn-secondary {{#if selected}}active{{/if}} {{#unless ../hasDeploySelection}}window-encounter-deploy-pattern-disabled{{/unless}}" data-pattern="{{value}}" {{#unless ../hasDeploySelection}}disabled{{/unless}} title="{{#if ../hasDeploySelection}}Deploy using {{label}} pattern{{else}}Select monsters above first{{/if}}">{{label}}</button>
+                <button type="button" class="window-encounter-deploy-pattern window-encounter-btn-secondary" data-pattern="{{value}}" title="Deploy using {{label}} pattern">{{label}}</button>
                 {{/each}}
             </div>
             {{/if}}

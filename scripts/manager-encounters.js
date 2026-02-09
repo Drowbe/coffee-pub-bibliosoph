@@ -92,6 +92,19 @@ function isValidEncounterActor(doc) {
 }
 
 /**
+ * Get token image from an Actor document (prototype token); fallback to actor portrait.
+ * Used for result cards so they show the token, not the portrait.
+ * @param {Actor|{ prototypeToken?: { texture?: { src?: string }, img?: string }, img?: string }} doc
+ * @returns {string}
+ */
+function getActorTokenImg(doc) {
+    if (!doc) return '';
+    const pt = doc.prototypeToken ?? doc.prototypeTokenData;
+    const src = pt?.texture?.src ?? pt?.img;
+    return src && typeof src === 'string' ? src : (doc.img ?? '');
+}
+
+/**
  * Get numeric CR from D&D 5e actor (system.details.cr).
  * @param {Actor} doc
  * @returns {number}
@@ -243,7 +256,7 @@ export async function buildEncounterCache(progressCallback) {
                     compendiumId,
                     docId: doc.id,
                     name: doc.name ?? 'Unknown',
-                    img: doc.img ?? '',
+                    img: getActorTokenImg(doc),
                     cr: crNum,
                     xp,
                     habitats
@@ -318,7 +331,7 @@ async function getCandidatesWithXP(habitat) {
                 const xp = getActorXP(doc);
                 if (Number.isNaN(crNum) || Number.isNaN(xp)) continue;
                 out.push({
-                    doc,
+                    doc: { img: getActorTokenImg(doc), name: doc.name ?? 'Unknown' },
                     id: doc.uuid ?? `${compendiumId}.${doc.id}`,
                     cr: crNum,
                     xp
