@@ -351,6 +351,98 @@ async function getCandidatesWithXP(habitat) {
 }
 
 /**
+ * Find monsters by name (ignore habitat/CR). Used for "Include" list; results get override: true.
+ * @param {string[]} names - Trimmed, non-empty names (e.g. ["goblin", "orc"])
+ * @returns {Promise<Array<{id: string, img: string, name: string, cr: string, override: true}>>}
+ */
+export async function encounterGetIncludeMonsters(names) {
+    const normalized = (names || [])
+        .map((n) => String(n).trim())
+        .filter((n) => n.length > 0);
+    if (normalized.length === 0) return [];
+
+    const seen = new Set();
+    const results = [];
+
+    // Use cache for name lookup whenever we have entries (even if "invalid" due to compendium list change)
+    const cache = getEncounterCache();
+    if (cache.entries.length > 0) {
+        for (const entry of cache.entries) {
+            if (!entry.id || !entry.name || entry.cr <= 0) continue;
+            const entryNameLower = String(entry.name).toLowerCase();
+            const matched = normalized.some((n) => {
+                const searchLower = n.toLowerCase();
+                return entryNameLower.includes(searchLower) || searchLower.includes(entryNameLower);
+            });
+            if (matched && !seen.has(entry.id)) {
+                seen.add(entry.id);
+                results.push({
+                    id: entry.id,
+                    img: entry.img ?? '',
+                    name: entry.name ?? 'Unknown',
+                    cr: formatCR(entry.cr),
+                    override: true
+                });
+            }
+        }
+        return results;
+    }
+
+    const compendiumIds = getMonsterCompendiums();
+    for (const compendiumId of compendiumIds) {
+        const pack = game.packs.get(compendiumId);
+        if (!pack) continue;
+        try {
+            const index = await pack.getIndex();
+            // v13: getIndex() returns a Collection; use .contents for array of index entry objects
+            let entries = Array.isArray(index) ? index : (index?.contents ?? index?.index ?? index?.entries ?? []);
+            if (entries.length > 0 && Array.isArray(entries[0]) && entries[0].length >= 2) {
+                entries = entries.map((e) => e[1]);
+            }
+            const matchingIds = [];
+            for (const e of entries) {
+                const name = e?.name ?? e?.metadata?.name ?? '';
+                if (!name) continue;
+                const nameLower = String(name).toLowerCase();
+                const matched = normalized.some((n) => {
+                    const searchLower = n.toLowerCase();
+                    return nameLower.includes(searchLower) || searchLower.includes(nameLower);
+                });
+                if (matched) matchingIds.push(e?._id ?? e?.id);
+            }
+            if (matchingIds.length === 0) continue;
+            const docs = await pack.getDocuments({ _id__in: matchingIds.filter(Boolean) });
+            for (const doc of docs || []) {
+                if (!isValidEncounterActor(doc)) continue;
+                const id = doc.uuid ?? `${compendiumId}.${doc.id}`;
+                if (seen.has(id)) continue;
+                const crNum = getActorCR(doc);
+                if (Number.isNaN(crNum) || crNum <= 0) continue;
+                const nameLower = String(doc.name ?? '').toLowerCase();
+                const matched = normalized.some((n) => {
+                    const searchLower = n.toLowerCase();
+                    return nameLower.includes(searchLower) || searchLower.includes(nameLower);
+                });
+                if (!matched) continue;
+                seen.add(id);
+                results.push({
+                    id,
+                    img: getActorTokenImg(doc),
+                    name: doc.name ?? 'Unknown',
+                    cr: formatCR(crNum),
+                    override: true
+                });
+            }
+        } catch (e) {
+            if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Quick Encounter: Include search failed for ${compendiumId}`, e?.message ?? '', true, false);
+            }
+        }
+    }
+    return results;
+}
+
+/**
  * Recommend monsters: same sourcing as buildEncounter — habitat + min/max CR.
  * Returns a blend: up to MAX_RECOMMENDATIONS monsters spread evenly across the CR range (min to max).
  * @param {number} [minCR=0] - floor: no monster below this CR
@@ -655,6 +747,7 @@ export async function postEncounterDeployCardToChat(introEntry, selectedMonsters
 // Expose for window-encounter.js
 if (typeof window !== 'undefined') {
     window.bibliosophEncounterRecommend = encounterRecommend;
+    window.bibliosophEncounterGetIncludeMonsters = encounterGetIncludeMonsters;
     window.bibliosophRollForEncounter = rollForEncounter;
     window.bibliosophPostEncounterDeployCard = postEncounterDeployCardToChat;
     window.bibliosophBuildEncounterCache = buildEncounterCache;

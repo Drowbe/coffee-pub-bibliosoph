@@ -45,7 +45,7 @@
                 <span class="window-encounter-cr-box-label">HERO CR</span>
                 <span class="window-encounter-cr-box-value">{{heroCRDisplay}}</span>
             </div>
-            <div class="window-encounter-cr-box" title="{{#if monsterCRFromSelection}}Selected for deploy (effective CR){{else}}Current monsters on canvas{{/if}}">
+            <div class="window-encounter-cr-box" title="{{#if monsterCRFromSelection}}Canvas monsters + selected for deploy{{else}}Current monsters on canvas{{/if}}">
                 <span class="window-encounter-cr-box-label">MONSTER CR</span>
                 <span class="window-encounter-cr-box-value">{{monsterCRDisplay}}</span>
             </div>
@@ -97,6 +97,11 @@
             {{/each}}
         </div>
     </section>
+
+    <section class="window-encounter-include">
+        <h3 class="window-encounter-section-title">Include</h3>
+        <input type="text" class="window-encounter-include-input" value="{{includeMonsterNamesText}}" placeholder="e.g. goblin, orc, dragon" aria-label="Comma-separated monster names to always include in results" />
+    </section>
     </div>
 
     {{#if showResultsSection}}
@@ -111,7 +116,7 @@
         {{else if hasRecommendations}}
         <div class="window-encounter-results-grid">
             {{#each recommendations}}
-            <div class="window-encounter-result-card {{#if selected}}selected{{/if}}{{#if count}} window-encounter-result-row-built{{/if}}" data-actor-id="{{id}}" data-count="{{count}}" title="{{#if count}}Part of built encounter — deploy below{{else}}Click to select for deploy{{/if}}">
+            <div class="window-encounter-result-card {{#if selected}}selected{{/if}}{{#if count}} window-encounter-result-row-built{{/if}}{{#if override}} window-encounter-result-card-override{{/if}}" data-actor-id="{{id}}" data-count="{{count}}" title="{{#if override}}Included by name (ignores filters){{else}}{{#if count}}Part of built encounter — deploy below{{else}}Click to select for deploy{{/if}}{{/if}}">
                 {{#if selected}}
                 <span class="window-encounter-result-count-wrap" data-actor-id="{{id}}">
                     <button type="button" class="window-encounter-result-count-btn window-encounter-result-count-minus" data-actor-id="{{id}}" aria-label="Decrease count">-</button>

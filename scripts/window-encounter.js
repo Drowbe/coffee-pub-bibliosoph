@@ -163,6 +163,8 @@ export class WindowEncounter extends Base {
     _cacheBuilding = false;
     /** Progress text during cache build (e.g. "2/5 compendiums"). */
     _cacheBuildingText = '';
+    /** Include box: comma-separated monster names to always add to results (override filters). */
+    _includeMonsterNamesText = '';
 
     /** AppV2: parts go here so Foundry injects template into .window-content (not in DEFAULT_OPTIONS). */
     static PARTS = {
@@ -215,16 +217,16 @@ export class WindowEncounter extends Base {
 
         const recommendations = Array.isArray(this._recommendations) ? this._recommendations : [];
         const selectedRecs = recommendations.filter(r => this._selectedForDeploy.has(r.id));
-        let monsterCRNum = canvasMonsterCRNum;
-        if (selectedRecs.length > 0) {
-            const totalXp = selectedRecs.reduce((sum, r) => {
-                const crNum = parseCR(r.cr);
-                const count = this._selectedCounts.get(r.id) ?? (typeof r.count === 'number' && r.count >= 1 ? r.count : 1);
-                return sum + count * crToXp(crNum);
-            }, 0);
-            monsterCRNum = xpToEffectiveCR(totalXp);
-        }
-        const monsterCRDisplay = formatCRDisplay(monsterCRNum);
+        const canvasCRNum = Number.isNaN(canvasMonsterCRNum) ? 0 : canvasMonsterCRNum;
+        const selectedCRNum = selectedRecs.reduce((sum, r) => {
+            const crNum = parseCR(r.cr);
+            const count = this._selectedCounts.get(r.id) ?? (typeof r.count === 'number' && r.count >= 1 ? r.count : 1);
+            return sum + count * crNum;
+        }, 0);
+        const totalMonsterCRNum = canvasCRNum + selectedCRNum;
+        const monsterCRDisplay = selectedRecs.length > 0
+            ? `${formatCRDisplay(canvasCRNum)} + ${formatCRDisplay(selectedCRNum)}`
+            : formatCRDisplay(canvasMonsterCRNum);
 
         const partyBase = Number.isNaN(heroCRNum) ? 5 : heroCRNum;
         if (this._targetCR == null || this._targetCR === undefined) {
@@ -258,8 +260,8 @@ export class WindowEncounter extends Base {
         const maxCRValue = Math.max(0, Math.min(30, Number(this._maxCR) ?? 30));
         const maxCRDisplay = formatCRDisplay(maxCRValue);
         const crSliderMin = 0;
-        const crSliderMax = (partyBase || monsterCRNum)
-            ? Math.min(200, Math.max(20, Math.max(partyBase || 0, monsterCRNum || 0) * 2.5 + 10))
+        const crSliderMax = (partyBase || totalMonsterCRNum)
+            ? Math.min(200, Math.max(20, Math.max(partyBase || 0, totalMonsterCRNum || 0) * 2.5 + 10))
             : 200;
         const partyCRMarkerPercent = (() => {
             if (Number.isNaN(heroCRNum)) return null;
@@ -280,7 +282,7 @@ export class WindowEncounter extends Base {
         const crRangeMaxInputWidth = crRangeRightWidth > 0 ? (100 / crRangeRightWidth) * 100 : 100;
         const markerCR = Number.isFinite(partyAvgCR) ? partyAvgCR : heroCRNum;
         const crRangePartyMarkerPercent = Number.isNaN(markerCR) ? null : Math.max(0, Math.min(100, (markerCR / crRangeMax) * 100));
-        const monsterGapNum = Number.isNaN(monsterCRNum) ? targetCRNum : Math.max(0, targetCRNum - monsterCRNum);
+        const monsterGapNum = Math.max(0, targetCRNum - totalMonsterCRNum);
         const encounterCRDisplay = formatCRDisplay(targetCRNum);
         const monsterGapDisplay = formatCRDisplay(monsterGapNum);
         const crSliderFill = (() => {
@@ -313,7 +315,7 @@ export class WindowEncounter extends Base {
             partyCRDisplay: this._assessment?.partyCRDisplay ?? heroCRDisplay,
             monsterCRDisplay,
             heroCRDisplay,
-            monsterCRDisplayNum: monsterCRDisplay,
+            monsterCRDisplayNum: totalMonsterCRNum,
             monsterGapDisplay,
             encounterCRDisplay,
             difficulty: difficultyLabel,
@@ -364,7 +366,8 @@ export class WindowEncounter extends Base {
             cacheBuildingText: this._cacheBuildingText,
             cacheStatusText: this._getCacheStatusText(),
             cacheStatusTitle: this._getCacheStatusTitle(),
-            monsterCRFromSelection
+            monsterCRFromSelection,
+            includeMonsterNamesText: this._includeMonsterNamesText ?? ''
         };
     }
 
@@ -778,6 +781,9 @@ export class WindowEncounter extends Base {
                 this.render();
             });
         });
+        root.querySelector('.window-encounter-include-input')?.addEventListener('input', (e) => {
+            this._includeMonsterNamesText = e.target?.value ?? '';
+        });
         root.querySelector('.window-encounter-odds-slider')?.addEventListener('change', (e) => {
             const val = Math.max(0, Math.min(100, parseInt(e.target?.value, 10) || 0));
             game.settings.set(MODULE.ID, 'encounterOdds', val);
@@ -900,7 +906,7 @@ export class WindowEncounter extends Base {
             this._lastRollHadEncounter = result.encounter === true;
             this._lastRollIntroEntry = result.introEntry ?? null;
             if (result.encounter && Array.isArray(result.recommendations)) {
-                this._recommendations = result.recommendations;
+                this._recommendations = await this._mergeIncludeMonsters(result.recommendations);
                 this._recommendAttempted = true;
             }
             postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: roll complete', result.encounter ? `${result.recommendations?.length ?? 0} types` : 'no encounter', true, false);
@@ -954,11 +960,35 @@ export class WindowEncounter extends Base {
                 this._selectedCounts.clear();
                 postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: recommend returned', `${this._recommendations?.length ?? 0} results`, true, false);
             }
+            this._recommendations = await this._mergeIncludeMonsters(this._recommendations);
         } finally {
             this._recommendLoading = false;
             this._recommendAttempted = true;
             this.render();
         }
+    }
+
+    /**
+     * Parse Include text, fetch matching monsters (ignore filters), merge into list with override flag.
+     * @param {Array<{id: string}>} list - Current recommendations
+     * @returns {Promise<Array>} list with include monsters appended (deduped by id)
+     */
+    async _mergeIncludeMonsters(list) {
+        const text = (this._includeMonsterNamesText ?? '').trim();
+        if (!text || typeof window.bibliosophEncounterGetIncludeMonsters !== 'function') return list;
+        const names = text.split(/\s*,\s*/).map((n) => n.trim()).filter(Boolean);
+        if (names.length === 0) return list;
+        const includeList = await window.bibliosophEncounterGetIncludeMonsters(names);
+        if (!Array.isArray(includeList) || includeList.length === 0) return list;
+        const existingIds = new Set((list || []).map((r) => r.id).filter(Boolean));
+        const merged = [...(list || [])];
+        for (const r of includeList) {
+            if (r?.id && !existingIds.has(r.id)) {
+                merged.push(r);
+                existingIds.add(r.id);
+            }
+        }
+        return merged;
     }
 
     /**

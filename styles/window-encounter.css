@@ -145,6 +145,7 @@
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-configure,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-panel,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-filters,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-include,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-buttons,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-results,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-deploy {
@@ -604,6 +605,27 @@
     box-shadow: 0 0 4px rgba(71, 110, 130, 0.6);
 }
 
+/* Include: comma-separated monster names (full-width text box) */
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-include-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px 10px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--encounter-border-color);
+    border-radius: 4px;
+    color: #e0e0e0;
+    font-family: inherit;
+    font-size: 0.95em;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-include-input::placeholder {
+    color: #888;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-include-input:focus {
+    outline: none;
+    border-color: var(--encounter-accent-color);
+}
 
 
 
@@ -817,6 +839,12 @@
     background: rgba(68, 137, 67, 0.2);
     border: 2px solid rgba(68, 137, 67, 0.9);
     box-shadow: 0 0 0 2px rgba(172, 159, 129, 0.2), inset 0 0 12px rgba(200, 120, 60, 0.2);
+}
+
+/* Included by name (ignores habitat/CR filters) */
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-result-card-override {
+    border-color: var(--encounter-accent-color);
+    box-shadow: 0 0 0 1px rgba(172, 159, 129, 0.4);
 }
 
 
