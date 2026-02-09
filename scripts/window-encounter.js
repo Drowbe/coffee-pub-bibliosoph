@@ -13,6 +13,11 @@ export const WINDOW_ENCOUNTER_TEMPLATE = `modules/${MODULE.ID}/templates/window-
 /** Unique application id so no other module's window can be reused. */
 export const WINDOW_ENCOUNTER_APP_ID = `${MODULE.ID}-quick-encounter`;
 
+/** Window height when results/deploy sections are hidden (configure + CR + habitat + buttons only). */
+export const WINDOW_ENCOUNTER_HEIGHT_COLLAPSED = 520;
+/** Window height when results and deploy sections are shown. */
+export const WINDOW_ENCOUNTER_HEIGHT_EXPANDED = 750;
+
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 const Base = HandlebarsApplicationMixin(ApplicationV2);
 
@@ -169,7 +174,7 @@ export class WindowEncounter extends Base {
         {
             id: WINDOW_ENCOUNTER_APP_ID,
             classes: ['window-encounter', 'bibliosoph-window'],
-            position: { width: 500, height: 750 },
+            position: { width: 500, height: WINDOW_ENCOUNTER_HEIGHT_COLLAPSED },
             window: {
                 title: 'Quick Encounter',
                 resizable: true,
@@ -346,6 +351,7 @@ export class WindowEncounter extends Base {
             isBuiltEncounter,
             deploySelectedCount,
             hasDeploySelection,
+            showResultsSection: this._recommendLoading || this._rollLoading || this._recommendAttempted || recommendations.length > 0,
             deploymentPatterns: [
                 { value: 'sequential', label: 'Sequential', selected: false },
                 { value: 'circle', label: 'Circle', selected: false },
@@ -466,6 +472,25 @@ export class WindowEncounter extends Base {
     async _preClose(options) {
         await super._preClose?.(options);
         this._saveWindowBounds();
+    }
+
+    /**
+     * Expand window height when results section is shown (loading, recommendations, or attempted).
+     * Called after render so the window grows to fit results/deploy sections.
+     */
+    _expandIfResults() {
+        const showResults = this._recommendLoading || this._rollLoading
+            || (this._recommendations?.length > 0) || this._recommendAttempted;
+        const currentHeight = this.position?.height ?? 0;
+        if (showResults && currentHeight < WINDOW_ENCOUNTER_HEIGHT_EXPANDED) {
+            this.setPosition({ height: WINDOW_ENCOUNTER_HEIGHT_EXPANDED });
+        }
+    }
+
+    async render(...args) {
+        const result = await super.render(...args);
+        queueMicrotask(() => this._expandIfResults());
+        return result;
     }
 
     /**

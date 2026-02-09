@@ -5,7 +5,7 @@
 // CR/compendium (Blacksmith), search (Recommend), roll for encounter, and deploy.
 
 import { MODULE, BIBLIOSOPH } from './const.js';
-import { WindowEncounter, WINDOW_ENCOUNTER_APP_ID } from './window-encounter.js';
+import { WindowEncounter, WINDOW_ENCOUNTER_APP_ID, WINDOW_ENCOUNTER_HEIGHT_COLLAPSED } from './window-encounter.js';
 
 let _encounterWindow = null;
 
@@ -39,11 +39,11 @@ export function openEncounterWindow() {
         }
         return _encounterWindow;
     }
-    let position = { width: 500, height: 750 };
+    let position = { width: 500, height: WINDOW_ENCOUNTER_HEIGHT_COLLAPSED };
     try {
         const savedBounds = game.settings.get(MODULE.ID, 'quickEncounterWindowBounds');
-        if (savedBounds && typeof savedBounds === 'object' && (savedBounds.width != null || savedBounds.height != null || savedBounds.left != null || savedBounds.top != null)) {
-            position = { ...position, ...savedBounds };
+        if (savedBounds && typeof savedBounds === 'object') {
+            position = { ...position, ...savedBounds, height: WINDOW_ENCOUNTER_HEIGHT_COLLAPSED };
         }
     } catch (_) {}
     _encounterWindow = new WindowEncounter({

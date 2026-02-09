@@ -102,11 +102,13 @@
                 <i class="fa-solid fa-dice"></i> Roll for Encounter
             </button>
             <button type="button" class="window-encounter-recommend window-encounter-btn" {{#if recommendLoading}}disabled{{/if}} title="{{#if recommendLoading}}Searching…{{else}}Search compendiums for matching monsters{{/if}}">
-                <i class="fa-solid fa-magnifying-glass"></i> Recommend monsters
+                <i class="fa-solid fa-magnifying-glass"></i> Recommend
             </button>
+
         </div>
     </section>
 
+    {{#if showResultsSection}}
     <section class="window-encounter-results">
         <h3 class="window-encounter-section-title">Matching results</h3>
         {{#if showSearchingSpinner}}
@@ -139,7 +141,9 @@
         {{/if}}
         {{/if}}
     </section>
+    {{/if}}
 
+    {{#if hasRecommendations}}
     <section class="window-encounter-deploy">
         <h3 class="window-encounter-section-title">Deploy</h3>
         <p class="window-encounter-deploy-hint">Click result cards to select (or use a built encounter). Click a pattern to deploy to the canvas.</p>
@@ -155,4 +159,5 @@
             </label>
         </div>
     </section>
+    {{/if}}
 </div>
