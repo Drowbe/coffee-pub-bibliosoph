@@ -232,7 +232,7 @@ export class WindowEncounter extends Base {
 
         const partyBase = Number.isNaN(heroCRNum) ? 5 : heroCRNum;
         if (this._targetCR == null || this._targetCR === undefined) {
-            this._targetCR = partyBase;
+            this._targetCR = Math.round(partyBase);
         }
         if (this._minCR == null || this._minCR === undefined) {
             const saved = Number(game.settings.get?.(MODULE.ID, 'quickEncounterMinCR'));
@@ -340,7 +340,7 @@ export class WindowEncounter extends Base {
                 const v = Math.max(1, Math.min(10, Number(game.settings.get(MODULE.ID, 'quickEncounterVariability')) ?? 3));
                 return ((v - 1) / 9) * 100;
             })(),
-            targetCRValue: Math.max(0, Number(this._targetCR) || 0),
+            targetCRValue: Math.round(Math.max(0, Number(this._targetCR) || 0)),
             crSliderMin,
             crSliderMax,
             partyCRMarkerPercent,
@@ -730,7 +730,7 @@ export class WindowEncounter extends Base {
             if (crSlider) {
                 const raw = parseFloat(crSlider.value);
                 if (!Number.isNaN(raw) && raw >= 0) {
-                    self._targetCR = raw;
+                    self._targetCR = Math.round(raw);
                     postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: target CR', self._targetCR, true, false);
                     self.render();
                 }
@@ -787,9 +787,9 @@ export class WindowEncounter extends Base {
             if (crSlider) {
                 const raw = parseFloat(crSlider.value);
                 if (!Number.isNaN(raw) && raw >= 0) {
-                    self._targetCR = raw;
+                    self._targetCR = Math.round(raw);
                     const box = root?.querySelector('[data-encounter-cr-display="target"]');
-                    if (box) box.textContent = raw === 0.5 ? '1/2' : String(Math.round(raw * 100) / 100);
+                    if (box) box.textContent = String(Math.round(raw));
                     const min = parseFloat(crSlider.min ?? '0') || 0;
                     const max = parseFloat(crSlider.max ?? '100') || 100;
                     const span = Math.max(1, max - min);
@@ -858,7 +858,7 @@ export class WindowEncounter extends Base {
         root.querySelector('[data-encounter-cr-slider="target"]')?.addEventListener('change', (e) => {
             const raw = parseFloat(e.target?.value);
             if (!Number.isNaN(raw) && raw >= 0) {
-                this._targetCR = raw;
+                this._targetCR = Math.round(raw);
                 this.render();
             }
         });
