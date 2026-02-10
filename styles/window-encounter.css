@@ -379,6 +379,29 @@
     color: #e8c090;
 }
 
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-box-over {
+    border-color: rgba(200, 80, 80, 0.9);
+    background: rgba(120, 40, 40, 0.5);
+}
+
+/* When MONSTER GAP is over target, the value is the overage (e.g. +18) and flashes */
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-box-value.window-encounter-cr-box-overage {
+    font-weight: 700;
+    color: #ffb0b0;
+    animation: window-encounter-overage-flash 1.2s ease-in-out infinite;
+}
+
+@keyframes window-encounter-overage-flash {
+    0%, 100% {
+        opacity: 1;
+        text-shadow: 0 0 8px rgba(255, 180, 180, 0.8);
+    }
+    50% {
+        opacity: 0.85;
+        text-shadow: 0 0 12px rgba(255, 200, 200, 1);
+    }
+}
+
 
 
 

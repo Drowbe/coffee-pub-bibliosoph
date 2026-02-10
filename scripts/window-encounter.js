@@ -287,6 +287,9 @@ export class WindowEncounter extends Base {
         const monsterGapNum = Math.max(0, targetCRNum - totalMonsterCRNum);
         const encounterCRDisplay = formatCRDisplay(targetCRNum);
         const monsterGapDisplay = formatCRDisplay(monsterGapNum);
+        const encounterCROver = totalMonsterCRNum > targetCRNum;
+        const encounterOverageNum = encounterCROver ? totalMonsterCRNum - targetCRNum : 0;
+        const encounterOverageDisplay = encounterCROver ? `+${formatCRDisplay(encounterOverageNum)}` : '';
         const crSliderFill = (() => {
             const min = Number(crSliderMin);
             const max = Number(crSliderMax);
@@ -322,6 +325,8 @@ export class WindowEncounter extends Base {
             monsterCRDisplayNum: totalMonsterCRNum,
             monsterGapDisplay,
             encounterCRDisplay,
+            encounterCROver,
+            encounterOverageDisplay,
             difficulty: difficultyLabel,
             difficultyClass,
             oddsOfEncounter: Math.max(0, Math.min(100, Number(game.settings.get(MODULE.ID, 'encounterOdds')) ?? 20)),

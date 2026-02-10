@@ -58,9 +58,9 @@
                         <span class="window-encounter-cr-box-label">MONSTER CR</span>
                         <span class="window-encounter-cr-box-value">{{monsterCRDisplay}}</span>
                     </div>
-                    <div class="window-encounter-cr-box window-encounter-cr-box-gap" title="Remaining CR to reach target">
+                    <div class="window-encounter-cr-box window-encounter-cr-box-gap{{#if encounterCROver}} window-encounter-cr-box-over{{/if}}" title="{{#if encounterCROver}}Over target by {{encounterOverageDisplay}}{{else}}Remaining CR to reach target{{/if}}">
                         <span class="window-encounter-cr-box-label">MONSTER GAP</span>
-                        <span class="window-encounter-cr-box-value">{{monsterGapDisplay}}</span>
+                        <span class="window-encounter-cr-box-value{{#if encounterCROver}} window-encounter-cr-box-overage{{/if}}">{{#if encounterCROver}}{{encounterOverageDisplay}}{{else}}{{monsterGapDisplay}}{{/if}}</span>
                     </div>
                     <div class="window-encounter-cr-box window-encounter-cr-box-target" title="Target encounter CR (from slider)">
                         <span class="window-encounter-cr-box-label">ENCOUNTER CR</span>
