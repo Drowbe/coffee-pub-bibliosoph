@@ -795,6 +795,17 @@ export class WindowEncounter extends Base {
                     const span = Math.max(1, max - min);
                     const pct = Math.max(0, Math.min(100, ((raw - min) / span) * 100));
                     crSlider.style.setProperty('--cr-fill', `${pct}%`);
+                    const partyCRNum = parseCR(self._assessment?.partyCR ?? self._assessment?.partyCRDisplay);
+                    const partyBase = Number.isNaN(partyCRNum) ? 5 : partyCRNum;
+                    const targetCRNum = Math.round(raw);
+                    const difficultyInfo = getDifficultyFromPartyAndTarget(partyBase, targetCRNum);
+                    const badge = root?.querySelector('.window-encounter-difficulty-badge-large');
+                    if (badge) {
+                        const labelEl = badge.querySelector('.window-encounter-difficulty-label');
+                        if (labelEl) labelEl.textContent = difficultyInfo.label;
+                        ['trivial', 'easy', 'moderate', 'hard', 'deadly', 'impossible'].forEach((c) => badge.classList.remove(c));
+                        badge.classList.add(difficultyInfo.class);
+                    }
                 }
                 return;
             }
