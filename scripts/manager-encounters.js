@@ -692,7 +692,7 @@ async function postEncounterCardToChat(cardData) {
 }
 
 /**
- * Roll for encounter using Global Encounter Settings (encounterOdds, encounterDice).
+ * Roll for encounter using Global Encounter Settings (encounterOdds).
  * Uses encounters-narrative.json for no-encounter and encounter intro text.
  * If encounter: posts intro card, runs recommend, returns recommendations.
  * If no encounter: posts no-encounter card, returns empty recommendations.
