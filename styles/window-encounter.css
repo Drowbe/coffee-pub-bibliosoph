@@ -147,9 +147,7 @@
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-recommend-variability,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-filters,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-include,
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-buttons,
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-results,
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-deploy {
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-buttons {
     flex-shrink: 0;
     padding: 10px 12px;
     border-bottom: 1px solid var(--encounter-border-color);
@@ -168,14 +166,12 @@
     color: #c0c0c0;
 }
 
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-current,
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-slider-value {
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-label-value {
     min-width: 2.5em;
-    font-weight: 600;
+    font-weight: 900;
     color: rgba(105, 213, 104, 0.9);
-    font-size: 1.2em;
+    font-size: 1.0em;
 }
-
 
 
 /* ***** SLIDER ***** */
@@ -333,10 +329,10 @@
     color: var(--encounter-accent-color);
 }
 
-/* ----- CR panel: four boxes + difficulty badge + slider ----- */
+/* ----- CR panel: four CR boxes + difficulty badge in one row ----- */
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-boxes {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 8px;
     margin-bottom: 10px;
 }
@@ -386,20 +382,30 @@
 
 
 
+/* Difficulty badge: same row/size as CR boxes */
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-difficulty-badge-large {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    width: 100%;
-    margin: 10px 0px 10px 0px;
-    padding: 8px 16px;
-    border-radius: 3px;
-    font-weight: bold;
-    font-size: 1.0em;
+    gap: 2px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid var(--encounter-border-color);
+    min-height: 0;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-difficulty-badge-large .window-encounter-difficulty-icon {
+    font-size: 0.7em;
+    opacity: 0.9;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-difficulty-badge-large .window-encounter-difficulty-label {
+    font-size: 1.1em;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: 0.04em;
+    color: rgba(255, 255, 255, 0.95);
 }
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-difficulty-badge-large.trivial {
@@ -433,8 +439,11 @@
     border: 1px solid rgba(120, 40, 40, 0.95);
 }
 
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-difficulty-icon {
-    font-size: 1.2em;
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider-label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.9em;
+    color: #d0d0d0;
 }
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider-row {
@@ -466,10 +475,43 @@
     color: #d0d0d0;
 }
 
+
+
+
+
+
+
+
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-value {
     font-weight: 600;
     color: #e8c090;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-hint {
     font-size: 0.78em;
@@ -757,6 +799,8 @@
 /* ----- Results grid ----- */
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-results {
     flex: 1;
+    flex-shrink: 0;
+    padding: 10px 12px;
     min-height: 120px;
     overflow: auto;
 }
@@ -779,7 +823,11 @@
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-tray .window-encounter-deploy {
     flex-shrink: 0;
     border-bottom: none;
+    border-top: 1px solid var(--encounter-border-color);
+    padding: 10px 12px 0px 12px;
 }
+
+
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-results-loading {
     display: flex;
@@ -813,6 +861,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     gap: 8px;
+    align-content: start;
 }
 
 
@@ -840,7 +889,10 @@
     border: 2px solid var(--encounter-border-color);
     border-radius: 4px;
     cursor: pointer;
+    height: 170px;
 }
+
+
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-result-card.selected:hover,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-result-card:hover {
     border: 2px solid rgba(255, 100, 0, 0.6);
@@ -933,13 +985,19 @@
     border: 1px solid rgba(72, 69, 68, 0.4);
 }
 
+
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-result-name {
     font-size: 0.85em;
     text-align: center;
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     max-width: 100%;
+    line-height: 1.2;
+    word-break: break-word;
 }
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-result-cr {

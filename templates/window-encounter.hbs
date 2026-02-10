@@ -1,4 +1,6 @@
 <div class="window-encounter">
+
+    <!-- HEADER -->
     <header class="window-encounter-header">
         <div class="window-encounter-header-content">
             <div class="window-encounter-header-icon">
@@ -13,189 +15,228 @@
                         <span class="window-encounter-cache-info">{{cacheStatusText}}</span>
                     {{/if}}
                 </div>
-                <button type="button" class="window-encounter-refresh-cache window-encounter-btn-secondary" {{#if cacheBuilding}}disabled{{/if}} title="Build or refresh the monster cache for faster searches">
+                <button type="button" id="{{appId}}-refresh-cache" class="window-encounter-refresh-cache window-encounter-btn-secondary" data-encounter-action="refresh-cache" {{#if cacheBuilding}}disabled{{/if}} title="Build or refresh the monster cache for faster searches">
                     <i class="fa-solid fa-database"></i> {{localize "coffee-pub-bibliosoph.quickEncounterRefreshCache-Label"}}
                 </button>
             </div>
         </div>
-        <div class="window-encounter-difficulty-badge-large {{difficultyClass}}" title="Current difficulty setting">
-            <i class="fa-solid fa-dragon window-encounter-difficulty-icon"></i>
-            <span class="window-encounter-difficulty-label">{{difficulty}}</span>
-        </div>
+
     </header>
 
+
+
+
+
+
+    <!-- CONTENT -->
+
     <div class="window-encounter-body {{#if showResultsSection}}window-encounter-body-with-tray{{/if}}">
-    <div class="window-encounter-main">
-    <section class="window-encounter-configure">
-        <h3 class="window-encounter-section-title">{{localize "coffee-pub-bibliosoph.quickEncounterConfigureEncounter-Label"}}</h3>
-        <div class="window-encounter-odds-row">
-            <label class="window-encounter-odds-label" for="{{appId}}-odds">{{localize "coffee-pub-bibliosoph.encounterOdds-Label"}} <span class="window-encounter-slider-value" data-encounter-setting-value="encounterOdds">{{oddsOfEncounter}}%</span></label>
-        </div>
-        <div class="window-encounter-odds-slider-row">
-            <span class="window-encounter-odds-endpoint">0%</span>
-            <input type="range" id="{{appId}}-odds" class="window-encounter-setting-slider" min="0" max="100" value="{{oddsOfEncounter}}" step="1" aria-label="Odds of encounter (0–100)" data-encounter-setting="encounterOdds" data-encounter-setting-min="0" data-encounter-setting-max="100" data-encounter-setting-suffix="%" style="--slider-fill: {{oddsOfEncounter}}%;" />
-            <span class="window-encounter-odds-endpoint">100%</span>
-        </div>
-    </section>
+        <div class="window-encounter-main">
 
-    <section class="window-encounter-cr-panel">
-        <h3 class="window-encounter-section-title">Challenge rating</h3>
-        <div class="window-encounter-cr-boxes">
-            <div class="window-encounter-cr-box" title="Party (hero) Challenge Rating">
-                <span class="window-encounter-cr-box-label">HERO CR</span>
-                <span class="window-encounter-cr-box-value">{{heroCRDisplay}}</span>
-            </div>
-            <div class="window-encounter-cr-box" title="{{#if monsterCRFromSelection}}Canvas monsters + selected for deploy{{else}}Current monsters on canvas{{/if}}">
-                <span class="window-encounter-cr-box-label">MONSTER CR</span>
-                <span class="window-encounter-cr-box-value">{{monsterCRDisplay}}</span>
-            </div>
-            <div class="window-encounter-cr-box window-encounter-cr-box-gap" title="Remaining CR to reach target">
-                <span class="window-encounter-cr-box-label">MONSTER GAP</span>
-                <span class="window-encounter-cr-box-value">{{monsterGapDisplay}}</span>
-            </div>
-            <div class="window-encounter-cr-box window-encounter-cr-box-target" title="Target encounter CR (from slider)">
-                <span class="window-encounter-cr-box-label">ENCOUNTER CR</span>
-                <span class="window-encounter-cr-box-value">{{encounterCRDisplay}}</span>
-            </div>
+            <!-- ENCOUNTER ODDS SECTION -->   
+
+            <section class="window-encounter-configure">
+                <h3 class="window-encounter-section-title">{{localize "coffee-pub-bibliosoph.quickEncounterConfigureEncounter-Label"}}</h3>
+                <div class="window-encounter-odds-row">
+                    <label class="window-encounter-odds-label" for="{{appId}}-odds">{{localize "coffee-pub-bibliosoph.encounterOdds-Label"}}: <span class="window-encounter-label-value" data-encounter-setting-value="encounterOdds">{{oddsOfEncounter}}%</span></label>
+                </div>
+                <div class="window-encounter-odds-slider-row">
+                    <span class="window-encounter-odds-endpoint">0%</span>
+                    <input type="range" id="{{appId}}-odds" class="window-encounter-setting-slider" min="0" max="100" value="{{oddsOfEncounter}}" step="1" aria-label="Odds of encounter (0–100)" data-encounter-setting="encounterOdds" data-encounter-setting-min="0" data-encounter-setting-max="100" data-encounter-setting-suffix="%" style="--slider-fill: {{oddsOfEncounter}}%;" />
+                    <span class="window-encounter-odds-endpoint">100%</span>
+                </div>
+            </section>
+
+            <!-- CHALLENGE RATING SECTION -->   
+
+            <section class="window-encounter-cr-panel">
+
+                <h3 class="window-encounter-section-title">Challenge rating</h3>
+
+                <!-- BADGES -->
+
+                <div class="window-encounter-cr-boxes">
+                    <div class="window-encounter-cr-box" title="Party (hero) Challenge Rating">
+                        <span class="window-encounter-cr-box-label">HERO CR</span>
+                        <span class="window-encounter-cr-box-value">{{heroCRDisplay}}</span>
+                    </div>
+                    <div class="window-encounter-cr-box" title="{{#if monsterCRFromSelection}}Canvas monsters + selected for deploy{{else}}Current monsters on canvas{{/if}}">
+                        <span class="window-encounter-cr-box-label">MONSTER CR</span>
+                        <span class="window-encounter-cr-box-value">{{monsterCRDisplay}}</span>
+                    </div>
+                    <div class="window-encounter-cr-box window-encounter-cr-box-gap" title="Remaining CR to reach target">
+                        <span class="window-encounter-cr-box-label">MONSTER GAP</span>
+                        <span class="window-encounter-cr-box-value">{{monsterGapDisplay}}</span>
+                    </div>
+                    <div class="window-encounter-cr-box window-encounter-cr-box-target" title="Target encounter CR (from slider)">
+                        <span class="window-encounter-cr-box-label">ENCOUNTER CR</span>
+                        <span class="window-encounter-cr-box-value" data-encounter-cr-display="target">{{encounterCRDisplay}}</span>
+                    </div>
+                    <div class="window-encounter-difficulty-badge-large {{difficultyClass}}" title="Current difficulty setting">
+                        <i class="fa-solid fa-dragon window-encounter-difficulty-icon"></i>
+                        <span class="window-encounter-difficulty-label">{{difficulty}}</span>
+                    </div>
+                </div>
+
+                <!-- TARGET ENCOUNTER CR SLIDER -->
+
+                <label class="window-encounter-cr-slider-label" for="{{appId}}-target-cr">Target Encounter CR</label>
+                <div class="window-encounter-cr-slider-row">
+                    <i class="fa-solid fa-rabbit window-encounter-slider-icon" title="Lower CR"></i>
+                    <div class="window-encounter-cr-slider-wrap">
+                        <input type="range" id="{{appId}}-target-cr" class="window-encounter-cr-slider" min="{{crSliderMin}}" max="{{crSliderMax}}" value="{{targetCRValue}}" step="0.25" aria-label="Target Encounter CR" data-encounter-cr-slider="target" style="--cr-fill: {{crSliderFill}}%;" />
+                    </div>
+                    <i class="fa-solid fa-skull window-encounter-slider-icon" title="Higher CR"></i>
+                </div>
+
+                <!-- CR MIN/MAX RANGE SLIDER -->
+
+                <div class="window-encounter-cr-range-row">
+                    <label class="window-encounter-cr-range-label" for="{{appId}}-min-cr">Monster CR Range: <span id="{{appId}}-cr-range-value" class="window-encounter-label-value">{{crRangeLabel}}</span></label>
+                    <div class="window-encounter-cr-range-row-inner">
+                        <span class="window-encounter-cr-range-endpoint">0 CR</span>
+                        <div class="window-encounter-cr-range-track">
+                            <div class="window-encounter-cr-range-track-bg" aria-hidden="true"></div>
+                            <div id="{{appId}}-cr-range-highlight" class="window-encounter-cr-range-highlight" style="left: {{crRangeHighlightLeft}}%; width: {{crRangeHighlightWidth}}%;" aria-hidden="true"></div>
+                            {{#if crRangePartyMarkerPercent}}
+                            <div class="window-encounter-cr-range-marker" style="left: {{crRangePartyMarkerPercent}}%;" title="Party CR (average)"></div>
+                            {{/if}}
+                            <div id="{{appId}}-cr-range-left-half" class="window-encounter-cr-range-half window-encounter-cr-range-half-left" style="width: {{crRangeSplitPercent}}%;">
+                                <input type="range" id="{{appId}}-min-cr" class="window-encounter-min-cr-slider window-encounter-cr-range-input" data-encounter-cr-slider="min" style="width: {{crRangeMinInputWidth}}%;" min="{{minCRSliderMin}}" max="{{minCRSliderMax}}" value="{{minCRValue}}" step="0.25" aria-label="Minimum creature CR" />
+                            </div>
+                            <div id="{{appId}}-cr-range-right-half" class="window-encounter-cr-range-half window-encounter-cr-range-half-right" style="left: {{crRangeSplitPercent}}%; width: {{crRangeRightWidth}}%;">
+                                <input type="range" id="{{appId}}-max-cr" class="window-encounter-max-cr-slider window-encounter-cr-range-input" data-encounter-cr-slider="max" style="left: {{crRangeMaxInputLeft}}%; width: {{crRangeMaxInputWidth}}%;" min="{{maxCRSliderMin}}" max="{{maxCRSliderMax}}" value="{{maxCRValue}}" step="0.25" aria-label="Maximum creature CR" />
+                            </div>
+                        </div>
+                        <span class="window-encounter-cr-range-endpoint">30 CR</span>
+                    </div>
+                    <p class="window-encounter-cr-range-hint">The red dot represents the average CR of the party.</p>
+                </div>
+            </section>  
+
+            <!-- RECOMMEND AND VARIABILITY SECTION -->
+
+            <section class="window-encounter-recommend-variability">
+                <div class="window-encounter-sliders-row">
+
+                    <!-- MAX RECOMMENDATIONS SLIDER -->
+                    <div class="window-encounter-slider-cell">
+                        <div class="window-encounter-odds-row">
+                            <label class="window-encounter-odds-label" for="{{appId}}-max-recommendations">{{localize "coffee-pub-bibliosoph.quickEncounterMaxRecommendations-Label"}}: <span class="window-encounter-label-value" data-encounter-setting-value="quickEncounterMaxRecommendations">{{maxRecommendationsValue}} </span></label>
+                        </div>
+                        <div class="window-encounter-odds-slider-row">
+                            <span class="window-encounter-odds-endpoint">5</span>
+                            <input type="range" id="{{appId}}-max-recommendations" class="window-encounter-setting-slider" min="5" max="30" value="{{maxRecommendationsValue}}" step="1" aria-label="Max Recommendations (5–30)" data-encounter-setting="quickEncounterMaxRecommendations" data-encounter-setting-min="5" data-encounter-setting-max="30" data-encounter-setting-suffix="" style="--slider-fill: {{maxRecommendationsFill}}%;" />
+                            <span class="window-encounter-odds-endpoint">30</span>
+                        </div>
+                    </div>
+
+                    <!-- VARIABILITY SLIDER -->
+                    <div class="window-encounter-slider-cell">
+                        <div class="window-encounter-odds-row">
+                            <label class="window-encounter-odds-label" for="{{appId}}-variability">{{localize "coffee-pub-bibliosoph.quickEncounterVariability-Label"}}: <span class="window-encounter-label-value" data-encounter-setting-value="quickEncounterVariability">{{variabilityValue}} </span></label>
+                        </div>
+                        <div class="window-encounter-odds-slider-row">
+                            <span class="window-encounter-odds-endpoint">1</span>
+                            <input type="range" id="{{appId}}-variability" class="window-encounter-setting-slider" min="1" max="10" value="{{variabilityValue}}" step="1" aria-label="Variability (1–10)" data-encounter-setting="quickEncounterVariability" data-encounter-setting-min="1" data-encounter-setting-max="10" data-encounter-setting-suffix="" style="--slider-fill: {{variabilityFill}}%;" />
+                            <span class="window-encounter-odds-endpoint">10</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        
+            <!-- HABITAT FILTERS SECTION -->
+
+            <section class="window-encounter-filters">
+                <h3 class="window-encounter-section-title">Habitat</h3>
+                <div class="window-encounter-habitats">
+                    {{#each habitats}}
+                    <button type="button" class="window-encounter-habitat {{#if selected}}active{{/if}}" data-habitat="{{name}}">{{name}}</button>
+                    {{/each}}
+                </div>
+            </section>
+
+            <section class="window-encounter-include">
+                <h3 class="window-encounter-section-title">Include</h3>
+                <input type="text" id="{{appId}}-include-input" class="window-encounter-include-input" value="{{includeMonsterNamesText}}" placeholder="e.g. goblin, orc, dragon" aria-label="Comma-separated monster names to always include in results" />
+            </section>
         </div>
 
-        <div class="window-encounter-cr-slider-row">
-            <i class="fa-solid fa-rabbit window-encounter-slider-icon" title="Lower CR"></i>
-            <div class="window-encounter-cr-slider-wrap">
-                <input type="range" class="window-encounter-cr-slider window-encounter-slider-value" min="{{crSliderMin}}" max="{{crSliderMax}}" value="{{targetCRValue}}" step="0.25" aria-label="Target Encounter CR" style="--cr-fill: {{crSliderFill}}%;" />
-            </div>
-            <i class="fa-solid fa-skull window-encounter-slider-icon" title="Higher CR"></i>
-        </div>
-        <div class="window-encounter-cr-range-row">
-            <label class="window-encounter-cr-range-label" for="{{appId}}-min-cr">Monster CR range <span class="window-encounter-cr-range-value">{{crRangeLabel}}</span></label>
-            <div class="window-encounter-cr-range-row-inner">
-                <span class="window-encounter-cr-range-endpoint">0 CR</span>
-                <div class="window-encounter-cr-range-track">
-                    <div class="window-encounter-cr-range-track-bg" aria-hidden="true"></div>
-                    <div class="window-encounter-cr-range-highlight" style="left: {{crRangeHighlightLeft}}%; width: {{crRangeHighlightWidth}}%;" aria-hidden="true"></div>
-                    {{#if crRangePartyMarkerPercent}}
-                    <div class="window-encounter-cr-range-marker" style="left: {{crRangePartyMarkerPercent}}%;" title="Party CR (average)"></div>
+        <!-- HIDE/SHOW RESULTS SECTION (TRAY) -->
+
+        {{#if showResultsSection}}
+            <div class="window-encounter-tray">
+                <section class="window-encounter-results">
+                    <h3 class="window-encounter-section-title">Matching results</h3>
+                    {{#if showSearchingSpinner}}
+                        <div class="window-encounter-results-loading" aria-busy="true">
+                            <i class="fa-solid fa-spinner fa-spin window-encounter-spinner"></i>
+                            <span class="window-encounter-loading-text">Searching compendiums…</span>
+                        </div>
+                    {{else if hasRecommendations}}
+                        <div class="window-encounter-results-grid">
+                            {{#each recommendations}}
+                            <div class="window-encounter-result-card {{#if selected}}selected{{/if}}{{#if count}} window-encounter-result-row-built{{/if}}{{#if override}} window-encounter-result-card-override{{/if}}" data-encounter-role="result-card" data-actor-id="{{id}}" data-count="{{count}}" title="{{#if override}}Included by name (ignores filters){{else}}{{#if count}}Part of built encounter — deploy below{{else}}Click to select for deploy{{/if}}{{/if}}">
+                                {{#if selected}}
+                                <span class="window-encounter-result-count-wrap" data-actor-id="{{id}}">
+                                    <button type="button" class="window-encounter-result-count-btn window-encounter-result-count-minus" data-encounter-action="count-minus" data-actor-id="{{id}}" aria-label="Decrease count">-</button>
+                                    <span class="window-encounter-result-selected-badge" aria-hidden="true">{{selectedCount}}</span>
+                                    <button type="button" class="window-encounter-result-count-btn window-encounter-result-count-plus" data-encounter-action="count-plus" data-actor-id="{{id}}" aria-label="Increase count">+</button>
+                                </span>
+                                {{/if}}
+                                <img class="window-encounter-result-img" src="{{img}}" alt="{{name}}" />
+                                <div class="window-encounter-result-cr">CR {{cr}}</div>
+                                <div class="window-encounter-result-name">{{name}}</div>
+                            </div>
+                            {{/each}}
+                        </div>
+                    {{else}}
+                        {{#if recommendAttempted}}
+                            <p></p>
+                            <p class="window-encounter-results-empty">No monsters found. Try a different habitat or difficulty.</p>
+                        {{else}}
+                            <p class="window-encounter-results-empty"><strong>ROLL</strong>: Roll to see if there is an encounter based on the odds. If so, it creeates an encounder meeting the defined critera.</p>
+                            <p></p>
+                            <p class="window-encounter-results-empty"><strong>RECOMMEND</strong>: Gereates a list of potential encounter monsters that meet the defined criteria. It retains any selected monsters each time it is pressed.</p>
+                        {{/if}}
                     {{/if}}
-                    <div class="window-encounter-cr-range-half window-encounter-cr-range-half-left" style="width: {{crRangeSplitPercent}}%;">
-                        <input type="range" id="{{appId}}-min-cr" class="window-encounter-min-cr-slider window-encounter-cr-range-input" style="width: {{crRangeMinInputWidth}}%;" min="{{minCRSliderMin}}" max="{{minCRSliderMax}}" value="{{minCRValue}}" step="0.25" aria-label="Minimum creature CR" />
-                    </div>
-                    <div class="window-encounter-cr-range-half window-encounter-cr-range-half-right" style="left: {{crRangeSplitPercent}}%; width: {{crRangeRightWidth}}%;">
-                        <input type="range" id="{{appId}}-max-cr" class="window-encounter-max-cr-slider window-encounter-cr-range-input" style="left: {{crRangeMaxInputLeft}}%; width: {{crRangeMaxInputWidth}}%;" min="{{maxCRSliderMin}}" max="{{maxCRSliderMax}}" value="{{maxCRValue}}" step="0.25" aria-label="Maximum creature CR" />
-                    </div>
-                </div>
-                <span class="window-encounter-cr-range-endpoint">30 CR</span>
-            </div>
-            <p class="window-encounter-cr-range-hint">The red dot represents the average CR of the party.</p>
-        </div>
-    </section>
-
-    <section class="window-encounter-recommend-variability">
-        <div class="window-encounter-sliders-row">
-            <div class="window-encounter-slider-cell">
-                <div class="window-encounter-odds-row">
-                    <label class="window-encounter-odds-label" for="{{appId}}-max-recommendations">{{localize "coffee-pub-bibliosoph.quickEncounterMaxRecommendations-Label"}} <span class="window-encounter-slider-value" data-encounter-setting-value="quickEncounterMaxRecommendations">{{maxRecommendationsValue}}</span></label>
-                </div>
-                <div class="window-encounter-odds-slider-row">
-                    <span class="window-encounter-odds-endpoint">5</span>
-                    <input type="range" id="{{appId}}-max-recommendations" class="window-encounter-setting-slider" min="5" max="30" value="{{maxRecommendationsValue}}" step="1" aria-label="Max Recommendations (5–30)" data-encounter-setting="quickEncounterMaxRecommendations" data-encounter-setting-min="5" data-encounter-setting-max="30" data-encounter-setting-suffix="" style="--slider-fill: {{maxRecommendationsFill}}%;" />
-                    <span class="window-encounter-odds-endpoint">30</span>
-                </div>
-            </div>
-            <div class="window-encounter-slider-cell">
-                <div class="window-encounter-odds-row">
-                    <label class="window-encounter-odds-label" for="{{appId}}-variability">{{localize "coffee-pub-bibliosoph.quickEncounterVariability-Label"}} <span class="window-encounter-slider-value" data-encounter-setting-value="quickEncounterVariability">{{variabilityValue}}</span></label>
-                </div>
-                <div class="window-encounter-odds-slider-row">
-                    <span class="window-encounter-odds-endpoint">1</span>
-                    <input type="range" id="{{appId}}-variability" class="window-encounter-setting-slider" min="1" max="10" value="{{variabilityValue}}" step="1" aria-label="Variability (1–10)" data-encounter-setting="quickEncounterVariability" data-encounter-setting-min="1" data-encounter-setting-max="10" data-encounter-setting-suffix="" style="--slider-fill: {{variabilityFill}}%;" />
-                    <span class="window-encounter-odds-endpoint">10</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="window-encounter-filters">
-        <h3 class="window-encounter-section-title">Habitat</h3>
-        <div class="window-encounter-habitats">
-            {{#each habitats}}
-            <button type="button" class="window-encounter-habitat {{#if selected}}active{{/if}}" data-habitat="{{name}}">{{name}}</button>
-            {{/each}}
-        </div>
-    </section>
-
-    <section class="window-encounter-include">
-        <h3 class="window-encounter-section-title">Include</h3>
-        <input type="text" class="window-encounter-include-input" value="{{includeMonsterNamesText}}" placeholder="e.g. goblin, orc, dragon" aria-label="Comma-separated monster names to always include in results" />
-    </section>
-    </div>
-
-    {{#if showResultsSection}}
-    <div class="window-encounter-tray">
-    <section class="window-encounter-results">
-        <h3 class="window-encounter-section-title">Matching results</h3>
-        {{#if showSearchingSpinner}}
-        <div class="window-encounter-results-loading" aria-busy="true">
-            <i class="fa-solid fa-spinner fa-spin window-encounter-spinner"></i>
-            <span class="window-encounter-loading-text">Searching compendiums…</span>
-        </div>
-        {{else if hasRecommendations}}
-        <div class="window-encounter-results-grid">
-            {{#each recommendations}}
-            <div class="window-encounter-result-card {{#if selected}}selected{{/if}}{{#if count}} window-encounter-result-row-built{{/if}}{{#if override}} window-encounter-result-card-override{{/if}}" data-actor-id="{{id}}" data-count="{{count}}" title="{{#if override}}Included by name (ignores filters){{else}}{{#if count}}Part of built encounter — deploy below{{else}}Click to select for deploy{{/if}}{{/if}}">
-                {{#if selected}}
-                <span class="window-encounter-result-count-wrap" data-actor-id="{{id}}">
-                    <button type="button" class="window-encounter-result-count-btn window-encounter-result-count-minus" data-actor-id="{{id}}" aria-label="Decrease count">-</button>
-                    <span class="window-encounter-result-selected-badge" aria-hidden="true">{{selectedCount}}</span>
-                    <button type="button" class="window-encounter-result-count-btn window-encounter-result-count-plus" data-actor-id="{{id}}" aria-label="Increase count">+</button>
-                </span>
+                </section>
+                {{#if hasRecommendations}}
+                    <section class="window-encounter-deploy">
+                        <h3 class="window-encounter-section-title">Deploy</h3>
+                        <div class="window-encounter-deploy-options">
+                            
+                            <label class="window-encounter-deploy-visible-label" for="{{appId}}-deploy-visible">
+                                <input type="checkbox" id="{{appId}}-deploy-visible" class="window-encounter-deploy-visible" {{#unless deploymentHidden}}checked{{/unless}} />
+                                <span>Visible</span>
+                            </label>
+                        </div>
+                    </section>
                 {{/if}}
-                <img class="window-encounter-result-img" src="{{img}}" alt="{{name}}" />
-                <div class="window-encounter-result-cr">CR {{cr}}</div>
-                <div class="window-encounter-result-name">{{name}}</div>
-            </div>
-            {{/each}}
-        </div>
-        {{else}}
-        {{#if recommendAttempted}}
-        <p class="window-encounter-results-empty">No monsters found. Try a different habitat or difficulty.</p>
-        {{else}}
-        <p class="window-encounter-results-empty">Set habitat and difficulty, then click <strong>Recommend monsters</strong>.</p>
+            </div>                      
         {{/if}}
-        {{/if}}
-    </section>
-    {{#if hasRecommendations}}
-    <section class="window-encounter-deploy">
-        <h3 class="window-encounter-section-title">Deploy</h3>
-        <div class="window-encounter-deploy-options">
-            
-            <label class="window-encounter-deploy-visible-label">
-                <input type="checkbox" class="window-encounter-deploy-visible" {{#unless deploymentHidden}}checked{{/unless}} />
-                <span>Visible</span>
-            </label>
-        </div>
-    </section>
-    {{/if}}
     </div>
-    {{/if}}
-    </div>
+
+
+    <!-- ACTION BUTTONS -->
 
     <section class="window-encounter-buttons window-encounter-buttons-bar">
         <div class="window-encounter-action-buttons">
             <!-- ACTION Buttons -->
-            <button type="button" class="window-encounter-roll window-encounter-btn-primary" {{#if rollLoading}}disabled{{/if}} title="Roll for encounter using Global Encounter Settings (odds and dice); posts a card and may recommend monsters">
+            <button type="button" id="{{appId}}-roll" class="window-encounter-roll window-encounter-btn-primary" {{#if rollLoading}}disabled{{/if}} title="Roll for encounter using Global Encounter Settings (odds and dice); posts a card and may recommend monsters">
                 <i class="fa-solid fa-dice"></i> Roll
             </button>
-            <button type="button" class="window-encounter-recommend window-encounter-btn-primary" {{#if recommendLoading}}disabled{{/if}} title="{{#if recommendLoading}}Searching…{{else}}Search compendiums for matching monsters{{/if}}">
+            <button type="button" id="{{appId}}-recommend" class="window-encounter-recommend window-encounter-btn-primary" {{#if recommendLoading}}disabled{{/if}} title="{{#if recommendLoading}}Searching…{{else}}Search compendiums for matching monsters{{/if}}">
                 <i class="fa-solid fa-magnifying-glass"></i> Recommend
             </button>
-            <button type="button" class="window-encounter-reset window-encounter-btn-secondary" title="Clear results and selection, start over">
+            <button type="button" id="{{appId}}-reset" class="window-encounter-reset window-encounter-btn-secondary" title="Clear results and selection, start over">
                 <i class="fa-solid fa-rotate-left"></i> Reset
             </button>
             {{#if hasRecommendations}}
             <!-- DEPLOY Buttons (only when there are results) -->
             <div class="window-encounter-deploy-patterns">
                 {{#each deploymentPatterns}}
-                <button type="button" class="window-encounter-deploy-pattern window-encounter-btn-secondary" data-pattern="{{value}}" title="Deploy using {{label}} pattern">{{label}}</button>
+                <button type="button" id="{{../appId}}-deploy-{{value}}" class="window-encounter-deploy-pattern window-encounter-btn-secondary" data-encounter-action="deploy-pattern" data-pattern="{{value}}" title="Deploy using {{label}} pattern">{{label}}</button>
                 {{/each}}
             </div>
             {{/if}}

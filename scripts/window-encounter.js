@@ -365,7 +365,7 @@ export class WindowEncounter extends Base {
             isBuiltEncounter,
             deploySelectedCount,
             hasDeploySelection,
-            showResultsSection: this._recommendLoading || this._rollLoading || this._recommendAttempted || recommendations.length > 0,
+            showResultsSection: true,
             deploymentPatterns: [
                 { value: 'sequential', label: 'Sequential' },
                 { value: 'circle', label: 'Circle' },
@@ -529,12 +529,13 @@ export class WindowEncounter extends Base {
      * @param {number} maxCR - Current max CR value
      */
     _updateCRRangeDisplay(root, minCR, maxCR) {
-        const labelEl = root?.querySelector?.('.window-encounter-cr-range-value');
+        const appId = this.id || WINDOW_ENCOUNTER_APP_ID;
+        const labelEl = root?.querySelector?.(`#${appId}-cr-range-value`);
         if (labelEl) labelEl.textContent = `${formatCRDisplay(minCR)} to ${formatCRDisplay(maxCR)}`;
         const crMax = 30;
         const left = Math.min(100, (minCR / crMax) * 100);
         const width = Math.max(0, Math.min(100 - left, ((maxCR - minCR) / crMax) * 100));
-        const highlightEl = root?.querySelector?.('.window-encounter-cr-range-highlight');
+        const highlightEl = root?.querySelector?.(`#${appId}-cr-range-highlight`);
         if (highlightEl) {
             highlightEl.style.left = `${left}%`;
             highlightEl.style.width = `${width}%`;
@@ -543,10 +544,10 @@ export class WindowEncounter extends Base {
         const midpoint = (minCR + maxCR) / 2;
         const splitPercent = Math.max(10, Math.min(90, (midpoint / crMax) * 100));
         const rightWidth = 100 - splitPercent;
-        const leftHalf = root?.querySelector?.('.window-encounter-cr-range-half-left');
-        const rightHalf = root?.querySelector?.('.window-encounter-cr-range-half-right');
-        const minInput = root?.querySelector?.('.window-encounter-cr-range-half-left .window-encounter-cr-range-input');
-        const maxInput = root?.querySelector?.('.window-encounter-cr-range-half-right .window-encounter-cr-range-input');
+        const leftHalf = root?.querySelector?.(`#${appId}-cr-range-left-half`);
+        const rightHalf = root?.querySelector?.(`#${appId}-cr-range-right-half`);
+        const minInput = root?.querySelector?.(`#${appId}-min-cr`);
+        const maxInput = root?.querySelector?.(`#${appId}-max-cr`);
         if (leftHalf) leftHalf.style.width = `${splitPercent}%`;
         if (rightHalf) {
             rightHalf.style.left = `${splitPercent}%`;
@@ -571,7 +572,7 @@ export class WindowEncounter extends Base {
         document.addEventListener('click', function _encounterDelegation(e) {
             const root = self._getEncounterRoot();
             if (!root || !root.contains(e.target)) return;
-            const habitatBtn = e.target?.closest?.('.window-encounter-habitat');
+            const habitatBtn = e.target?.closest?.('[data-encounter-role="habitat"]');
             if (habitatBtn?.dataset?.habitat) {
                 self._selectedHabitat = habitatBtn.dataset.habitat;
                 game.settings.set?.(MODULE.ID, 'quickEncounterHabitat', self._selectedHabitat);
@@ -579,27 +580,27 @@ export class WindowEncounter extends Base {
                 self.render();
                 return;
             }
-            const rollBtn = e.target?.closest?.('.window-encounter-roll');
+            const rollBtn = e.target?.closest?.(`[id="${self.id || WINDOW_ENCOUNTER_APP_ID}-roll"]`);
             if (rollBtn) {
                 self._onRollForEncounter();
                 return;
             }
-            const recommendBtn = e.target?.closest?.('.window-encounter-recommend');
+            const recommendBtn = e.target?.closest?.(`[id="${self.id || WINDOW_ENCOUNTER_APP_ID}-recommend"]`);
             if (recommendBtn) {
                 self._onRecommend();
                 return;
             }
-            const resetBtn = e.target?.closest?.('.window-encounter-reset');
+            const resetBtn = e.target?.closest?.(`[id="${self.id || WINDOW_ENCOUNTER_APP_ID}-reset"]`);
             if (resetBtn) {
                 self._onReset();
                 return;
             }
-            const refreshCacheBtn = e.target?.closest?.('.window-encounter-refresh-cache');
+            const refreshCacheBtn = e.target?.closest?.('[data-encounter-action="refresh-cache"]');
             if (refreshCacheBtn) {
                 self._onRefreshCache();
                 return;
             }
-            const countMinus = e.target?.closest?.('.window-encounter-result-count-minus');
+            const countMinus = e.target?.closest?.('[data-encounter-action="count-minus"]');
             if (countMinus) {
                 const uuid = countMinus.getAttribute?.('data-actor-id') ?? countMinus.dataset?.actorId;
                 if (uuid && self._selectedForDeploy.has(uuid)) {
@@ -615,7 +616,7 @@ export class WindowEncounter extends Base {
                 }
                 return;
             }
-            const countPlus = e.target?.closest?.('.window-encounter-result-count-plus');
+            const countPlus = e.target?.closest?.('[data-encounter-action="count-plus"]');
             if (countPlus) {
                 const uuid = countPlus.getAttribute?.('data-actor-id') ?? countPlus.dataset?.actorId;
                 if (uuid && self._selectedForDeploy.has(uuid)) {
@@ -626,7 +627,7 @@ export class WindowEncounter extends Base {
                 }
                 return;
             }
-            const resultCard = e.target?.closest?.('.window-encounter-result-card');
+            const resultCard = e.target?.closest?.('[data-encounter-role="result-card"]');
             const uuid = resultCard?.getAttribute?.('data-actor-id') ?? resultCard?.dataset?.actorId;
             if (resultCard && uuid) {
                 if (self._selectedForDeploy.has(uuid)) {
@@ -642,7 +643,7 @@ export class WindowEncounter extends Base {
                 self.render();
                 return;
             }
-            const patternBtn = e.target?.closest?.('.window-encounter-deploy-pattern');
+            const patternBtn = e.target?.closest?.('[data-encounter-action="deploy-pattern"]');
             if (patternBtn?.getAttribute?.('data-pattern')) {
                 self._deploymentPattern = patternBtn.getAttribute('data-pattern') ?? patternBtn.dataset.pattern;
                 postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: deploy with pattern', self._deploymentPattern, true, false);
@@ -653,7 +654,7 @@ export class WindowEncounter extends Base {
         document.addEventListener('change', function _encounterChange(e) {
             const root = self._getEncounterRoot();
             if (!root || !root.contains(e.target)) return;
-            const visibleCheck = e.target?.closest?.('.window-encounter-deploy-visible');
+            const visibleCheck = e.target?.closest?.(`[id="${self.id || WINDOW_ENCOUNTER_APP_ID}-deploy-visible"]`);
             if (visibleCheck) {
                 self._deploymentHidden = !visibleCheck.checked;
                 postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: deploy visible', visibleCheck.checked ? 'visible' : 'hidden', true, false);
@@ -675,7 +676,7 @@ export class WindowEncounter extends Base {
                 self.render();
                 return;
             }
-            const crSlider = e.target?.closest?.('.window-encounter-cr-slider');
+            const crSlider = e.target?.closest?.('[data-encounter-cr-slider="target"]');
             if (crSlider) {
                 const raw = parseFloat(crSlider.value);
                 if (!Number.isNaN(raw) && raw >= 0) {
@@ -685,7 +686,7 @@ export class WindowEncounter extends Base {
                 }
                 return;
             }
-            const minCRSlider = e.target?.closest?.('.window-encounter-min-cr-slider');
+            const minCRSlider = e.target?.closest?.('[data-encounter-cr-slider="min"]');
             if (minCRSlider) {
                 const raw = parseFloat(minCRSlider.value);
                 if (!Number.isNaN(raw) && raw >= 0) {
@@ -699,7 +700,7 @@ export class WindowEncounter extends Base {
                 }
                 return;
             }
-            const maxCRSlider = e.target?.closest?.('.window-encounter-max-cr-slider');
+            const maxCRSlider = e.target?.closest?.('[data-encounter-cr-slider="max"]');
             if (maxCRSlider) {
                 const raw = parseFloat(maxCRSlider.value);
                 if (!Number.isNaN(raw) && raw >= 0) {
@@ -732,12 +733,12 @@ export class WindowEncounter extends Base {
                 settingSlider.style.setProperty('--slider-fill', `${pct}%`);
                 return;
             }
-            const crSlider = e.target?.closest?.('.window-encounter-cr-slider');
+            const crSlider = e.target?.closest?.('[data-encounter-cr-slider="target"]');
             if (crSlider) {
                 const raw = parseFloat(crSlider.value);
                 if (!Number.isNaN(raw) && raw >= 0) {
                     self._targetCR = raw;
-                    const box = root?.querySelector('.window-encounter-cr-box-target .window-encounter-cr-box-value');
+                    const box = root?.querySelector('[data-encounter-cr-display="target"]');
                     if (box) box.textContent = raw === 0.5 ? '1/2' : String(Math.round(raw * 100) / 100);
                     const min = parseFloat(crSlider.min ?? '0') || 0;
                     const max = parseFloat(crSlider.max ?? '100') || 100;
@@ -747,12 +748,12 @@ export class WindowEncounter extends Base {
                 }
                 return;
             }
-            const minCRSlider = e.target?.closest?.('.window-encounter-min-cr-slider');
+            const minCRSlider = e.target?.closest?.('[data-encounter-cr-slider="min"]');
             if (minCRSlider) {
                 const raw = parseFloat(minCRSlider.value);
                 if (!Number.isNaN(raw) && raw >= 0) {
                     const v = Math.min(29, Math.max(0, raw));
-                    const maxVal = parseFloat(root?.querySelector('.window-encounter-max-cr-slider')?.value ?? 30);
+                    const maxVal = parseFloat(root?.querySelector?.(`#${self.id || WINDOW_ENCOUNTER_APP_ID}-max-cr`)?.value ?? 30);
                     const clampedMax = Math.max(MIN_CR_GAP, Math.min(30, maxVal));
                     const minVal = Math.min(v, clampedMax - MIN_CR_GAP);
                     const maxVal2 = Math.max(clampedMax, minVal + MIN_CR_GAP);
@@ -761,12 +762,12 @@ export class WindowEncounter extends Base {
                 }
                 return;
             }
-            const maxCRSlider = e.target?.closest?.('.window-encounter-max-cr-slider');
+            const maxCRSlider = e.target?.closest?.('[data-encounter-cr-slider="max"]');
             if (maxCRSlider) {
                 const raw = parseFloat(maxCRSlider.value);
                 if (!Number.isNaN(raw) && raw >= 0) {
                     const v = Math.min(30, Math.max(MIN_CR_GAP, raw));
-                    const minVal = parseFloat(root?.querySelector('.window-encounter-min-cr-slider')?.value ?? 0);
+                    const minVal = parseFloat(root?.querySelector?.(`#${self.id || WINDOW_ENCOUNTER_APP_ID}-min-cr`)?.value ?? 0);
                     const clampedMin = Math.max(0, Math.min(29, minVal));
                     const maxVal2 = Math.max(v, clampedMin + MIN_CR_GAP);
                     const minVal2 = Math.min(clampedMin, maxVal2 - MIN_CR_GAP);
@@ -789,7 +790,9 @@ export class WindowEncounter extends Base {
         const root = html?.matches?.('.window-encounter') ? html : html?.querySelector?.('.window-encounter');
         if (!root) return;
 
-        root.querySelectorAll('.window-encounter-habitat').forEach(btn => {
+        const appId = this.id || WINDOW_ENCOUNTER_APP_ID;
+
+        root.querySelectorAll('[data-encounter-role="habitat"]').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const habitat = e.currentTarget?.dataset?.habitat;
                 if (!habitat) return;
@@ -798,24 +801,24 @@ export class WindowEncounter extends Base {
                 this.render();
             });
         });
-        root.querySelector('.window-encounter-include-input')?.addEventListener('input', (e) => {
+        root.querySelector(`#${appId}-include-input`)?.addEventListener('input', (e) => {
             this._includeMonsterNamesText = e.target?.value ?? '';
         });
-        /* Setting sliders (odds, max recommendations, variability) handled by document listener via [data-encounter-setting] */
-        root.querySelector('.window-encounter-cr-slider')?.addEventListener('change', (e) => {
+        /* Setting sliders handled by document listener via [data-encounter-setting]; target CR via [data-encounter-cr-slider] */
+        root.querySelector('[data-encounter-cr-slider="target"]')?.addEventListener('change', (e) => {
             const raw = parseFloat(e.target?.value);
             if (!Number.isNaN(raw) && raw >= 0) {
                 this._targetCR = raw;
                 this.render();
             }
         });
-        root.querySelector('.window-encounter-roll')?.addEventListener('click', () => this._onRollForEncounter());
-        root.querySelector('.window-encounter-recommend')?.addEventListener('click', () => this._onRecommend());
-        root.querySelector('.window-encounter-reset')?.addEventListener('click', () => this._onReset());
-        root.querySelectorAll('.window-encounter-refresh-cache').forEach(btn => btn.addEventListener('click', () => this._onRefreshCache()));
-        root.querySelectorAll('.window-encounter-result-card').forEach(card => {
+        root.querySelector(`#${appId}-roll`)?.addEventListener('click', () => this._onRollForEncounter());
+        root.querySelector(`#${appId}-recommend`)?.addEventListener('click', () => this._onRecommend());
+        root.querySelector(`#${appId}-reset`)?.addEventListener('click', () => this._onReset());
+        root.querySelectorAll('[data-encounter-action="refresh-cache"]').forEach(btn => btn.addEventListener('click', () => this._onRefreshCache()));
+        root.querySelectorAll('[data-encounter-role="result-card"]').forEach(card => {
             card.addEventListener('click', (e) => {
-                if (e.target?.closest?.('.window-encounter-result-count-btn')) return;
+                if (e.target?.closest?.('[data-encounter-action="count-minus"], [data-encounter-action="count-plus"]')) return;
                 const uuid = card.getAttribute?.('data-actor-id') ?? card.dataset?.actorId;
                 if (!uuid) return;
                 if (this._selectedForDeploy.has(uuid)) {
@@ -831,7 +834,7 @@ export class WindowEncounter extends Base {
                 this.render();
             });
         });
-        root.querySelectorAll('.window-encounter-result-count-minus').forEach(btn => {
+        root.querySelectorAll('[data-encounter-action="count-minus"]').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const uuid = btn.getAttribute?.('data-actor-id') ?? btn.dataset?.actorId;
@@ -844,7 +847,7 @@ export class WindowEncounter extends Base {
                 this.render();
             });
         });
-        root.querySelectorAll('.window-encounter-result-count-plus').forEach(btn => {
+        root.querySelectorAll('[data-encounter-action="count-plus"]').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const uuid = btn.getAttribute?.('data-actor-id') ?? btn.dataset?.actorId;
@@ -854,7 +857,7 @@ export class WindowEncounter extends Base {
                 this.render();
             });
         });
-        root.querySelectorAll('.window-encounter-deploy-pattern').forEach(btn => {
+        root.querySelectorAll('[data-encounter-action="deploy-pattern"]').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const pattern = e.currentTarget?.getAttribute?.('data-pattern') ?? e.currentTarget?.dataset?.pattern;
                 if (pattern) {
@@ -863,11 +866,11 @@ export class WindowEncounter extends Base {
                 }
             });
         });
-        root.querySelector('.window-encounter-deploy-visible')?.addEventListener('change', (e) => {
+        root.querySelector(`#${appId}-deploy-visible`)?.addEventListener('change', (e) => {
             this._deploymentHidden = !e.target?.checked;
             this.render();
         });
-        root.querySelector('.window-encounter-min-cr-slider')?.addEventListener('change', (e) => {
+        root.querySelector(`#${appId}-min-cr`)?.addEventListener('change', (e) => {
             const raw = parseFloat(e.target?.value);
             if (!Number.isNaN(raw) && raw >= 0) {
                 const v = Math.min(29, Math.max(0, raw));
@@ -878,7 +881,7 @@ export class WindowEncounter extends Base {
                 this.render();
             }
         });
-        root.querySelector('.window-encounter-max-cr-slider')?.addEventListener('change', (e) => {
+        root.querySelector(`#${appId}-max-cr`)?.addEventListener('change', (e) => {
             const raw = parseFloat(e.target?.value);
             if (!Number.isNaN(raw) && raw >= 0) {
                 const v = Math.min(30, Math.max(MIN_CR_GAP, raw));
