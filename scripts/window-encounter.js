@@ -661,6 +661,12 @@ export class WindowEncounter extends Base {
                 self.render();
                 return;
             }
+            const includeClear = e.target?.closest?.('[data-encounter-action="include-clear"]');
+            if (includeClear) {
+                self._includeMonsterNamesText = '';
+                self.render();
+                return;
+            }
             const recentRemove = e.target?.closest?.('[data-encounter-action="recent-include-remove"]');
             if (recentRemove) {
                 const idx = parseInt(recentRemove.getAttribute?.('data-encounter-recent-index'), 10);
