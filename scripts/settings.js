@@ -2185,6 +2185,12 @@ export const registerSettings = () => {
 			type: Number,
 			default: 3,
 		});
+		game.settings.register(MODULE.ID, 'quickEncounterRecentIncludeNames', {
+			scope: 'client',
+			config: false,
+			type: Object,
+			default: [],
+		});
 		game.settings.register(MODULE.ID, 'toolbarCoffeePubQuickEncounterEnabled', {
 			name: MODULE.ID + '.toolbarCoffeePubQuickEncounterEnabled-Label',
 			hint: MODULE.ID + '.toolbarCoffeePubQuickEncounterEnabled-Hint',

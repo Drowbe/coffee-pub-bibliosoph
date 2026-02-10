@@ -382,7 +382,11 @@ export class WindowEncounter extends Base {
             cacheStatusTitle: this._getCacheStatusTitle(),
             monsterCRFromSelection,
             includeMonsterNamesText: this._includeMonsterNamesText ?? '',
-            recentIncludeNames: Array.isArray(this._recentIncludeNames) ? this._recentIncludeNames.map((name, index) => ({ name, index })) : [],
+            recentIncludeNames: (() => {
+                const raw = game.settings.get?.(MODULE.ID, 'quickEncounterRecentIncludeNames');
+                this._recentIncludeNames = Array.isArray(raw) ? raw.filter((s) => typeof s === 'string') : [];
+                return this._recentIncludeNames.map((name, index) => ({ name, index }));
+            })(),
             hasRecentIncludeNames: (this._recentIncludeNames?.length ?? 0) > 0
         };
     }
@@ -573,6 +577,16 @@ export class WindowEncounter extends Base {
         this._encounterDelegationAttached = true;
         const self = this;
 
+        document.addEventListener('input', function _encounterInputDelegation(e) {
+            const root = self._getEncounterRoot();
+            if (!root || !root.contains(e.target)) return;
+            const appId = self.id || WINDOW_ENCOUNTER_APP_ID;
+            const includeInput = e.target?.id === `${appId}-include-input` ? e.target : null;
+            if (includeInput && typeof includeInput.value === 'string') {
+                self._includeMonsterNamesText = includeInput.value;
+            }
+        });
+
         document.addEventListener('click', function _encounterDelegation(e) {
             const root = self._getEncounterRoot();
             if (!root || !root.contains(e.target)) return;
@@ -652,6 +666,7 @@ export class WindowEncounter extends Base {
                 const idx = parseInt(recentRemove.getAttribute?.('data-encounter-recent-index'), 10);
                 if (!Number.isNaN(idx) && Array.isArray(self._recentIncludeNames) && idx >= 0 && idx < self._recentIncludeNames.length) {
                     self._recentIncludeNames = self._recentIncludeNames.filter((_, i) => i !== idx);
+                    game.settings.set?.(MODULE.ID, 'quickEncounterRecentIncludeNames', self._recentIncludeNames);
                     self.render();
                 }
                 return;
@@ -1034,6 +1049,7 @@ export class WindowEncounter extends Base {
             recent.unshift(s);
         }
         this._recentIncludeNames = recent.slice(0, 20);
+        game.settings.set?.(MODULE.ID, 'quickEncounterRecentIncludeNames', this._recentIncludeNames);
     }
 
     /**
@@ -1042,6 +1058,11 @@ export class WindowEncounter extends Base {
      * @returns {Promise<Array>} list with include monsters appended (deduped by id)
      */
     async _mergeIncludeMonsters(list) {
+        const root = this._getEncounterRoot();
+        const appId = this.id || WINDOW_ENCOUNTER_APP_ID;
+        const includeInput = root?.querySelector?.(`#${appId}-include-input`);
+        if (includeInput && typeof includeInput.value === 'string') this._includeMonsterNamesText = includeInput.value;
+
         const text = (this._includeMonsterNamesText ?? '').trim();
         const names = text ? text.split(/\s*,\s*/).map((n) => n.trim()).filter(Boolean) : [];
         postConsoleAndNotification(MODULE.NAME, 'Encounter Include', text ? `raw: "${text}" | parsed: [${names.join(', ')}]` : '(empty)', true, false);
