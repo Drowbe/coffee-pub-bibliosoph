@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+## [13.1.0]
+
+### Added
+
+- **Quick Encounter Target Encounter CR label:** Visible label "Target Encounter CR" above the target CR slider.
+- **Quick Encounter recent include list:** Names entered in Include and used (Recommend or Roll) are added to a "recent" list below the input. Clicking a recent item adds it to the Include field; clicking × removes it from the list. The recent list is persisted (client setting) until items are removed.
+- **Quick Encounter include clear button:** A × button inside the Include input clears the field.
+- **Quick Encounter Monster Gap overage:** When total monster CR exceeds the target, the MONSTER GAP box shows the overage (e.g. "+18") with flashing styling so the GM sees they are over budget.
+- **Quick Encounter difficulty during drag:** The difficulty badge (Trivial, Easy, Moderate, etc.) updates live as the Target Encounter CR slider is dragged, without releasing the mouse.
+
+### Changed
+
+- **Quick Encounter tray:** Results/deploy tray now shows by default so the two-column layout is visible from the start.
+- **Quick Encounter results grid:** Cards stack from the top when there are few results (`align-content: start`).
+- **Quick Encounter cache header:** Cache status and Refresh button are on one line (e.g. "Cache: 939 Monsters [Refresh]").
+- **Quick Encounter Target CR slider:** Steps in whole numbers only (step 1); value is rounded and stored as an integer.
+- **Quick Encounter deploy:** Clicking a deploy pattern button (Sequential, Circle, Line, Scatter, Grid) closes the Quick Encounter window so the canvas is visible for placing tokens.
+
+### Fixed
+
+- **Quick Encounter result card selection:** Result cards and count buttons now have the correct `data-encounter-role` and `data-encounter-action` attributes so clicking cards toggles selection and ± adjusts count.
+- **Quick Encounter include input:** Include field value is synced from the DOM when Recommend/Roll runs and via a document-level `input` listener so the value is read correctly (fixes cases where activateListeners may not run with Application V2/PARTS).
+- **Quick Encounter habitat buttons:** Habitat buttons now have `data-encounter-role="habitat"` so clicking them selects the habitat.
+- **Quick Encounter overage display:** Overage is shown only in the MONSTER GAP box as a single number (e.g. "+18") with flash; fixed missing `encounterCROver`/`encounterOverageDisplay` variable declarations in getData.
+
 ## [13.0.10]
 
 ### Added
