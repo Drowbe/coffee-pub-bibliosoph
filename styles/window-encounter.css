@@ -686,7 +686,60 @@
     border-color: var(--encounter-accent-color);
 }
 
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-recent-include {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+    align-content: flex-start;
+}
 
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-recent-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 6px 4px 8px;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid var(--encounter-border-color);
+    border-radius: 4px;
+    font-size: 0.85em;
+    color: #c0c0c0;
+    cursor: pointer;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-recent-chip:hover {
+    border-color: rgba(255, 100, 0, 0.5);
+    background: rgba(255, 100, 0, 0.12);
+    color: #e0e0e0;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-recent-chip-name {
+    pointer-events: none;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-recent-chip-remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
+    min-height: 16px;
+    padding: 0;
+    margin: 0;
+    border: none;
+    border-radius: 2px;
+    background: transparent;
+    color: #999;
+    font-size: 1.1em;
+    line-height: 1;
+    cursor: pointer;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-recent-chip-remove:hover {
+    background: rgba(200, 80, 80, 0.4);
+    color: #fff;
+}
 
 
 /* DIFFICULTY */
@@ -784,10 +837,15 @@
 /* CACHE STATUS */
 
 
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-header-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-cache-status {
     font-size: 0.85em;
     color: rgba(255, 255, 255, 0.75);
-    margin-bottom: 6px;
 }
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-cache-building {

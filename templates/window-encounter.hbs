@@ -8,13 +8,7 @@
             </div>
             <div class="window-encounter-header-title">{{title}}</div>
             <div class="window-encounter-header-controls">
-                <div class="window-encounter-cache-status" title="{{cacheStatusTitle}}">
-                    {{#if cacheBuilding}}
-                        <span class="window-encounter-cache-building"><i class="fa-solid fa-spinner fa-spin"></i> {{cacheBuildingText}}</span>
-                    {{else}}
-                        <span class="window-encounter-cache-info">{{cacheStatusText}}</span>
-                    {{/if}}
-                </div>
+                <span class="window-encounter-cache-status" title="{{cacheStatusTitle}}">Cache: {{#if cacheBuilding}}<span class="window-encounter-cache-building"><i class="fa-solid fa-spinner fa-spin"></i> {{cacheBuildingText}}</span>{{else}}{{cacheStatusText}}{{/if}}</span>
                 <button type="button" id="{{appId}}-refresh-cache" class="window-encounter-refresh-cache window-encounter-btn-secondary" data-encounter-action="refresh-cache" {{#if cacheBuilding}}disabled{{/if}} title="Build or refresh the monster cache for faster searches">
                     <i class="fa-solid fa-database"></i> {{localize "coffee-pub-bibliosoph.quickEncounterRefreshCache-Label"}}
                 </button>
@@ -159,6 +153,16 @@
             <section class="window-encounter-include">
                 <h3 class="window-encounter-section-title">Include</h3>
                 <input type="text" id="{{appId}}-include-input" class="window-encounter-include-input" value="{{includeMonsterNamesText}}" placeholder="e.g. goblin, orc, dragon" aria-label="Comma-separated monster names to always include in results" />
+                {{#if hasRecentIncludeNames}}
+                <div class="window-encounter-recent-include">
+                    {{#each recentIncludeNames}}
+                    <span class="window-encounter-recent-chip" data-encounter-action="recent-include-add" data-encounter-recent-index="{{this.index}}" title="Add to Include">
+                        <span class="window-encounter-recent-chip-name">{{this.name}}</span>
+                        <button type="button" class="window-encounter-recent-chip-remove" data-encounter-action="recent-include-remove" data-encounter-recent-index="{{this.index}}" aria-label="Remove from recent">×</button>
+                    </span>
+                    {{/each}}
+                </div>
+                {{/if}}
             </section>
         </div>
 

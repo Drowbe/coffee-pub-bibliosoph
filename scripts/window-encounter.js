@@ -165,6 +165,8 @@ export class WindowEncounter extends Base {
     _cacheBuildingText = '';
     /** Include box: comma-separated monster names to always add to results (override filters). */
     _includeMonsterNamesText = '';
+    /** Recent include names (most recent first), for quick-add chips. */
+    _recentIncludeNames = [];
 
     /** AppV2: parts go here so Foundry injects template into .window-content (not in DEFAULT_OPTIONS). */
     static PARTS = {
@@ -379,7 +381,9 @@ export class WindowEncounter extends Base {
             cacheStatusText: this._getCacheStatusText(),
             cacheStatusTitle: this._getCacheStatusTitle(),
             monsterCRFromSelection,
-            includeMonsterNamesText: this._includeMonsterNamesText ?? ''
+            includeMonsterNamesText: this._includeMonsterNamesText ?? '',
+            recentIncludeNames: Array.isArray(this._recentIncludeNames) ? this._recentIncludeNames.map((name, index) => ({ name, index })) : [],
+            hasRecentIncludeNames: (this._recentIncludeNames?.length ?? 0) > 0
         };
     }
 
@@ -641,6 +645,26 @@ export class WindowEncounter extends Base {
                 }
                 postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: selection toggled', `${self._selectedForDeploy.size} selected`, true, false);
                 self.render();
+                return;
+            }
+            const recentRemove = e.target?.closest?.('[data-encounter-action="recent-include-remove"]');
+            if (recentRemove) {
+                const idx = parseInt(recentRemove.getAttribute?.('data-encounter-recent-index'), 10);
+                if (!Number.isNaN(idx) && Array.isArray(self._recentIncludeNames) && idx >= 0 && idx < self._recentIncludeNames.length) {
+                    self._recentIncludeNames = self._recentIncludeNames.filter((_, i) => i !== idx);
+                    self.render();
+                }
+                return;
+            }
+            const recentAdd = e.target?.closest?.('[data-encounter-action="recent-include-add"]');
+            if (recentAdd && !e.target?.closest?.('[data-encounter-action="recent-include-remove"]')) {
+                const idx = parseInt(recentAdd.getAttribute?.('data-encounter-recent-index'), 10);
+                if (!Number.isNaN(idx) && Array.isArray(self._recentIncludeNames) && idx >= 0 && idx < self._recentIncludeNames.length) {
+                    const name = self._recentIncludeNames[idx];
+                    const current = (self._includeMonsterNamesText ?? '').trim();
+                    self._includeMonsterNamesText = current ? `${current}, ${name}` : name;
+                    self.render();
+                }
                 return;
             }
             const patternBtn = e.target?.closest?.('[data-encounter-action="deploy-pattern"]');
@@ -996,15 +1020,34 @@ export class WindowEncounter extends Base {
     }
 
     /**
+     * Add names to the recent-include list (most recent first, deduped, max 20).
+     * @param {string[]} names - Names to add (will be trimmed).
+     */
+    _pushToRecentInclude(names) {
+        if (!Array.isArray(names) || names.length === 0) return;
+        const key = (n) => String(n).trim().toLowerCase();
+        let recent = Array.isArray(this._recentIncludeNames) ? [...this._recentIncludeNames] : [];
+        for (const n of names) {
+            const s = String(n).trim();
+            if (!s) continue;
+            recent = recent.filter((r) => key(r) !== key(s));
+            recent.unshift(s);
+        }
+        this._recentIncludeNames = recent.slice(0, 20);
+    }
+
+    /**
      * Parse Include text, fetch matching monsters (ignore filters), merge into list with override flag.
      * @param {Array<{id: string}>} list - Current recommendations
      * @returns {Promise<Array>} list with include monsters appended (deduped by id)
      */
     async _mergeIncludeMonsters(list) {
         const text = (this._includeMonsterNamesText ?? '').trim();
+        const names = text ? text.split(/\s*,\s*/).map((n) => n.trim()).filter(Boolean) : [];
+        postConsoleAndNotification(MODULE.NAME, 'Encounter Include', text ? `raw: "${text}" | parsed: [${names.join(', ')}]` : '(empty)', true, false);
         if (!text || typeof window.bibliosophEncounterGetIncludeMonsters !== 'function') return list;
-        const names = text.split(/\s*,\s*/).map((n) => n.trim()).filter(Boolean);
         if (names.length === 0) return list;
+        this._pushToRecentInclude(names);
         const includeList = await window.bibliosophEncounterGetIncludeMonsters(names);
         if (!Array.isArray(includeList) || includeList.length === 0) return list;
         const existingIds = new Set((list || []).map((r) => r.id).filter(Boolean));
