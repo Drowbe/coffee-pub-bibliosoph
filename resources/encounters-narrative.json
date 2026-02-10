@@ -3,43 +3,43 @@
 
     "Any": {
       "day": [
-        {
+          {
           "title": "Nothing Breaks the Rhythm",
-          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+            "icon": "<i class=\"fa-solid fa-dice\"></i>",
           "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
-          "tags": ["encounter", "failure"],
+            "tags": ["encounter", "failure"],
           "timeOfDay": "day",
           "description": "The hours pass without interruption. Whatever might have crossed your path does not."
-        },
-        {
+          },
+          {
           "title": "An Uneventful Stretch",
-          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+            "icon": "<i class=\"fa-solid fa-dice\"></i>",
           "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
-          "tags": ["encounter", "failure"],
+            "tags": ["encounter", "failure"],
           "timeOfDay": "day",
           "description": "You remain alert, but nothing rises to meet that caution."
-        },
-        {
+          },
+          {
           "title": "All Seems Normal",
-          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+            "icon": "<i class=\"fa-solid fa-dice\"></i>",
           "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
-          "tags": ["encounter", "failure"],
+            "tags": ["encounter", "failure"],
           "timeOfDay": "day",
           "description": "Sounds, movement, and atmosphere remain as expected. No threat presents itself."
-        },
-        {
+          },
+          {
           "title": "Quiet Progress",
-          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+            "icon": "<i class=\"fa-solid fa-dice\"></i>",
           "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
-          "tags": ["encounter", "failure"],
+            "tags": ["encounter", "failure"],
           "timeOfDay": "day",
           "description": "You move forward steadily, unchallenged and uninterrupted."
-        },
-        {
+          },
+          {
           "title": "Nothing Takes Notice",
-          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+            "icon": "<i class=\"fa-solid fa-dice\"></i>",
           "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-neutral.webp",
-          "tags": ["encounter", "failure"],
+            "tags": ["encounter", "failure"],
           "timeOfDay": "day",
           "description": "If anything is nearby, it keeps its distance. Your passage goes unnoticed."
         }
@@ -341,19 +341,19 @@
           "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-forest-3.webp",
           "tags": ["encounter", "failure"],
           "description": "You stay alert for movement, but the forest offers only ordinary sounds."
-        },
-        {
-          "title": "Remarkably Unremarkable",
-          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          },
+          {
+            "title": "Remarkably Unremarkable",
+            "icon": "<i class=\"fa-solid fa-dice\"></i>",
           "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-forest-1.webp",
-          "tags": ["encounter", "failure"],
+            "tags": ["encounter", "failure"],
           "description": "Hours pass with little more than birdcalls and rustling branches."
-        },
-        {
-          "title": "Peaceful Progress",
-          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+          },
+          {
+            "title": "Peaceful Progress",
+            "icon": "<i class=\"fa-solid fa-dice\"></i>",
           "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-forest-2.webp",
-          "tags": ["encounter", "failure"],
+            "tags": ["encounter", "failure"],
           "description": "The path stays clear of trouble. For now, the forest lets you pass."
         }
       ],
@@ -367,23 +367,23 @@
         },
         {
           "title": "Lanternlit Stillness",
-          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+            "icon": "<i class=\"fa-solid fa-dice\"></i>",
           "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-forest-1.webp",
-          "tags": ["encounter", "failure"],
+            "tags": ["encounter", "failure"],
           "description": "Shadows sway with the branches. The night remains tense but quiet."
-        },
-        {
+          },
+          {
           "title": "All Quiet",
-          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+            "icon": "<i class=\"fa-solid fa-dice\"></i>",
           "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-forest-2.webp",
-          "tags": ["encounter", "failure"],
+            "tags": ["encounter", "failure"],
           "description": "The silence is watchful rather than oppressive. No threat presents itself."
-        },
-        {
+          },
+          {
           "title": "Dark Canopy Calm",
-          "icon": "<i class=\"fa-solid fa-dice\"></i>",
+            "icon": "<i class=\"fa-solid fa-dice\"></i>",
           "image": "modules/coffee-pub-blacksmith/images/banners/banners-narration-forest-3.webp",
-          "tags": ["encounter", "failure"],
+            "tags": ["encounter", "failure"],
           "description": "Night air cools the forest. You hear life, but not danger."
         },
         {
@@ -1345,11 +1345,11 @@
 
     "Forest": {
       "day": [
-        {
-          "title": "Something Stirs!",
-          "icon": "<i class=\"fa-solid fa-dice\"></i>",
-          "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
-          "tags": ["encounter", "success"],
+      {
+        "title": "Something Stirs!",    
+        "icon": "<i class=\"fa-solid fa-dice\"></i>",
+        "image": "modules/coffee-pub-blacksmith/images/banners/banners-heros-1.webp",
+        "tags": ["encounter", "success"],
           "description": "Faint shuffling reaches your ears. The air feels watchful all at once."
         },
         {
@@ -2199,3 +2199,4 @@
     
   }
 }
+  
