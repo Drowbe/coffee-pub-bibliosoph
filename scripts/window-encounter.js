@@ -13,6 +13,10 @@ export const WINDOW_ENCOUNTER_TEMPLATE = `modules/${MODULE.ID}/templates/window-
 /** Unique application id so no other module's window can be reused. */
 export const WINDOW_ENCOUNTER_APP_ID = `${MODULE.ID}-quick-encounter`;
 
+/** Module-level: only one document delegation listener is ever attached; it dispatches to the current window ref. */
+let _encounterDelegationAttached = false;
+let _currentEncounterWindowRef = null;
+
 /** Window height when results/deploy sections are hidden (configure + CR + habitat + buttons only). */
 export const WINDOW_ENCOUNTER_HEIGHT_COLLAPSED = 520;
 /** Window height when results and deploy sections are shown. */
@@ -196,6 +200,17 @@ export class WindowEncounter extends Base {
         const ourData = await this.getData(options);
         postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: prepareContext', `habitats=${ourData.habitats?.length ?? 0}, assessment=${ourData.partyCRDisplay ?? '—'}`, true, false);
         return foundry.utils.mergeObject(base, ourData);
+    }
+
+    /**
+     * On close, clear the current window ref so the single document listener
+     * does not dispatch to a closed instance when the user reopens the window.
+     */
+    close(options = {}) {
+        if (_currentEncounterWindowRef === this) {
+            _currentEncounterWindowRef = null;
+        }
+        return super.close(options);
     }
 
     /**
@@ -574,147 +589,157 @@ export class WindowEncounter extends Base {
     }
 
     /**
-     * Attach click/change delegation once. Uses document so we catch events however the app is rendered.
-     * This is the reliable path for PARTS-based apps where activateListeners may not run.
+     * Attach click/change delegation once per session. Uses document so we catch events however the app is rendered.
+     * Listener is added only once (module-level); it dispatches to _currentEncounterWindowRef so closing and
+     * reopening the window does not stack duplicate listeners (which caused multiple cards per click).
      */
     _attachDelegationOnce() {
-        if (this._encounterDelegationAttached) return;
-        this._encounterDelegationAttached = true;
-        const self = this;
+        _currentEncounterWindowRef = this;
+        if (_encounterDelegationAttached) return;
+        _encounterDelegationAttached = true;
 
         document.addEventListener('input', function _encounterInputDelegation(e) {
-            const root = self._getEncounterRoot();
+            const w = _currentEncounterWindowRef;
+            if (!w) return;
+            const root = w._getEncounterRoot();
             if (!root || !root.contains(e.target)) return;
-            const appId = self.id || WINDOW_ENCOUNTER_APP_ID;
+            const appId = w.id || WINDOW_ENCOUNTER_APP_ID;
             const includeInput = e.target?.id === `${appId}-include-input` ? e.target : null;
             if (includeInput && typeof includeInput.value === 'string') {
-                self._includeMonsterNamesText = includeInput.value;
+                w._includeMonsterNamesText = includeInput.value;
             }
         });
 
         document.addEventListener('click', function _encounterDelegation(e) {
-            const root = self._getEncounterRoot();
+            const w = _currentEncounterWindowRef;
+            if (!w) return;
+            const root = w._getEncounterRoot();
             if (!root || !root.contains(e.target)) return;
+            const appId = w.id || WINDOW_ENCOUNTER_APP_ID;
             const habitatBtn = e.target?.closest?.('[data-encounter-role="habitat"]');
             if (habitatBtn?.dataset?.habitat) {
-                self._selectedHabitat = habitatBtn.dataset.habitat;
-                game.settings.set?.(MODULE.ID, 'quickEncounterHabitat', self._selectedHabitat);
-                postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: habitat selected', self._selectedHabitat, true, false);
-                self.render();
+                w._selectedHabitat = habitatBtn.dataset.habitat;
+                game.settings.set?.(MODULE.ID, 'quickEncounterHabitat', w._selectedHabitat);
+                postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: habitat selected', w._selectedHabitat, true, false);
+                w.render();
                 return;
             }
-            const rollBtn = e.target?.closest?.(`[id="${self.id || WINDOW_ENCOUNTER_APP_ID}-roll"]`);
+            const rollBtn = e.target?.closest?.(`[id="${appId}-roll"]`);
             if (rollBtn) {
-                self._onRollForEncounter();
+                w._onRollForEncounter();
                 return;
             }
-            const recommendBtn = e.target?.closest?.(`[id="${self.id || WINDOW_ENCOUNTER_APP_ID}-recommend"]`);
+            const recommendBtn = e.target?.closest?.(`[id="${appId}-recommend"]`);
             if (recommendBtn) {
-                self._onRecommend();
+                w._onRecommend();
                 return;
             }
-            const resetBtn = e.target?.closest?.(`[id="${self.id || WINDOW_ENCOUNTER_APP_ID}-reset"]`);
+            const resetBtn = e.target?.closest?.(`[id="${appId}-reset"]`);
             if (resetBtn) {
-                self._onReset();
+                w._onReset();
                 return;
             }
             const refreshCacheBtn = e.target?.closest?.('[data-encounter-action="refresh-cache"]');
             if (refreshCacheBtn) {
-                self._onRefreshCache();
+                w._onRefreshCache();
                 return;
             }
             const countMinus = e.target?.closest?.('[data-encounter-action="count-minus"]');
             if (countMinus) {
                 const uuid = countMinus.getAttribute?.('data-actor-id') ?? countMinus.dataset?.actorId;
-                if (uuid && self._selectedForDeploy.has(uuid)) {
-                    const n = (self._selectedCounts.get(uuid) ?? 1) - 1;
+                if (uuid && w._selectedForDeploy.has(uuid)) {
+                    const n = (w._selectedCounts.get(uuid) ?? 1) - 1;
                     if (n <= 0) {
-                        self._selectedForDeploy.delete(uuid);
-                        self._selectedCounts.delete(uuid);
+                        w._selectedForDeploy.delete(uuid);
+                        w._selectedCounts.delete(uuid);
                     } else {
-                        self._selectedCounts.set(uuid, n);
+                        w._selectedCounts.set(uuid, n);
                     }
                     postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: count', `${uuid.slice(-8)} → ${n <= 0 ? 'removed' : n}`, true, false);
-                    self.render();
+                    w.render();
                 }
                 return;
             }
             const countPlus = e.target?.closest?.('[data-encounter-action="count-plus"]');
             if (countPlus) {
                 const uuid = countPlus.getAttribute?.('data-actor-id') ?? countPlus.dataset?.actorId;
-                if (uuid && self._selectedForDeploy.has(uuid)) {
-                    const n = Math.min(99, (self._selectedCounts.get(uuid) ?? 1) + 1);
-                    self._selectedCounts.set(uuid, n);
+                if (uuid && w._selectedForDeploy.has(uuid)) {
+                    const n = Math.min(99, (w._selectedCounts.get(uuid) ?? 1) + 1);
+                    w._selectedCounts.set(uuid, n);
                     postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: count', `${uuid.slice(-8)} → ${n}`, true, false);
-                    self.render();
+                    w.render();
                 }
                 return;
             }
             const resultCard = e.target?.closest?.('[data-encounter-role="result-card"]');
             const uuid = resultCard?.getAttribute?.('data-actor-id') ?? resultCard?.dataset?.actorId;
             if (resultCard && uuid) {
-                if (self._selectedForDeploy.has(uuid)) {
-                    self._selectedForDeploy.delete(uuid);
-                    self._selectedCounts.delete(uuid);
+                if (w._selectedForDeploy.has(uuid)) {
+                    w._selectedForDeploy.delete(uuid);
+                    w._selectedCounts.delete(uuid);
                 } else {
-                    self._selectedForDeploy.add(uuid);
-                    const rec = (self._recommendations || []).find((r) => r.id === uuid);
+                    w._selectedForDeploy.add(uuid);
+                    const rec = (w._recommendations || []).find((r) => r.id === uuid);
                     const initialCount = rec && typeof rec.count === 'number' && rec.count >= 1 ? rec.count : 1;
-                    self._selectedCounts.set(uuid, initialCount);
+                    w._selectedCounts.set(uuid, initialCount);
                 }
-                postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: selection toggled', `${self._selectedForDeploy.size} selected`, true, false);
-                self.render();
+                postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: selection toggled', `${w._selectedForDeploy.size} selected`, true, false);
+                w.render();
                 return;
             }
             const includeClear = e.target?.closest?.('[data-encounter-action="include-clear"]');
             if (includeClear) {
-                self._includeMonsterNamesText = '';
-                self.render();
+                w._includeMonsterNamesText = '';
+                w.render();
                 return;
             }
             const recentRemove = e.target?.closest?.('[data-encounter-action="recent-include-remove"]');
             if (recentRemove) {
                 const idx = parseInt(recentRemove.getAttribute?.('data-encounter-recent-index'), 10);
-                if (!Number.isNaN(idx) && Array.isArray(self._recentIncludeNames) && idx >= 0 && idx < self._recentIncludeNames.length) {
-                    self._recentIncludeNames = self._recentIncludeNames.filter((_, i) => i !== idx);
-                    game.settings.set?.(MODULE.ID, 'quickEncounterRecentIncludeNames', self._recentIncludeNames);
-                    self.render();
+                if (!Number.isNaN(idx) && Array.isArray(w._recentIncludeNames) && idx >= 0 && idx < w._recentIncludeNames.length) {
+                    w._recentIncludeNames = w._recentIncludeNames.filter((_, i) => i !== idx);
+                    game.settings.set?.(MODULE.ID, 'quickEncounterRecentIncludeNames', w._recentIncludeNames);
+                    w.render();
                 }
                 return;
             }
             const recentAdd = e.target?.closest?.('[data-encounter-action="recent-include-add"]');
             if (recentAdd && !e.target?.closest?.('[data-encounter-action="recent-include-remove"]')) {
                 const idx = parseInt(recentAdd.getAttribute?.('data-encounter-recent-index'), 10);
-                if (!Number.isNaN(idx) && Array.isArray(self._recentIncludeNames) && idx >= 0 && idx < self._recentIncludeNames.length) {
-                    const name = self._recentIncludeNames[idx];
-                    const current = (self._includeMonsterNamesText ?? '').trim();
-                    self._includeMonsterNamesText = current ? `${current}, ${name}` : name;
-                    self.render();
+                if (!Number.isNaN(idx) && Array.isArray(w._recentIncludeNames) && idx >= 0 && idx < w._recentIncludeNames.length) {
+                    const name = w._recentIncludeNames[idx];
+                    const current = (w._includeMonsterNamesText ?? '').trim();
+                    w._includeMonsterNamesText = current ? `${current}, ${name}` : name;
+                    w.render();
                 }
                 return;
             }
             const patternBtn = e.target?.closest?.('[data-encounter-action="deploy-pattern"]');
             if (patternBtn?.getAttribute?.('data-pattern')) {
-                self._deploymentPattern = patternBtn.getAttribute('data-pattern') ?? patternBtn.dataset.pattern;
-                postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: deploy with pattern', self._deploymentPattern, true, false);
-                self._onDeploy();
-                self.close();
+                w._deploymentPattern = patternBtn.getAttribute('data-pattern') ?? patternBtn.dataset.pattern;
+                postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: deploy with pattern', w._deploymentPattern, true, false);
+                w._onDeploy();
+                w.close();
                 return;
             }
         });
         document.addEventListener('change', function _encounterChange(e) {
-            const root = self._getEncounterRoot();
+            const w = _currentEncounterWindowRef;
+            if (!w) return;
+            const root = w._getEncounterRoot();
             if (!root || !root.contains(e.target)) return;
-            const visibleCheck = e.target?.closest?.(`[id="${self.id || WINDOW_ENCOUNTER_APP_ID}-deploy-visible"]`);
+            const visibleCheck = e.target?.closest?.(`[id="${w.id || WINDOW_ENCOUNTER_APP_ID}-deploy-visible"]`);
             if (visibleCheck) {
-                self._deploymentHidden = !visibleCheck.checked;
+                w._deploymentHidden = !visibleCheck.checked;
                 postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: deploy visible', visibleCheck.checked ? 'visible' : 'hidden', true, false);
-                self.render();
+                w.render();
             }
         });
         // Sliders: only update and re-render on 'change' (mouseup / keyup) so drag stays responsive
         document.addEventListener('change', function _encounterSliderChange(e) {
-            const root = self._getEncounterRoot();
+            const w = _currentEncounterWindowRef;
+            if (!w) return;
+            const root = w._getEncounterRoot();
             if (!root || !root.contains(e.target)) return;
             const settingSlider = e.target?.closest?.('[data-encounter-setting]');
             if (settingSlider) {
@@ -724,16 +749,16 @@ export class WindowEncounter extends Base {
                 const val = Math.max(min, Math.min(max, parseInt(settingSlider.value, 10) || min));
                 game.settings.set(MODULE.ID, key, val);
                 postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: setting', `${key}=${val}`, true, false);
-                self.render();
+                w.render();
                 return;
             }
             const crSlider = e.target?.closest?.('[data-encounter-cr-slider="target"]');
             if (crSlider) {
                 const raw = parseFloat(crSlider.value);
                 if (!Number.isNaN(raw) && raw >= 0) {
-                    self._targetCR = Math.round(raw);
-                    postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: target CR', self._targetCR, true, false);
-                    self.render();
+                    w._targetCR = Math.round(raw);
+                    postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: target CR', w._targetCR, true, false);
+                    w.render();
                 }
                 return;
             }
@@ -742,12 +767,12 @@ export class WindowEncounter extends Base {
                 const raw = parseFloat(minCRSlider.value);
                 if (!Number.isNaN(raw) && raw >= 0) {
                     const v = Math.min(29, Math.max(0, raw));
-                    const currentMax = Math.max(MIN_CR_GAP, Math.min(30, Number(self._maxCR) ?? 30));
-                    self._minCR = Math.min(v, currentMax - MIN_CR_GAP);
-                    self._maxCR = Math.max(self._maxCR ?? 30, self._minCR + MIN_CR_GAP);
-                    game.settings.set?.(MODULE.ID, 'quickEncounterMinCR', self._minCR);
-                    postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: minimum CR', self._minCR, true, false);
-                    self.render();
+                    const currentMax = Math.max(MIN_CR_GAP, Math.min(30, Number(w._maxCR) ?? 30));
+                    w._minCR = Math.min(v, currentMax - MIN_CR_GAP);
+                    w._maxCR = Math.max(w._maxCR ?? 30, w._minCR + MIN_CR_GAP);
+                    game.settings.set?.(MODULE.ID, 'quickEncounterMinCR', w._minCR);
+                    postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: minimum CR', w._minCR, true, false);
+                    w.render();
                 }
                 return;
             }
@@ -756,18 +781,20 @@ export class WindowEncounter extends Base {
                 const raw = parseFloat(maxCRSlider.value);
                 if (!Number.isNaN(raw) && raw >= 0) {
                     const v = Math.min(30, Math.max(MIN_CR_GAP, raw));
-                    const currentMin = Math.max(0, Math.min(29, Number(self._minCR) ?? 0));
-                    self._maxCR = Math.max(v, currentMin + MIN_CR_GAP);
-                    self._minCR = Math.min(self._minCR ?? 0, self._maxCR - MIN_CR_GAP);
-                    game.settings.set?.(MODULE.ID, 'quickEncounterMaxCR', self._maxCR);
-                    postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: maximum CR', self._maxCR, true, false);
-                    self.render();
+                    const currentMin = Math.max(0, Math.min(29, Number(w._minCR) ?? 0));
+                    w._maxCR = Math.max(v, currentMin + MIN_CR_GAP);
+                    w._minCR = Math.min(w._minCR ?? 0, w._maxCR - MIN_CR_GAP);
+                    game.settings.set?.(MODULE.ID, 'quickEncounterMaxCR', w._maxCR);
+                    postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: maximum CR', w._maxCR, true, false);
+                    w.render();
                 }
             }
         });
         // Update displayed value during drag without full re-render (keeps drag responsive)
         document.addEventListener('input', function _encounterSliderInput(e) {
-            const root = self._getEncounterRoot();
+            const w = _currentEncounterWindowRef;
+            if (!w) return;
+            const root = w._getEncounterRoot();
             if (!root || !root.contains(e.target)) return;
             const settingSlider = e.target?.closest?.('[data-encounter-setting]');
             if (settingSlider) {
@@ -788,7 +815,7 @@ export class WindowEncounter extends Base {
             if (crSlider) {
                 const raw = parseFloat(crSlider.value);
                 if (!Number.isNaN(raw) && raw >= 0) {
-                    self._targetCR = Math.round(raw);
+                    w._targetCR = Math.round(raw);
                     const box = root?.querySelector('[data-encounter-cr-display="target"]');
                     if (box) box.textContent = String(Math.round(raw));
                     const min = parseFloat(crSlider.min ?? '0') || 0;
@@ -796,7 +823,7 @@ export class WindowEncounter extends Base {
                     const span = Math.max(1, max - min);
                     const pct = Math.max(0, Math.min(100, ((raw - min) / span) * 100));
                     crSlider.style.setProperty('--cr-fill', `${pct}%`);
-                    const partyCRNum = parseCR(self._assessment?.partyCR ?? self._assessment?.partyCRDisplay);
+                    const partyCRNum = parseCR(w._assessment?.partyCR ?? w._assessment?.partyCRDisplay);
                     const partyBase = Number.isNaN(partyCRNum) ? 5 : partyCRNum;
                     const targetCRNum = Math.round(raw);
                     const difficultyInfo = getDifficultyFromPartyAndTarget(partyBase, targetCRNum);
@@ -815,12 +842,12 @@ export class WindowEncounter extends Base {
                 const raw = parseFloat(minCRSlider.value);
                 if (!Number.isNaN(raw) && raw >= 0) {
                     const v = Math.min(29, Math.max(0, raw));
-                    const maxVal = parseFloat(root?.querySelector?.(`#${self.id || WINDOW_ENCOUNTER_APP_ID}-max-cr`)?.value ?? 30);
+                    const maxVal = parseFloat(root?.querySelector?.(`#${w.id || WINDOW_ENCOUNTER_APP_ID}-max-cr`)?.value ?? 30);
                     const clampedMax = Math.max(MIN_CR_GAP, Math.min(30, maxVal));
                     const minVal = Math.min(v, clampedMax - MIN_CR_GAP);
                     const maxVal2 = Math.max(clampedMax, minVal + MIN_CR_GAP);
                     if (Number(minCRSlider.value) !== minVal) minCRSlider.value = minVal;
-                    self._updateCRRangeDisplay(root, minVal, maxVal2);
+                    w._updateCRRangeDisplay(root, minVal, maxVal2);
                 }
                 return;
             }
@@ -829,12 +856,12 @@ export class WindowEncounter extends Base {
                 const raw = parseFloat(maxCRSlider.value);
                 if (!Number.isNaN(raw) && raw >= 0) {
                     const v = Math.min(30, Math.max(MIN_CR_GAP, raw));
-                    const minVal = parseFloat(root?.querySelector?.(`#${self.id || WINDOW_ENCOUNTER_APP_ID}-min-cr`)?.value ?? 0);
+                    const minVal = parseFloat(root?.querySelector?.(`#${w.id || WINDOW_ENCOUNTER_APP_ID}-min-cr`)?.value ?? 0);
                     const clampedMin = Math.max(0, Math.min(29, minVal));
                     const maxVal2 = Math.max(v, clampedMin + MIN_CR_GAP);
                     const minVal2 = Math.min(clampedMin, maxVal2 - MIN_CR_GAP);
                     if (Number(maxCRSlider.value) !== maxVal2) maxCRSlider.value = maxVal2;
-                    self._updateCRRangeDisplay(root, minVal2, maxVal2);
+                    w._updateCRRangeDisplay(root, minVal2, maxVal2);
                 }
             }
         });
@@ -874,10 +901,7 @@ export class WindowEncounter extends Base {
                 this.render();
             }
         });
-        root.querySelector(`#${appId}-roll`)?.addEventListener('click', () => this._onRollForEncounter());
-        root.querySelector(`#${appId}-recommend`)?.addEventListener('click', () => this._onRecommend());
-        root.querySelector(`#${appId}-reset`)?.addEventListener('click', () => this._onReset());
-        root.querySelectorAll('[data-encounter-action="refresh-cache"]').forEach(btn => btn.addEventListener('click', () => this._onRefreshCache()));
+        /* Roll, Recommend, Reset, Refresh cache: handled only by document-level delegation (_attachDelegationOnce) so one click = one action (activateListeners can run on every render and would add duplicate listeners). */
         root.querySelectorAll('[data-encounter-role="result-card"]').forEach(card => {
             card.addEventListener('click', (e) => {
                 if (e.target?.closest?.('[data-encounter-action="count-minus"], [data-encounter-action="count-plus"]')) return;
@@ -919,16 +943,7 @@ export class WindowEncounter extends Base {
                 this.render();
             });
         });
-        root.querySelectorAll('[data-encounter-action="deploy-pattern"]').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const pattern = e.currentTarget?.getAttribute?.('data-pattern') ?? e.currentTarget?.dataset?.pattern;
-                if (pattern) {
-                    this._deploymentPattern = pattern;
-                    this._onDeploy();
-                    this.close();
-                }
-            });
-        });
+        /* Deploy-pattern buttons: handled only by document-level delegation so one click = one deploy (same duplicate-listener issue as Roll/Recommend). */
         root.querySelector(`#${appId}-deploy-visible`)?.addEventListener('change', (e) => {
             this._deploymentHidden = !e.target?.checked;
             this.render();
@@ -1126,27 +1141,19 @@ export class WindowEncounter extends Base {
      */
     async _onDeploy() {
         const recommendations = Array.isArray(this._recommendations) ? this._recommendations : [];
-        const isBuiltEncounter = recommendations.length > 0 && recommendations.every(r => typeof r.count === 'number' && r.count >= 1);
         const selectedRecommendations = recommendations.filter(r => this._selectedForDeploy.has(r.id));
-        let uuids;
-        if (isBuiltEncounter) {
-            uuids = selectedRecommendations.flatMap(r => Array(r.count ?? 1).fill(r.id));
-        } else if (this._selectedForDeploy.size > 0) {
-            uuids = selectedRecommendations.flatMap(r => Array(this._selectedCounts.get(r.id) ?? 1).fill(r.id));
-        } else {
-            uuids = recommendations.map(r => r.id).filter(Boolean);
-        }
+        // Always use user's selected counts (_selectedCounts); for rolled encounters we pre-filled these but user can +/- in UI.
+        const uuids = selectedRecommendations.length > 0
+            ? selectedRecommendations.flatMap(r => Array(this._selectedCounts.get(r.id) ?? (typeof r.count === 'number' && r.count >= 1 ? r.count : 1)).fill(r.id))
+            : [];
         if (uuids.length === 0) {
             postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: deploy', 'No monsters selected', true, true);
             return;
         }
-        const selectedMonsters = selectedRecommendations.map(r => ({
-            name: r.name ?? 'Unknown',
-            count: r.count ?? 1,
-            cr: r.cr ?? '—',
-            img: r.img ?? '',
-            id: r.id
-        }));
+        const selectedMonsters = selectedRecommendations.map(r => {
+            const count = this._selectedCounts.get(r.id) ?? (typeof r.count === 'number' && r.count >= 1 ? r.count : 1);
+            return { name: r.name ?? 'Unknown', count, cr: r.cr ?? '—', img: r.img ?? '', id: r.id };
+        });
         const metadata = { monsters: uuids, npcs: [] };
         const options = {
             deploymentPattern: this._deploymentPattern || 'sequential',
