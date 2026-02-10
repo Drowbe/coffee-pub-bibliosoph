@@ -698,6 +698,7 @@ export class WindowEncounter extends Base {
                 self._deploymentPattern = patternBtn.getAttribute('data-pattern') ?? patternBtn.dataset.pattern;
                 postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: deploy with pattern', self._deploymentPattern, true, false);
                 self._onDeploy();
+                self.close();
                 return;
             }
         });
@@ -924,6 +925,7 @@ export class WindowEncounter extends Base {
                 if (pattern) {
                     this._deploymentPattern = pattern;
                     this._onDeploy();
+                    this.close();
                 }
             });
         });
