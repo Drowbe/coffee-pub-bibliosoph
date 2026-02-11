@@ -141,9 +141,11 @@
     padding: 2px;
 }
 .encounter-monster-name {
-
+    text-transform: uppercase;
+    font-weight: 900;
+    font-size: 1.0em;
+    color: rgba(52, 44, 38, 0.9);
 }
-
 .investigation-items {
     margin: 0.5em 0;
 }

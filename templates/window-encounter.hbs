@@ -8,7 +8,7 @@
             </div>
             <div class="window-encounter-header-title">{{title}}</div>
             <div class="window-encounter-header-controls">
-                <span class="window-encounter-cache-status" title="{{cacheStatusTitle}}">Cache: {{#if cacheBuilding}}<span class="window-encounter-cache-building"><i class="fa-solid fa-spinner fa-spin"></i> {{cacheBuildingText}}</span>{{else}}{{cacheStatusText}}{{/if}}</span>
+                <span class="window-encounter-cache-status" title="{{cacheStatusTitle}}">Cache: {{#if cacheBuilding}}<span class="window-encounter-cache-building"><i class="fa-solid fa-spinner window-encounter-spinner"></i> {{cacheBuildingText}}</span>{{else}}{{cacheStatusText}}{{/if}}</span>
                 <button type="button" id="{{appId}}-refresh-cache" class="window-encounter-refresh-cache window-encounter-btn-secondary" data-encounter-action="refresh-cache" {{#if cacheBuilding}}disabled{{/if}} title="Build or refresh the monster cache for faster searches">
                     <i class="fa-solid fa-database"></i> {{localize "coffee-pub-bibliosoph.quickEncounterRefreshCache-Label"}}
                 </button>
@@ -177,7 +177,7 @@
                     <h3 class="window-encounter-section-title">Matching results</h3>
                     {{#if showSearchingSpinner}}
                         <div class="window-encounter-results-loading" aria-busy="true">
-                            <i class="fa-solid fa-spinner fa-spin window-encounter-spinner"></i>
+                            <i class="fa-solid fa-spinner window-encounter-spinner"></i>
                             <span class="window-encounter-loading-text">Searching compendiums…</span>
                         </div>
                     {{else if hasRecommendations}}

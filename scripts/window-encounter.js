@@ -315,13 +315,14 @@ export class WindowEncounter extends Base {
         const difficultyLabel = difficultyInfo.label;
         const difficultyClass = difficultyInfo.class;
 
+        const noImagePortrait = 'modules/coffee-pub-blacksmith/images/portraits/portrait-noimage.webp';
         const isBuiltEncounter = recommendations.length > 0 && recommendations.every(r => typeof r.count === 'number' && r.count >= 1);
         const recommendationsWithSelection = recommendations.map(r => {
             const selected = this._selectedForDeploy.has(r.id);
             const selectedCount = selected
                 ? (this._selectedCounts.get(r.id) ?? (typeof r.count === 'number' && r.count >= 1 ? r.count : 1))
                 : 0;
-            return { ...r, selected, selectedCount };
+            return { ...r, img: r.img || noImagePortrait, selected, selectedCount };
         });
         const deploySelectedCount = isBuiltEncounter
             ? recommendations.filter(r => this._selectedForDeploy.has(r.id)).reduce((s, r) => s + (r.count ?? 1), 0)

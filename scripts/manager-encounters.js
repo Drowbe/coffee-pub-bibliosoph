@@ -88,16 +88,57 @@ function isValidEncounterActor(doc) {
 }
 
 /**
- * Get token image from an Actor document (prototype token); fallback to actor portrait.
- * Used for result cards so they show the token, not the portrait.
- * @param {Actor|{ prototypeToken?: { texture?: { src?: string }, img?: string }, img?: string }} doc
- * @returns {string}
+ * Resolve wildcard token path (e.g. arch-hag-*.webp) to a concrete file.
+ * If no wildcard, returns original path.
+ * @param {string} path
+ * @returns {Promise<string>}
  */
-function getActorTokenImg(doc) {
-    if (!doc) return '';
+async function resolveWildcardPath(path) {
+    if (!path || !path.includes('*')) return path;
+
+    try {
+        const parts = path.split('/');
+        const pattern = parts.pop();
+        const dir = parts.join('/');
+
+        const response = await FilePicker.browse('data', dir);
+        if (!response?.files?.length) return path;
+
+        const regex = new RegExp(
+            '^' + pattern.replace(/\./g, '\\.').replace(/\*/g, '.*') + '$'
+        );
+
+        const matches = response.files.filter(f =>
+            regex.test(f.split('/').pop())
+        );
+
+        if (!matches.length) return path;
+
+        return matches[Math.floor(Math.random() * matches.length)];
+    } catch (err) {
+        console.error(MODULE.ID + ' | Wildcard token resolution failed:', err);
+        return path;
+    }
+}
+
+/**
+ * Get token image from an Actor document (prototype token); fallback to actor portrait.
+ * Resolves wildcard paths (e.g. arch-hag-*.webp) to a concrete file for display.
+ * @param {Actor|{ prototypeToken?: { texture?: { src?: string }, img?: string }, img?: string }} doc
+ * @returns {Promise<string>}
+ */
+const NO_IMAGE_PORTRAIT = 'modules/coffee-pub-blacksmith/images/portraits/portrait-noimage.webp';
+
+async function getActorTokenImg(doc) {
+    if (!doc) return NO_IMAGE_PORTRAIT;
     const pt = doc.prototypeToken ?? doc.prototypeTokenData;
-    const src = pt?.texture?.src ?? pt?.img;
-    return src && typeof src === 'string' ? src : (doc.img ?? '');
+    let src = pt?.texture?.src ?? pt?.img ?? doc.img ?? '';
+    if (typeof src !== 'string') return NO_IMAGE_PORTRAIT;
+    if (src.includes('*')) {
+        src = await resolveWildcardPath(src);
+        if (src.includes('*')) src = doc.img ?? ''; // resolution failed, fall back to portrait
+    }
+    return src || NO_IMAGE_PORTRAIT;
 }
 
 /**
@@ -250,7 +291,7 @@ export async function buildEncounterCache(progressCallback) {
                     compendiumId,
                     docId: doc.id,
                     name: doc.name ?? 'Unknown',
-                    img: getActorTokenImg(doc),
+                    img: await getActorTokenImg(doc),
                     cr: crNum,
                     xp,
                     habitats
@@ -321,7 +362,7 @@ async function getCandidatesWithXP(habitat) {
                 const xp = getActorXP(doc);
                 if (Number.isNaN(crNum) || Number.isNaN(xp)) continue;
                 out.push({
-                    doc: { img: getActorTokenImg(doc), name: doc.name ?? 'Unknown' },
+                    doc: { img: await getActorTokenImg(doc), name: doc.name ?? 'Unknown' },
                     id: doc.uuid ?? `${compendiumId}.${doc.id}`,
                     cr: crNum,
                     xp
@@ -415,7 +456,7 @@ export async function encounterGetIncludeMonsters(names) {
                 seen.add(id);
                 results.push({
                     id,
-                    img: getActorTokenImg(doc),
+                    img: await getActorTokenImg(doc),
                     name: doc.name ?? 'Unknown',
                     cr: formatCR(crNum),
                     override: true
@@ -650,9 +691,26 @@ function pickRandomEncounterIntroEntry(narrativeJson, habitat) {
  * @returns {Object} CARDDATA for template
  */
 function buildEncounterCardData(entry, theme, cardTitle = 'Encounter', encounterMonsters = null) {
-    const strUserName = game.user?.name ?? '';
-    const strUserAvatar = game.user?.avatar ?? '';
-    const strCharacterName = game.user?.character?.name ?? '';
+    let strUserName = '';
+    let strUserAvatar = '';
+    let strCharacterName = '';
+    const controlled = canvas?.tokens?.controlled ?? [];
+    if (controlled.length > 0) {
+        const token = controlled[0];
+        const actor = token?.actor ?? token?.document?.actor;
+        if (actor) {
+            strUserAvatar = actor.img ?? actor.portrait ?? token?.document?.texture?.src ?? '';
+            strUserName = actor.name ?? '';
+            const owners = game.users?.filter((u) => !u.isGM && actor.testUserPermission?.(u, 'OWNER')) ?? [];
+            const owner = owners.find((u) => u.active) ?? owners[0];
+            if (owner?.name) strCharacterName = owner.name;
+        }
+    }
+    if (!strUserAvatar || !strUserName) {
+        strUserName = game.user?.name ?? '';
+        strUserAvatar = game.user?.avatar ?? '';
+        strCharacterName = game.user?.character?.name ?? '';
+    }
     const data = {
         isEncounterCard: true,
         isGM: game.user?.isGM ?? false,
@@ -674,7 +732,8 @@ function buildEncounterCardData(entry, theme, cardTitle = 'Encounter', encounter
         data.detectionNarrativeText = detectionInfo.narrative;
         data.encounterDetectionLevel = detectionLevel;
         data.encounterShowUnknownAdversaries = detectionLevel <= 2;
-        data.encounterUnknownAdversariesImage = 'modules/coffee-pub-blacksmith/images/portraits/portrait-noimage.webp';
+        const noImagePortrait = 'modules/coffee-pub-blacksmith/images/portraits/portrait-noimage.webp';
+        data.encounterUnknownAdversariesImage = noImagePortrait;
 
         data.encounterMonsters = encounterMonsters.map((m) => {
             const name = m.name ?? 'Unknown';
@@ -682,20 +741,21 @@ function buildEncounterCardData(entry, theme, cardTitle = 'Encounter', encounter
             const uuid = m.id || m.uuid || m.actorUuid || m.actorUUID;
             const displayName = count > 1 ? `${count} × ${name}` : name;
             const displayNameLink = uuid ? `@UUID[${uuid}]{${displayName}}` : displayName;
+            const img = m.img ?? m.portrait ?? m.tokenImg ?? noImagePortrait;
             return {
                 name,
                 count,
                 displayName,
                 displayNameLink,
                 cr: m.cr ?? '—',
-                img: m.img ?? m.portrait ?? m.tokenImg ?? ''
+                img
             };
         });
         data.encounterMonstersPlain = encounterMonsters.map((m) => {
             const name = m.name ?? 'Unknown';
             const count = typeof m.count === 'number' && m.count >= 1 ? m.count : 1;
             const displayName = count > 1 ? `${count} × ${name}` : name;
-            const img = m.img ?? m.portrait ?? m.tokenImg ?? '';
+            const img = m.img ?? m.portrait ?? m.tokenImg ?? noImagePortrait;
             return { displayName, img };
         });
     }

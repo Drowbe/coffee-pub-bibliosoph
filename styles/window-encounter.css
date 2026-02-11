@@ -963,6 +963,16 @@
     gap: 6px;
 }
 
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-cache-building .window-encounter-spinner {
+    font-size: 1em;
+    animation: window-encounter-spin 1s linear infinite;
+}
+
+@keyframes window-encounter-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
 /* ----- Results grid ----- */
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-results {
     flex: 1;
@@ -1023,6 +1033,7 @@
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-spinner {
     font-size: 1.5em;
     color: var(--encounter-accent-color);
+    animation: window-encounter-spin 1s linear infinite;
 }
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-loading-text {
