@@ -12,7 +12,6 @@ let _encounterWindow = null;
 /** Max monster types returned by Recommend (random pick; no budget). */
 const MAX_RECOMMENDATIONS = 20;
 /** Max distinct monster types in a rolled encounter (then we fill by adding more of same types). */
-const MAX_ENCOUNTER_TYPES = 3;
 /** Cap actors loaded per compendium when not using cache. */
 const MAX_ACTORS_PER_PACK = 200;
 /** Cache version for migrations; bump when schema changes. */
@@ -38,7 +37,7 @@ export function openEncounterWindow() {
         BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: brought existing window to front', '', true, false);
         return _encounterWindow;
     }
-    let position = { width: 500, height: WINDOW_ENCOUNTER_HEIGHT_COLLAPSED };
+    let position = { width: 1000, height: 800 };
     try {
         const savedBounds = game.settings.get(MODULE.ID, 'quickEncounterWindowBounds');
         if (savedBounds && typeof savedBounds === 'object' && (savedBounds.width != null || savedBounds.height != null || savedBounds.left != null || savedBounds.top != null)) {
@@ -474,15 +473,18 @@ export async function encounterRecommend(habitat, difficulty, targetCR, minCR = 
 }
 
 /**
- * Build a single encounter: up to MAX_ENCOUNTER_TYPES types, then add more of those types to close monster CR gap (without going over target).
- * Returns array of { id, img, name, cr, count } with count >= 1.
+ * Build a single encounter: up to variability types, then add more of those types to close monster CR gap (without going over target).
+ * Optionally appends extra unselected monsters (count 0) for GM swap options.
+ * Returns array of { id, img, name, cr, count } with count >= 1 for built, count 0 for extras.
  * @param {string} habitat
  * @param {number} targetCR - target encounter CR; we fill until total monster CR is as close as possible without exceeding this
  * @param {number} [minCR=0] - floor: no monster below this CR
  * @param {number} [maxCR=30] - ceiling: no monster above this CR
+ * @param {number} [variability=3] - number of monster types in the built encounter
+ * @param {number} [maxExtraOptions=0] - add this many extra unselected monsters (count 0) to the result
  * @returns {Promise<Array<{id: string, img: string, name: string, cr: string, count: number}>>}
  */
-export async function buildEncounter(habitat, targetCR, minCR = 0, maxCR = 30) {
+export async function buildEncounter(habitat, targetCR, minCR = 0, maxCR = 30, variability = 3, maxExtraOptions = 0) {
     let candidates = await getCandidatesWithXP(habitat);
     const minCRNum = typeof minCR === 'number' && !Number.isNaN(minCR) ? Math.max(0, minCR) : 0;
     const maxCRNum = typeof maxCR === 'number' && !Number.isNaN(maxCR) ? Math.min(30, Math.max(0, maxCR)) : 30;
@@ -491,13 +493,14 @@ export async function buildEncounter(habitat, targetCR, minCR = 0, maxCR = 30) {
     if (candidates.length === 0) return [];
 
     const targetCRNum = typeof targetCR === 'number' && !Number.isNaN(targetCR) ? Math.max(0, targetCR) : 0;
+    const maxTypes = Math.max(1, Math.min(5, Math.floor(variability) || 3));
     /** @type {Array<{id: string, img: string, name: string, crNum: number, count: number}>} */
     const encounter = [];
     let totalCR = 0;
     const usedIds = new Set();
 
-    // Phase 1: pick up to MAX_ENCOUNTER_TYPES types at random, each with count 1, so total CR <= target
-    for (let i = 0; i < MAX_ENCOUNTER_TYPES; i++) {
+    // Phase 1: pick up to variability types at random, each with count 1, so total CR <= target
+    for (let i = 0; i < maxTypes; i++) {
         const valid = candidates.filter((c) => !usedIds.has(c.id) && c.cr + totalCR <= targetCRNum);
         if (valid.length === 0) break;
         const pick = valid[Math.floor(Math.random() * valid.length)];
@@ -551,8 +554,27 @@ export async function buildEncounter(habitat, targetCR, minCR = 0, maxCR = 30) {
         count: e.count
     }));
 
-    const totalTokens = out.reduce((s, e) => s + e.count, 0);
-    BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: Built encounter', `${out.length} types, ${totalTokens} tokens (CR gap ${(targetCRNum - totalCR).toFixed(2)})`, true, false);
+    // Phase 3: add extra unselected monsters (count 0) for GM swap options
+    const numExtra = Math.max(0, Math.floor(maxExtraOptions));
+    if (numExtra > 0) {
+        const unused = candidates.filter((c) => !usedIds.has(c.id));
+        const shuffled = [...unused].sort(() => Math.random() - 0.5);
+        for (let i = 0; i < numExtra && i < shuffled.length; i++) {
+            const pick = shuffled[i];
+            out.push({
+                id: pick.id,
+                img: pick.doc?.img ?? '',
+                name: pick.doc?.name ?? 'Unknown',
+                cr: formatCR(pick.cr),
+                count: 0
+            });
+        }
+    }
+
+    const totalTokens = out.filter((e) => e.count > 0).reduce((s, e) => s + e.count, 0);
+    const extraCount = out.length - encounter.length;
+    const extraText = extraCount > 0 ? ` +${extraCount} options` : '';
+    BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: Built encounter', `${encounter.length} types${extraText}, ${totalTokens} tokens (CR gap ${(targetCRNum - totalCR).toFixed(2)})`, true, false);
     return out;
 }
 
@@ -725,15 +747,20 @@ export async function rollForEncounter(habitat, difficulty, targetCR, minCR = 0,
         const entry = pickEntry(encounterFalseEntries);
         const cardData = buildEncounterCardData(entry, theme, 'No Encounter');
         await postEncounterCardToChat(cardData);
-        if (typeof BlacksmithUtils?.playSound === 'function') {
-            BlacksmithUtils.playSound('modules/coffee-pub-blacksmith/sounds/rustling-grass.mp3', '0.7');
+        const encounterFalseSound = game.settings.get(MODULE.ID, 'encounterFalseSound');
+        const encounterSoundVolume = game.settings.get(MODULE.ID, 'encounterSoundVolume') ?? 0.7;
+        if (typeof BlacksmithUtils?.playSound === 'function' && encounterFalseSound && encounterFalseSound !== 'none') {
+            BlacksmithUtils.playSound(encounterFalseSound, String(encounterSoundVolume));
         }
         return { encounter: false, recommendations: [] };
     }
 
     const introEntry = pickRandomEncounterIntroEntry(narrativeJson, habitat);
-    const recommendations = await buildEncounter(habitat, targetCR, minCR, maxCR);
-    const n = recommendations.reduce((s, r) => s + (r.count ?? 1), 0);
+    const variability = Math.max(1, Math.min(5, Number(game.settings.get(MODULE.ID, 'quickEncounterVariability')) ?? 3));
+    const maxRec = Math.max(5, Math.min(30, Number(game.settings.get(MODULE.ID, 'quickEncounterMaxRecommendations')) ?? 10));
+    const maxExtraOptions = Math.max(0, maxRec - variability);
+    const recommendations = await buildEncounter(habitat, targetCR, minCR, maxCR, variability, maxExtraOptions);
+    const n = recommendations.filter((r) => (r.count ?? 0) > 0).reduce((s, r) => s + (r.count ?? 1), 0);
     BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: Roll for Encounter', `${recommendations.length} types, ${n} tokens`, false, false);
     return { encounter: true, recommendations, introEntry };
 }
@@ -764,6 +791,11 @@ export async function postEncounterDeployCardToChat(introEntry, selectedMonsters
     const cardTitle = (habitatStr && habitatStr.toLowerCase() !== 'any') ? `${habitatStr} Encounter` : 'Encounter';
     const cardData = buildEncounterCardData(entry, theme, cardTitle, selectedMonsters);
     await postEncounterCardToChat(cardData);
+    const encounterTrueSound = game.settings.get(MODULE.ID, 'encounterTrueSound');
+    const encounterSoundVolume = game.settings.get(MODULE.ID, 'encounterSoundVolume') ?? 0.7;
+    if (typeof BlacksmithUtils?.playSound === 'function' && encounterTrueSound && encounterTrueSound !== 'none') {
+        BlacksmithUtils.playSound(encounterTrueSound, String(encounterSoundVolume));
+    }
 }
 
 // Expose for window-encounter.js

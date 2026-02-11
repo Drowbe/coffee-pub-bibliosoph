@@ -113,7 +113,7 @@ export const registerSettings = () => {
 			scope: 'client',
 			config: false,
 			type: Object,
-			default: { width: 500, height: 750 },
+			default: { width: 1000, height: 800 },
 		});
 		// Quick Encounter monster cache (world; built on demand, used for fast Recommend/Roll)
 		game.settings.register(MODULE.ID, 'quickEncounterCache', {
@@ -1591,7 +1591,43 @@ export const registerSettings = () => {
 			default: false,
 		});
 
+		// -- Encounter False Sound --
+		game.settings.register(MODULE.ID,'encounterFalseSound', {
+			name: MODULE.ID + '.encounterFalseSound-Label',
+			hint: MODULE.ID + '.encounterFalseSound-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: false,
+			default: 'none',
+			choices: getBlacksmithChoices('arrSoundChoices', 'No sounds found. Try reloading Foundry after all modules are enabled.')
+		});
 
+		// -- Encounter True Sound --
+		game.settings.register(MODULE.ID,'encounterTrueSound', {
+			name: MODULE.ID + '.encounterTrueSound-Label',
+			hint: MODULE.ID + '.encounterTrueSound-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: false,
+			default: 'none',
+			choices: getBlacksmithChoices('arrSoundChoices', 'No sounds found. Try reloading Foundry after all modules are enabled.')
+		});
+
+		// -- Encounter Sound VOlume --
+		game.settings.register(MODULE.ID,'encounterSoundVolume', {
+			name: MODULE.ID + '.encounterSoundVolume-Label',
+			hint: MODULE.ID + '.encounterSoundVolume-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: false,
+			type: Number,
+			range: {
+			min: 0,
+			max: 1,
+			step: 0.05,
+			},
+			default: 0.7,
+		});
 
 
 	});

@@ -320,6 +320,12 @@
 		"toolbarCoffeePubQuickEncounterEnabled-Label": "Show in the Coffee Pub toolbar",
 		"toolbarCoffeePubQuickEncounterEnabled-Hint": "Quick Encounter button in the Coffee Pub toolbar (default: true).",
 		"toolbarFoundryQuickEncounterEnabled-Label": "Show in the Foundry toolbar",
-		"toolbarFoundryQuickEncounterEnabled-Hint": "Quick Encounter button in the Foundry toolbar (default: false)."
+		"toolbarFoundryQuickEncounterEnabled-Hint": "Quick Encounter button in the Foundry toolbar (default: false).",
+		"encounterFalseSound-Label": "No Encounter Sound",
+		"encounterFalseSound-Hint": "",
+		"encounterTrueSound-Label": "Encounter Sound",
+		"encounterTrueSound-Hint": "",
+		"encounterSoundVolume-Label": "Sound Volume",
+		"encounterSoundVolume-Hint": ""
 	}
 }

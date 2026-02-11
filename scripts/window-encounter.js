@@ -181,7 +181,7 @@ export class WindowEncounter extends Base {
         {
             id: WINDOW_ENCOUNTER_APP_ID,
             classes: ['window-encounter', 'bibliosoph-window'],
-            position: { width: 500, height: WINDOW_ENCOUNTER_HEIGHT_COLLAPSED },
+            position: { width: 1000, height: 800 },
             window: {
                 title: 'Quick Encounter',
                 resizable: true,
@@ -349,10 +349,10 @@ export class WindowEncounter extends Base {
                 const v = Math.max(5, Math.min(30, Number(game.settings.get(MODULE.ID, 'quickEncounterMaxRecommendations')) ?? 10));
                 return ((v - 5) / 25) * 100;
             })(),
-            variabilityValue: Math.max(1, Math.min(10, Number(game.settings.get(MODULE.ID, 'quickEncounterVariability')) ?? 3)),
+            variabilityValue: Math.max(1, Math.min(5, Number(game.settings.get(MODULE.ID, 'quickEncounterVariability')) ?? 3)),
             variabilityFill: (() => {
-                const v = Math.max(1, Math.min(10, Number(game.settings.get(MODULE.ID, 'quickEncounterVariability')) ?? 3));
-                return ((v - 1) / 9) * 100;
+                const v = Math.max(1, Math.min(5, Number(game.settings.get(MODULE.ID, 'quickEncounterVariability')) ?? 3));
+                return ((v - 1) / 4) * 100;
             })(),
             detectionValue: Math.max(1, Math.min(5, Number(game.settings.get(MODULE.ID, 'quickEncounterDetection')) ?? 3)),
             detectionFill: (() => {
@@ -538,7 +538,7 @@ export class WindowEncounter extends Base {
         const showResults = this._recommendLoading || this._rollLoading
             || (this._recommendations?.length > 0) || this._recommendAttempted;
         const currentHeight = this.position?.height ?? 0;
-        const currentWidth = this.position?.width ?? 500;
+        const currentWidth = this.position?.width ?? 1000;
         const minWidthWithTray = 820;
         if (showResults && currentHeight < WINDOW_ENCOUNTER_HEIGHT_EXPANDED) {
             const width = currentWidth < minWidthWithTray ? minWidthWithTray : currentWidth;
