@@ -4,7 +4,7 @@
 // Foundry v13 only. Uses HandlebarsApplicationMixin for _renderHTML/_replaceHTML.
 // Options follow ApplicationV2 (v13): PARTS (what injects into .window-content), DEFAULT_OPTIONS (sizing, title).
 
-import { MODULE } from './const.js';
+import { MODULE, getDetectionLevelInfo } from './const.js';
 import { postConsoleAndNotification } from './common.js';
 
 /** Template path for the encounter window. */
@@ -354,6 +354,19 @@ export class WindowEncounter extends Base {
             variabilityFill: (() => {
                 const v = Math.max(1, Math.min(10, Number(game.settings.get(MODULE.ID, 'quickEncounterVariability')) ?? 3));
                 return ((v - 1) / 9) * 100;
+            })(),
+            detectionValue: Math.max(1, Math.min(5, Number(game.settings.get(MODULE.ID, 'quickEncounterDetection')) ?? 3)),
+            detectionFill: (() => {
+                const v = Math.max(1, Math.min(5, Number(game.settings.get(MODULE.ID, 'quickEncounterDetection')) ?? 3));
+                return ((v - 1) / 4) * 100;
+            })(),
+            detectionLevelLabel: (() => {
+                const info = getDetectionLevelInfo(game.settings.get(MODULE.ID, 'quickEncounterDetection'));
+                return info.label;
+            })(),
+            detectionLevelTooltip: (() => {
+                const info = getDetectionLevelInfo(game.settings.get(MODULE.ID, 'quickEncounterDetection'));
+                return info.tooltip;
             })(),
             targetCRValue: Math.round(Math.max(0, Number(this._targetCR) || 0)),
             crSliderMin,
@@ -721,6 +734,11 @@ export class WindowEncounter extends Base {
                 postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: deploy with pattern', w._deploymentPattern, true, false);
                 w._onDeploy();
                 w.close();
+                return;
+            }
+            const postCardOnlyBtn = e.target?.closest?.('[data-encounter-action="post-card-only"]');
+            if (postCardOnlyBtn) {
+                w._onPostCardOnly();
                 return;
             }
         });
@@ -1139,6 +1157,25 @@ export class WindowEncounter extends Base {
         this._lastRollIntroEntry = null;
         postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: reset', 'Results and selection cleared', true, false);
         this.render();
+    }
+
+    /**
+     * Post a chat card with the selected monsters only (no deploy). Ignores the "Chat Card" checkbox.
+     */
+    async _onPostCardOnly() {
+        const recommendations = Array.isArray(this._recommendations) ? this._recommendations : [];
+        const selectedRecommendations = recommendations.filter(r => this._selectedForDeploy.has(r.id));
+        if (selectedRecommendations.length === 0) {
+            postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: Chat Card', 'No monsters selected', true, true);
+            return;
+        }
+        const selectedMonsters = selectedRecommendations.map(r => {
+            const count = this._selectedCounts.get(r.id) ?? (typeof r.count === 'number' && r.count >= 1 ? r.count : 1);
+            return { name: r.name ?? 'Unknown', count, cr: r.cr ?? '—', img: r.img ?? '', id: r.id };
+        });
+        if (typeof window.bibliosophPostEncounterDeployCard !== 'function') return;
+        const introEntry = this._lastRollHadEncounter ? this._lastRollIntroEntry : null;
+        await window.bibliosophPostEncounterDeployCard(introEntry, selectedMonsters, this._selectedHabitat);
     }
 
     /**

@@ -114,6 +114,12 @@
 .encounter-monsters {
     margin: 0.5em 0;
 }
+.encounter-detection-header {
+    margin-top: 0.75em;
+}
+.encounter-detection-narrative {
+    margin: 0.5em 0;
+}
 .encounter-monster-row {
     display: flex;
     align-items: center;

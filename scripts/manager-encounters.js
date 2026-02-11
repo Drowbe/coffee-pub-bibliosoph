@@ -4,7 +4,7 @@
 // Orchestrates the Quick Encounter tool: opens the window, coordinates
 // CR/compendium (Blacksmith), search (Recommend), roll for encounter, and deploy.
 
-import { MODULE, BIBLIOSOPH } from './const.js';
+import { MODULE, BIBLIOSOPH, getDetectionLevelInfo } from './const.js';
 import { WindowEncounter, WINDOW_ENCOUNTER_APP_ID, WINDOW_ENCOUNTER_HEIGHT_COLLAPSED } from './window-encounter.js';
 
 let _encounterWindow = null;
@@ -683,6 +683,10 @@ function buildEncounterCardData(entry, theme, cardTitle = 'Encounter', encounter
                 img: m.img ?? m.portrait ?? m.tokenImg ?? ''
             };
         });
+        const detectionLevel = Math.max(1, Math.min(5, Number(game.settings.get(MODULE.ID, 'quickEncounterDetection')) ?? 3));
+        const detectionInfo = getDetectionLevelInfo(detectionLevel);
+        data.detectionLevelHeader = `${detectionLevel} · ${detectionInfo.label}`;
+        data.detectionNarrativeText = detectionInfo.narrative;
     }
     return data;
 }

@@ -209,14 +209,22 @@
                     {{/if}}
                 </section>
                 {{#if hasRecommendations}}
+                    <section class="window-encounter-detection">
+                        <h3 class="window-encounter-section-title">{{localize "coffee-pub-bibliosoph.quickEncounterDetection-Label"}}: <span class="window-encounter-label-value" data-encounter-setting-value="quickEncounterDetection" data-tooltip="{{detectionLevelTooltip}}">{{detectionLevelLabel}}</span></h3>
+                        <div class="window-encounter-detection-slider-row">
+                            <span class="window-encounter-detection-endpoint">{{localize "coffee-pub-bibliosoph.quickEncounterDetectionSurprised-Label"}} <i class="fa-solid fa-wifi"></i></span>
+                            <input type="range" id="{{appId}}-detection" class="window-encounter-setting-slider" min="1" max="5" value="{{detectionValue}}" step="1" aria-label="Detection (1 to 5)" data-encounter-setting="quickEncounterDetection" data-encounter-setting-min="1" data-encounter-setting-max="5" data-encounter-setting-suffix="" style="--slider-fill: {{detectionFill}}%;" />
+                            <span class="window-encounter-detection-endpoint"><i class="fa-solid fa-wifi-weak"></i>{{localize "coffee-pub-bibliosoph.quickEncounterDetectionUndetected-Label"}}</span>
+                        </div>
+                    </section>
                     <section class="window-encounter-deploy">
                         <h3 class="window-encounter-section-title">Deploy</h3>
                         <div class="window-encounter-deploy-options">
-                            <label class="window-encounter-deploy-visible-label" for="{{appId}}-deploy-visible">
+                            <label class="window-encounter-deploy-checkbox-label" for="{{appId}}-deploy-visible">
                                 <input type="checkbox" id="{{appId}}-deploy-visible" class="window-encounter-deploy-visible" {{#unless deploymentHidden}}checked{{/unless}} />
                                 <span>Visible</span>
                             </label>
-                            <label class="window-encounter-deploy-chat-card-label" for="{{appId}}-deploy-chat-card">
+                            <label class="window-encounter-deploy-checkbox-label" for="{{appId}}-deploy-chat-card">
                                 <input type="checkbox" id="{{appId}}-deploy-chat-card" class="window-encounter-deploy-chat-card" {{#if deploymentPostChatCard}}checked{{/if}} />
                                 <span>Chat Card</span>
                             </label>
@@ -243,16 +251,18 @@
                 <i class="fa-solid fa-rotate-left"></i> Reset
             </button>
             {{#if hasRecommendations}}
-            <!-- DEPLOY Buttons (only when there are results) -->
-            <div class="window-encounter-deploy-patterns">
-                {{#each deploymentPatterns}}
-                <button type="button" id="{{../appId}}-deploy-{{value}}" class="window-encounter-deploy-pattern window-encounter-btn-secondary" data-encounter-action="deploy-pattern" data-pattern="{{value}}" title="Deploy using {{label}} pattern">{{label}}</button>
-                {{/each}}
-            </div>
+                <!-- DEPLOY Buttons (only when there are results) -->
+                <div class="window-encounter-deploy-patterns">
+                    {{#each deploymentPatterns}}
+                        <button type="button" id="{{../appId}}-deploy-{{value}}" class="window-encounter-deploy-pattern window-encounter-btn-secondary btn-deploy" data-encounter-action="deploy-pattern" data-pattern="{{value}}" title="Deploy using {{label}} pattern">
+                            <i class="fa-solid fa-chess-pawn"></i> {{label}}
+                        </button>
+                    {{/each}}
+                </div>
+                <button type="button" id="{{appId}}-card" class="window-encounter-card window-encounter-btn-secondary btn-card" data-encounter-action="post-card-only" title="Post a chat card with the selected monsters (no deploy)">
+                    <i class="fa-solid fa-id-badge"></i> Chat Card
+                </button>
             {{/if}}
-            <button type="button" id="{{appId}}-card" class="window-encounter-card window-encounter-btn-secondary" title="Post a chat card with the selected monsters">
-                <i class="fa-solid fa-id-badge"></i> Chat Card
-            </button>
         </div>
     </section>
 </div>

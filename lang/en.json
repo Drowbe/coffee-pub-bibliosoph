@@ -293,7 +293,8 @@
 		"injurySoundVolume-Hint": "",
 
 
-
+		"headingH2Encounters-Label": "Encounters",
+		"headingH2Encounters-Hint": "Set the odds of encountering a monster, configure your thresholds, and the Quick Encounter tool does the rest.",
 
 
 		"cardThemeEncounter-Label": "Card Style",
@@ -312,6 +313,9 @@
 		"quickEncounterCacheBuildingProgress-Label": "{current}/{total} compendiums, {count} monsters",
 		"quickEncounterMaxRecommendations-Label": "Max Recommendations",
 		"quickEncounterVariability-Label": "Variability",
+		"quickEncounterDetection-Label": "Detection",
+		"quickEncounterDetectionSurprised-Label": "Surprised",
+		"quickEncounterDetectionUndetected-Label": "Undetected",
 		"toolbarCoffeePubQuickEncounterEnabled-Label": "Show in the Coffee Pub toolbar",
 		"toolbarCoffeePubQuickEncounterEnabled-Hint": "Quick Encounter button in the Coffee Pub toolbar (default: true).",
 		"toolbarFoundryQuickEncounterEnabled-Label": "Show in the Foundry toolbar",

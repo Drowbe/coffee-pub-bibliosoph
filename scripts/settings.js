@@ -1361,9 +1361,6 @@ export const registerSettings = () => {
 		});
 
 
-		// ********** INJURIES **********
-
-		// -- Injury Settings --
 
 		// ********** INJURIES **********
 
@@ -1482,6 +1479,23 @@ export const registerSettings = () => {
 		});
 
 
+
+
+		// ********** ENCOUNTERS **********
+
+		// ---------- Encounters ----------
+		game.settings.register(MODULE.ID, "headingH2Encounters", {
+			name: MODULE.ID + '.headingH2Encounters-Label',
+			hint: MODULE.ID + '.headingH2Encounters-Hint',
+			scope: "world",
+			config: true,
+			default: "",
+			type: String,
+		});
+		// -------------------------------------
+
+
+
 		// ********** ENCOUNTERS (Quick Encounter) **********
 		game.settings.register(MODULE.ID, 'cardThemeEncounter', {
 			name: MODULE.ID + '.cardThemeEncounter-Label',
@@ -1541,6 +1555,12 @@ export const registerSettings = () => {
 			default: 10,
 		});
 		game.settings.register(MODULE.ID, 'quickEncounterVariability', {
+			scope: 'client',
+			config: false,
+			type: Number,
+			default: 3,
+		});
+		game.settings.register(MODULE.ID, 'quickEncounterDetection', {
 			scope: 'client',
 			config: false,
 			type: Number,

@@ -29,6 +29,9 @@
     {{/if}}
     {{#if encounterMonsters}}
         <div class="section-header"><i class="fa-solid fa-dragon"></i> Adversaries</div>
+        {{#if detectionNarrativeText}}
+            <p class="encounter-detection-narrative"><strong>{{detectionLevelHeader}}</strong>: {{detectionNarrativeText}}</p>
+        {{/if}}
         <div class="encounter-monsters">
             {{#each encounterMonsters}}
                 <div class="encounter-monster-row">
