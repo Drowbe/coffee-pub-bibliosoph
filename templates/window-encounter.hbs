@@ -210,7 +210,10 @@
                 </section>
                 {{#if hasRecommendations}}
                     <section class="window-encounter-detection">
-                        <h3 class="window-encounter-section-title">{{localize "coffee-pub-bibliosoph.quickEncounterDetection-Label"}}: <span class="window-encounter-label-value" data-encounter-setting-value="quickEncounterDetection" data-tooltip="{{detectionLevelTooltip}}">{{detectionLevelLabel}}</span></h3>
+                        <h3 class="window-encounter-section-title window-encounter-detection-header-row">
+                            <span>{{localize "coffee-pub-bibliosoph.quickEncounterDetection-Label"}}: <span class="window-encounter-label-value" data-encounter-setting-value="quickEncounterDetection" data-tooltip="{{detectionLevelTooltip}}">{{detectionLevelLabel}}</span></span>
+                            <button type="button" class="window-encounter-detection-roll-btn" data-encounter-action="request-detection-roll" data-tooltip="{{localize "coffee-pub-bibliosoph.quickEncounterRequestDetectionRoll-Label"}}" aria-label="{{localize "coffee-pub-bibliosoph.quickEncounterRequestDetectionRoll-Label"}}"><i class="fa-solid fa-dice-d20"></i></button>
+                        </h3>
                         <div class="window-encounter-detection-slider-row">
                             <span class="window-encounter-detection-endpoint" data-tooltip="{{localize "coffee-pub-bibliosoph.quickEncounterDetectionSurprised-Label"}}"> <i class="fa-solid fa-eye"></i></span>
                             <input type="range" id="{{appId}}-detection" class="window-encounter-setting-slider" min="1" max="5" value="{{detectionValue}}" step="1" aria-label="Detection (1 to 5)" data-encounter-setting="quickEncounterDetection" data-encounter-setting-min="1" data-encounter-setting-max="5" data-encounter-setting-suffix="" style="--slider-fill: {{detectionFill}}%;" />

@@ -740,6 +740,20 @@ export class WindowEncounter extends Base {
                 w._onPostCardOnly();
                 return;
             }
+            const requestDetectionRollBtn = e.target?.closest?.('[data-encounter-action="request-detection-roll"]');
+            if (requestDetectionRollBtn) {
+                const api = game.modules.get('coffee-pub-blacksmith')?.api;
+                if (api?.openRequestRollDialog) {
+                    api.openRequestRollDialog({
+                        title: game.i18n?.localize?.('coffee-pub-bibliosoph.quickEncounterRequestDetectionRoll-Label') ?? 'Roll for Detection',
+                        initialType: 'skill',
+                        initialValue: 'perception',
+                        dc: 15,
+                        initialFilter: 'party'
+                    });
+                }
+                return;
+            }
         });
         document.addEventListener('change', function _encounterChange(e) {
             const w = _currentEncounterWindowRef;

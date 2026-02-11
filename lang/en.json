@@ -314,6 +314,7 @@
 		"quickEncounterMaxRecommendations-Label": "Max Recommendations",
 		"quickEncounterVariability-Label": "Variability",
 		"quickEncounterDetection-Label": "Detection",
+		"quickEncounterRequestDetectionRoll-Label": "Roll for Detection",
 		"quickEncounterDetectionSurprised-Label": "Surprised",
 		"quickEncounterDetectionUndetected-Label": "Undetected",
 		"toolbarCoffeePubQuickEncounterEnabled-Label": "Show in the Coffee Pub toolbar",

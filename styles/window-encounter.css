@@ -205,6 +205,27 @@
     white-space: nowrap;
 }
 
+/* Detection section: header row with label + roll button */
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-detection-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-detection-roll-btn {
+    flex-shrink: 0;
+    padding: 4px 6px;
+    margin: 0;
+    border: none;
+    background: transparent;
+    color: rgba(176, 176, 176, 0.9);
+    cursor: pointer;
+    font-size: 1.1em;
+}
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-detection-roll-btn:hover {
+    color: rgba(105, 213, 104, 0.9);
+}
+
 /* Detection section: slider row and endpoints (same layout as odds) */
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-detection-slider-row {
     display: flex;
