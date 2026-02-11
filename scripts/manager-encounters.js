@@ -668,6 +668,14 @@ function buildEncounterCardData(entry, theme, cardTitle = 'Encounter', encounter
         narrativeImage: entry?.image ?? null
     };
     if (Array.isArray(encounterMonsters) && encounterMonsters.length > 0) {
+        const detectionLevel = Math.max(1, Math.min(5, Number(game.settings.get(MODULE.ID, 'quickEncounterDetection')) ?? 3));
+        const detectionInfo = getDetectionLevelInfo(detectionLevel);
+        data.detectionLevelHeader = detectionInfo.label;
+        data.detectionNarrativeText = detectionInfo.narrative;
+        data.encounterDetectionLevel = detectionLevel;
+        data.encounterShowUnknownAdversaries = detectionLevel <= 2;
+        data.encounterUnknownAdversariesImage = 'modules/coffee-pub-blacksmith/images/portraits/portrait-noimage.webp';
+
         data.encounterMonsters = encounterMonsters.map((m) => {
             const name = m.name ?? 'Unknown';
             const count = typeof m.count === 'number' && m.count >= 1 ? m.count : 1;
@@ -683,10 +691,13 @@ function buildEncounterCardData(entry, theme, cardTitle = 'Encounter', encounter
                 img: m.img ?? m.portrait ?? m.tokenImg ?? ''
             };
         });
-        const detectionLevel = Math.max(1, Math.min(5, Number(game.settings.get(MODULE.ID, 'quickEncounterDetection')) ?? 3));
-        const detectionInfo = getDetectionLevelInfo(detectionLevel);
-        data.detectionLevelHeader = detectionInfo.label;
-        data.detectionNarrativeText = detectionInfo.narrative;
+        data.encounterMonstersPlain = encounterMonsters.map((m) => {
+            const name = m.name ?? 'Unknown';
+            const count = typeof m.count === 'number' && m.count >= 1 ? m.count : 1;
+            const displayName = count > 1 ? `${count} × ${name}` : name;
+            const img = m.img ?? m.portrait ?? m.tokenImg ?? '';
+            return { displayName, img };
+        });
     }
     return data;
 }

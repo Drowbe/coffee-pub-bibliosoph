@@ -1262,7 +1262,21 @@ Hooks.on("renderChatMessage", (message, html) => {
     if (html && (html.jquery || typeof html.find === 'function')) {
         nativeHtml = html[0] || html.get?.(0) || html;
     }
-    
+    // Encounter card: GM sees linked monsters; non-GM sees plain text or "Unknown Adversaries" (detection 1-2)
+    const encounterAdversaries = nativeHtml?.querySelectorAll?.('.bibliosoph-encounter-adversaries') ?? [];
+    encounterAdversaries.forEach((el) => {
+        const gmView = el.querySelector('.encounter-adversaries-gm-view');
+        const playerView = el.querySelector('.encounter-adversaries-player-view');
+        if (!gmView || !playerView) return;
+        if (game.user?.isGM) {
+            gmView.style.display = '';
+            playerView.style.display = 'none';
+        } else {
+            gmView.style.display = 'none';
+            playerView.style.display = '';
+        }
+    });
+
     const buttons = nativeHtml.querySelectorAll(".category-button");
     buttons.forEach(button => {
         button.addEventListener('click', async (event) => {

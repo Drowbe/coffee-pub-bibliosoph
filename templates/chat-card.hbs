@@ -32,13 +32,36 @@
         {{#if detectionNarrativeText}}
             <p class="encounter-detection-narrative"><strong>{{detectionLevelHeader}}</strong>: {{detectionNarrativeText}}</p>
         {{/if}}
-        <div class="encounter-monsters">
-            {{#each encounterMonsters}}
-                <div class="encounter-monster-row">
-                    {{#if img}}<img class="encounter-monster-img" src="{{img}}" alt="" data-tooltip="{{#if ../isGM}}CR {{cr}}{{/if}}" />{{/if}}
-                    <span class="encounter-monster-name">{{{displayNameLink}}}</span>
+        <div class="bibliosoph-encounter-adversaries" data-encounter-detection="{{encounterDetectionLevel}}">
+            <div class="encounter-adversaries-gm-view">
+                <div class="encounter-monsters">
+                    {{#each encounterMonsters}}
+                        <div class="encounter-monster-row">
+                            {{#if img}}<img class="encounter-monster-img" src="{{img}}" alt="" data-tooltip="CR {{cr}}" />{{/if}}
+                            <span class="encounter-monster-name">{{{displayNameLink}}}</span>
+                        </div>
+                    {{/each}}
                 </div>
-            {{/each}}
+            </div>
+            <div class="encounter-adversaries-player-view" style="display:none">
+                {{#if encounterShowUnknownAdversaries}}
+                    <div class="encounter-monsters">
+                        <div class="encounter-monster-row">
+                            <img class="encounter-monster-img" src="{{encounterUnknownAdversariesImage}}" alt="" />
+                            <span class="encounter-monster-name">Unknown Adversaries</span>
+                        </div>
+                    </div>
+                {{else}}
+                    <div class="encounter-monsters">
+                        {{#each encounterMonstersPlain}}
+                            <div class="encounter-monster-row encounter-monster-row-plain">
+                                {{#if img}}<img class="encounter-monster-img" src="{{img}}" alt="" />{{/if}}
+                                <span class="encounter-monster-name">{{displayName}}</span>
+                            </div>
+                        {{/each}}
+                    </div>
+                {{/if}}
+            </div>
         </div>
     {{/if}}
     {{else if isInvestigationCard}}

@@ -9,7 +9,10 @@
     --encounter-background: #232323;
     --encounter-header-bg: rgba(0, 0, 0, 0.7);
     --encounter-content-bg: #232323;
+    --encounter-banner-image: url('../images/backgrounds/background-skull-red.webp');
 }
+
+
 
 #coffee-pub-bibliosoph-quick-encounter,
 #coffee-pub-bibliosoph-quick-encounter .window-content {
@@ -28,6 +31,7 @@
 
 #coffee-pub-bibliosoph-quick-encounter .window-header {
     background: var(--encounter-header-bg) !important;
+    background-image: var(--notes-banner-image) !important;
     border-bottom: 1px solid var(--encounter-border-color) !important;
     color: var(--encounter-accent-color) !important;
 }
