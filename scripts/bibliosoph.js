@@ -3,7 +3,7 @@
 // ================================================================== 
 
 // Grab the module data
-import { MODULE, BIBLIOSOPH  } from './const.js';
+import { MODULE, BIBLIOSOPH } from './const.js';
 import { registerToolbarTools, unregisterToolbarTools } from './manager-toolbar.js';
 
 // Resolve a macro reference (UUID, id, or name) to a Macro document
@@ -803,13 +803,13 @@ Hooks.on("ready", async () => {
     // BUTTON PRESSES IN CHAT
     document.addEventListener('click', function(event) {
         if(event.target.classList.contains('coffee-pub-bibliosoph-button-reply')) {
-            //postConsoleAndNotification("Button Pressed", "Be sure to verify the recipients.", false, true, false);
+            //BlacksmithUtils.postConsoleAndNotification("Button Pressed", "Be sure to verify the recipients.", false, true, false);
             var recipients = event.target.getAttribute('data-recipient');
             var recipientArray = recipients.split(',').map(r => r.trim()).filter(r => r !== '');
             // Use the recipientArray
-            //postConsoleAndNotification("Inside document.addEventListener. The recipient array: ", recipientArray, false, true, false);
+            //BlacksmithUtils.postConsoleAndNotification("Inside document.addEventListener. The recipient array: ", recipientArray, false, true, false);
             // Let's see if the sam stuff from the macro work.
-            //postConsoleAndNotification("Inside document.addEventListener. The strPrivateMacro: ", strPrivateMacro, false, true, false);
+            //BlacksmithUtils.postConsoleAndNotification("Inside document.addEventListener. The strPrivateMacro: ", strPrivateMacro, false, true, false);
             // Build the chat message
             resetBibliosophVars();
             BIBLIOSOPH.CARDTYPEWHISPER = true;
@@ -832,12 +832,12 @@ Hooks.on("ready", async () => {
         // CHECK FOR INJURY BUTTON
         if(event.target.classList.contains('coffee-pub-bibliosoph-button-injury')) {
 
-            //postConsoleAndNotification("INJURY BUTTON PRESSED", "", false, false, false);
+            //BlacksmithUtils.postConsoleAndNotification("INJURY BUTTON PRESSED", "", false, false, false);
 
             var strEffectData = event.target.getAttribute('data-effect');
             var arrEffectData = BlacksmithUtils.stringToObject(strEffectData) || JSON.parse(strEffectData);
 
-            //postConsoleAndNotification("arrEffectData: ", arrEffectData, false, true, false);
+            //BlacksmithUtils.postConsoleAndNotification("arrEffectData: ", arrEffectData, false, true, false);
         
             // map the data to the token
             var strLabel = arrEffectData.name;
@@ -902,7 +902,7 @@ Hooks.on("ready", async () => {
             let GiftMacro = getMacroByIdOrName(strGiftMacro);
             if(GiftMacro) {
                 GiftMacro.execute = async () => {
-                    //postConsoleAndNotification("Macro Clicked: ", "Gift", false, true, false);
+                    //BlacksmithUtils.postConsoleAndNotification("Macro Clicked: ", "Gift", false, true, false);
                     // Build the chat message
                     resetBibliosophVars();
                     BIBLIOSOPH.CARDTYPEGIFT = true;
@@ -925,7 +925,7 @@ Hooks.on("ready", async () => {
             let ShadygoodsMacro = getMacroByIdOrName(strShadygoodsMacro);
             if(ShadygoodsMacro) {
                 ShadygoodsMacro.execute = async () => {
-                    //postConsoleAndNotification("Macro Clicked: ", "Shady Goods", false, true, false);
+                    //BlacksmithUtils.postConsoleAndNotification("Macro Clicked: ", "Shady Goods", false, true, false);
                     // Build the chat message
                     resetBibliosophVars();
                     BIBLIOSOPH.CARDTYPESHADYGOODS = true;
@@ -949,7 +949,7 @@ Hooks.on("ready", async () => {
             let CriticalMacro = getMacroByIdOrName(strCriticalMacro);
             if(CriticalMacro) {
                 CriticalMacro.execute = async () => {
-                    //postConsoleAndNotification("Macro Clicked: ", "Critical", false, true, false);
+                    //BlacksmithUtils.postConsoleAndNotification("Macro Clicked: ", "Critical", false, true, false);
                     // Build the chat message
                     resetBibliosophVars();
                     BIBLIOSOPH.CARDTYPECRIT = true;
@@ -972,7 +972,7 @@ Hooks.on("ready", async () => {
             let FumbleMacro = getMacroByIdOrName(strFumbleMacro);
             if(FumbleMacro) {
                 FumbleMacro.execute = async () => {
-                    //postConsoleAndNotification("Macro Clicked: ", "Fumble", false, true, false);
+                    //BlacksmithUtils.postConsoleAndNotification("Macro Clicked: ", "Fumble", false, true, false);
                     // Build the chat message
                     resetBibliosophVars();
                     BIBLIOSOPH.CARDTYPEFUMBLE = true;
@@ -996,7 +996,7 @@ Hooks.on("ready", async () => {
             let InspirationMacro = getMacroByIdOrName(strInspirationMacro);
             if(InspirationMacro) {
                 InspirationMacro.execute = async () => {
-                    //postConsoleAndNotification("Macro Clicked: ", "Inspiration", false, true, false);
+                    //BlacksmithUtils.postConsoleAndNotification("Macro Clicked: ", "Inspiration", false, true, false);
                     // Build the chat message
                     resetBibliosophVars();
                     BIBLIOSOPH.CARDTYPEINSPIRATION = true;
@@ -1019,7 +1019,7 @@ Hooks.on("ready", async () => {
             let DOMTMacro = getMacroByIdOrName(strDOMTMacro);
             if(DOMTMacro) {
                 DOMTMacro.execute = async () => {
-                    //postConsoleAndNotification("Macro Clicked: ", "Deck of Many Things", false, true, false);
+                    //BlacksmithUtils.postConsoleAndNotification("Macro Clicked: ", "Deck of Many Things", false, true, false);
                     // Build the chat message
                     resetBibliosophVars();
                     BIBLIOSOPH.CARDTYPEDOMT = true;
@@ -1043,7 +1043,7 @@ Hooks.on("ready", async () => {
             let BeverageMacro = getMacroByIdOrName(strBeverageMacro);
             if(BeverageMacro) {
                 BeverageMacro.execute = async () => {
-                    //postConsoleAndNotification("Macro Clicked: ", "Beverage", false, true, false);
+                    //BlacksmithUtils.postConsoleAndNotification("Macro Clicked: ", "Beverage", false, true, false);
                     // Build the chat message
                     resetBibliosophVars();
                     BIBLIOSOPH.CARDTYPEBEVERAGE = true;
@@ -1066,7 +1066,7 @@ Hooks.on("ready", async () => {
             let BioMacro = getMacroByIdOrName(strBioMacro);
             if(BioMacro) {
                 BioMacro.execute = async () => {
-                    //postConsoleAndNotification("Macro Clicked: ", "Bio", false, true, false);
+                    //BlacksmithUtils.postConsoleAndNotification("Macro Clicked: ", "Bio", false, true, false);
                     // Build the chat message
                     resetBibliosophVars();
                     BIBLIOSOPH.CARDTYPEBIO = true;
@@ -1091,7 +1091,7 @@ Hooks.on("ready", async () => {
             let InsultMacro = getMacroByIdOrName(strInsultMacro);
             if(InsultMacro) {
                 InsultMacro.execute = async () => {
-                    //postConsoleAndNotification("Macro Clicked: ", "Insult", false, true, false);
+                    //BlacksmithUtils.postConsoleAndNotification("Macro Clicked: ", "Insult", false, true, false);
                     // Build the chat message
                     resetBibliosophVars();
                     BIBLIOSOPH.CARDTYPEINSULT = true;
@@ -1114,7 +1114,7 @@ Hooks.on("ready", async () => {
             let PraiseMacro = getMacroByIdOrName(strPraiseMacro);
             if(PraiseMacro) {
                 PraiseMacro.execute = async () => {
-                    //postConsoleAndNotification("Macro Clicked: ", "Praise", false, true, false);
+                    //BlacksmithUtils.postConsoleAndNotification("Macro Clicked: ", "Praise", false, true, false);
                     // Build the chat message
                     resetBibliosophVars();
                     BIBLIOSOPH.CARDTYPEPRAISE = true;
@@ -1137,7 +1137,7 @@ Hooks.on("ready", async () => {
             let PartyMacro = getMacroByIdOrName(strPartyMacro);
             if(PartyMacro) {
                 PartyMacro.execute = async () => {
-                    //postConsoleAndNotification("Macro Clicked: ", "Party Message", false, true, false);
+                    //BlacksmithUtils.postConsoleAndNotification("Macro Clicked: ", "Party Message", false, true, false);
                     // Build the chat message
                     resetBibliosophVars();
                     BIBLIOSOPH.CARDTYPEMESSAGE = true;
@@ -1170,7 +1170,7 @@ Hooks.on("ready", async () => {
             let PartyMacro = getMacroByIdOrName(strPrivateMacro);
             if(PartyMacro) {
                 PartyMacro.execute = async () => {
-                    //postConsoleAndNotification("Macro Clicked: ", "Private Message", false, true, false);
+                    //BlacksmithUtils.postConsoleAndNotification("Macro Clicked: ", "Private Message", false, true, false);
                     // Build the chat message
                     resetBibliosophVars();
                     BIBLIOSOPH.CARDTYPEWHISPER = true;
@@ -1201,12 +1201,12 @@ Hooks.on("ready", async () => {
     // *** INJURIES: GENERAL ***
     if (blninjuriesEnabledGlobal) {
 
-        //postConsoleAndNotification("blninjuriesEnabledGlobal: ", blninjuriesEnabledGlobal, false, true, false);
+        //BlacksmithUtils.postConsoleAndNotification("blninjuriesEnabledGlobal: ", blninjuriesEnabledGlobal, false, true, false);
 
         if(strInjuriesMacroGlobal) {
             let InjuryMacro = getMacroByIdOrName(strInjuriesMacroGlobal);
 
-            //postConsoleAndNotification("InjuryMacro: ", InjuryMacro, false, true, false);
+            //BlacksmithUtils.postConsoleAndNotification("InjuryMacro: ", InjuryMacro, false, true, false);
 
             if(InjuryMacro) {
                 InjuryMacro.execute = async () => {
@@ -1382,12 +1382,12 @@ async function publishChatCard() {
         compiledHtml = await createChatCardSearch(strRollTableName);
     } else if (BIBLIOSOPH.CARDTYPECRIT) {
         // CRITICAL
-        //postConsoleAndNotification("Card Type: ", "Crit", false, true, false);
+        //BlacksmithUtils.postConsoleAndNotification("Card Type: ", "Crit", false, true, false);
         strRollTableName = game.settings.get(MODULE.ID, 'criticalTable');
         compiledHtml = await createChatCardGeneral(strRollTableName);
     } else if (BIBLIOSOPH.CARDTYPEFUMBLE) {
         // FUMBLE
-        //postConsoleAndNotification("Card Type: ", "Fumble", false, true, false);
+        //BlacksmithUtils.postConsoleAndNotification("Card Type: ", "Fumble", false, true, false);
         strRollTableName = game.settings.get(MODULE.ID, 'fumbleTable');
         compiledHtml = await createChatCardGeneral(strRollTableName);
     } else if (BIBLIOSOPH.CARDTYPEINSPIRATION) {
@@ -1453,7 +1453,7 @@ async function publishChatCard() {
     //user, speaker, timestamp, flavor, whisper, blind, roll, sound, emote, flags, content
     //these are the types: OTHER (Uncategorized), OOC (Out of Char), IC (In Character), EMOTE (e.g. "waves hand"), WHISPER (Private), ROLL (Dice Roll)
     // ** If a WHisper send a whisper card... all other go as a normal card.
-    //postConsoleAndNotification("strChatType", strChatType, false, true, true);
+    //BlacksmithUtils.postConsoleAndNotification("strChatType", strChatType, false, true, true);
     if (strChatType == BIBLIOSOPH.CHAT_TYPE_WHISPER ) {
         // IT IS A WHISPER
         let users = BIBLIOSOPH.MESSAGES_LIST_TO_PRIVATE;
@@ -1662,12 +1662,12 @@ async function createChatCardGeneral(strRollTableName) {
             arrPrivateRecipients = privateData.recipients;
             privateRecipientsCompressed = privateData.compressed;
             strRecipients = BIBLIOSOPH.MESSAGES_LIST_TO_PRIVATE;
-            //postConsoleAndNotification("Private TO List: ", BIBLIOSOPH.MESSAGES_LIST_TO_PRIVATE, false, true, false);
+            //BlacksmithUtils.postConsoleAndNotification("Private TO List: ", BIBLIOSOPH.MESSAGES_LIST_TO_PRIVATE, false, true, false);
             break;
         default:
             // NOTHING
             // POST DEBUG
-            //postConsoleAndNotification("Card Type: ","Not Defined", false, true, false);
+            //BlacksmithUtils.postConsoleAndNotification("Card Type: ","Not Defined", false, true, false);
             return;
     }  
 
@@ -1679,7 +1679,7 @@ async function createChatCardGeneral(strRollTableName) {
         if (game.settings.get(MODULE.ID, 'showDiceRolls')) {
             BlacksmithUtils.rollCoffeePubDice(arrRollTableResults.roll);
         }
-        // postConsoleAndNotification("BIBLIOSOPH: createChatCardGeneral arrRollTableResults", arrRollTableResults, false, true, false);
+        // BlacksmithUtils.postConsoleAndNotification("BIBLIOSOPH: createChatCardGeneral arrRollTableResults", arrRollTableResults, false, true, false);
         strTableName = arrRollTableResults.strTableName;
         strTableImage = arrRollTableResults.strTableImage;
         strCardTitle = arrRollTableResults.strTableName;
@@ -1720,7 +1720,7 @@ async function createChatCardGeneral(strRollTableName) {
     // Play the Sound
     BlacksmithUtils.playSound(strSound,strVolume);
     // POST DEBUG
-    //postConsoleAndNotification("CARDDATA.content" , CARDDATA.content, false, true, true);
+    //BlacksmithUtils.postConsoleAndNotification("CARDDATA.content" , CARDDATA.content, false, true, true);
     // Return the template
     return template(CARDDATA);
 
@@ -1917,7 +1917,7 @@ async function createChatCardInjury(category) {
         statuseffect: strStatusEffect,
     }; 
 
-    //postConsoleAndNotification("EFFECTDATA for the CARDDATA Array: ",EFFECTDATA, false, true, false);
+    //BlacksmithUtils.postConsoleAndNotification("EFFECTDATA for the CARDDATA Array: ",EFFECTDATA, false, true, false);
     // Set the tmeplate type to encounter
     const templatePath = BIBLIOSOPH.MESSAGE_TEMPLATE_CARD;
     const response = await fetch(templatePath);
@@ -1925,7 +1925,7 @@ async function createChatCardInjury(category) {
     const template = Handlebars.compile(templateText);
     // Stringify the EFFECTDATA array
     var strStringifiedEFFECTDATA = BlacksmithUtils.objectToString(EFFECTDATA) || JSON.stringify(EFFECTDATA);
-    //postConsoleAndNotification("EFFECTDATA converted to STRING as strStringifiedEFFECTDATA: ",strStringifiedEFFECTDATA, false, true, false);
+    //BlacksmithUtils.postConsoleAndNotification("EFFECTDATA converted to STRING as strStringifiedEFFECTDATA: ",strStringifiedEFFECTDATA, false, true, false);
     // if they have the image off in settings, hide it
     var strCardImage = "";
     if (!blnInjuryImageEnabled){
@@ -1962,7 +1962,7 @@ async function createChatCardInjury(category) {
     BlacksmithUtils.playSound(strSound,strVolume);
     // Return the template
 
-    //postConsoleAndNotification("*** LINE 1682 CARDDATA",  CARDDATA, false, true, false);
+    //BlacksmithUtils.postConsoleAndNotification("*** LINE 1682 CARDDATA",  CARDDATA, false, true, false);
 
     const compiledHtml = template(CARDDATA);
     return compiledHtml;
@@ -1975,7 +1975,7 @@ async function createChatCardInjury(category) {
 // ** CREATE Investigation Card (new flow: narrative + slots + per-rarity tables)
 // ************************************
 async function createChatCardInvestigation() {
-    ui.notifications.info(game.i18n.localize("coffee-pub-bibliosoph.investigationNotificationStart"), { permanent: false });
+    BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, game.i18n.localize("coffee-pub-bibliosoph.investigationNotificationStart"), '', false, true);
     const strTheme = game.settings.get(MODULE.ID, 'cardThemeInvestigation');
     const strIconStyle = "fa-eye";
     const strUserName = game.user.name;
@@ -2824,7 +2824,7 @@ async function createChatCardInjurySelector(compendiumName) {
     var arrCategories = [];
     // get the categories
     arrCategories = await getCompendiumJournalList(compendiumName, "category", true);
-   //postConsoleAndNotification("createChatCardInjurySelector arrCategories" , arrCategories, false, true, false); 
+   //BlacksmithUtils.postConsoleAndNotification("createChatCardInjurySelector arrCategories" , arrCategories, false, true, false); 
     // build the buttons
     arrInjuryButtons = await getCategoryButtons(arrCategories);
     
@@ -2917,7 +2917,7 @@ async function getCategoryButtons(categories){
             arrInjuryButtons.push(buttonObject);
         }
     } else {
-        //postConsoleAndNotification("In createChatCardInjurySelector, arrCategories comes back null or undefined." , "", false, true, false); 
+        //BlacksmithUtils.postConsoleAndNotification("In createChatCardInjurySelector, arrCategories comes back null or undefined." , "", false, true, false); 
         return;
     }
     return arrInjuryButtons;
@@ -2953,7 +2953,7 @@ async function getCompendiumJournalList(compendiumName) {
     }
     // Sort arrpages in alphabetical order
     arrValues.sort();
-    //postConsoleAndNotification("getCompendiumPageContent" , arrValues, false, false, false);
+    //BlacksmithUtils.postConsoleAndNotification("getCompendiumPageContent" , arrValues, false, false, false);
     // If no arrpages, return null or handle however you prefer
     if (arrValues.length === 0) {
         return null;
@@ -2961,7 +2961,7 @@ async function getCompendiumJournalList(compendiumName) {
     // Return the Array
     var arrTEMP = [];
     arrTEMP = arrValues
-    //postConsoleAndNotification("createChatCardInjurySelector arrTEMP" , arrTEMP, false, true, false); 
+    //BlacksmithUtils.postConsoleAndNotification("createChatCardInjurySelector arrTEMP" , arrTEMP, false, true, false); 
     return arrValues;
 }
 
@@ -2978,8 +2978,8 @@ async function getJournalCategoryPageData(compendiumName,category) {
     const strMatchingCategory = category.toLowerCase();
 
 
-    //postConsoleAndNotification("*** getJournalCategoryPageData pack" , pack, false, true, false); 
-    //postConsoleAndNotification("*** getJournalCategoryPageData strMatchingCategory" , strMatchingCategory, false, true, false); 
+    //BlacksmithUtils.postConsoleAndNotification("*** getJournalCategoryPageData pack" , pack, false, true, false); 
+    //BlacksmithUtils.postConsoleAndNotification("*** getJournalCategoryPageData strMatchingCategory" , strMatchingCategory, false, true, false); 
 
 
     if (!pack) {
@@ -2990,12 +2990,12 @@ async function getJournalCategoryPageData(compendiumName,category) {
     // The entries are the journals.
     const entries = await pack.getDocuments();
 
-    //postConsoleAndNotification("*** getJournalCategoryPageData entries" , entries, false, true, false); 
+    //BlacksmithUtils.postConsoleAndNotification("*** getJournalCategoryPageData entries" , entries, false, true, false); 
 
     // Collect all available categories
     let arrCategoryPages = [];
     for (let entry of entries) {
-        //postConsoleAndNotification("*** getJournalCategoryPageData entry" , entry, false, true, false); 
+        //BlacksmithUtils.postConsoleAndNotification("*** getJournalCategoryPageData entry" , entry, false, true, false); 
         // Look for the right journal
         if (entry.name.toLowerCase() == strMatchingCategory) {
             arrCategoryPages = entry._source.pages;
@@ -3003,22 +3003,22 @@ async function getJournalCategoryPageData(compendiumName,category) {
     }
     // If no pages
     if (arrCategoryPages.length === 0) {
-        //postConsoleAndNotification("*** getJournalCategoryPageData No Pages Found" , arrCategoryPages, false, true, false); 
+        //BlacksmithUtils.postConsoleAndNotification("*** getJournalCategoryPageData No Pages Found" , arrCategoryPages, false, true, false); 
         return null;
     }
 
-    //postConsoleAndNotification("*** getJournalCategoryPageData arrCategoryPages" , arrCategoryPages, false, true, false); 
+    //BlacksmithUtils.postConsoleAndNotification("*** getJournalCategoryPageData arrCategoryPages" , arrCategoryPages, false, true, false); 
 
     // Randomly select a Page
     const randomPage = arrCategoryPages[Math.floor(Math.random() * arrCategoryPages.length)];
 
-    //postConsoleAndNotification("*** getJournalCategoryPageData randomPage" , randomPage, false, true, false); 
+    //BlacksmithUtils.postConsoleAndNotification("*** getJournalCategoryPageData randomPage" , randomPage, false, true, false); 
 
-   //postConsoleAndNotification("*** getJournalCategoryPageData randomPage.name" , randomPage.name, false, true, false); 
-    //postConsoleAndNotification("*** getJournalCategoryPageData randomPage.text.content" , randomPage.text.content, false, true, false); 
+   //BlacksmithUtils.postConsoleAndNotification("*** getJournalCategoryPageData randomPage.name" , randomPage.name, false, true, false); 
+    //BlacksmithUtils.postConsoleAndNotification("*** getJournalCategoryPageData randomPage.text.content" , randomPage.text.content, false, true, false); 
 
     let metadataObject = getHTMLMetadata(randomPage.text.content);
-    //postConsoleAndNotification("*** getJournalCategoryPageData metadataObject" , metadataObject, false, true, false); 
+    //BlacksmithUtils.postConsoleAndNotification("*** getJournalCategoryPageData metadataObject" , metadataObject, false, true, false); 
 
     return metadataObject;
 }
@@ -3079,13 +3079,13 @@ function getHTMLMetadata(html){
 // ************************************
 
 async function getInjuryDataFromJournalPages(compendiumName, journalName) {
-    //postConsoleAndNotification("getInjuryDataFromJournalPages compendiumName: ", compendiumName, false, true, false);
-    //postConsoleAndNotification("getInjuryDataFromJournalPages journalName: ", journalName, false, true, false);
+    //BlacksmithUtils.postConsoleAndNotification("getInjuryDataFromJournalPages compendiumName: ", compendiumName, false, true, false);
+    //BlacksmithUtils.postConsoleAndNotification("getInjuryDataFromJournalPages journalName: ", journalName, false, true, false);
     const pack = game.packs.get(compendiumName);
     const entries = await pack.getDocuments();
     const journalEntry = entries.find((entry) => entry.name === journalName);
     
-    //postConsoleAndNotification("entries", entries, false, true, false);
+    //BlacksmithUtils.postConsoleAndNotification("entries", entries, false, true, false);
 
     var category = "";
     var label = "";
@@ -3099,43 +3099,43 @@ async function getInjuryDataFromJournalPages(compendiumName, journalName) {
 
     if (journalEntry && journalEntry._source && journalEntry._source.pages) {
         let content = journalEntry._source.pages;
-        //postConsoleAndNotification("Journal Entry Content: ", content, false, true, false);
+        //BlacksmithUtils.postConsoleAndNotification("Journal Entry Content: ", content, false, true, false);
 
         let categoryPage = content.find(page => page.name === 'category');
         category = removeHTMLTags(categoryPage ? categoryPage.text.content : null);
-        //postConsoleAndNotification("category: ", category, false, true, false);
+        //BlacksmithUtils.postConsoleAndNotification("category: ", category, false, true, false);
 
         let labelPage = content.find(page => page.name === 'label');
         label = removeHTMLTags(labelPage ? labelPage.text.content : null);
-        //postConsoleAndNotification("label: ", label, false, true, false);
+        //BlacksmithUtils.postConsoleAndNotification("label: ", label, false, true, false);
 
         let iconPage = content.find(page => page.name === 'icon');
         icon = removeHTMLTags(iconPage ? iconPage.text.content : null);
-        //postConsoleAndNotification("icon: ", icon, false, true, false);
+        //BlacksmithUtils.postConsoleAndNotification("icon: ", icon, false, true, false);
 
         let damagePage = content.find(page => page.name === 'damage');
         damage = removeHTMLTags(damagePage ? damagePage.text.content : null);
-        //postConsoleAndNotification("damage: ", damage, false, true, false);
+        //BlacksmithUtils.postConsoleAndNotification("damage: ", damage, false, true, false);
 
         let durationPage = content.find(page => page.name === 'duration');
         duration = removeHTMLTags(durationPage ? durationPage.text.content : null);
-        //postConsoleAndNotification("duration: ", duration, false, true, false);
+        //BlacksmithUtils.postConsoleAndNotification("duration: ", duration, false, true, false);
 
         let descriptionPage = content.find(page => page.name === 'description');
         description = removeHTMLTags(descriptionPage ? descriptionPage.text.content : null);
-        //postConsoleAndNotification("description: ", description, false, true, false);
+        //BlacksmithUtils.postConsoleAndNotification("description: ", description, false, true, false);
 
         let treatmentPage = content.find(page => page.name === 'treatment');
         treatment = removeHTMLTags(treatmentPage ? treatmentPage.text.content : null);
-        //postConsoleAndNotification("treatment: ", treatment, false, true, false);
+        //BlacksmithUtils.postConsoleAndNotification("treatment: ", treatment, false, true, false);
 
         let actionPage = content.find(page => page.name === 'action');
         action = removeHTMLTags(actionPage ? actionPage.text.content : null);
-        //postConsoleAndNotification("action: ", action, false, true, false);
+        //BlacksmithUtils.postConsoleAndNotification("action: ", action, false, true, false);
 
         let statuseffectPage = content.find(page => page.name === 'status effect');
         statuseffect = removeHTMLTags(statuseffectPage ? statuseffectPage.text.content : null);
-        //postConsoleAndNotification("statuseffect: ", statuseffect, false, true, false);
+        //BlacksmithUtils.postConsoleAndNotification("statuseffect: ", statuseffect, false, true, false);
 
         return { category, label, icon, damage, duration, description, treatment, action, statuseffect };
     } else {

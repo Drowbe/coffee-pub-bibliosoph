@@ -966,11 +966,12 @@
     flex-shrink: 0;
     border-top: 1px solid var(--encounter-border-color);
     padding: 10px 12px 0px 12px;
+    margin-bottom: 12px;
 }
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-tray .window-encounter-detection .window-encounter-odds-slider-row {
     margin-top: 2px;
-    margin-bottom: 12px;
+    
 }
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-tray .window-encounter-deploy {

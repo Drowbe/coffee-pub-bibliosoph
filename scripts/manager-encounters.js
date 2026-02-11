@@ -30,16 +30,12 @@ const OFFICIAL_HABITATS = new Set([
  * focusing another module's window (e.g. Artificer).
  */
 export function openEncounterWindow() {
-    if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: openEncounterWindow called', '', true, false);
-    }
+    BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: openEncounterWindow called', '', true, false);
     const isOurWindow = _encounterWindow?.id === WINDOW_ENCOUNTER_APP_ID
         || _encounterWindow?.element?.id === WINDOW_ENCOUNTER_APP_ID;
     if (_encounterWindow && _encounterWindow.rendered && isOurWindow) {
         _encounterWindow.bringToFront();
-        if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
-            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: brought existing window to front', '', true, false);
-        }
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: brought existing window to front', '', true, false);
         return _encounterWindow;
     }
     let position = { width: 500, height: WINDOW_ENCOUNTER_HEIGHT_COLLAPSED };
@@ -54,9 +50,7 @@ export function openEncounterWindow() {
         position
     });
     _encounterWindow.render(true);
-    if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: new window rendered', '', true, false);
-    }
+    BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: new window rendered', '', true, false);
     return _encounterWindow;
 }
 
@@ -219,9 +213,7 @@ export function getEncounterCacheStatus() {
 export async function buildEncounterCache(progressCallback) {
     const compendiumIds = getMonsterCompendiums();
     if (compendiumIds.length === 0) {
-        if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
-            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: No compendiums to cache', '', true, false);
-        }
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: No compendiums to cache', '', true, false);
         return { count: 0 };
     }
 
@@ -266,9 +258,7 @@ export async function buildEncounterCache(progressCallback) {
                 });
             }
         } catch (e) {
-            if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
-                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Quick Encounter: Cache failed for ${compendiumId}`, e?.message ?? '', true, false);
-            }
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Quick Encounter: Cache failed for ${compendiumId}`, e?.message ?? '', true, false);
         }
         if (typeof progressCallback === 'function') progressCallback(p + 1, total, allEntries.length);
     }
@@ -280,9 +270,7 @@ export async function buildEncounterCache(progressCallback) {
         entries: allEntries
     };
     await game.settings.set(MODULE.ID, ENCOUNTER_CACHE_SETTING, payload);
-    if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: Cache built', `${allEntries.length} monsters from ${total} compendium(s)`, true, false);
-    }
+    BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: Cache built', `${allEntries.length} monsters from ${total} compendium(s)`, true, false);
     return { count: allEntries.length };
 }
 
@@ -342,9 +330,7 @@ async function getCandidatesWithXP(habitat) {
             }
             return out;
         } catch (e) {
-            if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
-                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Quick Encounter: Failed to load ${compendiumId}`, e?.message ?? '', true, false);
-            }
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Quick Encounter: Failed to load ${compendiumId}`, e?.message ?? '', true, false);
             return [];
         }
     };
@@ -437,9 +423,7 @@ export async function encounterGetIncludeMonsters(names) {
                 });
             }
         } catch (e) {
-            if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
-                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Quick Encounter: Include search failed for ${compendiumId}`, e?.message ?? '', true, false);
-            }
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Quick Encounter: Include search failed for ${compendiumId}`, e?.message ?? '', true, false);
         }
     }
     return results;
@@ -460,9 +444,7 @@ export async function encounterRecommend(habitat, difficulty, targetCR, minCR = 
     if (minCRNum > 0) candidates = candidates.filter((c) => c.cr >= minCRNum);
     if (maxCRNum < 30) candidates = candidates.filter((c) => c.cr <= maxCRNum);
     if (candidates.length === 0) {
-        if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
-            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: No monster compendiums or no matching actors', '', true, true);
-        }
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: No monster compendiums or no matching actors', '', true, true);
         return [];
     }
 
@@ -487,9 +469,7 @@ export async function encounterRecommend(habitat, difficulty, targetCR, minCR = 
         });
     }
 
-    if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: Recommend', `${results.length} monsters (habitat=${habitat}, CR ${minCRNum}–${maxCRNum}, random)`, true, false);
-    }
+    BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: Recommend', `${results.length} monsters (habitat=${habitat}, CR ${minCRNum}–${maxCRNum}, random)`, true, false);
     return results;
 }
 
@@ -571,10 +551,8 @@ export async function buildEncounter(habitat, targetCR, minCR = 0, maxCR = 30) {
         count: e.count
     }));
 
-    if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
-        const totalTokens = out.reduce((s, e) => s + e.count, 0);
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: Built encounter', `${out.length} types, ${totalTokens} tokens (CR gap ${(targetCRNum - totalCR).toFixed(2)})`, true, false);
-    }
+    const totalTokens = out.reduce((s, e) => s + e.count, 0);
+    BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: Built encounter', `${out.length} types, ${totalTokens} tokens (CR gap ${(targetCRNum - totalCR).toFixed(2)})`, true, false);
     return out;
 }
 
@@ -685,7 +663,7 @@ function buildEncounterCardData(entry, theme, cardTitle = 'Encounter', encounter
         });
         const detectionLevel = Math.max(1, Math.min(5, Number(game.settings.get(MODULE.ID, 'quickEncounterDetection')) ?? 3));
         const detectionInfo = getDetectionLevelInfo(detectionLevel);
-        data.detectionLevelHeader = `${detectionLevel} · ${detectionInfo.label}`;
+        data.detectionLevelHeader = detectionInfo.label;
         data.detectionNarrativeText = detectionInfo.narrative;
     }
     return data;
@@ -726,9 +704,7 @@ export async function rollForEncounter(habitat, difficulty, targetCR, minCR = 0,
         narrativeJson = await loadEncounterNarrative();
     } catch (e) {
         console.warn(MODULE.ID + ' | Could not load encounter narrative:', e);
-        if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
-            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Could not load encounters-narrative.json.', e?.message ?? String(e), false, false);
-        }
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Could not load encounters-narrative.json.', e?.message ?? String(e), false, false);
         return { encounter: false, recommendations: [] };
     }
 
@@ -757,10 +733,8 @@ export async function rollForEncounter(habitat, difficulty, targetCR, minCR = 0,
 
     const introEntry = pickRandomEncounterIntroEntry(narrativeJson, habitat);
     const recommendations = await buildEncounter(habitat, targetCR, minCR, maxCR);
-    if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
-        const n = recommendations.reduce((s, r) => s + (r.count ?? 1), 0);
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: Roll for Encounter', `${recommendations.length} types, ${n} tokens`, false, false);
-    }
+    const n = recommendations.reduce((s, r) => s + (r.count ?? 1), 0);
+    BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: Roll for Encounter', `${recommendations.length} types, ${n} tokens`, false, false);
     return { encounter: true, recommendations, introEntry };
 }
 
