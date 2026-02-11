@@ -396,6 +396,7 @@ export class WindowEncounter extends Base {
                 { value: 'grid', label: 'Grid' }
             ],
             deploymentHidden: this._deploymentHidden,
+            deploymentPostChatCard: game.settings.get(MODULE.ID, 'quickEncounterPostChatCard') !== false,
             cacheBuilding: this._cacheBuilding,
             cacheBuildingText: this._cacheBuildingText,
             cacheStatusText: this._getCacheStatusText(),
@@ -732,6 +733,11 @@ export class WindowEncounter extends Base {
             if (visibleCheck) {
                 w._deploymentHidden = !visibleCheck.checked;
                 postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: deploy visible', visibleCheck.checked ? 'visible' : 'hidden', true, false);
+                w.render();
+            }
+            const chatCardCheck = e.target?.closest?.(`[id="${w.id || WINDOW_ENCOUNTER_APP_ID}-deploy-chat-card"]`);
+            if (chatCardCheck) {
+                game.settings.set(MODULE.ID, 'quickEncounterPostChatCard', !!chatCardCheck.checked);
                 w.render();
             }
         });
@@ -1160,11 +1166,13 @@ export class WindowEncounter extends Base {
             deploymentHidden: this._deploymentHidden
         };
         try {
-            if (this._lastRollHadEncounter && typeof window.bibliosophPostEncounterDeployCard === 'function') {
-                await window.bibliosophPostEncounterDeployCard(this._lastRollIntroEntry, selectedMonsters, this._selectedHabitat);
-                this._lastRollHadEncounter = false;
-                this._lastRollIntroEntry = null;
+            const postChatCard = game.settings.get(MODULE.ID, 'quickEncounterPostChatCard') !== false;
+            if (postChatCard && typeof window.bibliosophPostEncounterDeployCard === 'function') {
+                const introEntry = this._lastRollHadEncounter ? this._lastRollIntroEntry : null;
+                await window.bibliosophPostEncounterDeployCard(introEntry, selectedMonsters, this._selectedHabitat);
             }
+            this._lastRollHadEncounter = false;
+            this._lastRollIntroEntry = null;
             const api = game.modules.get('coffee-pub-blacksmith')?.api;
             if (api?.deployMonsters) {
                 const tokens = await api.deployMonsters(metadata, options);

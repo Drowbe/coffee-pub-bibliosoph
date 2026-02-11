@@ -629,6 +629,19 @@ function getNarrativeEntriesForHabitatAndTime(narrativeJson, encounterKey, habit
 }
 
 /**
+ * Pick a random encounter intro entry (encounterTrue) for the given habitat and current time of day.
+ * Shared by roll (when there is an encounter) and deploy card (when no intro from roll, e.g. Recommend → Deploy).
+ * @param {Object} narrativeJson - loaded encounters-narrative.json
+ * @param {string} habitat - e.g. "Any", "Forest"
+ * @returns {{ title: string, icon: string, image?: string, description: string } | null}
+ */
+function pickRandomEncounterIntroEntry(narrativeJson, habitat) {
+    const timeOfDay = getTimeOfDay();
+    const entries = getNarrativeEntriesForHabitatAndTime(narrativeJson, 'encounterTrue', habitat, timeOfDay);
+    return entries.length ? entries[Math.floor(Math.random() * entries.length)] : null;
+}
+
+/**
  * Build encounter card data for chat-card.hbs (isEncounterCard branch).
  * @param {Object} entry - { title, icon, image?, description }
  * @param {string} theme - card theme (e.g. from cardThemeEncounter)
@@ -694,8 +707,8 @@ async function postEncounterCardToChat(cardData) {
 /**
  * Roll for encounter using Global Encounter Settings (encounterOdds).
  * Uses encounters-narrative.json for no-encounter and encounter intro text.
- * If encounter: posts intro card, runs recommend, returns recommendations.
- * If no encounter: posts no-encounter card, returns empty recommendations.
+ * If no encounter: posts No Encounter card, returns empty recommendations.
+ * If encounter: runs recommend, returns recommendations (encounter card is posted only on Deploy when Chat Card is checked).
  * @param {string} habitat - e.g. "Any", "Forest"
  * @param {string} difficulty - "Easy" | "Medium" | "Hard" | "Deadly"
  * @param {number} targetCR - target encounter CR for recommend
@@ -717,7 +730,6 @@ export async function rollForEncounter(habitat, difficulty, targetCR, minCR = 0,
 
     const timeOfDay = getTimeOfDay();
     const encounterFalseEntries = getNarrativeEntriesForHabitatAndTime(narrativeJson, 'encounterFalse', habitat, timeOfDay);
-    const encounterTrueEntries = getNarrativeEntriesForHabitatAndTime(narrativeJson, 'encounterTrue', habitat, timeOfDay);
     const pickEntry = (arr) => (arr.length ? arr[Math.floor(Math.random() * arr.length)] : { title: '', icon: '<i class="fa-solid fa-dice"></i>', description: '' });
 
     const encounterOdds = Math.max(0, Math.min(100, Number(game.settings.get(MODULE.ID, 'encounterOdds')) ?? 20));
@@ -739,7 +751,7 @@ export async function rollForEncounter(habitat, difficulty, targetCR, minCR = 0,
         return { encounter: false, recommendations: [] };
     }
 
-    const introEntry = pickEntry(encounterTrueEntries);
+    const introEntry = pickRandomEncounterIntroEntry(narrativeJson, habitat);
     const recommendations = await buildEncounter(habitat, targetCR, minCR, maxCR);
     if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
         const n = recommendations.reduce((s, r) => s + (r.count ?? 1), 0);
@@ -750,16 +762,26 @@ export async function rollForEncounter(habitat, difficulty, targetCR, minCR = 0,
 
 /**
  * Post the encounter deploy card to chat with the selected monster list, then place is done by the caller.
- * Card shows narrative (optional intro) plus the list of monsters being placed.
- * @param {Object} [introEntry] - optional narrative entry from roll (title, description, icon, image)
+ * Card shows narrative (optional intro or a random encounterTrue entry for habitat/time) plus the list of monsters being placed.
+ * @param {Object} [introEntry] - optional narrative entry from roll (title, description, icon, image); if null, picks from narrative by habitat/time
  * @param {Array<{name: string, count?: number, cr: string, img?: string}>} [selectedMonsters] - monsters being deployed (for card list)
- * @param {string} [habitat] - e.g. "Mountain"; card title becomes "{habitat} Encounter" when set (omitted when "Any")
+ * @param {string} [habitat] - e.g. "Mountain"; card title becomes "{habitat} Encounter" when set (omitted when "Any"); also used to pick narrative when introEntry is null
  */
 export async function postEncounterDeployCardToChat(introEntry, selectedMonsters = null, habitat = '') {
     const theme = game.settings.get(MODULE.ID, 'cardThemeEncounter') ?? 'theme-default';
-    const entry = introEntry
-        ? { ...introEntry }
-        : { title: 'Encounter Deployed', icon: '<i class="fa-solid fa-map-location-dot"></i>', description: '' };
+    let entry;
+    const fallbackEntry = { title: 'Encounter Deployed', icon: '<i class="fa-solid fa-map-location-dot"></i>', description: '' };
+    if (introEntry) {
+        entry = { ...introEntry };
+    } else {
+        try {
+            const narrativeJson = await loadEncounterNarrative();
+            entry = pickRandomEncounterIntroEntry(narrativeJson, habitat) ?? fallbackEntry;
+        } catch (e) {
+            console.warn(MODULE.ID + ' | Could not load encounter narrative for deploy card:', e);
+            entry = fallbackEntry;
+        }
+    }
     const habitatStr = habitat ? String(habitat).trim() : '';
     const cardTitle = (habitatStr && habitatStr.toLowerCase() !== 'any') ? `${habitatStr} Encounter` : 'Encounter';
     const cardData = buildEncounterCardData(entry, theme, cardTitle, selectedMonsters);

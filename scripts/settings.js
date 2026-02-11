@@ -122,6 +122,13 @@ export const registerSettings = () => {
 			type: Object,
 			default: null,
 		});
+		// Quick Encounter: post chat card when deploying (client; used by encounter window only)
+		game.settings.register(MODULE.ID, 'quickEncounterPostChatCard', {
+			scope: 'client',
+			config: false,
+			type: Boolean,
+			default: true,
+		});
 
 		// ---------- TITLE ----------
 		game.settings.register(MODULE.ID, "headingH1Bibliosoph", {

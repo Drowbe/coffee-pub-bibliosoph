@@ -212,10 +212,13 @@
                     <section class="window-encounter-deploy">
                         <h3 class="window-encounter-section-title">Deploy</h3>
                         <div class="window-encounter-deploy-options">
-                            
                             <label class="window-encounter-deploy-visible-label" for="{{appId}}-deploy-visible">
                                 <input type="checkbox" id="{{appId}}-deploy-visible" class="window-encounter-deploy-visible" {{#unless deploymentHidden}}checked{{/unless}} />
                                 <span>Visible</span>
+                            </label>
+                            <label class="window-encounter-deploy-chat-card-label" for="{{appId}}-deploy-chat-card">
+                                <input type="checkbox" id="{{appId}}-deploy-chat-card" class="window-encounter-deploy-chat-card" {{#if deploymentPostChatCard}}checked{{/if}} />
+                                <span>Chat Card</span>
                             </label>
                         </div>
                     </section>
@@ -247,6 +250,9 @@
                 {{/each}}
             </div>
             {{/if}}
+            <button type="button" id="{{appId}}-card" class="window-encounter-card window-encounter-btn-secondary" title="Post a chat card with the selected monsters">
+                <i class="fa-solid fa-id-badge"></i> Chat Card
+            </button>
         </div>
     </section>
 </div>
