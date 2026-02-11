@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Quick Encounter include clear button:** A × button inside the Include input clears the field.
 - **Quick Encounter Monster Gap overage:** When total monster CR exceeds the target, the MONSTER GAP box shows the overage (e.g. "+18") with flashing styling so the GM sees they are over budget.
 - **Quick Encounter difficulty during drag:** The difficulty badge (Trivial, Easy, Moderate, etc.) updates live as the Target Encounter CR slider is dragged, without releasing the mouse.
+- **Quick Encounter Detection levels:** Detection slider (1–5) maps to named levels: Surprised, Outmatched Awareness, Mutual Awareness, Tactical Advantage, Undetected. Each level has a tooltip and narrative text shown on the encounter chat card below Adversaries.
+- **Quick Encounter Roll for Detection:** Clickable dice icon on the Detection header opens Blacksmith's Request a Roll dialog (Perception, DC 15, party filter) via the Request Roll API.
 
 ### Changed
 
@@ -24,6 +26,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Quick Encounter cache header:** Cache status and Refresh button are on one line (e.g. "Cache: 939 Monsters [Refresh]").
 - **Quick Encounter Target CR slider:** Steps in whole numbers only (step 1); value is rounded and stored as an integer.
 - **Quick Encounter deploy:** Clicking a deploy pattern button (Sequential, Circle, Line, Scatter, Grid) closes the Quick Encounter window so the canvas is visible for placing tokens.
+- **Quick Encounter Detection display:** Slider shows the detection level label (never the number) and updates live as you drag. Detection section CSS classes renamed from odds-related to detection-related (`window-encounter-detection-*`).
+- **Quick Encounter encounter card:** Detection narrative appears below Adversaries with the level label (no number) and paragraph text.
+- **Notifications:** All notifications use Blacksmith's `postConsoleAndNotification` API directly; the former common.js wrapper was removed. Notifications are never permanent.
 
 ### Fixed
 
@@ -31,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Quick Encounter include input:** Include field value is synced from the DOM when Recommend/Roll runs and via a document-level `input` listener so the value is read correctly (fixes cases where activateListeners may not run with Application V2/PARTS).
 - **Quick Encounter habitat buttons:** Habitat buttons now have `data-encounter-role="habitat"` so clicking them selects the habitat.
 - **Quick Encounter overage display:** Overage is shown only in the MONSTER GAP box as a single number (e.g. "+18") with flash; fixed missing `encounterCROver`/`encounterOverageDisplay` variable declarations in getData.
+- **Manager encounters:** Removed stray `}` that caused "Illegal return statement" in `openEncounterWindow`.
 
 ## [13.0.10]
 
