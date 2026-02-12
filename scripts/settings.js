@@ -1006,6 +1006,16 @@ export const registerSettings = () => {
 			scope: 'user',
 			default: false,
 		});
+		// -- Gift Theme --
+		game.settings.register(MODULE.ID, 'cardThemeGift', {
+			name: MODULE.ID + '.cardThemeGift-Label',
+			hint: MODULE.ID + '.cardThemeGift-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			default: 'theme-default',
+			choices: themeChoices
+		});
 		// -- Gift Table --
 		game.settings.register(MODULE.ID,'giftTable', {
 			name: MODULE.ID + '.giftTable-Label',
@@ -1066,6 +1076,16 @@ export const registerSettings = () => {
 			requiresReload: true,
 			scope: 'user',
 			default: false,
+		});
+		// -- Shady Goods Theme --
+		game.settings.register(MODULE.ID, 'cardThemeShadygoods', {
+			name: MODULE.ID + '.cardThemeShadygoods-Label',
+			hint: MODULE.ID + '.cardThemeShadygoods-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			default: 'theme-default',
+			choices: themeChoices
 		});
 		// -- Shady Goods Table --
 		game.settings.register(MODULE.ID,'shadygoodsTable', {
