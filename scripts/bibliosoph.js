@@ -1564,21 +1564,21 @@ async function createChatCardGeneral(strRollTableName) {
             strTheme = game.settings.get(MODULE.ID, 'cardThemeCritical');
             strSound = "modules/coffee-pub-blacksmith/sounds/reaction-yay.mp3";
             strIconStyle = "fa-burst";
-            strActionLabel = "Action";
+            strActionLabel = "";
             break;
         case (BIBLIOSOPH.CARDTYPEFUMBLE):
             // FUMBLE
             strTheme = game.settings.get(MODULE.ID, 'cardThemeFumble');
             strSound = "modules/coffee-pub-blacksmith/sounds/sadtrombone.mp3";
             strIconStyle = "fa-heart-crack";
-            strActionLabel = "Action";
+            strActionLabel = "";
             break;
         case (BIBLIOSOPH.CARDTYPEINSPIRATION):
             // INSPIRATION
             strTheme = game.settings.get(MODULE.ID, 'cardThemeInspiration');
             strSound = "modules/coffee-pub-blacksmith/sounds/spell-magic-circle.mp3";
             strIconStyle = "fa-sparkles";
-            strActionLabel = "Card";
+            strActionLabel = "";
             break;
         case (BIBLIOSOPH.CARDTYPEINSULT):
             // INSULT
@@ -1587,35 +1587,35 @@ async function createChatCardGeneral(strRollTableName) {
             strUserName = strUserName; //where used?
             strSound = "modules/coffee-pub-blacksmith/sounds/reaction-oooooh.mp3";
             strIconStyle = "fa-person-harassing";
-            strActionLabel = "Action";
+            strActionLabel = "";
             break;
         case (BIBLIOSOPH.CARDTYPEPRAISE):
             // PRAISE
             strTheme = game.settings.get(MODULE.ID, 'cardThemePraise');
             strSound = "modules/coffee-pub-blacksmith/sounds/reaction-ahhhhh.mp3";
             strIconStyle = "fa-flower-tulip";
-            strActionLabel = "Action";
+            strActionLabel = "";
             break;
         case (BIBLIOSOPH.CARDTYPEDOMT):
             // DECK OF MANY THINGS
             strTheme = game.settings.get(MODULE.ID, 'cardThemeDOMT');
             strSound = "modules/coffee-pub-blacksmith/sounds/fanfare-harp.mp3";
             strIconStyle = "fa-cards-blank";
-            strActionLabel = "Action";
+            strActionLabel = "";
             break;
         case (BIBLIOSOPH.CARDTYPEBEVERAGE):
             // BEVERAGE
             strTheme = game.settings.get(MODULE.ID, 'cardThemeBeverage');
             strSound = "modules/coffee-pub-blacksmith/sounds/general-cocktail-ice.mp3";
             strIconStyle = "fa-martini-glass-citrus";
-            strActionLabel = "Action";
+            strActionLabel = "";
             break;
         case (BIBLIOSOPH.CARDTYPEBIO):
             // BIO
             strTheme = game.settings.get(MODULE.ID, 'cardThemeBio');
             strSound = "modules/coffee-pub-blacksmith/sounds/general-toilet-flushing.mp3";
             strIconStyle = "fa-toilet";
-            strActionLabel = "Action";
+            strActionLabel = "";
             break;
         case (BIBLIOSOPH.CARDTYPEMESSAGE):
             strTheme = game.settings.get(MODULE.ID, 'cardThemePartyMessage');
@@ -1644,7 +1644,7 @@ async function createChatCardGeneral(strRollTableName) {
                     strImage = "icons/magic/life/heart-shadow-red.webp";
                     strSound = "modules/coffee-pub-blacksmith/sounds/reaction-ahhhhh.mp3";
                     strIconStyle = "fa-flower-tulip";
-                    strActionLabel = "Action";
+                    strActionLabel = "";
                     break;
                 case (BIBLIOSOPH.MESSAGES_TITLE == "messageInsult"):
                     strTheme = game.settings.get(MODULE.ID, 'cardThemeInsults');
@@ -1652,7 +1652,7 @@ async function createChatCardGeneral(strRollTableName) {
                     strImage = "icons/skills/wounds/injury-face-impact-orange.webp";
                     strSound = "modules/coffee-pub-blacksmith/sounds/reaction-oooooh.mp3";
                     strIconStyle = "fa-person-harassing";
-                    strActionLabel = "Action";
+                    strActionLabel = "";
                     strUserName = strUserName;
                     break;
                 default:

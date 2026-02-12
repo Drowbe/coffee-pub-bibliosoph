@@ -6,6 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [13.1.2]
+
+### Added
+
+- **Card theme settings for Gift and Shady Goods:** `cardThemeGift` and `cardThemeShadygoods` are now registered in settings and localization. These were previously referenced in `createChatCardSearch` but not registered, causing "not a registered game setting" errors when rolling Gift or Shady Goods cards.
+
+### Changed
+
+- **Toolbar zones:** Tools now use valid Blacksmith toolbar zones. Inspiration, Shady Goods, and Gifts moved to `rolls`; Praise, Insults, Bio Break, and Beverage Break moved to `communication`; Quick Encounter moved to `gmtools` (GM-only).
+- **Toolbar order:** Sequential ordering (1–7 for rolls, 1–6 for communication, 1 for gmtools) so Bibliosoph tools stay grouped and other modules' tools do not appear between them.
+- **Chat card action labels:** Removed all prepended labels ("Action", "Card") before UUID links on roll table cards. Critical, Fumble, Inspiration, Insults, Praise, DOMT, Beverage, Bio, and message variants now display only the UUID link (e.g. `@UUID[Item.xxx]{SNAKE OIL}`) with no word before it.
+
+### Fixed
+
+- **`strRollTableName` ReferenceError:** Declared `strRollTableName` at the top of `publishChatCard()` so it is defined before use. In strict mode (ES modules), assigning to an undeclared variable threw a ReferenceError when rolling Critical Hit and other roll table cards.
+- **Invalid toolbar zone:** Replaced the invalid `roleplay` zone with `rolls` and `communication`. The Blacksmith Toolbar API only supports `general`, `rolls`, `communication`, `utilities`, `leadertools`, and `gmtools`; tools in `roleplay` did not appear in the toolbar.
+
 ## [13.1.1]
 
 ### Added
