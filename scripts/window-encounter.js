@@ -855,7 +855,6 @@ export class WindowEncounter extends Base {
                 const max = parseFloat(settingSlider.getAttribute('data-encounter-setting-max')) || 100;
                 const suffix = settingSlider.getAttribute('data-encounter-setting-suffix') || '';
                 const val = Math.max(min, Math.min(max, parseInt(settingSlider.value, 10) || min));
-                game.settings.set(MODULE.ID, key, val);
                 const valueEl = root?.querySelector(`[data-encounter-setting-value="${key}"]`);
                 if (valueEl) {
                     if (key === 'quickEncounterDetection') {
