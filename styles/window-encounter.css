@@ -31,7 +31,11 @@
 
 #coffee-pub-bibliosoph-quick-encounter .window-header {
     background: var(--encounter-header-bg) !important;
-    background-image: var(--notes-banner-image) !important;
+
+    background-blend-mode: multiply;
+    background-position: top center;
+    background-repeat: no-repeat;
+    background-size: cover;
     border-bottom: 1px solid var(--encounter-border-color) !important;
     color: var(--encounter-accent-color) !important;
 }
@@ -90,6 +94,11 @@
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-header {
     flex-shrink: 0;
     background: var(--encounter-header-bg);
+    background-image: var(--encounter-banner-image);
+    background-blend-mode: multiply;
+    background-position: top center;
+    background-repeat: no-repeat;
+    background-size: cover;
     border-bottom: 1px solid var(--encounter-border-color);
     padding: 8px 12px;
     min-height: 50px;
@@ -146,10 +155,12 @@
 }
 
 /* ----- Sections (scrollable body) ----- */
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-configure,
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-panel,
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-recommend-variability,
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-filters,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-section {
+    flex-shrink: 0;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--encounter-border-color);
+}
+
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-include,
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-buttons {
     flex-shrink: 0;
@@ -157,17 +168,18 @@
     border-bottom: 1px solid var(--encounter-border-color);
 }
 
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-row {
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-row-data {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 10px 0px;
+    padding: 0px 0px 8px 0px;
 }
 
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-odds-label {
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-row-label {
     flex-shrink: 0;
     font-size: 1.0em;
-    color: #c0c0c0;
+    color: rgba(201, 201, 201, 0.9);
 }
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-label-value {
@@ -357,10 +369,8 @@
 
 
 
-
-
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-section-title {
-    margin: 0 0 8px 0;
+    margin: 0 0 16px 0;
     font-size: 0.9em;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -500,12 +510,7 @@
     border: 1px solid rgba(120, 40, 40, 0.95);
 }
 
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider-label {
-    display: block;
-    margin-bottom: 6px;
-    font-size: 0.9em;
-    color: #d0d0d0;
-}
+
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-slider-row {
     display: flex;
@@ -524,54 +529,15 @@
 
 /* ----- Monster CR range (one track, two thumbs, highlight between) ----- */
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-row {
-    margin-top: 14px;
-    padding-top: 10px;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    margin-top: 8px;
+    padding-top: 0px;
 }
-
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-label {
-    display: block;
-    margin-bottom: 6px;
-    font-size: 0.9em;
-    color: #d0d0d0;
-}
-
-
-
-
-
-
 
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-value {
     font-weight: 600;
     color: #e8c090;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-hint {
@@ -648,9 +614,7 @@
     left: 0;
 }
 
-/* Right half on top so max thumb wins in right zone; left zone has only left half so min wins */
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-half-right {
-}
+
 
 /* Inputs: each half hosts a full-width slider using the 200% trick */
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-cr-range-half .window-encounter-cr-range-input {
@@ -1185,6 +1149,7 @@
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
 
     overflow: hidden;
     max-width: 100%;

@@ -29,10 +29,10 @@
 
             <!-- ENCOUNTER ODDS SECTION -->   
 
-            <section class="window-encounter-configure">
+            <section class="window-encounter-section">
                 <h3 class="window-encounter-section-title">{{localize "coffee-pub-bibliosoph.quickEncounterConfigureEncounter-Label"}}</h3>
-                <div class="window-encounter-odds-row">
-                    <label class="window-encounter-odds-label" for="{{appId}}-odds">{{localize "coffee-pub-bibliosoph.encounterOdds-Label"}}: <span class="window-encounter-label-value" data-encounter-setting-value="encounterOdds">{{oddsOfEncounter}}%</span></label>
+                <div class="window-encounter-row-data">
+                    <label class="window-encounter-row-label" for="{{appId}}-odds">{{localize "coffee-pub-bibliosoph.encounterOdds-Label"}}: <span class="window-encounter-label-value" data-encounter-setting-value="encounterOdds">{{oddsOfEncounter}}%</span></label>
                 </div>
                 <div class="window-encounter-odds-slider-row">
                     <span class="window-encounter-odds-endpoint">0%</span>
@@ -43,9 +43,9 @@
 
             <!-- CHALLENGE RATING SECTION -->   
 
-            <section class="window-encounter-cr-panel">
+            <section class="window-encounter-section">
 
-                <h3 class="window-encounter-section-title">Challenge rating</h3>
+                <h3 class="window-encounter-section-title">Challenge Rating</h3>
 
                 <!-- BADGES -->
 
@@ -74,7 +74,10 @@
 
                 <!-- TARGET ENCOUNTER CR SLIDER -->
 
-                <label class="window-encounter-cr-slider-label" for="{{appId}}-target-cr">Target Encounter CR</label>
+                <div class="window-encounter-row-data">
+                    <label class="window-encounter-row-label" for="{{appId}}-target-cr">Target Encounter CR</label>
+                </div>
+                
                 <div class="window-encounter-cr-slider-row">
                     <i class="fa-solid fa-rabbit window-encounter-slider-icon" title="Lower CR"></i>
                     <div class="window-encounter-cr-slider-wrap">
@@ -82,11 +85,18 @@
                     </div>
                     <i class="fa-solid fa-skull window-encounter-slider-icon" title="Higher CR"></i>
                 </div>
+            </section>  
+
+            <section class="window-encounter-section">
+
+                <h3 class="window-encounter-section-title">Adversaries</h3>
 
                 <!-- CR MIN/MAX RANGE SLIDER -->
 
                 <div class="window-encounter-cr-range-row">
-                    <label class="window-encounter-cr-range-label" for="{{appId}}-min-cr">Monster CR Range: <span id="{{appId}}-cr-range-value" class="window-encounter-label-value">{{crRangeLabel}}</span></label>
+                    <div class="window-encounter-row-data">
+                        <label class="window-encounter-row-label" for="{{appId}}-min-cr">Monster CR Range: <span id="{{appId}}-cr-range-value" class="window-encounter-label-value">{{crRangeLabel}}</span></label>
+                    </div>
                     <div class="window-encounter-cr-range-row-inner">
                         <span class="window-encounter-cr-range-endpoint">0 CR</span>
                         <div class="window-encounter-cr-range-track">
@@ -110,13 +120,16 @@
 
             <!-- RECOMMEND AND VARIABILITY SECTION -->
 
-            <section class="window-encounter-recommend-variability">
+            <section class="window-encounter-section">
+                
+                <h3 class="window-encounter-section-title">Recommendations</h3>
+
                 <div class="window-encounter-sliders-row">
 
                     <!-- MAX RECOMMENDATIONS SLIDER -->
                     <div class="window-encounter-slider-cell">
-                        <div class="window-encounter-odds-row">
-                            <label class="window-encounter-odds-label" for="{{appId}}-max-recommendations">{{localize "coffee-pub-bibliosoph.quickEncounterMaxRecommendations-Label"}}: <span class="window-encounter-label-value" data-encounter-setting-value="quickEncounterMaxRecommendations">{{maxRecommendationsValue}} </span></label>
+                        <div class="window-encounter-row-data">
+                            <label class="window-encounter-row-label" for="{{appId}}-max-recommendations">{{localize "coffee-pub-bibliosoph.quickEncounterMaxRecommendations-Label"}}: <span class="window-encounter-label-value" data-encounter-setting-value="quickEncounterMaxRecommendations">{{maxRecommendationsValue}} </span></label>
                         </div>
                         <div class="window-encounter-odds-slider-row">
                             <span class="window-encounter-odds-endpoint">5</span>
@@ -127,8 +140,8 @@
 
                     <!-- VARIABILITY SLIDER -->
                     <div class="window-encounter-slider-cell">
-                        <div class="window-encounter-odds-row">
-                            <label class="window-encounter-odds-label" for="{{appId}}-variability">{{localize "coffee-pub-bibliosoph.quickEncounterVariability-Label"}}: <span class="window-encounter-label-value" data-encounter-setting-value="quickEncounterVariability">{{variabilityValue}} </span></label>
+                        <div class="window-encounter-row-data">
+                            <label class="window-encounter-row-label" for="{{appId}}-variability">{{localize "coffee-pub-bibliosoph.quickEncounterVariability-Label"}}: <span class="window-encounter-label-value" data-encounter-setting-value="quickEncounterVariability">{{variabilityValue}} </span></label>
                         </div>
                         <div class="window-encounter-odds-slider-row">
                             <span class="window-encounter-odds-endpoint">1</span>
@@ -141,7 +154,7 @@
         
             <!-- HABITAT FILTERS SECTION -->
 
-            <section class="window-encounter-filters">
+            <section class="window-encounter-section">
                 <h3 class="window-encounter-section-title">Habitat</h3>
                 <div class="window-encounter-habitats">
                     {{#each habitats}}
