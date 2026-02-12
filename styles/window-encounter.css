@@ -13,12 +13,11 @@
 }
 
 
-
 #coffee-pub-bibliosoph-quick-encounter,
 #coffee-pub-bibliosoph-quick-encounter .window-content {
     background: var(--encounter-background) !important;
-    border: 1px solid var(--encounter-border-color) !important;
-    color: #e0e0e0;
+    border: 0px solid var(--encounter-border-color) !important;
+    color: rgba(224, 224, 224, 0.9);
     font-family: "Signika", sans-serif;
 }
 
@@ -31,7 +30,6 @@
 
 #coffee-pub-bibliosoph-quick-encounter .window-header {
     background: var(--encounter-header-bg) !important;
-
     background-blend-mode: multiply;
     background-position: top center;
     background-repeat: no-repeat;
@@ -161,11 +159,14 @@
     border-bottom: 1px solid var(--encounter-border-color);
 }
 
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-include,
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-section:last-child {
+    border-bottom: none;
+}
+
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-buttons {
     flex-shrink: 0;
-    padding: 10px 12px;
-    border-bottom: 1px solid var(--encounter-border-color);
+    padding: 12px 12px;
+    background: rgba(0, 0, 0, 0.9);
 }
 
 
@@ -690,12 +691,12 @@
 }
 
 /* Include: comma-separated monster names (full-width text box) */
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-include-input-wrap {
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-section-input-wrap {
     position: relative;
     display: block;
 }
 
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-include-input {
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-section-input {
     width: 100%;
     box-sizing: border-box;
     padding: 8px 28px 8px 10px;
@@ -707,16 +708,16 @@
     font-size: 0.95em;
 }
 
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-include-input::placeholder {
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-section-input::placeholder {
     color: #888;
 }
 
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-include-input:focus {
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-section-input:focus {
     outline: none;
     border-color: var(--encounter-accent-color);
 }
 
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-include-clear {
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-section-clear {
     position: absolute;
     top: 50%;
     right: 6px;
@@ -739,7 +740,7 @@
     cursor: pointer;
 }
 
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-include-clear:hover {
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-section-clear:hover {
     background: rgba(255, 255, 255, 0.15);
     color: #ccc;
 }
