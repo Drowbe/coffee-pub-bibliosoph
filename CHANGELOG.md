@@ -6,6 +6,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [13.1.1]
+
+### Added
+
+- **Wildcard token path resolution:** `resolveWildcardPath` resolves glob patterns (e.g. `arch-hag-*.webp`) to concrete files via `FilePicker.browse`. `getActorTokenImg` is async and resolves wildcards with random selection when multiple variants exist; resolved paths are cached at build time so encounter cards and recommendations use real file paths.
+
+### Changed
+
+- **Encounter card owner display:** Exclude GMs when resolving the character owner so the encounter card shows the actual player owner (e.g. Alicia Panicucci) instead of a GM (e.g. CursorAI).
+- **Cache building spinner:** Replaced Font Awesome `fa-spin` with custom CSS animation (`window-encounter-spin`) for cache building and results loading spinners so they animate reliably in all contexts.
+- **Encounter window header background:** Fixed variable name (`--notes-banner-image` → `--encounter-banner-image`) and applied background image to both `.window-header` and `.window-encounter-header` with proper `background-size`, `background-position`, `background-repeat`, and `background-blend-mode`.
+- **line-clamp compatibility:** Added standard `line-clamp` property alongside `-webkit-line-clamp` for result card name truncation.
+
+### Fixed
+
+- **Monster portrait fallback:** When a monster has no portrait, use `portrait-noimage.webp` in encounter cards and the encounter window.
+- **Empty images on encounter cards:** `getActorTokenImg` returns `NO_IMAGE_PORTRAIT` when doc is null, when wildcard resolution fails, or when path is empty; encounter window recommendations use `noImagePortrait` fallback when `r.img` is empty.
+- **Header background image not showing:** Wrong CSS variable reference caused background image to not display.
 
 ## [13.1.0]
 
