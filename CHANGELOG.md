@@ -18,12 +18,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Cache building spinner:** Replaced Font Awesome `fa-spin` with custom CSS animation (`window-encounter-spin`) for cache building and results loading spinners so they animate reliably in all contexts.
 - **Encounter window header background:** Fixed variable name (`--notes-banner-image` → `--encounter-banner-image`) and applied background image to both `.window-header` and `.window-encounter-header` with proper `background-size`, `background-position`, `background-repeat`, and `background-blend-mode`.
 - **line-clamp compatibility:** Added standard `line-clamp` property alongside `-webkit-line-clamp` for result card name truncation.
+- **Quick Encounter cache gate:** Recommend, Roll, and Include now require a built monster cache; when absent, they show a "Cache required" notification instead of scanning compendiums implicitly.
 
 ### Fixed
 
 - **Monster portrait fallback:** When a monster has no portrait, use `portrait-noimage.webp` in encounter cards and the encounter window.
 - **Empty images on encounter cards:** `getActorTokenImg` returns `NO_IMAGE_PORTRAIT` when doc is null, when wildcard resolution fails, or when path is empty; encounter window recommendations use `noImagePortrait` fallback when `r.img` is empty.
 - **Header background image not showing:** Wrong CSS variable reference caused background image to not display.
+- **Quick Encounter slider churn:** Settings are no longer saved on every slider `input` event; values persist on change only, reducing settings DB spam during drags.
+- **Combat assessment spam:** Encounter window fetches combat assessment once per session instead of on every render, avoiding repeated API calls and console noise.
 
 ## [13.1.0]
 

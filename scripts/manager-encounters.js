@@ -334,49 +334,15 @@ async function getCandidatesWithXP(habitat) {
         }));
     }
 
-    const compendiumIds = getMonsterCompendiums();
-    if (compendiumIds.length === 0) return [];
-
-    const loadOnePack = async (compendiumId) => {
-        const pack = game.packs.get(compendiumId);
-        if (!pack) return [];
-        try {
-            let docs;
-            const index = await pack.getIndex();
-            // getIndex() may return { index }, { entries }, or the array of entries directly
-            const entries = Array.isArray(index) ? index : (index?.index ?? index?.entries ?? []);
-            const ids = (Array.isArray(entries) ? entries : []).map((e) => e?._id ?? e?.id).filter(Boolean).slice(0, MAX_ACTORS_PER_PACK);
-            if (ids.length > 0) {
-                docs = await pack.getDocuments({ _id__in: ids });
-            } else {
-                // Fallback when index shape doesn't give ids (e.g. v13): load all then cap
-                docs = await pack.getDocuments();
-                docs = (Array.isArray(docs) ? docs : []).slice(0, MAX_ACTORS_PER_PACK);
-            }
-            if (!docs?.length) return [];
-            const out = [];
-            for (const doc of docs) {
-                if (!isValidEncounterActor(doc)) continue;
-                if (!actorMatchesHabitat(doc, habitat)) continue;
-                const crNum = getActorCR(doc);
-                const xp = getActorXP(doc);
-                if (Number.isNaN(crNum) || Number.isNaN(xp)) continue;
-                out.push({
-                    doc: { img: await getActorTokenImg(doc), name: doc.name ?? 'Unknown' },
-                    id: doc.uuid ?? `${compendiumId}.${doc.id}`,
-                    cr: crNum,
-                    xp
-                });
-            }
-            return out;
-        } catch (e) {
-            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Quick Encounter: Failed to load ${compendiumId}`, e?.message ?? '', true, false);
-            return [];
-        }
-    };
-
-    const packs = await Promise.all(compendiumIds.map((id) => loadOnePack(id)));
-    return packs.flat();
+    // Cache is required; avoid implicit full-compendium scans without user consent.
+    BlacksmithUtils.postConsoleAndNotification(
+        MODULE.NAME,
+        'Quick Encounter: Cache required',
+        'Build the encounter cache (Refresh Cache) before Recommend/Roll.',
+        true,
+        true
+    );
+    return [];
 }
 
 /**
@@ -417,56 +383,14 @@ export async function encounterGetIncludeMonsters(names) {
         return results;
     }
 
-    const compendiumIds = getMonsterCompendiums();
-    for (const compendiumId of compendiumIds) {
-        const pack = game.packs.get(compendiumId);
-        if (!pack) continue;
-        try {
-            const index = await pack.getIndex();
-            // v13: getIndex() returns a Collection; use .contents for array of index entry objects
-            let entries = Array.isArray(index) ? index : (index?.contents ?? index?.index ?? index?.entries ?? []);
-            if (entries.length > 0 && Array.isArray(entries[0]) && entries[0].length >= 2) {
-                entries = entries.map((e) => e[1]);
-            }
-            const matchingIds = [];
-            for (const e of entries) {
-                const name = e?.name ?? e?.metadata?.name ?? '';
-                if (!name) continue;
-                const nameLower = String(name).toLowerCase();
-                const matched = normalized.some((n) => {
-                    const searchLower = n.toLowerCase();
-                    return nameLower.includes(searchLower) || searchLower.includes(nameLower);
-                });
-                if (matched) matchingIds.push(e?._id ?? e?.id);
-            }
-            if (matchingIds.length === 0) continue;
-            const docs = await pack.getDocuments({ _id__in: matchingIds.filter(Boolean) });
-            for (const doc of docs || []) {
-                if (!isValidEncounterActor(doc)) continue;
-                const id = doc.uuid ?? `${compendiumId}.${doc.id}`;
-                if (seen.has(id)) continue;
-                const crNum = getActorCR(doc);
-                if (Number.isNaN(crNum) || crNum <= 0) continue;
-                const nameLower = String(doc.name ?? '').toLowerCase();
-                const matched = normalized.some((n) => {
-                    const searchLower = n.toLowerCase();
-                    return nameLower.includes(searchLower) || searchLower.includes(nameLower);
-                });
-                if (!matched) continue;
-                seen.add(id);
-                results.push({
-                    id,
-                    img: await getActorTokenImg(doc),
-                    name: doc.name ?? 'Unknown',
-                    cr: formatCR(crNum),
-                    override: true
-                });
-            }
-        } catch (e) {
-            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Quick Encounter: Include search failed for ${compendiumId}`, e?.message ?? '', true, false);
-        }
-    }
-    return results;
+    BlacksmithUtils.postConsoleAndNotification(
+        MODULE.NAME,
+        'Quick Encounter: Cache required for Include search',
+        'Build the encounter cache (Refresh Cache) to use Include.',
+        true,
+        true
+    );
+    return [];
 }
 
 /**
