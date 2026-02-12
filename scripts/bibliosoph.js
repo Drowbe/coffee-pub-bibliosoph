@@ -1381,6 +1381,7 @@ async function publishChatCard() {
     // Build the card
     var compiledHtml = "";
     var strInjuryCategory = "";
+    var strRollTableName = "";
     var strChatType = BIBLIOSOPH.CHAT_TYPE_OTHER;
     if (BIBLIOSOPH.CARDTYPEINVESTIGATION) {
         // INVESTIGATION (new flow: narrative + slots + per-rarity tables)
