@@ -134,6 +134,8 @@ function getPartyAverageCRFromCharacters() {
  */
 export class WindowEncounter extends Base {
     _assessment = null;
+    /** Lazy-loaded promise so we fetch combat assessment only once per window session. */
+    _assessmentPromise = null;
     _habitats = [
         'Any', 'Arctic', 'Coastal', 'Desert', 'Forest', 'Grassland',
         'Hill', 'Mountain', 'Planar', 'Swamp', 'Underdark', 'Underwater', 'Urban'
@@ -218,7 +220,7 @@ export class WindowEncounter extends Base {
      * @returns {Object} Context for the Handlebars template
      */
     async getData(options = {}) {
-        await this._loadCombatAssessment();
+        await this._ensureCombatAssessment();
 
         const a = this._assessment;
         const heroCRNum = parseCR(a?.partyCR ?? a?.partyCRDisplay);
@@ -423,6 +425,18 @@ export class WindowEncounter extends Base {
             })(),
             hasRecentIncludeNames: (this._recentIncludeNames?.length ?? 0) > 0
         };
+    }
+
+    /** Load combat assessment once; reused across renders to avoid hammering the API. */
+    async _ensureCombatAssessment() {
+        if (this._assessmentPromise) {
+            await this._assessmentPromise;
+            return;
+        }
+        this._assessmentPromise = this._loadCombatAssessment().catch(() => {}).finally(() => {
+            // Keep the promise so future renders reuse the resolved value without refetching.
+        });
+        await this._assessmentPromise;
     }
 
     /**
