@@ -84,6 +84,8 @@ The HandlebarsApplicationMixin uses **getData** to build the context for the Han
 
 Avoid relying on V1-only or undocumented names (e.g. `_prepareContext`) unless the mixin explicitly documents them. Stick to `getData` for Handlebars apps.
 
+**When mapping actors or tokens:** Actor `system` shape is not guaranteed (e.g. vehicles, some NPCs, or different game-system structures). When building lists from `canvas.tokens.placeables` or `game.actors`, use optional chaining and fallbacks for nested fields like `system.attributes.hp`, `system.details.level`, or `system.details.class` so a single actor with missing or different data does not throw during render.
+
 ```javascript
 async getData(options = {}) {
     await this._loadSomeData(); // optional async prep
@@ -103,6 +105,7 @@ async getData(options = {}) {
 After the mixin renders HTML, it calls **activateListeners(html)** so you can attach events. Use **native DOM** (no jQuery).
 
 - **Signature:** `activateListeners(html)` — `html` is the rendered root (or fragment) for your app’s content.
+- **Normalize html:** In v13, `html` may sometimes be jQuery. At the start of `activateListeners`, normalize to a native element if needed: e.g. `if (html?.jquery ?? typeof html?.find === 'function') { html = html[0] ?? html.get?.(0) ?? html; }` so the rest of the method can use `querySelector` / `querySelectorAll` / `addEventListener` safely.
 - **Resolve root:** If your template is wrapped in a single root (e.g. `<div class="window-yourname">`), get it with `html?.querySelector?.('.window-yourname') ?? html?.[0] ?? html`.
 - **Use:** `root.querySelector`, `root.querySelectorAll`, `element.addEventListener('click', ...)`, etc.
 
@@ -180,7 +183,9 @@ export function openEncounterWindow() {
 
 ---
 
-## 10. Lessons Learned
+## 10. Lessons Learned (Application V2)
+
+These lessons come from implementing and debugging Application V2 windows (HandlebarsApplicationMixin + ApplicationV2) in Coffee Pub modules on Foundry V13+.
 
 | Lesson | Detail |
 |--------|--------|
@@ -195,6 +200,8 @@ export function openEncounterWindow() {
 | **Scoped CSS** | Use a unique app id and class prefix (e.g. `#bibliosoph-quick-encounter`, `.window-encounter-*`) so styles don’t leak. |
 | **Precompute “selected” in getData** | Avoid depending on Handlebars helpers like `eq`; pass `selected: true/false` (or similar) from `getData` so templates stay simple and portable. |
 | **Use bringToFront, not bringToTop** | In Application V2, `bringToTop` is deprecated (v12) and redirects to `bringToFront`; the shim is removed in v14. Always use `bringToFront()` when focusing an already-rendered window. |
+| **Defensive actor/token data in V2 getData** | In Application V2, `getData()` drives the Handlebars render. When that context is built from `canvas.tokens.placeables` or actors, do not assume every actor has the same `system` shape (vehicles, some NPCs, or different structures may lack `system.attributes.hp`, `system.details.level`, etc.). Use optional chaining and fallbacks so one actor does not crash the V2 render with "Cannot read properties of undefined (reading 'value')". Example: `const hp = t.actor.system?.attributes?.hp; ... hp ? { value: hp.value ?? 0, max: hp.max ?? 0 } : { value: 0, max: 0 }`. |
+| **V2 activateListeners(html) may receive jQuery** | In V13, the Application V2 / mixin flow can still pass a jQuery-wrapped element to `activateListeners(html)` in some code paths. Normalize to native DOM at the start (e.g. `if (html?.jquery ?? typeof html?.find === 'function') { html = html[0] ?? html.get?.(0) ?? html; }`) so the rest of the method uses `querySelector` / `addEventListener` reliably. |
 
 ---
 
@@ -204,7 +211,8 @@ export function openEncounterWindow() {
 - [ ] `static PARTS = { content: { template: '...' } }` is defined on the class (not inside DEFAULT_OPTIONS).
 - [ ] `DEFAULT_OPTIONS` uses v13 shape: `id`, `classes`, `position`, `window` (no top-level `template`/`title`/`width`/`height`).
 - [ ] `async getData(options)` returns the full template context.
-- [ ] `activateListeners(html)` resolves root with "I am already the root" logic (`html?.matches?.('.your-root') ? html : ...`), then attaches listeners with native DOM.
+- [ ] `activateListeners(html)` normalizes `html` to native DOM if jQuery is passed, resolves root with "I am already the root" logic (`html?.matches?.('.your-root') ? html : ...`), then attaches listeners with native DOM.
+- [ ] If `getData` builds lists from actors/tokens, nested `system` fields use optional chaining and fallbacks (e.g. `system?.attributes?.hp`, `{ value: hp?.value ?? 0, max: hp?.max ?? 0 }`) so all actor types render without throwing.
 - [ ] Template has a single logical root and uses a consistent class prefix.
 - [ ] CSS is in `styles/window-*.css` and loaded via `module.json`; selectors are scoped (id/class).
 - [ ] Opening the window is done via a manager (e.g. `openEncounterWindow()`) and, if needed, wired from the toolbar or another entry point.
