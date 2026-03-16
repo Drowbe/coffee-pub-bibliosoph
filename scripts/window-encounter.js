@@ -428,7 +428,24 @@ export class WindowEncounter extends Base {
                 return this._recentIncludeNames.map((name, index) => ({ name, index }));
             })(),
             hasRecentIncludeNames: (this._recentIncludeNames?.length ?? 0) > 0,
-            excludeMonsterNamesText: this._excludeMonsterNamesText ?? '',
+            rememberInclude: game.settings.get?.(MODULE.ID, 'quickEncounterRememberInclude') === true,
+            rememberExclude: game.settings.get?.(MODULE.ID, 'quickEncounterRememberExclude') === true,
+            includeMonsterNamesText: (() => {
+                const current = (this._includeMonsterNamesText ?? '').trim();
+                if (current) return this._includeMonsterNamesText ?? '';
+                if (game.settings.get?.(MODULE.ID, 'quickEncounterRememberInclude') === true) {
+                    return game.settings.get?.(MODULE.ID, 'quickEncounterRememberedIncludeText') ?? '';
+                }
+                return '';
+            })(),
+            excludeMonsterNamesText: (() => {
+                const current = (this._excludeMonsterNamesText ?? '').trim();
+                if (current) return this._excludeMonsterNamesText ?? '';
+                if (game.settings.get?.(MODULE.ID, 'quickEncounterRememberExclude') === true) {
+                    return game.settings.get?.(MODULE.ID, 'quickEncounterRememberedExcludeText') ?? '';
+                }
+                return '';
+            })(),
             recentExcludeNames: (() => {
                 const raw = game.settings.get?.(MODULE.ID, 'quickEncounterRecentExcludeNames');
                 this._recentExcludeNames = Array.isArray(raw) ? raw.filter((s) => typeof s === 'string') : [];
@@ -714,6 +731,19 @@ export class WindowEncounter extends Base {
                 }
                 return;
             }
+            const openSheetBtn = e.target?.closest?.('[data-encounter-action="open-sheet"]');
+            if (openSheetBtn) {
+                e.stopPropagation();
+                const uuid = openSheetBtn.getAttribute?.('data-actor-id') ?? openSheetBtn.dataset?.actorId;
+                if (uuid && typeof fromUuid === 'function') {
+                    fromUuid(uuid).then((doc) => {
+                        if (doc?.sheet) doc.sheet.render(true);
+                    }).catch((err) => {
+                        console.warn(MODULE.NAME, 'Quick Encounter: open sheet failed', uuid, err);
+                    });
+                }
+                return;
+            }
             const resultCard = e.target?.closest?.('[data-encounter-role="result-card"]');
             const uuid = resultCard?.getAttribute?.('data-actor-id') ?? resultCard?.dataset?.actorId;
             if (resultCard && uuid) {
@@ -817,15 +847,36 @@ export class WindowEncounter extends Base {
             if (!w) return;
             const root = w._getEncounterRoot();
             if (!root || !root.contains(e.target)) return;
-            const visibleCheck = e.target?.closest?.(`[id="${w.id || WINDOW_ENCOUNTER_APP_ID}-deploy-visible"]`);
+            const appId = w.id || WINDOW_ENCOUNTER_APP_ID;
+            const visibleCheck = e.target?.closest?.(`[id="${appId}-deploy-visible"]`);
             if (visibleCheck) {
                 w._deploymentHidden = !visibleCheck.checked;
                 BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: deploy visible', visibleCheck.checked ? 'visible' : 'hidden', true, false);
                 w.render();
             }
-            const chatCardCheck = e.target?.closest?.(`[id="${w.id || WINDOW_ENCOUNTER_APP_ID}-deploy-chat-card"]`);
+            const chatCardCheck = e.target?.closest?.(`[id="${appId}-deploy-chat-card"]`);
             if (chatCardCheck) {
                 game.settings.set(MODULE.ID, 'quickEncounterPostChatCard', !!chatCardCheck.checked);
+                w.render();
+            }
+            if (e.target?.id === `${appId}-remember-include`) {
+                const checked = !!e.target.checked;
+                game.settings.set(MODULE.ID, 'quickEncounterRememberInclude', checked);
+                if (checked) {
+                    const includeInput = root?.querySelector?.(`#${appId}-include-input`);
+                    const val = (includeInput?.value ?? w._includeMonsterNamesText ?? '').trim();
+                    game.settings.set(MODULE.ID, 'quickEncounterRememberedIncludeText', val);
+                }
+                w.render();
+            }
+            if (e.target?.id === `${appId}-remember-exclude`) {
+                const checked = !!e.target.checked;
+                game.settings.set(MODULE.ID, 'quickEncounterRememberExclude', checked);
+                if (checked) {
+                    const excludeInput = root?.querySelector?.(`#${appId}-exclude-input`);
+                    const val = (excludeInput?.value ?? w._excludeMonsterNamesText ?? '').trim();
+                    game.settings.set(MODULE.ID, 'quickEncounterRememberedExcludeText', val);
+                }
                 w.render();
             }
         });
@@ -1085,6 +1136,7 @@ export class WindowEncounter extends Base {
             BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: roll', 'bibliosophRollForEncounter not available', true, true);
             return;
         }
+        this._persistRememberedIncludeExclude();
         this._rollLoading = true;
         this._recommendLoading = true;
         this.render();
@@ -1133,6 +1185,7 @@ export class WindowEncounter extends Base {
             BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: recommend', 'bibliosophEncounterRecommend not available', true);
             return;
         }
+        this._persistRememberedIncludeExclude();
         this._recommendLoading = true;
         this.render();
         try {
@@ -1174,6 +1227,24 @@ export class WindowEncounter extends Base {
             this._recommendLoading = false;
             this._recommendAttempted = true;
             this.render();
+        }
+    }
+
+    /**
+     * If "Remember" is checked for include/exclude, persist current input values so they auto-fill next time.
+     */
+    _persistRememberedIncludeExclude() {
+        const root = this._getEncounterRoot();
+        const appId = this.id || WINDOW_ENCOUNTER_APP_ID;
+        if (game.settings.get?.(MODULE.ID, 'quickEncounterRememberInclude') === true) {
+            const includeInput = root?.querySelector?.(`#${appId}-include-input`);
+            const val = (includeInput?.value ?? this._includeMonsterNamesText ?? '').trim();
+            game.settings.set?.(MODULE.ID, 'quickEncounterRememberedIncludeText', val);
+        }
+        if (game.settings.get?.(MODULE.ID, 'quickEncounterRememberExclude') === true) {
+            const excludeInput = root?.querySelector?.(`#${appId}-exclude-input`);
+            const val = (excludeInput?.value ?? this._excludeMonsterNamesText ?? '').trim();
+            game.settings.set?.(MODULE.ID, 'quickEncounterRememberedExcludeText', val);
         }
     }
 

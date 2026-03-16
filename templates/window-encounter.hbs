@@ -168,6 +168,10 @@
                 <div class="window-encounter-section-input-wrap">
                     <input type="text" id="{{appId}}-include-input" class="window-encounter-section-input" value="{{includeMonsterNamesText}}" placeholder="e.g. goblin, orc, dragon" aria-label="Comma-separated monster names to always include in results" />
                     <button type="button" class="window-encounter-section-clear" data-encounter-action="include-clear" aria-label="Clear include field" title="Clear">×</button>
+                    <label class="window-encounter-remember-wrap">
+                        <input type="checkbox" id="{{appId}}-remember-include" class="window-encounter-remember-checkbox" data-encounter-setting="quickEncounterRememberInclude" {{#if rememberInclude}}checked{{/if}} />
+                        <span class="window-encounter-remember-label">Remember</span>
+                    </label>
                 </div>
                 {{#if hasRecentIncludeNames}}
                 <div class="window-encounter-recent-include">
@@ -186,6 +190,10 @@
                 <div class="window-encounter-section-input-wrap">
                     <input type="text" id="{{appId}}-exclude-input" class="window-encounter-section-input" value="{{excludeMonsterNamesText}}" placeholder="e.g. dragon, beholder" aria-label="Comma-separated monster names to exclude from results" />
                     <button type="button" class="window-encounter-section-clear" data-encounter-action="exclude-clear" aria-label="Clear exclude field" title="Clear">×</button>
+                    <label class="window-encounter-remember-wrap">
+                        <input type="checkbox" id="{{appId}}-remember-exclude" class="window-encounter-remember-checkbox" data-encounter-setting="quickEncounterRememberExclude" {{#if rememberExclude}}checked{{/if}} />
+                        <span class="window-encounter-remember-label">Remember</span>
+                    </label>
                 </div>
                 {{#if hasRecentExcludeNames}}
                 <div class="window-encounter-recent-exclude">
@@ -215,6 +223,7 @@
                         <div class="window-encounter-results-grid">
                             {{#each recommendations}}
                             <div class="window-encounter-result-card {{#if selected}}selected{{/if}}{{#if count}} window-encounter-result-row-built{{/if}}{{#if override}} window-encounter-result-card-override{{/if}}" data-encounter-role="result-card" data-actor-id="{{id}}" data-count="{{count}}" title="{{#if override}}Included by name (ignores filters){{else}}{{#if count}}Part of built encounter — deploy below{{else}}Click to select for deploy{{/if}}{{/if}}">
+                                <button type="button" class="window-encounter-result-open-sheet" data-encounter-action="open-sheet" data-actor-id="{{id}}" aria-label="Open {{name}} sheet" title="Open sheet"><i class="fa-solid fa-feather-pointed"></i></button>
                                 {{#if selected}}
                                 <span class="window-encounter-result-count-wrap" data-actor-id="{{id}}">
                                     <button type="button" class="window-encounter-result-count-btn window-encounter-result-count-minus" data-encounter-action="count-minus" data-actor-id="{{id}}" aria-label="Decrease count">-</button>
@@ -233,9 +242,25 @@
                             <p></p>
                             <p class="window-encounter-results-empty">No monsters found. Try a different habitat or difficulty.</p>
                         {{else}}
-                            <p class="window-encounter-results-empty"><strong>ROLL</strong>: Roll to see if there is an encounter based on the odds. If so, it creeates an encounder meeting the defined critera.</p>
+                            <p class="window-encounter-results-empty"><strong>ROLL</strong>:</p>
                             <p></p>
-                            <p class="window-encounter-results-empty"><strong>RECOMMEND</strong>: Gereates a list of potential encounter monsters that meet the defined criteria. It retains any selected monsters each time it is pressed.</p>
+                            <ul class="window-encounter-results-empty">
+                                <li>Roll to see if there is an encounter based on the odds.</li>
+                                <li>If the roll FAILS, posts an environment-appropriate "No Encounter" card.</li>
+                                <li>If the roll SUCCEEDS, recommends an encounter based on the defined criteria.</li>
+                                <li>You then can have the party roll for "Detection" to set the monster awareness, deploy the monsters to the canvas, and then post a chat card with the encounter details.</li>
+                            </ul>
+                            <p></p>
+                            <p></p>
+                            <p class="window-encounter-results-empty"><strong>RECOMMEND</strong>:</p>
+                            <p></p>
+
+                            <ul class="window-encounter-results-empty">
+                                <li>Generates a list of potential encounter monsters that meet the defined criteria.</li>
+                                <li>It retains any selected monsters each time "Recommend" is pressed.</li>
+                                <li>You can then deploy the monsters or post a chat card with the encounter.</li>
+                            </ul>
+                            <p></p>
                         {{/if}}
                     {{/if}}
                 </section>

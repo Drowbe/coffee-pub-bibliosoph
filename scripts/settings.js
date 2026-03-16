@@ -1598,6 +1598,30 @@ export const registerSettings = () => {
 			type: Object,
 			default: [],
 		});
+		game.settings.register(MODULE.ID, 'quickEncounterRememberInclude', {
+			scope: 'client',
+			config: false,
+			type: Boolean,
+			default: false,
+		});
+		game.settings.register(MODULE.ID, 'quickEncounterRememberedIncludeText', {
+			scope: 'client',
+			config: false,
+			type: String,
+			default: '',
+		});
+		game.settings.register(MODULE.ID, 'quickEncounterRememberExclude', {
+			scope: 'client',
+			config: false,
+			type: Boolean,
+			default: false,
+		});
+		game.settings.register(MODULE.ID, 'quickEncounterRememberedExcludeText', {
+			scope: 'client',
+			config: false,
+			type: String,
+			default: '',
+		});
 		game.settings.register(MODULE.ID, 'toolbarCoffeePubQuickEncounterEnabled', {
 			name: MODULE.ID + '.toolbarCoffeePubQuickEncounterEnabled-Label',
 			hint: MODULE.ID + '.toolbarCoffeePubQuickEncounterEnabled-Hint',

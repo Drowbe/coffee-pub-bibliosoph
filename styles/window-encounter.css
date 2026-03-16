@@ -690,16 +690,19 @@
     box-shadow: 0 0 4px rgba(71, 110, 130, 0.6);
 }
 
-/* Include: comma-separated monster names (full-width text box) */
+/* Include / Exclude: input row with clear + right-aligned Remember checkbox */
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-section-input-wrap {
     position: relative;
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-section-input {
-    width: 100%;
+    flex: 1;
+    min-width: 0;
     box-sizing: border-box;
-    padding: 8px 28px 8px 10px;
+    padding: 8px 10px 8px 10px;
     background: rgba(0, 0, 0, 0.3);
     border: 1px solid var(--encounter-border-color);
     border-radius: 4px;
@@ -718,10 +721,7 @@
 }
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-section-clear {
-    position: absolute;
-    top: 50%;
-    right: 6px;
-    transform: translateY(-50%);
+    flex-shrink: 0;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -743,6 +743,28 @@
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-section-clear:hover {
     background: rgba(255, 255, 255, 0.15);
     color: #ccc;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-remember-wrap {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: auto;
+    white-space: nowrap;
+    cursor: pointer;
+    color: rgba(224, 224, 224, 0.85);
+    font-size: 0.9em;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-remember-wrap:hover {
+    color: var(--encounter-accent-color);
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-remember-checkbox {
+    margin: 0;
+    cursor: pointer;
+    accent-color: var(--encounter-accent-color);
 }
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-recent-include {
@@ -1085,6 +1107,37 @@
 
 
 
+
+
+
+
+/* Open Sheet Icon */
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-result-card .window-encounter-result-open-sheet {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    border: 1px solid rgba(0, 0, 0, 0.9);
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.5);
+    color: var(--encounter-accent-color);
+    cursor: pointer;
+    font-size: 0.85em;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-result-card .window-encounter-result-open-sheet:hover {
+    background: rgba(255, 100, 0, 0.6);
+    border-color: rgba(255, 100, 0, 0.6);
+    color: rgba(255, 255, 255, 0.9);
+}
+
 /* Selected count: − [badge with count] + */
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-result-card .window-encounter-result-count-wrap {
@@ -1099,19 +1152,19 @@
 }
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-result-card .window-encounter-result-count-btn {
-    width: 14px;
-    height: 14px;
-    min-width: 14px;
-    min-height: 14px;
+    width: 26px;
+    height: 26px;
+    min-width: 26px;
+    min-height: 26px;
     padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(0, 0, 0, 0.3);
     border-radius: 50%;
     background: rgba(0, 0, 0, 0.9);
     color: #e0e0e0;
-    font-size: 1.0em;
+    font-size: 1.1em;
     line-height: 1.2;
     cursor: pointer;
     font-family: inherit;
@@ -1128,16 +1181,25 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 18px;
-    height: 18px;
+    min-width: 26px;
+    height: 26px;
     padding: 0 4px;
     background: rgba(45, 94, 47, 0.9);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(0, 0, 0, 0.6);
     color: #fff;
     border-radius: 50%;
-    font-size: 0.7em;
+    font-size: 1.0em;
     font-weight: 600;
 }
+
+
+
+
+
+
+
+
+
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-result-img  {
     width: 100px;
@@ -1149,6 +1211,9 @@
     background: rgba(72, 69, 68, 0.6);
     border: 1px solid rgba(72, 69, 68, 0.4);
 }
+
+
+
 
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-result-name {
