@@ -10,6 +10,8 @@
     --encounter-header-bg: rgba(0, 0, 0, 0.7);
     --encounter-content-bg: #232323;
     --encounter-banner-image: url('../images/backgrounds/background-skull-red.webp');
+    min-width: 900px;
+    min-height: 575px;
 }
 
 

@@ -6,9 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+
+## [13.1.4]
+
+### Added
+
+- **Quick Encounter Exclude section:** New "Exclude" section below Include with comma-separated monster names. Matching monsters are filtered out of Recommend and Roll results (e.g. "dragon, lich" excludes them from suggestions). Same substring matching and recent-chip quick-add as Include; registered setting `quickEncounterRecentExcludeNames` for recent exclude list.
+- **Quick Encounter Remember checkboxes:** Right-aligned "Remember" checkbox for both Include and Exclude. When checked, the current value is saved and auto-fills when the window is opened again; values are also saved when running Recommend or Roll. Settings: `quickEncounterRememberInclude`, `quickEncounterRememberedIncludeText`, `quickEncounterRememberExclude`, `quickEncounterRememberedExcludeText`.
+- **Quick Encounter open-sheet button:** Feather icon in the upper-left of each result card opens that creature's sheet when clicked (uses `fromUuid` + `sheet.render(true)`).
+
+### Changed
+
+- **Quick Encounter layout:** Main config panel (Habitat, Include, Exclude, etc.) is fixed width (550px) when the results tray is visible; the results/deploy tray flexes with the window. When the tray is hidden, main still fills the window.
+- **Quick Encounter Include/Exclude row:** Clear (×) button is back inside the input; Remember checkbox remains to the right of the input. Input and clear are wrapped in `.window-encounter-section-input-inner` with the clear absolutely positioned over the input.
+- **Quick Encounter window size:** Minimum width 900px and minimum height 575px for the Quick Encounter window.
+
 ## [13.1.3] - Quick update
-
-
 
 ## [13.1.2]
 
