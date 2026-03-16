@@ -166,8 +166,10 @@
             <section class="window-encounter-section">
                 <h3 class="window-encounter-section-title">Include</h3>
                 <div class="window-encounter-section-input-wrap">
-                    <input type="text" id="{{appId}}-include-input" class="window-encounter-section-input" value="{{includeMonsterNamesText}}" placeholder="e.g. goblin, orc, dragon" aria-label="Comma-separated monster names to always include in results" />
-                    <button type="button" class="window-encounter-section-clear" data-encounter-action="include-clear" aria-label="Clear include field" title="Clear">×</button>
+                    <div class="window-encounter-section-input-inner">
+                        <input type="text" id="{{appId}}-include-input" class="window-encounter-section-input" value="{{includeMonsterNamesText}}" placeholder="e.g. goblin, orc, dragon" aria-label="Comma-separated monster names to always include in results" />
+                        <button type="button" class="window-encounter-section-clear" data-encounter-action="include-clear" aria-label="Clear include field" title="Clear">×</button>
+                    </div>
                     <label class="window-encounter-remember-wrap">
                         <input type="checkbox" id="{{appId}}-remember-include" class="window-encounter-remember-checkbox" data-encounter-setting="quickEncounterRememberInclude" {{#if rememberInclude}}checked{{/if}} />
                         <span class="window-encounter-remember-label">Remember</span>
@@ -188,8 +190,10 @@
             <section class="window-encounter-section">
                 <h3 class="window-encounter-section-title">Exclude</h3>
                 <div class="window-encounter-section-input-wrap">
-                    <input type="text" id="{{appId}}-exclude-input" class="window-encounter-section-input" value="{{excludeMonsterNamesText}}" placeholder="e.g. dragon, beholder" aria-label="Comma-separated monster names to exclude from results" />
-                    <button type="button" class="window-encounter-section-clear" data-encounter-action="exclude-clear" aria-label="Clear exclude field" title="Clear">×</button>
+                    <div class="window-encounter-section-input-inner">
+                        <input type="text" id="{{appId}}-exclude-input" class="window-encounter-section-input" value="{{excludeMonsterNamesText}}" placeholder="e.g. dragon, beholder" aria-label="Comma-separated monster names to exclude from results" />
+                        <button type="button" class="window-encounter-section-clear" data-encounter-action="exclude-clear" aria-label="Clear exclude field" title="Clear">×</button>
+                    </div>
                     <label class="window-encounter-remember-wrap">
                         <input type="checkbox" id="{{appId}}-remember-exclude" class="window-encounter-remember-checkbox" data-encounter-setting="quickEncounterRememberExclude" {{#if rememberExclude}}checked{{/if}} />
                         <span class="window-encounter-remember-label">Remember</span>

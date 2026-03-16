@@ -62,6 +62,9 @@
     overflow: hidden;
 }
 
+
+
+/* Panel Settings */
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-main {
     display: flex;
     flex-direction: column;
@@ -71,23 +74,29 @@
     overflow: auto;
 }
 
+/* When tray is visible: main fixed width, tray flexes with window */
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-body-with-tray .window-encounter-main {
-    flex: 1;
-    min-width: 280px;
+    flex: 0 0 auto;
+    width: 550px;
+    min-width: 550px;
 }
 
-/* Right tray: results + deploy when results are present */
+/* Right tray: results + deploy when results are present; flexes with window */
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-tray {
     display: flex;
     flex-direction: column;
-    width: 320px;
-    min-width: 280px;
-    max-width: 42%;
-    flex-shrink: 0;
+    flex: 1;
+    min-width: 350px;
+    min-height: 0;
     border-left: 1px solid var(--encounter-border-color);
     background: rgba(0, 0, 0, 0.25);
     overflow: hidden;
 }
+
+
+
+
+
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-header {
     flex-shrink: 0;
@@ -690,19 +699,23 @@
     box-shadow: 0 0 4px rgba(71, 110, 130, 0.6);
 }
 
-/* Include / Exclude: input row with clear + right-aligned Remember checkbox */
+/* Include / Exclude: input row with clear inside input, Remember checkbox to the right */
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-section-input-wrap {
-    position: relative;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-section-input-inner {
+    position: relative;
+    flex: 1;
+    min-width: 0;
 }
 
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-section-input {
-    flex: 1;
-    min-width: 0;
+    width: 100%;
     box-sizing: border-box;
-    padding: 8px 10px 8px 10px;
+    padding: 8px 28px 8px 10px;
     background: rgba(0, 0, 0, 0.3);
     border: 1px solid var(--encounter-border-color);
     border-radius: 4px;
@@ -720,8 +733,11 @@
     border-color: var(--encounter-accent-color);
 }
 
-#coffee-pub-bibliosoph-quick-encounter .window-encounter-section-clear {
-    flex-shrink: 0;
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-section-input-inner .window-encounter-section-clear {
+    position: absolute;
+    top: 50%;
+    right: 6px;
+    transform: translateY(-50%);
     display: inline-flex;
     align-items: center;
     justify-content: center;
