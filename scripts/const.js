@@ -59,6 +59,23 @@ export function getDetectionLevelInfo(level) {
     return DETECTION_LEVELS[v - 1] ?? DETECTION_LEVELS[2];
 }
 
+/**
+ * Map average Perception roll (0–20) to detection level (1–5) for Quick Encounter.
+ * 0–3: Surprised (1), 4–8: Outmatched Awareness (2), 9–12: Mutual Awareness (3),
+ * 13–16: Tactical Advantage (4), 17–20: Undetected (5).
+ * @param {number} average - Average of party roll totals
+ * @returns {number} Detection level 1–5
+ */
+export function getDetectionLevelFromAverageRoll(average) {
+    const n = Number(average);
+    if (Number.isNaN(n) || n < 0) return 1;
+    if (n <= 3) return 1;
+    if (n <= 8) return 2;
+    if (n <= 12) return 3;
+    if (n <= 16) return 4;
+    return 5;
+}
+
 export const BIBLIOSOPH = {
     DEBUGON: true,
     //ID: MODULE.ID,

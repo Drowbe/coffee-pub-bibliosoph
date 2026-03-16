@@ -4,7 +4,7 @@
 // Foundry v13 only. Uses HandlebarsApplicationMixin for _renderHTML/_replaceHTML.
 // Options follow ApplicationV2 (v13): PARTS (what injects into .window-content), DEFAULT_OPTIONS (sizing, title).
 
-import { MODULE, getDetectionLevelInfo } from './const.js';
+import { MODULE, getDetectionLevelInfo, getDetectionLevelFromAverageRoll } from './const.js';
 
 /** Template path for the encounter window. */
 export const WINDOW_ENCOUNTER_TEMPLATE = `modules/${MODULE.ID}/templates/window-encounter.hbs`;
@@ -831,12 +831,29 @@ export class WindowEncounter extends Base {
             if (requestDetectionRollBtn) {
                 const api = game.modules.get('coffee-pub-blacksmith')?.api;
                 if (api?.openRequestRollDialog) {
+                    w._detectionRollTotals = [];
                     api.openRequestRollDialog({
                         title: game.i18n?.localize?.('coffee-pub-bibliosoph.quickEncounterRequestDetectionRoll-Label') ?? 'Roll for Detection',
                         initialType: 'skill',
                         initialValue: 'perception',
                         dc: 15,
-                        initialFilter: 'party'
+                        initialFilter: 'party',
+                        groupRoll: false,
+                        onRollComplete(payload) {
+                            const tot = payload?.result?.total ?? payload?.result;
+                            if (typeof tot === 'number' && !Number.isNaN(tot)) {
+                                w._detectionRollTotals = w._detectionRollTotals ?? [];
+                                w._detectionRollTotals.push(tot);
+                            }
+                            if (payload?.allComplete && Array.isArray(w._detectionRollTotals) && w._detectionRollTotals.length > 0) {
+                                const sum = w._detectionRollTotals.reduce((a, b) => a + b, 0);
+                                const avg = sum / w._detectionRollTotals.length;
+                                const level = getDetectionLevelFromAverageRoll(avg);
+                                game.settings.set(MODULE.ID, 'quickEncounterDetection', level);
+                                w._detectionRollTotals = [];
+                                w.render();
+                            }
+                        }
                     });
                 }
                 return;
