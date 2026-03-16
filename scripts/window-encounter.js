@@ -172,6 +172,10 @@ export class WindowEncounter extends Base {
     _includeMonsterNamesText = '';
     /** Recent include names (most recent first), for quick-add chips. */
     _recentIncludeNames = [];
+    /** Exclude box: comma-separated monster names to filter out from results. */
+    _excludeMonsterNamesText = '';
+    /** Recent exclude names (most recent first), for quick-add chips. */
+    _recentExcludeNames = [];
 
     /** AppV2: parts go here so Foundry injects template into .window-content (not in DEFAULT_OPTIONS). */
     static PARTS = {
@@ -423,7 +427,14 @@ export class WindowEncounter extends Base {
                 this._recentIncludeNames = Array.isArray(raw) ? raw.filter((s) => typeof s === 'string') : [];
                 return this._recentIncludeNames.map((name, index) => ({ name, index }));
             })(),
-            hasRecentIncludeNames: (this._recentIncludeNames?.length ?? 0) > 0
+            hasRecentIncludeNames: (this._recentIncludeNames?.length ?? 0) > 0,
+            excludeMonsterNamesText: this._excludeMonsterNamesText ?? '',
+            recentExcludeNames: (() => {
+                const raw = game.settings.get?.(MODULE.ID, 'quickEncounterRecentExcludeNames');
+                this._recentExcludeNames = Array.isArray(raw) ? raw.filter((s) => typeof s === 'string') : [];
+                return this._recentExcludeNames.map((name, index) => ({ name, index }));
+            })(),
+            hasRecentExcludeNames: (this._recentExcludeNames?.length ?? 0) > 0
         };
     }
 
@@ -636,6 +647,10 @@ export class WindowEncounter extends Base {
             if (includeInput && typeof includeInput.value === 'string') {
                 w._includeMonsterNamesText = includeInput.value;
             }
+            const excludeInput = e.target?.id === `${appId}-exclude-input` ? e.target : null;
+            if (excludeInput && typeof excludeInput.value === 'string') {
+                w._excludeMonsterNamesText = excludeInput.value;
+            }
         });
 
         document.addEventListener('click', function _encounterDelegation(e) {
@@ -721,6 +736,12 @@ export class WindowEncounter extends Base {
                 w.render();
                 return;
             }
+            const excludeClear = e.target?.closest?.('[data-encounter-action="exclude-clear"]');
+            if (excludeClear) {
+                w._excludeMonsterNamesText = '';
+                w.render();
+                return;
+            }
             const recentRemove = e.target?.closest?.('[data-encounter-action="recent-include-remove"]');
             if (recentRemove) {
                 const idx = parseInt(recentRemove.getAttribute?.('data-encounter-recent-index'), 10);
@@ -738,6 +759,27 @@ export class WindowEncounter extends Base {
                     const name = w._recentIncludeNames[idx];
                     const current = (w._includeMonsterNamesText ?? '').trim();
                     w._includeMonsterNamesText = current ? `${current}, ${name}` : name;
+                    w.render();
+                }
+                return;
+            }
+            const recentExcludeRemove = e.target?.closest?.('[data-encounter-action="recent-exclude-remove"]');
+            if (recentExcludeRemove) {
+                const idx = parseInt(recentExcludeRemove.getAttribute?.('data-encounter-recent-index'), 10);
+                if (!Number.isNaN(idx) && Array.isArray(w._recentExcludeNames) && idx >= 0 && idx < w._recentExcludeNames.length) {
+                    w._recentExcludeNames = w._recentExcludeNames.filter((_, i) => i !== idx);
+                    game.settings.set?.(MODULE.ID, 'quickEncounterRecentExcludeNames', w._recentExcludeNames);
+                    w.render();
+                }
+                return;
+            }
+            const recentExcludeAdd = e.target?.closest?.('[data-encounter-action="recent-exclude-add"]');
+            if (recentExcludeAdd && !e.target?.closest?.('[data-encounter-action="recent-exclude-remove"]')) {
+                const idx = parseInt(recentExcludeAdd.getAttribute?.('data-encounter-recent-index'), 10);
+                if (!Number.isNaN(idx) && Array.isArray(w._recentExcludeNames) && idx >= 0 && idx < w._recentExcludeNames.length) {
+                    const name = w._recentExcludeNames[idx];
+                    const current = (w._excludeMonsterNamesText ?? '').trim();
+                    w._excludeMonsterNamesText = current ? `${current}, ${name}` : name;
                     w.render();
                 }
                 return;
@@ -952,6 +994,9 @@ export class WindowEncounter extends Base {
         root.querySelector(`#${appId}-include-input`)?.addEventListener('input', (e) => {
             this._includeMonsterNamesText = e.target?.value ?? '';
         });
+        root.querySelector(`#${appId}-exclude-input`)?.addEventListener('input', (e) => {
+            this._excludeMonsterNamesText = e.target?.value ?? '';
+        });
         /* Setting sliders handled by document listener via [data-encounter-setting]; target CR via [data-encounter-cr-slider] */
         root.querySelector('[data-encounter-cr-slider="target"]')?.addEventListener('change', (e) => {
             const raw = parseFloat(e.target?.value);
@@ -1059,7 +1104,7 @@ export class WindowEncounter extends Base {
             this._lastRollHadEncounter = result.encounter === true;
             this._lastRollIntroEntry = result.introEntry ?? null;
             if (result.encounter && Array.isArray(result.recommendations)) {
-                this._recommendations = await this._mergeIncludeMonsters(result.recommendations);
+                this._recommendations = await this._mergeIncludeMonsters(this._filterExcludeMonsters(result.recommendations));
                 this._recommendAttempted = true;
                 // Pre-select roll monsters (optimized encounter) and set counts for badge
                 this._selectedForDeploy = new Set();
@@ -1124,7 +1169,7 @@ export class WindowEncounter extends Base {
                 this._selectedCounts.clear();
                 BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: recommend returned', `${this._recommendations?.length ?? 0} results`, true, false);
             }
-            this._recommendations = await this._mergeIncludeMonsters(this._recommendations);
+            this._recommendations = await this._mergeIncludeMonsters(this._filterExcludeMonsters(this._recommendations));
         } finally {
             this._recommendLoading = false;
             this._recommendAttempted = true;
@@ -1148,6 +1193,50 @@ export class WindowEncounter extends Base {
         }
         this._recentIncludeNames = recent.slice(0, 20);
         game.settings.set?.(MODULE.ID, 'quickEncounterRecentIncludeNames', this._recentIncludeNames);
+    }
+
+    /**
+     * Add names to the recent-exclude list (most recent first, deduped, max 20).
+     * @param {string[]} names - Names to add (e.g. from exclude field).
+     */
+    _pushToRecentExclude(names) {
+        if (!Array.isArray(names) || names.length === 0) return;
+        const key = (s) => String(s).toLowerCase().trim();
+        let recent = Array.isArray(this._recentExcludeNames) ? [...this._recentExcludeNames] : [];
+        for (const s of names) {
+            if (!s) continue;
+            recent = recent.filter((r) => key(r) !== key(s));
+            recent.unshift(s);
+        }
+        this._recentExcludeNames = recent.slice(0, 20);
+        game.settings.set?.(MODULE.ID, 'quickEncounterRecentExcludeNames', this._recentExcludeNames);
+    }
+
+    /**
+     * Filter out monsters whose name matches any exclude term (same substring logic as include).
+     * @param {Array<{id: string, name?: string}>} list - Current recommendations
+     * @returns {Array} list with excluded monsters removed
+     */
+    _filterExcludeMonsters(list) {
+        const root = this._getEncounterRoot();
+        const appId = this.id || WINDOW_ENCOUNTER_APP_ID;
+        const excludeInput = root?.querySelector?.(`#${appId}-exclude-input`);
+        if (excludeInput && typeof excludeInput.value === 'string') this._excludeMonsterNamesText = excludeInput.value;
+
+        const text = (this._excludeMonsterNamesText ?? '').trim();
+        const names = text ? text.split(/\s*,\s*/).map((n) => n.trim()).filter(Boolean) : [];
+        if (!text || names.length === 0) return Array.isArray(list) ? list : [];
+        this._pushToRecentExclude(names);
+
+        const excludeLower = names.map((n) => n.toLowerCase());
+        return (list || []).filter((r) => {
+            const entryName = (r?.name ?? '').toString();
+            const entryNameLower = entryName.toLowerCase();
+            const matched = excludeLower.some((searchLower) =>
+                entryNameLower.includes(searchLower) || searchLower.includes(entryNameLower)
+            );
+            return !matched;
+        });
     }
 
     /**

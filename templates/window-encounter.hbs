@@ -180,6 +180,24 @@
                 </div>
                 {{/if}}
             </section>
+
+            <section class="window-encounter-section">
+                <h3 class="window-encounter-section-title">Exclude</h3>
+                <div class="window-encounter-section-input-wrap">
+                    <input type="text" id="{{appId}}-exclude-input" class="window-encounter-section-input" value="{{excludeMonsterNamesText}}" placeholder="e.g. dragon, beholder" aria-label="Comma-separated monster names to exclude from results" />
+                    <button type="button" class="window-encounter-section-clear" data-encounter-action="exclude-clear" aria-label="Clear exclude field" title="Clear">×</button>
+                </div>
+                {{#if hasRecentExcludeNames}}
+                <div class="window-encounter-recent-exclude">
+                    {{#each recentExcludeNames}}
+                    <span class="window-encounter-recent-chip" data-encounter-action="recent-exclude-add" data-encounter-recent-index="{{this.index}}" title="Add to Exclude">
+                        <span class="window-encounter-recent-chip-name">{{this.name}}</span>
+                        <button type="button" class="window-encounter-recent-chip-remove" data-encounter-action="recent-exclude-remove" data-encounter-recent-index="{{this.index}}" aria-label="Remove from recent">×</button>
+                    </span>
+                    {{/each}}
+                </div>
+                {{/if}}
+            </section>
         </div>
 
         <!-- HIDE/SHOW RESULTS SECTION (TRAY) -->

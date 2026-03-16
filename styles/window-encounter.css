@@ -753,6 +753,14 @@
     align-content: flex-start;
 }
 
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-recent-exclude {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+    align-content: flex-start;
+}
+
 
 /* RECENT INCLUDES */
 
