@@ -355,151 +355,18 @@ export const registerSettings = () => {
 		});
 
 
-		// ********** INJURIES **********
+		// ********** INVESTIGATIONS **********
 
-		// ---------- Injuries ----------
-		game.settings.register(MODULE.ID, "headingH2Injuries", {
-			name: MODULE.ID + '.headingH2Injuries-Label',
-			hint: MODULE.ID + '.headingH2Injuries-Hint',
+		// ---------- Investigations ----------
+		game.settings.register(MODULE.ID, "headingH2Investigations", {
+			name: MODULE.ID + '.headingH2Investigations-Label',
+			hint: MODULE.ID + '.headingH2Investigations-Hint',
 			scope: "world",
 			config: true,
 			default: "",
 			type: String,
 		});
 		// -------------------------------------
-
-
-		// LETS MAKE IT EVENTUALLY SO I CAN BE ROLLED MANUALLY OR AUTOMATED BASED ON CRITERIA
-
-		game.settings.register(MODULE.ID, 'injuriesEnabledGlobal', {
-			name: MODULE.ID + '.injuriesEnabledGlobal-Label',
-			hint: MODULE.ID + '.injuriesEnabledGlobal-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'world',
-			default: false,
-		});
-		// -- Injuries Coffee Pub Toolbar --
-		game.settings.register(MODULE.ID, 'toolbarCoffeePubInjuriesEnabled', {
-			name: MODULE.ID + '.toolbarCoffeePubInjuriesEnabled-Label',
-			hint: MODULE.ID + '.toolbarCoffeePubInjuriesEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'user',
-			default: true,
-		});
-		// -- Injuries Foundry Toolbar --
-		game.settings.register(MODULE.ID, 'toolbarFoundryInjuriesEnabled', {
-			name: MODULE.ID + '.toolbarFoundryInjuriesEnabled-Label',
-			hint: MODULE.ID + '.toolbarFoundryInjuriesEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'user',
-			default: false,
-		});
-		game.settings.register(MODULE.ID,'injuryCompendium', {
-			name: MODULE.ID + '.injuryCompendium-Label',
-			hint: MODULE.ID + '.injuryCompendium-Hint',
-			scope: "world",
-			config: true,
-			requiresReload: false,
-			default: '-- Choose a Roll Compendium --',
-			choices: getBlacksmithChoices('arrCompendiumChoices', 'No compendiums found. Try reloading Foundry after all modules are enabled.')
-		});
-
-		game.settings.register(MODULE.ID,'injuriesMacroGlobal', {
-			name: MODULE.ID + '.injuriesMacroGlobal-Label',
-			hint: MODULE.ID + '.injuriesMacroGlobal-Hint',
-			scope: "world",
-			config: true,
-			requiresReload: true,
-			default: '-- Choose a Macro --',
-			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
-		});
-
-		// -- Injury Theme --
-		game.settings.register(MODULE.ID, 'cardThemeInjury', {
-			name: MODULE.ID + '.cardThemeInjury-Label',
-			hint: MODULE.ID + '.cardThemeInjury-Hint',
-			scope: 'world',
-			config: true,
-			requiresReload: false,
-			default: 'theme-default',
-			choices: themeChoices
-		});
-
-
-		// -- Injury Image --
-		game.settings.register(MODULE.ID, 'injuryImageEnabled', {
-			name: MODULE.ID + '.injuryImageEnabled-Label',
-			hint: MODULE.ID + '.injuryImageEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: false,
-			scope: 'world',
-			default: false,
-		});
-
-
-		// -- Injury Sound --
-		game.settings.register(MODULE.ID,'injurySound', {
-			name: MODULE.ID + '.injurySound-Label',
-			hint: MODULE.ID + '.injurySound-Hint',
-			scope: "world",
-			config: true,
-			requiresReload: false,
-			default: 'none',
-			choices: getBlacksmithChoices('arrSoundChoices', 'No sounds found. Try reloading Foundry after all modules are enabled.')
-		});
-
-		// -- Injury Sound VOlume --
-		game.settings.register(MODULE.ID,'injurySoundVolume', {
-			name: MODULE.ID + '.injurySoundVolume-Label',
-			hint: MODULE.ID + '.injurySoundVolume-Hint',
-			scope: "world",
-			config: true,
-			requiresReload: false,
-			type: Number,
-			range: {
-			min: 0,
-			max: 1,
-			step: 0.05,
-			},
-			default: 0.7,
-		});
-
-		// ********** ROLL TABLES **********
-
-		// ---------- HEADING ----------
-		game.settings.register(MODULE.ID, "headingH2RollTables", {
-			name: MODULE.ID + '.headingH2RollTables-Label',
-			hint: MODULE.ID + '.headingH2RollTables-Hint',
-			scope: "world",
-			config: true,
-			default: "",
-			type: String,
-		});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 		// -------------------------------------
@@ -578,11 +445,6 @@ export const registerSettings = () => {
 			default: '-- Choose a Macro --',
 			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
 		});
-
-
-
-
-
 
 		// -- Investigation: Odds of Finding Coins --
 		game.settings.register(MODULE.ID, 'investigationCoinsOdds', {
@@ -807,6 +669,144 @@ export const registerSettings = () => {
 			range: { min: 0, max: 1000, step: 1 },
 			default: 1,
 		});
+
+
+		// ********** INJURIES **********
+
+		// ---------- Injuries ----------
+		game.settings.register(MODULE.ID, "headingH2Injuries", {
+			name: MODULE.ID + '.headingH2Injuries-Label',
+			hint: MODULE.ID + '.headingH2Injuries-Hint',
+			scope: "world",
+			config: true,
+			default: "",
+			type: String,
+		});
+		// -------------------------------------
+
+
+		// LETS MAKE IT EVENTUALLY SO I CAN BE ROLLED MANUALLY OR AUTOMATED BASED ON CRITERIA
+
+		game.settings.register(MODULE.ID, 'injuriesEnabledGlobal', {
+			name: MODULE.ID + '.injuriesEnabledGlobal-Label',
+			hint: MODULE.ID + '.injuriesEnabledGlobal-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'world',
+			default: false,
+		});
+		// -- Injuries Coffee Pub Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarCoffeePubInjuriesEnabled', {
+			name: MODULE.ID + '.toolbarCoffeePubInjuriesEnabled-Label',
+			hint: MODULE.ID + '.toolbarCoffeePubInjuriesEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'user',
+			default: true,
+		});
+		// -- Injuries Foundry Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarFoundryInjuriesEnabled', {
+			name: MODULE.ID + '.toolbarFoundryInjuriesEnabled-Label',
+			hint: MODULE.ID + '.toolbarFoundryInjuriesEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'user',
+			default: false,
+		});
+		game.settings.register(MODULE.ID,'injuryCompendium', {
+			name: MODULE.ID + '.injuryCompendium-Label',
+			hint: MODULE.ID + '.injuryCompendium-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: false,
+			default: '-- Choose a Roll Compendium --',
+			choices: getBlacksmithChoices('arrCompendiumChoices', 'No compendiums found. Try reloading Foundry after all modules are enabled.')
+		});
+
+		game.settings.register(MODULE.ID,'injuriesMacroGlobal', {
+			name: MODULE.ID + '.injuriesMacroGlobal-Label',
+			hint: MODULE.ID + '.injuriesMacroGlobal-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: true,
+			default: '-- Choose a Macro --',
+			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
+		});
+
+		// -- Injury Theme --
+		game.settings.register(MODULE.ID, 'cardThemeInjury', {
+			name: MODULE.ID + '.cardThemeInjury-Label',
+			hint: MODULE.ID + '.cardThemeInjury-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			default: 'theme-default',
+			choices: themeChoices
+		});
+
+
+		// -- Injury Image --
+		game.settings.register(MODULE.ID, 'injuryImageEnabled', {
+			name: MODULE.ID + '.injuryImageEnabled-Label',
+			hint: MODULE.ID + '.injuryImageEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: false,
+			scope: 'world',
+			default: false,
+		});
+
+
+		// -- Injury Sound --
+		game.settings.register(MODULE.ID,'injurySound', {
+			name: MODULE.ID + '.injurySound-Label',
+			hint: MODULE.ID + '.injurySound-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: false,
+			default: 'none',
+			choices: getBlacksmithChoices('arrSoundChoices', 'No sounds found. Try reloading Foundry after all modules are enabled.')
+		});
+
+		// -- Injury Sound VOlume --
+		game.settings.register(MODULE.ID,'injurySoundVolume', {
+			name: MODULE.ID + '.injurySoundVolume-Label',
+			hint: MODULE.ID + '.injurySoundVolume-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: false,
+			type: Number,
+			range: {
+			min: 0,
+			max: 1,
+			step: 0.05,
+			},
+			default: 0.7,
+		});
+
+		// ********** ROLL TABLES **********
+
+		// ---------- HEADING ----------
+		game.settings.register(MODULE.ID, "headingH2RollTables", {
+			name: MODULE.ID + '.headingH2RollTables-Label',
+			hint: MODULE.ID + '.headingH2RollTables-Hint',
+			scope: "world",
+			config: true,
+			default: "",
+			type: String,
+		});
+
+
+
+
+
+
+
+
+
 
 
 

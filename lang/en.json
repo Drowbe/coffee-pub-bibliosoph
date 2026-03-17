@@ -300,6 +300,9 @@
 		"headingH2Encounters-Label": "Encounters",
 		"headingH2Encounters-Hint": "Set the odds of encountering a monster, configure your thresholds, and the Quick Encounter tool does the rest.",
 
+		"headingH2Investigations-Label": "Investigations",
+		"headingH2Investigations-Hint": "",
+
 
 		"cardThemeEncounter-Label": "Card Style",
 		"cardThemeEncounter-Hint": "",
