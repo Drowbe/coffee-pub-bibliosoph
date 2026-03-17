@@ -21,6 +21,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Quick Encounter Include/Exclude row:** Clear (×) button is back inside the input; Remember checkbox remains to the right of the input. Input and clear are wrapped in `.window-encounter-section-input-inner` with the clear absolutely positioned over the input.
 - **Quick Encounter window size:** Minimum width 900px and minimum height 575px for the Quick Encounter window.
 - **Quick Encounter Roll for Detection:** The dice button now uses the Blacksmith Request a Roll API with `groupRoll: false` and `onRollComplete`. When all party Perception rolls are in, the average of roll totals is computed and the Detection slider is updated automatically: average 0–3 → Surprised, 4–8 → Outmatched Awareness, 9–12 → Mutual Awareness, 13–16 → Tactical Advantage, 17–20 → Undetected. Helper `getDetectionLevelFromAverageRoll()` added in `const.js`.
+- **Settings group order:** Config groups now appear in this order: GENERAL, ENCOUNTERS, INJURIES, SPECIAL ROLL TABLES, COMMUNICATIONS.
+- **Investigations section:** Investigations is its own top-level section (H2) below Encounters; removed from under Special Roll Tables. Redundant H3 "Investigations" heading removed. H3 "Currency" added above "Odds of finding coins"; H3 "Items" added above "Odds of finding items". New keys: `headingH2Investigations`, `headingH3Currency`, `headingH3Items`.
+- **Encounters settings order:** "Card Style" and "Odds of encounter" moved below "Show in Foundry toolbar" in the Encounters section.
 
 ## [13.1.3] - Quick update
 
