@@ -175,9 +175,13 @@ export const registerSettings = () => {
 
 
 		// ---------- HEADING ----------
-		game.settings.register(MODULE.ID, "headingH2Communications", {
-			name: MODULE.ID + '.headingH2Communications-Label',
-			hint: MODULE.ID + '.headingH2Communications-Hint',
+
+		// ********** ENCOUNTERS **********
+
+		// ---------- Encounters ----------
+		game.settings.register(MODULE.ID, "headingH2Encounters", {
+			name: MODULE.ID + '.headingH2Encounters-Label',
+			hint: MODULE.ID + '.headingH2Encounters-Hint',
 			scope: "world",
 			config: true,
 			default: "",
@@ -185,291 +189,230 @@ export const registerSettings = () => {
 		});
 		// -------------------------------------
 
-	  	// ---------- SUBHEADING ----------
-		game.settings.register(MODULE.ID, "headingH3PartyMessage", {
-			name: MODULE.ID + '.headingH3PartyMessage-Label',
-			hint: MODULE.ID + '.headingH3PartyMessage-Hint',
-			scope: "client",
-			config: true,
-			default: "",
-			type: String,
-		});
-		// -------------------------------------
 
-		game.settings.register(MODULE.ID, 'partyMessageEnabled', {
-			name: MODULE.ID + '.partyMessageEnabled-Label',
-			hint: MODULE.ID + '.partyMessageEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'world',
-			default: false,
-		});
-		// -- Party Message Coffee Pub Toolbar --
-		game.settings.register(MODULE.ID, 'toolbarCoffeePubPartyMessageEnabled', {
-			name: MODULE.ID + '.toolbarCoffeePubPartyMessageEnabled-Label',
-			hint: MODULE.ID + '.toolbarCoffeePubPartyMessageEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'user',
-			default: true,
-		});
-		// -- Party Message Foundry Toolbar --
-		game.settings.register(MODULE.ID, 'toolbarFoundryPartyMessageEnabled', {
-			name: MODULE.ID + '.toolbarFoundryPartyMessageEnabled-Label',
-			hint: MODULE.ID + '.toolbarFoundryPartyMessageEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'user',
-			default: true,
-		});
-		// -- Party Message Macro --
-		game.settings.register(MODULE.ID,'partyMessageMacro', {
-			name: MODULE.ID + '.partyMessageMacro-Label',
-			hint: MODULE.ID + '.partyMessageMacro-Hint',
-			scope: "world",
-			config: true,
-			requiresReload: true,
-			default: '-- Choose a Macro --',
-			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
-		});
-		// -- Party Message Theme --
-		game.settings.register(MODULE.ID, 'cardThemePartyMessage', {
-			name: MODULE.ID + '.cardThemePartyMessage-Label',
-			hint: MODULE.ID + '.cardThemePartyMessage-Hint',
+
+		// ********** ENCOUNTERS (Quick Encounter) **********
+		game.settings.register(MODULE.ID, 'cardThemeEncounter', {
+			name: MODULE.ID + '.cardThemeEncounter-Label',
+			hint: MODULE.ID + '.cardThemeEncounter-Hint',
 			scope: 'world',
 			config: true,
 			requiresReload: false,
 			default: 'theme-default',
 			choices: themeChoices
 		});
+		game.settings.register(MODULE.ID,'encounterOdds', {
+			name: MODULE.ID + '.encounterOdds-Label',
+			hint: MODULE.ID + '.encounterOdds-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: false,
+			type: Number,
+			range: {
+			min: 0,
+			max: 100,
+			step: 1,
+			},
+			default: 20,
+		});
+		// -- Quick Encounter (CR-aware tool) --
+		game.settings.register(MODULE.ID, 'quickEncounterEnabled', {
+			name: MODULE.ID + '.quickEncounterEnabled-Label',
+			hint: MODULE.ID + '.quickEncounterEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'world',
+			default: true,
+		});
+		game.settings.register(MODULE.ID, 'quickEncounterHabitat', {
+			scope: 'client',
+			config: false,
+			type: String,
+			default: 'Any',
+		});
+		game.settings.register(MODULE.ID, 'quickEncounterMinCR', {
+			scope: 'client',
+			config: false,
+			type: Number,
+			default: 0,
+		});
+		game.settings.register(MODULE.ID, 'quickEncounterMaxCR', {
+			scope: 'client',
+			config: false,
+			type: Number,
+			default: 30,
+		});
+		game.settings.register(MODULE.ID, 'quickEncounterMaxRecommendations', {
+			scope: 'client',
+			config: false,
+			type: Number,
+			default: 10,
+		});
+		game.settings.register(MODULE.ID, 'quickEncounterVariability', {
+			scope: 'client',
+			config: false,
+			type: Number,
+			default: 3,
+		});
+		game.settings.register(MODULE.ID, 'quickEncounterDetection', {
+			scope: 'client',
+			config: false,
+			type: Number,
+			default: 3,
+		});
+		game.settings.register(MODULE.ID, 'quickEncounterRecentIncludeNames', {
+			scope: 'client',
+			config: false,
+			type: Object,
+			default: [],
+		});
+		game.settings.register(MODULE.ID, 'quickEncounterRecentExcludeNames', {
+			scope: 'client',
+			config: false,
+			type: Object,
+			default: [],
+		});
+		game.settings.register(MODULE.ID, 'quickEncounterRememberInclude', {
+			scope: 'client',
+			config: false,
+			type: Boolean,
+			default: false,
+		});
+		game.settings.register(MODULE.ID, 'quickEncounterRememberedIncludeText', {
+			scope: 'client',
+			config: false,
+			type: String,
+			default: '',
+		});
+		game.settings.register(MODULE.ID, 'quickEncounterRememberExclude', {
+			scope: 'client',
+			config: false,
+			type: Boolean,
+			default: false,
+		});
+		game.settings.register(MODULE.ID, 'quickEncounterRememberedExcludeText', {
+			scope: 'client',
+			config: false,
+			type: String,
+			default: '',
+		});
+		game.settings.register(MODULE.ID, 'toolbarCoffeePubQuickEncounterEnabled', {
+			name: MODULE.ID + '.toolbarCoffeePubQuickEncounterEnabled-Label',
+			hint: MODULE.ID + '.toolbarCoffeePubQuickEncounterEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'world',
+			default: true,
+		});
+		game.settings.register(MODULE.ID, 'toolbarFoundryQuickEncounterEnabled', {
+			name: MODULE.ID + '.toolbarFoundryQuickEncounterEnabled-Label',
+			hint: MODULE.ID + '.toolbarFoundryQuickEncounterEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'world',
+			default: false,
+		});
 
-		// ---------- SUBHEADING ----------
-		game.settings.register(MODULE.ID, "headingH3PrivateMessage", {
-			name: MODULE.ID + '.headingH3PrivateMessage-Label',
-			hint: MODULE.ID + '.headingH3PrivateMessage-Hint',
-			scope: "client",
+		// -- Encounter False Sound --
+		game.settings.register(MODULE.ID,'encounterFalseSound', {
+			name: MODULE.ID + '.encounterFalseSound-Label',
+			hint: MODULE.ID + '.encounterFalseSound-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: false,
+			default: 'none',
+			choices: getBlacksmithChoices('arrSoundChoices', 'No sounds found. Try reloading Foundry after all modules are enabled.')
+		});
+
+		// -- Encounter True Sound --
+		game.settings.register(MODULE.ID,'encounterTrueSound', {
+			name: MODULE.ID + '.encounterTrueSound-Label',
+			hint: MODULE.ID + '.encounterTrueSound-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: false,
+			default: 'none',
+			choices: getBlacksmithChoices('arrSoundChoices', 'No sounds found. Try reloading Foundry after all modules are enabled.')
+		});
+
+		// -- Encounter Sound VOlume --
+		game.settings.register(MODULE.ID,'encounterSoundVolume', {
+			name: MODULE.ID + '.encounterSoundVolume-Label',
+			hint: MODULE.ID + '.encounterSoundVolume-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: false,
+			type: Number,
+			range: {
+			min: 0,
+			max: 1,
+			step: 0.05,
+			},
+			default: 0.7,
+		});
+
+
+		// ********** INJURIES **********
+
+		// ---------- Injuries ----------
+		game.settings.register(MODULE.ID, "headingH2Injuries", {
+			name: MODULE.ID + '.headingH2Injuries-Label',
+			hint: MODULE.ID + '.headingH2Injuries-Hint',
+			scope: "world",
 			config: true,
 			default: "",
 			type: String,
 		});
 		// -------------------------------------
-		
-		game.settings.register(MODULE.ID, 'privateMessageEnabled', {
-			name: MODULE.ID + '.privateMessageEnabled-Label',
-			hint: MODULE.ID + '.privateMessageEnabled-Hint',
+
+
+		// LETS MAKE IT EVENTUALLY SO I CAN BE ROLLED MANUALLY OR AUTOMATED BASED ON CRITERIA
+
+		game.settings.register(MODULE.ID, 'injuriesEnabledGlobal', {
+			name: MODULE.ID + '.injuriesEnabledGlobal-Label',
+			hint: MODULE.ID + '.injuriesEnabledGlobal-Hint',
 			type: Boolean,
 			config: true,
 			requiresReload: true,
 			scope: 'world',
 			default: false,
 		});
-		// -- Private Message Coffee Pub Toolbar --
-		game.settings.register(MODULE.ID, 'toolbarCoffeePubPrivateMessageEnabled', {
-			name: MODULE.ID + '.toolbarCoffeePubPrivateMessageEnabled-Label',
-			hint: MODULE.ID + '.toolbarCoffeePubPrivateMessageEnabled-Hint',
+		// -- Injuries Coffee Pub Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarCoffeePubInjuriesEnabled', {
+			name: MODULE.ID + '.toolbarCoffeePubInjuriesEnabled-Label',
+			hint: MODULE.ID + '.toolbarCoffeePubInjuriesEnabled-Hint',
 			type: Boolean,
 			config: true,
 			requiresReload: true,
 			scope: 'user',
 			default: true,
 		});
-		// -- Private Message Foundry Toolbar --
-		game.settings.register(MODULE.ID, 'toolbarFoundryPrivateMessageEnabled', {
-			name: MODULE.ID + '.toolbarFoundryPrivateMessageEnabled-Label',
-			hint: MODULE.ID + '.toolbarFoundryPrivateMessageEnabled-Hint',
+		// -- Injuries Foundry Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarFoundryInjuriesEnabled', {
+			name: MODULE.ID + '.toolbarFoundryInjuriesEnabled-Label',
+			hint: MODULE.ID + '.toolbarFoundryInjuriesEnabled-Hint',
 			type: Boolean,
 			config: true,
 			requiresReload: true,
-			scope: 'user',
-			default: true,
-		});
-		// -- Private Message Macro --
-		game.settings.register(MODULE.ID,'privateMessageMacro', {
-			name: MODULE.ID + '.privateMessageMacro-Label',
-			hint: MODULE.ID + '.privateMessageMacro-Hint',
-			scope: "world",
-			config: true,
-			requiresReload: true,
-			default: '-- Choose a Macro --',
-			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
-		});
-
-		// -- Private Message Theme --
-		game.settings.register(MODULE.ID, 'cardThemePrivateMessage', {
-			name: MODULE.ID + '.cardThemePrivateMessage-Label',
-			hint: MODULE.ID + '.cardThemePrivateMessage-Hint',
-			scope: 'world',
-			config: true,
-			requiresReload: false,
-			default: 'theme-default',
-			choices: themeChoices
-		});
-
-		// -- Private Message Chat Layout --
-		game.settings.register(MODULE.ID, 'cardLayoutPrivateMessage', {
-			name: MODULE.ID + '.cardLayoutPrivateMessage-Label',
-			hint: MODULE.ID + '.cardLayoutPrivateMessage-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: false,
-			scope: 'world',
-			default: false,
-		});
-
-
-		// -- Private Message Window Layout --
-		game.settings.register(MODULE.ID, 'privateMessageCompressedWindow', {
-			name: MODULE.ID + '.privateMessageCompressedWindow-Label',
-			hint: MODULE.ID + '.privateMessageCompressedWindow-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: false,
 			scope: 'user',
 			default: false,
 		});
-
-
-
-		// ** BEVERAGE **
-
-		// ---------- SUBHEADING ----------
-		game.settings.register(MODULE.ID, "headingH3Beverage", {
-			name: MODULE.ID + '.headingH3Beverage-Label',
-			hint: MODULE.ID + '.headingH3Beverage-Hint',
-			scope: "client",
-			config: true,
-			default: "",
-			type: String,
-		});
-		// -------------------------------------
-		game.settings.register(MODULE.ID, 'beverageEnabled', {
-			name: MODULE.ID + '.beverageEnabled-Label',
-			hint: MODULE.ID + '.beverageEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'world',
-			default: false,
-		});
-		// -- Beverage Coffee Pub Toolbar --
-		game.settings.register(MODULE.ID, 'toolbarCoffeePubBeverageEnabled', {
-			name: MODULE.ID + '.toolbarCoffeePubBeverageEnabled-Label',
-			hint: MODULE.ID + '.toolbarCoffeePubBeverageEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'user',
-			default: true,
-		});
-		// -- Beverage Foundry Toolbar --
-		game.settings.register(MODULE.ID, 'toolbarFoundryBeverageEnabled', {
-			name: MODULE.ID + '.toolbarFoundryBeverageEnabled-Label',
-			hint: MODULE.ID + '.toolbarFoundryBeverageEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'user',
-			default: true,
-		});
-		// -- Beverage Theme --
-		game.settings.register(MODULE.ID, 'cardThemeBeverage', {
-			name: MODULE.ID + '.cardThemeBeverage-Label',
-			hint: MODULE.ID + '.cardThemeBeverage-Hint',
-			scope: 'world',
-			config: true,
-			requiresReload: false,
-			default: 'theme-default',
-			choices: themeChoices
-		});
-		// -- Beverage Table --
-		game.settings.register(MODULE.ID,'beverageTable', {
-			name: MODULE.ID + '.beverageTable-Label',
-			hint: MODULE.ID + '.beverageTable-Hint',
+		game.settings.register(MODULE.ID,'injuryCompendium', {
+			name: MODULE.ID + '.injuryCompendium-Label',
+			hint: MODULE.ID + '.injuryCompendium-Hint',
 			scope: "world",
 			config: true,
 			requiresReload: false,
-			default: '-- Choose a Roll Table --',
-			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
-		});
-		// -- Beverage Macro --
-		game.settings.register(MODULE.ID,'beverageMacro', {
-			name: MODULE.ID + '.beverageMacro-Label',
-			hint: MODULE.ID + '.beverageMacro-Hint',
-			scope: "world",
-			config: true,
-			requiresReload: true,
-			default: '-- Choose a Macro --',
-			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
+			default: '-- Choose a Roll Compendium --',
+			choices: getBlacksmithChoices('arrCompendiumChoices', 'No compendiums found. Try reloading Foundry after all modules are enabled.')
 		});
 
-		// ** BIO **
-
-		// ---------- SUBHEADING ----------
-		game.settings.register(MODULE.ID, "headingH3Bio", {
-			name: MODULE.ID + '.headingH3Bio-Label',
-			hint: MODULE.ID + '.headingH3Bio-Hint',
-			scope: "client",
-			config: true,
-			default: "",
-			type: String,
-		});
-		// -------------------------------------
-		game.settings.register(MODULE.ID, 'bioEnabled', {
-			name: MODULE.ID + '.bioEnabled-Label',
-			hint: MODULE.ID + '.bioEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'world',
-			default: false,
-		});
-		// -- Bio Coffee Pub Toolbar --
-		game.settings.register(MODULE.ID, 'toolbarCoffeePubBioEnabled', {
-			name: MODULE.ID + '.toolbarCoffeePubBioEnabled-Label',
-			hint: MODULE.ID + '.toolbarCoffeePubBioEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'user',
-			default: true,
-		});
-		// -- Bio Foundry Toolbar --
-		game.settings.register(MODULE.ID, 'toolbarFoundryBioEnabled', {
-			name: MODULE.ID + '.toolbarFoundryBioEnabled-Label',
-			hint: MODULE.ID + '.toolbarFoundryBioEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'user',
-			default: false,
-		});
-		// -- Bio Theme --
-		game.settings.register(MODULE.ID, 'cardThemeBio', {
-			name: MODULE.ID + '.cardThemeBio-Label',
-			hint: MODULE.ID + '.cardThemeBio-Hint',
-			scope: 'world',
-			config: true,
-			requiresReload: false,
-			default: 'theme-default',
-			choices: themeChoices
-		});
-		// -- Bio Table --
-		game.settings.register(MODULE.ID,'bioTable', {
-			name: MODULE.ID + '.bioTable-Label',
-			hint: MODULE.ID + '.bioTable-Hint',
-			scope: "world",
-			config: true,
-			requiresReload: false,
-			default: '-- Choose a Roll Table --',
-			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
-		});
-		// -- Bio Macro --
-		game.settings.register(MODULE.ID,'bioMacro', {
-			name: MODULE.ID + '.bioMacro-Label',
-			hint: MODULE.ID + '.bioMacro-Hint',
+		game.settings.register(MODULE.ID,'injuriesMacroGlobal', {
+			name: MODULE.ID + '.injuriesMacroGlobal-Label',
+			hint: MODULE.ID + '.injuriesMacroGlobal-Hint',
 			scope: "world",
 			config: true,
 			requiresReload: true,
@@ -477,147 +420,55 @@ export const registerSettings = () => {
 			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
 		});
 
-		// ** INSULTS **
-
-		// ---------- SUBHEADING ----------
-		game.settings.register(MODULE.ID, "headingH3Insults", {
-			name: MODULE.ID + '.headingH3Insults-Label',
-			hint: MODULE.ID + '.headingH3Insults-Hint',
-			scope: "client",
-			config: true,
-			default: "",
-			type: String,
-		});
-		// -------------------------------------
-		game.settings.register(MODULE.ID, 'insultsEnabled', {
-			name: MODULE.ID + '.insultsEnabled-Label',
-			hint: MODULE.ID + '.insultsEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'world',
-			default: false,
-		});
-		// -- Insults Coffee Pub Toolbar --
-		game.settings.register(MODULE.ID, 'toolbarCoffeePubInsultsEnabled', {
-			name: MODULE.ID + '.toolbarCoffeePubInsultsEnabled-Label',
-			hint: MODULE.ID + '.toolbarCoffeePubInsultsEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'user',
-			default: true,
-		});
-		// -- Insults Foundry Toolbar --
-		game.settings.register(MODULE.ID, 'toolbarFoundryInsultsEnabled', {
-			name: MODULE.ID + '.toolbarFoundryInsultsEnabled-Label',
-			hint: MODULE.ID + '.toolbarFoundryInsultsEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'user',
-			default: false,
-		});
-		// -- Insults Theme --
-		game.settings.register(MODULE.ID, 'cardThemeInsults', {
-			name: MODULE.ID + '.cardThemeInsults-Label',
-			hint: MODULE.ID + '.cardThemeInsults-Hint',
+		// -- Injury Theme --
+		game.settings.register(MODULE.ID, 'cardThemeInjury', {
+			name: MODULE.ID + '.cardThemeInjury-Label',
+			hint: MODULE.ID + '.cardThemeInjury-Hint',
 			scope: 'world',
 			config: true,
 			requiresReload: false,
 			default: 'theme-default',
 			choices: themeChoices
 		});
-		// -- Insults Table --
-		game.settings.register(MODULE.ID,'insultsTable', {
-			name: MODULE.ID + '.insultsTable-Label',
-			hint: MODULE.ID + '.insultsTable-Hint',
-			scope: "world",
-			config: true,
-			requiresReload: false,
-			default: '-- Choose a Roll Table --',
-			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
-		});
-		// -- Insults Macro --
-		game.settings.register(MODULE.ID,'insultsMacro', {
-			name: MODULE.ID + '.insultsMacro-Label',
-			hint: MODULE.ID + '.insultsMacro-Hint',
-			scope: "world",
-			config: true,
-			requiresReload: true,
-			default: '-- Choose a Macro --',
-			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
-		});
-		// ** PRAISE **
 
-		// ---------- SUBHEADING ----------
-		game.settings.register(MODULE.ID, "headingH3Praise", {
-			name: MODULE.ID + '.headingH3Praise-Label',
-			hint: MODULE.ID + '.headingH3Praise-Hint',
-			scope: "client",
-			config: true,
-			default: "",
-			type: String,
-		});
-		// -------------------------------------
-		game.settings.register(MODULE.ID, 'praiseEnabled', {
-			name: MODULE.ID + '.praiseEnabled-Label',
-			hint: MODULE.ID + '.praiseEnabled-Hint',
+
+		// -- Injury Image --
+		game.settings.register(MODULE.ID, 'injuryImageEnabled', {
+			name: MODULE.ID + '.injuryImageEnabled-Label',
+			hint: MODULE.ID + '.injuryImageEnabled-Hint',
 			type: Boolean,
 			config: true,
-			requiresReload: true,
+			requiresReload: false,
 			scope: 'world',
 			default: false,
 		});
-		// -- Praise Coffee Pub Toolbar --
-		game.settings.register(MODULE.ID, 'toolbarCoffeePubPraiseEnabled', {
-			name: MODULE.ID + '.toolbarCoffeePubPraiseEnabled-Label',
-			hint: MODULE.ID + '.toolbarCoffeePubPraiseEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'user',
-			default: true,
-		});
-		// -- Praise Foundry Toolbar --
-		game.settings.register(MODULE.ID, 'toolbarFoundryPraiseEnabled', {
-			name: MODULE.ID + '.toolbarFoundryPraiseEnabled-Label',
-			hint: MODULE.ID + '.toolbarFoundryPraiseEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'user',
-			default: false,
-		});
-		// -- Praise Theme --
-		game.settings.register(MODULE.ID, 'cardThemePraise', {
-			name: MODULE.ID + '.cardThemePraise-Label',
-			hint: MODULE.ID + '.cardThemePraise-Hint',
-			scope: 'world',
-			config: true,
-			requiresReload: false,
-			default: 'theme-default',
-			choices: themeChoices
-		});
-		// -- Praise Table --
-		game.settings.register(MODULE.ID,'praiseTable', {
-			name: MODULE.ID + '.praiseTable-Label',
-			hint: MODULE.ID + '.praiseTable-Hint',
+
+
+		// -- Injury Sound --
+		game.settings.register(MODULE.ID,'injurySound', {
+			name: MODULE.ID + '.injurySound-Label',
+			hint: MODULE.ID + '.injurySound-Hint',
 			scope: "world",
 			config: true,
 			requiresReload: false,
-			default: '-- Choose a Roll Table --',
-			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
+			default: 'none',
+			choices: getBlacksmithChoices('arrSoundChoices', 'No sounds found. Try reloading Foundry after all modules are enabled.')
 		});
-		// -- Praise Macro --
-		game.settings.register(MODULE.ID,'praiseMacro', {
-			name: MODULE.ID + '.praiseMacro-Label',
-			hint: MODULE.ID + '.praiseMacro-Hint',
+
+		// -- Injury Sound VOlume --
+		game.settings.register(MODULE.ID,'injurySoundVolume', {
+			name: MODULE.ID + '.injurySoundVolume-Label',
+			hint: MODULE.ID + '.injurySoundVolume-Hint',
 			scope: "world",
 			config: true,
-			requiresReload: true,
-			default: '-- Choose a Macro --',
-			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
+			requiresReload: false,
+			type: Number,
+			range: {
+			min: 0,
+			max: 1,
+			step: 0.05,
+			},
+			default: 0.7,
 		});
 
 		// ********** ROLL TABLES **********
@@ -1380,14 +1231,9 @@ export const registerSettings = () => {
 			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
 		});
 
-
-
-		// ********** INJURIES **********
-
-		// ---------- Injuries ----------
-		game.settings.register(MODULE.ID, "headingH2Injuries", {
-			name: MODULE.ID + '.headingH2Injuries-Label',
-			hint: MODULE.ID + '.headingH2Injuries-Hint',
+		game.settings.register(MODULE.ID, "headingH2Communications", {
+			name: MODULE.ID + '.headingH2Communications-Label',
+			hint: MODULE.ID + '.headingH2Communications-Hint',
 			scope: "world",
 			config: true,
 			default: "",
@@ -1395,51 +1241,111 @@ export const registerSettings = () => {
 		});
 		// -------------------------------------
 
+	  	// ---------- SUBHEADING ----------
+		game.settings.register(MODULE.ID, "headingH3PartyMessage", {
+			name: MODULE.ID + '.headingH3PartyMessage-Label',
+			hint: MODULE.ID + '.headingH3PartyMessage-Hint',
+			scope: "client",
+			config: true,
+			default: "",
+			type: String,
+		});
+		// -------------------------------------
 
-		// LETS MAKE IT EVENTUALLY SO I CAN BE ROLLED MANUALLY OR AUTOMATED BASED ON CRITERIA
-
-		game.settings.register(MODULE.ID, 'injuriesEnabledGlobal', {
-			name: MODULE.ID + '.injuriesEnabledGlobal-Label',
-			hint: MODULE.ID + '.injuriesEnabledGlobal-Hint',
+		game.settings.register(MODULE.ID, 'partyMessageEnabled', {
+			name: MODULE.ID + '.partyMessageEnabled-Label',
+			hint: MODULE.ID + '.partyMessageEnabled-Hint',
 			type: Boolean,
 			config: true,
 			requiresReload: true,
 			scope: 'world',
 			default: false,
 		});
-		// -- Injuries Coffee Pub Toolbar --
-		game.settings.register(MODULE.ID, 'toolbarCoffeePubInjuriesEnabled', {
-			name: MODULE.ID + '.toolbarCoffeePubInjuriesEnabled-Label',
-			hint: MODULE.ID + '.toolbarCoffeePubInjuriesEnabled-Hint',
+		// -- Party Message Coffee Pub Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarCoffeePubPartyMessageEnabled', {
+			name: MODULE.ID + '.toolbarCoffeePubPartyMessageEnabled-Label',
+			hint: MODULE.ID + '.toolbarCoffeePubPartyMessageEnabled-Hint',
 			type: Boolean,
 			config: true,
 			requiresReload: true,
 			scope: 'user',
 			default: true,
 		});
-		// -- Injuries Foundry Toolbar --
-		game.settings.register(MODULE.ID, 'toolbarFoundryInjuriesEnabled', {
-			name: MODULE.ID + '.toolbarFoundryInjuriesEnabled-Label',
-			hint: MODULE.ID + '.toolbarFoundryInjuriesEnabled-Hint',
+		// -- Party Message Foundry Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarFoundryPartyMessageEnabled', {
+			name: MODULE.ID + '.toolbarFoundryPartyMessageEnabled-Label',
+			hint: MODULE.ID + '.toolbarFoundryPartyMessageEnabled-Hint',
 			type: Boolean,
 			config: true,
 			requiresReload: true,
 			scope: 'user',
-			default: false,
+			default: true,
 		});
-		game.settings.register(MODULE.ID,'injuryCompendium', {
-			name: MODULE.ID + '.injuryCompendium-Label',
-			hint: MODULE.ID + '.injuryCompendium-Hint',
+		// -- Party Message Macro --
+		game.settings.register(MODULE.ID,'partyMessageMacro', {
+			name: MODULE.ID + '.partyMessageMacro-Label',
+			hint: MODULE.ID + '.partyMessageMacro-Hint',
 			scope: "world",
 			config: true,
+			requiresReload: true,
+			default: '-- Choose a Macro --',
+			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
+		});
+		// -- Party Message Theme --
+		game.settings.register(MODULE.ID, 'cardThemePartyMessage', {
+			name: MODULE.ID + '.cardThemePartyMessage-Label',
+			hint: MODULE.ID + '.cardThemePartyMessage-Hint',
+			scope: 'world',
+			config: true,
 			requiresReload: false,
-			default: '-- Choose a Roll Compendium --',
-			choices: getBlacksmithChoices('arrCompendiumChoices', 'No compendiums found. Try reloading Foundry after all modules are enabled.')
+			default: 'theme-default',
+			choices: themeChoices
 		});
 
-		game.settings.register(MODULE.ID,'injuriesMacroGlobal', {
-			name: MODULE.ID + '.injuriesMacroGlobal-Label',
-			hint: MODULE.ID + '.injuriesMacroGlobal-Hint',
+		// ---------- SUBHEADING ----------
+		game.settings.register(MODULE.ID, "headingH3PrivateMessage", {
+			name: MODULE.ID + '.headingH3PrivateMessage-Label',
+			hint: MODULE.ID + '.headingH3PrivateMessage-Hint',
+			scope: "client",
+			config: true,
+			default: "",
+			type: String,
+		});
+		// -------------------------------------
+		
+		game.settings.register(MODULE.ID, 'privateMessageEnabled', {
+			name: MODULE.ID + '.privateMessageEnabled-Label',
+			hint: MODULE.ID + '.privateMessageEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'world',
+			default: false,
+		});
+		// -- Private Message Coffee Pub Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarCoffeePubPrivateMessageEnabled', {
+			name: MODULE.ID + '.toolbarCoffeePubPrivateMessageEnabled-Label',
+			hint: MODULE.ID + '.toolbarCoffeePubPrivateMessageEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'user',
+			default: true,
+		});
+		// -- Private Message Foundry Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarFoundryPrivateMessageEnabled', {
+			name: MODULE.ID + '.toolbarFoundryPrivateMessageEnabled-Label',
+			hint: MODULE.ID + '.toolbarFoundryPrivateMessageEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'user',
+			default: true,
+		});
+		// -- Private Message Macro --
+		game.settings.register(MODULE.ID,'privateMessageMacro', {
+			name: MODULE.ID + '.privateMessageMacro-Label',
+			hint: MODULE.ID + '.privateMessageMacro-Hint',
 			scope: "world",
 			config: true,
 			requiresReload: true,
@@ -1447,10 +1353,10 @@ export const registerSettings = () => {
 			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
 		});
 
-		// -- Injury Theme --
-		game.settings.register(MODULE.ID, 'cardThemeInjury', {
-			name: MODULE.ID + '.cardThemeInjury-Label',
-			hint: MODULE.ID + '.cardThemeInjury-Hint',
+		// -- Private Message Theme --
+		game.settings.register(MODULE.ID, 'cardThemePrivateMessage', {
+			name: MODULE.ID + '.cardThemePrivateMessage-Label',
+			hint: MODULE.ID + '.cardThemePrivateMessage-Hint',
 			scope: 'world',
 			config: true,
 			requiresReload: false,
@@ -1458,11 +1364,10 @@ export const registerSettings = () => {
 			choices: themeChoices
 		});
 
-
-		// -- Injury Image --
-		game.settings.register(MODULE.ID, 'injuryImageEnabled', {
-			name: MODULE.ID + '.injuryImageEnabled-Label',
-			hint: MODULE.ID + '.injuryImageEnabled-Hint',
+		// -- Private Message Chat Layout --
+		game.settings.register(MODULE.ID, 'cardLayoutPrivateMessage', {
+			name: MODULE.ID + '.cardLayoutPrivateMessage-Label',
+			hint: MODULE.ID + '.cardLayoutPrivateMessage-Hint',
 			type: Boolean,
 			config: true,
 			requiresReload: false,
@@ -1471,214 +1376,305 @@ export const registerSettings = () => {
 		});
 
 
-		// -- Injury Sound --
-		game.settings.register(MODULE.ID,'injurySound', {
-			name: MODULE.ID + '.injurySound-Label',
-			hint: MODULE.ID + '.injurySound-Hint',
-			scope: "world",
+		// -- Private Message Window Layout --
+		game.settings.register(MODULE.ID, 'privateMessageCompressedWindow', {
+			name: MODULE.ID + '.privateMessageCompressedWindow-Label',
+			hint: MODULE.ID + '.privateMessageCompressedWindow-Hint',
+			type: Boolean,
 			config: true,
 			requiresReload: false,
-			default: 'none',
-			choices: getBlacksmithChoices('arrSoundChoices', 'No sounds found. Try reloading Foundry after all modules are enabled.')
-		});
-
-		// -- Injury Sound VOlume --
-		game.settings.register(MODULE.ID,'injurySoundVolume', {
-			name: MODULE.ID + '.injurySoundVolume-Label',
-			hint: MODULE.ID + '.injurySoundVolume-Hint',
-			scope: "world",
-			config: true,
-			requiresReload: false,
-			type: Number,
-			range: {
-			min: 0,
-			max: 1,
-			step: 0.05,
-			},
-			default: 0.7,
+			scope: 'user',
+			default: false,
 		});
 
 
 
+		// ** BEVERAGE **
 
-		// ********** ENCOUNTERS **********
-
-		// ---------- Encounters ----------
-		game.settings.register(MODULE.ID, "headingH2Encounters", {
-			name: MODULE.ID + '.headingH2Encounters-Label',
-			hint: MODULE.ID + '.headingH2Encounters-Hint',
-			scope: "world",
+		// ---------- SUBHEADING ----------
+		game.settings.register(MODULE.ID, "headingH3Beverage", {
+			name: MODULE.ID + '.headingH3Beverage-Label',
+			hint: MODULE.ID + '.headingH3Beverage-Hint',
+			scope: "client",
 			config: true,
 			default: "",
 			type: String,
 		});
 		// -------------------------------------
-
-
-
-		// ********** ENCOUNTERS (Quick Encounter) **********
-		game.settings.register(MODULE.ID, 'cardThemeEncounter', {
-			name: MODULE.ID + '.cardThemeEncounter-Label',
-			hint: MODULE.ID + '.cardThemeEncounter-Hint',
+		game.settings.register(MODULE.ID, 'beverageEnabled', {
+			name: MODULE.ID + '.beverageEnabled-Label',
+			hint: MODULE.ID + '.beverageEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'world',
+			default: false,
+		});
+		// -- Beverage Coffee Pub Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarCoffeePubBeverageEnabled', {
+			name: MODULE.ID + '.toolbarCoffeePubBeverageEnabled-Label',
+			hint: MODULE.ID + '.toolbarCoffeePubBeverageEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'user',
+			default: true,
+		});
+		// -- Beverage Foundry Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarFoundryBeverageEnabled', {
+			name: MODULE.ID + '.toolbarFoundryBeverageEnabled-Label',
+			hint: MODULE.ID + '.toolbarFoundryBeverageEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'user',
+			default: true,
+		});
+		// -- Beverage Theme --
+		game.settings.register(MODULE.ID, 'cardThemeBeverage', {
+			name: MODULE.ID + '.cardThemeBeverage-Label',
+			hint: MODULE.ID + '.cardThemeBeverage-Hint',
 			scope: 'world',
 			config: true,
 			requiresReload: false,
 			default: 'theme-default',
 			choices: themeChoices
 		});
-		game.settings.register(MODULE.ID,'encounterOdds', {
-			name: MODULE.ID + '.encounterOdds-Label',
-			hint: MODULE.ID + '.encounterOdds-Hint',
+		// -- Beverage Table --
+		game.settings.register(MODULE.ID,'beverageTable', {
+			name: MODULE.ID + '.beverageTable-Label',
+			hint: MODULE.ID + '.beverageTable-Hint',
 			scope: "world",
 			config: true,
 			requiresReload: false,
-			type: Number,
-			range: {
-			min: 0,
-			max: 100,
-			step: 1,
-			},
-			default: 20,
+			default: '-- Choose a Roll Table --',
+			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
 		});
-		// -- Quick Encounter (CR-aware tool) --
-		game.settings.register(MODULE.ID, 'quickEncounterEnabled', {
-			name: MODULE.ID + '.quickEncounterEnabled-Label',
-			hint: MODULE.ID + '.quickEncounterEnabled-Hint',
+		// -- Beverage Macro --
+		game.settings.register(MODULE.ID,'beverageMacro', {
+			name: MODULE.ID + '.beverageMacro-Label',
+			hint: MODULE.ID + '.beverageMacro-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: true,
+			default: '-- Choose a Macro --',
+			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
+		});
+
+		// ** BIO **
+
+		// ---------- SUBHEADING ----------
+		game.settings.register(MODULE.ID, "headingH3Bio", {
+			name: MODULE.ID + '.headingH3Bio-Label',
+			hint: MODULE.ID + '.headingH3Bio-Hint',
+			scope: "client",
+			config: true,
+			default: "",
+			type: String,
+		});
+		// -------------------------------------
+		game.settings.register(MODULE.ID, 'bioEnabled', {
+			name: MODULE.ID + '.bioEnabled-Label',
+			hint: MODULE.ID + '.bioEnabled-Hint',
 			type: Boolean,
 			config: true,
 			requiresReload: true,
 			scope: 'world',
+			default: false,
+		});
+		// -- Bio Coffee Pub Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarCoffeePubBioEnabled', {
+			name: MODULE.ID + '.toolbarCoffeePubBioEnabled-Label',
+			hint: MODULE.ID + '.toolbarCoffeePubBioEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'user',
 			default: true,
 		});
-		game.settings.register(MODULE.ID, 'quickEncounterHabitat', {
-			scope: 'client',
-			config: false,
-			type: String,
-			default: 'Any',
-		});
-		game.settings.register(MODULE.ID, 'quickEncounterMinCR', {
-			scope: 'client',
-			config: false,
-			type: Number,
-			default: 0,
-		});
-		game.settings.register(MODULE.ID, 'quickEncounterMaxCR', {
-			scope: 'client',
-			config: false,
-			type: Number,
-			default: 30,
-		});
-		game.settings.register(MODULE.ID, 'quickEncounterMaxRecommendations', {
-			scope: 'client',
-			config: false,
-			type: Number,
-			default: 10,
-		});
-		game.settings.register(MODULE.ID, 'quickEncounterVariability', {
-			scope: 'client',
-			config: false,
-			type: Number,
-			default: 3,
-		});
-		game.settings.register(MODULE.ID, 'quickEncounterDetection', {
-			scope: 'client',
-			config: false,
-			type: Number,
-			default: 3,
-		});
-		game.settings.register(MODULE.ID, 'quickEncounterRecentIncludeNames', {
-			scope: 'client',
-			config: false,
-			type: Object,
-			default: [],
-		});
-		game.settings.register(MODULE.ID, 'quickEncounterRecentExcludeNames', {
-			scope: 'client',
-			config: false,
-			type: Object,
-			default: [],
-		});
-		game.settings.register(MODULE.ID, 'quickEncounterRememberInclude', {
-			scope: 'client',
-			config: false,
+		// -- Bio Foundry Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarFoundryBioEnabled', {
+			name: MODULE.ID + '.toolbarFoundryBioEnabled-Label',
+			hint: MODULE.ID + '.toolbarFoundryBioEnabled-Hint',
 			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'user',
 			default: false,
 		});
-		game.settings.register(MODULE.ID, 'quickEncounterRememberedIncludeText', {
-			scope: 'client',
-			config: false,
+		// -- Bio Theme --
+		game.settings.register(MODULE.ID, 'cardThemeBio', {
+			name: MODULE.ID + '.cardThemeBio-Label',
+			hint: MODULE.ID + '.cardThemeBio-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			default: 'theme-default',
+			choices: themeChoices
+		});
+		// -- Bio Table --
+		game.settings.register(MODULE.ID,'bioTable', {
+			name: MODULE.ID + '.bioTable-Label',
+			hint: MODULE.ID + '.bioTable-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: false,
+			default: '-- Choose a Roll Table --',
+			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
+		});
+		// -- Bio Macro --
+		game.settings.register(MODULE.ID,'bioMacro', {
+			name: MODULE.ID + '.bioMacro-Label',
+			hint: MODULE.ID + '.bioMacro-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: true,
+			default: '-- Choose a Macro --',
+			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
+		});
+
+		// ** INSULTS **
+
+		// ---------- SUBHEADING ----------
+		game.settings.register(MODULE.ID, "headingH3Insults", {
+			name: MODULE.ID + '.headingH3Insults-Label',
+			hint: MODULE.ID + '.headingH3Insults-Hint',
+			scope: "client",
+			config: true,
+			default: "",
 			type: String,
-			default: '',
 		});
-		game.settings.register(MODULE.ID, 'quickEncounterRememberExclude', {
-			scope: 'client',
-			config: false,
-			type: Boolean,
-			default: false,
-		});
-		game.settings.register(MODULE.ID, 'quickEncounterRememberedExcludeText', {
-			scope: 'client',
-			config: false,
-			type: String,
-			default: '',
-		});
-		game.settings.register(MODULE.ID, 'toolbarCoffeePubQuickEncounterEnabled', {
-			name: MODULE.ID + '.toolbarCoffeePubQuickEncounterEnabled-Label',
-			hint: MODULE.ID + '.toolbarCoffeePubQuickEncounterEnabled-Hint',
+		// -------------------------------------
+		game.settings.register(MODULE.ID, 'insultsEnabled', {
+			name: MODULE.ID + '.insultsEnabled-Label',
+			hint: MODULE.ID + '.insultsEnabled-Hint',
 			type: Boolean,
 			config: true,
 			requiresReload: true,
 			scope: 'world',
+			default: false,
+		});
+		// -- Insults Coffee Pub Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarCoffeePubInsultsEnabled', {
+			name: MODULE.ID + '.toolbarCoffeePubInsultsEnabled-Label',
+			hint: MODULE.ID + '.toolbarCoffeePubInsultsEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'user',
 			default: true,
 		});
-		game.settings.register(MODULE.ID, 'toolbarFoundryQuickEncounterEnabled', {
-			name: MODULE.ID + '.toolbarFoundryQuickEncounterEnabled-Label',
-			hint: MODULE.ID + '.toolbarFoundryQuickEncounterEnabled-Hint',
+		// -- Insults Foundry Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarFoundryInsultsEnabled', {
+			name: MODULE.ID + '.toolbarFoundryInsultsEnabled-Label',
+			hint: MODULE.ID + '.toolbarFoundryInsultsEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'user',
+			default: false,
+		});
+		// -- Insults Theme --
+		game.settings.register(MODULE.ID, 'cardThemeInsults', {
+			name: MODULE.ID + '.cardThemeInsults-Label',
+			hint: MODULE.ID + '.cardThemeInsults-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			default: 'theme-default',
+			choices: themeChoices
+		});
+		// -- Insults Table --
+		game.settings.register(MODULE.ID,'insultsTable', {
+			name: MODULE.ID + '.insultsTable-Label',
+			hint: MODULE.ID + '.insultsTable-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: false,
+			default: '-- Choose a Roll Table --',
+			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
+		});
+		// -- Insults Macro --
+		game.settings.register(MODULE.ID,'insultsMacro', {
+			name: MODULE.ID + '.insultsMacro-Label',
+			hint: MODULE.ID + '.insultsMacro-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: true,
+			default: '-- Choose a Macro --',
+			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
+		});
+		// ** PRAISE **
+
+		// ---------- SUBHEADING ----------
+		game.settings.register(MODULE.ID, "headingH3Praise", {
+			name: MODULE.ID + '.headingH3Praise-Label',
+			hint: MODULE.ID + '.headingH3Praise-Hint',
+			scope: "client",
+			config: true,
+			default: "",
+			type: String,
+		});
+		// -------------------------------------
+		game.settings.register(MODULE.ID, 'praiseEnabled', {
+			name: MODULE.ID + '.praiseEnabled-Label',
+			hint: MODULE.ID + '.praiseEnabled-Hint',
 			type: Boolean,
 			config: true,
 			requiresReload: true,
 			scope: 'world',
 			default: false,
 		});
-
-		// -- Encounter False Sound --
-		game.settings.register(MODULE.ID,'encounterFalseSound', {
-			name: MODULE.ID + '.encounterFalseSound-Label',
-			hint: MODULE.ID + '.encounterFalseSound-Hint',
+		// -- Praise Coffee Pub Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarCoffeePubPraiseEnabled', {
+			name: MODULE.ID + '.toolbarCoffeePubPraiseEnabled-Label',
+			hint: MODULE.ID + '.toolbarCoffeePubPraiseEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'user',
+			default: true,
+		});
+		// -- Praise Foundry Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarFoundryPraiseEnabled', {
+			name: MODULE.ID + '.toolbarFoundryPraiseEnabled-Label',
+			hint: MODULE.ID + '.toolbarFoundryPraiseEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'user',
+			default: false,
+		});
+		// -- Praise Theme --
+		game.settings.register(MODULE.ID, 'cardThemePraise', {
+			name: MODULE.ID + '.cardThemePraise-Label',
+			hint: MODULE.ID + '.cardThemePraise-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			default: 'theme-default',
+			choices: themeChoices
+		});
+		// -- Praise Table --
+		game.settings.register(MODULE.ID,'praiseTable', {
+			name: MODULE.ID + '.praiseTable-Label',
+			hint: MODULE.ID + '.praiseTable-Hint',
 			scope: "world",
 			config: true,
 			requiresReload: false,
-			default: 'none',
-			choices: getBlacksmithChoices('arrSoundChoices', 'No sounds found. Try reloading Foundry after all modules are enabled.')
+			default: '-- Choose a Roll Table --',
+			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
 		});
-
-		// -- Encounter True Sound --
-		game.settings.register(MODULE.ID,'encounterTrueSound', {
-			name: MODULE.ID + '.encounterTrueSound-Label',
-			hint: MODULE.ID + '.encounterTrueSound-Hint',
+		// -- Praise Macro --
+		game.settings.register(MODULE.ID,'praiseMacro', {
+			name: MODULE.ID + '.praiseMacro-Label',
+			hint: MODULE.ID + '.praiseMacro-Hint',
 			scope: "world",
 			config: true,
-			requiresReload: false,
-			default: 'none',
-			choices: getBlacksmithChoices('arrSoundChoices', 'No sounds found. Try reloading Foundry after all modules are enabled.')
+			requiresReload: true,
+			default: '-- Choose a Macro --',
+			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
 		});
-
-		// -- Encounter Sound VOlume --
-		game.settings.register(MODULE.ID,'encounterSoundVolume', {
-			name: MODULE.ID + '.encounterSoundVolume-Label',
-			hint: MODULE.ID + '.encounterSoundVolume-Hint',
-			scope: "world",
-			config: true,
-			requiresReload: false,
-			type: Number,
-			range: {
-			min: 0,
-			max: 1,
-			step: 0.05,
-			},
-			default: 0.7,
-		});
-
 
 	});
 };
