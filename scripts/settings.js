@@ -192,29 +192,6 @@ export const registerSettings = () => {
 
 
 		// ********** ENCOUNTERS (Quick Encounter) **********
-		game.settings.register(MODULE.ID, 'cardThemeEncounter', {
-			name: MODULE.ID + '.cardThemeEncounter-Label',
-			hint: MODULE.ID + '.cardThemeEncounter-Hint',
-			scope: 'world',
-			config: true,
-			requiresReload: false,
-			default: 'theme-default',
-			choices: themeChoices
-		});
-		game.settings.register(MODULE.ID,'encounterOdds', {
-			name: MODULE.ID + '.encounterOdds-Label',
-			hint: MODULE.ID + '.encounterOdds-Hint',
-			scope: "world",
-			config: true,
-			requiresReload: false,
-			type: Number,
-			range: {
-			min: 0,
-			max: 100,
-			step: 1,
-			},
-			default: 20,
-		});
 		// -- Quick Encounter (CR-aware tool) --
 		game.settings.register(MODULE.ID, 'quickEncounterEnabled', {
 			name: MODULE.ID + '.quickEncounterEnabled-Label',
@@ -316,6 +293,32 @@ export const registerSettings = () => {
 			default: false,
 		});
 
+		// -- Card Style --
+		game.settings.register(MODULE.ID, 'cardThemeEncounter', {
+			name: MODULE.ID + '.cardThemeEncounter-Label',
+			hint: MODULE.ID + '.cardThemeEncounter-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			default: 'theme-default',
+			choices: themeChoices
+		});
+		// -- Odds of Encounter --
+		game.settings.register(MODULE.ID,'encounterOdds', {
+			name: MODULE.ID + '.encounterOdds-Label',
+			hint: MODULE.ID + '.encounterOdds-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: false,
+			type: Number,
+			range: {
+			min: 0,
+			max: 100,
+			step: 1,
+			},
+			default: 20,
+		});
+
 		// -- Encounter False Sound --
 		game.settings.register(MODULE.ID,'encounterFalseSound', {
 			name: MODULE.ID + '.encounterFalseSound-Label',
@@ -362,20 +365,6 @@ export const registerSettings = () => {
 			name: MODULE.ID + '.headingH2Investigations-Label',
 			hint: MODULE.ID + '.headingH2Investigations-Hint',
 			scope: "world",
-			config: true,
-			default: "",
-			type: String,
-		});
-		// -------------------------------------
-
-
-		// -------------------------------------
-		// ** INVESTIGATION **
-		// ---------- SUBHEADING ----------
-			game.settings.register(MODULE.ID, "headingH3Investigation", {
-			name: MODULE.ID + '.headingH3Investigation-Label',
-			hint: MODULE.ID + '.headingH3Investigation-Hint',
-			scope: "client",
 			config: true,
 			default: "",
 			type: String,
@@ -446,6 +435,17 @@ export const registerSettings = () => {
 			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
 		});
 
+		// ---------- SUBHEADING: Currency ----------
+		game.settings.register(MODULE.ID, "headingH3Currency", {
+			name: MODULE.ID + '.headingH3Currency-Label',
+			hint: MODULE.ID + '.headingH3Currency-Hint',
+			scope: "client",
+			config: true,
+			default: "",
+			type: String,
+		});
+		// -------------------------------------
+
 		// -- Investigation: Odds of Finding Coins --
 		game.settings.register(MODULE.ID, 'investigationCoinsOdds', {
 			name: MODULE.ID + '.investigationCoinsOdds-Label',
@@ -514,6 +514,17 @@ export const registerSettings = () => {
 
 
 
+
+		// ---------- SUBHEADING: Items ----------
+		game.settings.register(MODULE.ID, "headingH3Items", {
+			name: MODULE.ID + '.headingH3Items-Label',
+			hint: MODULE.ID + '.headingH3Items-Hint',
+			scope: "client",
+			config: true,
+			default: "",
+			type: String,
+		});
+		// -------------------------------------
 
 		// -- Investigation Odds --
 		game.settings.register(MODULE.ID,'investigationOdds', {

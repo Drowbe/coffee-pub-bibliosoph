@@ -79,8 +79,8 @@
 /* When tray is visible: main fixed width, tray flexes with window */
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-body-with-tray .window-encounter-main {
     flex: 0 0 auto;
-    width: 550px;
-    min-width: 550px;
+    width: 575px;
+    min-width: 575px;
 }
 
 /* Right tray: results + deploy when results are present; flexes with window */
@@ -1066,18 +1066,6 @@
     gap: 8px;
     align-content: start;
 }
-
-
-
-
-
-
-
-
-
-/* RESULT CARD */
-
-
 
 
 /* RESULT CARD */
