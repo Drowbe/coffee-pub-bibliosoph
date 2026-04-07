@@ -42,15 +42,33 @@ import { BlacksmithAPI } from '/modules/coffee-pub-blacksmith/api/blacksmith-api
 // Register your module with Blacksmith and then register toolbar tools
 Hooks.once('ready', async () => {
     try {
-        // Get the module manager
-        const moduleManager = BlacksmithModuleManager;
-        // Register your module
-        moduleManager.registerModule(MODULE.ID, {
-            name: MODULE.NAME,
-            version: MODULE.VERSION
-        });
-        // Log success
-        console.log(MODULE.ID + ' | ✅ Module ' + MODULE.NAME + ' registered with Blacksmith successfully');
+        const bsMod = game.modules.get('coffee-pub-blacksmith');
+        if (!bsMod?.active) return;
+
+        // Globals like BlacksmithModuleManager / BlacksmithUtils attach after markReadyForConsumers();
+        // module.api.registerModule is available earlier on fixed Blacksmith, but waitForReady keeps
+        // registration + toolbar path safe on all builds and hook orderings.
+        if (typeof BlacksmithAPI.waitForReady === 'function') {
+            await BlacksmithAPI.waitForReady();
+        }
+
+        const api = game.modules.get('coffee-pub-blacksmith')?.api;
+        const registerFn =
+            (typeof api?.registerModule === 'function' && api.registerModule.bind(api)) ||
+            (typeof api?.ModuleManager?.registerModule === 'function' &&
+                api.ModuleManager.registerModule.bind(api.ModuleManager)) ||
+            (typeof BlacksmithModuleManager?.registerModule === 'function' &&
+                BlacksmithModuleManager.registerModule.bind(BlacksmithModuleManager));
+
+        if (!registerFn) {
+            console.warn(`${MODULE.ID} | Blacksmith registerModule not available; skipping module registration`);
+        } else {
+            registerFn(MODULE.ID, {
+                name: MODULE.NAME,
+                version: MODULE.VERSION
+            });
+            console.log(MODULE.ID + ' | ✅ Module ' + MODULE.NAME + ' registered with Blacksmith successfully');
+        }
         
         // NOW register toolbar tools after module registration is complete
         // In v13, we need to wait for Blacksmith to be fully ready
@@ -475,6 +493,10 @@ Hooks.on('renderChatLog', (app, html, data) => {
 Hooks.on("ready", async () => {
 
     logMacroFix("ready hook start");
+
+    if (game.modules.get('coffee-pub-blacksmith')?.active && typeof BlacksmithAPI.waitForReady === 'function') {
+        await BlacksmithAPI.waitForReady();
+    }
 
     // ********  VERIFY BLACKSMITH  **********
     // Verify Blacksmith API is available via global objects

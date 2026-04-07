@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+## [13.1.5]
+
+### Fixed
+
+- **Blacksmith registration race:** Module registration no longer calls `BlacksmithModuleManager.registerModule` before Blacksmith has finished consumer setup. When Coffee Pub Blacksmith is active, the `Hooks.once('ready')` handler awaits `BlacksmithAPI.waitForReady()`, then registers using `game.modules.get('coffee-pub-blacksmith').api` (`api.registerModule` or `api.ModuleManager.registerModule`) with a final fallback to `BlacksmithModuleManager`. Prevents `TypeError: Cannot read properties of null (reading 'registerModule')` when Bibliosoph’s `ready` ran before window globals or before older Blacksmith builds assigned `module.api`.
+
+- **False “Blacksmith API not fully initialized” on startup:** The main `Hooks.on('ready')` handler now awaits `BlacksmithAPI.waitForReady()` when Blacksmith is active before checking `BlacksmithUtils`, so settings and notifications are not skipped just because `ready` fired early relative to `markReadyForConsumers()`.
+
 ## [13.1.4]
 
 ### Added
