@@ -252,6 +252,25 @@
     padding-right: 4px;
 }
 
+/* Day separators between messages */
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-day {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--bibliosoph-msg-muted);
+    font-size: 0.8em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 4px 0;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-day::before,
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-day::after {
+    content: '';
+    flex: 1;
+    border-top: 1px solid var(--bibliosoph-msg-border);
+}
+
 /* Message cards (Regent message-wrapper style) */
 #coffee-pub-bibliosoph-messages-wrapper .bibliosoph-message-wrapper {
     background: var(--bibliosoph-msg-card-bg);
@@ -401,6 +420,37 @@
     gap: 8px;
     color: var(--bibliosoph-msg-muted);
     font-style: italic;
+}
+
+/* Typing indicator line (updated via DOM, not re-render) */
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-typing {
+    display: none;
+    color: var(--bibliosoph-msg-muted);
+    font-size: 0.8em;
+    font-style: italic;
+    padding: 0 2px;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-typing.visible {
+    display: block;
+}
+
+/* Edited tag + edit-mode banner */
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-message-editedtag {
+    font-size: 0.9em;
+    font-style: italic;
+    color: var(--bibliosoph-msg-muted);
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-editing {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 8px;
+    border: 1px dashed var(--bibliosoph-msg-accent);
+    border-radius: var(--bibliosoph-msg-radius);
+    color: var(--bibliosoph-msg-accent);
+    font-size: 0.85em;
 }
 
 /* Compose: tones + textarea locked to the bottom of the main column */

@@ -117,7 +117,8 @@ export class MessagesWindow extends resolveBase() {
         'msg-toggle-mute': () => MessagesWindow.current?._toggleMute(),
         'msg-toggle-autoopen': () => MessagesWindow.current?._toggleAutoOpen(),
         'msg-purge-messages': () => MessagesWindow.current?._purgeMessages(),
-        'msg-export-messages': () => MessagesWindow.current?._exportMessages()
+        'msg-export-messages': () => MessagesWindow.current?._exportMessages(),
+        'msg-clean-images': () => MessagesWindow.current?._cleanImages()
     };
 
     constructor(options = {}) {
@@ -128,6 +129,8 @@ export class MessagesWindow extends resolveBase() {
         this._draft = '';
         /** When set, the body shows the new-conversation member picker. */
         this._picker = null;
+        /** Message id currently being edited (compose box in edit mode). */
+        this._editing = null;
     }
 
     /** Used by ConversationManager to decide between re-render and notification. */
@@ -200,9 +203,12 @@ export class MessagesWindow extends resolveBase() {
                 barButtons.push(`<a class="bibliosoph-messages-bar-btn bibliosoph-messages-bar-btn-danger" data-action="msg-purge-messages" title="Delete all messages in this conversation"><i class="fa-solid fa-trash"></i></a>`);
             }
         }
+        if (game.user.isGM) {
+            barButtons.push(`<a class="bibliosoph-messages-bar-btn" data-action="msg-clean-images" title="Clean unused message images (GM)"><i class="fa-solid fa-broom"></i></a>`);
+        }
         const actionBarLeft = `<label class="blacksmith-window-template-action-label bibliosoph-messages-enter-label"><input type="checkbox" class="bibliosoph-messages-enter-sends" ${this._enterSends ? 'checked' : ''}> ENTER Sends</label><span class="bibliosoph-messages-bar-group">${barButtons.join('')}</span>`;
         const actionBarRight = showCompose
-            ? `<button type="button" class="blacksmith-window-btn-primary bibliosoph-messages-btn" data-action="msg-send"><i class="fa-solid fa-paper-plane"></i> Send Message</button>`
+            ? `<button type="button" class="blacksmith-window-btn-primary bibliosoph-messages-btn" data-action="msg-send"><i class="fa-solid ${this._editing ? 'fa-pen' : 'fa-paper-plane'}"></i> ${this._editing ? 'Save Edit' : 'Send Message'}</button>`
             : '';
 
         let windowTitle = 'Messages';
@@ -296,14 +302,21 @@ export class MessagesWindow extends resolveBase() {
 
         const toneMap = Object.fromEntries(MESSAGE_TONES.map((t) => [t.key, t]));
         const reactionMap = Object.fromEntries(MESSAGE_REACTIONS.map((r) => [r.key, r]));
-        const messages = active ? ConversationManager.getMessages(active).map((m) => ({
-            ...m,
-            timeDisplay: formatTimestamp(m.timestamp),
-            toneIcon: toneMap[m.tone]?.icon ?? toneMap.message.icon,
-            toneLabel: toneMap[m.tone]?.label ?? 'Message',
-            showTone: m.tone !== 'message',
-            reactionsDisplay: this._buildReactionsDisplay(m.reactions, reactionMap)
-        })) : [];
+        let lastDayLabel = '';
+        const messages = active ? ConversationManager.getMessages(active).map((m) => {
+            const dayLabel = this._dayLabelFor(m.timestamp);
+            const showDay = dayLabel !== lastDayLabel;
+            lastDayLabel = dayLabel;
+            return {
+                ...m,
+                timeDisplay: formatTimestamp(m.timestamp),
+                dayLabel: showDay ? dayLabel : null,
+                toneIcon: toneMap[m.tone]?.icon ?? toneMap.message.icon,
+                toneLabel: toneMap[m.tone]?.label ?? 'Message',
+                showTone: m.tone !== 'message',
+                reactionsDisplay: this._buildReactionsDisplay(m.reactions, reactionMap)
+            };
+        }) : [];
 
         return {
             trayGroups,
@@ -311,6 +324,7 @@ export class MessagesWindow extends resolveBase() {
             showTrayDivider: trayGroups.length > 0 && trayPlayers.length > 0,
             picker: null,
             hasConversation: !!active || !!virtualUser,
+            editing: !!this._editing,
             messages,
             tones: MESSAGE_TONES.map((t) => ({ ...t, active: t.key === this._tone })),
             draft: this._draft
@@ -401,6 +415,20 @@ export class MessagesWindow extends resolveBase() {
         return { trayGroups, trayPlayers };
     }
 
+    /** Day-separator label for a timestamp: Today, Yesterday, or the date. */
+    _dayLabelFor(timestamp) {
+        if (!timestamp) return '';
+        const date = new Date(timestamp);
+        const now = new Date();
+        const startOfDay = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+        const diffDays = Math.round((startOfDay(now) - startOfDay(date)) / 86400000);
+        if (diffDays === 0) return 'Today';
+        if (diffDays === 1) return 'Yesterday';
+        const options = { month: 'long', day: 'numeric' };
+        if (date.getFullYear() !== now.getFullYear()) options.year = 'numeric';
+        return date.toLocaleDateString(undefined, options);
+    }
+
     /** Group raw {userId: reactionKey} into chips: icon, count, names, mine. */
     _buildReactionsDisplay(reactions = {}, reactionMap) {
         const groups = new Map();
@@ -454,6 +482,10 @@ export class MessagesWindow extends resolveBase() {
                 if (event.key === 'Enter' && !event.shiftKey && this._enterSends) {
                     event.preventDefault();
                     this._send();
+                } else if (event.key === 'Escape' && this._editing) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    this._cancelEditing();
                 }
             });
             // Paste a screenshot / image from the clipboard → upload + insert
@@ -462,6 +494,11 @@ export class MessagesWindow extends resolveBase() {
                 if (!files.length) return; // plain text pastes proceed normally
                 event.preventDefault();
                 this._insertUploadedImages(files);
+            });
+            // Let conversation members know we're typing (throttled, ephemeral)
+            textarea.addEventListener('input', () => {
+                const entry = game.journal.get(this._activeConversationId);
+                if (entry) ConversationManager.emitTyping(entry);
             });
         }
 
@@ -531,6 +568,8 @@ export class MessagesWindow extends resolveBase() {
         this._activeConversationId = id;
         this._picker = null;
         this._draft = '';
+        this._editing = null;
+        this._clearTypingIndicators();
         const entry = game.journal.get(id);
         if (entry) ConversationManager.markRead(entry);
         ConversationManager.playUiSound('switch');
@@ -540,6 +579,41 @@ export class MessagesWindow extends resolveBase() {
     _toggleMute() {
         ConversationManager.setSoundsMuted(!ConversationManager.soundsMuted());
         this.render(false);
+    }
+
+    // ==============================================================
+    // ===== TYPING INDICATOR (incoming) ============================
+    // ==============================================================
+
+    /** Show "X is typing…" for ~4s; updates the DOM directly (no re-render). */
+    showTypingIndicator(userId) {
+        this._typing ??= new Map();
+        clearTimeout(this._typing.get(userId));
+        this._typing.set(userId, setTimeout(() => {
+            this._typing.delete(userId);
+            this._renderTypingLine();
+        }, 4000));
+        this._renderTypingLine();
+    }
+
+    _clearTypingIndicators() {
+        for (const timer of this._typing?.values() ?? []) clearTimeout(timer);
+        this._typing?.clear();
+        this._renderTypingLine();
+    }
+
+    _renderTypingLine() {
+        const el = this._getRoot()?.querySelector('.bibliosoph-messages-typing');
+        if (!el) return;
+        const names = [...(this._typing?.keys() ?? [])]
+            .map((id) => game.users.get(id)?.name)
+            .filter(Boolean);
+        el.textContent = names.length === 0
+            ? ''
+            : names.length === 1
+                ? `${names[0]} is typing…`
+                : `${names.join(' and ')} are typing…`;
+        el.classList.toggle('visible', names.length > 0);
     }
 
     /** Flip the messageAutoOpen user setting from the window's action bar. */
@@ -581,6 +655,46 @@ export class MessagesWindow extends resolveBase() {
         await ConversationManager.purgeMessages(entry);
         ui.notifications.info(`Deleted all messages in "${name}".`);
         // deleteJournalEntryPage hooks re-render the window
+    }
+
+    /**
+     * GM: find images in the messages upload folder that no live message
+     * references, and reclaim their space (Foundry has no file-deletion API,
+     * so orphans are overwritten with a tiny blank PNG).
+     */
+    async _cleanImages() {
+        if (!game.user.isGM) return;
+        const scan = await ConversationManager.findOrphanImages();
+        if (!scan) {
+            ui.notifications.error('File browsing is unavailable in this Foundry version.');
+            return;
+        }
+        if (!scan.orphans.length) {
+            ui.notifications.info(`No unused images found (${scan.files.length} file${scan.files.length === 1 ? '' : 's'} in the messages folder, all referenced).`);
+            return;
+        }
+
+        const names = scan.orphans.slice(0, 15)
+            .map((p) => `<li>${escapeHtml(decodeURIComponent(p.split('/').pop() ?? ''))}</li>`)
+            .join('');
+        const more = scan.orphans.length > 15 ? `<li>…and ${scan.orphans.length - 15} more</li>` : '';
+        const content = `<p><b>${scan.orphans.length}</b> uploaded image${scan.orphans.length === 1 ? ' is' : 's are'} no longer referenced by any message:</p>
+            <ul>${names}${more}</ul>
+            <p>Foundry modules cannot delete files, so cleaning replaces each with a tiny blank image to reclaim its space. To remove the files entirely, delete them from <code>${scan.dir}</code> on the server.</p>`;
+
+        let confirmed = false;
+        const DialogV2 = foundry.applications?.api?.DialogV2;
+        try {
+            confirmed = DialogV2?.confirm
+                ? await DialogV2.confirm({ window: { title: 'Clean Unused Images' }, content, rejectClose: false })
+                : await Dialog.confirm({ title: 'Clean Unused Images', content });
+        } catch (_) {
+            confirmed = false;
+        }
+        if (!confirmed) return;
+
+        const reclaimed = await ConversationManager.reclaimOrphanImages(scan.orphans);
+        ui.notifications.info(`Reclaimed ${reclaimed} unused image${reclaimed === 1 ? '' : 's'}.`);
     }
 
     /** Export the active conversation's history as a standalone HTML file. */
@@ -745,6 +859,16 @@ ${rows}
 
         this._draft = '';
         if (textarea) textarea.value = '';
+
+        // Edit mode: update the existing message instead of posting a new one
+        if (this._editing) {
+            const messageId = this._editing;
+            this._editing = null;
+            await ConversationManager.editMessage(entry, messageId, text);
+            ConversationManager.playUiSound('send');
+            return; // updateJournalEntryPage hook re-renders the window
+        }
+
         await ConversationManager.postMessage(entry, { markdown: text, tone: this._tone });
         this._tone = 'message';
         ConversationManager.playUiSound('send');
@@ -928,6 +1052,28 @@ ${rows}
         // updateJournalEntryPage hook refreshes the window
     }
 
+    /** Load one of your own messages into the compose box for editing. */
+    async _startEditing(messageId) {
+        const entry = game.journal.get(this._activeConversationId);
+        const message = entry ? ConversationManager.getMessages(entry).find((m) => m.id === messageId) : null;
+        if (!message?.isOwn || message.deleted) return;
+        this._editing = messageId;
+        this._draft = message.markdown || '';
+        await this.render(false);
+        const textarea = this._getRoot()?.querySelector('.bibliosoph-messages-input');
+        if (textarea) {
+            textarea.focus();
+            textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+        }
+    }
+
+    _cancelEditing() {
+        if (!this._editing) return;
+        this._editing = null;
+        this._draft = '';
+        this.render(false);
+    }
+
     /** Quote a message into the compose box as a markdown blockquote. */
     _replyTo(messageId) {
         const entry = game.journal.get(this._activeConversationId);
@@ -992,7 +1138,16 @@ ${rows}
                 name: 'Reply',
                 icon: 'fa-solid fa-reply',
                 callback: () => this._replyTo(messageId)
-            },
+            }
+        ];
+        if (message.isOwn) {
+            items.push({
+                name: 'Edit Message',
+                icon: 'fa-solid fa-pen',
+                callback: () => this._startEditing(messageId)
+            });
+        }
+        items.push(
             {
                 name: 'React',
                 icon: 'fa-solid fa-face-smile',
@@ -1007,7 +1162,7 @@ ${rows}
                 icon: 'fa-solid fa-share-from-square',
                 callback: () => this._sendToChat(messageId)
             }
-        ];
+        );
         if (message.isOwn || game.user.isGM) {
             items.push({ separator: true });
             items.push({

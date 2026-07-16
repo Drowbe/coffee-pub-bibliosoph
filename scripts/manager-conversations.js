@@ -21,6 +21,9 @@ export const SOCKET_CREATE_CONVERSATION = `${MODULE.ID}.conversation.create`;
 /** Socket event: player asks a GM client to update a conversation (name/icon/members). */
 export const SOCKET_UPDATE_CONVERSATION = `${MODULE.ID}.conversation.update`;
 
+/** Socket event: ephemeral "user is typing" ping to conversation members. */
+export const SOCKET_TYPING = `${MODULE.ID}.conversation.typing`;
+
 function getBlacksmith() {
     return game.modules.get('coffee-pub-blacksmith')?.api;
 }
@@ -532,12 +535,7 @@ export class ConversationManager {
         const text = (markdown ?? '').trim();
         if (!entry || !text) return null;
 
-        let html = this.renderMarkdown(text);
-        // Enrich @UUID[...]{...} links (from drag & drop) into clickable content links
-        try {
-            const TE = foundry.applications?.ux?.TextEditor?.implementation ?? globalThis.TextEditor;
-            html = await TE.enrichHTML(html, { async: true });
-        } catch (_) { /* store unenriched HTML */ }
+        const html = await this._composeHtml(text);
         const timestamp = Date.now();
         const formats = CONST.JOURNAL_ENTRY_PAGE_FORMATS ?? { HTML: 1 };
 
@@ -559,6 +557,35 @@ export class ConversationManager {
 
         await this._trimRetention(entry);
         return page;
+    }
+
+    /** Markdown → enriched HTML (escape, convert, enrich @UUID content links). */
+    static async _composeHtml(text) {
+        let html = this.renderMarkdown(text);
+        try {
+            const TE = foundry.applications?.ux?.TextEditor?.implementation ?? globalThis.TextEditor;
+            html = await TE.enrichHTML(html, { async: true });
+        } catch (_) { /* store unenriched HTML */ }
+        return html;
+    }
+
+    /**
+     * Edit a message's content in place (author only; keeps the original
+     * timestamp and tone, marks the message as edited).
+     */
+    static async editMessage(entry, pageId, markdown) {
+        const page = entry?.pages?.get(pageId);
+        if (!page || !this.isMessagePage(page)) return;
+        const flags = page.flags?.[MODULE.ID] ?? {};
+        if (flags.deleted || flags.sender !== game.user.id) return;
+        const text = (markdown ?? '').trim();
+        if (!text) return;
+        const html = await this._composeHtml(text);
+        await page.update({
+            'text.content': html,
+            [`flags.${MODULE.ID}.markdown`]: text,
+            [`flags.${MODULE.ID}.edited`]: true
+        });
     }
 
     /**
@@ -616,6 +643,7 @@ export class ConversationManager {
                 markdown: flags.markdown ?? '',
                 isOwn: flags.sender === game.user.id,
                 deleted: !!flags.deleted,
+                edited: !!flags.edited,
                 reactions: flags.deleted ? {} : (flags.reactions ?? {})
             };
         });
@@ -714,6 +742,75 @@ export class ConversationManager {
     }
 
     // ==============================================================
+    // ===== IMAGE CLEANUP (GM) =====================================
+    // ==============================================================
+
+    /** The world folder message images upload into. */
+    static get imageDir() {
+        return `worlds/${game.world.id}/bibliosoph-messages`;
+    }
+
+    /**
+     * Scan the message-images folder for files no longer referenced by any
+     * live message. Returns { dir, files, orphans } or null if unavailable.
+     */
+    static async findOrphanImages() {
+        const FP = foundry.applications?.apps?.FilePicker?.implementation ?? globalThis.FilePicker;
+        if (!FP?.browse) return null;
+        const dir = this.imageDir;
+
+        let files = [];
+        try {
+            const result = await FP.browse('data', dir);
+            files = result?.files ?? [];
+        } catch (_) {
+            return { dir, files: [], orphans: [] }; // folder doesn't exist yet
+        }
+
+        let corpus = '';
+        for (const entry of game.journal) {
+            if (!this.isConversation(entry)) continue;
+            for (const page of entry.pages) {
+                if (!this.isMessagePage(page)) continue;
+                corpus += `${page.text?.content ?? ''}\n${page.flags?.[MODULE.ID]?.markdown ?? ''}\n`;
+            }
+        }
+
+        const orphans = files.filter((path) => {
+            const filename = decodeURIComponent(path.split('/').pop() ?? '');
+            return filename && !corpus.includes(filename);
+        });
+        return { dir, files, orphans };
+    }
+
+    /**
+     * Reclaim the space of orphaned images. Foundry provides no client file
+     * deletion API, so each orphan is overwritten with a 1×1 transparent PNG
+     * (a few dozen bytes). True removal requires deleting the files on disk.
+     * @returns {Promise<number>} how many files were overwritten
+     */
+    static async reclaimOrphanImages(orphans) {
+        const FP = foundry.applications?.apps?.FilePicker?.implementation ?? globalThis.FilePicker;
+        if (!FP?.upload || !Array.isArray(orphans)) return 0;
+        const blankPngB64 = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
+        const bytes = Uint8Array.from(atob(blankPngB64), (c) => c.charCodeAt(0));
+
+        let reclaimed = 0;
+        for (const path of orphans) {
+            const filename = decodeURIComponent(path.split('/').pop() ?? '');
+            if (!filename) continue;
+            try {
+                await FP.upload('data', this.imageDir, new File([bytes], filename, { type: 'image/png' }), {}, { notify: false });
+                reclaimed++;
+            } catch (error) {
+                log(`Image cleanup: failed to overwrite ${filename}`, error?.message, false, false);
+            }
+        }
+        log(`Image cleanup: reclaimed ${reclaimed} orphaned file(s)`);
+        return reclaimed;
+    }
+
+    // ==============================================================
     // ===== READ TRACKING ==========================================
     // ==============================================================
 
@@ -775,6 +872,16 @@ export class ConversationManager {
                 createdBy: requestedBy ?? senderUserId
             });
         });
+        await sockets.register(SOCKET_TYPING, async (data, senderUserId) => {
+            const { conversationId, userId } = data ?? {};
+            const typerId = userId ?? senderUserId;
+            if (!typerId || typerId === game.user.id) return;
+            const entry = game.journal.get(conversationId);
+            if (!this.isConversation(entry) || !this.isMember(entry)) return;
+            const win = await this._getOpenWindow();
+            if (!win || win.activeConversationId !== conversationId) return;
+            win.showTypingIndicator?.(typerId);
+        });
         await sockets.register(SOCKET_UPDATE_CONVERSATION, async (data, senderUserId) => {
             if (!game.user.isGM || game.users.activeGM?.id !== game.user.id) return;
             const { entryId, name, icon, members, tint, requestedBy } = data ?? {};
@@ -788,6 +895,32 @@ export class ConversationManager {
             });
         });
         this._socketRegistered = true;
+    }
+
+    // ==============================================================
+    // ===== TYPING INDICATOR (ephemeral, socket-only) ==============
+    // ==============================================================
+
+    static _lastTypingEmit = 0;
+
+    /**
+     * Tell active members of a conversation that this user is typing.
+     * Throttled to one ping every 2 seconds; nothing is stored anywhere.
+     */
+    static async emitTyping(entry) {
+        if (!this.isConversation(entry)) return;
+        const now = Date.now();
+        if (now - this._lastTypingEmit < 2000) return;
+        this._lastTypingEmit = now;
+
+        const sockets = getBlacksmith()?.sockets;
+        if (!sockets?.isReady?.()) return;
+        const recipients = (this.getInfo(entry).members ?? [])
+            .filter((id) => id !== game.user.id && game.users.get(id)?.active);
+        if (!recipients.length) return;
+        try {
+            await sockets.emit(SOCKET_TYPING, { conversationId: entry.id, userId: game.user.id }, { recipients });
+        } catch (_) { /* typing pings are best-effort */ }
     }
 
     // ==============================================================

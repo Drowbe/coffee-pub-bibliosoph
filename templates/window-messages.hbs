@@ -69,12 +69,16 @@
         <div class="bibliosoph-messages-thread">
             {{#if messages.length}}
                 {{#each messages}}
+                {{#if this.dayLabel}}
+                <div class="bibliosoph-messages-day"><span>{{this.dayLabel}}</span></div>
+                {{/if}}
                 <div class="bibliosoph-message-wrapper {{#if this.isOwn}}bibliosoph-message-own{{/if}} {{#if this.deleted}}bibliosoph-message-removed{{/if}}" data-message-id="{{this.id}}" style="border-left-color: {{this.color}};">
                     <div class="bibliosoph-message-header">
                         <img class="bibliosoph-message-avatar" src="{{this.avatar}}" alt="{{this.senderName}}" width="28" height="28">
                         <span class="bibliosoph-message-speaker" style="color: {{this.color}};">{{this.senderName}}</span>
                         {{#unless this.deleted}}
                         {{#if this.showTone}}<i class="{{this.toneIcon}} bibliosoph-message-tone" title="{{this.toneLabel}}"></i>{{/if}}
+                        {{#if this.edited}}<span class="bibliosoph-message-editedtag">(edited)</span>{{/if}}
                         {{/unless}}
                         <span class="bibliosoph-message-time">{{this.timeDisplay}}</span>
                         {{#unless this.deleted}}
@@ -109,6 +113,10 @@
         </div>
         {{#if hasConversation}}
         <div class="bibliosoph-messages-compose">
+            <div class="bibliosoph-messages-typing" aria-live="polite"></div>
+            {{#if editing}}
+            <div class="bibliosoph-messages-editing"><i class="fa-solid fa-pen"></i> Editing message &mdash; press ESC to cancel</div>
+            {{/if}}
             <div class="bibliosoph-messages-tones">
                 {{#each tones}}
                 <a class="bibliosoph-messages-tone-btn {{#if this.active}}active{{/if}}" data-action="msg-tone" data-tone="{{this.key}}" title="{{this.label}}"><i class="{{this.icon}}"></i></a>

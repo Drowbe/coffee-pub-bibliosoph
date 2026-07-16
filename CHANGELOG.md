@@ -11,6 +11,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **Paste and drop image uploads:** Paste a screenshot from the clipboard into the Messages compose box, or drop an image file from your desktop onto the window, and it uploads to `worlds/<world>/bibliosoph-messages/` (via Foundry's FilePicker) and inserts as a markdown image. Requires the core "Upload New Files" permission; users without it get a clear warning and can still link images by path or URL.
+- **Day separators:** The message thread now shows "Today", "Yesterday", or the date between messages from different days.
+- **Edit message:** Right-click your own message → Edit Message loads it into the compose box (banner + "Save Edit" button, ESC cancels); edited messages keep their timestamp and show an "(edited)" tag.
+- **Typing indicators:** "X is typing…" appears above the compose box when another member types in the conversation you're viewing. Ephemeral socket pings only (throttled to one per 2s, targeted at active members, nothing stored).
+- **Clean unused images (GM):** Broom button in the action bar scans the messages upload folder for images no longer referenced by any message and reclaims their space. Foundry provides no file-deletion API, so orphans are overwritten with a tiny blank PNG; the confirmation dialog names the folder for true on-disk removal.
+
+### Changed
+
+- **TODO.md:** Added planned work — crit/fumble table automation on natural 20/1 (replacing the placeholder `createChatMessage` hook), a keybinding to open Messages, and localization of hardcoded JS strings.
+
+### Removed
+
+- **Orphaned legacy CSS:** Deleted the dead `#bib-window-user-*` block in `styles/default.css` left over from the removed private chat window.
 
 ## [13.2.0]
 
