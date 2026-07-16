@@ -449,10 +449,16 @@ export class MessagesWindow extends resolveBase() {
     // ==============================================================
 
     async render(force = false) {
-        // Preserve an in-progress draft across live re-renders
-        const root = this._getRoot?.();
-        const textarea = root?.querySelector?.('.bibliosoph-messages-input');
-        if (textarea) this._draft = textarea.value;
+        // Preserve an in-progress draft across live re-renders — unless this
+        // render was triggered by code that deliberately set the draft itself
+        // (start/cancel editing, conversation switch)
+        if (this._skipDraftCapture) {
+            this._skipDraftCapture = false;
+        } else {
+            const root = this._getRoot?.();
+            const textarea = root?.querySelector?.('.bibliosoph-messages-input');
+            if (textarea) this._draft = textarea.value;
+        }
         return super.render(force);
     }
 
@@ -569,6 +575,7 @@ export class MessagesWindow extends resolveBase() {
         this._picker = null;
         this._draft = '';
         this._editing = null;
+        this._skipDraftCapture = true;
         this._clearTypingIndicators();
         const entry = game.journal.get(id);
         if (entry) ConversationManager.markRead(entry);
@@ -1059,6 +1066,7 @@ ${rows}
         if (!message?.isOwn || message.deleted) return;
         this._editing = messageId;
         this._draft = message.markdown || '';
+        this._skipDraftCapture = true;
         await this.render(false);
         const textarea = this._getRoot()?.querySelector('.bibliosoph-messages-input');
         if (textarea) {
@@ -1071,6 +1079,7 @@ ${rows}
         if (!this._editing) return;
         this._editing = null;
         this._draft = '';
+        this._skipDraftCapture = true;
         this.render(false);
     }
 
