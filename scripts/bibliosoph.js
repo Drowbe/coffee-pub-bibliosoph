@@ -88,6 +88,35 @@ Hooks.once('ready', async () => {
                         moduleId: MODULE.ID
                     });
                 }
+                // Menubar: left zone, right next to Squire's Quick Note (general/999/202)
+                if (api?.registerMenubarTool) {
+                    api.registerMenubarTool('bibliosoph-messages', {
+                        icon: "fa-solid fa-comments",
+                        name: "bibliosoph-messages",
+                        title: null,
+                        tooltip: "Messages",
+                        onClick: async () => {
+                            if (api.isWindowRegistered?.('bibliosoph-messages')) {
+                                return api.openWindow('bibliosoph-messages');
+                            }
+                            const { openMessagesWindow } = await import('./window-messages.js');
+                            return openMessagesWindow();
+                        },
+                        zone: "left",
+                        group: "general",
+                        groupOrder: 999,
+                        order: 203,
+                        moduleId: MODULE.ID,
+                        gmOnly: false,
+                        leaderOnly: false,
+                        visible: true,
+                        toggleable: false,
+                        active: false,
+                        iconColor: null,
+                        buttonNormalTint: null,
+                        buttonSelectedTint: null
+                    });
+                }
             }
         } catch (error) {
             console.error(MODULE.ID + ' | Failed to initialize Messages system:', error);
@@ -441,7 +470,9 @@ Hooks.once('init', async function() {
 Hooks.once('disableModule', (moduleId) => {
     if (moduleId === 'coffee-pub-bibliosoph') {
         unregisterToolbarTools();
-        game.modules.get('coffee-pub-blacksmith')?.api?.unregisterWindow?.('bibliosoph-messages');
+        const blacksmith = game.modules.get('coffee-pub-blacksmith')?.api;
+        blacksmith?.unregisterWindow?.('bibliosoph-messages');
+        blacksmith?.unregisterMenubarTool?.('bibliosoph-messages');
     }
 });
 

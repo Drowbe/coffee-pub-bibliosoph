@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Retention:** `retentionMaxMessages` world setting (default 200 per conversation, GM-adjustable); oldest messages trim automatically as new ones post.
 - **GM visibility setting:** `gmSeesAllConversations` (world, default on) controls whether the GM's window lists conversations the GM is not a member of.
 - **Hide journal folder:** `hideMessagesJournal` world setting (default on) hides the conversations folder and entries from the journal sidebar via injected CSS that survives sidebar re-renders.
+- **Menubar button:** Messages also opens from the Blacksmith menubar (left zone, next to Squire's Quick Note icon) via `api.registerMenubarTool`.
 
 ### Changed
 
