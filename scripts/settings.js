@@ -1315,16 +1315,35 @@ export const registerSettings = () => {
 			default: 200,
 			range: { min: 20, max: 1000, step: 10 },
 		});
-		// -- Notification sound for incoming messages --
-		game.settings.register(MODULE.ID, 'messageNotifySound', {
-			name: MODULE.ID + '.messageNotifySound-Label',
-			hint: MODULE.ID + '.messageNotifySound-Hint',
-			scope: 'user',
+		// -- Hide the conversations journal folder from the sidebar --
+		game.settings.register(MODULE.ID, 'hideMessagesJournal', {
+			name: MODULE.ID + '.hideMessagesJournal-Label',
+			hint: MODULE.ID + '.hideMessagesJournal-Hint',
+			type: Boolean,
 			config: true,
 			requiresReload: false,
-			default: 'none',
-			choices: getBlacksmithChoices('arrSoundChoices', 'No sounds found. Try reloading Foundry after all modules are enabled.')
+			scope: 'world',
+			default: true,
 		});
+		// -- Message sounds (all local; mute toggle lives in the Messages window) --
+		const messageSounds = [
+			{ key: 'messageSoundAlert', def: 'modules/coffee-pub-blacksmith/sounds/interface-notification-03.mp3' },
+			{ key: 'messageSoundReceive', def: 'modules/coffee-pub-blacksmith/sounds/interface-pop-01.mp3' },
+			{ key: 'messageSoundSend', def: 'modules/coffee-pub-blacksmith/sounds/interface-pop-02.mp3' },
+			{ key: 'messageSoundSwitch', def: 'modules/coffee-pub-blacksmith/sounds/book-open-02.mp3' },
+			{ key: 'messageSoundClose', def: 'modules/coffee-pub-blacksmith/sounds/fire-candle-blow.mp3' }
+		];
+		for (const { key, def } of messageSounds) {
+			game.settings.register(MODULE.ID, key, {
+				name: MODULE.ID + '.' + key + '-Label',
+				hint: MODULE.ID + '.' + key + '-Hint',
+				scope: 'user',
+				config: true,
+				requiresReload: false,
+				default: def,
+				choices: getBlacksmithChoices('arrSoundChoices', 'No sounds found. Try reloading Foundry after all modules are enabled.')
+			});
+		}
 		// -- Send-to-chat card themes (used when escalating a message to Foundry chat) --
 		game.settings.register(MODULE.ID, 'cardThemePartyMessage', {
 			name: MODULE.ID + '.cardThemePartyMessage-Label',

@@ -83,7 +83,64 @@ export class ConversationManager {
                 log('Failed to bootstrap party conversation', error?.message, false, false);
             }
         }
+
+        this._applySidebarHidingStyle();
+        this._notifyUnreadOnLogin();
         log('ConversationManager initialized');
+    }
+
+    /** On login: one menubar notification with the total unread count. */
+    static _notifyUnreadOnLogin() {
+        const totalUnread = this.getConversations()
+            .filter((entry) => this.isMember(entry))
+            .reduce((total, entry) => total + this.getUnreadCount(entry), 0);
+        if (totalUnread <= 0) return;
+        getBlacksmith()?.addNotification?.(
+            `${totalUnread} Unread Message${totalUnread === 1 ? '' : 's'}`,
+            'fas fa-envelope',
+            30,
+            MODULE.ID
+        );
+    }
+
+    // ==============================================================
+    // ===== UI SOUNDS ==============================================
+    // ==============================================================
+
+    /** Setting key per sound kind (all user-scoped, Blacksmith sound paths). */
+    static SOUND_SETTINGS = {
+        alert: 'messageSoundAlert',
+        receive: 'messageSoundReceive',
+        send: 'messageSoundSend',
+        switch: 'messageSoundSwitch',
+        close: 'messageSoundClose'
+    };
+
+    /** Local mute toggle (the speaker button in the Messages window tray). */
+    static soundsMuted() {
+        try {
+            return localStorage.getItem('bibliosoph-messages-muted') === 'true';
+        } catch (_) {
+            return false;
+        }
+    }
+
+    static setSoundsMuted(muted) {
+        try {
+            localStorage.setItem('bibliosoph-messages-muted', muted ? 'true' : 'false');
+        } catch (_) { /* no-op */ }
+    }
+
+    /** Play one of the Messages UI sounds locally, honoring the mute toggle. */
+    static playUiSound(kind) {
+        if (this.soundsMuted()) return;
+        const settingKey = this.SOUND_SETTINGS[kind];
+        if (!settingKey) return;
+        const sound = getSetting(settingKey, 'none');
+        if (!sound || sound === 'none') return;
+        if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.playSound) {
+            BlacksmithUtils.playSound(sound, 0.7, false, false);
+        }
     }
 
     // ==============================================================
@@ -618,6 +675,27 @@ export class ConversationManager {
         await entry.delete();
     }
 
+    /**
+     * UI gate: may this user purge a conversation's entire message history?
+     * GM: anything. Members: their own 1:1s. Creators: their own groups.
+     */
+    static canPurge(entry) {
+        const info = this.getInfo(entry);
+        if (game.user.isGM) return true;
+        if (info.kind === 'party') return false;
+        if (info.kind === 'direct') return this.isMember(entry);
+        return info.createdBy === game.user.id;
+    }
+
+    /** Hard-delete every message in a conversation (confirmation happens in the UI). */
+    static async purgeMessages(entry) {
+        if (!this.isConversation(entry) || !this.canPurge(entry)) return 0;
+        const ids = entry.pages.filter((p) => this.isMessagePage(p)).map((p) => p.id);
+        if (ids.length) await entry.deleteEmbeddedDocuments('JournalEntryPage', ids);
+        log(`Purged ${ids.length} message(s) from "${entry.name}"`);
+        return ids.length;
+    }
+
     /** Delete oldest overflow pages beyond the GM-configured retention cap. */
     static async _trimRetention(entry) {
         const cap = Math.max(10, Number(getSetting('retentionMaxMessages', 200)) || 200);
@@ -763,7 +841,10 @@ export class ConversationManager {
 
         if (viewingThis) {
             win.render(false);
-            if (!isOwn) this.markRead(entry);
+            if (!isOwn) {
+                this.markRead(entry);
+                this.playUiSound('receive');
+            }
             return;
         }
 
@@ -772,20 +853,13 @@ export class ConversationManager {
         if (isOwn) return;
 
         const sender = game.users.get(flags.sender)?.name ?? 'Someone';
-        const conversationName = this.getInfo(entry).name ?? entry.name;
-        const blacksmith = getBlacksmith();
-        blacksmith?.addNotification?.(
-            `${sender} sent a message in "${conversationName}"`,
+        getBlacksmith()?.addNotification?.(
+            `Message from ${sender}`,
             'fas fa-envelope',
-            5,
+            30,
             MODULE.ID
         );
-
-        const sound = getSetting('messageNotifySound', 'none');
-        if (sound && sound !== 'none' && typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.playSound) {
-            // Local-only playback: every receiving client runs this hook itself
-            BlacksmithUtils.playSound(sound, 0.7, false, false);
-        }
+        this.playUiSound('alert');
     }
 
     /** Re-render the Messages window if it is open (list + thread). */
@@ -808,22 +882,47 @@ export class ConversationManager {
     // ===== SIDEBAR HIDING =========================================
     // ==============================================================
 
-    /** Hide the conversations folder (and its entries) from the journal sidebar. */
+    /**
+     * Inject a stylesheet that hides the conversations folder (and any stray
+     * conversation entries) in the journal sidebar. CSS survives sidebar
+     * re-renders (search, collapse, new documents), unlike DOM removal.
+     * Gated by the hideMessagesJournal world setting.
+     */
+    static _applySidebarHidingStyle() {
+        const styleId = 'bibliosoph-messages-hide-journal';
+        document.getElementById(styleId)?.remove();
+        if (!getSetting('hideMessagesJournal', true)) return;
+
+        const selectors = [];
+        const folder = this.getFolder();
+        if (folder) {
+            selectors.push(`#journal li[data-folder-id="${folder.id}"]`);
+            selectors.push(`#journal li.folder[data-folder-id="${folder.id}"]`);
+        }
+        for (const entry of game.journal) {
+            if (!this.isConversation(entry)) continue;
+            selectors.push(`#journal li[data-entry-id="${entry.id}"]`);
+            selectors.push(`#journal li[data-document-id="${entry.id}"]`);
+        }
+        if (!selectors.length) return;
+
+        const style = document.createElement('style');
+        style.id = styleId;
+        style.textContent = `${selectors.join(',\n')} { display: none !important; }`;
+        document.head.appendChild(style);
+    }
+
+    /** Keep the hiding style current as conversations come and go. */
     static _registerSidebarHiding() {
-        Hooks.on('renderJournalDirectory', (_app, html) => {
-            const root = html?.jquery ? html[0] : html;
-            if (!root?.querySelectorAll) return;
-            const folder = this.getFolder();
-            if (folder) {
-                root.querySelectorAll(`li.folder[data-folder-id="${folder.id}"], li[data-uuid="${folder.uuid}"]`)
-                    .forEach((el) => el.remove());
-            }
-            // Belt and suspenders: hide any stray conversation entries
-            for (const entry of game.journal) {
-                if (!this.isConversation(entry)) continue;
-                root.querySelectorAll(`li[data-entry-id="${entry.id}"], li[data-document-id="${entry.id}"]`)
-                    .forEach((el) => el.remove());
-            }
+        Hooks.on('renderJournalDirectory', () => this._applySidebarHidingStyle());
+        Hooks.on('createJournalEntry', (entry) => {
+            if (this.isConversation(entry)) this._applySidebarHidingStyle();
+        });
+        Hooks.on('deleteJournalEntry', (entry) => {
+            if (this.isConversation(entry)) this._applySidebarHidingStyle();
+        });
+        Hooks.on('updateSetting', (setting) => {
+            if (setting?.key === `${MODULE.ID}.hideMessagesJournal`) this._applySidebarHidingStyle();
         });
     }
 }

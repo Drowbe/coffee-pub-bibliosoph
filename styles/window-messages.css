@@ -145,9 +145,13 @@
     flex-shrink: 0;
     padding: 8px;
     border-top: 1px solid var(--bibliosoph-msg-border);
+    display: flex;
+    align-items: stretch;
+    gap: 6px;
 }
 
 #coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tray-new {
+    flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -159,6 +163,42 @@
     cursor: pointer;
     font-size: 0.9em;
     text-transform: uppercase;
+}
+
+/* Action-bar utility buttons: mute, export, delete-all */
+#coffee-pub-bibliosoph-messages .bibliosoph-messages-bar-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: 12px;
+}
+
+#coffee-pub-bibliosoph-messages .bibliosoph-messages-bar-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 4px;
+    color: rgba(224, 224, 224, 0.5);
+    cursor: pointer;
+}
+
+#coffee-pub-bibliosoph-messages .bibliosoph-messages-bar-btn:hover {
+    color: #ac9f81;
+    border-color: #ac9f81;
+    text-shadow: none;
+}
+
+#coffee-pub-bibliosoph-messages .bibliosoph-messages-bar-btn.muted {
+    color: #8b2e2e;
+    border-color: #8b2e2e;
+}
+
+#coffee-pub-bibliosoph-messages .bibliosoph-messages-bar-btn-danger:hover {
+    color: #c84040;
+    border-color: #c84040;
 }
 
 #coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tray-new:hover {

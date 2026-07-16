@@ -113,7 +113,10 @@ export class MessagesWindow extends resolveBase() {
         'msg-tone': (_e, btn) => MessagesWindow.current?._setTone(btn.dataset.tone),
         'msg-send': () => MessagesWindow.current?._send(),
         'msg-send-to-chat': (_e, btn) => MessagesWindow.current?._sendToChat(btn.dataset.messageId),
-        'msg-react': (_e, btn) => MessagesWindow.current?._toggleReaction(btn.dataset.messageId, btn.dataset.reaction)
+        'msg-react': (_e, btn) => MessagesWindow.current?._toggleReaction(btn.dataset.messageId, btn.dataset.reaction),
+        'msg-toggle-mute': () => MessagesWindow.current?._toggleMute(),
+        'msg-purge-messages': () => MessagesWindow.current?._purgeMessages(),
+        'msg-export-messages': () => MessagesWindow.current?._exportMessages()
     };
 
     constructor(options = {}) {
@@ -184,7 +187,17 @@ export class MessagesWindow extends resolveBase() {
         const bodyContent = await renderTemplateFn(BODY_TEMPLATE, this._buildBodyContext(active, conversations));
 
         const showCompose = !this._picker && (!!active || !!virtualUser);
-        const actionBarLeft = `<label class="blacksmith-window-template-action-label bibliosoph-messages-enter-label"><input type="checkbox" class="bibliosoph-messages-enter-sends" ${this._enterSends ? 'checked' : ''}> ENTER Sends</label>`;
+        const muted = ConversationManager.soundsMuted();
+        const barButtons = [
+            `<a class="bibliosoph-messages-bar-btn ${muted ? 'muted' : ''}" data-action="msg-toggle-mute" title="${muted ? 'Sounds muted — click to unmute' : 'Sounds on — click to mute'}"><i class="fa-solid ${muted ? 'fa-volume-xmark' : 'fa-volume-high'}"></i></a>`
+        ];
+        if (active) {
+            barButtons.push(`<a class="bibliosoph-messages-bar-btn" data-action="msg-export-messages" title="Export this conversation as HTML"><i class="fa-solid fa-file-arrow-down"></i></a>`);
+            if (ConversationManager.canPurge(active)) {
+                barButtons.push(`<a class="bibliosoph-messages-bar-btn bibliosoph-messages-bar-btn-danger" data-action="msg-purge-messages" title="Delete all messages in this conversation"><i class="fa-solid fa-trash"></i></a>`);
+            }
+        }
+        const actionBarLeft = `<label class="blacksmith-window-template-action-label bibliosoph-messages-enter-label"><input type="checkbox" class="bibliosoph-messages-enter-sends" ${this._enterSends ? 'checked' : ''}> ENTER Sends</label><span class="bibliosoph-messages-bar-group">${barButtons.join('')}</span>`;
         const actionBarRight = showCompose
             ? `<button type="button" class="blacksmith-window-btn-primary bibliosoph-messages-btn" data-action="msg-send"><i class="fa-solid fa-paper-plane"></i> Send Message</button>`
             : '';
@@ -491,6 +504,7 @@ export class MessagesWindow extends resolveBase() {
 
     async close(options) {
         if (MessagesWindow.current === this) MessagesWindow.current = null;
+        ConversationManager.playUiSound('close');
         return super.close(options);
     }
 
@@ -505,7 +519,96 @@ export class MessagesWindow extends resolveBase() {
         this._draft = '';
         const entry = game.journal.get(id);
         if (entry) ConversationManager.markRead(entry);
+        ConversationManager.playUiSound('switch');
         this.render(false);
+    }
+
+    _toggleMute() {
+        ConversationManager.setSoundsMuted(!ConversationManager.soundsMuted());
+        this.render(false);
+    }
+
+    /** Delete all messages in the active conversation, after an "are you sure". */
+    async _purgeMessages() {
+        const entry = game.journal.get(this._activeConversationId);
+        if (!entry || !ConversationManager.canPurge(entry)) return;
+        const name = this._conversationDisplayName(entry);
+        const count = ConversationManager.getMessages(entry).length;
+        if (!count) {
+            ui.notifications.info('There are no messages to delete.');
+            return;
+        }
+
+        let confirmed = false;
+        const content = `<p>Delete all <b>${count}</b> message${count === 1 ? '' : 's'} in <b>${escapeHtml(name)}</b>?</p><p>This removes the history for <b>everyone</b> and cannot be undone.</p>`;
+        const DialogV2 = foundry.applications?.api?.DialogV2;
+        try {
+            confirmed = DialogV2?.confirm
+                ? await DialogV2.confirm({ window: { title: 'Delete Messages' }, content, rejectClose: false })
+                : await Dialog.confirm({ title: 'Delete Messages', content });
+        } catch (_) {
+            confirmed = false;
+        }
+        if (!confirmed) return;
+
+        await ConversationManager.purgeMessages(entry);
+        ui.notifications.info(`Deleted all messages in "${name}".`);
+        // deleteJournalEntryPage hooks re-render the window
+    }
+
+    /** Export the active conversation's history as a standalone HTML file. */
+    _exportMessages() {
+        const entry = game.journal.get(this._activeConversationId);
+        if (!entry) return;
+        const info = ConversationManager.getInfo(entry);
+        const name = this._conversationDisplayName(entry);
+        const memberNames = (info.members ?? [])
+            .map((id) => game.users.get(id)?.name)
+            .filter(Boolean)
+            .join(', ');
+        const messages = ConversationManager.getMessages(entry);
+
+        const rows = messages.map((m) => {
+            const time = m.timestamp ? new Date(m.timestamp).toLocaleString() : '';
+            if (m.deleted) {
+                return `<div class="msg deleted"><div class="meta"><span class="sender">${escapeHtml(m.senderName)}</span><span class="time">${time}</span></div><div class="content"><i>Message deleted</i></div></div>`;
+            }
+            return `<div class="msg"><div class="meta"><span class="sender" style="color:${m.color}">${escapeHtml(m.senderName)}</span><span class="time">${time}</span></div><div class="content">${m.html}</div></div>`;
+        }).join('\n');
+
+        const html = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>${escapeHtml(name)} — Messages</title>
+<style>
+    body { font-family: system-ui, sans-serif; background: #232323; color: #e0e0e0; max-width: 800px; margin: 24px auto; padding: 0 16px; }
+    h1 { color: #ac9f81; border-bottom: 1px solid #444; padding-bottom: 8px; }
+    .exportmeta { color: #999; font-size: 0.9em; margin-bottom: 20px; }
+    .msg { border: 1px solid #3a3a3a; border-left: 3px solid #555; border-radius: 4px; padding: 8px 12px; margin-bottom: 8px; }
+    .msg.deleted { opacity: 0.6; }
+    .meta { display: flex; justify-content: space-between; font-size: 0.85em; color: #999; margin-bottom: 4px; }
+    .sender { font-weight: bold; }
+    .content img { max-width: 100%; border-radius: 4px; }
+    .content blockquote { border-left: 3px solid #555; margin: 0 0 6px 0; padding: 2px 8px; color: #999; }
+    a.content-link { color: #ac9f81; text-decoration: none; }
+</style>
+</head>
+<body>
+<h1>${escapeHtml(name)}</h1>
+<div class="exportmeta">Members: ${escapeHtml(memberNames)}<br>Exported: ${new Date().toLocaleString()} &mdash; ${messages.length} message${messages.length === 1 ? '' : 's'}</div>
+${rows}
+</body>
+</html>`;
+
+        const filename = `messages-${name.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}-${new Date().toISOString().slice(0, 10)}.html`;
+        const save = foundry.utils?.saveDataToFile ?? globalThis.saveDataToFile;
+        if (typeof save !== 'function') {
+            ui.notifications.error('Export helper unavailable in this Foundry version.');
+            return;
+        }
+        save(html, 'text/html', filename);
+        ui.notifications.info(`Exported ${messages.length} message${messages.length === 1 ? '' : 's'} to "${filename}".`);
     }
 
     _openPicker() {
@@ -617,6 +720,7 @@ export class MessagesWindow extends resolveBase() {
         if (textarea) textarea.value = '';
         await ConversationManager.postMessage(entry, { markdown: text, tone: this._tone });
         this._tone = 'message';
+        ConversationManager.playUiSound('send');
         // Our own createJournalEntryPage hook re-renders the window
     }
 
