@@ -449,16 +449,29 @@ export class MessagesWindow extends resolveBase() {
     // ==============================================================
 
     async render(force = false) {
+        const root = this._getRoot?.();
+
         // Preserve an in-progress draft across live re-renders — unless this
         // render was triggered by code that deliberately set the draft itself
         // (start/cancel editing, conversation switch)
         if (this._skipDraftCapture) {
             this._skipDraftCapture = false;
         } else {
-            const root = this._getRoot?.();
             const textarea = root?.querySelector?.('.bibliosoph-messages-input');
             if (textarea) this._draft = textarea.value;
         }
+
+        // Preserve the thread scroll position so a re-render doesn't reset to
+        // the top; remember whether the user was pinned near the bottom
+        const thread = root?.querySelector?.('.bibliosoph-messages-thread');
+        if (thread) {
+            this._threadScrollSaved = thread.scrollTop;
+            this._threadWasPinned = thread.scrollTop + thread.clientHeight >= thread.scrollHeight - 80;
+        } else {
+            this._threadScrollSaved = null;
+            this._threadWasPinned = true;
+        }
+
         return super.render(force);
     }
 
@@ -534,13 +547,21 @@ export class MessagesWindow extends resolveBase() {
             });
         }
 
-        // Keep the thread pinned to the newest message: jump instantly on
-        // load / conversation switch, glide smoothly for incoming messages
+        // Thread scrolling: jump straight to the bottom on load / conversation
+        // switch. On same-conversation re-renders, restore the saved position
+        // first (the rebuilt DOM starts at the top), then — only if the user
+        // was already near the bottom — glide the short distance to the
+        // newest message. Readers scrolled up into history stay put.
         const thread = root.querySelector('.bibliosoph-messages-thread');
         if (thread) {
-            const instant = this._lastScrolledConversation !== this._activeConversationId;
+            const conversationChanged = this._lastScrolledConversation !== this._activeConversationId;
             this._lastScrolledConversation = this._activeConversationId;
-            this._pinThreadToBottom(thread, instant);
+            if (conversationChanged) {
+                this._pinThreadToBottom(thread, true);
+            } else {
+                if (typeof this._threadScrollSaved === 'number') thread.scrollTop = this._threadScrollSaved;
+                if (this._threadWasPinned !== false) this._pinThreadToBottom(thread, false);
+            }
 
             // Click an image in a message → full-size popout
             if (!thread.dataset.bibliosophImgBound) {
