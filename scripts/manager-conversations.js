@@ -852,14 +852,76 @@ export class ConversationManager {
         this._refreshWindow();
         if (isOwn) return;
 
-        const sender = game.users.get(flags.sender)?.name ?? 'Someone';
+        const senderUser = game.users.get(flags.sender);
         getBlacksmith()?.addNotification?.(
-            `Message from ${sender}`,
+            `Message from ${senderUser?.name ?? 'Someone'}`,
             'fas fa-envelope',
             30,
             MODULE.ID
         );
         this.playUiSound('alert');
+
+        // Auto Open: pop the window straight onto the conversation when closed
+        if (!win && getSetting('messageAutoOpen', false)) {
+            try {
+                const { openMessagesWindow } = await import('./window-messages.js');
+                openMessagesWindow({ conversationId: entry.id });
+                return; // window is opening on it — no splash needed
+            } catch (_) { /* fall through to splash */ }
+        }
+
+        // On-screen splash so messages can't be missed (per-kind user settings)
+        const kind = this.getInfo(entry).kind;
+        const splashSetting = kind === 'direct' ? 'messageSplashEnabled' : 'messageSplashGroupEnabled';
+        if (getSetting(splashSetting, true)) {
+            this._showSplash(entry, senderUser);
+        }
+    }
+
+    /** On-screen splash for an incoming direct message; click opens the conversation. */
+    static _showSplash(entry, senderUser) {
+        const splashId = 'bibliosoph-message-splash';
+        document.getElementById(splashId)?.remove();
+
+        const splash = document.createElement('div');
+        splash.id = splashId;
+
+        const avatar = document.createElement('img');
+        avatar.src = senderUser?.avatar || 'icons/svg/mystery-man.svg';
+        avatar.alt = '';
+        splash.appendChild(avatar);
+
+        const textBlock = document.createElement('div');
+        textBlock.className = 'bibliosoph-splash-text';
+        const title = document.createElement('div');
+        title.className = 'bibliosoph-splash-title';
+        title.textContent = `Message from ${senderUser?.name ?? 'Someone'}`;
+        const sub = document.createElement('div');
+        sub.className = 'bibliosoph-splash-sub';
+        const info = this.getInfo(entry);
+        sub.textContent = info.kind === 'direct'
+            ? 'Click to open the conversation'
+            : `in ${info.name ?? entry.name} — click to open`;
+        textBlock.append(title, sub);
+        splash.appendChild(textBlock);
+
+        let dismissTimer = null;
+        const dismiss = () => {
+            clearTimeout(dismissTimer);
+            splash.classList.remove('visible');
+            setTimeout(() => splash.remove(), 400);
+        };
+        splash.addEventListener('click', async () => {
+            dismiss();
+            try {
+                const { openMessagesWindow } = await import('./window-messages.js');
+                openMessagesWindow({ conversationId: entry.id });
+            } catch (_) { /* no-op */ }
+        });
+
+        document.body.appendChild(splash);
+        requestAnimationFrame(() => splash.classList.add('visible'));
+        dismissTimer = setTimeout(dismiss, 8000);
     }
 
     /** Re-render the Messages window if it is open (list + thread). */

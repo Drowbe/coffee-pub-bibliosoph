@@ -1325,6 +1325,36 @@ export const registerSettings = () => {
 			scope: 'world',
 			default: true,
 		});
+		// -- Auto-open the Messages window when a message arrives --
+		game.settings.register(MODULE.ID, 'messageAutoOpen', {
+			name: MODULE.ID + '.messageAutoOpen-Label',
+			hint: MODULE.ID + '.messageAutoOpen-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: false,
+			scope: 'user',
+			default: false,
+		});
+		// -- On-screen splash for incoming direct messages --
+		game.settings.register(MODULE.ID, 'messageSplashEnabled', {
+			name: MODULE.ID + '.messageSplashEnabled-Label',
+			hint: MODULE.ID + '.messageSplashEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: false,
+			scope: 'user',
+			default: true,
+		});
+		// -- On-screen splash for incoming party/group messages --
+		game.settings.register(MODULE.ID, 'messageSplashGroupEnabled', {
+			name: MODULE.ID + '.messageSplashGroupEnabled-Label',
+			hint: MODULE.ID + '.messageSplashGroupEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: false,
+			scope: 'user',
+			default: true,
+		});
 		// -- Message sounds (all local; mute toggle lives in the Messages window) --
 		const messageSounds = [
 			{ key: 'messageSoundAlert', def: 'modules/coffee-pub-blacksmith/sounds/interface-notification-03.mp3' },

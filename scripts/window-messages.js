@@ -115,6 +115,7 @@ export class MessagesWindow extends resolveBase() {
         'msg-send-to-chat': (_e, btn) => MessagesWindow.current?._sendToChat(btn.dataset.messageId),
         'msg-react': (_e, btn) => MessagesWindow.current?._toggleReaction(btn.dataset.messageId, btn.dataset.reaction),
         'msg-toggle-mute': () => MessagesWindow.current?._toggleMute(),
+        'msg-toggle-autoopen': () => MessagesWindow.current?._toggleAutoOpen(),
         'msg-purge-messages': () => MessagesWindow.current?._purgeMessages(),
         'msg-export-messages': () => MessagesWindow.current?._exportMessages()
     };
@@ -188,8 +189,10 @@ export class MessagesWindow extends resolveBase() {
 
         const showCompose = !this._picker && (!!active || !!virtualUser);
         const muted = ConversationManager.soundsMuted();
+        const autoOpen = getSetting('messageAutoOpen', false);
         const barButtons = [
-            `<a class="bibliosoph-messages-bar-btn ${muted ? 'muted' : ''}" data-action="msg-toggle-mute" title="${muted ? 'Sounds muted — click to unmute' : 'Sounds on — click to mute'}"><i class="fa-solid ${muted ? 'fa-volume-xmark' : 'fa-volume-high'}"></i></a>`
+            `<a class="bibliosoph-messages-bar-btn ${muted ? 'muted' : ''}" data-action="msg-toggle-mute" title="${muted ? 'Sounds muted — click to unmute' : 'Sounds on — click to mute'}"><i class="fa-solid ${muted ? 'fa-volume-xmark' : 'fa-volume-high'}"></i></a>`,
+            `<a class="bibliosoph-messages-bar-btn ${autoOpen ? 'active' : ''}" data-action="msg-toggle-autoopen" title="${autoOpen ? 'Auto Open is on — window opens when a message arrives' : 'Auto Open is off — click to open this window automatically when a message arrives'}"><i class="fa-solid fa-window-restore"></i></a>`
         ];
         if (active) {
             barButtons.push(`<a class="bibliosoph-messages-bar-btn" data-action="msg-export-messages" title="Export this conversation as HTML"><i class="fa-solid fa-file-arrow-down"></i></a>`);
@@ -481,10 +484,14 @@ export class MessagesWindow extends resolveBase() {
             });
         }
 
-        // Keep the thread pinned to the newest message
+        // Keep the thread pinned to the newest message: jump instantly on
+        // load / conversation switch, glide smoothly for incoming messages
         const thread = root.querySelector('.bibliosoph-messages-thread');
         if (thread) {
-            thread.scrollTop = thread.scrollHeight;
+            const instant = this._lastScrolledConversation !== this._activeConversationId;
+            this._lastScrolledConversation = this._activeConversationId;
+            this._pinThreadToBottom(thread, instant);
+
             // Click an image in a message → full-size popout
             if (!thread.dataset.bibliosophImgBound) {
                 thread.dataset.bibliosophImgBound = '1';
@@ -525,6 +532,19 @@ export class MessagesWindow extends resolveBase() {
 
     _toggleMute() {
         ConversationManager.setSoundsMuted(!ConversationManager.soundsMuted());
+        this.render(false);
+    }
+
+    /** Flip the messageAutoOpen user setting from the window's action bar. */
+    async _toggleAutoOpen() {
+        const current = getSetting('messageAutoOpen', false);
+        try {
+            if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.setSettingSafely) {
+                await BlacksmithUtils.setSettingSafely(MODULE.ID, 'messageAutoOpen', !current);
+            } else {
+                await game.settings.set(MODULE.ID, 'messageAutoOpen', !current);
+            }
+        } catch (_) { /* setting unavailable — leave as-is */ }
         this.render(false);
     }
 
@@ -727,6 +747,26 @@ ${rows}
     // ==============================================================
     // ===== DRAG & DROP (documents → UUID links) ===================
     // ==============================================================
+
+    /**
+     * Pin the thread scroll to the bottom, resiliently: once now, once on the
+     * next frame (after layout settles), and again whenever an avatar or
+     * message image finishes loading and grows the thread.
+     */
+    _pinThreadToBottom(thread, instant = false) {
+        const scroll = (behavior) => {
+            try {
+                thread.scrollTo({ top: thread.scrollHeight, behavior });
+            } catch (_) {
+                thread.scrollTop = thread.scrollHeight;
+            }
+        };
+        scroll(instant ? 'auto' : 'smooth');
+        requestAnimationFrame(() => scroll(instant ? 'auto' : 'smooth'));
+        for (const img of thread.querySelectorAll('img')) {
+            if (!img.complete) img.addEventListener('load', () => scroll('auto'), { once: true });
+        }
+    }
 
     /** Open Foundry's image popout (handles both the V2 and legacy signatures). */
     _openImagePopout(src) {
