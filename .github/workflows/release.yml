@@ -20,10 +20,21 @@ jobs:
         id: get-version
         run: echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
 
+      # Compile compendium packs from committed JSON sources (packs/_source/)
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build Compendium Packs
+        run: |
+          npm install --no-audit --no-fund
+          npm run packs:build
+
       # Create zip file
       - name: Create Zip File
         run: |
-          # Ensure the zip excludes unnecessary files
+          # Ensure the zip excludes unnecessary files (packs ship compiled LevelDB, not _source JSON)
           zip -r coffee-pub-bibliosoph.zip \
             module.json \
             LICENSE \
@@ -35,7 +46,9 @@ jobs:
             images/ \
             resources/ \
             sounds/ \
-            -x "*.git*" -x "*.github*" -x "*node_modules*" -x "*.vscode*"
+            packs/ \
+            -x "*.git*" -x "*.github*" -x "*node_modules*" -x "*.vscode*" \
+            -x "packs/_source/*" -x "packs/*/LOCK" -x "packs/*/LOG*"
 
       # Create release
       - name: Create Release

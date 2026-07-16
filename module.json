@@ -61,7 +61,19 @@
   "esmodules": [
     "scripts/bibliosoph.js"
   ],
-  "packs": [],
+  "packs": [
+    {
+      "name": "injuries",
+      "label": "Injuries",
+      "path": "packs/injuries",
+      "type": "JournalEntry",
+      "system": "dnd5e",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    }
+  ],
   "relationships": {
     "requires": [
       {

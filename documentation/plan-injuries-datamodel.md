@@ -57,6 +57,26 @@ missing `odds` set to the rescued dataset's per-severity medians (minor 40, mode
 `imagetitle` left blank. Non-standard legacy status effects (e.g. "Frozen in Time", "Headache",
 "Bleeding", "Sluggish") kept verbatim — see Open decisions.
 
+## Interim: bundled `injuries` compendium ✅ infrastructure (July 16, 2026)
+
+Goal: **functional before improved** — restore the out-of-the-box injuries experience on the
+current (HTML-metadata) consumer before any data-model work. Infrastructure in place:
+
+- `module.json` declares pack `coffee-pub-bibliosoph.injuries` (JournalEntry, dnd5e, players
+  observer). **Full world relaunch required** to see it.
+- LevelDB stays gitignored. Committed source of truth is `packs/_source/injuries/*.json`
+  (per-document extracts); the release workflow compiles `_source` → LevelDB via
+  `@foundryvtt/foundryvtt-cli` before zipping `packs/` (this avoids the LevelDB-in-git churn
+  Blacksmith's cleanup calls out — deliberately *not* Artificer's commit-the-LevelDB convention).
+- Tooling: `npm run packs:extract` (Foundry-edited pack → `_source` JSON; run after changing pack
+  content in Foundry, world closed) and `npm run packs:build` (`_source` → LevelDB; CI does this,
+  running it locally overwrites the local pack).
+
+Populating it (manual, once): relaunch world → paste `resources/injuries.json` into Blacksmith's
+JSON Import tool (builds the category journals) → unlock the `Injuries` compendium → drag the
+journals in → `npm run packs:extract` → commit. Then point Bibliosoph's `injuryCompendium` setting
+at **Coffee Pub Bibliosoph: Injuries**. The Phase 1–5 rebuild below supersedes this pipeline later.
+
 ## Target Architecture
 
 ### Document type

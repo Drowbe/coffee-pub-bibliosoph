@@ -1,0 +1,13 @@
+{
+  "name": "coffee-pub-bibliosoph",
+  "private": true,
+  "type": "module",
+  "description": "Development tooling for Coffee Pub Bibliosoph (compendium pack build/extract).",
+  "scripts": {
+    "packs:extract": "node tools/extract-packs.mjs",
+    "packs:build": "node tools/build-packs.mjs"
+  },
+  "devDependencies": {
+    "@foundryvtt/foundryvtt-cli": "^3.0.4"
+  }
+}
