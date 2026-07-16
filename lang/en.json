@@ -29,6 +29,8 @@
 		"gmSeesAllConversations-Hint": "When enabled, the GM's Messages window lists every conversation, including ones the GM is not a member of. When disabled, the GM only sees conversations they belong to.",
 		"retentionMaxMessages-Label": "Message History Limit",
 		"retentionMaxMessages-Hint": "Maximum messages kept per conversation. Older messages are trimmed automatically as new ones arrive.",
+		"messagesExcludedUsers-Label": "Excluded Users",
+		"messagesExcludedUsers-Hint": "Comma-separated user names to leave out of Messages (no 1:1 row, not selectable for groups, not added to the party conversation). Case-insensitive; matches the exact name or the start of it (e.g. 'developer' matches 'DeveloperXXX').",
 		"hideMessagesJournal-Label": "Hide Messages Journal Folder",
 		"hideMessagesJournal-Hint": "Hides the conversations journal folder from the journal sidebar for everyone.",
 		"messageAutoOpen-Label": "Auto Open Messages",

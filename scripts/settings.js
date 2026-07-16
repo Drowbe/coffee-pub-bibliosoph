@@ -1315,6 +1315,16 @@ export const registerSettings = () => {
 			default: 200,
 			range: { min: 20, max: 1000, step: 10 },
 		});
+		// -- Users excluded from the Messages system --
+		game.settings.register(MODULE.ID, 'messagesExcludedUsers', {
+			name: MODULE.ID + '.messagesExcludedUsers-Label',
+			hint: MODULE.ID + '.messagesExcludedUsers-Hint',
+			type: String,
+			config: true,
+			requiresReload: false,
+			scope: 'world',
+			default: 'Cameraman, DeveloperXXX, AuthorXXX',
+		});
 		// -- Hide the conversations journal folder from the sidebar --
 		game.settings.register(MODULE.ID, 'hideMessagesJournal', {
 			name: MODULE.ID + '.hideMessagesJournal-Label',

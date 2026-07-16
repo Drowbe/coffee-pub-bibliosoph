@@ -50,12 +50,16 @@ function log(message, data = '', debug = true, notify = false) {
 /** Ownership level constants with safe fallbacks. */
 const LEVELS = () => CONST.DOCUMENT_OWNERSHIP_LEVELS ?? { NONE: 0, OBSERVER: 2, OWNER: 3 };
 
-/** Users that should never be conversation members (system accounts). */
-const EXCLUDED_USER_PREFIXES = ['Cameraman', 'Developer', 'Author'];
-
+/**
+ * Users excluded from the Messages system, from the messagesExcludedUsers
+ * setting (comma list; case-insensitive exact-or-prefix name match).
+ */
 function isSelectableUser(user) {
     if (!user?.name) return false;
-    return !EXCLUDED_USER_PREFIXES.some((prefix) => user.name.startsWith(prefix));
+    const raw = getSetting('messagesExcludedUsers', 'Cameraman, DeveloperXXX, AuthorXXX') ?? '';
+    const tokens = raw.split(',').map((s) => s.trim().toLowerCase()).filter(Boolean);
+    const name = user.name.toLowerCase();
+    return !tokens.some((token) => name === token || name.startsWith(token));
 }
 
 export class ConversationManager {
@@ -496,18 +500,24 @@ export class ConversationManager {
             });
             return party;
         }
-        // Keep membership + ownership in sync as users are added to the world,
-        // and follow the campaign party name when it changes in Blacksmith
+        // Keep membership + ownership in sync (new users join, excluded or
+        // deleted users drop out), and follow the campaign party name
         const info = this.getInfo(party);
         const current = new Set(info.members ?? []);
+        const selectable = new Set(allUserIds);
         const missing = allUserIds.filter((id) => !current.has(id));
+        const removed = [...current].filter((id) => !selectable.has(id));
         const update = {};
-        if (missing.length) {
+        if (missing.length || removed.length) {
             const levels = LEVELS();
             const ownership = foundry.utils.deepClone(party.ownership ?? { default: levels.NONE });
             for (const id of missing) ownership[id] = levels.OWNER;
+            for (const id of removed) {
+                delete ownership[id];
+                ownership[`-=${id}`] = null;
+            }
             update.ownership = ownership;
-            update[`flags.${MODULE.ID}.members`] = [...current, ...missing];
+            update[`flags.${MODULE.ID}.members`] = allUserIds;
         }
         if (partyName !== info.name) {
             update.name = partyName;
@@ -515,7 +525,7 @@ export class ConversationManager {
         }
         if (Object.keys(update).length) {
             await party.update(update);
-            log('Party conversation refreshed', { missing, partyName });
+            log('Party conversation refreshed', { missing, removed, partyName });
         }
         return party;
     }

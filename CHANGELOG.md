@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Edit message:** Right-click your own message → Edit Message loads it into the compose box (banner + "Save Edit" button, ESC cancels); edited messages keep their timestamp and show an "(edited)" tag.
 - **Typing indicators:** "X is typing…" appears above the compose box when another member types in the conversation you're viewing. Ephemeral socket pings only (throttled to one per 2s, targeted at active members, nothing stored).
 - **Clean unused images (GM):** Broom button in the action bar scans the messages upload folder for images no longer referenced by any message and reclaims their space. Foundry provides no file-deletion API, so orphans are overwritten with a tiny blank PNG; the confirmation dialog names the folder for true on-disk removal.
+- **Excluded Users setting:** `messagesExcludedUsers` (world) — comma-separated user names left out of Messages entirely: no 1:1 tray row, not selectable for groups, and removed from the party conversation on world load. Case-insensitive exact-or-prefix matching; replaces the hardcoded Cameraman/Developer/Author exclusion (which is now the default value).
 
 ### Changed
 
