@@ -1,0 +1,566 @@
+{
+  "name": "Slashing",
+  "pages": [
+    {
+      "type": "text",
+      "name": "Bleeding Edge",
+      "text": {
+        "content": "<h5>Injuries • Slashing • Bleeding Edge</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Bleeding Edge</h4>\n    <p>The cutting edge of the blade opens a torrent of crimson, as blood spills from the lacerations like a scarlet river flowing unchecked. Each slash becomes a reminder of the body's vulnerability, as life essence escapes in a crimson dance.</p>\n        <h5></h5>\n        <img src=\"icons/skills/melee/strike-axe-blood-red.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Applying pressure to the bleeding edge and elevating the affected limb can help stem the flow of blood and promote clotting. Seeking medical evaluation for deeper lacerations or signs of excessive bleeding is crucial for proper treatment.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Slashing</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 5 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 50</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: none</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Slashing</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 20</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Bleeding Edge</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> </p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/melee/strike-axe-blood-red.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The cutting edge of the blade opens a torrent of crimson, as blood spills from the lacerations like a scarlet river flowing unchecked. Each slash becomes a reminder of the body's vulnerability, as life essence escapes in a crimson dance.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Applying pressure to the bleeding edge and elevating the affected limb can help stem the flow of blood and promote clotting. Seeking medical evaluation for deeper lacerations or signs of excessive bleeding is crucial for proper treatment.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 5</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 300</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Slashing Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "cCDSHOU0ucHH11DW",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!n6EA1GHz05jsme7t.cCDSHOU0ucHH11DW"
+    },
+    {
+      "type": "text",
+      "name": "Crimson Gash Of Carnage",
+      "text": {
+        "content": "<h5>Injuries • Slashing • Crimson Gash Of Carnage</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Crimson Gash Of Carnage</h4>\n    <p>A brutal slash carves through your flesh, leaving a deep, gaping wound that bleeds profusely. The pain is excruciating, and moving becomes a challenge as blood loss starts to take its toll.</p>\n        <h5>Echoes Of The Blade</h5>\n        <img src=\"icons/skills/melee/strike-axe-blood-red.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Urgent magical healing or expert medical attention is necessary to prevent further complications or potential death.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Slashing</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Major</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 10 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 100</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Bleeding</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Slashing</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 10</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Crimson Gash Of Carnage</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Echoes Of The Blade</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/melee/strike-axe-blood-red.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A brutal slash carves through your flesh, leaving a deep, gaping wound that bleeds profusely. The pain is excruciating, and moving becomes a challenge as blood loss starts to take its toll.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Urgent magical healing or expert medical attention is necessary to prevent further complications or potential death.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Major</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 10</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 600</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Slashing Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Bleeding</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "pFbEmL6HismbwwRU",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!n6EA1GHz05jsme7t.pFbEmL6HismbwwRU"
+    },
+    {
+      "type": "text",
+      "name": "Disembowelment Delight",
+      "text": {
+        "content": "<h5>Injuries • Slashing • Disembowelment Delight</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Disembowelment Delight</h4>\n    <p>Your innards had a brief day out of your body before you managed to stuff them back in. Now, your once trusty armor seems a bit snug.</p>\n        <h5>Internal Struggle</h5>\n        <img src=\"icons/skills/melee/strike-axe-blood-red.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Seek a skilled healer to make sure everything is back where it should be.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Slashing</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Major</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 10 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 50</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Prone</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Slashing</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 25</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Disembowelment Delight</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Internal Struggle</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/melee/strike-axe-blood-red.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Your innards had a brief day out of your body before you managed to stuff them back in. Now, your once trusty armor seems a bit snug.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Seek a skilled healer to make sure everything is back where it should be.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Major</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 10</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 300</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Slashing Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Prone</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "I6Kwum5DyYb2TtLe",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!n6EA1GHz05jsme7t.I6Kwum5DyYb2TtLe"
+    },
+    {
+      "type": "text",
+      "name": "Gnash Wound",
+      "text": {
+        "content": "<h5>Injuries • Slashing • Gnash Wound</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Gnash Wound</h4>\n    <p>A deep gash from a sharp blade that just won't stop bleeding, causing a trail of drips wherever you go. Your clothes are now the latest in gruesome fashion.</p>\n        <h5>Bloody Havoc</h5>\n        <img src=\"icons/skills/melee/strike-axe-blood-red.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Apply a clean bandage and hope for the best.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Slashing</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 2 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 10</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Bleeding</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Slashing</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 75</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Gnash Wound</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Bloody Havoc</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/melee/strike-axe-blood-red.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A deep gash from a sharp blade that just won't stop bleeding, causing a trail of drips wherever you go. Your clothes are now the latest in gruesome fashion.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Apply a clean bandage and hope for the best.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 60</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Slashing Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Bleeding</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "eXb0zeEpHIcMj0ps",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!n6EA1GHz05jsme7t.eXb0zeEpHIcMj0ps"
+    },
+    {
+      "type": "text",
+      "name": "Jagged Gash",
+      "text": {
+        "content": "<h5>Injuries • Slashing • Jagged Gash</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Jagged Gash</h4>\n    <p>The jagged gash left by a slashing strike mirrors the chaos of battle, a ragged tear in the fabric of flesh that oozes with pain and pulsates with every heartbeat. Each movement a reminder of the jagged nature of the wound.</p>\n        <h5></h5>\n        <img src=\"icons/skills/wounds/injury-stapled-flesh-tan.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Careful cleaning and closure of the jagged gash are essential to prevent infection and promote proper healing. Monitoring for signs of inflammation or delayed healing can guide further treatment and prevent complications.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Slashing</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 5 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 50</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: none</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Slashing</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 20</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Jagged Gash</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> </p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/wounds/injury-stapled-flesh-tan.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The jagged gash left by a slashing strike mirrors the chaos of battle, a ragged tear in the fabric of flesh that oozes with pain and pulsates with every heartbeat. Each movement a reminder of the jagged nature of the wound.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Careful cleaning and closure of the jagged gash are essential to prevent infection and promote proper healing. Monitoring for signs of inflammation or delayed healing can guide further treatment and prevent complications.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 5</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 300</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Slashing Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "qNQattiAPQJtJn1E",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!n6EA1GHz05jsme7t.qNQattiAPQJtJn1E"
+    },
+    {
+      "type": "text",
+      "name": "Lacerating Wound",
+      "text": {
+        "content": "<h5>Injuries • Slashing • Lacerating Wound</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Lacerating Wound</h4>\n    <p>The sharp bite of the blade leaves a lacerating wound, tearing through flesh and rending skin with a merciless ferocity. Each slash, a symphony of pain, as the jagged edge cuts deep and leaves a trail of crimson in its wake.</p>\n        <h5></h5>\n        <img src=\"icons/skills/melee/strike-axe-blood-red.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Promptly cleaning and disinfecting the lacerating wound is crucial to prevent infection and promote healing. Proper wound care, bandaging, and monitoring for signs of complications are essential during the recovery process.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Slashing</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 5 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 38</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Exhaustion</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Slashing</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 20</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Lacerating Wound</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> </p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/melee/strike-axe-blood-red.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The sharp bite of the blade leaves a lacerating wound, tearing through flesh and rending skin with a merciless ferocity. Each slash, a symphony of pain, as the jagged edge cuts deep and leaves a trail of crimson in its wake.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Promptly cleaning and disinfecting the lacerating wound is crucial to prevent infection and promote healing. Proper wound care, bandaging, and monitoring for signs of complications are essential during the recovery process.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 5</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 230</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Slashing Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Exhaustion</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "VeAzHt8WouEHWchw",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!n6EA1GHz05jsme7t.VeAzHt8WouEHWchw"
+    },
+    {
+      "type": "text",
+      "name": "Paper Cut From Hell",
+      "text": {
+        "content": "<h5>Injuries • Slashing • Paper Cut From Hell</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Paper Cut From Hell</h4>\n    <p>You yelp in surprise as you receive a minuscule cut, yet the pain that follows is disproportionate. It feels like a paper cut, but with the fury of a thousand devils.</p>\n        <h5>Blade Of Banter</h5>\n        <img src=\"icons/skills/melee/strike-axe-blood-red.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Apply a healing salve and try not to get any more paper cuts, especially from vicious monsters.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Slashing</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 3 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 20</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: none</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Slashing</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 75</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Paper Cut From Hell</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Blade Of Banter</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/melee/strike-axe-blood-red.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> You yelp in surprise as you receive a minuscule cut, yet the pain that follows is disproportionate. It feels like a paper cut, but with the fury of a thousand devils.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Apply a healing salve and try not to get any more paper cuts, especially from vicious monsters.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 3</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 120</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Slashing Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "vKtwvOMvvfrfHdW5",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!n6EA1GHz05jsme7t.vKtwvOMvvfrfHdW5"
+    },
+    {
+      "type": "text",
+      "name": "Partially Severed Ligament",
+      "text": {
+        "content": "<h5>Injuries • Slashing • Partially Severed Ligament</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Partially Severed Ligament</h4>\n    <p>An enemy's blade grazes you, leaving your ligament partially severed. The pain is sharp and intensifies with each movement you make, hindering your combat capabilities.</p>\n        <h5>Waltz Of The Blade</h5>\n        <img src=\"icons/skills/melee/strike-axe-blood-red.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Seek immediate magical or expert medical attention to repair the ligament before the injury worsens.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Slashing</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 6 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 50</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Restrained</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Slashing</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 30</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Partially Severed Ligament</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Waltz Of The Blade</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/melee/strike-axe-blood-red.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> An enemy's blade grazes you, leaving your ligament partially severed. The pain is sharp and intensifies with each movement you make, hindering your combat capabilities.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Seek immediate magical or expert medical attention to repair the ligament before the injury worsens.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 6</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 300</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Slashing Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Restrained</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "63QNpvq9SuC9u4qD",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!n6EA1GHz05jsme7t.63QNpvq9SuC9u4qD"
+    },
+    {
+      "type": "text",
+      "name": "Rending Rift",
+      "text": {
+        "content": "<h5>Injuries • Slashing • Rending Rift</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Rending Rift</h4>\n    <p>The rending rift carved by a slashing blow leaves behind a gaping chasm of agony, where raw flesh and exposed nerves scream in protest. Each breath a torment, as the wound throbs with a rhythm of its own.</p>\n        <h5></h5>\n        <img src=\"icons/skills/melee/strike-axe-blood-red.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Stabilizing the rending rift with sterile dressings and avoiding further trauma to the area are crucial for promoting healing. Seeking medical evaluation for deep wounds or signs of infection can prevent complications and aid in recovery.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Slashing</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 7 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 62</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: none</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Slashing</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 20</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Rending Rift</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> </p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/melee/strike-axe-blood-red.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The rending rift carved by a slashing blow leaves behind a gaping chasm of agony, where raw flesh and exposed nerves scream in protest. Each breath a torment, as the wound throbs with a rhythm of its own.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Stabilizing the rending rift with sterile dressings and avoiding further trauma to the area are crucial for promoting healing. Seeking medical evaluation for deep wounds or signs of infection can prevent complications and aid in recovery.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 7</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 375</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Slashing Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "CIU0k6pMaY6vBEQQ",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!n6EA1GHz05jsme7t.CIU0k6pMaY6vBEQQ"
+    },
+    {
+      "type": "text",
+      "name": "Sashimi Slice",
+      "text": {
+        "content": "<h5>Injuries • Slashing • Sashimi Slice</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Sashimi Slice</h4>\n    <p>A precise cut that leaves you feeling as thin and fragile as a piece of sashimi, making you more susceptible to further injuries.</p>\n        <h5>Culinary Misadventure</h5>\n        <img src=\"icons/skills/melee/strike-axe-blood-red.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Tape yourself back together with magic or healing potions.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Slashing</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 7 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 20</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: none</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Slashing</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 50</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Sashimi Slice</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Culinary Misadventure</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/melee/strike-axe-blood-red.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A precise cut that leaves you feeling as thin and fragile as a piece of sashimi, making you more susceptible to further injuries.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Tape yourself back together with magic or healing potions.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 7</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 120</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Slashing Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "3PyCPtRxsTwcbv8k",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!n6EA1GHz05jsme7t.3PyCPtRxsTwcbv8k"
+    },
+    {
+      "type": "text",
+      "name": "Severed Limb",
+      "text": {
+        "content": "<h5>Injuries • Slashing • Severed Limb</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Severed Limb</h4>\n    <p>The brutal severing of a limb leaves a gaping void where once there was strength and mobility. The stark reality of the loss sends shockwaves through the body, as pain and disbelief collide in a cruel symphony of suffering.</p>\n        <h5></h5>\n        <img src=\"icons/commodities/bones/bone-broken-grey-red.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Immediate medical intervention is critical for addressing the severed limb, including controlling bleeding, stabilizing the patient, and ensuring proper wound management. Surgical measures and rehabilitation efforts are essential for the long-term well-being and functionality of the individual.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Slashing</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Major</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 10 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: Permanent</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Prone</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Slashing</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 10</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Severed Limb</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> </p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/commodities/bones/bone-broken-grey-red.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The brutal severing of a limb leaves a gaping void where once there was strength and mobility. The stark reality of the loss sends shockwaves through the body, as pain and disbelief collide in a cruel symphony of suffering.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Immediate medical intervention is critical for addressing the severed limb, including controlling bleeding, stabilizing the patient, and ensuring proper wound management. Surgical measures and rehabilitation efforts are essential for the long-term well-being and functionality of the individual.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Major</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 10</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 0</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Slashing Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Prone</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "th9XaNFSteRjF29r",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!n6EA1GHz05jsme7t.th9XaNFSteRjF29r"
+    },
+    {
+      "type": "text",
+      "name": "Severed Strands",
+      "text": {
+        "content": "<h5>Injuries • Slashing • Severed Strands</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Severed Strands</h4>\n    <p>In the aftermath of a slashing strike, severed strands of flesh hang like tattered remnants of a once-whole canvas. The blade's keen edge cleaves through sinew and muscle, leaving a landscape of destruction in its wake.</p>\n        <h5></h5>\n        <img src=\"icons/skills/melee/strike-axe-blood-red.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Seeking immediate medical attention to address the severed strands is essential to prevent further damage and facilitate healing. Surgical intervention and meticulous wound care may be necessary to restore function and prevent complications.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Slashing</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 5 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 70</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Prone</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Slashing</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 20</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Severed Strands</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> </p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/melee/strike-axe-blood-red.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> In the aftermath of a slashing strike, severed strands of flesh hang like tattered remnants of a once-whole canvas. The blade's keen edge cleaves through sinew and muscle, leaving a landscape of destruction in its wake.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Seeking immediate medical attention to address the severed strands is essential to prevent further damage and facilitate healing. Surgical intervention and meticulous wound care may be necessary to restore function and prevent complications.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 5</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 420</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Slashing Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Prone</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "t5wIWoKjiY52vmia",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!n6EA1GHz05jsme7t.t5wIWoKjiY52vmia"
+    },
+    {
+      "type": "text",
+      "name": "Slashed Eye",
+      "text": {
+        "content": "<h5>Injuries • Slashing • Slashed Eye</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Slashed Eye</h4>\n    <p>The vicious slash across the eye sends shards of pain through the delicate orb, leaving a trail of crimson and blurred vision in its wake. The world shifts and distorts, a reminder of the fragility of sight in the face of a brutal assault. The dice have decided your fate: [[1d2]] The roll of a 1 = left and a 2 = right.</p>\n        <h5></h5>\n        <img src=\"icons/commodities/biological/eye-green-pink.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Immediate evaluation by an ophthalmologist is essential for addressing the slashed eye, including measures to control bleeding, assess vision impairment, and prevent infection. Surgical intervention and ongoing care are crucial for restoring vision and preventing long-term complications.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Slashing</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 8 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: Permanent</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Blind</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Slashing</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 20</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Slashed Eye</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> </p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/commodities/biological/eye-green-pink.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The vicious slash across the eye sends shards of pain through the delicate orb, leaving a trail of crimson and blurred vision in its wake. The world shifts and distorts, a reminder of the fragility of sight in the face of a brutal assault. The dice have decided your fate: [[1d2]] The roll of a 1 = left and a 2 = right.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Immediate evaluation by an ophthalmologist is essential for addressing the slashed eye, including measures to control bleeding, assess vision impairment, and prevent infection. Surgical intervention and ongoing care are crucial for restoring vision and preventing long-term complications.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 8</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 0</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Slashing Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Blind</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "TGVhkK8mDAHw1sAK",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!n6EA1GHz05jsme7t.TGVhkK8mDAHw1sAK"
+    },
+    {
+      "type": "text",
+      "name": "Tickle Of The Blade",
+      "text": {
+        "content": "<h5>Injuries • Slashing • Tickle Of The Blade</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Tickle Of The Blade</h4>\n    <p>You feel a light tickling sensation as if a mischievous imp is gently running a blade across your skin. The cut is shallow but surprisingly persistent, causing slight discomfort.</p>\n        <h5>Whispers In The Wind</h5>\n        <img src=\"icons/skills/melee/strike-axe-blood-red.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Bandage the wound and rest for a short while to let it heal naturally.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Slashing</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 2 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 30</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Prone</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Slashing</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 75</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Tickle Of The Blade</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Whispers In The Wind</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/melee/strike-axe-blood-red.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> You feel a light tickling sensation as if a mischievous imp is gently running a blade across your skin. The cut is shallow but surprisingly persistent, causing slight discomfort.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Bandage the wound and rest for a short while to let it heal naturally.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 180</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Slashing Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Prone</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "FqWyOO0cahGRFkt8",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!n6EA1GHz05jsme7t.FqWyOO0cahGRFkt8"
+    },
+    {
+      "type": "text",
+      "name": "Whistle Wound",
+      "text": {
+        "content": "<h5>Injuries • Slashing • Whistle Wound</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Whistle Wound</h4>\n    <p>A nasty cut that, when you breathe or speak, lets out a high-pitched whistle that is quite distracting to you and your party members.</p>\n        <h5>Sharp Tune</h5>\n        <img src=\"icons/skills/melee/strike-axe-blood-red.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Have someone else do all the talking for you.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Slashing</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 3 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 10</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: none</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Slashing</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 75</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Whistle Wound</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Sharp Tune</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/melee/strike-axe-blood-red.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A nasty cut that, when you breathe or speak, lets out a high-pitched whistle that is quite distracting to you and your party members.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Have someone else do all the talking for you.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 3</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 60</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Slashing Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "hY4ae7qQ75mBzrrG",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!n6EA1GHz05jsme7t.hY4ae7qQ75mBzrrG"
+    }
+  ],
+  "folder": null,
+  "_id": "n6EA1GHz05jsme7t",
+  "categories": [],
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1784237483935,
+    "modifiedTime": 1784237483935,
+    "lastModifiedBy": "B4d9pDwUBOtAfJFE"
+  },
+  "ownership": {
+    "default": 0,
+    "B4d9pDwUBOtAfJFE": 3
+  },
+  "sort": 0,
+  "_key": "!journal!n6EA1GHz05jsme7t"
+}

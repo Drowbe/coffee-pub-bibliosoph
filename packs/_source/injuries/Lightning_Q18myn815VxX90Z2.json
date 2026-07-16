@@ -1,0 +1,314 @@
+{
+  "name": "Lightning",
+  "pages": [
+    {
+      "type": "text",
+      "name": "Fried Fringe",
+      "text": {
+        "content": "<h5>Injuries • Lightning • Fried Fringe</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Fried Fringe</h4>\n    <p>A sudden burst of lightning has singed your hair and clothes. Your fringe now crackles with energy, making you slightly jittery. It's a shocking fashion statement!</p>\n        <h5>Crackling Shock</h5>\n        <img src=\"icons/magic/lightning/bolt-strike-forked-blue.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Trimming the fried ends may help minimize static buildup and reduce your urge to reach out and touch someone.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Lightning</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 2 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 50</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: none</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Lightning</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 20</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Fried Fringe</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Crackling Shock</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/lightning/bolt-strike-forked-blue.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A sudden burst of lightning has singed your hair and clothes. Your fringe now crackles with energy, making you slightly jittery. It's a shocking fashion statement!</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Trimming the fried ends may help minimize static buildup and reduce your urge to reach out and touch someone.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 300</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Lightning Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "ESRKIyoh3aj7DxZw",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!Q18myn815VxX90Z2.ESRKIyoh3aj7DxZw"
+    },
+    {
+      "type": "text",
+      "name": "Shocking Bad Hair Day",
+      "text": {
+        "content": "<h5>Injuries • Lightning • Shocking Bad Hair Day</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Shocking Bad Hair Day</h4>\n    <p>Your hair stands on end like you've been electrified. It's not just a fashion statement; the static energy around you is causing mild shocks to anyone who gets too close, making teamwork a bit electrifying.</p>\n        <h5>Static Overload</h5>\n        <img src=\"icons/magic/lightning/bolt-strike-forked-blue.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Ground yourself by meditating on a grassy field for an hour.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Lightning</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 6 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 20</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: none</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Lightning</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 5</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Shocking Bad Hair Day</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Static Overload</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/lightning/bolt-strike-forked-blue.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Your hair stands on end like you've been electrified. It's not just a fashion statement; the static energy around you is causing mild shocks to anyone who gets too close, making teamwork a bit electrifying.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Ground yourself by meditating on a grassy field for an hour.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 6</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 120</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Lightning Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "I78ZRsTPoaG59r7U",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!Q18myn815VxX90Z2.I78ZRsTPoaG59r7U"
+    },
+    {
+      "type": "text",
+      "name": "Shockwave Symphony",
+      "text": {
+        "content": "<h5>Injuries • Lightning • Shockwave Symphony</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Shockwave Symphony</h4>\n    <p>Your encounter with a powerful lightning strike leaves you resonating with a shockwave symphony. Vibrations ripple through you, causing sporadic involuntary movements.</p>\n        <h5>Electric Harmony</h5>\n        <img src=\"icons/magic/lightning/bolt-strike-forked-blue.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Resting in a calm environment and gentle grounding exercises can help silence the electric symphony playing in your muscles.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Lightning</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Major</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 11 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 200</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Unconscious</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Lightning</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 10</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Shockwave Symphony</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Electric Harmony</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/lightning/bolt-strike-forked-blue.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Your encounter with a powerful lightning strike leaves you resonating with a shockwave symphony. Vibrations ripple through you, causing sporadic involuntary movements.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Resting in a calm environment and gentle grounding exercises can help silence the electric symphony playing in your muscles.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Major</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 11</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 1200</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Lightning Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Unconscious</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "RHvUp42LFZVg17DS",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!Q18myn815VxX90Z2.RHvUp42LFZVg17DS"
+    },
+    {
+      "type": "text",
+      "name": "The Lightning Conductor",
+      "text": {
+        "content": "<h5>Injuries • Lightning • The Lightning Conductor</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>The Lightning Conductor</h4>\n    <p>Your body has become a lightning rod, attracting bolts from the sky and nearby magic. While it's great for parties, it's not so fun when you're the only one glowing in the dark during stealth missions.</p>\n        <h5>Living Conduit</h5>\n        <img src=\"icons/magic/lightning/bolt-strike-forked-blue.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Sit out in a storm for an hour and let it all discharge.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Lightning</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Major</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 10 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: Permanent</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Stunned</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Lightning</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 3</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> The Lightning Conductor</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Living Conduit</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/lightning/bolt-strike-forked-blue.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Your body has become a lightning rod, attracting bolts from the sky and nearby magic. While it's great for parties, it's not so fun when you're the only one glowing in the dark during stealth missions.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Sit out in a storm for an hour and let it all discharge.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Major</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 10</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 0</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Lightning Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Stunned</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "k96hX2gHX4WUCOVS",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!Q18myn815VxX90Z2.k96hX2gHX4WUCOVS"
+    },
+    {
+      "type": "text",
+      "name": "Thunderous Tingle",
+      "text": {
+        "content": "<h5>Injuries • Lightning • Thunderous Tingle</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Thunderous Tingle</h4>\n    <p>As lightning courses through your veins, you experience a thunderous tingle that leaves you feeling both exhilarated and slightly jittery. Beware of unexpected shivers!</p>\n        <h5>Rumbling Shiver</h5>\n        <img src=\"icons/magic/lightning/bolt-strike-forked-blue.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Taking shelter from any stormy weather and avoiding static-inducing fabrics can help reduce the lingering tingling sensation.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Lightning</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 7 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 150</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Paralyzed</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Lightning</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 15</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Thunderous Tingle</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Rumbling Shiver</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/lightning/bolt-strike-forked-blue.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> As lightning courses through your veins, you experience a thunderous tingle that leaves you feeling both exhilarated and slightly jittery. Beware of unexpected shivers!</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Taking shelter from any stormy weather and avoiding static-inducing fabrics can help reduce the lingering tingling sensation.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 7</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 900</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Lightning Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Paralyzed</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "dMTTzY2QsWrup36u",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!Q18myn815VxX90Z2.dMTTzY2QsWrup36u"
+    },
+    {
+      "type": "text",
+      "name": "Thunderous Tinnitus",
+      "text": {
+        "content": "<h5>Injuries • Lightning • Thunderous Tinnitus</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Thunderous Tinnitus</h4>\n    <p>During the last battle, a lightning strike has left you with the constant sound of thunder in your ears. The effect is worse during silences, making stealth a bit tricky while keeping you constantly on edge.</p>\n        <h5>Ear Ringing</h5>\n        <img src=\"icons/magic/lightning/bolt-strike-forked-blue.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Have a bard play soothing music for an evening.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Lightning</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 2 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 40</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: none</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Lightning</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 15</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Thunderous Tinnitus</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Ear Ringing</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/lightning/bolt-strike-forked-blue.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> During the last battle, a lightning strike has left you with the constant sound of thunder in your ears. The effect is worse during silences, making stealth a bit tricky while keeping you constantly on edge.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Have a bard play soothing music for an evening.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 240</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Lightning Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "9L1D5jJcojAAmG8V",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!Q18myn815VxX90Z2.9L1D5jJcojAAmG8V"
+    },
+    {
+      "type": "text",
+      "name": "Zap Zap Fingers",
+      "text": {
+        "content": "<h5>Injuries • Lightning • Zap Zap Fingers</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Zap Zap Fingers</h4>\n    <p>You touched something electrifying and now your fingers feel tingly. Whenever you try to grab something, a small spark jumps. Sometimes it helps light candles, but other times it just zaps you.</p>\n        <h5>Electric Jolt</h5>\n        <img src=\"icons/magic/lightning/bolt-strike-forked-blue.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Rest and avoid touching anything metal for a day.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Lightning</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 3 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 30</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: none</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Lightning</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 10</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Zap Zap Fingers</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Electric Jolt</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/lightning/bolt-strike-forked-blue.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> You touched something electrifying and now your fingers feel tingly. Whenever you try to grab something, a small spark jumps. Sometimes it helps light candles, but other times it just zaps you.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Rest and avoid touching anything metal for a day.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 3</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 180</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Lightning Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "ReGYPT10ovBqjRLj",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!Q18myn815VxX90Z2.ReGYPT10ovBqjRLj"
+    },
+    {
+      "type": "text",
+      "name": "Zapped Zest",
+      "text": {
+        "content": "<h5>Injuries • Lightning • Zapped Zest</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Zapped Zest</h4>\n    <p>After being zapped by lightning, you feel electrifyingly energized! But be careful, that extra zest might make you act impulsively for a while.</p>\n        <h5>Sparkling Sizzle</h5>\n        <img src=\"icons/magic/lightning/bolt-strike-forked-blue.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Resting and avoiding loud noises can help calm your overexcited nerves.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Lightning</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 3 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 100</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Stunned</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Lightning</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 25</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Zapped Zest</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Sparkling Sizzle</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/lightning/bolt-strike-forked-blue.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> After being zapped by lightning, you feel electrifyingly energized! But be careful, that extra zest might make you act impulsively for a while.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Resting and avoiding loud noises can help calm your overexcited nerves.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 3</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 600</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Lightning Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Stunned</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "vdcu09jwTpOOHG0A",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!Q18myn815VxX90Z2.vdcu09jwTpOOHG0A"
+    }
+  ],
+  "folder": null,
+  "_id": "Q18myn815VxX90Z2",
+  "categories": [],
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1784237483935,
+    "modifiedTime": 1784237483935,
+    "lastModifiedBy": "B4d9pDwUBOtAfJFE"
+  },
+  "ownership": {
+    "default": 0,
+    "B4d9pDwUBOtAfJFE": 3
+  },
+  "sort": 0,
+  "_key": "!journal!Q18myn815VxX90Z2"
+}

@@ -1,0 +1,350 @@
+{
+  "name": "Cold",
+  "pages": [
+    {
+      "type": "text",
+      "name": "Arctic Awakening",
+      "text": {
+        "content": "<h5>Injuries • Cold • Arctic Awakening</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Arctic Awakening</h4>\n    <p>A haze of frost surrounds you, your very breath crystallizing in the air. Your body becomes one with the winter landscape, as if the frost itself has claimed you as its own.</p>\n        <h5>Glacial Transformation</h5>\n        <img src=\"icons/magic/air/wind-weather-snow-gusts.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Seeking a powerful mage of warmth to draw forth the latent heat within you is your only chance to escape becoming a permanent fixture in the snow.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Cold</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Major</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 12 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: Permanent</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Frozen in Time</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Cold</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 10</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Arctic Awakening</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Glacial Transformation</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/wind-weather-snow-gusts.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A haze of frost surrounds you, your very breath crystallizing in the air. Your body becomes one with the winter landscape, as if the frost itself has claimed you as its own.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Seeking a powerful mage of warmth to draw forth the latent heat within you is your only chance to escape becoming a permanent fixture in the snow.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Major</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 12</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 0</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Cold Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Frozen in Time</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "X9QY7RXDMDy9e9YM",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!3j2hkiJdlX2gxIKw.X9QY7RXDMDy9e9YM"
+    },
+    {
+      "type": "text",
+      "name": "Frostbitten Fingertips",
+      "text": {
+        "content": "<h5>Injuries • Cold • Frostbitten Fingertips</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Frostbitten Fingertips</h4>\n    <p>Your fingertips turn a frosty hue, feeling numb and unresponsive to touch. Even the warmest flames offer only fleeting relief as the cold magic's hold tightens.</p>\n        <h5>Chilling Grasp</h5>\n        <img src=\"icons/magic/air/wind-weather-snow-gusts.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Rubbing your hands vigorously with infused frostweed oil and wearing insulated gloves will gradually restore sensation.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Cold</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 2 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 40</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Clumsy Fingers</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Cold</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 40</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Frostbitten Fingertips</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Chilling Grasp</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/wind-weather-snow-gusts.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Your fingertips turn a frosty hue, feeling numb and unresponsive to touch. Even the warmest flames offer only fleeting relief as the cold magic's hold tightens.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Rubbing your hands vigorously with infused frostweed oil and wearing insulated gloves will gradually restore sensation.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 240</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Cold Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Clumsy Fingers</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "MIyET8AlaoQBOdb9",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!3j2hkiJdlX2gxIKw.MIyET8AlaoQBOdb9"
+    },
+    {
+      "type": "text",
+      "name": "Frosty Fingers",
+      "text": {
+        "content": "<h5>Injuries • Cold • Frosty Fingers</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Frosty Fingers</h4>\n    <p>The character's fingers have become numb and frostbitten, causing them to fumble with objects and weapons. Everything they touch turns to icicles, including their sense of dexterity.</p>\n        <h5>Chilling Touch</h5>\n        <img src=\"icons/magic/air/wind-weather-snow-gusts.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Warm up by the fire or use hand warmers to regain feeling and control in the frosty fingers.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Cold</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 7 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 30</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Restrained</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Cold</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 15</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Frosty Fingers</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Chilling Touch</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/wind-weather-snow-gusts.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The character's fingers have become numb and frostbitten, causing them to fumble with objects and weapons. Everything they touch turns to icicles, including their sense of dexterity.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Warm up by the fire or use hand warmers to regain feeling and control in the frosty fingers.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 7</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 180</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Cold Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Restrained</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "ivxvEoJYzMVTs0bK",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!3j2hkiJdlX2gxIKw.ivxvEoJYzMVTs0bK"
+    },
+    {
+      "type": "text",
+      "name": "Frozen Fingers",
+      "text": {
+        "content": "<h5>Injuries • Cold • Frozen Fingers</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Frozen Fingers</h4>\n    <p>Your fingers become numb, turning a shade of blue that rivals the frost itself. Fumbling with objects becomes a comedy of errors as you struggle to maintain your grip, feeling as though you've unknowingly entered a slapstick routine.</p>\n        <h5></h5>\n        <img src=\"icons/magic/air/air-smoke-casting.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Warming up your hands with a cozy fire or a hot beverage can help thaw out your frozen digits. Avoiding further exposure to extreme cold is also advisable to prevent prolonged discomfort.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Cold</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 3 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 50</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Prone</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Cold</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 40</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Frozen Fingers</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> </p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/air-smoke-casting.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Your fingers become numb, turning a shade of blue that rivals the frost itself. Fumbling with objects becomes a comedy of errors as you struggle to maintain your grip, feeling as though you've unknowingly entered a slapstick routine.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Warming up your hands with a cozy fire or a hot beverage can help thaw out your frozen digits. Avoiding further exposure to extreme cold is also advisable to prevent prolonged discomfort.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 3</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 300</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Cold Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Prone</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "xd1rX7gSmR7uRkBs",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!3j2hkiJdlX2gxIKw.xd1rX7gSmR7uRkBs"
+    },
+    {
+      "type": "text",
+      "name": "Frozen Heartbeat",
+      "text": {
+        "content": "<h5>Injuries • Cold • Frozen Heartbeat</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Frozen Heartbeat</h4>\n    <p>Your heart beats to the slow, steady rhythm of an ancient glacier, each pulse sending a frigid shiver through your body. The winter's icy grasp threatens to freeze your very core.</p>\n        <h5>Icy Pulse</h5>\n        <img src=\"icons/magic/air/wind-weather-snow-gusts.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Drinking a steaming tonic brewed with hearthfire moss and receiving a warm embrace can help thaw the chill within.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Cold</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 7 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 100</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Chilled to the Bone</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Cold</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 20</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Frozen Heartbeat</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Icy Pulse</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/wind-weather-snow-gusts.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Your heart beats to the slow, steady rhythm of an ancient glacier, each pulse sending a frigid shiver through your body. The winter's icy grasp threatens to freeze your very core.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Drinking a steaming tonic brewed with hearthfire moss and receiving a warm embrace can help thaw the chill within.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 7</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 600</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Cold Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Chilled to the Bone</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "a9EbOPwGYVgCjtWF",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!3j2hkiJdlX2gxIKw.a9EbOPwGYVgCjtWF"
+    },
+    {
+      "type": "text",
+      "name": "Frozen Noggin",
+      "text": {
+        "content": "<h5>Injuries • Cold • Frozen Noggin</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Frozen Noggin</h4>\n    <p>The character's head has been chilled to the core, causing brain freeze and rendering them unable to concentrate. Spells may fizzle out unexpectedly and thoughts become as frozen as a winter fruit smoothie.</p>\n        <h5>Chilling Accident</h5>\n        <img src=\"icons/magic/air/wind-weather-snow-gusts.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Consume a warm beverage, like a nice cup of tea, to help melt away the cold inside the brain.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Cold</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 3 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 20</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Stunned</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Cold</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 30</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Frozen Noggin</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Chilling Accident</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/wind-weather-snow-gusts.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The character's head has been chilled to the core, causing brain freeze and rendering them unable to concentrate. Spells may fizzle out unexpectedly and thoughts become as frozen as a winter fruit smoothie.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Consume a warm beverage, like a nice cup of tea, to help melt away the cold inside the brain.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 3</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 120</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Cold Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Stunned</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "jN9lDsql5y1qQvSc",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!3j2hkiJdlX2gxIKw.jN9lDsql5y1qQvSc"
+    },
+    {
+      "type": "text",
+      "name": "Icy Heart",
+      "text": {
+        "content": "<h5>Injuries • Cold • Icy Heart</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Icy Heart</h4>\n    <p>The character's heart has been encased in ice, turning them into a cold, emotionless husk. Friendships freeze over, and love thaws out. They become as chilly as an iceberg in the ocean of feelings.</p>\n        <h5>Frozen Emotions</h5>\n        <img src=\"icons/magic/air/wind-weather-snow-gusts.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Warmth can only be found in the heartfelt words of companions or by performing acts of kindness to melt the icy barriers around the heart.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Cold</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Major</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 11 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: Permanent</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Charmed</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Cold</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 10</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Icy Heart</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Frozen Emotions</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/wind-weather-snow-gusts.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The character's heart has been encased in ice, turning them into a cold, emotionless husk. Friendships freeze over, and love thaws out. They become as chilly as an iceberg in the ocean of feelings.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Warmth can only be found in the heartfelt words of companions or by performing acts of kindness to melt the icy barriers around the heart.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Major</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 11</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 0</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Cold Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Charmed</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "TuYFy1TWtFOhHEcf",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!3j2hkiJdlX2gxIKw.TuYFy1TWtFOhHEcf"
+    },
+    {
+      "type": "text",
+      "name": "Slippery Slope Syndrome",
+      "text": {
+        "content": "<h5>Injuries • Cold • Slippery Slope Syndrome</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Slippery Slope Syndrome</h4>\n    <p>You feel a sudden chill as if a mischievous winter spirit has taken up residency in your veins. Your movements become slightly clumsy, as if you're trying to ice skate on solid ground.</p>\n        <h5>Frosty Misstep</h5>\n        <img src=\"icons/magic/air/wind-weather-snow-gusts.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Warm tea made from snowberry leaves and resting by a cozy fire will help alleviate symptoms.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Cold</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 3 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 50</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Sluggish</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Cold</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 50</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Slippery Slope Syndrome</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Frosty Misstep</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/wind-weather-snow-gusts.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> You feel a sudden chill as if a mischievous winter spirit has taken up residency in your veins. Your movements become slightly clumsy, as if you're trying to ice skate on solid ground.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Warm tea made from snowberry leaves and resting by a cozy fire will help alleviate symptoms.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 3</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 300</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Cold Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Sluggish</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "6lIa4HeQX8hZjORb",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!3j2hkiJdlX2gxIKw.6lIa4HeQX8hZjORb"
+    },
+    {
+      "type": "text",
+      "name": "Slippery Slopes",
+      "text": {
+        "content": "<h5>Injuries • Cold • Slippery Slopes</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Slippery Slopes</h4>\n    <p>The character's feet have turned into blocks of ice, making walking as precarious as wearing socks on a frozen lake. Every step is a potential slip and slide, causing embarrassment and bruised tailbones.</p>\n        <h5>Icy Misstep</h5>\n        <img src=\"icons/magic/air/wind-weather-snow-gusts.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Walk carefully on heated floors or wear warm, grippy socks to regain stability.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Cold</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 2 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 15</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Prone</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Cold</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 25</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Slippery Slopes</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Icy Misstep</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/wind-weather-snow-gusts.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The character's feet have turned into blocks of ice, making walking as precarious as wearing socks on a frozen lake. Every step is a potential slip and slide, causing embarrassment and bruised tailbones.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Walk carefully on heated floors or wear warm, grippy socks to regain stability.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 90</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Cold Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Prone</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "q87iJB9CDsXX98Mj",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!3j2hkiJdlX2gxIKw.q87iJB9CDsXX98Mj"
+    }
+  ],
+  "folder": null,
+  "_id": "3j2hkiJdlX2gxIKw",
+  "categories": [],
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1784237483935,
+    "modifiedTime": 1784237483935,
+    "lastModifiedBy": "B4d9pDwUBOtAfJFE"
+  },
+  "ownership": {
+    "default": 0,
+    "B4d9pDwUBOtAfJFE": 3
+  },
+  "sort": 0,
+  "_key": "!journal!3j2hkiJdlX2gxIKw"
+}

@@ -1,0 +1,314 @@
+{
+  "name": "Poison",
+  "pages": [
+    {
+      "type": "text",
+      "name": "Chromatic Conundrum",
+      "text": {
+        "content": "<h5>Injuries • Poison • Chromatic Conundrum</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Chromatic Conundrum</h4>\n    <p>The character's skin starts changing colors randomly, as if affected by a magical poison. Each hue change comes with a wave of weakness and dizziness.</p>\n        <h5>Colorful Chaos</h5>\n        <img src=\"icons/consumables/potions/bottle-conical-corked-labeled-skull-poison-green.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Seek the help of an alchemist to create a potion that can stabilize the effects and reverse the poison's influence.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Poison</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Major</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 12 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: Permanent</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Poisoned</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Poison</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 1</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Chromatic Conundrum</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Colorful Chaos</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/consumables/potions/bottle-conical-corked-labeled-skull-poison-green.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The character's skin starts changing colors randomly, as if affected by a magical poison. Each hue change comes with a wave of weakness and dizziness.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Seek the help of an alchemist to create a potion that can stabilize the effects and reverse the poison's influence.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Major</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 12</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 0</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Poison Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Poisoned</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "IKJe87FrQZ64qnF5",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!EKJtdLRI7iUH5pSC.IKJe87FrQZ64qnF5"
+    },
+    {
+      "type": "text",
+      "name": "Mystical Mosquito Bites",
+      "text": {
+        "content": "<h5>Injuries • Poison • Mystical Mosquito Bites</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Mystical Mosquito Bites</h4>\n    <p>The character is plagued by mystical mosquito bites that never seem to heal, leaving behind glowing welts that attract other insects.</p>\n        <h5>Tiny Troublemakers</h5>\n        <img src=\"icons/consumables/potions/bottle-conical-corked-labeled-skull-poison-green.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Use a special salve made of rare herbs and arcane ingredients to soothe the bites and prevent further infestation.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Poison</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 7 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 400</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: none</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Poison</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 5</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Mystical Mosquito Bites</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Tiny Troublemakers</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/consumables/potions/bottle-conical-corked-labeled-skull-poison-green.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The character is plagued by mystical mosquito bites that never seem to heal, leaving behind glowing welts that attract other insects.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Use a special salve made of rare herbs and arcane ingredients to soothe the bites and prevent further infestation.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 7</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 2400</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Poison Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "jhsdbarroLd6CG7M",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!EKJtdLRI7iUH5pSC.jhsdbarroLd6CG7M"
+    },
+    {
+      "type": "text",
+      "name": "Serpentine Sibilant Speaking",
+      "text": {
+        "content": "<h5>Injuries • Poison • Serpentine Sibilant Speaking</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Serpentine Sibilant Speaking</h4>\n    <p>Your words now sound like a hissing serpent, which may cause misunderstandings during negotiations</p>\n        <h5>Words Of Wisdom Worms</h5>\n        <img src=\"icons/consumables/potions/bottle-conical-corked-labeled-skull-poison-green.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Speak only in rhymes for a full moon cycle</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Poison</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Major</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 11 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 100</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Charmed</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Poison</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 20</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Serpentine Sibilant Speaking</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Words Of Wisdom Worms</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/consumables/potions/bottle-conical-corked-labeled-skull-poison-green.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Your words now sound like a hissing serpent, which may cause misunderstandings during negotiations</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Speak only in rhymes for a full moon cycle</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Major</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 11</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 600</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Poison Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Charmed</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "fwZceXyTY6bQVJib",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!EKJtdLRI7iUH5pSC.fwZceXyTY6bQVJib"
+    },
+    {
+      "type": "text",
+      "name": "Sneaky Sneeze Syndrome",
+      "text": {
+        "content": "<h5>Injuries • Poison • Sneaky Sneeze Syndrome</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Sneaky Sneeze Syndrome</h4>\n    <p>You were hit by a mischievous druid's sneeze spell. Your sneezes are now random and may cause embarrassing situations</p>\n        <h5>Cough Of Confusion</h5>\n        <img src=\"icons/consumables/potions/bottle-conical-corked-labeled-skull-poison-green.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Drink a special tea made from four rare herbs found in a hidden glade</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Poison</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 2 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 30</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Blind</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Poison</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 50</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Sneaky Sneeze Syndrome</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Cough Of Confusion</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/consumables/potions/bottle-conical-corked-labeled-skull-poison-green.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> You were hit by a mischievous druid's sneeze spell. Your sneezes are now random and may cause embarrassing situations</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Drink a special tea made from four rare herbs found in a hidden glade</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 180</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Poison Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Blind</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "j8Zg2IRuwurhwUYl",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!EKJtdLRI7iUH5pSC.j8Zg2IRuwurhwUYl"
+    },
+    {
+      "type": "text",
+      "name": "Toadstool Toenails",
+      "text": {
+        "content": "<h5>Injuries • Poison • Toadstool Toenails</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Toadstool Toenails</h4>\n    <p>The character's toenails have mysteriously transformed into tiny toadstools, causing mild discomfort and a musty smell that repels insects.</p>\n        <h5>Mushroom Mayhem</h5>\n        <img src=\"icons/consumables/potions/bottle-conical-corked-labeled-skull-poison-green.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Apply a soothing cream made of rare mushroom spores to prevent further fungal growth.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Poison</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 2 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 200</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: none</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Poison</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 5</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Toadstool Toenails</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Mushroom Mayhem</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/consumables/potions/bottle-conical-corked-labeled-skull-poison-green.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The character's toenails have mysteriously transformed into tiny toadstools, causing mild discomfort and a musty smell that repels insects.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Apply a soothing cream made of rare mushroom spores to prevent further fungal growth.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 1200</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Poison Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "wealfpTUBQJHnpGG",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!EKJtdLRI7iUH5pSC.wealfpTUBQJHnpGG"
+    },
+    {
+      "type": "text",
+      "name": "Toxic Toenail Trouble",
+      "text": {
+        "content": "<h5>Injuries • Poison • Toxic Toenail Trouble</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Toxic Toenail Trouble</h4>\n    <p>Your big toenail has taken on a life of its own and may cause uncontrollable tap-dancing at awkward times</p>\n        <h5>Foot Funk Fiasco</h5>\n        <img src=\"icons/consumables/potions/bottle-conical-corked-labeled-skull-poison-green.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Trim the nail under the light of a full moon, while singing a lullaby</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Poison</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 3 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 20</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: none</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Poison</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 40</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Toxic Toenail Trouble</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Foot Funk Fiasco</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/consumables/potions/bottle-conical-corked-labeled-skull-poison-green.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Your big toenail has taken on a life of its own and may cause uncontrollable tap-dancing at awkward times</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Trim the nail under the light of a full moon, while singing a lullaby</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 3</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 120</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Poison Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "1CvyqqgD0dKmfR3e",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!EKJtdLRI7iUH5pSC.1CvyqqgD0dKmfR3e"
+    },
+    {
+      "type": "text",
+      "name": "Venomous Hiccup Syndrom",
+      "text": {
+        "content": "<h5>Injuries • Poison • Venomous Hiccup Syndrom</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Venomous Hiccup Syndrom</h4>\n    <p>The character periodically suffers from venomous hiccups, causing small spurts of toxic gas to escape with each hiccup.</p>\n        <h5>Unusual Belching</h5>\n        <img src=\"icons/consumables/potions/bottle-conical-corked-labeled-skull-poison-green.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Consume a concoction of herbal extracts to neutralize the venom and control the hiccups.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Poison</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 4 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 250</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Poisoned</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Poison</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 30</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Venomous Hiccup Syndrom</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Unusual Belching</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/consumables/potions/bottle-conical-corked-labeled-skull-poison-green.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The character periodically suffers from venomous hiccups, causing small spurts of toxic gas to escape with each hiccup.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Consume a concoction of herbal extracts to neutralize the venom and control the hiccups.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 4</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 1500</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Poison Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Poisoned</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "H8kYm8smE0zL1deL",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!EKJtdLRI7iUH5pSC.H8kYm8smE0zL1deL"
+    },
+    {
+      "type": "text",
+      "name": "Venomous Vision Vertigo",
+      "text": {
+        "content": "<h5>Injuries • Poison • Venomous Vision Vertigo</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Venomous Vision Vertigo</h4>\n    <p>Your eyes now perceive everything as if it's made of creepy crawlies. Try not to scream</p>\n        <h5>Gaze Of The Grotesque</h5>\n        <img src=\"icons/consumables/potions/bottle-conical-corked-labeled-skull-poison-green.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Wear spectacles crafted from the web of a giant spider</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Poison</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 7 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 50</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Poisoned</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Poison</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 30</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Venomous Vision Vertigo</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Gaze Of The Grotesque</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/consumables/potions/bottle-conical-corked-labeled-skull-poison-green.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Your eyes now perceive everything as if it's made of creepy crawlies. Try not to scream</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Wear spectacles crafted from the web of a giant spider</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 7</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 300</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Poison Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Poisoned</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "Lie2tOcN0kcEtBAs",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!EKJtdLRI7iUH5pSC.Lie2tOcN0kcEtBAs"
+    }
+  ],
+  "folder": null,
+  "_id": "EKJtdLRI7iUH5pSC",
+  "categories": [],
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1784237483935,
+    "modifiedTime": 1784237483935,
+    "lastModifiedBy": "B4d9pDwUBOtAfJFE"
+  },
+  "ownership": {
+    "default": 0,
+    "B4d9pDwUBOtAfJFE": 3
+  },
+  "sort": 0,
+  "_key": "!journal!EKJtdLRI7iUH5pSC"
+}

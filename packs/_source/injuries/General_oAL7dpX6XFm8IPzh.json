@@ -1,0 +1,98 @@
+{
+  "name": "General",
+  "pages": [
+    {
+      "type": "text",
+      "name": "Absurd Attraction Aura",
+      "text": {
+        "content": "<h5>Injuries • General • Absurd Attraction Aura</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Absurd Attraction Aura</h4>\n    <p>Objects seemingly have a mind of their own in your vicinity, gravitating towards you in a bizarre display of magnetism. It's as if you've become a walking anomaly, attracting items with a peculiar sense of humor.</p>\n        <h5></h5>\n        <img src=\"icons/skills/trades/construction-mason-stonecutter-sculpture.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Creating a designated space for items and organizing your surroundings can help reduce the chaos caused by the attraction aura. Being mindful of your proximity to objects can prevent inadvertent collisions.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: General</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 4 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 60</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Grappled</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> General</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 40</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Absurd Attraction Aura</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> </p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/trades/construction-mason-stonecutter-sculpture.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Objects seemingly have a mind of their own in your vicinity, gravitating towards you in a bizarre display of magnetism. It's as if you've become a walking anomaly, attracting items with a peculiar sense of humor.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Creating a designated space for items and organizing your surroundings can help reduce the chaos caused by the attraction aura. Being mindful of your proximity to objects can prevent inadvertent collisions.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 4</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 360</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the General Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Grappled</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "ZhVGHoaAC5LyaVhC",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!oAL7dpX6XFm8IPzh.ZhVGHoaAC5LyaVhC"
+    },
+    {
+      "type": "text",
+      "name": "Dizzying Dance Dilemma",
+      "text": {
+        "content": "<h5>Injuries • General • Dizzying Dance Dilemma</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Dizzying Dance Dilemma</h4>\n    <p>The world spins around you in a dizzying display of disorientation, turning your balance into a precarious waltz with unseen partners. It's a dance routine you never signed up for, with each step feeling like a misstep waiting to happen.</p>\n        <h5></h5>\n        <img src=\"icons/skills/movement/feet-bladed-boots-fire.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Finding a stable surface to rest on and focusing on a fixed point can help alleviate the vertigo induced by the dizzying dance dilemma. Slow, deliberate movements are key to navigating this impromptu dance floor without stumbling.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: General</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 6 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 80</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Charmed</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> General</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 20</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Dizzying Dance Dilemma</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> </p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/movement/feet-bladed-boots-fire.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The world spins around you in a dizzying display of disorientation, turning your balance into a precarious waltz with unseen partners. It's a dance routine you never signed up for, with each step feeling like a misstep waiting to happen.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Finding a stable surface to rest on and focusing on a fixed point can help alleviate the vertigo induced by the dizzying dance dilemma. Slow, deliberate movements are key to navigating this impromptu dance floor without stumbling.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 6</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 480</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the General Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Charmed</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "9LR5qPF9QtFAS3sm",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!oAL7dpX6XFm8IPzh.9LR5qPF9QtFAS3sm"
+    }
+  ],
+  "folder": null,
+  "_id": "oAL7dpX6XFm8IPzh",
+  "categories": [],
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1784237483935,
+    "modifiedTime": 1784237483935,
+    "lastModifiedBy": "B4d9pDwUBOtAfJFE"
+  },
+  "ownership": {
+    "default": 0,
+    "B4d9pDwUBOtAfJFE": 3
+  },
+  "sort": 0,
+  "_key": "!journal!oAL7dpX6XFm8IPzh"
+}

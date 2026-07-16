@@ -1,0 +1,494 @@
+{
+  "name": "Piercing",
+  "pages": [
+    {
+      "type": "text",
+      "name": "Beastly Puncture Wound",
+      "text": {
+        "content": "<h5>Injuries • Piercing • Beastly Puncture Wound</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Beastly Puncture Wound</h4>\n    <p>A mischievous goblin has replaced your veins with vines. Bleeding out? More like... watering. Sunlight exposure may lead to sprouting flowers from your ears.</p>\n        <h5>Fanged Marking</h5>\n        <img src=\"icons/skills/melee/strike-polearm-light-orange.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Bathe in moonlit water under the guidance of a wise treant. Apply a paste made from crushed sunstones to your wounds.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Piercing</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 2 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 2400</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Poisoned</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Piercing</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 60</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Beastly Puncture Wound</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Fanged Marking</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/melee/strike-polearm-light-orange.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A mischievous goblin has replaced your veins with vines. Bleeding out? More like... watering. Sunlight exposure may lead to sprouting flowers from your ears.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Bathe in moonlit water under the guidance of a wise treant. Apply a paste made from crushed sunstones to your wounds.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 14400</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Piercing Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Poisoned</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "Hn1Sa1jXAqwfJuum",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!0371wN7YXHFI7PAR.Hn1Sa1jXAqwfJuum"
+    },
+    {
+      "type": "text",
+      "name": "Dragon's Pointed Reminder",
+      "text": {
+        "content": "<h5>Injuries • Piercing • Dragon's Pointed Reminder</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Dragon's Pointed Reminder</h4>\n    <p>A hyperactive dragon decided to leave a memento of your encounter by embedding a heated dragon's nail in your shoulder. Your new talents include boiling water by just touching it.</p>\n        <h5>Fiery Calligraphy</h5>\n        <img src=\"icons/skills/melee/strike-polearm-light-orange.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Cool your wounds by swimming in a freezing glacier. Bring a smith to craft custom ice armor on the affected area.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Piercing</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Major</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 10 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: Permanent</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Exhaustion</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Piercing</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 30</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Dragon's Pointed Reminder</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Fiery Calligraphy</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/melee/strike-polearm-light-orange.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A hyperactive dragon decided to leave a memento of your encounter by embedding a heated dragon's nail in your shoulder. Your new talents include boiling water by just touching it.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Cool your wounds by swimming in a freezing glacier. Bring a smith to craft custom ice armor on the affected area.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Major</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 10</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 0</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Piercing Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Exhaustion</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "krHE96ClYPPVWLj1",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!0371wN7YXHFI7PAR.krHE96ClYPPVWLj1"
+    },
+    {
+      "type": "text",
+      "name": "Impaled Appendage",
+      "text": {
+        "content": "<h5>Injuries • Piercing • Impaled Appendage</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Impaled Appendage</h4>\n    <p>The brutal impalement of an appendage sends waves of shock through the body, as the offending object pierces through muscle and bone with relentless force. Each movement a torment, as the impaled limb hangs in a precarious balance.</p>\n        <h5></h5>\n        <img src=\"icons/skills/melee/blade-tip-chipped-blood-red.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>The brutal impalement of an appendage sends waves of shock through the body, as the offending object pierces through muscle and bone with relentless force. Each movement a torment, as the impaled limb hangs in a precarious balance.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Piercing</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 8 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 80</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: none</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Piercing</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 20</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Impaled Appendage</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> </p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/melee/blade-tip-chipped-blood-red.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The brutal impalement of an appendage sends waves of shock through the body, as the offending object pierces through muscle and bone with relentless force. Each movement a torment, as the impaled limb hangs in a precarious balance.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> The brutal impalement of an appendage sends waves of shock through the body, as the offending object pierces through muscle and bone with relentless force. Each movement a torment, as the impaled limb hangs in a precarious balance.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 8</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 480</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Piercing Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "QE6M2MxvV0tJKScS",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!0371wN7YXHFI7PAR.QE6M2MxvV0tJKScS"
+    },
+    {
+      "type": "text",
+      "name": "Impaled Misery",
+      "text": {
+        "content": "<h5>Injuries • Piercing • Impaled Misery</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Impaled Misery</h4>\n    <p>A severe injury has left the character impaled on a sharp object. The pain is excruciating, and movement is severely restricted as blood loss weakens the body.</p>\n        <h5>Wrenching Agony</h5>\n        <img src=\"icons/skills/melee/strike-polearm-light-orange.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Immediate medical attention needed to remove the impaling object and address the wound.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Piercing</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Major</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 10 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: Permanent</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Restrained</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Piercing</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 20</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Impaled Misery</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Wrenching Agony</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/melee/strike-polearm-light-orange.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A severe injury has left the character impaled on a sharp object. The pain is excruciating, and movement is severely restricted as blood loss weakens the body.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Immediate medical attention needed to remove the impaling object and address the wound.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Major</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 10</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 0</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Piercing Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Restrained</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "XWpRvkw7CseSFG99",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!0371wN7YXHFI7PAR.XWpRvkw7CseSFG99"
+    },
+    {
+      "type": "text",
+      "name": "Penetrating Trauma",
+      "text": {
+        "content": "<h5>Injuries • Piercing • Penetrating Trauma</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Penetrating Trauma</h4>\n    <p>The penetrating trauma of a deep stab pierces through layers of tissue, leaving a trail of destruction and pain in its wake. Each touch a torment, as the wound bleeds profusely and demands urgent attention.</p>\n        <h5></h5>\n        <img src=\"icons/skills/melee/blade-tip-chipped-blood-red.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Immediate wound assessment and appropriate hemostatic measures are vital for managing the penetrating trauma. Surgical intervention and ongoing medical care are essential for addressing internal damage and preventing complications.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Piercing</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 7 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 71</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: none</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Piercing</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 20</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Penetrating Trauma</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> </p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/melee/blade-tip-chipped-blood-red.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The penetrating trauma of a deep stab pierces through layers of tissue, leaving a trail of destruction and pain in its wake. Each touch a torment, as the wound bleeds profusely and demands urgent attention.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Immediate wound assessment and appropriate hemostatic measures are vital for managing the penetrating trauma. Surgical intervention and ongoing medical care are essential for addressing internal damage and preventing complications.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 7</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 429</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Piercing Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "fynZPfohZBcQXAMq",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!0371wN7YXHFI7PAR.fynZPfohZBcQXAMq"
+    },
+    {
+      "type": "text",
+      "name": "Piercing Wound",
+      "text": {
+        "content": "<h5>Injuries • Piercing • Piercing Wound</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Piercing Wound</h4>\n    <p>The sharp puncture of the piercing wound penetrates with pinpoint accuracy, leaving a pathway of destruction in its wake. Each stab, a jolt of searing pain, as the wound bleeds freely and demands attention.</p>\n        <h5></h5>\n        <img src=\"icons/skills/melee/blade-tip-chipped-blood-red.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Immediate wound care, including cleaning, disinfection, and appropriate dressing, is critical for preventing infection and promoting healing. Monitoring for signs of inflammation and seeking medical evaluation for deep punctures are essential for optimal recovery.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Piercing</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 4 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 40</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: none</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Piercing</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 40</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Piercing Wound</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> </p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/melee/blade-tip-chipped-blood-red.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The sharp puncture of the piercing wound penetrates with pinpoint accuracy, leaving a pathway of destruction in its wake. Each stab, a jolt of searing pain, as the wound bleeds freely and demands attention.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Immediate wound care, including cleaning, disinfection, and appropriate dressing, is critical for preventing infection and promoting healing. Monitoring for signs of inflammation and seeking medical evaluation for deep punctures are essential for optimal recovery.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 4</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 240</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Piercing Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "XhxgcnD6AxOobd1k",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!0371wN7YXHFI7PAR.XhxgcnD6AxOobd1k"
+    },
+    {
+      "type": "text",
+      "name": "Pinprick Of Pain",
+      "text": {
+        "content": "<h5>Injuries • Piercing • Pinprick Of Pain</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Pinprick Of Pain</h4>\n    <p>The character feels a sudden sharp pain as if pricked by a hundred needles. The discomfort lingers, causing mild irritation and some difficulty in movement.</p>\n        <h5>Apothecary Tincture</h5>\n        <img src=\"icons/skills/melee/strike-polearm-light-orange.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Clean and dress the wound with a healing salve or poultice.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Piercing</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 3 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 600</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Poisoned</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Piercing</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 50</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Pinprick Of Pain</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Apothecary Tincture</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/melee/strike-polearm-light-orange.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The character feels a sudden sharp pain as if pricked by a hundred needles. The discomfort lingers, causing mild irritation and some difficulty in movement.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Clean and dress the wound with a healing salve or poultice.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 3</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 3600</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Piercing Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Poisoned</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "hN41uYch5Tgwc0Jl",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!0371wN7YXHFI7PAR.hN41uYch5Tgwc0Jl"
+    },
+    {
+      "type": "text",
+      "name": "Rogue Needle Prick",
+      "text": {
+        "content": "<h5>Injuries • Piercing • Rogue Needle Prick</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Rogue Needle Prick</h4>\n    <p>A mischievous ghost has replaced your blood with cherry syrup. Attacks now pierce as if you're a gelatinous cube. Your party may notice a mysterious sweet scent following you around.</p>\n        <h5>Stranger Stitch</h5>\n        <img src=\"icons/skills/melee/strike-polearm-light-orange.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Sip a cup of warming tea made from freshly squeezed kelp. Can be found at any apothecary.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Piercing</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 3 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 1200</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Deafened</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Piercing</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 50</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Rogue Needle Prick</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Stranger Stitch</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/melee/strike-polearm-light-orange.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A mischievous ghost has replaced your blood with cherry syrup. Attacks now pierce as if you're a gelatinous cube. Your party may notice a mysterious sweet scent following you around.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Sip a cup of warming tea made from freshly squeezed kelp. Can be found at any apothecary.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 3</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 7200</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Piercing Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Deafened</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "yL5jfFAwNkG4nYZc",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!0371wN7YXHFI7PAR.yL5jfFAwNkG4nYZc"
+    },
+    {
+      "type": "text",
+      "name": "Spear In The Side",
+      "text": {
+        "content": "<h5>Injuries • Piercing • Spear In The Side</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Spear In The Side</h4>\n    <p>A sharp pain jolts through the character's side as if struck by a spear. The wound throbs persistently, making each movement a reminder of the injury.</p>\n        <h5>Painful Reminder</h5>\n        <img src=\"icons/skills/melee/strike-polearm-light-orange.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Stabilize the wound and rest to prevent aggravating the injury.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Piercing</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 6 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 1200</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Prone</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Piercing</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 30</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Spear In The Side</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Painful Reminder</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/melee/strike-polearm-light-orange.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A sharp pain jolts through the character's side as if struck by a spear. The wound throbs persistently, making each movement a reminder of the injury.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Stabilize the wound and rest to prevent aggravating the injury.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 6</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 7200</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Piercing Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Prone</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "7j9qPO5FwD1lGQ6P",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!0371wN7YXHFI7PAR.7j9qPO5FwD1lGQ6P"
+    },
+    {
+      "type": "text",
+      "name": "Stabbed Flesh",
+      "text": {
+        "content": "<h5>Injuries • Piercing • Stabbed Flesh</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Stabbed Flesh</h4>\n    <p>The forceful stab into the flesh creates a cavity of agony, where tissue is rent asunder and nerves scream in protest. Each moment a symphony of pain, as the wound throbs with every heartbeat.</p>\n        <h5></h5>\n        <img src=\"icons/skills/melee/blade-tip-chipped-blood-red.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Stabilizing the stabbed flesh with pressure and controlling bleeding are crucial steps in managing the injury. Seeking medical assessment for deeper penetration or potential organ involvement is essential for proper treatment and preventing complications.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Piercing</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 6 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 60</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: none</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Piercing</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 20</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Stabbed Flesh</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> </p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/melee/blade-tip-chipped-blood-red.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The forceful stab into the flesh creates a cavity of agony, where tissue is rent asunder and nerves scream in protest. Each moment a symphony of pain, as the wound throbs with every heartbeat.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Stabilizing the stabbed flesh with pressure and controlling bleeding are crucial steps in managing the injury. Seeking medical assessment for deeper penetration or potential organ involvement is essential for proper treatment and preventing complications.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 6</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 360</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Piercing Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "iuR2j6rSly6xVXEo",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!0371wN7YXHFI7PAR.iuR2j6rSly6xVXEo"
+    },
+    {
+      "type": "text",
+      "name": "Stabbing Pain",
+      "text": {
+        "content": "<h5>Injuries • Piercing • Stabbing Pain</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Stabbing Pain</h4>\n    <p>The stabbing pain of a puncture wound radiates with relentless intensity, a constant reminder of the invasive nature of the injury. Each breath a struggle, as the wound pulsates with a rhythm of its own.</p>\n        <h5></h5>\n        <img src=\"icons/skills/melee/blade-tip-chipped-blood-red.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Prompt wound care, including cleaning, disinfection, and dressing, is crucial for preventing infection and promoting healing. Monitoring for signs of complications and seeking medical evaluation for persistent pain are essential for effective management.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Piercing</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 4 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 50</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Exhaustion</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Piercing</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 40</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Stabbing Pain</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> </p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/melee/blade-tip-chipped-blood-red.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The stabbing pain of a puncture wound radiates with relentless intensity, a constant reminder of the invasive nature of the injury. Each breath a struggle, as the wound pulsates with a rhythm of its own.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Prompt wound care, including cleaning, disinfection, and dressing, is crucial for preventing infection and promoting healing. Monitoring for signs of complications and seeking medical evaluation for persistent pain are essential for effective management.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 4</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 300</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Piercing Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Exhaustion</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "8I1M3kwGyErt0843",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!0371wN7YXHFI7PAR.8I1M3kwGyErt0843"
+    },
+    {
+      "type": "text",
+      "name": "Stuck Like A Thistle",
+      "text": {
+        "content": "<h5>Injuries • Piercing • Stuck Like A Thistle</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Stuck Like A Thistle</h4>\n    <p>A small thorn-like protrusion remains embedded in the character's skin, causing discomfort whenever pressure is applied. Movement feels slightly hindered due to the irritation.</p>\n        <h5>Herbal Alchemy</h5>\n        <img src=\"icons/skills/melee/strike-polearm-light-orange.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Gently extract the thorn and apply a soothing ointment.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Piercing</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 2 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 300</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: none</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Piercing</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 50</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Stuck Like A Thistle</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Herbal Alchemy</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/melee/strike-polearm-light-orange.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A small thorn-like protrusion remains embedded in the character's skin, causing discomfort whenever pressure is applied. Movement feels slightly hindered due to the irritation.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Gently extract the thorn and apply a soothing ointment.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 1800</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Piercing Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "OAcqpc9vyeg4nLYM",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!0371wN7YXHFI7PAR.OAcqpc9vyeg4nLYM"
+    },
+    {
+      "type": "text",
+      "name": "Tortle's Unlucky Jab",
+      "text": {
+        "content": "<h5>Injuries • Piercing • Tortle's Unlucky Jab</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Tortle's Unlucky Jab</h4>\n    <p>A clumsy tortle mistook your arm for a tree trunk. You now have the ability to stretch your neck like a giraffe - handy for high shelves, not so much in battle. Eating salads whole is the new style.</p>\n        <h5>Shell Shock</h5>\n        <img src=\"icons/skills/melee/strike-polearm-light-orange.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Embrace the gift and introduce yourself to the nearest zoo or circus. Carrots and leafy greens are now your go-to snack.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Piercing</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 7 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 4800</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Prone</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Piercing</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 40</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Tortle's Unlucky Jab</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Shell Shock</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/melee/strike-polearm-light-orange.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A clumsy tortle mistook your arm for a tree trunk. You now have the ability to stretch your neck like a giraffe - handy for high shelves, not so much in battle. Eating salads whole is the new style.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Embrace the gift and introduce yourself to the nearest zoo or circus. Carrots and leafy greens are now your go-to snack.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 7</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 28800</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Piercing Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Prone</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "dskCnhRjoQ7aAu8b",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!0371wN7YXHFI7PAR.dskCnhRjoQ7aAu8b"
+    }
+  ],
+  "folder": null,
+  "_id": "0371wN7YXHFI7PAR",
+  "categories": [],
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1784237483935,
+    "modifiedTime": 1784237483935,
+    "lastModifiedBy": "B4d9pDwUBOtAfJFE"
+  },
+  "ownership": {
+    "default": 0,
+    "B4d9pDwUBOtAfJFE": 3
+  },
+  "sort": 0,
+  "_key": "!journal!0371wN7YXHFI7PAR"
+}

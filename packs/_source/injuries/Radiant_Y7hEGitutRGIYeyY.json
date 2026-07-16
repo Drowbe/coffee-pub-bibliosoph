@@ -1,0 +1,350 @@
+{
+  "name": "Radiant",
+  "pages": [
+    {
+      "type": "text",
+      "name": "Blinding Euphoria",
+      "text": {
+        "content": "<h5>Injuries • Radiant • Blinding Euphoria</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Blinding Euphoria</h4>\n    <p>The radiant magic coursing through you overwhelms your senses, causing a brief moment of euphoria. However, the intensity of the light leaves your vision temporarily dazzled.</p>\n        <h5>Sacred Light</h5>\n        <img src=\"icons/magic/sonic/explosion-shock-wave-teal.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Rest in a dark environment and avoid exposure to bright light.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Radiant</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 2 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 10</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Blind</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Radiant</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 50</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Blinding Euphoria</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Sacred Light</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/sonic/explosion-shock-wave-teal.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The radiant magic coursing through you overwhelms your senses, causing a brief moment of euphoria. However, the intensity of the light leaves your vision temporarily dazzled.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Rest in a dark environment and avoid exposure to bright light.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 60</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Radiant Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Blind</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "5xb8hKQAEf6hK0m4",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!Y7hEGitutRGIYeyY.5xb8hKQAEf6hK0m4"
+    },
+    {
+      "type": "text",
+      "name": "Celestial Bruising",
+      "text": {
+        "content": "<h5>Injuries • Radiant • Celestial Bruising</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Celestial Bruising</h4>\n    <p>The radiant force strikes you, leaving behind vibrant, otherworldly bruises that pulse with soft light. Despite their beauty, they ache with a divine intensity.</p>\n        <h5>Holy Wound</h5>\n        <img src=\"icons/magic/sonic/explosion-shock-wave-teal.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Rest and apply a soothing balm to ease the discomfort.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Radiant</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 7 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 20</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: none</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Radiant</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 30</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Celestial Bruising</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Holy Wound</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/sonic/explosion-shock-wave-teal.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The radiant force strikes you, leaving behind vibrant, otherworldly bruises that pulse with soft light. Despite their beauty, they ache with a divine intensity.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Rest and apply a soothing balm to ease the discomfort.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 7</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 120</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Radiant Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "ygCcL19Iyu9oRANm",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!Y7hEGitutRGIYeyY.ygCcL19Iyu9oRANm"
+    },
+    {
+      "type": "text",
+      "name": "Celestial Shimmer",
+      "text": {
+        "content": "<h5>Injuries • Radiant • Celestial Shimmer</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Celestial Shimmer</h4>\n    <p>The affected area emits a soft, radiant glow that flickers like distant stars on a clear night. It causes a mild feeling of euphoria but leaves the skin slightly sensitive to magical auras.</p>\n        <h5>Aurora Glide</h5>\n        <img src=\"icons/magic/sonic/explosion-shock-wave-teal.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Rest and exposure to natural light help to dissipate the celestial aura.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Radiant</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 3 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 250</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: none</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Radiant</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 55</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Celestial Shimmer</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Aurora Glide</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/sonic/explosion-shock-wave-teal.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The affected area emits a soft, radiant glow that flickers like distant stars on a clear night. It causes a mild feeling of euphoria but leaves the skin slightly sensitive to magical auras.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Rest and exposure to natural light help to dissipate the celestial aura.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 3</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 1500</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Radiant Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "a2SwA4N3Xu60c7Sh",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!Y7hEGitutRGIYeyY.a2SwA4N3Xu60c7Sh"
+    },
+    {
+      "type": "text",
+      "name": "Celestial Sunburn",
+      "text": {
+        "content": "<h5>Injuries • Radiant • Celestial Sunburn</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Celestial Sunburn</h4>\n    <p>After being exposed to a burst of radiant energy, your skin starts to shimmer with faint divine light, causing discomfort and sensitivity to sunlight. You feel like a walking beacon of celestial energy.</p>\n        <h5>Divine Glow</h5>\n        <img src=\"icons/magic/sonic/explosion-shock-wave-teal.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Applying a soothing salve made of aloe vera leaves and holy water can help alleviate the discomfort and reduce the glowing effect.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Radiant</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 3 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 50</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Prone</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Radiant</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 50</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Celestial Sunburn</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Divine Glow</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/sonic/explosion-shock-wave-teal.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> After being exposed to a burst of radiant energy, your skin starts to shimmer with faint divine light, causing discomfort and sensitivity to sunlight. You feel like a walking beacon of celestial energy.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Applying a soothing salve made of aloe vera leaves and holy water can help alleviate the discomfort and reduce the glowing effect.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 3</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 300</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Radiant Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Prone</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "lWh78ZkhJHF9680K",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!Y7hEGitutRGIYeyY.lWh78ZkhJHF9680K"
+    },
+    {
+      "type": "text",
+      "name": "Cherubic Sunburn",
+      "text": {
+        "content": "<h5>Injuries • Radiant • Cherubic Sunburn</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Cherubic Sunburn</h4>\n    <p>A burst of radiant energy envelops you, leaving your skin tingling and red as if you spent too much time basking under the celestial sun.</p>\n        <h5>Heavenly Burn</h5>\n        <img src=\"icons/magic/sonic/explosion-shock-wave-teal.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Apply aloe vera or a cooling salve to soothe the affected skin.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Radiant</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 3 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 10</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: none</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Radiant</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 50</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Cherubic Sunburn</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Heavenly Burn</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/sonic/explosion-shock-wave-teal.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A burst of radiant energy envelops you, leaving your skin tingling and red as if you spent too much time basking under the celestial sun.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Apply aloe vera or a cooling salve to soothe the affected skin.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 3</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 60</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Radiant Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "g6xIDYE2UlhODyD1",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!Y7hEGitutRGIYeyY.g6xIDYE2UlhODyD1"
+    },
+    {
+      "type": "text",
+      "name": "Heavenly Glare",
+      "text": {
+        "content": "<h5>Injuries • Radiant • Heavenly Glare</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Heavenly Glare</h4>\n    <p>A bright beam of radiant energy sears the affected area. The skin takes on a subtle, luminescent quality, giving off a soft light that attracts small creatures. It feels as if a small sun is trapped under the skin, warming from within.</p>\n        <h5>Divine Sparkle</h5>\n        <img src=\"icons/magic/sonic/explosion-shock-wave-teal.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Rest, holy water baths, and prayers to radiant deities can help soothe the celestial burn.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Radiant</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 6 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 400</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Charmed</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Radiant</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 25</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Heavenly Glare</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Divine Sparkle</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/sonic/explosion-shock-wave-teal.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A bright beam of radiant energy sears the affected area. The skin takes on a subtle, luminescent quality, giving off a soft light that attracts small creatures. It feels as if a small sun is trapped under the skin, warming from within.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Rest, holy water baths, and prayers to radiant deities can help soothe the celestial burn.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 6</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 2400</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Radiant Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Charmed</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "4nOnodeKE4zndkiT",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!Y7hEGitutRGIYeyY.4nOnodeKE4zndkiT"
+    },
+    {
+      "type": "text",
+      "name": "Lightburn",
+      "text": {
+        "content": "<h5>Injuries • Radiant • Lightburn</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Lightburn</h4>\n    <p>The afflicted area glows with a warm light, causing discomfort. It feels like being sunburnt by a celestial being. The radiance gradually fades but leaves the skin tender to the touch.</p>\n        <h5>Dawn Strike</h5>\n        <img src=\"icons/magic/sonic/explosion-shock-wave-teal.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Cooling salves and magical healing can alleviate the discomfort.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Radiant</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 2 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 300</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Deafened</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Radiant</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 60</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Lightburn</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Dawn Strike</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/sonic/explosion-shock-wave-teal.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The afflicted area glows with a warm light, causing discomfort. It feels like being sunburnt by a celestial being. The radiance gradually fades but leaves the skin tender to the touch.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Cooling salves and magical healing can alleviate the discomfort.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 1800</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Radiant Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Deafened</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "pkxw05Vw1JiziWmt",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!Y7hEGitutRGIYeyY.pkxw05Vw1JiziWmt"
+    },
+    {
+      "type": "text",
+      "name": "Luminous Wrath",
+      "text": {
+        "content": "<h5>Injuries • Radiant • Luminous Wrath</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Luminous Wrath</h4>\n    <p>A burst of blinding radiant light engulfs the area, leaving behind an otherworldly mark. The skin becomes translucent, revealing an inner glow that can be seen faintly pulsing. It feels like having a miniature star trapped within, radiating heat and light.</p>\n        <h5>Hallowed Burst</h5>\n        <img src=\"icons/magic/sonic/explosion-shock-wave-teal.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Potent healing magic or divine intervention may be required to diminish the radiant essence infused within the body.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Radiant</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Major</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 11 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 600</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Exhaustion</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Radiant</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 15</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Luminous Wrath</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Hallowed Burst</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/sonic/explosion-shock-wave-teal.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A burst of blinding radiant light engulfs the area, leaving behind an otherworldly mark. The skin becomes translucent, revealing an inner glow that can be seen faintly pulsing. It feels like having a miniature star trapped within, radiating heat and light.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Potent healing magic or divine intervention may be required to diminish the radiant essence infused within the body.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Major</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 11</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 3600</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Radiant Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Exhaustion</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "vSOUlVbL2hlh44eS",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!Y7hEGitutRGIYeyY.vSOUlVbL2hlh44eS"
+    },
+    {
+      "type": "text",
+      "name": "Radiant Overload",
+      "text": {
+        "content": "<h5>Injuries • Radiant • Radiant Overload</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Radiant Overload</h4>\n    <p>A surge of radiant power overwhelms you, causing your skin to glow brightly and emit a soft light. The excess energy burns within, threatening to consume you if not controlled.</p>\n        <h5>Luminous Catastrophe</h5>\n        <img src=\"icons/magic/sonic/explosion-shock-wave-teal.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Seek out a skilled healer to help regulate the radiant energy within you.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Radiant</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Major</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 11 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 50</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Poisoned</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Radiant</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 20</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Radiant Overload</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Luminous Catastrophe</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/sonic/explosion-shock-wave-teal.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A surge of radiant power overwhelms you, causing your skin to glow brightly and emit a soft light. The excess energy burns within, threatening to consume you if not controlled.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Seek out a skilled healer to help regulate the radiant energy within you.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Major</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 11</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 300</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Radiant Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Poisoned</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "TpE646WAap50FFsw",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!Y7hEGitutRGIYeyY.TpE646WAap50FFsw"
+    }
+  ],
+  "folder": null,
+  "_id": "Y7hEGitutRGIYeyY",
+  "categories": [],
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1784237483935,
+    "modifiedTime": 1784237483935,
+    "lastModifiedBy": "B4d9pDwUBOtAfJFE"
+  },
+  "ownership": {
+    "default": 0,
+    "B4d9pDwUBOtAfJFE": 3
+  },
+  "sort": 0,
+  "_key": "!journal!Y7hEGitutRGIYeyY"
+}

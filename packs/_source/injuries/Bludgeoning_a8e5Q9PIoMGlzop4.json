@@ -1,0 +1,530 @@
+{
+  "name": "Bludgeoning",
+  "pages": [
+    {
+      "type": "text",
+      "name": "Battered And Bruised Ballet",
+      "text": {
+        "content": "<h5>Injuries • Bludgeoning • Battered And Bruised Ballet</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Battered And Bruised Ballet</h4>\n    <p>Amidst the chaos of battle, your movements resemble a battered and bruised ballet, choreographed by the unseen hands of your adversaries. Each step becomes a delicate balance between grace and agony, as you dance to the tune of bludgeoning blows.</p>\n        <h5></h5>\n        <img src=\"icons/magic/earth/strike-fist-stone.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Engaging in gentle physical therapy and maintaining a balanced diet can assist in recovery from the battered and bruised ballet. Rest and gradual reintroduction to physical activity are recommended to prevent setbacks.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Bludgeoning</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 4 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 50</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: none</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Bludgeoning</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 40</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Battered And Bruised Ballet</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> </p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/earth/strike-fist-stone.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Amidst the chaos of battle, your movements resemble a battered and bruised ballet, choreographed by the unseen hands of your adversaries. Each step becomes a delicate balance between grace and agony, as you dance to the tune of bludgeoning blows.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Engaging in gentle physical therapy and maintaining a balanced diet can assist in recovery from the battered and bruised ballet. Rest and gradual reintroduction to physical activity are recommended to prevent setbacks.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 4</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 300</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Bludgeoning Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "D9usq7jxsaJTEQlq",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!a8e5Q9PIoMGlzop4.D9usq7jxsaJTEQlq"
+    },
+    {
+      "type": "text",
+      "name": "Bone Rattle",
+      "text": {
+        "content": "<h5>Injuries • Bludgeoning • Bone Rattle</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Bone Rattle</h4>\n    <p>Your entire skeletal structure rattles with each movement, causing discomfort and the occasional eerie sound effect.</p>\n        <h5>Shook Skeleton</h5>\n        <img src=\"icons/skills/wounds/bone-broken-marrow-red.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Consult a skilled cleric or wizard to realign your bones and provide some magical stability.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Bludgeoning</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Major</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 10 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: Permanent</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Restrained</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Bludgeoning</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Bone Rattle</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Shook Skeleton</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/wounds/bone-broken-marrow-red.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Your entire skeletal structure rattles with each movement, causing discomfort and the occasional eerie sound effect.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Consult a skilled cleric or wizard to realign your bones and provide some magical stability.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Major</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 10</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 0</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Bludgeoning Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Restrained</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "ZyPviSee9wOfhUcX",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!a8e5Q9PIoMGlzop4.ZyPviSee9wOfhUcX"
+    },
+    {
+      "type": "text",
+      "name": "Bruised Ego",
+      "text": {
+        "content": "<h5>Injuries • Bludgeoning • Bruised Ego</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Bruised Ego</h4>\n    <p>Your confidence takes a hit along with your body. Each attempt to impress or intimidate others is met with an uncomfortable reminder of your recent defeat.</p>\n        <h5>Painful Pride</h5>\n        <img src=\"icons/skills/wounds/bone-broken-marrow-red.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>A boost to morale from companions or a swift victory in combat may help restore your shaken confidence.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Bludgeoning</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 7 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 20</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Frightened</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Bludgeoning</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 50</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Bruised Ego</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Painful Pride</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/wounds/bone-broken-marrow-red.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Your confidence takes a hit along with your body. Each attempt to impress or intimidate others is met with an uncomfortable reminder of your recent defeat.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> A boost to morale from companions or a swift victory in combat may help restore your shaken confidence.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 7</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 120</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Bludgeoning Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Frightened</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "gFLTn7r1ud1wo0fl",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!a8e5Q9PIoMGlzop4.gFLTn7r1ud1wo0fl"
+    },
+    {
+      "type": "text",
+      "name": "Clobbered Conundrum",
+      "text": {
+        "content": "<h5>Injuries • Bludgeoning • Clobbered Conundrum</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Clobbered Conundrum</h4>\n    <p>A relentless barrage of blunt force assaults your senses, turning each impact into a cacophony of concussive chaos. It's like being caught in a tempest of blows, struggling to find solid ground amidst the whirlwind of strikes.</p>\n        <h5></h5>\n        <img src=\"icons/skills/ranged/projectile-spiral-gray.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Seeking immediate medical attention and rest are crucial to address the aftershocks of the clobbered conundrum. Monitoring for signs of concussion and taking precautions to prevent further head trauma are paramount.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Bludgeoning</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 6 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 70</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Stunned</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Bludgeoning</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 20</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Clobbered Conundrum</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> </p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/ranged/projectile-spiral-gray.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A relentless barrage of blunt force assaults your senses, turning each impact into a cacophony of concussive chaos. It's like being caught in a tempest of blows, struggling to find solid ground amidst the whirlwind of strikes.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Seeking immediate medical attention and rest are crucial to address the aftershocks of the clobbered conundrum. Monitoring for signs of concussion and taking precautions to prevent further head trauma are paramount.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 6</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 420</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Bludgeoning Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Stunned</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "KwE8PLvxwCoRv0zp",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!a8e5Q9PIoMGlzop4.KwE8PLvxwCoRv0zp"
+    },
+    {
+      "type": "text",
+      "name": "Cranial Cacophony",
+      "text": {
+        "content": "<h5>Injuries • Bludgeoning • Cranial Cacophony</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Cranial Cacophony</h4>\n    <p>Every thought feels like a cacophony of confusion in your head. Concentration on spells or complex tasks becomes an exhausting endeavor.</p>\n        <h5>Bumbling Brains</h5>\n        <img src=\"icons/skills/wounds/bone-broken-marrow-red.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Complete silence and a mental breather can help calm the chaos in your mind.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Bludgeoning</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Major</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 11 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: Permanent</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Confused</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Bludgeoning</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 10</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Cranial Cacophony</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Bumbling Brains</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/wounds/bone-broken-marrow-red.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Every thought feels like a cacophony of confusion in your head. Concentration on spells or complex tasks becomes an exhausting endeavor.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Complete silence and a mental breather can help calm the chaos in your mind.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Major</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 11</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 0</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Bludgeoning Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Confused</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "ITYtxzoHPOgJUVHF",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!a8e5Q9PIoMGlzop4.ITYtxzoHPOgJUVHF"
+    },
+    {
+      "type": "text",
+      "name": "Dented Armor",
+      "text": {
+        "content": "<h5>Injuries • Bludgeoning • Dented Armor</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Dented Armor</h4>\n    <p>Your armor now sports a massive dent, reducing its protective properties but granting you a bit of extra character.</p>\n        <h5>Warped Metal</h5>\n        <img src=\"icons/skills/wounds/bone-broken-marrow-red.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Visit a skilled blacksmith to repair the armor while enjoying the tale of how you acquired the dent.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Bludgeoning</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 7 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 100</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: none</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Bludgeoning</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 8</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Dented Armor</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Warped Metal</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/wounds/bone-broken-marrow-red.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Your armor now sports a massive dent, reducing its protective properties but granting you a bit of extra character.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Visit a skilled blacksmith to repair the armor while enjoying the tale of how you acquired the dent.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 7</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 600</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Bludgeoning Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "Knn9I8CJ98M5xjeC",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!a8e5Q9PIoMGlzop4.Knn9I8CJ98M5xjeC"
+    },
+    {
+      "type": "text",
+      "name": "Pulpy Palm",
+      "text": {
+        "content": "<h5>Injuries • Bludgeoning • Pulpy Palm</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Pulpy Palm</h4>\n    <p>One of your hands is mangled, making it painful and difficult to hold or wield objects effectively.</p>\n        <h5>Squished Hand</h5>\n        <img src=\"icons/skills/wounds/bone-broken-marrow-red.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Soak the hand in healing herbs and rest, avoiding putting weight or pressure on it.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Bludgeoning</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 4 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 75</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Restrained</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Bludgeoning</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 10</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Pulpy Palm</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Squished Hand</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/wounds/bone-broken-marrow-red.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> One of your hands is mangled, making it painful and difficult to hold or wield objects effectively.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Soak the hand in healing herbs and rest, avoiding putting weight or pressure on it.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 4</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 450</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Bludgeoning Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Restrained</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "1pLZGcjmnWlk98PY",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!a8e5Q9PIoMGlzop4.1pLZGcjmnWlk98PY"
+    },
+    {
+      "type": "text",
+      "name": "Pummeling Painscape",
+      "text": {
+        "content": "<h5>Injuries • Bludgeoning • Pummeling Painscape</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Pummeling Painscape</h4>\n    <p>The relentless pummeling transforms your body into a landscape of pain, where every contour is etched with the memory of each blow. Navigating this unforgiving painscape becomes a test of endurance, as you seek respite from the ceaseless assault.</p>\n        <h5></h5>\n        <img src=\"icons/magic/death/skull-fire-white-yellow.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Utilizing pain management techniques and seeking medical evaluation for internal injuries are crucial in navigating the pummeling painscape. Rest and gentle stretching can aid in easing muscle soreness and tension.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Bludgeoning</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 5 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 60</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Stunned</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Bludgeoning</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 20</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Pummeling Painscape</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> </p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/death/skull-fire-white-yellow.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The relentless pummeling transforms your body into a landscape of pain, where every contour is etched with the memory of each blow. Navigating this unforgiving painscape becomes a test of endurance, as you seek respite from the ceaseless assault.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Utilizing pain management techniques and seeking medical evaluation for internal injuries are crucial in navigating the pummeling painscape. Rest and gentle stretching can aid in easing muscle soreness and tension.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 5</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 360</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Bludgeoning Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Stunned</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "PMd52aMWRMyA5CMs",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!a8e5Q9PIoMGlzop4.PMd52aMWRMyA5CMs"
+    },
+    {
+      "type": "text",
+      "name": "Skin Canvas",
+      "text": {
+        "content": "<h5>Injuries • Bludgeoning • Skin Canvas</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Skin Canvas</h4>\n    <p>Each strike leaves a vivid mark on your body, painting a picture of your bruised and battered state. It's as if you've become a canvas for the artistic expressions of those wielding blunt weapons, showcasing a palette of purples and blues.</p>\n        <h5></h5>\n        <img src=\"icons/skills/melee/maneuver-daggers-paired-orange.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Applying cold compresses and gentle massages to the affected areas can help reduce the pain and swelling of your bruises. Rest and avoiding further impact can aid in the healing process.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Bludgeoning</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 4 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 50</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: none</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Bludgeoning</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 40</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Skin Canvas</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> </p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/melee/maneuver-daggers-paired-orange.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Each strike leaves a vivid mark on your body, painting a picture of your bruised and battered state. It's as if you've become a canvas for the artistic expressions of those wielding blunt weapons, showcasing a palette of purples and blues.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Applying cold compresses and gentle massages to the affected areas can help reduce the pain and swelling of your bruises. Rest and avoiding further impact can aid in the healing process.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 4</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 300</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Bludgeoning Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "U0yXuaYgEOLGOERH",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!a8e5Q9PIoMGlzop4.U0yXuaYgEOLGOERH"
+    },
+    {
+      "type": "text",
+      "name": "Squishy Ears",
+      "text": {
+        "content": "<h5>Injuries • Bludgeoning • Squishy Ears</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Squishy Ears</h4>\n    <p>After a particularly heavy slam to the head, your ears feel squishy, affecting your balance and ability to hear clearly.</p>\n        <h5>Ear Smoosh</h5>\n        <img src=\"icons/skills/wounds/bone-broken-marrow-red.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Gently massage the ears with healing salve and rest in a quiet place.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Bludgeoning</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 3 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 100</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Deafened</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Bludgeoning</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 15</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Squishy Ears</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Ear Smoosh</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/wounds/bone-broken-marrow-red.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> After a particularly heavy slam to the head, your ears feel squishy, affecting your balance and ability to hear clearly.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Gently massage the ears with healing salve and rest in a quiet place.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 3</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 600</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Bludgeoning Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Deafened</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "Q9dB6YAov0sdVemX",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!a8e5Q9PIoMGlzop4.Q9dB6YAov0sdVemX"
+    },
+    {
+      "type": "text",
+      "name": "The Leaning Warrior",
+      "text": {
+        "content": "<h5>Injuries • Bludgeoning • The Leaning Warrior</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>The Leaning Warrior</h4>\n    <p>Your body feels off-balance, causing you to lean to one side awkwardly. It's a real challenge to stand straight.</p>\n        <h5>Tilted Stance</h5>\n        <img src=\"icons/skills/wounds/bone-broken-marrow-red.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Practice standing still on level ground and focus on correcting your posture.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Bludgeoning</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 2 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 50</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Prone</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Bludgeoning</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 12</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> The Leaning Warrior</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Tilted Stance</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/wounds/bone-broken-marrow-red.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Your body feels off-balance, causing you to lean to one side awkwardly. It's a real challenge to stand straight.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Practice standing still on level ground and focus on correcting your posture.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 300</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Bludgeoning Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Prone</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "2VOJKzyFiV0r1MDn",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!a8e5Q9PIoMGlzop4.2VOJKzyFiV0r1MDn"
+    },
+    {
+      "type": "text",
+      "name": "The Lopsided Lifter",
+      "text": {
+        "content": "<h5>Injuries • Bludgeoning • The Lopsided Lifter</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>The Lopsided Lifter</h4>\n    <p>One of your legs feels shorter than the other, causing you to walk with a humorous sway.</p>\n        <h5>Slanted Hold</h5>\n        <img src=\"icons/skills/wounds/bone-broken-marrow-red.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Perform leg stretches and exercises to help realign your posture and gait.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Bludgeoning</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 6 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 75</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Prone</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Bludgeoning</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 5</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> The Lopsided Lifter</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Slanted Hold</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/wounds/bone-broken-marrow-red.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> One of your legs feels shorter than the other, causing you to walk with a humorous sway.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Perform leg stretches and exercises to help realign your posture and gait.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 6</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 450</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Bludgeoning Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Prone</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "tRqDA7llf9Jg9jbO",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!a8e5Q9PIoMGlzop4.tRqDA7llf9Jg9jbO"
+    },
+    {
+      "type": "text",
+      "name": "Thump And Tumble",
+      "text": {
+        "content": "<h5>Injuries • Bludgeoning • Thump And Tumble</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Thump And Tumble</h4>\n    <p>Every strike sends you reeling, causing a cascade of tumbles and falls in a slapstick symphony of misfortune. It's as if gravity has a personal vendetta against you, conspiring to turn each thump into an inevitable tumble.</p>\n        <h5></h5>\n        <img src=\"icons/commodities/biological/organ-brain-pink-purple.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Focusing on balance exercises and stability training can help mitigate the effects of thump and tumble. Resting and avoiding activities that exacerbate dizziness or loss of equilibrium are advised during recovery.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Bludgeoning</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 5 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 20</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Prone</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Bludgeoning</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 20</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Thump And Tumble</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> </p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/commodities/biological/organ-brain-pink-purple.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Every strike sends you reeling, causing a cascade of tumbles and falls in a slapstick symphony of misfortune. It's as if gravity has a personal vendetta against you, conspiring to turn each thump into an inevitable tumble.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Focusing on balance exercises and stability training can help mitigate the effects of thump and tumble. Resting and avoiding activities that exacerbate dizziness or loss of equilibrium are advised during recovery.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 5</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 120</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Bludgeoning Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Prone</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "PDcvl0ntcshbEZSp",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!a8e5Q9PIoMGlzop4.PDcvl0ntcshbEZSp"
+    },
+    {
+      "type": "text",
+      "name": "Whacky Whiplash",
+      "text": {
+        "content": "<h5>Injuries • Bludgeoning • Whacky Whiplash</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Whacky Whiplash</h4>\n    <p>You suddenly find yourself unable to walk straight. Every step feels like a stumble and a trip waiting to happen, much to the amusement of your party members.</p>\n        <h5>Bumbling Bumps</h5>\n        <img src=\"icons/skills/wounds/bone-broken-marrow-red.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Resting and avoiding sudden movements can help alleviate the clumsiness.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Bludgeoning</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 3 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 10</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: none</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Bludgeoning</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 25</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Whacky Whiplash</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Bumbling Bumps</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/wounds/bone-broken-marrow-red.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> You suddenly find yourself unable to walk straight. Every step feels like a stumble and a trip waiting to happen, much to the amusement of your party members.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Resting and avoiding sudden movements can help alleviate the clumsiness.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 3</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 60</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Bludgeoning Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "3wCUst0BE9vRyHWN",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!a8e5Q9PIoMGlzop4.3wCUst0BE9vRyHWN"
+    }
+  ],
+  "folder": null,
+  "_id": "a8e5Q9PIoMGlzop4",
+  "categories": [],
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1784237483935,
+    "modifiedTime": 1784237483935,
+    "lastModifiedBy": "B4d9pDwUBOtAfJFE"
+  },
+  "ownership": {
+    "default": 0,
+    "B4d9pDwUBOtAfJFE": 3
+  },
+  "sort": 0,
+  "_key": "!journal!a8e5Q9PIoMGlzop4"
+}

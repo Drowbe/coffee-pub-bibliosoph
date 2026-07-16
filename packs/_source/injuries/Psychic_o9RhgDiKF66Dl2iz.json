@@ -1,0 +1,386 @@
+{
+  "name": "Psychic",
+  "pages": [
+    {
+      "type": "text",
+      "name": "Brain Fizzle",
+      "text": {
+        "content": "<h5>Injuries • Psychic • Brain Fizzle</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Brain Fizzle</h4>\n    <p>You feel a strange sensation in your head, as if your brain is fizzling like a poorly made potion. Thoughts become a bit hazy, and concentrating on tasks seems more challenging</p>\n        <h5>Mind Muddle</h5>\n        <img src=\"icons/magic/control/hypnosis-mesmerism-eye.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Meditation and mental rest may help alleviate the effects.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Psychic</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 3 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 30</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Confused</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Psychic</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 50</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Brain Fizzle</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Mind Muddle</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/control/hypnosis-mesmerism-eye.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> You feel a strange sensation in your head, as if your brain is fizzling like a poorly made potion. Thoughts become a bit hazy, and concentrating on tasks seems more challenging</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Meditation and mental rest may help alleviate the effects.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 3</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 180</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Psychic Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Confused</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "F6uRP7MMfGTYXtQf",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!o9RhgDiKF66Dl2iz.F6uRP7MMfGTYXtQf"
+    },
+    {
+      "type": "text",
+      "name": "Cerebral Backfire",
+      "text": {
+        "content": "<h5>Injuries • Psychic • Cerebral Backfire</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Cerebral Backfire</h4>\n    <p>A backlash of psychic energy causes the victim's thoughts to ricochet, creating momentary lapses in memory and cognitive function.</p>\n        <h5>Mental Feedback</h5>\n        <img src=\"icons/magic/control/hypnosis-mesmerism-eye.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Meditation and mental exercises are required to restore clarity of mind.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Psychic</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 7 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 40</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Disoriented</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Psychic</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 30</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Cerebral Backfire</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Mental Feedback</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/control/hypnosis-mesmerism-eye.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A backlash of psychic energy causes the victim's thoughts to ricochet, creating momentary lapses in memory and cognitive function.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Meditation and mental exercises are required to restore clarity of mind.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 7</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 240</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Psychic Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Disoriented</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "BnTffbwqQPked0nP",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!o9RhgDiKF66Dl2iz.BnTffbwqQPked0nP"
+    },
+    {
+      "type": "text",
+      "name": "Cerebral Overload",
+      "text": {
+        "content": "<h5>Injuries • Psychic • Cerebral Overload</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Cerebral Overload</h4>\n    <p>Your mind feels like it's caught in a storm of chaotic thoughts, each vying for dominance. The mental strain is excruciating, making it hard to focus on anything but the overwhelming buzz in your head.</p>\n        <h5>Mind Meltdown</h5>\n        <img src=\"icons/magic/control/hypnosis-mesmerism-eye.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Seek help from skilled healers or those attuned to psychic energies to stabilize your mind from the overload.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Psychic</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Major</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 10 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: Permanent</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Confused</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Psychic</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 50</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Cerebral Overload</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Mind Meltdown</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/control/hypnosis-mesmerism-eye.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Your mind feels like it's caught in a storm of chaotic thoughts, each vying for dominance. The mental strain is excruciating, making it hard to focus on anything but the overwhelming buzz in your head.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Seek help from skilled healers or those attuned to psychic energies to stabilize your mind from the overload.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Major</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 10</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 0</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Psychic Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Confused</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "FSQYvuUcSTUAjDnQ",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!o9RhgDiKF66Dl2iz.FSQYvuUcSTUAjDnQ"
+    },
+    {
+      "type": "text",
+      "name": "Cogitation Cramp",
+      "text": {
+        "content": "<h5>Injuries • Psychic • Cogitation Cramp</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Cogitation Cramp</h4>\n    <p>A sudden surge of psychic energy causes sharp pain in the victim's head, making it hard to concentrate and cast spells.</p>\n        <h5>Psionic Overload</h5>\n        <img src=\"icons/magic/control/hypnosis-mesmerism-eye.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Drinking a concoction of herbal remedies can help alleviate the cramping.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Psychic</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 2 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 20</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: none</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Psychic</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 70</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Cogitation Cramp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Psionic Overload</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/control/hypnosis-mesmerism-eye.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A sudden surge of psychic energy causes sharp pain in the victim's head, making it hard to concentrate and cast spells.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Drinking a concoction of herbal remedies can help alleviate the cramping.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 120</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Psychic Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "WjXlw23SuSQCuiwe",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!o9RhgDiKF66Dl2iz.WjXlw23SuSQCuiwe"
+    },
+    {
+      "type": "text",
+      "name": "Mindbender's Migraine",
+      "text": {
+        "content": "<h5>Injuries • Psychic • Mindbender's Migraine</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Mindbender's Migraine</h4>\n    <p>After a psychic attack, your mind feels like it's been tied in mental knots. Thoughts seem to echo loudly, causing sharp, sudden headaches.</p>\n        <h5>Psionic Whispers</h5>\n        <img src=\"icons/magic/control/hypnosis-mesmerism-eye.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Seek out a powerful psychic healer or rest in a quiet, calming environment.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Psychic</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 3 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 20</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Confused</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Psychic</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 20</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Mindbender's Migraine</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Psionic Whispers</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/control/hypnosis-mesmerism-eye.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> After a psychic attack, your mind feels like it's been tied in mental knots. Thoughts seem to echo loudly, causing sharp, sudden headaches.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Seek out a powerful psychic healer or rest in a quiet, calming environment.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 3</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 120</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Psychic Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Confused</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "0CCWexJ8HcD209SL",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!o9RhgDiKF66Dl2iz.0CCWexJ8HcD209SL"
+    },
+    {
+      "type": "text",
+      "name": "Mindquake Madness",
+      "text": {
+        "content": "<h5>Injuries • Psychic • Mindquake Madness</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Mindquake Madness</h4>\n    <p>After a sudden burst of psychic energy, the victim's mind feels like shaken rubble, causing disorientation and difficulty focusing.</p>\n        <h5>Psychic Jolt</h5>\n        <img src=\"icons/magic/control/hypnosis-mesmerism-eye.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Rest and meditation can help alleviate the symptoms over time.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Psychic</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 3 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 30</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Confused</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Psychic</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 50</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Mindquake Madness</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Psychic Jolt</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/control/hypnosis-mesmerism-eye.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> After a sudden burst of psychic energy, the victim's mind feels like shaken rubble, causing disorientation and difficulty focusing.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Rest and meditation can help alleviate the symptoms over time.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 3</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 180</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Psychic Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Confused</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "U5MYCCEaByEv8s5d",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!o9RhgDiKF66Dl2iz.U5MYCCEaByEv8s5d"
+    },
+    {
+      "type": "text",
+      "name": "Psionic Echoes",
+      "text": {
+        "content": "<h5>Injuries • Psychic • Psionic Echoes</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Psionic Echoes</h4>\n    <p>Psychic waves have left a lingering effect, making your own thoughts feel distant, as if being heard slightly delayed.</p>\n        <h5>Mental Strain</h5>\n        <img src=\"icons/magic/control/hypnosis-mesmerism-eye.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Meditate and focus on aligning your mind. Distractions may make the echoes worse.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Psychic</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 2 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 15</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: none</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Psychic</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 20</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Psionic Echoes</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Mental Strain</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/control/hypnosis-mesmerism-eye.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Psychic waves have left a lingering effect, making your own thoughts feel distant, as if being heard slightly delayed.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Meditate and focus on aligning your mind. Distractions may make the echoes worse.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 90</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Psychic Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "OvSMhqqpH9Mlfa2f",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!o9RhgDiKF66Dl2iz.OvSMhqqpH9Mlfa2f"
+    },
+    {
+      "type": "text",
+      "name": "Psionic Feedback",
+      "text": {
+        "content": "<h5>Injuries • Psychic • Psionic Feedback</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Psionic Feedback</h4>\n    <p>A surge of mental energy overwhelms your senses, causing sharp pain behind your eyes and confusion in your thoughts. It's like a magic missile fired directly into your mind.</p>\n        <h5>Mindquake</h5>\n        <img src=\"icons/magic/control/hypnosis-mesmerism-eye.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Rest and mental relaxation are key to recovering from this powerful mental backlash.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Psychic</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 7 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 40</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Disoriented</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Psychic</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 50</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Psionic Feedback</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Mindquake</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/control/hypnosis-mesmerism-eye.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A surge of mental energy overwhelms your senses, causing sharp pain behind your eyes and confusion in your thoughts. It's like a magic missile fired directly into your mind.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Rest and mental relaxation are key to recovering from this powerful mental backlash.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 7</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 240</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Psychic Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Disoriented</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "JUolDSdEb0R5LuGq",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!o9RhgDiKF66Dl2iz.JUolDSdEb0R5LuGq"
+    },
+    {
+      "type": "text",
+      "name": "Psionic Meltdown",
+      "text": {
+        "content": "<h5>Injuries • Psychic • Psionic Meltdown</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Psionic Meltdown</h4>\n    <p>The victim experiences a catastrophic surge of psychic power, overwhelming their senses and causing intense mental anguish.</p>\n        <h5>Mind Eruption</h5>\n        <img src=\"icons/magic/control/hypnosis-mesmerism-eye.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Only a skilled psychic healer can mend the shattered psyche of the victim.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Psychic</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Major</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 10 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: Permanent</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Confused</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Psychic</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 15</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Psionic Meltdown</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Mind Eruption</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/control/hypnosis-mesmerism-eye.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The victim experiences a catastrophic surge of psychic power, overwhelming their senses and causing intense mental anguish.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Only a skilled psychic healer can mend the shattered psyche of the victim.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Major</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 10</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 0</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Psychic Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Confused</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "pLe8HqcluBBafaa6",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!o9RhgDiKF66Dl2iz.pLe8HqcluBBafaa6"
+    },
+    {
+      "type": "text",
+      "name": "Spiritual Static",
+      "text": {
+        "content": "<h5>Injuries • Psychic • Spiritual Static</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Spiritual Static</h4>\n    <p>Your mind feels scrambled, like picking up a station between radio frequencies. It's as if your own thoughts are being overshadowed by a mysterious background noise.</p>\n        <h5>Etheric Interference</h5>\n        <img src=\"icons/magic/control/hypnosis-mesmerism-eye.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Engage in calming activities and avoid mental strain until the effects wear off.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Psychic</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 2 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 20</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: none</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Psychic</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 50</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Spiritual Static</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Etheric Interference</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/control/hypnosis-mesmerism-eye.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Your mind feels scrambled, like picking up a station between radio frequencies. It's as if your own thoughts are being overshadowed by a mysterious background noise.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Engage in calming activities and avoid mental strain until the effects wear off.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 120</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Psychic Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "VptykVMwpDiolorv",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!o9RhgDiKF66Dl2iz.VptykVMwpDiolorv"
+    }
+  ],
+  "folder": null,
+  "_id": "o9RhgDiKF66Dl2iz",
+  "categories": [],
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1784237483935,
+    "modifiedTime": 1784237483935,
+    "lastModifiedBy": "B4d9pDwUBOtAfJFE"
+  },
+  "ownership": {
+    "default": 0,
+    "B4d9pDwUBOtAfJFE": 3
+  },
+  "sort": 0,
+  "_key": "!journal!o9RhgDiKF66Dl2iz"
+}

@@ -1,0 +1,386 @@
+{
+  "name": "Thunder",
+  "pages": [
+    {
+      "type": "text",
+      "name": "Ear-ringer",
+      "text": {
+        "content": "<h5>Injuries • Thunder • Ear-ringer</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Ear-ringer</h4>\n    <p>After a particularly loud thunderous boom, your ears start ringing incessantly. You find it hard to focus as the sound drowns out everything around you, making communication a challenge.</p>\n        <h5>Thunder Blast</h5>\n        <img src=\"icons/magic/air/air-wave-gust-blue.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Resting in a quiet area for a few hours can alleviate the ringing. Alternatively, a caster could attempt to dispel the temporary deafness.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Thunder</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 2 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 50</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Deafened</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Thunder</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 50</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Ear-ringer</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Thunder Blast</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/air-wave-gust-blue.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> After a particularly loud thunderous boom, your ears start ringing incessantly. You find it hard to focus as the sound drowns out everything around you, making communication a challenge.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Resting in a quiet area for a few hours can alleviate the ringing. Alternatively, a caster could attempt to dispel the temporary deafness.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 300</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Thunder Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Deafened</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "JzJLHXaTKAcGjIm5",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!BmkfEyb2NrQwwrMu.JzJLHXaTKAcGjIm5"
+    },
+    {
+      "type": "text",
+      "name": "Ear-ringing Shockwave",
+      "text": {
+        "content": "<h5>Injuries • Thunder • Ear-ringing Shockwave</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Ear-ringing Shockwave</h4>\n    <p>During a fierce thunderous clash, you found yourself too close to a deafening blast of sound. The intense pressure rattled your eardrums, leaving your hearing muddled and distant.</p>\n        <h5>Sound Blast Echo</h5>\n        <img src=\"icons/magic/air/air-wave-gust-blue.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>To soothe your ears, you must rest in a quiet environment and avoid exposure to loud noises.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Thunder</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 6 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 100</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Deafened</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Thunder</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 20</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Ear-ringing Shockwave</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Sound Blast Echo</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/air-wave-gust-blue.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> During a fierce thunderous clash, you found yourself too close to a deafening blast of sound. The intense pressure rattled your eardrums, leaving your hearing muddled and distant.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> To soothe your ears, you must rest in a quiet environment and avoid exposure to loud noises.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 6</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 600</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Thunder Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Deafened</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "iMAhXvoU33GElrnW",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!BmkfEyb2NrQwwrMu.iMAhXvoU33GElrnW"
+    },
+    {
+      "type": "text",
+      "name": "Ear-shattering Boom",
+      "text": {
+        "content": "<h5>Injuries • Thunder • Ear-shattering Boom</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Ear-shattering Boom</h4>\n    <p>During a powerful thunderous strike, your ears are bombarded with a resonating boom that seems to linger. You can now hear everything as if you're underwater, with distant echoes distorting sounds around you. The louder the noise, the more painful the reverberation.</p>\n        <h5>Tinnitus Echo</h5>\n        <img src=\"icons/magic/air/air-wave-gust-blue.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Visit a skilled healer who can help recalibrate your inner ear balance, or endure the ringing until it fades naturally.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Thunder</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 7 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 50</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Deafened</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Thunder</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 10</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Ear-shattering Boom</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Tinnitus Echo</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/air-wave-gust-blue.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> During a powerful thunderous strike, your ears are bombarded with a resonating boom that seems to linger. You can now hear everything as if you're underwater, with distant echoes distorting sounds around you. The louder the noise, the more painful the reverberation.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Visit a skilled healer who can help recalibrate your inner ear balance, or endure the ringing until it fades naturally.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 7</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 300</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Thunder Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Deafened</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "1q3towcbwuhKfuRi",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!BmkfEyb2NrQwwrMu.1q3towcbwuhKfuRi"
+    },
+    {
+      "type": "text",
+      "name": "Eardrum Rupture",
+      "text": {
+        "content": "<h5>Injuries • Thunder • Eardrum Rupture</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Eardrum Rupture</h4>\n    <p>After being caught in a thunderous clap, your eardrums shatter, leaving you with muffled hearing and a tendency to yell everything you say. The world feels oddly silent; even the loudest noises dim in comparison to the constant ringing in your ears.</p>\n        <h5>Sonic Boom Echo</h5>\n        <img src=\"icons/magic/air/air-wave-gust-blue.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Seek out a skilled bard or healer to cast a mending spell on your ears. Avoid sudden loud noises to prevent further damage.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Thunder</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 6 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 50</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Deafened</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Thunder</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 25</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Eardrum Rupture</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Sonic Boom Echo</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/air-wave-gust-blue.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> After being caught in a thunderous clap, your eardrums shatter, leaving you with muffled hearing and a tendency to yell everything you say. The world feels oddly silent; even the loudest noises dim in comparison to the constant ringing in your ears.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Seek out a skilled bard or healer to cast a mending spell on your ears. Avoid sudden loud noises to prevent further damage.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 6</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 300</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Thunder Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Deafened</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "mixEGpr99cxzXH1A",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!BmkfEyb2NrQwwrMu.mixEGpr99cxzXH1A"
+    },
+    {
+      "type": "text",
+      "name": "Electric Shockwave",
+      "text": {
+        "content": "<h5>Injuries • Thunder • Electric Shockwave</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Electric Shockwave</h4>\n    <p>Hit by a powerful burst of electricity, your muscles twitch uncontrollably and your nerves feel on edge.</p>\n        <h5>Zapped</h5>\n        <img src=\"icons/magic/air/air-wave-gust-blue.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Rest and avoid contact with water to prevent further electric surges.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Thunder</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Major</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 10 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 600</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Twitching</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Thunder</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 75</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Electric Shockwave</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Zapped</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/air-wave-gust-blue.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Hit by a powerful burst of electricity, your muscles twitch uncontrollably and your nerves feel on edge.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Rest and avoid contact with water to prevent further electric surges.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Major</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 10</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 3600</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Thunder Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Twitching</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "KS9R9bp2cD1QmUvr",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!BmkfEyb2NrQwwrMu.KS9R9bp2cD1QmUvr"
+    },
+    {
+      "type": "text",
+      "name": "Lightning Tickles",
+      "text": {
+        "content": "<h5>Injuries • Thunder • Lightning Tickles</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Lightning Tickles</h4>\n    <p>A bolt of lightning grazes your skin, leaving a tingling sensation and making it hard to hold onto things.</p>\n        <h5>Electric Sensation</h5>\n        <img src=\"icons/magic/air/air-wave-gust-blue.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Massage the affected area to reduce the tingling sensation.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Thunder</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 2 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 300</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: none</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Thunder</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 75</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Lightning Tickles</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Electric Sensation</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/air-wave-gust-blue.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A bolt of lightning grazes your skin, leaving a tingling sensation and making it hard to hold onto things.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Massage the affected area to reduce the tingling sensation.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 1800</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Thunder Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "E7RDXIBVzbWZhUQj",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!BmkfEyb2NrQwwrMu.E7RDXIBVzbWZhUQj"
+    },
+    {
+      "type": "text",
+      "name": "Roaring Thunderclap",
+      "text": {
+        "content": "<h5>Injuries • Thunder • Roaring Thunderclap</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Roaring Thunderclap</h4>\n    <p>Caught in the epicenter of a deafening thunderclap, your very essence quivers in response to the overwhelming force. Your vision blurs, and even the slightest sound feels like a hammer blow.</p>\n        <h5>Cacophonous Boom</h5>\n        <img src=\"icons/magic/air/air-wave-gust-blue.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Only the most skilled of healers can mend the internal damage caused by the thunderclap. Resting in complete silence may slowly restore your senses.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Thunder</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Major</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 11 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: Permanent</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Deafened, Blind</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Thunder</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 10</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Roaring Thunderclap</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Cacophonous Boom</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/air-wave-gust-blue.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Caught in the epicenter of a deafening thunderclap, your very essence quivers in response to the overwhelming force. Your vision blurs, and even the slightest sound feels like a hammer blow.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Only the most skilled of healers can mend the internal damage caused by the thunderclap. Resting in complete silence may slowly restore your senses.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Major</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 11</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 0</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Thunder Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Deafened, Blind</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "mu5T23JZ8KqKBGOp",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!BmkfEyb2NrQwwrMu.mu5T23JZ8KqKBGOp"
+    },
+    {
+      "type": "text",
+      "name": "Static Shock",
+      "text": {
+        "content": "<h5>Injuries • Thunder • Static Shock</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Static Shock</h4>\n    <p>A sudden jolt of electric energy courses through your body as if you've been struck by a lightning rod. Your muscles twitch uncontrollably, making precise movements a challenge.</p>\n        <h5>Electric Discharge</h5>\n        <img src=\"icons/magic/air/air-wave-gust-blue.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Resting and grounding yourself by touching something conductive for a few hours can help dissipate the electric charge. A caster may also attempt to restore your nerve control.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Thunder</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 3 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 40</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Paralyzed</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Thunder</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 50</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Static Shock</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Electric Discharge</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/air-wave-gust-blue.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A sudden jolt of electric energy courses through your body as if you've been struck by a lightning rod. Your muscles twitch uncontrollably, making precise movements a challenge.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Resting and grounding yourself by touching something conductive for a few hours can help dissipate the electric charge. A caster may also attempt to restore your nerve control.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 3</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 240</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Thunder Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Paralyzed</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "mW7kNHbIvkiDa6kk",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!BmkfEyb2NrQwwrMu.mW7kNHbIvkiDa6kk"
+    },
+    {
+      "type": "text",
+      "name": "Thunderous Migraine",
+      "text": {
+        "content": "<h5>Injuries • Thunder • Thunderous Migraine</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Thunderous Migraine</h4>\n    <p>The booming thunder overhead triggers a debilitating headache that makes focusing on tasks a challenge.</p>\n        <h5>Brainstorm</h5>\n        <img src=\"icons/magic/air/air-wave-gust-blue.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Resting in a quiet and dark environment to ease the headache.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Thunder</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 7 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 450</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Headache</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Thunder</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 75</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Thunderous Migraine</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Brainstorm</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/air-wave-gust-blue.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The booming thunder overhead triggers a debilitating headache that makes focusing on tasks a challenge.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Resting in a quiet and dark environment to ease the headache.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 7</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 2700</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Thunder Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Headache</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "D3mFQ5TdkTjp36wX",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!BmkfEyb2NrQwwrMu.D3mFQ5TdkTjp36wX"
+    },
+    {
+      "type": "text",
+      "name": "Thunderstruck",
+      "text": {
+        "content": "<h5>Injuries • Thunder • Thunderstruck</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Thunderstruck</h4>\n    <p>A direct hit from a powerful bolt of lightning leaves you feeling like you've danced with the storm itself. Your body tingles with residual electricity, and your movements are sluggish.</p>\n        <h5>Storm's Fury</h5>\n        <img src=\"icons/magic/air/air-wave-gust-blue.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Seeking shelter from further electrical discharges and resting for an extended period can help alleviate the effects. A skilled healer might be able to accelerate your recovery.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Thunder</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 7 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 100</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: none</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Thunder</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 20</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Thunderstruck</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Storm's Fury</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/air-wave-gust-blue.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A direct hit from a powerful bolt of lightning leaves you feeling like you've danced with the storm itself. Your body tingles with residual electricity, and your movements are sluggish.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Seeking shelter from further electrical discharges and resting for an extended period can help alleviate the effects. A skilled healer might be able to accelerate your recovery.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 7</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 600</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Thunder Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "CCS6iNizo5LmuZoO",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!BmkfEyb2NrQwwrMu.CCS6iNizo5LmuZoO"
+    }
+  ],
+  "folder": null,
+  "_id": "BmkfEyb2NrQwwrMu",
+  "categories": [],
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1784237483935,
+    "modifiedTime": 1784237483935,
+    "lastModifiedBy": "B4d9pDwUBOtAfJFE"
+  },
+  "ownership": {
+    "default": 0,
+    "B4d9pDwUBOtAfJFE": 3
+  },
+  "sort": 0,
+  "_key": "!journal!BmkfEyb2NrQwwrMu"
+}
