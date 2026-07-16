@@ -1,0 +1,521 @@
+/* ==================================================================
+   Messages Window — Regent-style layout on the Blacksmith zone template.
+   All rules scoped under #coffee-pub-bibliosoph-messages-wrapper so we
+   complement Blacksmith's window CSS instead of fighting it.
+   ================================================================== */
+
+#coffee-pub-bibliosoph-messages-wrapper {
+    --bibliosoph-msg-radius: 4px;
+    --bibliosoph-msg-tray-width: 220px;
+    --bibliosoph-msg-border: rgba(255, 255, 255, 0.12);
+    --bibliosoph-msg-accent: #ac9f81;
+    --bibliosoph-msg-text: rgba(224, 224, 224, 0.9);
+    --bibliosoph-msg-muted: rgba(224, 224, 224, 0.5);
+    --bibliosoph-msg-panel-bg: rgba(0, 0, 0, 0.5);
+    --bibliosoph-msg-main-bg: rgba(0, 0, 0, 0.9);
+    --bibliosoph-msg-card-bg: rgba(255, 255, 255, 0.04);
+
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    overflow: hidden;
+    color: var(--bibliosoph-msg-text);
+}
+
+/* Fill the Blacksmith body zone; the wrapper manages its own scrolling */
+.blacksmith-window-template-body #coffee-pub-bibliosoph-messages-wrapper {
+    height: 100%;
+}
+
+#coffee-pub-bibliosoph-messages .blacksmith-window-template-body {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 0;
+}
+
+/* ----- LEFT TRAY: conversations ---------------------------------- */
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tray {
+    flex: 0 0 var(--bibliosoph-msg-tray-width);
+    min-width: 160px;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    background: var(--bibliosoph-msg-panel-bg);
+    border-right: 1px solid var(--bibliosoph-msg-border);
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tray-title {
+    padding: 8px 10px;
+    font-size: 0.85em;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--bibliosoph-msg-accent);
+    border-bottom: 1px solid var(--bibliosoph-msg-border);
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tray-list {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tray-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 8px;
+    border-radius: var(--bibliosoph-msg-radius);
+    border: 1px solid transparent;
+    color: var(--bibliosoph-msg-text);
+    cursor: pointer;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tray-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: var(--bibliosoph-msg-border);
+    text-shadow: none;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tray-item.active {
+    background: rgba(172, 159, 129, 0.15);
+    border-color: var(--bibliosoph-conv-tint, var(--bibliosoph-msg-accent));
+    color: var(--bibliosoph-conv-tint, var(--bibliosoph-msg-accent));
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tray-item i {
+    flex: 0 0 16px;
+    text-align: center;
+    color: var(--bibliosoph-conv-tint, inherit);
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tray-item-name {
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tray-item-badge {
+    flex: 0 0 auto;
+    background: #8b2e2e;
+    color: #fff;
+    border-radius: 10px;
+    font-size: 0.7em;
+    font-weight: bold;
+    padding: 1px 6px;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tray-empty {
+    padding: 10px;
+    color: var(--bibliosoph-msg-muted);
+    font-style: italic;
+    font-size: 0.9em;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tray-footer {
+    flex-shrink: 0;
+    padding: 8px;
+    border-top: 1px solid var(--bibliosoph-msg-border);
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tray-new {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 6px;
+    border: 1px dashed var(--bibliosoph-msg-accent);
+    border-radius: var(--bibliosoph-msg-radius);
+    color: var(--bibliosoph-msg-accent);
+    cursor: pointer;
+    font-size: 0.9em;
+    text-transform: uppercase;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tray-new:hover {
+    background: rgba(172, 159, 129, 0.15);
+    text-shadow: none;
+}
+
+/* ----- MAIN COLUMN: thread + compose ------------------------------ */
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-main {
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    background: var(--bibliosoph-msg-main-bg);
+    padding: 8px;
+    border: 1px dashed transparent;
+}
+
+/* Drop target feedback while dragging a document over the window */
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-main.bibliosoph-messages-dragover {
+    border-color: var(--bibliosoph-msg-accent);
+    background: rgba(172, 159, 129, 0.06);
+}
+
+/* Content links (@UUID drops) inside messages match the accent palette */
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-message-content a.content-link {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--bibliosoph-msg-border);
+    border-radius: var(--bibliosoph-msg-radius);
+    padding: 0 4px;
+    color: var(--bibliosoph-msg-accent);
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-thread {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 8px;
+    padding-right: 4px;
+}
+
+/* Message cards (Regent message-wrapper style) */
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-message-wrapper {
+    background: var(--bibliosoph-msg-card-bg);
+    border: 1px solid var(--bibliosoph-msg-border);
+    border-left: 3px solid var(--bibliosoph-msg-border);
+    border-radius: var(--bibliosoph-msg-radius);
+    padding: 6px 10px 8px 10px;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-message-own {
+    border-left-color: var(--bibliosoph-msg-accent);
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-message-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85em;
+    color: var(--bibliosoph-msg-muted);
+    margin-bottom: 4px;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-message-avatar {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1px solid var(--bibliosoph-msg-border);
+    object-fit: cover;
+    flex: 0 0 22px;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-message-speaker {
+    font-weight: bold;
+    color: var(--bibliosoph-msg-accent);
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-message-tone {
+    color: var(--bibliosoph-msg-accent);
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-message-time {
+    margin-left: auto;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-message-tochat {
+    color: var(--bibliosoph-msg-muted);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-message-wrapper:hover .bibliosoph-message-tochat {
+    opacity: 1;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-message-tochat:hover {
+    color: var(--bibliosoph-msg-accent);
+    text-shadow: none;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-message-content {
+    color: var(--bibliosoph-msg-text);
+    word-break: break-word;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-message-content p {
+    margin: 0 0 4px 0;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-message-content p:last-child {
+    margin-bottom: 0;
+}
+
+/* Reaction chips under a message */
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-message-reactions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 6px;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-message-reaction {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 1px 8px;
+    border: 1px solid var(--bibliosoph-msg-border);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--bibliosoph-msg-muted);
+    font-size: 0.8em;
+    cursor: pointer;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-message-reaction:hover {
+    border-color: var(--bibliosoph-msg-accent);
+    color: var(--bibliosoph-msg-accent);
+    text-shadow: none;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-message-reaction.mine {
+    border-color: var(--bibliosoph-msg-accent);
+    color: var(--bibliosoph-msg-accent);
+    background: rgba(172, 159, 129, 0.15);
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-empty {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: var(--bibliosoph-msg-muted);
+    font-style: italic;
+}
+
+/* Compose: tones + textarea locked to the bottom of the main column */
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-compose {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tones {
+    display: flex;
+    gap: 4px;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tone-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--bibliosoph-msg-border);
+    border-radius: var(--bibliosoph-msg-radius);
+    color: var(--bibliosoph-msg-muted);
+    cursor: pointer;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tone-btn:hover {
+    color: var(--bibliosoph-msg-accent);
+    border-color: var(--bibliosoph-msg-accent);
+    text-shadow: none;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tone-btn.active {
+    border-color: var(--bibliosoph-msg-accent);
+    color: var(--bibliosoph-msg-accent);
+    background: rgba(172, 159, 129, 0.15);
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-input {
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 52px;
+    max-height: 160px;
+    resize: vertical;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--bibliosoph-msg-border);
+    border-radius: var(--bibliosoph-msg-radius);
+    color: var(--bibliosoph-msg-text);
+    padding: 6px 8px;
+    font-family: var(--font-primary, "Signika", sans-serif);
+    font-size: 1em;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-input:focus {
+    border-color: var(--bibliosoph-msg-accent);
+    box-shadow: none;
+    outline: none;
+}
+
+/* ----- NEW CONVERSATION PICKER ------------------------------------ */
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-picker {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 6px;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-picker-title {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: var(--bibliosoph-msg-accent);
+    text-transform: uppercase;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-picker-name {
+    width: 100%;
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--bibliosoph-msg-border);
+    border-radius: var(--bibliosoph-msg-radius);
+    color: var(--bibliosoph-msg-text);
+    padding: 6px 8px;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-picker-hint {
+    color: var(--bibliosoph-msg-muted);
+    font-size: 0.85em;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-picker-icons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-picker-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--bibliosoph-msg-border);
+    border-radius: var(--bibliosoph-msg-radius);
+    color: var(--bibliosoph-msg-muted);
+    cursor: pointer;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-picker-icon:hover {
+    border-color: var(--bibliosoph-msg-accent);
+    color: var(--bibliosoph-msg-accent);
+    text-shadow: none;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-picker-icon.selected {
+    border-color: var(--bibliosoph-msg-accent);
+    color: var(--bibliosoph-msg-accent);
+    background: rgba(172, 159, 129, 0.15);
+}
+
+/* Tint swatch sits at the end of the icon row */
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-picker-tint-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--bibliosoph-msg-border);
+    border-radius: var(--bibliosoph-msg-radius);
+    cursor: pointer;
+    margin-left: 8px;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-picker-tint {
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-picker-users {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 8px;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-picker-user {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    border: 1px solid var(--bibliosoph-msg-border);
+    border-radius: var(--bibliosoph-msg-radius);
+    cursor: pointer;
+    color: var(--bibliosoph-msg-text);
+    background: var(--bibliosoph-msg-card-bg);
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-picker-user:hover {
+    border-color: var(--bibliosoph-msg-accent);
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-picker-user img {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: none;
+    object-fit: cover;
+    flex: 0 0 28px;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-picker-user.selected {
+    border-color: var(--bibliosoph-msg-accent);
+    background: rgba(172, 159, 129, 0.15);
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-picker-user-name {
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-picker-user-offline {
+    flex: 0 0 auto;
+    font-size: 0.75em;
+    color: var(--bibliosoph-msg-muted);
+    font-style: italic;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-picker-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: auto;
+}
+
+/* ----- ACTION BAR TWEAKS ------------------------------------------ */
+
+/* Blacksmith's primary button is 300px wide by default — size to content here */
+#coffee-pub-bibliosoph-messages .bibliosoph-messages-btn {
+    width: auto;
+}
+
+#coffee-pub-bibliosoph-messages .bibliosoph-messages-enter-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: rgba(224, 224, 224, 0.9);
+    cursor: pointer;
+}

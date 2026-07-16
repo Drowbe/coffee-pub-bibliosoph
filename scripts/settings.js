@@ -1252,6 +1252,80 @@ export const registerSettings = () => {
 		});
 		// -------------------------------------
 
+		// ** MESSAGES (Unified Conversations) **
+
+	  	// ---------- SUBHEADING ----------
+		game.settings.register(MODULE.ID, "headingH3Messages", {
+			name: MODULE.ID + '.headingH3Messages-Label',
+			hint: MODULE.ID + '.headingH3Messages-Hint',
+			scope: "client",
+			config: true,
+			default: "",
+			type: String,
+		});
+		// -------------------------------------
+
+		game.settings.register(MODULE.ID, 'messagesEnabled', {
+			name: MODULE.ID + '.messagesEnabled-Label',
+			hint: MODULE.ID + '.messagesEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'world',
+			default: true,
+		});
+		// -- Messages Coffee Pub Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarCoffeePubMessagesEnabled', {
+			name: MODULE.ID + '.toolbarCoffeePubMessagesEnabled-Label',
+			hint: MODULE.ID + '.toolbarCoffeePubMessagesEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'user',
+			default: true,
+		});
+		// -- Messages Foundry Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarFoundryMessagesEnabled', {
+			name: MODULE.ID + '.toolbarFoundryMessagesEnabled-Label',
+			hint: MODULE.ID + '.toolbarFoundryMessagesEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'user',
+			default: false,
+		});
+		// -- GM sees all conversations --
+		game.settings.register(MODULE.ID, 'gmSeesAllConversations', {
+			name: MODULE.ID + '.gmSeesAllConversations-Label',
+			hint: MODULE.ID + '.gmSeesAllConversations-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: false,
+			scope: 'world',
+			default: true,
+		});
+		// -- Retention: max messages per conversation --
+		game.settings.register(MODULE.ID, 'retentionMaxMessages', {
+			name: MODULE.ID + '.retentionMaxMessages-Label',
+			hint: MODULE.ID + '.retentionMaxMessages-Hint',
+			type: Number,
+			config: true,
+			requiresReload: false,
+			scope: 'world',
+			default: 200,
+			range: { min: 20, max: 1000, step: 10 },
+		});
+		// -- Notification sound for incoming messages --
+		game.settings.register(MODULE.ID, 'messageNotifySound', {
+			name: MODULE.ID + '.messageNotifySound-Label',
+			hint: MODULE.ID + '.messageNotifySound-Hint',
+			scope: 'user',
+			config: true,
+			requiresReload: false,
+			default: 'none',
+			choices: getBlacksmithChoices('arrSoundChoices', 'No sounds found. Try reloading Foundry after all modules are enabled.')
+		});
+
 	  	// ---------- SUBHEADING ----------
 		game.settings.register(MODULE.ID, "headingH3PartyMessage", {
 			name: MODULE.ID + '.headingH3PartyMessage-Label',

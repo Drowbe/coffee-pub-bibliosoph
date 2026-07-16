@@ -70,6 +70,29 @@ Hooks.once('ready', async () => {
             console.log(MODULE.ID + ' | ✅ Module ' + MODULE.NAME + ' registered with Blacksmith successfully');
         }
         
+        // MESSAGES: conversation system + window registry
+        try {
+            const messagesEnabled = BlacksmithUtils?.getSettingSafely
+                ? BlacksmithUtils.getSettingSafely(MODULE.ID, 'messagesEnabled', true)
+                : game.settings.get(MODULE.ID, 'messagesEnabled');
+            if (messagesEnabled) {
+                const { ConversationManager } = await import('./manager-conversations.js');
+                await ConversationManager.initialize();
+                if (api?.registerWindow) {
+                    api.registerWindow('bibliosoph-messages', {
+                        open: async (options = {}) => {
+                            const { openMessagesWindow } = await import('./window-messages.js');
+                            return openMessagesWindow(options);
+                        },
+                        title: 'Messages',
+                        moduleId: MODULE.ID
+                    });
+                }
+            }
+        } catch (error) {
+            console.error(MODULE.ID + ' | Failed to initialize Messages system:', error);
+        }
+
         // NOW register toolbar tools after module registration is complete
         // In v13, we need to wait for Blacksmith to be fully ready
         // Try multiple times with increasing delays to ensure API is available
@@ -464,6 +487,7 @@ Hooks.once('init', async function() {
 Hooks.once('disableModule', (moduleId) => {
     if (moduleId === 'coffee-pub-bibliosoph') {
         unregisterToolbarTools();
+        game.modules.get('coffee-pub-blacksmith')?.api?.unregisterWindow?.('bibliosoph-messages');
     }
 });
 

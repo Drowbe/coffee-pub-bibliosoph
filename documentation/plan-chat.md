@@ -1,260 +1,181 @@
-# Code Review: Private Messages and Party Messages
+# Plan: Unified Messages Window (Conversations)
 
-## How the Code Works
+Replaces the old party/private message dialogs with a single, Regent-style conversation
+window. **No Foundry chat involvement** for storage or delivery — the chat log stays
+clean and conversations survive session chat wipes.
 
-### **Party Messages Flow:**
+## Decisions (locked)
 
-1. **Initialization** (```77:89:scripts/bibliosoph.js```):
-   - `openPartyMessageDialog()` resets variables and sets `BIBLIOSOPH.CARDTYPEMESSAGE = true`
-   - Creates a `BiblioWindowChat` form with `isPublic = true`
-   - Form shows party message type options (Party Message, Party Plan, Agree, Disagree, Praise, Insult)
+| Decision | Answer |
+|---|---|
+| Application framework | ApplicationV2 via `api.BlacksmithWindowBaseV2` (from `module.api`, never deep imports) |
+| Storage / delivery | Hidden journal-backed conversations (no ChatMessages, no chat DB) |
+| GM excluded from player conversations? | GM world setting (`gmSeesAllConversations`) |
+| Retention | GM-controlled: per-conversation message cap (default 200) + purge-all |
+| Macros | Killed entirely (settings + handlers removed) |
+| Toolbar | One "Messages" button (replaces party + private buttons) |
+| Send to Foundry chat | Per-message button, like Regent's "Send to Chat" |
+| Unread signaling | Blacksmith menubar notification area (`api.addNotification`) + toolbar badge |
 
-2. **Form Submission** (```115:156:scripts/window.js```):
-   - `_updateObject()` captures form data
-   - Sets `BIBLIOSOPH.CARDTYPEMESSAGE = true` and `BIBLIOSOPH.CARDTYPE = "Message"`
-   - Stores message content in `BIBLIOSOPH.MESSAGES_CONTENT`
-   - Calls `publishChatCard()` callback
+## Architecture
 
-3. **Card Creation** (```1627:1634:scripts/bibliosoph.js```):
-   - `publishChatCard()` calls `createChatCardGeneral()` for party messages
-   - `createChatCardGeneral()` builds HTML based on message type (```1815:1860:scripts/bibliosoph.js```)
+### Storage: journal-backed conversations
 
-4. **Message Publishing** (```1691:1702:scripts/bibliosoph.js```):
-   - Creates a public `ChatMessage` with compiled HTML content
-   - No whisper recipients, so visible to all players
+- A module-owned folder (e.g. **"Bibliosoph Messages"**), hidden from the journal
+  sidebar via a `renderJournalDirectory` hook.
+- **One `JournalEntry` per conversation.** Entry flags:
+  `{ type: 'conversation', kind: 'party' | 'group', members: [userId], name, createdBy, created }`
+- **One `JournalEntryPage` (text) per message.** Page flags:
+  `{ sender: userId, timestamp, tone, markdown }`; `text.content` holds the rendered
+  HTML; `sort` = timestamp for ordering.
+- **Ownership**: members get OWNER on the conversation entry; everyone else NONE.
+  Members can therefore post (create pages) and trim without a GM online.
+- **The Party conversation** is a singleton (`kind: 'party'`, members = all users),
+  bootstrapped by the first active GM client on `ready` if missing.
 
-### **Private Messages Flow:**
+Why journals win over a world-setting blob:
 
-1. **Initialization** (```92:118:scripts/bibliosoph.js```):
-   - `openPrivateMessageDialog()` validates macro configuration
-   - Sets `BIBLIOSOPH.CARDTYPEWHISPER = true`
-   - Creates form with `isPublic = false` and builds recipient list via `buildPlayerList()`
+1. **Delivery is free** — document create/update hooks fire on every connected client;
+   open windows append live. No sockets in the delivery path.
+2. **Persistence is free** — survives reloads, sessions, and chat wipes; offline
+   members see history at next login.
+3. **Incremental sync** — each message broadcasts one small page create, not a rewrite
+   of the whole store. No concurrent-write clobbering, no rewrite amplification.
+4. **Retention is natural** — trim = delete oldest pages; purge = delete pages/entries.
 
-2. **Recipient Selection** (```2734:2829:scripts/bibliosoph.js```):
-   - `buildPlayerList()` generates selectable divs for each player
-   - Excludes system users ("Cameraman", "DeveloperXXX", "AuthorXXX")
-   - Shows player name, avatar, and owned characters
-   - Tracks selections in `this.selectedDivs` array
+Honest caveats (documented, accepted):
 
-3. **Form Submission** (```115:156:scripts/window.js```):
-   - Stores selected recipients in `BIBLIOSOPH.MESSAGES_LIST_TO_PRIVATE` from `this.selectedDivs`
-   - Sets `BIBLIOSOPH.CARDTYPEWHISPER = true`
-   - Only clears textarea if recipients were selected
+- Foundry sends world data to all clients and enforces read permission in the UI, so a
+  console-savvy player could dig out messages. Same is true of core whispers. Fine for
+  a table of friends; not cryptographic secrecy.
+- GM users bypass document ownership entirely, so `gmSeesAllConversations = false` is a
+  **UI contract** (GM's window doesn't list those conversations), not hard secrecy.
 
-4. **Card Creation** (```1630:1634:scripts/bibliosoph.js```):
-   - Sets `strChatType = BIBLIOSOPH.CHAT_TYPE_WHISPER`
-   - Calls `createChatCardGeneral()` which builds private message card (```1861:1874:scripts/bibliosoph.js```)
-   - `buildPrivateList()` formats recipient display HTML
+### Conversation creation (the only GM-relay step)
 
-5. **Message Publishing** (```1667:1690:scripts/bibliosoph.js```):
-   - Converts user names to user IDs via `game.users.find()`
-   - Creates `ChatMessage` with `whisper array` containing recipient IDs
-   - Only sends if at least one valid recipient found
+Players typically can't create JournalEntries. Creating a conversation is relayed once
+to the GM via Blacksmith sockets:
 
----
+- SocketLib path: `sockets.getSocket().executeAsGM('bibliosoph.createConversation', …)`.
+- Fallback (native transport has no `executeAsGM`): `sockets.emit(…)` received by all,
+  acted on only by the **first active GM** (`game.users.activeGM`-style guard).
+- If no GM is connected, show a clear notification ("A GM must be online to start a new
+  conversation"). Posting into existing conversations never needs a GM.
 
-## Opportunities for Improvement
+> **Note on Blacksmith sockets:** as of Blacksmith **13.8.5**, `emit(…, { userId |
+> recipients })` targeting works (routes through SocketLib `executeAsUser` /
+> `executeForUsers`; native fallback filters on receipt). Targeting is
+> **dispatch-level filtering, not wire-level privacy** — payloads still reach every
+> connected client's socket listener, so treat every `emit` payload as publicly
+> visible. This plan uses sockets only for the create-conversation relay (GM-guarded,
+> carries nothing secret), targeted with `{recipients: [gmIds]}` so other clients
+> aren't woken. Delivery, sync, and notifications all ride on document hooks.
+> Bibliosoph therefore requires Blacksmith >= 13.8.5.
 
-### **1. Error Handling and Validation**
+### Live updates, unread, notifications
 
-**Issue:** Limited error handling in private message flow
-- ```1671:1674:scripts/bibliosoph.js```: Warns if `users` isn't an array but continues
-- ```1679:1689:scripts/bibliosoph.js```: Silently fails if no valid recipients found (commented out notification)
-- ```1680:1686:scripts/bibliosoph.js```: No error handling for `ChatMessage.create()` failures
+- Register (via Blacksmith HookManager) `createJournalEntryPage`,
+  `deleteJournalEntryPage`, `updateJournalEntry`, `deleteJournalEntry` filtered to our
+  folder/flags.
+- Window open → append/re-render the affected thread; scroll pinned to bottom.
+- Window closed (or other conversation focused) → increment unread and:
+  - `api.addNotification("New message from <name>", "fas fa-envelope", 5, MODULE.ID)`
+  - optional local sound (client setting) via Blacksmith sound helpers
+  - unread badge on the toolbar icon / conversation list rows.
+- **Read tracking**: per-user `lastRead[conversationId] = timestamp` stored on the
+  user's own User flags (own-document writes are always permitted; syncs free).
 
-**Recommendation:**
-- Add try-catch around `ChatMessage.create()`
-- Show user-friendly error if no recipients selected
-- Validate user array before processing
+### Retention
 
-### **2. Code Duplication**
+- World setting `retentionMaxMessages` (default **200**, GM-adjustable).
+- Enforced opportunistically by the **sender's client** after posting (members are
+  owners, so they may delete the oldest overflow pages).
+- GM-only actions in the window: purge a conversation, purge all, delete a conversation.
 
-**Issue:** Similar logic duplicated between party and private message initialization
-- ```77:89:scripts/bibliosoph.js``` and ```92:118:scripts/bibliosoph.js``` share setup patterns
-- Macro execution handlers (```1308:1326:scripts/bibliosoph.js``` and ```1341:1359:scripts/bibliosoph.js```) are nearly identical
+### Send to Foundry chat (escalation)
 
-**Recommendation:**
-- Extract common initialization into a shared function
-- Reduce duplication in macro handlers
+Per-message action button (Regent pattern). Posts that single message as a normal
+Bibliosoph chat card via the existing card path, honoring the kept
+`cardThemePartyMessage` / `cardThemePrivateMessage` themes. Party-sourced messages post
+public; group-sourced messages post as whispers to the members. This is the **only**
+remaining ChatMessage code path.
 
-### **3. User ID Resolution Efficiency**
+## Window design (ApplicationV2, Blacksmith zone contract)
 
-**Issue:** Inefficient user lookup in private message sending
-- ```1675:1678:scripts/bibliosoph.js```: Uses `game.users.find()` in a map, O(n²) complexity
-- Multiple iterations over the users array
+New `scripts/window-messages.js`, `class MessagesWindow extends api.BlacksmithWindowBaseV2`
+(resolved from `module.api`). Registered via `api.registerWindow('bibliosoph-messages', …)`
+on `ready`; toolbar tool calls `api.openWindow('bibliosoph-messages')`.
 
-**Recommendation:**
-- Create a user name-to-ID map once, then use it for lookups
-- Example:
-```javascript
-const userMap = new Map(game.users.map(u => [u.name, u._id]));
-const userids = users
-    .map(name => userMap.get(name))
-    .filter(id => id !== undefined);
-```
+| Zone | Content |
+|---|---|
+| Header | Icon + "Messages"; subtitle = active conversation name + member avatars |
+| Option bar | Conversation switcher: pinned **Party** + groups sorted by activity; "+ New" |
+| Body | Scrolling thread (sender avatar, name, timestamp, tone stamp, rendered markdown); per-message hover actions: **Send to Chat**, (GM/author) delete |
+| Tools | Hidden initially (future: search) |
+| Action bar | Compose: tone buttons (message/plan/agree/disagree/praise/insult), textarea (ENTER sends, SHIFT+ENTER newline), Send; GM: purge/manage |
 
-### **4. Variable Naming Consistency**
+Implementation notes (per Blacksmith guidance docs):
 
-**Issue:** Inconsistent variable naming
-- ```1339:1340:scripts/bibliosoph.js```: Uses `PartyMacro` for private message macro
-- Mixed use of `strChatType` vs `BIBLIOSOPH.CHAT_TYPE_WHISPER`
+- `data-action` + document-level delegation only; no inline `<script>`/`onclick` in
+  injected body HTML; no body queries in `activateListeners`.
+- Safe `DEFAULT_OPTIONS` merge; `windowSizeConstraints` for min size; scroll
+  save/restore from the base class; unique app id `coffee-pub-bibliosoph-messages`.
+- Markdown via `BlacksmithUtils.markdownToHtml` on send (store raw markdown in flags,
+  rendered HTML in page content).
+- New-conversation flow reuses the member-picker concept (user list with avatars),
+  excluding system users; respects `gmSeesAllConversations` (adds GM to members list
+  display when on).
 
-**Recommendation:**
-- Rename `PartyMacro` to `PrivateMacro` in private message context
-- Standardize naming conventions
+## Settings
 
-### **5. Missing Await on Async Operations**
+**New**
 
-**Issue:** `ChatMessage.create()` calls are not awaited
-- ```1680:1686:scripts/bibliosoph.js``` and ```1701:1701:scripts/bibliosoph.js```: `ChatMessage.create()` returns a Promise but isn't awaited
-- `publishChatCard()` is async but doesn't await message creation
+| Setting | Scope | Default | Notes |
+|---|---|---|---|
+| `messagesEnabled` | world | true | Master switch (replaces partyMessageEnabled + privateMessageEnabled) |
+| `toolbarCoffeePubMessagesEnabled` | world | true | Single tool replaces the two old pairs |
+| `toolbarFoundryMessagesEnabled` | world | true | |
+| `gmSeesAllConversations` | world (GM) | true | Off = GM window hides conversations GM isn't a member of |
+| `retentionMaxMessages` | world (GM) | 200 | Per conversation |
+| `messageNotifySound` / volume | client | subtle default | Local only |
 
-**Recommendation:**
-- Add `await` to `ChatMessage.create()` calls
-- Handle potential errors from message creation
+**Kept**: `cardThemePartyMessage`, `cardThemePrivateMessage` (escalation cards only).
 
-### **6. Recipient Validation**
+**Killed**: `partyMessageMacro`, `privateMessageMacro`, `partyMessageEnabled`,
+`privateMessageEnabled`, both old toolbar setting pairs, `cardLayoutPrivateMessage`,
+`privateMessageCompressedWindow`. Localization strings pruned to match.
 
-**Issue:** No validation that selected recipients are still valid users
-- ```1675:1678:scripts/bibliosoph.js```: Filters out undefined users but doesn't warn about invalid selections
-- No check if users are active or have permission to receive messages
+## Removal list (legacy)
 
-**Recommendation:**
-- Validate recipients exist and are active before sending
-- Provide feedback about invalid selections
+- `scripts/window.js` (`BiblioWindowChat`) and its template (`WINDOW_CHAT_TEMPLATE`).
+- `openPartyMessageDialog` / `openPrivateMessageDialog` and both macro execution
+  handlers in `bibliosoph.js`.
+- `buildPlayerList`, `buildPrivateList`, and the message branches of
+  `createChatCardGeneral` (except what the escalation card needs).
+- `BIBLIOSOPH.MESSAGES_*`, `CARDTYPEMESSAGE`, `CARDTYPEWHISPER` global state in
+  `const.js`.
+- Old party/private toolbar tool registrations in `manager-toolbar.js` (replaced by the
+  single Messages tool).
 
-### **7. Form State Management**
+## Phases
 
-**Issue:** Form clearing logic is conditional and may confuse users
-- ```143:155:scripts/window.js```: Only clears textarea for private messages if recipients selected
-- No clear feedback when message fails to send due to missing recipients
+1. **Foundation** — `manager-conversations.js`: folder/entry/page CRUD, party
+   bootstrap, GM-relay create, ownership management, retention trim, read tracking.
+   New settings registered; old ones removed.
+2. **Window** — `window-messages.js` + `templates/window-messages.hbs`: zones, thread
+   render, compose, tones, markdown, new-conversation picker. `registerWindow` +
+   single toolbar tool.
+3. **Live sync & signaling** — document hooks → live thread updates; unread counts;
+   menubar notifications; optional sound; sidebar folder hiding.
+4. **GM & escalation** — Send-to-Chat per message; GM purge/manage actions;
+   `gmSeesAllConversations` filtering.
+5. **Cleanup** — remove all legacy code/settings/templates/localization; update
+   README/CHANGELOG; verify in Foundry v13.
 
-**Recommendation:**
-- Provide clear feedback when message can't be sent
-- Consider keeping form open with error message instead of silent failure
+## Deferred (decide case by case later)
 
-### **8. Type Safety**
-
-**Issue:** No type checking for critical variables
-- ```1669:1669:scripts/bibliosoph.js```: Assumes `BIBLIOSOPH.MESSAGES_LIST_TO_PRIVATE` is an array
-- No validation of form data types before processing
-
-**Recommendation:**
-- Add explicit type checks and conversions
-- Use Array.isArray() checks before array operations
-
-### **9. Performance: buildPlayerList Duplication**
-
-**Issue:** Redundant code in `buildPlayerList()`
-- ```2753:2757:scripts/bibliosoph.js``` and ```2766:2770:scripts/bibliosoph.js```: Same filtering logic appears twice
-
-**Recommendation:**
-- Remove duplicate filtering logic
-- Extract to a single variable assignment
-
-### **10. Missing User Feedback**
-
-**Issue:** Limited feedback for edge cases
-- No notification when private message has no recipients
-- No confirmation when party message is sent successfully
-- Silent failures can confuse users
-
-**Recommendation:**
-- Add success notifications for sent messages
-- Show clear error messages for failures
-- Consider a "message sent" indicator
-
----
-
-## Future Enhancements
-
-### **11. Unified Chat Interface**
-
-**Requirements:**
-- Combine private and party messages into a single chat interface
-- Operate like a traditional chat window that shows conversation history
-- Messages still send to the main FoundryVTT chat
-- **Persistent chat history** - conversations are saved and persist across sessions
-- **Group-based private messaging** - select one or more party members to create a "group" for private conversations
-- Layout similar to "Regent" interface (from other module):
-  - **Left Panel:** Chat conversation area showing message history
-    - Displays sent/received messages in chronological order
-    - Shows message type indicators (party/private)
-    - Shows recipient information for private messages
-    - Shows group name/participants for group conversations
-    - Scrollable conversation log
-    - Conversation history persists across sessions
-  - **Right Panel:** Options and controls
-    - Message type selection (Party Message, Party Plan, Agree, Disagree, Praise, Insult)
-    - Group/recipient selection (for private messages)
-      - Create new group by selecting party members
-      - Select existing group from list
-      - Manage groups (rename, add/remove members)
-    - Message formatting options
-    - Settings/configuration options
-  - **Bottom:** Message input area
-    - Text input field
-    - Send button
-    - Option to toggle between party/private mode
-    - Current group/conversation indicator
-
-**Implementation Considerations:**
-- Create new unified `BiblioWindowChatUnified` class extending `FormApplication`
-- **Persistent Storage:**
-  - Store conversation history in FoundryVTT's persistent storage (flags or settings)
-  - Use `game.settings` or `game.user.setFlag()` for user-specific conversations
-  - Store group definitions and membership
-  - Implement data migration for existing conversations
-  - Consider storage limits and cleanup of old conversations
-- **Group Management:**
-  - Create group data structure: `{ id, name, members: [userIds], created, lastMessage }`
-  - Store groups per user (each user has their own group definitions)
-  - Allow creating groups on-the-fly when selecting recipients
-  - Support named groups (user can name the group) or auto-generated names
-  - Track which messages belong to which group
-  - Filter conversation history by selected group
-- **Conversation History:**
-  - Store messages with metadata: `{ id, timestamp, sender, recipients, content, type, groupId }`
-  - Load conversation history when opening chat interface
-  - Update history when new messages are sent/received
-  - Support pagination or lazy loading for long conversation histories
-  - Track message thread context (reply chains)
-- **Integration:**
-  - Update conversation view when messages are sent/received
-  - Integrate with existing `publishChatCard()` function
-  - Hook into FoundryVTT chat message creation to capture incoming messages
-  - Support both party and private modes within same interface
-  - Add toggle/selector for switching between party, private, and group modes
-  - Display conversation history with proper formatting and timestamps
-  - Show visual distinction between party messages (public), private messages (whisper), and group messages
-
-**Benefits:**
-- Single interface for all message types
-- Better user experience with conversation context
-- Easier to manage ongoing conversations
-- More intuitive workflow
-- Persistent history allows users to reference past conversations
-- Group-based private messaging enables organized multi-person conversations
-- Named groups make it easier to manage different conversation threads
-- Conversation continuity across game sessions
-
----
-
-## Summary
-
-The code works but has room for improvement in:
-1. Error handling and user feedback
-2. Code duplication reduction
-3. Performance optimization (user lookup)
-4. Async/await usage
-5. Input validation and type safety
-6. Unified chat interface with persistent history and group-based private messaging (future enhancement)
-
-The architecture is sound, but these changes would improve reliability, maintainability, and user experience.
-
-**Future Enhancement Highlights:**
-- Unified interface combining party and private messages
-- Persistent chat history across sessions
-- Group-based private messaging (select members to create conversation groups)
-- Traditional chat window UI with conversation history display
-
+- Typing indicators (would use sockets; broadcast-only is fine for this).
+- Edit own messages after send.
+- Conversation rename / leave / add members after creation.
+- Thread search (Tools zone).
+- Pagination/lazy-load for very long threads (retention cap makes this low priority).

@@ -63,6 +63,16 @@
   ],
   "packs": [],
   "relationships": {
+    "requires": [
+      {
+        "id": "coffee-pub-blacksmith",
+        "type": "module",
+        "manifest": "https://github.com/Drowbe/coffee-pub-blacksmith/releases/latest/download/module.json",
+        "compatibility": {
+          "minimum": "13.8.5"
+        }
+      }
+    ],
     "recommends": [
       {
         "id": "coffee-pub-crier",

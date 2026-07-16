@@ -24,6 +24,26 @@ function getSetting(key, defaultValue) {
 
 // Toolbar tool configuration
 const TOOLBAR_TOOLS = {
+    'bibliosoph-messages': {
+        icon: "fa-solid fa-comments",
+        name: "bibliosoph-messages",
+        title: "Messages",
+        zone: "communication",
+        order: 1,
+        moduleId: "coffee-pub-bibliosoph",
+        enabled: () => getSetting('messagesEnabled', true),
+        onCoffeePub: () => getSetting('toolbarCoffeePubMessagesEnabled', true),
+        onFoundry: () => getSetting('toolbarFoundryMessagesEnabled', false),
+        onClick: async () => {
+            // Prefer the Blacksmith window registry; fall back to a direct open
+            const blacksmith = game.modules.get('coffee-pub-blacksmith')?.api;
+            if (blacksmith?.openWindow && blacksmith.isWindowRegistered?.('bibliosoph-messages')) {
+                return blacksmith.openWindow('bibliosoph-messages');
+            }
+            const { openMessagesWindow } = await import('./window-messages.js');
+            return openMessagesWindow();
+        }
+    },
     'bibliosoph-party-message': {
         icon: "fa-solid fa-comments",
         name: "bibliosoph-party-message",

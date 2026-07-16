@@ -1,0 +1,104 @@
+{{!-- Body content for the unified Messages window (injected into the
+      Blacksmith zone template's body). Regent-style layout: left tray
+      manages conversations, main column shows the thread + compose.
+      Send / ENTER-sends live in the Blacksmith action bar. --}}
+<div id="coffee-pub-bibliosoph-messages-wrapper">
+
+    {{!-- ----- LEFT TRAY: conversations ----- --}}
+    <div class="bibliosoph-messages-tray">
+        <div class="bibliosoph-messages-tray-title"><i class="fa-solid fa-comments"></i> Conversations</div>
+        <div class="bibliosoph-messages-tray-list">
+            {{#each conversations}}
+            <a class="bibliosoph-messages-tray-item {{#if this.active}}active{{/if}}" data-action="msg-select-conversation" data-id="{{this.id}}" title="{{this.memberNames}}" {{#if this.tint}}style="--bibliosoph-conv-tint: {{this.tint}};"{{/if}}>
+                <i class="{{this.icon}}"></i>
+                <span class="bibliosoph-messages-tray-item-name">{{this.name}}</span>
+                {{#if this.unread}}<span class="bibliosoph-messages-tray-item-badge">{{this.unread}}</span>{{/if}}
+            </a>
+            {{else}}
+            <div class="bibliosoph-messages-tray-empty">No conversations yet</div>
+            {{/each}}
+        </div>
+        <div class="bibliosoph-messages-tray-footer">
+            <a class="bibliosoph-messages-tray-new" data-action="msg-new-conversation"><i class="fa-solid fa-plus"></i> New Conversation</a>
+        </div>
+    </div>
+
+    {{!-- ----- MAIN COLUMN ----- --}}
+    <div class="bibliosoph-messages-main">
+        {{#if picker}}
+        <div class="bibliosoph-messages-picker">
+            <div class="bibliosoph-messages-picker-title"><i class="{{picker.titleIcon}}"></i> {{picker.title}}</div>
+            <input type="text" class="bibliosoph-messages-picker-name" placeholder="Conversation name (optional)" value="{{picker.name}}" maxlength="60">
+            <div class="bibliosoph-messages-picker-hint">Pick an icon and tint for this conversation.</div>
+            <div class="bibliosoph-messages-picker-icons">
+                {{#each picker.icons}}
+                <a class="bibliosoph-messages-picker-icon {{#if this.selected}}selected{{/if}}" data-action="msg-pick-icon" data-icon="{{this.icon}}"><i class="{{this.icon}}"></i></a>
+                {{/each}}
+                <label class="bibliosoph-messages-picker-tint-label" title="Conversation tint">
+                    <input type="color" class="bibliosoph-messages-picker-tint" value="{{picker.tint}}">
+                </label>
+            </div>
+            {{#unless picker.hideMembers}}
+            <div class="bibliosoph-messages-picker-hint">Choose who can see this conversation.</div>
+            <div class="bibliosoph-messages-picker-users">
+                {{#each picker.users}}
+                <div class="bibliosoph-messages-picker-user {{#if this.selected}}selected{{/if}}" data-action="msg-toggle-member" data-id="{{this.id}}">
+                    <img src="{{this.avatar}}" alt="{{this.name}}" width="28" height="28">
+                    <span class="bibliosoph-messages-picker-user-name">{{this.name}}</span>
+                    {{#unless this.active}}<span class="bibliosoph-messages-picker-user-offline">offline</span>{{/unless}}
+                </div>
+                {{/each}}
+            </div>
+            {{/unless}}
+            <div class="bibliosoph-messages-picker-actions">
+                <button type="button" class="blacksmith-window-btn-secondary" data-action="msg-cancel-picker"><i class="fa-solid fa-xmark"></i> Cancel</button>
+                <button type="button" class="blacksmith-window-btn-primary bibliosoph-messages-btn" data-action="msg-create-conversation"><i class="fa-solid fa-comments"></i> {{picker.submitLabel}}</button>
+            </div>
+        </div>
+        {{else}}
+        <div class="bibliosoph-messages-thread">
+            {{#if messages.length}}
+                {{#each messages}}
+                <div class="bibliosoph-message-wrapper {{#if this.isOwn}}bibliosoph-message-own{{/if}}" data-message-id="{{this.id}}" style="border-left-color: {{this.color}};">
+                    <div class="bibliosoph-message-header">
+                        <img class="bibliosoph-message-avatar" src="{{this.avatar}}" alt="{{this.senderName}}" width="22" height="22">
+                        <span class="bibliosoph-message-speaker" style="color: {{this.color}};">{{this.senderName}}</span>
+                        {{#if this.showTone}}<i class="{{this.toneIcon}} bibliosoph-message-tone" title="{{this.toneLabel}}"></i>{{/if}}
+                        <span class="bibliosoph-message-time">{{this.timeDisplay}}</span>
+                        <a class="bibliosoph-message-tochat" data-action="msg-send-to-chat" data-message-id="{{this.id}}" title="Send to Foundry chat"><i class="fa-solid fa-share-from-square"></i></a>
+                    </div>
+                    <div class="bibliosoph-message-content">{{{this.html}}}</div>
+                    {{#if this.reactionsDisplay.length}}
+                    <div class="bibliosoph-message-reactions">
+                        {{#each this.reactionsDisplay}}
+                        <a class="bibliosoph-message-reaction {{#if this.mine}}mine{{/if}}" data-action="msg-react" data-message-id="{{../id}}" data-reaction="{{this.key}}" title="{{this.label}}: {{this.userNames}}">
+                            <i class="{{this.icon}}"></i><span>{{this.count}}</span>
+                        </a>
+                        {{/each}}
+                    </div>
+                    {{/if}}
+                </div>
+                {{/each}}
+            {{else}}
+                <div class="bibliosoph-messages-empty">
+                    {{#if hasConversation}}
+                    <i class="fa-solid fa-feather"></i> No messages yet — say hello!
+                    {{else}}
+                    <i class="fa-solid fa-comments"></i> No conversation selected. Start one from the tray.
+                    {{/if}}
+                </div>
+            {{/if}}
+        </div>
+        {{#if hasConversation}}
+        <div class="bibliosoph-messages-compose">
+            <div class="bibliosoph-messages-tones">
+                {{#each tones}}
+                <a class="bibliosoph-messages-tone-btn {{#if this.active}}active{{/if}}" data-action="msg-tone" data-tone="{{this.key}}" title="{{this.label}}"><i class="{{this.icon}}"></i></a>
+                {{/each}}
+            </div>
+            <textarea rows="3" class="bibliosoph-messages-input" placeholder="Type a message… Markdown supported.">{{draft}}</textarea>
+        </div>
+        {{/if}}
+        {{/if}}
+    </div>
+</div>
