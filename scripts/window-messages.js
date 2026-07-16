@@ -470,7 +470,17 @@ export class MessagesWindow extends resolveBase() {
 
         // Keep the thread pinned to the newest message
         const thread = root.querySelector('.bibliosoph-messages-thread');
-        if (thread) thread.scrollTop = thread.scrollHeight;
+        if (thread) {
+            thread.scrollTop = thread.scrollHeight;
+            // Click an image in a message → full-size popout
+            if (!thread.dataset.bibliosophImgBound) {
+                thread.dataset.bibliosophImgBound = '1';
+                thread.addEventListener('click', (event) => {
+                    const img = event.target.closest?.('.bibliosoph-message-content img');
+                    if (img?.src) this._openImagePopout(img.src);
+                });
+            }
+        }
 
         // Viewing a conversation marks it read
         const active = game.journal.get(this._activeConversationId);
@@ -614,20 +624,70 @@ export class MessagesWindow extends resolveBase() {
     // ===== DRAG & DROP (documents → UUID links) ===================
     // ==============================================================
 
+    /** Open Foundry's image popout (handles both the V2 and legacy signatures). */
+    _openImagePopout(src) {
+        const Popout = foundry.applications?.apps?.ImagePopout ?? globalThis.ImagePopout;
+        if (!Popout) return;
+        try {
+            new Popout({ src, window: { title: 'Image' } }).render(true);
+        } catch (_) {
+            try {
+                new Popout(src, { title: 'Image' }).render(true);
+            } catch (_) { /* give up quietly */ }
+        }
+    }
+
+    /** Does this path/URL look like an image file? */
+    _isImagePath(path) {
+        return /\.(png|jpe?g|webp|gif|avif|svg)(\?.*)?$/i.test(path ?? '');
+    }
+
+    /** Insert text at the compose textarea's cursor and refocus. */
+    _insertAtCursor(text) {
+        const textarea = this._getRoot()?.querySelector('.bibliosoph-messages-input');
+        if (!textarea) return;
+        const start = textarea.selectionStart ?? textarea.value.length;
+        const end = textarea.selectionEnd ?? textarea.value.length;
+        const before = textarea.value.slice(0, start);
+        const after = textarea.value.slice(end);
+        const spacer = before && !before.endsWith(' ') && !before.endsWith('\n') ? ' ' : '';
+        textarea.value = `${before}${spacer}${text} ${after}`;
+        const caret = (before + spacer + text + ' ').length;
+        textarea.setSelectionRange(caret, caret);
+        textarea.focus();
+        this._draft = textarea.value;
+    }
+
     /**
-     * Drop an item, actor/token, journal, roll table, … into the window:
-     * builds an @UUID enricher via Blacksmith's UUID builder
-     * (api.compendiums.formatLink) and inserts it at the textarea cursor.
+     * Drop into the window:
+     * - documents (item, actor/token, journal, roll table, …) → @UUID link via
+     *   Blacksmith's UUID builder (api.compendiums.formatLink)
+     * - images (Foundry file paths or web URLs) → markdown image syntax
      */
     async _onDropDocument(event) {
-        let data;
+        const raw = event.dataTransfer.getData('text/plain');
+        let data = null;
         try {
-            data = JSON.parse(event.dataTransfer.getData('text/plain'));
-        } catch (_) {
+            data = JSON.parse(raw);
+        } catch (_) { /* not JSON — maybe a plain URL/path */ }
+
+        if (!data) {
+            // Plain text drop (e.g. an image URL from a browser or a file path)
+            const uri = (event.dataTransfer.getData('text/uri-list') || raw || '').split('\n')[0]?.trim();
+            if (uri && this._isImagePath(uri)) {
+                event.preventDefault();
+                this._insertAtCursor(`![image](${uri})`);
+            }
             return;
         }
-        if (!data) return;
         event.preventDefault();
+
+        // Image drops from Foundry UIs (file picker, tiles) carry a src/path
+        const imagePath = data.texture?.src ?? data.src ?? data.path ?? null;
+        if (!data.uuid && imagePath && this._isImagePath(imagePath)) {
+            this._insertAtCursor(`![image](${imagePath})`);
+            return;
+        }
 
         // Foundry drag data carries a uuid for documents; tokens carry their actor
         let uuid = data.uuid ?? (data.type && data.id ? `${data.type}.${data.id}` : null);
@@ -648,19 +708,7 @@ export class MessagesWindow extends resolveBase() {
         const link = compendiums?.formatLink
             ? compendiums.formatLink(uuid, label)
             : `@UUID[${uuid}]{${label}}`;
-
-        const textarea = this._getRoot()?.querySelector('.bibliosoph-messages-input');
-        if (!textarea) return;
-        const start = textarea.selectionStart ?? textarea.value.length;
-        const end = textarea.selectionEnd ?? textarea.value.length;
-        const before = textarea.value.slice(0, start);
-        const after = textarea.value.slice(end);
-        const spacer = before && !before.endsWith(' ') ? ' ' : '';
-        textarea.value = `${before}${spacer}${link} ${after}`;
-        const caret = (before + spacer + link + ' ').length;
-        textarea.setSelectionRange(caret, caret);
-        textarea.focus();
-        this._draft = textarea.value;
+        this._insertAtCursor(link);
     }
 
     // ==============================================================
@@ -731,7 +779,7 @@ export class MessagesWindow extends resolveBase() {
         const entry = game.journal.get(this._activeConversationId);
         if (!menu || !entry) return;
         const message = ConversationManager.getMessages(entry).find((m) => m.id === messageId);
-        if (!message) return;
+        if (!message || message.deleted) return; // placeholders have no actions
 
         const items = [
             {

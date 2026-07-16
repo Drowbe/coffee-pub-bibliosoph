@@ -280,6 +280,31 @@
     margin-bottom: 0;
 }
 
+/* Images in messages (markdown ![alt](src) or image drops) */
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-message-content img {
+    display: block;
+    max-width: 100%;
+    max-height: 320px;
+    border: 1px solid var(--bibliosoph-msg-border);
+    border-radius: var(--bibliosoph-msg-radius);
+    margin: 4px 0;
+    cursor: zoom-in;
+}
+
+/* Soft-deleted message placeholder */
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-message-removed {
+    opacity: 0.6;
+    border-left-style: dashed !important;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-message-deleted {
+    color: var(--bibliosoph-msg-muted);
+    font-style: italic;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
 /* Reply quotes */
 #coffee-pub-bibliosoph-messages-wrapper .bibliosoph-message-content blockquote {
     margin: 0 0 6px 0;

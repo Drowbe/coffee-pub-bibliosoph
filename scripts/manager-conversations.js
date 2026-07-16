@@ -513,12 +513,28 @@ export class ConversationManager {
         const escaped = text
             .replace(/&/g, '&amp;')
             .replace(/</g, '&lt;');
+        let html;
         if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.markdownToHtml) {
             try {
-                return BlacksmithUtils.markdownToHtml(escaped);
+                html = BlacksmithUtils.markdownToHtml(escaped);
             } catch (_) { /* fall through to plain text */ }
         }
-        return `<p>${escaped.replace(/\n/g, '<br>')}</p>`;
+        if (html === undefined) html = `<p>${escaped.replace(/\n/g, '<br>')}</p>`;
+        return this._renderMarkdownImages(html);
+    }
+
+    /**
+     * Convert any ![alt](src) still present after markdown conversion into an
+     * <img> (the converter may not support image syntax). Only http(s) URLs
+     * and server-relative paths are allowed — anything else stays literal.
+     */
+    static _renderMarkdownImages(html) {
+        return html.replace(/!\[([^\]]*)\]\(([^)\s"'<>]+)\)/g, (match, alt, src) => {
+            const isWebUrl = /^https?:\/\//i.test(src);
+            if (!isWebUrl && src.includes(':')) return match; // no other schemes
+            const safeAlt = alt.replace(/"/g, '&quot;');
+            return `<img class="bibliosoph-message-image" src="${src}" alt="${safeAlt}">`;
+        });
     }
 
     /**
@@ -542,7 +558,8 @@ export class ConversationManager {
                 html: page.text?.content ?? '',
                 markdown: flags.markdown ?? '',
                 isOwn: flags.sender === game.user.id,
-                reactions: flags.reactions ?? {}
+                deleted: !!flags.deleted,
+                reactions: flags.deleted ? {} : (flags.reactions ?? {})
             };
         });
         messages.sort((a, b) => a.timestamp - b.timestamp);
@@ -565,7 +582,11 @@ export class ConversationManager {
         }
     }
 
-    /** Delete a single message. UI gates this to the author or a GM. */
+    /**
+     * Soft-delete a single message: the content, markdown, and reactions are
+     * wiped and a "Message deleted" placeholder remains in the thread.
+     * UI gates this to the author or a GM. (Retention trims still hard-delete.)
+     */
     static async deleteMessage(entry, pageId) {
         const page = entry?.pages?.get(pageId);
         if (!page || !this.isMessagePage(page)) return;
@@ -574,7 +595,12 @@ export class ConversationManager {
             ui.notifications.warn('You can only delete your own messages.');
             return;
         }
-        await entry.deleteEmbeddedDocuments('JournalEntryPage', [pageId]);
+        await page.update({
+            'text.content': '',
+            [`flags.${MODULE.ID}.deleted`]: true,
+            [`flags.${MODULE.ID}.markdown`]: '',
+            [`flags.${MODULE.ID}.-=reactions`]: null
+        });
     }
 
     /** Delete a whole conversation. GM or creator only; the Party conversation is permanent. */

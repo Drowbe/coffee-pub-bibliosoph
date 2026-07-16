@@ -69,14 +69,21 @@
         <div class="bibliosoph-messages-thread">
             {{#if messages.length}}
                 {{#each messages}}
-                <div class="bibliosoph-message-wrapper {{#if this.isOwn}}bibliosoph-message-own{{/if}}" data-message-id="{{this.id}}" style="border-left-color: {{this.color}};">
+                <div class="bibliosoph-message-wrapper {{#if this.isOwn}}bibliosoph-message-own{{/if}} {{#if this.deleted}}bibliosoph-message-removed{{/if}}" data-message-id="{{this.id}}" style="border-left-color: {{this.color}};">
                     <div class="bibliosoph-message-header">
                         <img class="bibliosoph-message-avatar" src="{{this.avatar}}" alt="{{this.senderName}}" width="28" height="28">
                         <span class="bibliosoph-message-speaker" style="color: {{this.color}};">{{this.senderName}}</span>
+                        {{#unless this.deleted}}
                         {{#if this.showTone}}<i class="{{this.toneIcon}} bibliosoph-message-tone" title="{{this.toneLabel}}"></i>{{/if}}
+                        {{/unless}}
                         <span class="bibliosoph-message-time">{{this.timeDisplay}}</span>
+                        {{#unless this.deleted}}
                         <a class="bibliosoph-message-tochat" data-action="msg-send-to-chat" data-message-id="{{this.id}}" title="Send to Foundry chat"><i class="fa-solid fa-share-from-square"></i></a>
+                        {{/unless}}
                     </div>
+                    {{#if this.deleted}}
+                    <div class="bibliosoph-message-deleted"><i class="fa-solid fa-ban"></i> Message deleted</div>
+                    {{else}}
                     <div class="bibliosoph-message-content">{{{this.html}}}</div>
                     {{#if this.reactionsDisplay.length}}
                     <div class="bibliosoph-message-reactions">
@@ -86,6 +93,7 @@
                         </a>
                         {{/each}}
                     </div>
+                    {{/if}}
                     {{/if}}
                 </div>
                 {{/each}}
@@ -105,7 +113,7 @@
                 {{#each tones}}
                 <a class="bibliosoph-messages-tone-btn {{#if this.active}}active{{/if}}" data-action="msg-tone" data-tone="{{this.key}}" title="{{this.label}}"><i class="{{this.icon}}"></i></a>
                 {{/each}}
-                <a class="bibliosoph-messages-help" data-tooltip-direction="UP" data-tooltip="You can use a subset of Markdown to format your message:<ul><li><b>Large Title</b>: # Title Here</li><li><b>Medium Title</b>: ## Title Here</li><li><b>Small Title</b>: ### Title Here</li><li><b>Horizontal Rule</b>: --- (3 dashes on their own line)</li><li><b>Bold Text</b>: **Text Here**</li><li><b>Italic Text</b>: *Text Here*</li><li><b>Bulleted List</b>: - List Item Here</li><li><b>Numbered List</b>: 1. List Item Here</li><li><b>Block Text</b>: &gt; Text Here</li><li><b>Document Link</b>: drag an item, actor, or journal into the window</li></ul>"><i class="fa-solid fa-circle-question"></i></a>
+                <a class="bibliosoph-messages-help" data-tooltip-direction="UP" data-tooltip="You can use a subset of Markdown to format your message:<ul><li><b>Large Title</b>: # Title Here</li><li><b>Medium Title</b>: ## Title Here</li><li><b>Small Title</b>: ### Title Here</li><li><b>Horizontal Rule</b>: --- (3 dashes on their own line)</li><li><b>Bold Text</b>: **Text Here**</li><li><b>Italic Text</b>: *Text Here*</li><li><b>Bulleted List</b>: - List Item Here</li><li><b>Numbered List</b>: 1. List Item Here</li><li><b>Block Text</b>: &gt; Text Here</li><li><b>Image</b>: ![name](path or URL) — or drag an image in</li><li><b>Document Link</b>: drag an item, actor, or journal into the window</li></ul>"><i class="fa-solid fa-circle-question"></i></a>
             </div>
             <textarea rows="3" class="bibliosoph-messages-input" placeholder="Type a message… Markdown supported.">{{draft}}</textarea>
         </div>
