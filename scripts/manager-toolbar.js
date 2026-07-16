@@ -4,7 +4,6 @@
 
 // Import required dependencies
 import { MODULE, BIBLIOSOPH } from './const.js';
-import { BiblioWindowChat } from './window.js';
 import { openEncounterWindow } from './manager-encounters.js';
 import { BlacksmithAPI } from '/modules/coffee-pub-blacksmith/api/blacksmith-api.js';
 
@@ -33,7 +32,7 @@ const TOOLBAR_TOOLS = {
         moduleId: "coffee-pub-bibliosoph",
         enabled: () => getSetting('messagesEnabled', true),
         onCoffeePub: () => getSetting('toolbarCoffeePubMessagesEnabled', true),
-        onFoundry: () => getSetting('toolbarFoundryMessagesEnabled', false),
+        onFoundry: () => getSetting('toolbarFoundryMessagesEnabled', true),
         onClick: async () => {
             // Prefer the Blacksmith window registry; fall back to a direct open
             const blacksmith = game.modules.get('coffee-pub-blacksmith')?.api;
@@ -42,40 +41,6 @@ const TOOLBAR_TOOLS = {
             }
             const { openMessagesWindow } = await import('./window-messages.js');
             return openMessagesWindow();
-        }
-    },
-    'bibliosoph-party-message': {
-        icon: "fa-solid fa-comments",
-        name: "bibliosoph-party-message",
-        title: "Party Message",
-        zone: "communication",
-        order: 1,
-        moduleId: "coffee-pub-bibliosoph",
-        enabled: () => getSetting('partyMessageEnabled', false),
-        onCoffeePub: () => getSetting('toolbarCoffeePubPartyMessageEnabled', true),
-        onFoundry: () => getSetting('toolbarFoundryPartyMessageEnabled', false),
-        onClick: () => {
-            // Directly open party message dialog
-            openPartyMessageDialog();
-        }
-    },
-    'bibliosoph-private-message': {
-        icon: "fa-solid fa-user-secret",
-        name: "bibliosoph-private-message",
-        title: "Private Message",
-        zone: "communication",
-        order: 2,
-        moduleId: "coffee-pub-bibliosoph",
-        enabled: () => getSetting('privateMessageEnabled', false),
-        onCoffeePub: () => getSetting('toolbarCoffeePubPrivateMessageEnabled', true),
-        onFoundry: () => getSetting('toolbarFoundryPrivateMessageEnabled', false),
-        onClick: () => {
-            // Call the global function that handles opening the dialog
-            if (typeof window.openPrivateMessageDialog === 'function') {
-                window.openPrivateMessageDialog();
-            } else {
-                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Private message dialog function not available", "", false, false);
-            }
         }
     },
     'bibliosoph-investigation': {
@@ -406,22 +371,6 @@ function unregisterToolbarTools() {
     
     // Clear our tracking set
     registeredToolIds.clear();
-}
-
-// Open party message dialog directly
-function openPartyMessageDialog() {
-    // Check if party messaging is enabled
-    if (!getSetting('partyMessageEnabled', false)) {
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Party messaging is not enabled in settings", "", false, false);
-        return;
-    }
-
-    // Call the global function that handles opening the dialog
-    if (typeof window.openPartyMessageDialog === 'function') {
-        window.openPartyMessageDialog();
-    } else {
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Party message dialog function not available", "", false, false);
-    }
 }
 
 // Export functions for use in main module

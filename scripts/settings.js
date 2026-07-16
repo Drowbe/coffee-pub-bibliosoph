@@ -1292,7 +1292,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: true,
 			scope: 'user',
-			default: false,
+			default: true,
 		});
 		// -- GM sees all conversations --
 		game.settings.register(MODULE.ID, 'gmSeesAllConversations', {
@@ -1325,58 +1325,7 @@ export const registerSettings = () => {
 			default: 'none',
 			choices: getBlacksmithChoices('arrSoundChoices', 'No sounds found. Try reloading Foundry after all modules are enabled.')
 		});
-
-	  	// ---------- SUBHEADING ----------
-		game.settings.register(MODULE.ID, "headingH3PartyMessage", {
-			name: MODULE.ID + '.headingH3PartyMessage-Label',
-			hint: MODULE.ID + '.headingH3PartyMessage-Hint',
-			scope: "client",
-			config: true,
-			default: "",
-			type: String,
-		});
-		// -------------------------------------
-
-		game.settings.register(MODULE.ID, 'partyMessageEnabled', {
-			name: MODULE.ID + '.partyMessageEnabled-Label',
-			hint: MODULE.ID + '.partyMessageEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'world',
-			default: false,
-		});
-		// -- Party Message Coffee Pub Toolbar --
-		game.settings.register(MODULE.ID, 'toolbarCoffeePubPartyMessageEnabled', {
-			name: MODULE.ID + '.toolbarCoffeePubPartyMessageEnabled-Label',
-			hint: MODULE.ID + '.toolbarCoffeePubPartyMessageEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'user',
-			default: true,
-		});
-		// -- Party Message Foundry Toolbar --
-		game.settings.register(MODULE.ID, 'toolbarFoundryPartyMessageEnabled', {
-			name: MODULE.ID + '.toolbarFoundryPartyMessageEnabled-Label',
-			hint: MODULE.ID + '.toolbarFoundryPartyMessageEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'user',
-			default: true,
-		});
-		// -- Party Message Macro --
-		game.settings.register(MODULE.ID,'partyMessageMacro', {
-			name: MODULE.ID + '.partyMessageMacro-Label',
-			hint: MODULE.ID + '.partyMessageMacro-Hint',
-			scope: "world",
-			config: true,
-			requiresReload: true,
-			default: '-- Choose a Macro --',
-			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
-		});
-		// -- Party Message Theme --
+		// -- Send-to-chat card themes (used when escalating a message to Foundry chat) --
 		game.settings.register(MODULE.ID, 'cardThemePartyMessage', {
 			name: MODULE.ID + '.cardThemePartyMessage-Label',
 			hint: MODULE.ID + '.cardThemePartyMessage-Hint',
@@ -1386,59 +1335,6 @@ export const registerSettings = () => {
 			default: 'theme-default',
 			choices: themeChoices
 		});
-
-		// ---------- SUBHEADING ----------
-		game.settings.register(MODULE.ID, "headingH3PrivateMessage", {
-			name: MODULE.ID + '.headingH3PrivateMessage-Label',
-			hint: MODULE.ID + '.headingH3PrivateMessage-Hint',
-			scope: "client",
-			config: true,
-			default: "",
-			type: String,
-		});
-		// -------------------------------------
-		
-		game.settings.register(MODULE.ID, 'privateMessageEnabled', {
-			name: MODULE.ID + '.privateMessageEnabled-Label',
-			hint: MODULE.ID + '.privateMessageEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'world',
-			default: false,
-		});
-		// -- Private Message Coffee Pub Toolbar --
-		game.settings.register(MODULE.ID, 'toolbarCoffeePubPrivateMessageEnabled', {
-			name: MODULE.ID + '.toolbarCoffeePubPrivateMessageEnabled-Label',
-			hint: MODULE.ID + '.toolbarCoffeePubPrivateMessageEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'user',
-			default: true,
-		});
-		// -- Private Message Foundry Toolbar --
-		game.settings.register(MODULE.ID, 'toolbarFoundryPrivateMessageEnabled', {
-			name: MODULE.ID + '.toolbarFoundryPrivateMessageEnabled-Label',
-			hint: MODULE.ID + '.toolbarFoundryPrivateMessageEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'user',
-			default: true,
-		});
-		// -- Private Message Macro --
-		game.settings.register(MODULE.ID,'privateMessageMacro', {
-			name: MODULE.ID + '.privateMessageMacro-Label',
-			hint: MODULE.ID + '.privateMessageMacro-Hint',
-			scope: "world",
-			config: true,
-			requiresReload: true,
-			default: '-- Choose a Macro --',
-			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
-		});
-
-		// -- Private Message Theme --
 		game.settings.register(MODULE.ID, 'cardThemePrivateMessage', {
 			name: MODULE.ID + '.cardThemePrivateMessage-Label',
 			hint: MODULE.ID + '.cardThemePrivateMessage-Hint',
@@ -1448,31 +1344,6 @@ export const registerSettings = () => {
 			default: 'theme-default',
 			choices: themeChoices
 		});
-
-		// -- Private Message Chat Layout --
-		game.settings.register(MODULE.ID, 'cardLayoutPrivateMessage', {
-			name: MODULE.ID + '.cardLayoutPrivateMessage-Label',
-			hint: MODULE.ID + '.cardLayoutPrivateMessage-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: false,
-			scope: 'world',
-			default: false,
-		});
-
-
-		// -- Private Message Window Layout --
-		game.settings.register(MODULE.ID, 'privateMessageCompressedWindow', {
-			name: MODULE.ID + '.privateMessageCompressedWindow-Label',
-			hint: MODULE.ID + '.privateMessageCompressedWindow-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: false,
-			scope: 'user',
-			default: false,
-		});
-
-
 
 		// ** BEVERAGE **
 

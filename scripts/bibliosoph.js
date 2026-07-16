@@ -138,49 +138,8 @@ Hooks.once('ready', async () => {
 // ===== TOOLBAR DIALOG FUNCTIONS ==================================
 // ================================================================== 
 
-// Open party message dialog directly (for toolbar integration)
-function openPartyMessageDialog() {
-    // Reset variables and set up for party message
-    resetBibliosophVars();
-    BIBLIOSOPH.CARDTYPEMESSAGE = true;
-    BIBLIOSOPH.CARDTYPE = "Message";
-    BIBLIOSOPH.MESSAGES_FORMTITLE = "Party Message";
-    
-    // Open the dialog
-    var blankForm = new BiblioWindowChat();
-    blankForm.onFormSubmit = publishChatCard;
-    blankForm.isPublic = true;
-    blankForm.render(true);
-}
-
-// Open private message dialog directly (for toolbar integration)
-function openPrivateMessageDialog() {
-    // Run the same code that fires when the private message macro is clicked
-    const strPrivateMacro = BlacksmithUtils.getSettingSafely(MODULE.ID, 'privateMessageMacro', '') || '';
-    const strPrivateMacroID = getMacroIdByName(strPrivateMacro);
-    
-    if (!strPrivateMacro || strPrivateMacro === '-- Choose a Macro --' || strPrivateMacro === 'none') {
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Private message macro not configured", "", false, false);
-        return;
-    }
-
-    // Build the chat message (same as macro click handler)
-    resetBibliosophVars();
-    BIBLIOSOPH.CARDTYPEWHISPER = true;
-    BIBLIOSOPH.CARDTYPE = "Message";
-    BIBLIOSOPH.MESSAGES_FORMTITLE = strPrivateMacro;
-    BIBLIOSOPH.MACRO_ID = strPrivateMacroID;
-    
-    // Open the form and get the data
-    var blankForm = new BiblioWindowChat();
-    // submits calls the card function after form is submitted
-    blankForm.onFormSubmit = publishChatCard;
-    // SET THE FORM VARIABLES
-    blankForm.isPublic = false;
-    var recipientArray = ""; // not a reply
-    blankForm.optionList = buildPlayerList(recipientArray);
-    blankForm.render(true);
-}
+// Party/private message dialogs removed — replaced by the unified Messages
+// window (window-messages.js + manager-conversations.js).
 
 // Trigger investigation macro (for toolbar integration)
 function triggerInvestigationMacro() {
@@ -374,8 +333,6 @@ function triggerInspirationMacro() {
 }
 
 // Make functions globally available for toolbar manager
-window.openPartyMessageDialog = openPartyMessageDialog;
-window.openPrivateMessageDialog = openPrivateMessageDialog;
 window.triggerInvestigationMacro = triggerInvestigationMacro;
 window.triggerCriticalMacro = triggerCriticalMacro;
 window.triggerFumbleMacro = triggerFumbleMacro;
@@ -408,8 +365,6 @@ function validateMandatorySettings() {
         { name: 'Bio Break', setting: game.settings.get(MODULE.ID, 'bioMacro'), required: true },
         { name: 'Insults', setting: game.settings.get(MODULE.ID, 'insultsMacro'), required: true },
         { name: 'Praise', setting: game.settings.get(MODULE.ID, 'praiseMacro'), required: true },
-        { name: 'Party Message', setting: game.settings.get(MODULE.ID, 'partyMessageMacro'), required: false },
-        { name: 'Private Message', setting: game.settings.get(MODULE.ID, 'privateMessageMacro'), required: false },
         { name: 'General Injuries', setting: game.settings.get(MODULE.ID, 'injuriesMacroGlobal'), required: true }
     ];
     
@@ -457,7 +412,6 @@ function validateMandatorySettings() {
 // Register settings so they can be loaded below.
 import { registerSettings } from './settings.js';
 // Grab windows
-import { BiblioWindowChat } from './window.js';
 
 // ================================================================== 
 // ===== REGISTER COMMON ============================================
@@ -489,23 +443,6 @@ Hooks.once('disableModule', (moduleId) => {
         unregisterToolbarTools();
         game.modules.get('coffee-pub-blacksmith')?.api?.unregisterWindow?.('bibliosoph-messages');
     }
-});
-
-// ***** CHAT CLICKS *****
-Hooks.on('renderChatLog', (app, html, data) => {
-    // v13: Detect and convert jQuery to native DOM if needed
-    let nativeHtml = html;
-    if (html && (html.jquery || typeof html.find === 'function')) {
-        nativeHtml = html[0] || html.get?.(0) || html;
-    }
-    
-    const icons = nativeHtml.querySelectorAll('#optionChatType > i');
-    icons.forEach(icon => {
-        icon.addEventListener('click', (event) => {
-            let chosenValue = event.currentTarget.getAttribute("value");
-            // Handle icon click if needed
-        });
-    });
 });
 
 // ************************************
@@ -750,43 +687,6 @@ Hooks.on("ready", async () => {
         });
 
         bindSimpleMacro({
-            label: "Party Message",
-            enabledKey: 'partyMessageEnabled',
-            macroKey: 'partyMessageMacro',
-            onExecute: async () => {
-                resetBibliosophVars();
-                BIBLIOSOPH.CARDTYPEMESSAGE = true;
-                BIBLIOSOPH.CARDTYPE = "Message";
-                BIBLIOSOPH.MESSAGES_FORMTITLE = "Party Message";
-                const form = new BiblioWindowChat();
-                form.onFormSubmit = publishChatCard;
-                form.isPublic = true;
-                form.render(true);
-            }
-        });
-
-        bindSimpleMacro({
-            label: "Private Message",
-            enabledKey: 'privateMessageEnabled',
-            macroKey: 'privateMessageMacro',
-            onExecute: async () => {
-                const macroName = getSetting('privateMessageMacro', '');
-                const macroId = getMacroIdByName(macroName);
-                resetBibliosophVars();
-                BIBLIOSOPH.CARDTYPEWHISPER = true;
-                BIBLIOSOPH.CARDTYPE = "Message";
-                BIBLIOSOPH.MESSAGES_FORMTITLE = macroName;
-                BIBLIOSOPH.MACRO_ID = macroId;
-                const form = new BiblioWindowChat();
-                form.onFormSubmit = publishChatCard;
-                form.isPublic = false;
-                const recipientArray = "";
-                form.optionList = buildPlayerList(recipientArray);
-                form.render(true);
-            }
-        });
-
-        bindSimpleMacro({
             label: "General Injuries",
             enabledKey: 'injuriesEnabledGlobal',
             macroKey: 'injuriesMacroGlobal',
@@ -823,16 +723,10 @@ Hooks.on("ready", async () => {
     var strBioMacro = getSetting('bioMacro', '');
     var strInsultMacro = getSetting('insultsMacro', '');
     var strPraiseMacro = getSetting('praiseMacro', '');
-    var strPartyMacro = getSetting('partyMessageMacro', '');
-    var strPartyMacroID = getMacroIdByName(strPartyMacro);
-    var strPrivateMacro = getSetting('privateMessageMacro', '');
-    var strPrivateMacroID = getMacroIdByName(strPrivateMacro);
 
     var strInjuriesMacroGlobal = getSetting('injuriesMacroGlobal', '');
     var strInjuriesMacroGlobalID = getMacroIdByName(strInjuriesMacroGlobal);
 
-    var blnPartyMessageEnabled = getSetting('partyMessageEnabled', false);
-    var blnPrivateMessageEnabled = getSetting('privateMessageEnabled', false);
     var blnBeverageEnabled = getSetting('beverageEnabled', false);
     var blnBioEnabled = getSetting('bioEnabled', false);
     var blnInsultsEnabled = getSetting('insultsEnabled', false);
@@ -848,33 +742,6 @@ Hooks.on("ready", async () => {
 
     // BUTTON PRESSES IN CHAT
     document.addEventListener('click', function(event) {
-        if(event.target.classList.contains('coffee-pub-bibliosoph-button-reply')) {
-            //BlacksmithUtils.postConsoleAndNotification("Button Pressed", "Be sure to verify the recipients.", false, true, false);
-            var recipients = event.target.getAttribute('data-recipient');
-            var recipientArray = recipients.split(',').map(r => r.trim()).filter(r => r !== '');
-            // Use the recipientArray
-            //BlacksmithUtils.postConsoleAndNotification("Inside document.addEventListener. The recipient array: ", recipientArray, false, true, false);
-            // Let's see if the sam stuff from the macro work.
-            //BlacksmithUtils.postConsoleAndNotification("Inside document.addEventListener. The strPrivateMacro: ", strPrivateMacro, false, true, false);
-            // Build the chat message
-            resetBibliosophVars();
-            BIBLIOSOPH.CARDTYPEWHISPER = true;
-            BIBLIOSOPH.CARDTYPE = "Message";
-            BIBLIOSOPH.MESSAGES_FORMTITLE  = strPrivateMacro;
-            BIBLIOSOPH.MACRO_ID = strPrivateMacroID;
-            // Open the form and get the data
-            var blankForm = new BiblioWindowChat()
-            // submits calls the card function after form is submitted
-            blankForm.onFormSubmit = publishChatCard
-            // sET THE FORM VARIABLES
-            blankForm.isPublic = false;
-            blankForm.optionList = buildPlayerList(recipientArray);
-            // Ensure selectedDivs is an array for pre-selection
-            blankForm.selectedDivs = Array.isArray(recipientArray) ? recipientArray : [];
-            //blankForm.formTitle = 'Private Message';
-            blankForm.render(true);
-        }
-
         // CHECK FOR INJURY BUTTON
         if(event.target.classList.contains('coffee-pub-bibliosoph-button-injury')) {
 
@@ -1177,73 +1044,6 @@ Hooks.on("ready", async () => {
             BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Praise not set.`, "", false, false);
         } 
     }
-    // *** Public Message ***
-    if (blnPartyMessageEnabled) {
-        if(strPartyMacro) {
-            let PartyMacro = getMacroByIdOrName(strPartyMacro);
-            if(PartyMacro) {
-                PartyMacro.execute = async () => {
-                    //BlacksmithUtils.postConsoleAndNotification("Macro Clicked: ", "Party Message", false, true, false);
-                    // Build the chat message
-                    resetBibliosophVars();
-                    BIBLIOSOPH.CARDTYPEMESSAGE = true;
-                    BIBLIOSOPH.CARDTYPE = "Message";
-                    BIBLIOSOPH.MESSAGES_FORMTITLE  = strPartyMacro;
-                    BIBLIOSOPH.MACRO_ID = strPartyMacroID;
-                    // Open the form and get the data
-                    var blankForm = new BiblioWindowChat()
-                    // submits calls the card function after form is submitted
-                    blankForm.onFormSubmit = publishChatCard
-                    // you can add other properties to BiblioWindowChat to configure it from here
-                    // in window.js, just declare them in the constructor like these
-                    // then you can access them here as below, and inside window.js as "this.foo"
-                    blankForm.isPublic = true
-                    //blankForm.formTitle = 'Party Message'
-                    blankForm.render(true);
-                };
-            } else {
-                // User needs to know about macro configuration issues
-                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Party Message Macro "${strPartyMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
-            }
-        } else {
-            // They haven't set this macro
-            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Party Message not set.`, "", false, false);
-        } 
-    }
-    // *** Private Message ***
-    if (blnPrivateMessageEnabled) {
-        if(strPrivateMacro) {
-            let PartyMacro = getMacroByIdOrName(strPrivateMacro);
-            if(PartyMacro) {
-                PartyMacro.execute = async () => {
-                    //BlacksmithUtils.postConsoleAndNotification("Macro Clicked: ", "Private Message", false, true, false);
-                    // Build the chat message
-                    resetBibliosophVars();
-                    BIBLIOSOPH.CARDTYPEWHISPER = true;
-                    BIBLIOSOPH.CARDTYPE = "Message";
-                    BIBLIOSOPH.MESSAGES_FORMTITLE  = strPrivateMacro;
-                    BIBLIOSOPH.MACRO_ID = strPrivateMacroID;
-                    // Open the form and get the data
-                    var blankForm = new BiblioWindowChat()
-                    // submits calls the card function after form is submitted
-                    blankForm.onFormSubmit = publishChatCard
-                    // sET THE FORM VARIABLES
-                    blankForm.isPublic = false;
-                    var recipientArray = ""; // not a reply
-                    blankForm.optionList = buildPlayerList(recipientArray);
-                    //blankForm.formTitle = 'Private Message';
-                    blankForm.render(true);
-                };
-            } else {
-                // User needs to know about macro configuration issues
-                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Private Message Macro "${strPrivateMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
-            }
-        } else {
-            // They haven't set this macro
-            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Private Message not set.`, "", false, false);
-        } 
-    }
-
     // *** INJURIES: GENERAL ***
     if (blninjuriesEnabledGlobal) {
 
@@ -1428,7 +1228,6 @@ async function publishChatCard() {
     var compiledHtml = "";
     var strInjuryCategory = "";
     var strRollTableName = "";
-    var strChatType = BIBLIOSOPH.CHAT_TYPE_OTHER;
     if (BIBLIOSOPH.CARDTYPEINVESTIGATION) {
         // INVESTIGATION (new flow: narrative + slots + per-rarity tables)
         compiledHtml = await createChatCardInvestigation();
@@ -1475,14 +1274,6 @@ async function publishChatCard() {
         // PRAISE
         strRollTableName = game.settings.get(MODULE.ID, 'praiseTable');
         compiledHtml = await createChatCardGeneral(strRollTableName);
-    } else if (BIBLIOSOPH.CARDTYPEMESSAGE) {
-        // MESSAGE
-        compiledHtml = await createChatCardGeneral();
-    } else if (BIBLIOSOPH.CARDTYPEWHISPER) {
-        // WHISPER
-        // Call the chat function
-        strChatType = BIBLIOSOPH.CHAT_TYPE_WHISPER;
-        compiledHtml = await createChatCardGeneral();
     } else if (BIBLIOSOPH.CARDTYPEINJURY) {
 
         // V12 CONTEXT:
@@ -1511,46 +1302,17 @@ async function publishChatCard() {
         // NOTHING
         BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Card Type: No Card Type Set", "", true, false);
     }
-    //user, speaker, timestamp, flavor, whisper, blind, roll, sound, emote, flags, content
-    //these are the types: OTHER (Uncategorized), OOC (Out of Char), IC (In Character), EMOTE (e.g. "waves hand"), WHISPER (Private), ROLL (Dice Roll)
-    // ** If a WHisper send a whisper card... all other go as a normal card.
-    //BlacksmithUtils.postConsoleAndNotification("strChatType", strChatType, false, true, true);
-    if (strChatType == BIBLIOSOPH.CHAT_TYPE_WHISPER ) {
-        // IT IS A WHISPER
-        let users = BIBLIOSOPH.MESSAGES_LIST_TO_PRIVATE;
-        // Check if `users` is an array.
-        if (!Array.isArray(users)) {
-            // This is an error that could break functionality - use console.warn
-            console.warn("BIBLIOSOPH | Expected 'users' to be an array, but it is not:", users);
-        }
-        let userids = users
-            .map(u => game.users.find(us => us && us.name === u))
-            .filter(u => u !== undefined && u !== null) 
-            .map(u => u._id);
-        if (userids.length > 0) {
-            ChatMessage.create({
-                user: game.user._id,
-                whisper: userids,
-                content: compiledHtml,
-                //type: strChatType,
-                speaker: ChatMessage.getSpeaker()
-            });
-        } else {
-            // Post Debug - This is debug info, only log if really needed for troubleshooting
-            // BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "No User Selected: No users to send a whisper to.", "", true, true);
-        }
-    } else {
-        // If there is content, send it.
-        if (compiledHtml){
-            // IT IS A NORMAL CHAT MESSAGE
-            var chatData = {
-                user: game.user._id,
-                content: compiledHtml,
-                speaker: ChatMessage.getSpeaker()
-            };
-            // Send the msaage to the chat window.
-            ChatMessage.create(chatData, {});
-        }
+    // If there is content, send it as a normal chat message.
+    // (Whisper delivery was removed with the legacy private messages — the
+    // unified Messages window handles private conversations now.)
+    if (compiledHtml){
+        var chatData = {
+            user: game.user._id,
+            content: compiledHtml,
+            speaker: ChatMessage.getSpeaker()
+        };
+        // Send the msaage to the chat window.
+        ChatMessage.create(chatData, {});
     }
 
     // Reset everything for the next time - This is a system message
@@ -1663,68 +1425,6 @@ async function createChatCardGeneral(strRollTableName) {
             strIconStyle = "fa-toilet";
             strActionLabel = "";
             break;
-        case (BIBLIOSOPH.CARDTYPEMESSAGE):
-            strTheme = game.settings.get(MODULE.ID, 'cardThemePartyMessage');
-            switch (true) {
-                case (BIBLIOSOPH.MESSAGES_TITLE == "messageVote"):
-                    strCardTitle = "Party Plan";
-                    strImage = "icons/skills/social/diplomacy-handshake.webp";
-                    strSound = "modules/coffee-pub-blacksmith/sounds/notification.mp3";
-                    strIconStyle = "fa-solid fa-square-poll-horizontal";
-                    break;
-                case (BIBLIOSOPH.MESSAGES_TITLE == "messageThumbsup"):
-                    strCardTitle = "Agree";
-                    strImage = "icons/skills/social/thumbsup-approval-like.webp";
-                    strSound = "modules/coffee-pub-blacksmith/sounds/notification.mp3";
-                    strIconStyle = "fa-solid fa-thumbs-up";
-                    break;
-                case (BIBLIOSOPH.MESSAGES_TITLE == "messageThumbsdown"):
-                    strCardTitle = "Disagree";
-                    strImage = "icons/skills/social/wave-halt-stop.webp";
-                    strSound = "modules/coffee-pub-blacksmith/sounds/notification.mp3";
-                    strIconStyle = "fa-solid fa-thumbs-down";
-                    break;
-                case (BIBLIOSOPH.MESSAGES_TITLE == "messagePraise"):
-                    strTheme = game.settings.get(MODULE.ID, 'cardThemePraise');
-                    strCardTitle = "Praise";
-                    strImage = "icons/magic/life/heart-shadow-red.webp";
-                    strSound = "modules/coffee-pub-blacksmith/sounds/reaction-ahhhhh.mp3";
-                    strIconStyle = "fa-flower-tulip";
-                    strActionLabel = "";
-                    break;
-                case (BIBLIOSOPH.MESSAGES_TITLE == "messageInsult"):
-                    strTheme = game.settings.get(MODULE.ID, 'cardThemeInsults');
-                    strCardTitle = "Defamation";
-                    strImage = "icons/skills/wounds/injury-face-impact-orange.webp";
-                    strSound = "modules/coffee-pub-blacksmith/sounds/reaction-oooooh.mp3";
-                    strIconStyle = "fa-person-harassing";
-                    strActionLabel = "";
-                    strUserName = strUserName;
-                    break;
-                default:
-                    strCardTitle = "Party Message";
-                    strImage = "";
-                    strSound = "modules/coffee-pub-blacksmith/sounds/notification.mp3";
-                    strIconStyle = "fa-comments-alt";
-            }
-            strActionLabel = "Reply";
-            break;
-        case (BIBLIOSOPH.CARDTYPEWHISPER):
-            strTheme = game.settings.get(MODULE.ID, 'cardThemePrivateMessage');
-            strCardTitle = "Private Message";
-            // set the image to the user avatar
-            strImage = strUserAvatar;
-            strSound = "modules/coffee-pub-blacksmith/sounds/fire-candle-blow.mp3";
-            strIconStyle = "fa-feather";
-            strActionLabel = "";
-            //strAction = "@UUID[Macro." + BIBLIOSOPH.MACRO_ID + "]{" + strCardTitle + "}";
-            strAction = ""; // not using the macro now
-            const privateData = buildPrivateList(BIBLIOSOPH.MESSAGES_LIST_TO_PRIVATE);
-            arrPrivateRecipients = privateData.recipients;
-            privateRecipientsCompressed = privateData.compressed;
-            strRecipients = BIBLIOSOPH.MESSAGES_LIST_TO_PRIVATE;
-            //BlacksmithUtils.postConsoleAndNotification("Private TO List: ", BIBLIOSOPH.MESSAGES_LIST_TO_PRIVATE, false, true, false);
-            break;
         default:
             // NOTHING
             // POST DEBUG
@@ -1748,10 +1448,6 @@ async function createChatCardGeneral(strRollTableName) {
         strContent = arrRollTableResults.strContent;
         strAction = arrRollTableResults.strAction;
         strImage = arrRollTableResults.strImage;
-    } else {
-        // Not getting data from a table, set it accordingly
-        // No Tabel content so assume message
-        strContent = BlacksmithUtils.markdownToHtml(BIBLIOSOPH.MESSAGES_CONTENT);
     }
     const templatePath = BIBLIOSOPH.MESSAGE_TEMPLATE_CARD;
     const response = await fetch(templatePath);
@@ -2501,201 +2197,8 @@ async function getRollTable(tableName) {
     return ROLLEDRESULT;
 }
 
-// ************************************
-// ** UTILITY Build Player List
-// ************************************
-
-// Fundtion to build the player list for the whisper
-function buildPlayerList(recipients) {
-
-    let strUser = game.user.name;
-    let strPortrait = game.user.avatar;
-    // Ensure arrRecipients is always an array
-    var arrRecipients = Array.isArray(recipients) ? recipients : (recipients ? [recipients] : []);
-    var defaultToCharacter = false; //"true" means the dialog will select a character to speak as by default; "false" means the dialog will select to speak as you, the player, by default.
-    var activePlayersOnly = false; //"true" means the dialog is only populated with active players currently in the session; "false" means the dialog is populated with all players in the world.
-    var warnIfNoTargets = true; //"true" means your whisper will not be posted if you did not select a player; "false" means your whisper will be posted for all players to see if you do not select a player.
-    var userConfigCharacterOnly = true; //Changes what appears when you hover on a player's name. "true" shows only the name of the character bound to them in their User Configuration; "false" shows a list of names for all characters they own. GMs and Assistant GMs do not get character lists regardless; they're labeled with their position.
-    var strSound = "modules/coffee-pub-blacksmith/sounds/fire-candle-blow.mp3";
-    
-    // Check if compressed window layout is enabled
-    var blnCompressedWindow = BlacksmithUtils.getSettingSafely(MODULE.ID, 'privateMessageCompressedWindow', false);
-
-    // Build the "whisper to" checkboxes
-    var characters = game.actors;
-    var checkOptions = "";
-    var strToActors = "";
-    var targets = Array.from(game.user.targets);
-
-    if (activePlayersOnly === true) {
-        var players = game.users.filter(player => player.active);
-    } else {
-        var players = game.users;
-    }
-
-    var whisperSpeakerID = "";
-    if (game.user.character !== null && game.user.character !== undefined) {
-        whisperSpeakerID = game.user.character.id
-    }
-    if (canvas.tokens.controlled[0] !== undefined && canvas.tokens.controlled[0].actor !== null) {
-        whisperSpeakerID = canvas.tokens.controlled[0].actor.id;
-    }
-    if (activePlayersOnly === true) {
-        var players = game.users.filter(player => player.active);
-    } else {
-        var players = game.users;
-    }
-    // Loop through the players
-    players.forEach(player => {
-        if (player.id !== game.user.id) {
-            if (player.name !== "Cameraman" && player.name !== "DeveloperXXX" && player.name !== "AuthorXXX") {
-                // Only show party members (users with assigned characters)
-                if (player.character === null || player.character === undefined) {
-                    return; // Skip users without characters (not party members)
-                }
-
-                var blnPlayerSelected = false;
-                var checked = "";
-                var strTheme = "";
-                if (targets.length > 0) {
-                    for (let i = 0; i < targets.length; i++) {
-                        const actor = game.actors.get(targets[i].data.actorId);
-                        if (actor && actor.system && actor.system.permission && actor.system.permission[player.id] !== undefined && actor.system.permission[player.id] > 2) {
-                            checked = "checked";
-                        }
-                    }
-                }
-                var ownedCharacters = "";
-                if (player.role == 4) {
-                    ownedCharacters = "Gamemaster";
-                } else if (player.role == 3) {
-                    ownedCharacters = "Assistant Gamemaster";
-                } else if (userConfigCharacterOnly == true && player.character !== null && player.character !== undefined) {
-                    ownedCharacters = player.character.name;
-                } else {
-                    characters.forEach(character => {
-                        if (character && character.system && character.system.permission && character.system.permission[`${player.id}`] > 2) {
-                            var charName = character.name.replace(/'/g, '`');
-                            var startSymbol = "; ";
-                            if (ownedCharacters == "") {
-                                startSymbol = "";
-                            }
-                            ownedCharacters += startSymbol + charName;
-                        }
-                    });
-                }
-                // Build the selectable divs - compressed or full layout
-                // Note: Selection is handled in activateListeners, not in initial HTML generation
-                if (blnCompressedWindow) {
-                    // Compressed layout: just portrait images in horizontal row (like party buttons)
-                    // Same styling as party buttons - let them wrap naturally
-                    checkOptions += "<img name='selectable-div' class='bibliosoph-option-image' title='" + player.name + " (" + ownedCharacters + ")' src='" + player.avatar + "' value='" + player.name + "' />";
-                } else {
-                    // Full layout: portrait with name and character info
-                    // Width set to ~33.33% to allow 3 per row (with gap)
-                    // Note: Selection is handled in activateListeners, not in initial HTML generation
-                    checkOptions += "<div name='selectable-div' id='bib-window-user-wrapper' value='" + player.name + "' class='bibliosoph-option-div' style='flex: 0 0 calc(33.33% - 5px);'>";
-                    checkOptions += "   <img id='bib-window-user-portrait' src='" + player.avatar + "' />";
-                    checkOptions += "   <div id='bib-window-user-nameplate-container'>";
-                    checkOptions += "       <span id='bib-window-user-nameplate-name'>" + player.name + "</span>";
-                    checkOptions += "       <br />";
-                    checkOptions += "       <span id='bib-window-user-nameplate-description'>" + ownedCharacters + "</span>";
-                    checkOptions += "   </div>";
-                    checkOptions += "</div>";
-                }
-
-            }
-        }
-    });
-
-    // Return the options
-    return checkOptions
-}
-
-// ************************************
-// ** UTILITY Whisper Private List
-// ************************************
-
-/**
- * Build private message recipient data for the template (no HTML).
- * Returns { recipients: [{ playerName, playerAvatar, characterName }, ...], compressed: boolean }.
- */
-function buildPrivateList(arrPlayers) {
-    const recipients = [];
-    const blnCompressedList = game.settings.get(MODULE.ID, "cardLayoutPrivateMessage");
-
-    for (let i = 0; i < arrPlayers.length; i++) {
-        if (!arrPlayers[i]) continue;
-
-        let strPlayerName = arrPlayers[i];
-        let strPlayerAvatar = "";
-        let strCharacterName = "";
-
-        const tokenDetails = getUserCharacterDetails(strPlayerName);
-        if (tokenDetails) {
-            strCharacterName = tokenDetails.strCharacterName;
-            strPlayerName = tokenDetails.strPlayerName;
-            strPlayerAvatar = tokenDetails.strPlayerAvatar || "";
-        } else {
-            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "No owned tokens for this user: " + strPlayerName, "", false, false);
-        }
-
-        recipients.push({
-            playerName: strPlayerName,
-            playerAvatar: strPlayerAvatar,
-            characterName: strCharacterName
-        });
-    }
-
-    return { recipients, compressed: blnCompressedList };
-}
-
-// ************************************
-// ** UTILITY Get Character Details
-// ************************************
-
-function getUserCharacterDetails(username) {
-// Fetch the user from Foundry VTT's user store
-let user = game.users.contents.find(u => u.name === username);
-
-// Check if the user exists
-if (user && user.character) {
-    // Fetch the owned character
-    let character = user.character;
-    
-    // Create the characterDetails object with character data
-    let characterDetails = {
-        strPlayerName: user.name,
-        strPlayerAvatar: user.avatar, 
-        strCharacterName: character.name,
-        strCharacterTokenImage: character.img, // map to token
-        strCharacterPortraitImage: character.img, 
-        intCharacterID: character._id,       
-    }
-    // Return character details
-    return characterDetails;
-} else {
-    BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "User with that username does not exist or the user has no character.", "", false, false); 
-}
-}
-
-// ************************************
-// ** UTILITY Userid by Name
-// ************************************
-
-function getUserIdByPlayerName(playerName) {
-    // Find the user object for the given player name
-    const user = game.users.find(u => u.name === playerName);
-
-    if (user) {
-        // Return the user's ID
-        return user.id;
-    } else {
-        // Handle the case where the user is not found
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "User with that username does not exist or the user has no character: " + playerName, "", false, false); 
-        return null;
-    }
-}
+// (Legacy whisper player-list/recipient utilities removed — the unified
+// Messages window owns private conversations now.)
 
 // ************************************
 // ** UTILITY Controlled Tokens info ID
@@ -3314,12 +2817,6 @@ function resetBibliosophVars() {
     BIBLIOSOPH.CARDTYPEPRAISE = false;
     BIBLIOSOPH.CARDTYPEINSPIRATION = false;
     BIBLIOSOPH.CARDTYPEDOMT = false;
-    BIBLIOSOPH.CARDTYPEMESSAGE = false;
-    BIBLIOSOPH.CARDTYPEWHISPER = false;
-    BIBLIOSOPH.MESSAGES_TITLE = "Message";
-    BIBLIOSOPH.MESSAGES_CONTENT = "";
-    BIBLIOSOPH.MESSAGES_FORMTITLE  = "";
-    BIBLIOSOPH.MESSAGES_LIST_TO_PRIVATE = "";
     BIBLIOSOPH.MACRO_ID = "";
 }
 

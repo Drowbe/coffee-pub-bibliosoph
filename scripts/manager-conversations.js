@@ -218,6 +218,68 @@ export class ConversationManager {
         return /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(tint ?? '') ? tint : '';
     }
 
+    /** Find the existing 1:1 conversation between the current user and another user. */
+    static getDirectConversation(otherUserId, userId = game.user.id) {
+        return game.journal.find((entry) => {
+            if (!this.isConversation(entry)) return false;
+            const info = this.getInfo(entry);
+            if (info.kind !== 'direct') return false;
+            const members = info.members ?? [];
+            return members.length === 2 && members.includes(userId) && members.includes(otherUserId);
+        }) ?? null;
+    }
+
+    /**
+     * Get (or lazily create) the 1:1 conversation with another user. GMs
+     * create directly; players relay to the GM and wait for the document to
+     * arrive. Returns null on timeout / no GM.
+     */
+    static async ensureDirectConversation(otherUserId) {
+        const existing = this.getDirectConversation(otherUserId);
+        if (existing) return existing;
+
+        const members = [game.user.id, otherUserId];
+        if (game.user.isGM) {
+            return this._createConversationEntry({ members, kind: 'direct', createdBy: game.user.id });
+        }
+
+        const activeGMs = game.users.filter((u) => u.isGM && u.active);
+        if (!activeGMs.length) {
+            ui.notifications.warn('A GM must be connected to start this direct message.');
+            return null;
+        }
+        const sockets = getBlacksmith()?.sockets;
+        if (!sockets) return null;
+        await sockets.waitForReady();
+
+        // Listen for the relayed creation BEFORE emitting, then wait for it
+        const created = new Promise((resolve) => {
+            const timeout = setTimeout(() => {
+                Hooks.off('createJournalEntry', onCreate);
+                resolve(null);
+            }, 8000);
+            const onCreate = (entry) => {
+                if (!this.isConversation(entry)) return;
+                const info = this.getInfo(entry);
+                if (info.kind !== 'direct') return;
+                const m = info.members ?? [];
+                if (m.includes(game.user.id) && m.includes(otherUserId)) {
+                    clearTimeout(timeout);
+                    Hooks.off('createJournalEntry', onCreate);
+                    resolve(entry);
+                }
+            };
+            Hooks.on('createJournalEntry', onCreate);
+        });
+
+        await sockets.emit(
+            SOCKET_CREATE_CONVERSATION,
+            { members, kind: 'direct', requestedBy: game.user.id },
+            { recipients: activeGMs.map((u) => u.id) }
+        );
+        return created;
+    }
+
     /** GM-side: actually create the conversation JournalEntry. */
     static async _createConversationEntry({ members, name, createdBy, kind = 'group', icon = '', tint = '' }) {
         const folder = await this._ensureFolder();
@@ -226,7 +288,8 @@ export class ConversationManager {
         const ownership = { default: levels.NONE };
         for (const id of members) ownership[id] = levels.OWNER;
 
-        const displayName = (name || '').trim() || this._defaultName(members);
+        const displayName = (name || '').trim()
+            || (kind === 'direct' ? this._directName(members) : this._defaultName(members));
         const entry = await JournalEntry.create({
             name: displayName,
             folder: folder.id,
@@ -237,7 +300,7 @@ export class ConversationManager {
                     kind,
                     members,
                     name: displayName,
-                    icon: icon || (kind === 'party' ? 'fa-solid fa-users' : 'fa-solid fa-user-group'),
+                    icon: icon || (kind === 'party' ? 'fa-solid fa-users' : kind === 'direct' ? 'fa-solid fa-user' : 'fa-solid fa-user-group'),
                     tint: this._sanitizeTint(tint),
                     createdBy,
                     created: Date.now()
@@ -246,6 +309,12 @@ export class ConversationManager {
         });
         log(`Conversation created: ${displayName}`, members);
         return entry;
+    }
+
+    /** Canonical stored name for a 1:1 ("Alice & Bob"); viewers see the other party's name. */
+    static _directName(members) {
+        const names = members.map((id) => game.users.get(id)?.name ?? 'Unknown').sort();
+        return names.join(' & ');
     }
 
     static _defaultName(members) {
@@ -260,6 +329,7 @@ export class ConversationManager {
     static canEdit(entry) {
         const info = this.getInfo(entry);
         if (info.kind === 'party') return game.user.isGM;
+        if (info.kind === 'direct') return false; // 1:1s are fixed by nature
         return game.user.isGM || info.createdBy === game.user.id;
     }
 
@@ -309,7 +379,8 @@ export class ConversationManager {
         if (requestedBy && info.createdBy !== requestedBy) return;
 
         const update = {};
-        const displayName = (name ?? '').trim();
+        // The Party conversation's name is owned by the Blacksmith campaign API
+        const displayName = info.kind === 'party' ? '' : (name ?? '').trim();
         if (displayName && displayName !== info.name) {
             update.name = displayName;
             update[`flags.${MODULE.ID}.name`] = displayName;
@@ -341,32 +412,50 @@ export class ConversationManager {
         return entry;
     }
 
+    /** Table-facing party name from the Blacksmith campaign API; falls back to "Party Chat". */
+    static async _getPartyName() {
+        try {
+            const partyBlock = await getBlacksmith()?.campaign?.getParty?.();
+            const name = (partyBlock?.name ?? '').trim();
+            if (name) return name;
+        } catch (_) { /* fall through */ }
+        return 'Party Chat';
+    }
+
     /** GM only: ensure the singleton Party conversation exists and includes everyone. */
     static async _ensurePartyConversation() {
         const allUserIds = this.getSelectableUsers().map((u) => u.id);
+        const partyName = await this._getPartyName();
         let party = this.getPartyConversation();
         if (!party) {
             party = await this._createConversationEntry({
                 members: allUserIds,
-                name: 'Party',
+                name: partyName,
                 createdBy: game.user.id,
                 kind: 'party'
             });
             return party;
         }
-        // Keep membership + ownership in sync as users are added to the world
+        // Keep membership + ownership in sync as users are added to the world,
+        // and follow the campaign party name when it changes in Blacksmith
         const info = this.getInfo(party);
         const current = new Set(info.members ?? []);
         const missing = allUserIds.filter((id) => !current.has(id));
+        const update = {};
         if (missing.length) {
             const levels = LEVELS();
             const ownership = foundry.utils.deepClone(party.ownership ?? { default: levels.NONE });
             for (const id of missing) ownership[id] = levels.OWNER;
-            await party.update({
-                ownership,
-                [`flags.${MODULE.ID}.members`]: [...current, ...missing]
-            });
-            log('Party conversation membership refreshed', missing);
+            update.ownership = ownership;
+            update[`flags.${MODULE.ID}.members`] = [...current, ...missing];
+        }
+        if (partyName !== info.name) {
+            update.name = partyName;
+            update[`flags.${MODULE.ID}.name`] = partyName;
+        }
+        if (Object.keys(update).length) {
+            await party.update(update);
+            log('Party conversation refreshed', { missing, partyName });
         }
         return party;
     }
@@ -415,12 +504,15 @@ export class ConversationManager {
         return page;
     }
 
-    /** Escape user input, then apply markdown so players can't inject raw HTML. */
+    /**
+     * Escape user input, then apply markdown so players can't inject raw HTML.
+     * `&` and `<` are enough to neutralize tags; `>` stays literal so
+     * blockquote syntax (replies) still reaches the markdown converter.
+     */
     static renderMarkdown(text) {
         const escaped = text
             .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;');
+            .replace(/</g, '&lt;');
         if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.markdownToHtml) {
             try {
                 return BlacksmithUtils.markdownToHtml(escaped);
@@ -448,6 +540,7 @@ export class ConversationManager {
                 timestamp: flags.timestamp ?? 0,
                 tone: flags.tone ?? 'message',
                 html: page.text?.content ?? '',
+                markdown: flags.markdown ?? '',
                 isOwn: flags.sender === game.user.id,
                 reactions: flags.reactions ?? {}
             };
@@ -563,13 +656,18 @@ export class ConversationManager {
             // Targeted at active GMs (Blacksmith >= 13.8.5), but keep the
             // first-active-GM guard so exactly one client acts on all builds.
             if (!game.user.isGM || game.users.activeGM?.id !== game.user.id) return;
-            const { members, name, icon, tint, requestedBy } = data ?? {};
+            const { members, name, icon, tint, kind, requestedBy } = data ?? {};
             if (!Array.isArray(members) || members.length < 2) return;
+            const safeKind = kind === 'direct' ? 'direct' : 'group';
+            // Never duplicate a 1:1 pair (e.g. both sides clicking at once)
+            if (safeKind === 'direct' && members.length === 2
+                && this.getDirectConversation(members[0], members[1])) return;
             await this._createConversationEntry({
                 members,
                 name,
                 icon,
                 tint,
+                kind: safeKind,
                 createdBy: requestedBy ?? senderUserId
             });
         });

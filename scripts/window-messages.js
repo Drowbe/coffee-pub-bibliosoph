@@ -11,7 +11,7 @@
 // after Blacksmith has loaded.
 // ==================================================================
 
-import { MODULE, BIBLIOSOPH } from './const.js';
+import { MODULE } from './const.js';
 import { ConversationManager } from './manager-conversations.js';
 
 const APP_ID = 'coffee-pub-bibliosoph-messages';
@@ -135,7 +135,24 @@ export class MessagesWindow extends resolveBase() {
     // ===== DATA ===================================================
     // ==============================================================
 
+    /** The other user's id when a virtual (not-yet-created) 1:1 row is selected. */
+    get _virtualUserId() {
+        const id = this._activeConversationId;
+        return typeof id === 'string' && id.startsWith('virtual:') ? id.slice('virtual:'.length) : null;
+    }
+
     _resolveActiveConversation(conversations) {
+        const virtualUserId = this._virtualUserId;
+        if (virtualUserId) {
+            // If the real 1:1 exists by now (created on first message), switch to it
+            const real = ConversationManager.getDirectConversation(virtualUserId);
+            if (real) {
+                this._activeConversationId = real.id;
+                return real;
+            }
+            if (game.users.get(virtualUserId)) return null; // stay on the empty virtual thread
+            this._activeConversationId = null;
+        }
         let active = conversations.find((c) => c.id === this._activeConversationId);
         if (!active) {
             active = conversations.find((c) => ConversationManager.getInfo(c).kind === 'party') ?? conversations[0] ?? null;
@@ -144,9 +161,20 @@ export class MessagesWindow extends resolveBase() {
         return active;
     }
 
+    /** Viewer-facing name: a 1:1 shows the other person's name. */
+    _conversationDisplayName(entry) {
+        const info = ConversationManager.getInfo(entry);
+        if (info.kind === 'direct' && (info.members ?? []).includes(game.user.id)) {
+            const otherId = (info.members ?? []).find((id) => id !== game.user.id);
+            return game.users.get(otherId)?.name ?? info.name ?? entry.name;
+        }
+        return info.name ?? entry.name;
+    }
+
     async getData() {
         const conversations = ConversationManager.getConversations();
         const active = this._resolveActiveConversation(conversations);
+        const virtualUser = this._virtualUserId ? game.users.get(this._virtualUserId) : null;
         const info = active ? ConversationManager.getInfo(active) : {};
         const memberNames = (info.members ?? [])
             .map((id) => game.users.get(id)?.name)
@@ -155,11 +183,32 @@ export class MessagesWindow extends resolveBase() {
         const renderTemplateFn = foundry.applications?.handlebars?.renderTemplate ?? renderTemplate;
         const bodyContent = await renderTemplateFn(BODY_TEMPLATE, this._buildBodyContext(active, conversations));
 
-        const showCompose = !this._picker && !!active;
+        const showCompose = !this._picker && (!!active || !!virtualUser);
         const actionBarLeft = `<label class="blacksmith-window-template-action-label bibliosoph-messages-enter-label"><input type="checkbox" class="bibliosoph-messages-enter-sends" ${this._enterSends ? 'checked' : ''}> ENTER Sends</label>`;
         const actionBarRight = showCompose
             ? `<button type="button" class="blacksmith-window-btn-primary bibliosoph-messages-btn" data-action="msg-send"><i class="fa-solid fa-paper-plane"></i> Send Message</button>`
             : '';
+
+        let windowTitle = 'Messages';
+        let headerIcon = 'fa-solid fa-comments';
+        let subtitle = 'No conversation selected';
+        // 1:1 chats show the other player's avatar instead of an icon
+        // (swapped into the header icon slot in _onRender)
+        this._headerAvatar = null;
+        if (active) {
+            windowTitle = this._conversationDisplayName(active);
+            headerIcon = info.icon ?? 'fa-solid fa-comments';
+            subtitle = info.kind === 'direct' ? 'Direct message' : (memberNames.join(', ') || '');
+            if (info.kind === 'direct' && (info.members ?? []).includes(game.user.id)) {
+                const otherId = (info.members ?? []).find((id) => id !== game.user.id);
+                this._headerAvatar = game.users.get(otherId)?.avatar || null;
+            }
+        } else if (virtualUser) {
+            windowTitle = virtualUser.name;
+            headerIcon = 'fa-solid fa-user';
+            subtitle = 'Direct message';
+            this._headerAvatar = virtualUser.avatar || null;
+        }
 
         return {
             appId: this.id,
@@ -167,9 +216,9 @@ export class MessagesWindow extends resolveBase() {
             showHeader: true,
             showTools: false,
             showActionBar: showCompose,
-            headerIcon: active ? (info.icon ?? 'fa-solid fa-comments') : 'fa-solid fa-comments',
-            windowTitle: active ? (info.name ?? active.name) : 'Messages',
-            subtitle: memberNames.length ? memberNames.join(', ') : 'No conversation selected',
+            headerIcon,
+            windowTitle,
+            subtitle,
             actionBarLeft,
             actionBarRight,
             bodyContent
@@ -192,25 +241,15 @@ export class MessagesWindow extends resolveBase() {
     }
 
     _buildBodyContext(active, conversations = []) {
-        const trayItems = conversations.map((entry) => {
-            const info = ConversationManager.getInfo(entry);
-            return {
-                id: entry.id,
-                name: info.name ?? entry.name,
-                icon: info.icon ?? (info.kind === 'party' ? 'fa-solid fa-users' : 'fa-solid fa-user-group'),
-                tint: info.tint ?? '',
-                active: entry.id === this._activeConversationId,
-                unread: ConversationManager.getUnreadCount(entry),
-                memberNames: (info.members ?? [])
-                    .map((id) => game.users.get(id)?.name)
-                    .filter(Boolean)
-                    .join(', ')
-            };
-        });
+        const { trayGroups, trayPlayers } = this._buildTrayItems(conversations);
+        // A selected virtual 1:1 row is a conversation too — just an empty one
+        const virtualUser = this._virtualUserId ? game.users.get(this._virtualUserId) : null;
         if (this._picker) {
             const isEdit = this._picker.mode === 'edit';
             return {
-                conversations: trayItems,
+                trayGroups,
+                trayPlayers,
+                showTrayDivider: trayGroups.length > 0 && trayPlayers.length > 0,
                 picker: {
                     name: this._picker.name,
                     tint: this._picker.tint || '#ac9f81',
@@ -218,6 +257,8 @@ export class MessagesWindow extends resolveBase() {
                     titleIcon: isEdit ? 'fa-solid fa-pen-to-square' : 'fa-solid fa-user-plus',
                     submitLabel: isEdit ? 'Save Changes' : 'Start Conversation',
                     hideMembers: !!this._picker.isParty,
+                    // Party name is owned by the Blacksmith campaign API
+                    hideName: !!this._picker.isParty,
                     icons: CONVERSATION_ICONS.map((icon) => ({
                         icon,
                         selected: icon === this._picker.icon
@@ -249,13 +290,99 @@ export class MessagesWindow extends resolveBase() {
         })) : [];
 
         return {
-            conversations: trayItems,
+            trayGroups,
+            trayPlayers,
+            showTrayDivider: trayGroups.length > 0 && trayPlayers.length > 0,
             picker: null,
-            hasConversation: !!active,
+            hasConversation: !!active || !!virtualUser,
             messages,
             tones: MESSAGE_TONES.map((t) => ({ ...t, active: t.key === this._tone })),
             draft: this._draft
         };
+    }
+
+    /**
+     * Tray zones:
+     * - Groups (top): Party first, then member groups by activity, then
+     *   (GM see-all) other people's groups.
+     * - Players (bottom): one 1:1 row per user — GM(s) first, then
+     *   alphabetical, using the player's avatar. Rows without an existing
+     *   conversation are virtual and get created on first message. GM
+     *   see-all also lists other people's 1:1s at the end.
+     */
+    _buildTrayItems(conversations) {
+        const meId = game.user.id;
+        const party = [];
+        const directs = [];
+        const groups = [];
+        const otherGroups = [];
+        const otherDirects = [];
+        for (const entry of conversations) {
+            const info = ConversationManager.getInfo(entry);
+            const mine = ConversationManager.isMember(entry);
+            if (info.kind === 'party') party.push(entry);
+            else if (info.kind === 'direct') (mine ? directs : otherDirects).push(entry);
+            else (mine ? groups : otherGroups).push(entry); // non-member = gmSeesAllConversations
+        }
+
+        const entryItem = (entry, overrides = {}) => {
+            const info = ConversationManager.getInfo(entry);
+            return {
+                id: entry.id,
+                name: this._conversationDisplayName(entry),
+                icon: info.icon ?? 'fa-solid fa-user-group',
+                avatar: '',
+                tint: info.tint ?? '',
+                active: entry.id === this._activeConversationId,
+                unread: ConversationManager.getUnreadCount(entry),
+                memberNames: (info.members ?? [])
+                    .map((id) => game.users.get(id)?.name)
+                    .filter(Boolean)
+                    .join(', '),
+                ...overrides
+            };
+        };
+
+        // 1:1 rows: existing conversations plus a virtual row per remaining user
+        const otherIdOf = (entry) => (ConversationManager.getInfo(entry).members ?? []).find((id) => id !== meId);
+        const haveDirect = new Set(directs.map(otherIdOf));
+        const directRows = [
+            ...directs.map((entry) => ({ user: game.users.get(otherIdOf(entry)), entry })),
+            ...ConversationManager.getSelectableUsers()
+                .filter((u) => u.id !== meId && !haveDirect.has(u.id))
+                .map((user) => ({ user, entry: null }))
+        ].sort((a, b) => {
+            const aGM = a.user?.isGM ? 0 : 1;
+            const bGM = b.user?.isGM ? 0 : 1;
+            if (aGM !== bGM) return aGM - bGM;
+            return (a.user?.name ?? '').localeCompare(b.user?.name ?? '');
+        });
+
+        const trayGroups = [
+            ...party.map((entry) => entryItem(entry)),
+            ...groups.map((entry) => entryItem(entry)),
+            ...otherGroups.map((entry) => entryItem(entry))
+        ];
+        const trayPlayers = [
+            ...directRows.map(({ user, entry }) => entry
+                ? entryItem(entry, {
+                    name: user?.name ?? this._conversationDisplayName(entry),
+                    avatar: user?.avatar || 'icons/svg/mystery-man.svg'
+                })
+                : {
+                    id: `virtual:${user.id}`,
+                    name: user.name,
+                    icon: 'fa-solid fa-user',
+                    avatar: user.avatar || 'icons/svg/mystery-man.svg',
+                    tint: '',
+                    active: `virtual:${user.id}` === this._activeConversationId,
+                    unread: 0,
+                    memberNames: `Direct message with ${user.name}`
+                }),
+            // GM see-all: 1:1s between other people ("Alice & Bob")
+            ...otherDirects.map((entry) => entryItem(entry))
+        ];
+        return { trayGroups, trayPlayers };
     }
 
     /** Group raw {userId: reactionKey} into chips: icon, count, names, mine. */
@@ -290,6 +417,18 @@ export class MessagesWindow extends resolveBase() {
         this._attachContextMenuOnce();
         const root = this._getRoot();
         if (!root) return;
+
+        // 1:1 chat: swap the header FA icon for the other player's avatar
+        if (this._headerAvatar) {
+            const iconBox = root.querySelector('.blacksmith-window-template-header-icon');
+            if (iconBox) {
+                const img = document.createElement('img');
+                img.className = 'bibliosoph-messages-header-avatar';
+                img.src = this._headerAvatar;
+                img.alt = '';
+                iconBox.replaceChildren(img);
+            }
+        }
 
         // ENTER sends (when enabled), SHIFT+ENTER inserts a newline
         const textarea = root.querySelector('.bibliosoph-messages-input');
@@ -451,11 +590,19 @@ export class MessagesWindow extends resolveBase() {
         const textarea = root?.querySelector('.bibliosoph-messages-input');
         const text = (textarea?.value ?? '').trim();
         if (!text) return;
-        const entry = game.journal.get(this._activeConversationId);
-        if (!entry) {
-            ui.notifications.warn('Select a conversation first.');
-            return;
+
+        let entry = game.journal.get(this._activeConversationId);
+        // First message in a virtual 1:1: create the conversation lazily
+        const virtualUserId = this._virtualUserId;
+        if (!entry && virtualUserId) {
+            entry = await ConversationManager.ensureDirectConversation(virtualUserId);
+            if (entry) this._activeConversationId = entry.id;
         }
+        if (!entry) {
+            if (!virtualUserId) ui.notifications.warn('Select a conversation first.');
+            return; // keep the draft — nothing was sent
+        }
+
         this._draft = '';
         if (textarea) textarea.value = '';
         await ConversationManager.postMessage(entry, { markdown: text, tone: this._tone });
@@ -527,6 +674,24 @@ export class MessagesWindow extends resolveBase() {
         // updateJournalEntryPage hook refreshes the window
     }
 
+    /** Quote a message into the compose box as a markdown blockquote. */
+    _replyTo(messageId) {
+        const entry = game.journal.get(this._activeConversationId);
+        const message = entry ? ConversationManager.getMessages(entry).find((m) => m.id === messageId) : null;
+        if (!message) return;
+        const source = (message.markdown || message.html.replace(/<[^>]+>/g, '')).trim();
+        const quoted = source.split('\n').map((line) => `> ${line}`).join('\n');
+        const prefix = `> **${message.senderName}** wrote:\n${quoted}\n\n`;
+
+        const textarea = this._getRoot()?.querySelector('.bibliosoph-messages-input');
+        if (!textarea) return;
+        textarea.value = prefix + textarea.value;
+        this._draft = textarea.value;
+        const caret = textarea.value.length;
+        textarea.setSelectionRange(caret, caret);
+        textarea.focus();
+    }
+
     // ==============================================================
     // ===== CONTEXT MENUS (Blacksmith uiContextMenu) ===============
     // ==============================================================
@@ -570,6 +735,11 @@ export class MessagesWindow extends resolveBase() {
 
         const items = [
             {
+                name: 'Reply',
+                icon: 'fa-solid fa-reply',
+                callback: () => this._replyTo(messageId)
+            },
+            {
                 name: 'React',
                 icon: 'fa-solid fa-face-smile',
                 submenu: MESSAGE_REACTIONS.map((r) => ({
@@ -602,7 +772,9 @@ export class MessagesWindow extends resolveBase() {
         if (!menu || !entry) return;
         const info = ConversationManager.getInfo(entry);
         const canEdit = ConversationManager.canEdit(entry);
-        const canDelete = info.kind !== 'party' && (game.user.isGM || info.createdBy === game.user.id);
+        // 1:1s regenerate as virtual rows, so deleting one just clears history — GM only
+        const canDelete = info.kind !== 'party'
+            && (game.user.isGM || (info.kind !== 'direct' && info.createdBy === game.user.id));
         if (!canEdit && !canDelete) return;
 
         const items = [];
@@ -646,28 +818,24 @@ export class MessagesWindow extends resolveBase() {
 
         const info = ConversationManager.getInfo(entry);
         const isParty = info.kind === 'party';
-        const theme = isParty
+        // Settings store Blacksmith Chat Cards API class names (see settings.js)
+        const cardTheme = isParty
             ? getSetting('cardThemePartyMessage', 'theme-default')
             : getSetting('cardThemePrivateMessage', 'theme-default');
 
         let content;
         try {
-            const response = await fetch(BIBLIOSOPH.MESSAGE_TEMPLATE_CARD);
-            const template = Handlebars.compile(await response.text());
-            content = template({
-                userName: message.senderName,
-                userAvatar: message.avatar,
-                theme,
-                iconStyle: isParty ? 'fa-comments-alt' : 'fa-feather',
-                cardTitle: isParty ? 'Party Message' : `Private Message — ${escapeHtml(info.name ?? entry.name)}`,
-                content: message.html,
-                action: '',
-                actionlabel: '',
-                image: isParty ? '' : message.avatar,
-                hasSectionContent: false
+            const renderTemplateFn = foundry.applications?.handlebars?.renderTemplate ?? renderTemplate;
+            content = await renderTemplateFn(`modules/${MODULE.ID}/templates/chat-card-message.hbs`, {
+                cardTheme,
+                icon: info.icon ?? 'fa-solid fa-comments',
+                title: this._conversationDisplayName(entry),
+                senderName: message.senderName,
+                timeDisplay: formatTimestamp(message.timestamp),
+                content: message.html
             });
         } catch (_) {
-            content = `<div class="${theme}"><strong>${escapeHtml(message.senderName)}:</strong> ${message.html}</div>`;
+            content = `<div class="blacksmith-card ${cardTheme}"><div class="section-content"><strong>${escapeHtml(message.senderName)}:</strong> ${message.html}</div></div>`;
         }
 
         const chatData = {

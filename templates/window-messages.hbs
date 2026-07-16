@@ -8,14 +8,22 @@
     <div class="bibliosoph-messages-tray">
         <div class="bibliosoph-messages-tray-title"><i class="fa-solid fa-comments"></i> Conversations</div>
         <div class="bibliosoph-messages-tray-list">
-            {{#each conversations}}
+            {{!-- Group chats (Party + groups) --}}
+            {{#each trayGroups}}
             <a class="bibliosoph-messages-tray-item {{#if this.active}}active{{/if}}" data-action="msg-select-conversation" data-id="{{this.id}}" title="{{this.memberNames}}" {{#if this.tint}}style="--bibliosoph-conv-tint: {{this.tint}};"{{/if}}>
                 <i class="{{this.icon}}"></i>
                 <span class="bibliosoph-messages-tray-item-name">{{this.name}}</span>
                 {{#if this.unread}}<span class="bibliosoph-messages-tray-item-badge">{{this.unread}}</span>{{/if}}
             </a>
-            {{else}}
-            <div class="bibliosoph-messages-tray-empty">No conversations yet</div>
+            {{/each}}
+            {{#if showTrayDivider}}<div class="bibliosoph-messages-tray-divider"></div>{{/if}}
+            {{!-- Player chats (1:1s, player avatars) --}}
+            {{#each trayPlayers}}
+            <a class="bibliosoph-messages-tray-item {{#if this.active}}active{{/if}}" data-action="msg-select-conversation" data-id="{{this.id}}" title="{{this.memberNames}}" {{#if this.tint}}style="--bibliosoph-conv-tint: {{this.tint}};"{{/if}}>
+                {{#if this.avatar}}<img class="bibliosoph-messages-tray-avatar" src="{{this.avatar}}" alt="{{this.name}}" width="28" height="28">{{else}}<i class="{{this.icon}}"></i>{{/if}}
+                <span class="bibliosoph-messages-tray-item-name">{{this.name}}</span>
+                {{#if this.unread}}<span class="bibliosoph-messages-tray-item-badge">{{this.unread}}</span>{{/if}}
+            </a>
             {{/each}}
         </div>
         <div class="bibliosoph-messages-tray-footer">
@@ -28,7 +36,9 @@
         {{#if picker}}
         <div class="bibliosoph-messages-picker">
             <div class="bibliosoph-messages-picker-title"><i class="{{picker.titleIcon}}"></i> {{picker.title}}</div>
+            {{#unless picker.hideName}}
             <input type="text" class="bibliosoph-messages-picker-name" placeholder="Conversation name (optional)" value="{{picker.name}}" maxlength="60">
+            {{/unless}}
             <div class="bibliosoph-messages-picker-hint">Pick an icon and tint for this conversation.</div>
             <div class="bibliosoph-messages-picker-icons">
                 {{#each picker.icons}}
@@ -43,7 +53,7 @@
             <div class="bibliosoph-messages-picker-users">
                 {{#each picker.users}}
                 <div class="bibliosoph-messages-picker-user {{#if this.selected}}selected{{/if}}" data-action="msg-toggle-member" data-id="{{this.id}}">
-                    <img src="{{this.avatar}}" alt="{{this.name}}" width="28" height="28">
+                    <img src="{{this.avatar}}" alt="{{this.name}}" width="36" height="36">
                     <span class="bibliosoph-messages-picker-user-name">{{this.name}}</span>
                     {{#unless this.active}}<span class="bibliosoph-messages-picker-user-offline">offline</span>{{/unless}}
                 </div>
@@ -61,7 +71,7 @@
                 {{#each messages}}
                 <div class="bibliosoph-message-wrapper {{#if this.isOwn}}bibliosoph-message-own{{/if}}" data-message-id="{{this.id}}" style="border-left-color: {{this.color}};">
                     <div class="bibliosoph-message-header">
-                        <img class="bibliosoph-message-avatar" src="{{this.avatar}}" alt="{{this.senderName}}" width="22" height="22">
+                        <img class="bibliosoph-message-avatar" src="{{this.avatar}}" alt="{{this.senderName}}" width="28" height="28">
                         <span class="bibliosoph-message-speaker" style="color: {{this.color}};">{{this.senderName}}</span>
                         {{#if this.showTone}}<i class="{{this.toneIcon}} bibliosoph-message-tone" title="{{this.toneLabel}}"></i>{{/if}}
                         <span class="bibliosoph-message-time">{{this.timeDisplay}}</span>
@@ -95,6 +105,7 @@
                 {{#each tones}}
                 <a class="bibliosoph-messages-tone-btn {{#if this.active}}active{{/if}}" data-action="msg-tone" data-tone="{{this.key}}" title="{{this.label}}"><i class="{{this.icon}}"></i></a>
                 {{/each}}
+                <a class="bibliosoph-messages-help" data-tooltip-direction="UP" data-tooltip="You can use a subset of Markdown to format your message:<ul><li><b>Large Title</b>: # Title Here</li><li><b>Medium Title</b>: ## Title Here</li><li><b>Small Title</b>: ### Title Here</li><li><b>Horizontal Rule</b>: --- (3 dashes on their own line)</li><li><b>Bold Text</b>: **Text Here**</li><li><b>Italic Text</b>: *Text Here*</li><li><b>Bulleted List</b>: - List Item Here</li><li><b>Numbered List</b>: 1. List Item Here</li><li><b>Block Text</b>: &gt; Text Here</li><li><b>Document Link</b>: drag an item, actor, or journal into the window</li></ul>"><i class="fa-solid fa-circle-question"></i></a>
             </div>
             <textarea rows="3" class="bibliosoph-messages-input" placeholder="Type a message… Markdown supported.">{{draft}}</textarea>
         </div>

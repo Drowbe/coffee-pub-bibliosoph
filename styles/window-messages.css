@@ -103,6 +103,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    color: var(--bibliosoph-conv-tint, inherit);
 }
 
 #coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tray-item-badge {
@@ -120,6 +121,24 @@
     color: var(--bibliosoph-msg-muted);
     font-style: italic;
     font-size: 0.9em;
+}
+
+/* Dim rule between group chats and player chats */
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tray-divider {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    margin: 6px 6px;
+    flex-shrink: 0;
+}
+
+/* Player avatar in 1:1 tray rows */
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tray-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--bibliosoph-msg-border);
+    object-fit: cover;
+    object-position: top;
+    flex: 0 0 28px;
 }
 
 #coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tray-footer {
@@ -210,12 +229,13 @@
 }
 
 #coffee-pub-bibliosoph-messages-wrapper .bibliosoph-message-avatar {
-    width: 22px;
-    height: 22px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     border: 1px solid var(--bibliosoph-msg-border);
     object-fit: cover;
-    flex: 0 0 22px;
+    object-position: top;
+    flex: 0 0 28px;
 }
 
 #coffee-pub-bibliosoph-messages-wrapper .bibliosoph-message-speaker {
@@ -258,6 +278,15 @@
 
 #coffee-pub-bibliosoph-messages-wrapper .bibliosoph-message-content p:last-child {
     margin-bottom: 0;
+}
+
+/* Reply quotes */
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-message-content blockquote {
+    margin: 0 0 6px 0;
+    padding: 2px 8px;
+    border-left: 3px solid var(--bibliosoph-msg-border);
+    color: var(--bibliosoph-msg-muted);
+    font-size: 0.9em;
 }
 
 /* Reaction chips under a message */
@@ -313,7 +342,25 @@
 
 #coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tones {
     display: flex;
+    align-items: center;
     gap: 4px;
+}
+
+/* Formatting help icon (native Foundry tooltip via data-tooltip) */
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-help {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    color: var(--bibliosoph-msg-muted);
+    cursor: help;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-help:hover {
+    color: var(--bibliosoph-msg-accent);
+    text-shadow: none;
 }
 
 #coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tone-btn {
@@ -470,12 +517,13 @@
 }
 
 #coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-picker-user img {
-    width: 28px;
-    height: 28px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     border: none;
     object-fit: cover;
-    flex: 0 0 28px;
+    object-position: top;
+    flex: 0 0 36px;
 }
 
 #coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-picker-user.selected {
@@ -503,6 +551,18 @@
     justify-content: flex-end;
     gap: 8px;
     margin-top: auto;
+}
+
+/* ----- HEADER ------------------------------------------------------ */
+
+/* 1:1 chats: player avatar fills the Blacksmith header icon circle */
+#coffee-pub-bibliosoph-messages .blacksmith-window-template-header-icon .bibliosoph-messages-header-avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: top;
+    display: block;
 }
 
 /* ----- ACTION BAR TWEAKS ------------------------------------------ */

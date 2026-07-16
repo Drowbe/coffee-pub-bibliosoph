@@ -1,0 +1,14 @@
+{{!-- Send-to-chat escalation card for the Messages window.
+      Follows the Blacksmith chat-card structure (api-chatcards.md):
+      .blacksmith-card + theme class, card-header, section-content.
+      cardTheme is a CSS class name straight from settings. --}}
+<span style="visibility: hidden">coffeepub-hide-header</span>
+<div class="blacksmith-card {{cardTheme}}">
+    <div class="card-header">
+        <i class="{{icon}}"></i> {{title}}
+    </div>
+    <div class="section-content">
+        <div class="section-header"><i class="fa-solid fa-feather"></i> {{senderName}}{{#if timeDisplay}} &mdash; {{timeDisplay}}{{/if}}</div>
+        {{{content}}}
+    </div>
+</div>
