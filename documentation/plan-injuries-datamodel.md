@@ -34,6 +34,29 @@ Poison 8, Psychic 10, Radiant 9, Slashing 15, Thunder 10). No name+category coll
 two packs; every record has description, treatment, and img. This file is now the canonical source —
 the Blacksmith LevelDB dirs can be deleted per its cleanup plan.
 
+### Data format: the Blacksmith JSON-import (AI prompt) schema — decision
+
+`injuries.json` is a JSON **array** whose entries conform exactly to the schema Blacksmith's JSON
+Import tool and `prompt-injuries.txt` use: `journaltype: "injury"`, lowercase `category`/`severity`,
+all values strings, keys `journaltype, category, odds, foldername, title, imagetitle, image,
+description, treatment, severity, damage, duration, action, statuseffect`. Consequences:
+
+- **Importable today, zero new code**: paste the array into Blacksmith's Import window
+  (`registry-json-import-journals.js` routes `journaltype "injury"` → `buildInjuryJournalEntry()`).
+- One AI/import schema everywhere — the eventual typed-page import accepts the same shape
+  (fields → `system`, `title` → page name), exactly like CODEX kept its old export JSON importable.
+- Future direction (idea, not scheduled): Blacksmith's import registry grows a public API so any
+  module can publish its import kind into the shared Import tool; Bibliosoph would register
+  "Injuries" there.
+
+Reformatting rules applied to the 25 legacy-format records (data-derived, no invented content):
+blank `severity` filled from the prompt's own damage ranges (0–4 minor, 5–8 moderate, 9–12 major);
+missing `odds` set to the rescued dataset's per-severity medians (minor 40, moderate 20, major 10);
+`action` normalized to the prompt's canonical "Apply the {Category} Injury"; blank `statuseffect` →
+"none"; recognized status effects re-cased to the prompt's spellings ("blinded" → "Blind"); blank
+`imagetitle` left blank. Non-standard legacy status effects (e.g. "Frozen in Time", "Headache",
+"Bleeding", "Sluggish") kept verbatim — see Open decisions.
+
 ## Target Architecture
 
 ### Document type
@@ -52,7 +75,9 @@ Type string: `coffee-pub-bibliosoph.injury` (auto-prefixed). Localization key:
 `class InjuryPageModel extends foundry.abstract.TypeDataModel`, registered at `init`:
 `CONFIG.JournalEntryPage.dataModels['coffee-pub-bibliosoph.injury'] = InjuryPageModel;`
 
-The injury's **name is the page name** (native). Fields mirror `resources/injuries.json`:
+The injury's **name is the page name** (native). Fields carry the same data as
+`resources/injuries.json` with typed values (numbers as NumberFields, `title` → page name,
+`image`/`imagetitle`/`statuseffect` → `img`/`imageTitle`/`statusEffect`):
 
 | Field | Type | Notes |
 |-------|------|-------|
@@ -124,9 +149,10 @@ data ships with the module anyway.
 
 ### Phase 2 — Default content import
 - [ ] `injuriesJournal` world setting (journal picker; replaces `injuryCompendium`)
-- [ ] "Import Default Injuries" GM action (settings button or toolbar): reads `resources/injuries.json`, creates typed pages in the configured journal
+- [ ] "Import Default Injuries" GM action (settings button or toolbar): reads `resources/injuries.json` (the Blacksmith import schema — see Phase 0), creates typed pages in the configured journal
 - [ ] Upsert by name+category (flag `injuryKey` on imported pages, CODEX `codexUuid` pattern) so re-import updates instead of duplicating; user-authored pages untouched
 - [ ] Optional: auto-prompt on first run when the journal is empty
+- [ ] Interim (works today, before Phase 1): the same file pastes into Blacksmith's JSON Import tool, which builds legacy HTML-metadata journals the current consumer already reads
 
 ### Phase 3 — Consumers
 - [ ] `createChatCardInjury` / `createChatCardInjurySelector` read typed pages (`page.system`) from `injuriesJournal`
@@ -147,10 +173,15 @@ data ships with the module anyway.
 ## Open decisions
 
 1. **`statusEffect` fidelity** — today a free-form string matched against conditions at apply time.
-   A future pass could make it a dropdown of dnd5e conditions in the edit sheet (cheap win).
+   The rescued data contains non-standard values kept verbatim: Bleeding, Chilled to the Bone,
+   Clumsy Fingers, Confused, Disoriented, "Deafened, Blind" (compound), Frozen in Time, Headache,
+   Sluggish, Twitching, plus Frightened/Incapacitated (real 5e conditions absent from the prompt's
+   list). Decide: map to nearest real condition, allow flavor-only effects, or make the edit sheet a
+   dnd5e condition dropdown with a free-text escape hatch.
 2. **Weighted selection** — `odds` is preserved in schema and data but unused; implement weighted
    random pick or drop the field at Phase 3 time.
-3. **Severity backfill** — the 25 legacy-format injuries have blank severity; backfill by hand in
-   `injuries.json` or leave blank (card hides empty severity today).
+3. **`imagetitle` backfill** — the 25 legacy-format injuries have blank image titles (field
+   postdates them); backfill by hand/AI in `injuries.json` or leave blank (card just omits the
+   caption).
 4. **CODEX Phase 3 verification is still in progress in Squire** — inherit any sheet/base-class
    lessons it surfaces before starting Phase 1 here.
