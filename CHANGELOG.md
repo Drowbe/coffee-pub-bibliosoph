@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [13.3.0]
+
+### Added
+
+- **Bundled Injuries compendium:** Bibliosoph now ships its own injuries. Blacksmith retired its content packs, which left the injuries feature with no out-of-the-box data source; the content now lives where it is used. The new `Injuries` journal compendium (`coffee-pub-bibliosoph.injuries`) contains **127 injuries across 14 damage categories** (Acid, Bludgeoning, Cold, Fire, Force, General, Lightning, Necrotic, Piercing, Poison, Psychic, Radiant, Slashing, Thunder) — the full content rescued from Blacksmith's orphaned packs, including 25 injuries recovered from an older format that had not shipped in years, with legacy category typos fixed (Poision → Poison, Lightening → Lightning). Requires a full world relaunch after updating for the compendium to appear.
+- **`resources/injuries.json`:** The canonical injuries dataset, formatted as a JSON array in the Blacksmith JSON Import / AI-prompt injury schema (`journaltype: "injury"`). Paste it into Blacksmith's Import tool to rebuild the injury journals in any world, or use it as the template for authoring new injuries with AI. Missing legacy values were derived from the data itself (severity from the prompt's damage ranges, odds from per-severity medians); recognized status effects re-cased to standard spellings.
+- **Compendium pack tooling:** Pack content is version-controlled as per-document JSON under `packs/_source/` (LevelDB stays gitignored — no binary churn). `npm run packs:extract` pulls Foundry-edited pack content back to source JSON; `npm run packs:build` compiles source to LevelDB. The release workflow now builds the packs and ships `packs/` in the module zip.
+- **Injuries rebuild plan:** `documentation/plan-injuries-datamodel.md` — the roadmap for moving injuries off HTML-metadata parsing onto a typed JournalEntryPage data model (Squire CODEX pattern) so users can create and edit their own injuries through a real form.
+
+### Changed
+
+- **Injury Compendium setting default:** `injuryCompendium` now defaults to the bundled `coffee-pub-bibliosoph.injuries` compendium, so injuries work out of the box on new installs. Existing worlds that previously saved this setting keep their choice — point it at "Coffee Pub Bibliosoph: Injuries" to use the bundled content. The setting hint (previously blank) now explains this.
+
 ## [13.2.1]
 
 ### Added
