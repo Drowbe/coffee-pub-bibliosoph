@@ -8,6 +8,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [13.2.0]
 
+### Added
+
+- **Unified Messages window:** Party and private messaging completely redesigned as a single Regent-style conversation window (Application V2, built on Blacksmith's `BlacksmithWindowBaseV2` + zone template, opened via `api.openWindow('bibliosoph-messages')` from a single "Messages" toolbar button). Full back-and-forth conversations happen inside the window — the Foundry chat log is never touched, so conversations survive session chat wipes.
+- **Journal-backed conversations:** Each conversation is a JournalEntry in a hidden "Bibliosoph Messages" folder with one JournalEntryPage per message. Members get OWNER permission; delivery/live sync ride on Foundry document hooks (no ChatMessages, no chat DB bloat). Sockets are used only to relay conversation create/edit requests to the GM (Blacksmith Sockets API with targeted `recipients`, requires Blacksmith >= 13.8.5).
+- **Conversation tray (left panel):** Two zones separated by a dim rule — group chats on top (Party pinned first, then groups by activity), player chats below (one 1:1 row per user with their avatar, GMs first). 1:1 rows are virtual until first use; the journal document is created lazily on first message.
+- **Party conversation:** Auto-created singleton that always includes every user; its name follows the Blacksmith Campaign API party name (fallback "Party Chat") and cannot be renamed in the editor.
+- **Conversation management:** New Conversation picker with member selection, custom name, icon picker (16 icons), and tint color; right-click a conversation for Edit (name/icon/tint/members; GM or creator) and Delete (with gating; Party protected). Membership edits rewrite document ownership via the GM relay.
+- **Messages:** Markdown support (with formatting help tooltip on a `?` icon), tone stamps (Message, Party Plan, Agree, Disagree, Praise, Insult), player-color accents on each message card, ENTER-sends toggle, drafts preserved across live updates.
+- **Reactions:** Right-click a message → React (Like, Dislike, Love, Laugh, Huh?) via the Blacksmith context menu (`api.uiContextMenu`) with reaction chips (count, names on hover, click to toggle yours).
+- **Reply:** Right-click a message → Reply quotes it into the compose box as a markdown blockquote.
+- **Delete message (soft):** Right-click your own message (or any, as GM) → Delete wipes content/reactions from the document and leaves a dimmed "Message deleted" placeholder in the thread.
+- **Send to Foundry Chat:** Per-message escalation (hover icon or context menu) posts that message to the Foundry chat as a Blacksmith-structured chat card (`.blacksmith-card` + theme from the Chat Cards API); group escalations whisper to members, party escalations post publicly.
+- **Drag & drop:** Drop items, actors/tokens, journals, roll tables, etc. into the window to insert an `@UUID` content link (built with `api.compendiums.formatLink`); drop image paths/URLs to insert a markdown image.
+- **Images in messages:** Markdown `![name](path or URL)` renders inline (sanitized; http(s)/relative paths only); click any image for a full-size popout.
+- **Notifications:** Blacksmith menubar notification "Message from X" (30s) when a message arrives while away; "N Unread Messages" notification on login; unread badges per conversation from per-user read tracking.
+- **On-screen splash:** Click-through splash (sender avatar + "Message from X", auto-dismiss, click to open the conversation) for direct messages and party/group messages, each behind its own user setting (`messageSplashEnabled`, `messageSplashGroupEnabled`, both default on). Group splashes name the conversation.
+- **Auto Open:** Optional user setting (`messageAutoOpen`) that opens the Messages window on the incoming conversation when a message arrives while it is closed; also toggleable from the window's action bar.
+- **Message sounds:** Five user-configurable local sounds — Alert (arrives while away), Received (posts in the open conversation), Sent, Switch Conversation, Close Window — with a mute toggle in the window's action bar (`messageSound*` settings).
+- **Action bar tools:** Mute, Auto Open, Export Messages (standalone dark-themed HTML download of the conversation history), and Delete Messages (purge all messages with a confirmation dialog; GM anywhere, members on their 1:1s, creators on their groups).
+- **Retention:** `retentionMaxMessages` world setting (default 200 per conversation, GM-adjustable); oldest messages trim automatically as new ones post.
+- **GM visibility setting:** `gmSeesAllConversations` (world, default on) controls whether the GM's window lists conversations the GM is not a member of.
+- **Hide journal folder:** `hideMessagesJournal` world setting (default on) hides the conversations folder and entries from the journal sidebar via injected CSS that survives sidebar re-renders.
+
+### Changed
+
+- **Blacksmith dependency:** `module.json` now requires `coffee-pub-blacksmith` >= 13.8.5 (targeted socket emit). New stylesheet loads via `@import` in `styles/default.css` per house convention.
+- **Card theme settings:** `cardThemePartyMessage` / `cardThemePrivateMessage` kept but relabeled — they now style only the Send-to-Chat escalation cards and live under the Messages settings group.
+- **Messages toolbar defaults:** The single Messages tool shows in both the Coffee Pub and Foundry toolbars by default.
+
+### Removed
+
+- **Legacy party/private messaging:** `BiblioWindowChat` (V1 FormApplication) and `dialogue-messages.hbs` deleted; both dialog openers, macro bindings and handlers, the chat-card Reply button, whisper send path, `buildPlayerList`/`buildPrivateList` and related helpers, `MESSAGES_*`/`CARDTYPEMESSAGE`/`CARDTYPEWHISPER` globals, and the two legacy toolbar buttons. Settings removed: `partyMessageEnabled`, `privateMessageEnabled`, both macro settings, both legacy toolbar setting pairs, `cardLayoutPrivateMessage`, `privateMessageCompressedWindow`. All roll-table features (criticals, fumbles, investigations, gifts, shady goods, inspiration, beverage/bio breaks, insults, praise, injuries, DOMT) are unaffected.
 
 ## [13.1.5]
 
