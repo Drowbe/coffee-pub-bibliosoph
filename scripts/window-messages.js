@@ -578,6 +578,13 @@ export class MessagesWindow extends resolveBase() {
         if (active && ConversationManager.getUnreadCount(active) > 0) {
             ConversationManager.markRead(active);
         }
+
+        // After sending/saving your own message, put the cursor back in the
+        // compose box (one-shot — never steals focus on incoming messages)
+        if (this._refocusCompose) {
+            this._refocusCompose = false;
+            root.querySelector('.bibliosoph-messages-input')?.focus();
+        }
     }
 
     async close(options) {
@@ -887,6 +894,8 @@ ${rows}
 
         this._draft = '';
         if (textarea) textarea.value = '';
+        // The hook-triggered re-render should hand focus back to the compose box
+        this._refocusCompose = true;
 
         // Edit mode: update the existing message instead of posting a new one
         if (this._editing) {
