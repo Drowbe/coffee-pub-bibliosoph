@@ -733,7 +733,7 @@ export const registerSettings = () => {
 			scope: "world",
 			config: true,
 			requiresReload: false,
-			default: '-- Choose a Roll Compendium --',
+			default: 'coffee-pub-bibliosoph.injuries',
 			choices: getBlacksmithChoices('arrCompendiumChoices', 'No compendiums found. Try reloading Foundry after all modules are enabled.')
 		});
 

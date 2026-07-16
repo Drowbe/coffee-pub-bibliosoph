@@ -289,7 +289,7 @@
 		"toolbarFoundryInjuriesEnabled-Hint": "",
 
 		"injuryCompendium-Label": "Injury Compendium",
-		"injuryCompendium-Hint": "",
+		"injuryCompendium-Hint": "The journal compendium injuries are drawn from. Defaults to the Injuries compendium bundled with Bibliosoph; choose another to use your own.",
 
 		"cardThemeInjury-Label": "Card Style",
 		"cardThemeInjury-Hint": "",
