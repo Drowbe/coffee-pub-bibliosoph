@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [13.2.1]
+
+### Added
+
+- **Paste and drop image uploads:** Paste a screenshot from the clipboard into the Messages compose box, or drop an image file from your desktop onto the window, and it uploads to `worlds/<world>/bibliosoph-messages/` (via Foundry's FilePicker) and inserts as a markdown image. Requires the core "Upload New Files" permission; users without it get a clear warning and can still link images by path or URL.
+
 ## [13.2.0]
 
 ### Added

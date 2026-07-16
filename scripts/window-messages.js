@@ -456,6 +456,13 @@ export class MessagesWindow extends resolveBase() {
                     this._send();
                 }
             });
+            // Paste a screenshot / image from the clipboard → upload + insert
+            textarea.addEventListener('paste', (event) => {
+                const files = [...(event.clipboardData?.files ?? [])].filter((f) => f.type?.startsWith('image/'));
+                if (!files.length) return; // plain text pastes proceed normally
+                event.preventDefault();
+                this._insertUploadedImages(files);
+            });
         }
 
         // ENTER Sends toggle (action bar)
@@ -786,6 +793,53 @@ ${rows}
         return /\.(png|jpe?g|webp|gif|avif|svg)(\?.*)?$/i.test(path ?? '');
     }
 
+    /**
+     * Upload a pasted/dropped image File to the world's storage
+     * (worlds/<world>/bibliosoph-messages/) and return its path.
+     * Requires the core "Upload New Files" permission.
+     */
+    async _uploadImageFile(file) {
+        if (!file?.type?.startsWith('image/')) return null;
+        if (!game.user.can('FILES_UPLOAD')) {
+            ui.notifications.warn('You need the "Upload New Files" permission to paste or drop image files. You can still link images by path or URL.');
+            return null;
+        }
+        const FP = foundry.applications?.apps?.FilePicker?.implementation ?? globalThis.FilePicker;
+        if (!FP?.upload) {
+            ui.notifications.error('File upload is unavailable in this Foundry version.');
+            return null;
+        }
+
+        const dir = `worlds/${game.world.id}/bibliosoph-messages`;
+        try {
+            await FP.createDirectory('data', dir);
+        } catch (_) { /* directory already exists */ }
+
+        const ext = ((file.name?.split('.').pop() || file.type.split('/')[1] || 'png')
+            .toLowerCase().replace(/[^a-z0-9]/g, '')) || 'png';
+        const base = ((file.name ? file.name.replace(/\.[^.]*$/, '') : 'paste')
+            .replace(/[^a-zA-Z0-9_-]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40)) || 'image';
+        const filename = `${base}-${Date.now()}.${ext}`;
+
+        try {
+            const upload = new File([file], filename, { type: file.type });
+            const result = await FP.upload('data', dir, upload, {}, { notify: false });
+            return result?.path ?? `${dir}/${filename}`;
+        } catch (error) {
+            console.error(`${MODULE.ID} | Image upload failed:`, error);
+            ui.notifications.error('Image upload failed — see the console for details.');
+            return null;
+        }
+    }
+
+    /** Upload each image file and insert markdown image syntax for it. */
+    async _insertUploadedImages(files) {
+        for (const file of files) {
+            const path = await this._uploadImageFile(file);
+            if (path) this._insertAtCursor(`![image](${path})`);
+        }
+    }
+
     /** Insert text at the compose textarea's cursor and refocus. */
     _insertAtCursor(text) {
         const textarea = this._getRoot()?.querySelector('.bibliosoph-messages-input');
@@ -809,6 +863,14 @@ ${rows}
      * - images (Foundry file paths or web URLs) → markdown image syntax
      */
     async _onDropDocument(event) {
+        // OS file drop (e.g. an image from the desktop): upload, then insert
+        const droppedFiles = [...(event.dataTransfer?.files ?? [])].filter((f) => f.type?.startsWith('image/'));
+        if (droppedFiles.length) {
+            event.preventDefault();
+            await this._insertUploadedImages(droppedFiles);
+            return;
+        }
+
         const raw = event.dataTransfer.getData('text/plain');
         let data = null;
         try {
