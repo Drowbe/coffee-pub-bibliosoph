@@ -542,9 +542,10 @@ export class ConversationManager {
      * @param {string} [data.tone] - message | plan | agree | disagree | praise | insult
      */
     static async postMessage(entry, { markdown, tone = 'message' } = {}) {
-        const text = (markdown ?? '').trim();
+        let text = (markdown ?? '').trim();
         if (!entry || !text) return null;
 
+        text = await this._linkifyBareUuids(text);
         const html = await this._composeHtml(text);
         const timestamp = Date.now();
         const formats = CONST.JOURNAL_ENTRY_PAGE_FORMATS ?? { HTML: 1 };
@@ -569,6 +570,40 @@ export class ConversationManager {
         return page;
     }
 
+    /**
+     * Convert bare pasted UUIDs (Actor.xxxx, JournalEntry.x.JournalEntryPage.y,
+     * Compendium.scope.pack.Type.id, …) into @UUID[...]{Name} links. UUIDs that
+     * don't resolve, and UUIDs already inside an @UUID[...] enricher, are left
+     * as-is.
+     */
+    static async _linkifyBareUuids(text) {
+        const ID = '[a-zA-Z0-9]{16}';
+        const TYPES = '(?:Actor|Item|JournalEntry|JournalEntryPage|Scene|RollTable|Macro|Playlist|Cards|Adventure|Token|ActiveEffect)';
+        const worldChain = `${TYPES}\\.${ID}(?:\\.${TYPES}\\.${ID})*`;
+        const compendium = `Compendium\\.[\\w-]+\\.[\\w-]+(?:\\.${TYPES}\\.${ID})+`;
+        // No match when preceded by [ (inside @UUID[...]), @, ., or a word char
+        const re = new RegExp(`(?<![\\w\\[.@])(${compendium}|${worldChain})(?!\\w)`, 'g');
+
+        const uuids = [...new Set(Array.from(text.matchAll(re), (m) => m[1]))];
+        if (!uuids.length) return text;
+
+        const compendiumsApi = getBlacksmith()?.compendiums;
+        const replacements = new Map();
+        for (const uuid of uuids) {
+            let doc = null;
+            try {
+                doc = await fromUuid(uuid);
+            } catch (_) { /* unresolvable — leave the text alone */ }
+            const label = (doc?.name ?? doc?.title ?? '').replace(/[{}\[\]]/g, '').trim();
+            if (!label) continue;
+            replacements.set(uuid, compendiumsApi?.formatLink
+                ? compendiumsApi.formatLink(uuid, label)
+                : `@UUID[${uuid}]{${label}}`);
+        }
+        if (!replacements.size) return text;
+        return text.replace(re, (match) => replacements.get(match) ?? match);
+    }
+
     /** Markdown → enriched HTML (escape, convert, enrich @UUID content links). */
     static async _composeHtml(text) {
         let html = this.renderMarkdown(text);
@@ -588,8 +623,9 @@ export class ConversationManager {
         if (!page || !this.isMessagePage(page)) return;
         const flags = page.flags?.[MODULE.ID] ?? {};
         if (flags.deleted || flags.sender !== game.user.id) return;
-        const text = (markdown ?? '').trim();
+        let text = (markdown ?? '').trim();
         if (!text) return;
+        text = await this._linkifyBareUuids(text);
         const html = await this._composeHtml(text);
         await page.update({
             'text.content': html,

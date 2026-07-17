@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [13.3.1]
+
+### Added
+
+- **Pasted UUIDs become links:** Bare UUIDs pasted into a message (`Actor.xxxx`, `JournalEntry.x.JournalEntryPage.y`, `Compendium.scope.pack.Type.id`) are resolved on send (and on Save Edit) and converted to clickable `@UUID[...]{Name}` content links via `api.compendiums.formatLink`. Unresolvable UUIDs are left as plain text, UUIDs already inside an `@UUID[...]` enricher are skipped, and trailing punctuation is handled. The formatting help tooltip now mentions pasting UUIDs.
+
 ## [13.3.0]
 
 ### Added
