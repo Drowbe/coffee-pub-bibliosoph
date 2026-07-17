@@ -6,6 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+
+## [13.3.2]
+
+### Added
+
+- **@Mentions in Messages:** Type `@` + a member's user name *or their assigned character's name* to mention them (`@Favia` notifies Favia's player). Partial names work — `@alicia` resolves to "Alicia Panicucci" (3+ characters, matched against the start of the name or any word in it, longest candidate wins) — and the message always displays the resolved full name as an accent-colored pill. Mentioned players get an upgraded alert: the menubar notification becomes "X mentioned you" with a pulsing `@` icon, and the on-screen splash always shows for mentions, even when group splashes are turned off. Mentions are limited to conversation members and are recomputed when a message is edited.
+- **Clickable menubar notifications:** Built on Blacksmith's new actionable-notification API (Blacksmith 13.9.3+; older builds degrade to display-only). Clicking an incoming-message notification opens that conversation; clicking the unread-count notification opens the Messages window.
+- **Persistent unread counter:** The "N Unread Messages" notification now appears on login *and* stays current as messages arrive; it persists until clicked or dismissed (pulsing for the first 10 seconds), clears whenever the Messages window opens, and reposts with a fresh count when the window closes with unread remaining. Notification hierarchy: when a message mentions you, only the mention notification shows — the ambient counter stands down until the next ordinary message or window close.
+- **Collapsible conversation tray:** New chevron toggle in the Conversations header collapses the tray to a 48px icon rail — conversation icons and player avatars only, unread badges pinned to the icon corner, names available as tooltips. Per-client preference, remembered across sessions.
+
+### Changed
+
+- **Incoming-message notifications collapse per conversation:** A burst of messages updates one notification with a running count ("Alicia (3)") instead of stacking one per message, auto-closing 10 seconds (was 30) after the last message. The text is now just the sender's name — the envelope icon carries the rest. If any message in the burst mentioned you, the notification keeps the mention styling and count.
+- **Messages init resilience:** The login unread notification is posted before any awaited setup (socket relay registration can stall on slow Blacksmith socket readiness and previously could silently swallow it), and socket-relay failures no longer abort the rest of Messages initialization.
+
 ## [13.3.1]
 
 ### Added

@@ -79,9 +79,17 @@ to the GM via Blacksmith sockets:
   folder/flags.
 - Window open → append/re-render the affected thread; scroll pinned to bottom.
 - Window closed (or other conversation focused) → increment unread and:
-  - `api.addNotification("New message from <name>", "fas fa-envelope", 5, MODULE.ID)`
+  - one clickable menubar notification per conversation (sender's name; bursts update
+    it in place with a running count; click opens that conversation; 10s auto-close).
+    Requires Blacksmith >= 13.9.3 for click/pulse — degrades to display-only below.
+  - a persistent "N Unread Messages" notification (click opens the window; cleared on
+    window open, reposted on close while unread remain). Hierarchy: an @mention
+    replaces both signals with a single pulsing "X mentioned you" notification.
   - optional local sound (client setting) via Blacksmith sound helpers
   - unread badge on the toolbar icon / conversation list rows.
+- **@Mentions**: `@` + member user or assigned-character name (partial, 3+ chars)
+  resolved at post time against conversation members; mentioned userIds stored in the
+  message page flags; rendered as a highlight pill showing the resolved full name.
 - **Read tracking**: per-user `lastRead[conversationId] = timestamp` stored on the
   user's own User flags (own-document writes are always permitted; syncs free).
 

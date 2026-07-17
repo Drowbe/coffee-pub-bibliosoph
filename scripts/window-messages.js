@@ -116,6 +116,7 @@ export class MessagesWindow extends resolveBase() {
         'msg-send-to-chat': (_e, btn) => MessagesWindow.current?._sendToChat(btn.dataset.messageId),
         'msg-react': (_e, btn) => MessagesWindow.current?._toggleReaction(btn.dataset.messageId, btn.dataset.reaction),
         'msg-toggle-mute': () => MessagesWindow.current?._toggleMute(),
+        'msg-toggle-tray': () => MessagesWindow.current?._toggleTray(),
         'msg-toggle-autoopen': () => MessagesWindow.current?._toggleAutoOpen(),
         'msg-purge-messages': () => MessagesWindow.current?._purgeMessages(),
         'msg-export-messages': () => MessagesWindow.current?._exportMessages(),
@@ -263,6 +264,26 @@ export class MessagesWindow extends resolveBase() {
         } catch (_) { /* no-op */ }
     }
 
+    /** Per-client: conversation tray collapsed to an icon rail. */
+    get _trayCollapsed() {
+        try {
+            return localStorage.getItem('bibliosoph-messages-tray-collapsed') === 'true';
+        } catch (_) {
+            return false;
+        }
+    }
+
+    set _trayCollapsed(value) {
+        try {
+            localStorage.setItem('bibliosoph-messages-tray-collapsed', value ? 'true' : 'false');
+        } catch (_) { /* no-op */ }
+    }
+
+    _toggleTray() {
+        this._trayCollapsed = !this._trayCollapsed;
+        this.render(false);
+    }
+
     _buildBodyContext(active, conversations = []) {
         const { trayGroups, trayPlayers } = this._buildTrayItems(conversations);
         // A selected virtual 1:1 row is a conversation too — just an empty one
@@ -273,6 +294,7 @@ export class MessagesWindow extends resolveBase() {
                 trayGroups,
                 trayPlayers,
                 showTrayDivider: trayGroups.length > 0 && trayPlayers.length > 0,
+                trayCollapsed: this._trayCollapsed,
                 picker: {
                     name: this._picker.name,
                     tint: this._picker.tint || '#ac9f81',
@@ -323,6 +345,7 @@ export class MessagesWindow extends resolveBase() {
             trayGroups,
             trayPlayers,
             showTrayDivider: trayGroups.length > 0 && trayPlayers.length > 0,
+            trayCollapsed: this._trayCollapsed,
             picker: null,
             hasConversation: !!active || !!virtualUser,
             editing: !!this._editing,

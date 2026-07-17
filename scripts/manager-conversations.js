@@ -148,8 +148,8 @@ export class ConversationManager {
         );
         if (!id) return;
         this._unreadNotificationId = id;
-        // Pulse to draw the eye, then settle (60s for testing)
-        setTimeout(() => blacksmith?.updateNotification?.(id, { pulse: false }), 60000);
+        // Pulse to draw the eye, then settle
+        setTimeout(() => blacksmith?.updateNotification?.(id, { pulse: false }), 10000);
     }
 
     // ==============================================================

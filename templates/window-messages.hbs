@@ -5,12 +5,18 @@
 <div id="coffee-pub-bibliosoph-messages-wrapper">
 
     {{!-- ----- LEFT TRAY: conversations ----- --}}
-    <div class="bibliosoph-messages-tray">
-        <div class="bibliosoph-messages-tray-title"><i class="fa-solid fa-comments"></i> Conversations</div>
+    <div class="bibliosoph-messages-tray {{#if trayCollapsed}}collapsed{{/if}}">
+        <div class="bibliosoph-messages-tray-title">
+            <i class="fa-solid fa-comments bibliosoph-messages-tray-title-icon"></i>
+            <span class="bibliosoph-messages-tray-title-text">Conversations</span>
+            <a class="bibliosoph-messages-tray-collapse" data-action="msg-toggle-tray" title="{{#if trayCollapsed}}Expand the conversation list{{else}}Collapse the conversation list to icons{{/if}}">
+                <i class="fa-solid {{#if trayCollapsed}}fa-angles-right{{else}}fa-angles-left{{/if}}"></i>
+            </a>
+        </div>
         <div class="bibliosoph-messages-tray-list">
             {{!-- Group chats (Party + groups) --}}
             {{#each trayGroups}}
-            <a class="bibliosoph-messages-tray-item {{#if this.active}}active{{/if}}" data-action="msg-select-conversation" data-id="{{this.id}}" title="{{this.memberNames}}" {{#if this.tint}}style="--bibliosoph-conv-tint: {{this.tint}};"{{/if}}>
+            <a class="bibliosoph-messages-tray-item {{#if this.active}}active{{/if}}" data-action="msg-select-conversation" data-id="{{this.id}}" title="{{this.name}}{{#if this.memberNames}} &mdash; {{this.memberNames}}{{/if}}" {{#if this.tint}}style="--bibliosoph-conv-tint: {{this.tint}};"{{/if}}>
                 <i class="{{this.icon}}"></i>
                 <span class="bibliosoph-messages-tray-item-name">{{this.name}}</span>
                 {{#if this.unread}}<span class="bibliosoph-messages-tray-item-badge">{{this.unread}}</span>{{/if}}
@@ -19,7 +25,7 @@
             {{#if showTrayDivider}}<div class="bibliosoph-messages-tray-divider"></div>{{/if}}
             {{!-- Player chats (1:1s, player avatars) --}}
             {{#each trayPlayers}}
-            <a class="bibliosoph-messages-tray-item {{#if this.active}}active{{/if}}" data-action="msg-select-conversation" data-id="{{this.id}}" title="{{this.memberNames}}" {{#if this.tint}}style="--bibliosoph-conv-tint: {{this.tint}};"{{/if}}>
+            <a class="bibliosoph-messages-tray-item {{#if this.active}}active{{/if}}" data-action="msg-select-conversation" data-id="{{this.id}}" title="{{this.name}}{{#if this.memberNames}} &mdash; {{this.memberNames}}{{/if}}" {{#if this.tint}}style="--bibliosoph-conv-tint: {{this.tint}};"{{/if}}>
                 {{#if this.avatar}}<img class="bibliosoph-messages-tray-avatar" src="{{this.avatar}}" alt="{{this.name}}" width="28" height="28">{{else}}<i class="{{this.icon}}"></i>{{/if}}
                 <span class="bibliosoph-messages-tray-item-name">{{this.name}}</span>
                 {{#if this.unread}}<span class="bibliosoph-messages-tray-item-badge">{{this.unread}}</span>{{/if}}
@@ -27,7 +33,7 @@
             {{/each}}
         </div>
         <div class="bibliosoph-messages-tray-footer">
-            <a class="bibliosoph-messages-tray-new" data-action="msg-new-conversation"><i class="fa-solid fa-plus"></i> New Conversation</a>
+            <a class="bibliosoph-messages-tray-new" data-action="msg-new-conversation" title="New Conversation"><i class="fa-solid fa-plus"></i> <span>New Conversation</span></a>
         </div>
     </div>
 
@@ -121,7 +127,7 @@
                 {{#each tones}}
                 <a class="bibliosoph-messages-tone-btn {{#if this.active}}active{{/if}}" data-action="msg-tone" data-tone="{{this.key}}" title="{{this.label}}"><i class="{{this.icon}}"></i></a>
                 {{/each}}
-                <a class="bibliosoph-messages-help" data-tooltip-direction="UP" data-tooltip="You can use a subset of Markdown to format your message:<ul><li><b>Large Title</b>: # Title Here</li><li><b>Medium Title</b>: ## Title Here</li><li><b>Small Title</b>: ### Title Here</li><li><b>Horizontal Rule</b>: --- (3 dashes on their own line)</li><li><b>Bold Text</b>: **Text Here**</li><li><b>Italic Text</b>: *Text Here*</li><li><b>Bulleted List</b>: - List Item Here</li><li><b>Numbered List</b>: 1. List Item Here</li><li><b>Block Text</b>: &gt; Text Here</li><li><b>Image</b>: ![name](path or URL) — or paste / drag an image in</li><li><b>Document Link</b>: drag an item, actor, or journal into the window — or paste its UUID</li></ul>"><i class="fa-solid fa-circle-question"></i></a>
+                <a class="bibliosoph-messages-help" data-tooltip-direction="UP" data-tooltip="You can use a subset of Markdown to format your message:<ul><li><b>Large Title</b>: # Title Here</li><li><b>Medium Title</b>: ## Title Here</li><li><b>Small Title</b>: ### Title Here</li><li><b>Horizontal Rule</b>: --- (3 dashes on their own line)</li><li><b>Bold Text</b>: **Text Here**</li><li><b>Italic Text</b>: *Text Here*</li><li><b>Bulleted List</b>: - List Item Here</li><li><b>Numbered List</b>: 1. List Item Here</li><li><b>Block Text</b>: &gt; Text Here</li><li><b>Image</b>: ![name](path or URL) — or paste / drag an image in</li><li><b>Document Link</b>: drag an item, actor, or journal into the window — or paste its UUID</li><li><b>Mention</b>: @ + a member's player or character name (partial names work) — they get an alert</li></ul>"><i class="fa-solid fa-circle-question"></i></a>
             </div>
             <textarea rows="3" class="bibliosoph-messages-input" placeholder="">{{draft}}</textarea>
         </div>

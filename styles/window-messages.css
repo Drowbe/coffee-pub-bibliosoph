@@ -49,6 +49,9 @@
 }
 
 #coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tray-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
     padding: 8px 10px;
     font-size: 0.85em;
     font-weight: bold;
@@ -56,6 +59,56 @@
     letter-spacing: 0.5px;
     color: var(--bibliosoph-msg-accent);
     border-bottom: 1px solid var(--bibliosoph-msg-border);
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tray-title-text {
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tray-collapse {
+    flex: 0 0 auto;
+    color: var(--bibliosoph-msg-muted);
+    cursor: pointer;
+    padding: 0 2px;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tray-collapse:hover {
+    color: var(--bibliosoph-msg-accent);
+}
+
+/* ----- Collapsed tray: icon rail ----- */
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tray.collapsed {
+    flex: 0 0 48px;
+    min-width: 48px;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tray.collapsed .bibliosoph-messages-tray-title {
+    justify-content: center;
+    padding: 8px 4px;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tray.collapsed .bibliosoph-messages-tray-title-icon,
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tray.collapsed .bibliosoph-messages-tray-title-text,
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tray.collapsed .bibliosoph-messages-tray-item-name,
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tray.collapsed .bibliosoph-messages-tray-new span {
+    display: none;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tray.collapsed .bibliosoph-messages-tray-item {
+    justify-content: center;
+    padding: 7px 0;
+    position: relative;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tray.collapsed .bibliosoph-messages-tray-item-badge {
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    padding: 0 4px;
 }
 
 #coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tray-list {

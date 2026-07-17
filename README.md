@@ -10,11 +10,12 @@ A comprehensive chat and encounter management module for Foundry VTT, designed t
 
 ## Features
 
-### Dynamic Chat System
+### Messages
 
-- Public and private messaging with recipient selection
-- Customizable chat cards for various game events
-- Reply functionality built into chat messages
+- Unified Messages window with party, group, and 1:1 conversations (journal-backed — survives chat log wipes)
+- @Mentions by user or character name, with partial matching and highlighted names; mentioned players get a pulsing alert and toast
+- Clickable menubar notifications (via Blacksmith 13.9.3+): click to jump to the conversation, with a persistent unread counter
+- Markdown formatting, image paste/drop, document links, reactions, typing indicators, and a collapsible conversation tray
 
 **Party Message**
 
