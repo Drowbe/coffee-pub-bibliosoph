@@ -588,7 +588,8 @@ export class ConversationManager {
         if (!entry || !text) return null;
 
         text = await this._linkifyBareUuids(text);
-        const html = await this._composeHtml(text);
+        const mentions = this._findMentions(text, entry);
+        const html = await this._composeHtml(text, entry);
         const timestamp = Date.now();
         const formats = CONST.JOURNAL_ENTRY_PAGE_FORMATS ?? { HTML: 1 };
 
@@ -603,7 +604,8 @@ export class ConversationManager {
                     sender: game.user.id,
                     timestamp,
                     tone,
-                    markdown: text
+                    markdown: text,
+                    mentions
                 }
             }
         }]);
@@ -646,14 +648,103 @@ export class ConversationManager {
         return text.replace(re, (match) => replacements.get(match) ?? match);
     }
 
-    /** Markdown → enriched HTML (escape, convert, enrich @UUID content links). */
-    static async _composeHtml(text) {
+    /** Markdown → enriched HTML (escape, convert, enrich @UUID content links, wrap @mentions). */
+    static async _composeHtml(text, entry = null) {
         let html = this.renderMarkdown(text);
         try {
             const TE = foundry.applications?.ux?.TextEditor?.implementation ?? globalThis.TextEditor;
             html = await TE.enrichHTML(html, { async: true });
         } catch (_) { /* store unenriched HTML */ }
+        if (entry) html = this._applyMentionHtml(html, entry);
         return html;
+    }
+
+    // ==============================================================
+    // ===== @MENTIONS ==============================================
+    // ==============================================================
+
+    /**
+     * Names a conversation member can be @mentioned by: their user name and
+     * their assigned character's name, each resolving to the member's userId.
+     */
+    static _mentionTargets(entry) {
+        const targets = [];
+        for (const id of this.getInfo(entry).members ?? []) {
+            const user = game.users.get(id);
+            if (!user?.name) continue;
+            targets.push({ name: user.name, userId: user.id });
+            const charName = user.character?.name;
+            if (charName) targets.push({ name: charName, userId: user.id });
+        }
+        return targets;
+    }
+
+    /**
+     * Resolve one mention candidate against the targets. Exact full-name
+     * matches always win; partial candidates (min 3 chars) match a prefix of
+     * the full name ("@alicia" → "Alicia Panicucci"), then a prefix of any
+     * word in it ("@panicucci").
+     */
+    static _matchTarget(candidate, targets) {
+        const c = candidate.toLowerCase();
+        let t = targets.find((t) => t.name.toLowerCase() === c);
+        if (t) return t;
+        if (c.length < 3) return null; // too short to partial-match safely
+        t = targets.find((t) => t.name.toLowerCase().startsWith(c));
+        if (t) return t;
+        return targets.find((t) => t.name.toLowerCase().split(/\s+/).some((w) => w.startsWith(c))) ?? null;
+    }
+
+    /**
+     * Scan text for @mentions against the targets. Each @ grabs up to four
+     * following words and resolves greedily, longest candidate first, so
+     * "@alicia panicucci rocks" highlights "@alicia panicucci" while
+     * "@alicia rocks" highlights just "@alicia".
+     * @returns {Array<{index: number, length: number, userId: string}>}
+     */
+    static _scanMentions(text, targets) {
+        if (!targets.length) return [];
+        const WORD = "[\\p{L}\\p{N}'’\\-]+";
+        const re = new RegExp(`(?<![\\p{L}\\p{N}@])@(${WORD}(?:[ \\t]${WORD}){0,3})`, 'gu');
+        const found = [];
+        for (const m of text.matchAll(re)) {
+            const words = m[1].split(/[ \t]+/);
+            for (let n = words.length; n >= 1; n--) {
+                const candidate = words.slice(0, n).join(' ');
+                const target = this._matchTarget(candidate, targets);
+                if (target) {
+                    found.push({ index: m.index, length: 1 + candidate.length, userId: target.userId, name: target.name });
+                    break;
+                }
+            }
+        }
+        return found;
+    }
+
+    /** User ids @mentioned in raw message text (conversation members only). */
+    static _findMentions(text, entry) {
+        const hits = this._scanMentions(text, this._mentionTargets(entry));
+        return [...new Set(hits.map((h) => h.userId))];
+    }
+
+    /**
+     * Wrap @mentions in rendered HTML with a highlight span. Names are
+     * matched in their HTML-escaped form since renderMarkdown escaped the text.
+     */
+    static _applyMentionHtml(html, entry) {
+        const escName = (n) => n.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+        const targets = this._mentionTargets(entry).map((t) => ({ ...t, name: escName(t.name) }));
+        const hits = this._scanMentions(html, targets);
+        if (!hits.length) return html;
+        let out = '';
+        let pos = 0;
+        for (const hit of hits) {
+            out += html.slice(pos, hit.index);
+            // Show the resolved full name even when a partial was typed
+            out += `<span class="bibliosoph-mention" data-user-id="${hit.userId}">@${hit.name}</span>`;
+            pos = hit.index + hit.length;
+        }
+        return out + html.slice(pos);
     }
 
     /**
@@ -668,10 +759,11 @@ export class ConversationManager {
         let text = (markdown ?? '').trim();
         if (!text) return;
         text = await this._linkifyBareUuids(text);
-        const html = await this._composeHtml(text);
+        const html = await this._composeHtml(text, entry);
         await page.update({
             'text.content': html,
             [`flags.${MODULE.ID}.markdown`]: text,
+            [`flags.${MODULE.ID}.mentions`]: this._findMentions(text, entry),
             [`flags.${MODULE.ID}.edited`]: true
         });
     }
@@ -1074,24 +1166,15 @@ export class ConversationManager {
         if (isOwn) return;
 
         const senderUser = game.users.get(flags.sender);
-        getBlacksmith()?.addNotification?.(
-            senderUser?.name ?? 'Someone',
-            'fas fa-envelope',
-            10,
-            MODULE.ID,
-            {
-                // Same destination as the splash click: open that conversation.
-                // Runs in Blacksmith's context — import locally, no module state
-                onClick: async () => {
-                    try {
-                        const { openMessagesWindow } = await import('./window-messages.js');
-                        openMessagesWindow({ conversationId: entry.id });
-                    } catch (_) { /* no-op */ }
-                }
-            }
-        );
-        // Keep the persistent unread-count notification current whenever unread > 0
-        this.notifyUnread();
+        const isMentioned = Array.isArray(flags.mentions) && flags.mentions.includes(game.user.id);
+        this._notifyIncoming(entry, senderUser, isMentioned);
+        // Notification hierarchy: a mention outranks the ambient unread counter,
+        // so show only the mention. The counter returns on window close / login.
+        if (isMentioned) {
+            this.clearUnreadNotification();
+        } else {
+            this.notifyUnread();
+        }
         this.playUiSound('alert');
 
         // Auto Open: pop the window straight onto the conversation when closed
@@ -1103,16 +1186,70 @@ export class ConversationManager {
             } catch (_) { /* fall through to splash */ }
         }
 
-        // On-screen splash so messages can't be missed (per-kind user settings)
+        // On-screen splash so messages can't be missed (per-kind user settings;
+        // being @mentioned always splashes — it's addressed to you personally)
         const kind = this.getInfo(entry).kind;
         const splashSetting = kind === 'direct' ? 'messageSplashEnabled' : 'messageSplashGroupEnabled';
-        if (getSetting(splashSetting, true)) {
-            this._showSplash(entry, senderUser);
+        if (isMentioned || getSetting(splashSetting, true)) {
+            this._showSplash(entry, senderUser, isMentioned);
         }
     }
 
+    /** conversationId → { id, count } for live incoming-message menubar notifications. */
+    static _incomingNotifications = new Map();
+
+    /**
+     * Menubar notification for an incoming message. One per conversation:
+     * a burst of messages updates the existing notification ("Alicia (3)")
+     * instead of stacking one per message. Clicking opens the conversation;
+     * auto-closes 10s after the LAST message in the burst.
+     */
+    static _notifyIncoming(entry, senderUser, mentioned = false) {
+        const blacksmith = getBlacksmith();
+        if (typeof blacksmith?.addNotification !== 'function') return;
+        const name = senderUser?.name ?? 'Someone';
+
+        const existing = this._incomingNotifications.get(entry.id);
+        if (existing) {
+            existing.count += 1;
+            existing.mentioned = existing.mentioned || mentioned;
+            const label = existing.mentioned ? `${name} mentioned you` : name;
+            const updated = blacksmith.updateNotification?.(existing.id, {
+                text: `${label} (${existing.count})`,
+                icon: existing.mentioned ? 'fas fa-at' : 'fas fa-envelope',
+                pulse: existing.mentioned,
+                duration: 10 // restart the auto-close clock
+            });
+            if (updated) return;
+            this._incomingNotifications.delete(entry.id); // it already went away
+        }
+
+        const conversationId = entry.id;
+        // Runs in Blacksmith's context — import locally, no module state
+        const id = blacksmith.addNotification(
+            mentioned ? `${name} mentioned you` : name,
+            mentioned ? 'fas fa-at' : 'fas fa-envelope',
+            10,
+            MODULE.ID,
+            {
+                pulse: mentioned,
+                onClick: async () => {
+                    ConversationManager._incomingNotifications.delete(conversationId);
+                    try {
+                        const { openMessagesWindow } = await import('./window-messages.js');
+                        openMessagesWindow({ conversationId });
+                    } catch (_) { /* no-op */ }
+                },
+                onDismiss: () => {
+                    ConversationManager._incomingNotifications.delete(conversationId);
+                }
+            }
+        );
+        if (id) this._incomingNotifications.set(conversationId, { id, count: 1, mentioned });
+    }
+
     /** On-screen splash for an incoming direct message; click opens the conversation. */
-    static _showSplash(entry, senderUser) {
+    static _showSplash(entry, senderUser, mentioned = false) {
         const splashId = 'bibliosoph-message-splash';
         document.getElementById(splashId)?.remove();
 
@@ -1128,7 +1265,9 @@ export class ConversationManager {
         textBlock.className = 'bibliosoph-splash-text';
         const title = document.createElement('div');
         title.className = 'bibliosoph-splash-title';
-        title.textContent = `Message from ${senderUser?.name ?? 'Someone'}`;
+        title.textContent = mentioned
+            ? `${senderUser?.name ?? 'Someone'} mentioned you`
+            : `Message from ${senderUser?.name ?? 'Someone'}`;
         const sub = document.createElement('div');
         sub.className = 'bibliosoph-splash-sub';
         const info = this.getInfo(entry);

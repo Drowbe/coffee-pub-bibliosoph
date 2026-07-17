@@ -240,6 +240,15 @@
     color: var(--bibliosoph-msg-accent);
 }
 
+/* @mentions inside messages */
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-message-content .bibliosoph-mention {
+    background: rgba(172, 159, 129, 0.15);
+    border-radius: var(--bibliosoph-msg-radius);
+    padding: 0 4px;
+    color: var(--bibliosoph-msg-accent);
+    font-weight: bold;
+}
+
 #coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-thread {
     flex: 1;
     min-height: 0;
