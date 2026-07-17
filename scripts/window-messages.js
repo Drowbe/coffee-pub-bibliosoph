@@ -78,6 +78,7 @@ function formatTimestamp(ts) {
 export function openMessagesWindow(options = {}) {
     const win = MessagesWindow.current ?? new MessagesWindow(options);
     if (options.conversationId) win._activeConversationId = options.conversationId;
+    ConversationManager.clearUnreadNotification();
     return win.render(true);
 }
 
@@ -590,6 +591,8 @@ export class MessagesWindow extends resolveBase() {
     async close(options) {
         if (MessagesWindow.current === this) MessagesWindow.current = null;
         ConversationManager.playUiSound('close');
+        // Anything still unread goes back on the menubar
+        ConversationManager.notifyUnread();
         return super.close(options);
     }
 

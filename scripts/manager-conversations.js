@@ -81,7 +81,16 @@ export class ConversationManager {
 
         this._registerDocumentHooks();
         this._registerSidebarHiding();
-        await this._registerSocketRelay();
+        this._applySidebarHidingStyle();
+        // Before any awaited setup: socket waits can stall and must never
+        // delay or swallow the login unread notification.
+        this.notifyUnread();
+
+        try {
+            await this._registerSocketRelay();
+        } catch (error) {
+            log('Socket relay registration failed', error?.message, false, false);
+        }
 
         if (game.user.isGM && game.users.activeGM?.id === game.user.id) {
             try {
@@ -91,23 +100,56 @@ export class ConversationManager {
             }
         }
 
-        this._applySidebarHidingStyle();
-        this._notifyUnreadOnLogin();
         log('ConversationManager initialized');
     }
 
-    /** On login: one menubar notification with the total unread count. */
-    static _notifyUnreadOnLogin() {
+    /** Menubar id of the live unread-count notification, if any. */
+    static _unreadNotificationId = null;
+
+    /** Remove the unread-count notification (e.g. the Messages window opened). */
+    static clearUnreadNotification() {
+        if (!this._unreadNotificationId) return;
+        getBlacksmith()?.removeNotification?.(this._unreadNotificationId);
+        this._unreadNotificationId = null;
+    }
+
+    /**
+     * Post (or refresh) the persistent unread-count notification. Called on
+     * login and again when the Messages window closes with unread remaining.
+     * Stays until clicked (opens Messages) or dismissed with the ×.
+     */
+    static notifyUnread() {
         const totalUnread = this.getConversations()
             .filter((entry) => this.isMember(entry))
             .reduce((total, entry) => total + this.getUnreadCount(entry), 0);
+        this.clearUnreadNotification(); // never stack; repost refreshes the count
+        log(`notifyUnread: ${totalUnread} unread`);
         if (totalUnread <= 0) return;
-        getBlacksmith()?.addNotification?.(
+        const blacksmith = getBlacksmith();
+        if (typeof blacksmith?.addNotification !== 'function') {
+            log('notifyUnread: Blacksmith addNotification unavailable', '', false, false);
+            return;
+        }
+        const id = blacksmith.addNotification(
             `${totalUnread} Unread Message${totalUnread === 1 ? '' : 's'}`,
             'fas fa-envelope',
-            30,
-            MODULE.ID
+            0, // persistent until clicked or dismissed
+            MODULE.ID,
+            {
+                pulse: true,
+                // Runs in Blacksmith's context — import locally, no module state
+                onClick: async () => {
+                    try {
+                        const { openMessagesWindow } = await import('./window-messages.js');
+                        openMessagesWindow();
+                    } catch (_) { /* no-op */ }
+                }
+            }
         );
+        if (!id) return;
+        this._unreadNotificationId = id;
+        // Pulse to draw the eye, then settle (60s for testing)
+        setTimeout(() => blacksmith?.updateNotification?.(id, { pulse: false }), 60000);
     }
 
     // ==============================================================
@@ -1033,11 +1075,23 @@ export class ConversationManager {
 
         const senderUser = game.users.get(flags.sender);
         getBlacksmith()?.addNotification?.(
-            `Message from ${senderUser?.name ?? 'Someone'}`,
+            senderUser?.name ?? 'Someone',
             'fas fa-envelope',
-            30,
-            MODULE.ID
+            10,
+            MODULE.ID,
+            {
+                // Same destination as the splash click: open that conversation.
+                // Runs in Blacksmith's context — import locally, no module state
+                onClick: async () => {
+                    try {
+                        const { openMessagesWindow } = await import('./window-messages.js');
+                        openMessagesWindow({ conversationId: entry.id });
+                    } catch (_) { /* no-op */ }
+                }
+            }
         );
+        // Keep the persistent unread-count notification current whenever unread > 0
+        this.notifyUnread();
         this.playUiSound('alert');
 
         // Auto Open: pop the window straight onto the conversation when closed
