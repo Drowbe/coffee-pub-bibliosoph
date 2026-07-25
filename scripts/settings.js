@@ -970,13 +970,31 @@ export const registerSettings = () => {
 			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
 		});
 
+		// Shared choice lists for the crit/fumble toast settings below.
+		// Values map straight onto Blacksmith's toast API config.
+		const toastSizeChoices = {
+			'adapt': 'Adapt to Content',
+			'small': 'Small',
+			'medium': 'Medium',
+			'large': 'Large',
+			'fullscreen': 'Fullscreen'
+		};
+		const toastAnimationChoices = {
+			'none': 'None',
+			'pop': 'Pop — scales in with a springy bounce',
+			'reveal': 'Reveal — icon, then title, then message',
+			'slam': 'Slam — smashes in like a stamp',
+			'shake': 'Shake — rattles in with a wobble',
+			'pulse': 'Pulse — subtle breathe (persistent toasts)'
+		};
+
 		// ** CRITICAL **
 
 		// ---------- SUBHEADING ----------
-		game.settings.register(MODULE.ID, "headingH3Critical", {
-			name: MODULE.ID + '.headingH3Critical-Label',
-			hint: MODULE.ID + '.headingH3Critical-Hint',
-			scope: "client",
+		game.settings.register(MODULE.ID, "headingH2Critical", {
+			name: MODULE.ID + '.headingH2Critical-Label',
+			hint: MODULE.ID + '.headingH2Critical-Hint',
+			scope: "world",
 			config: true,
 			default: "",
 			type: String,
@@ -1041,110 +1059,16 @@ export const registerSettings = () => {
 			default: '-- Choose a Macro --',
 			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
 		});
-
-		// ** FUMBLE **
-
-		// ---------- SUBHEADING ----------
-		game.settings.register(MODULE.ID, "headingH3Fumbles", {
-			name: MODULE.ID + '.headingH3Fumbles-Label',
-			hint: MODULE.ID + '.headingH3Fumbles-Hint',
-			scope: "client",
-			config: true,
-			default: "",
-			type: String,
-		});
-		// -------------------------------------
-		game.settings.register(MODULE.ID, 'fumbleEnabled', {
-			name: MODULE.ID + '.fumbleEnabled-Label',
-			hint: MODULE.ID + '.fumbleEnabled-Hint',
+		// -- Critical Toast --
+		game.settings.register(MODULE.ID, 'critToastEnabled', {
+			name: MODULE.ID + '.critToastEnabled-Label',
+			hint: MODULE.ID + '.critToastEnabled-Hint',
 			type: Boolean,
 			config: true,
-			requiresReload: true,
+			requiresReload: false,
 			scope: 'world',
 			default: false,
 		});
-		// -- Fumble Coffee Pub Toolbar --
-		game.settings.register(MODULE.ID, 'toolbarCoffeePubFumbleEnabled', {
-			name: MODULE.ID + '.toolbarCoffeePubFumbleEnabled-Label',
-			hint: MODULE.ID + '.toolbarCoffeePubFumbleEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'user',
-			default: true,
-		});
-		// -- Fumble Foundry Toolbar --
-		game.settings.register(MODULE.ID, 'toolbarFoundryFumbleEnabled', {
-			name: MODULE.ID + '.toolbarFoundryFumbleEnabled-Label',
-			hint: MODULE.ID + '.toolbarFoundryFumbleEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'user',
-			default: true,
-		});
-		// -- Fumble Theme --
-		game.settings.register(MODULE.ID, 'cardThemeFumble', {
-			name: MODULE.ID + '.cardThemeFumble-Label',
-			hint: MODULE.ID + '.cardThemeFumble-Hint',
-			scope: 'world',
-			config: true,
-			requiresReload: false,
-			type: String,
-			default: 'theme-default',
-			choices: themeChoices
-		});
-		// -- Fumble Table --
-		game.settings.register(MODULE.ID,'fumbleTable', {
-			name: MODULE.ID + '.fumbleTable-Label',
-			hint: MODULE.ID + '.fumbleTable-Hint',
-			scope: "world",
-			config: true,
-			requiresReload: false,
-			default: '-- Choose a Roll Table --',
-			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
-		});
-		// -- Fumble Macro --
-		game.settings.register(MODULE.ID,'fumbleMacro', {
-			name: MODULE.ID + '.fumbleMacro-Label',
-			hint: MODULE.ID + '.fumbleMacro-Hint',
-			scope: "world",
-			config: true,
-			requiresReload: true,
-			default: '-- Choose a Macro --',
-			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
-		});
-
-		// ** ROLL TOASTS **
-
-		// Shared choice lists for the crit/fumble toast settings below.
-		// Values map straight onto Blacksmith's toast API config.
-		const toastSizeChoices = {
-			'adapt': 'Adapt to Content',
-			'small': 'Small',
-			'medium': 'Medium',
-			'large': 'Large',
-			'fullscreen': 'Fullscreen'
-		};
-		const toastAnimationChoices = {
-			'none': 'None',
-			'pop': 'Pop — scales in with a springy bounce',
-			'reveal': 'Reveal — icon, then title, then message',
-			'slam': 'Slam — smashes in like a stamp',
-			'shake': 'Shake — rattles in with a wobble',
-			'pulse': 'Pulse — subtle breathe (persistent toasts)'
-		};
-
-		// ---------- SUBHEADING ----------
-		game.settings.register(MODULE.ID, "headingH3RollToasts", {
-			name: MODULE.ID + '.headingH3RollToasts-Label',
-			hint: MODULE.ID + '.headingH3RollToasts-Hint',
-			scope: "client",
-			config: true,
-			default: "",
-			type: String,
-		});
-		// -------------------------------------
 		game.settings.register(MODULE.ID, 'rollToastTriggeredBy', {
 			name: MODULE.ID + '.rollToastTriggeredBy-Label',
 			hint: MODULE.ID + '.rollToastTriggeredBy-Hint',
@@ -1157,16 +1081,6 @@ export const registerSettings = () => {
 				'everyone': 'Everyone (players, NPCs, and the GM)',
 				'players': 'Players Only'
 			}
-		});
-		// -- Critical Toast --
-		game.settings.register(MODULE.ID, 'critToastEnabled', {
-			name: MODULE.ID + '.critToastEnabled-Label',
-			hint: MODULE.ID + '.critToastEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: false,
-			scope: 'world',
-			default: false,
 		});
 		game.settings.register(MODULE.ID, 'critToastTitle', {
 			name: MODULE.ID + '.critToastTitle-Label',
@@ -1252,6 +1166,80 @@ export const registerSettings = () => {
 			type: String,
 			default: '#620404',
 		});
+
+		// ** FUMBLE **
+
+		// ---------- SUBHEADING ----------
+		game.settings.register(MODULE.ID, "headingH2Fumbles", {
+			name: MODULE.ID + '.headingH2Fumbles-Label',
+			hint: MODULE.ID + '.headingH2Fumbles-Hint',
+			scope: "world",
+			config: true,
+			default: "",
+			type: String,
+		});
+		// -------------------------------------
+		game.settings.register(MODULE.ID, 'fumbleEnabled', {
+			name: MODULE.ID + '.fumbleEnabled-Label',
+			hint: MODULE.ID + '.fumbleEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'world',
+			default: false,
+		});
+		// -- Fumble Coffee Pub Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarCoffeePubFumbleEnabled', {
+			name: MODULE.ID + '.toolbarCoffeePubFumbleEnabled-Label',
+			hint: MODULE.ID + '.toolbarCoffeePubFumbleEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'user',
+			default: true,
+		});
+		// -- Fumble Foundry Toolbar --
+		game.settings.register(MODULE.ID, 'toolbarFoundryFumbleEnabled', {
+			name: MODULE.ID + '.toolbarFoundryFumbleEnabled-Label',
+			hint: MODULE.ID + '.toolbarFoundryFumbleEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: true,
+			scope: 'user',
+			default: true,
+		});
+		// -- Fumble Theme --
+		game.settings.register(MODULE.ID, 'cardThemeFumble', {
+			name: MODULE.ID + '.cardThemeFumble-Label',
+			hint: MODULE.ID + '.cardThemeFumble-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			type: String,
+			default: 'theme-default',
+			choices: themeChoices
+		});
+		// -- Fumble Table --
+		game.settings.register(MODULE.ID,'fumbleTable', {
+			name: MODULE.ID + '.fumbleTable-Label',
+			hint: MODULE.ID + '.fumbleTable-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: false,
+			default: '-- Choose a Roll Table --',
+			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
+		});
+		// -- Fumble Macro --
+		game.settings.register(MODULE.ID,'fumbleMacro', {
+			name: MODULE.ID + '.fumbleMacro-Label',
+			hint: MODULE.ID + '.fumbleMacro-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: true,
+			default: '-- Choose a Macro --',
+			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
+		});
+
 		// -- Fumble Toast --
 		game.settings.register(MODULE.ID, 'fumbleToastEnabled', {
 			name: MODULE.ID + '.fumbleToastEnabled-Label',
