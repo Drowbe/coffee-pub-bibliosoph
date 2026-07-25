@@ -14,11 +14,8 @@
 		"showDiceRolls-Hint": "Show virtual dice rolls when cards are generated.",
 
 
-		"headingH2Communications-Label": "Communications",
-		"headingH2Communications-Hint": "",
-
-		"headingH3Messages-Label": "Messages",
-		"headingH3Messages-Hint": "The unified conversation window: party-wide and private group messages with history, without touching the Foundry chat log.",
+		"headingH2Messaging-Label": "Messaging",
+		"headingH2Messaging-Hint": "The unified conversation window: party-wide and private group messages with history, without touching the Foundry chat log.",
 		"messagesEnabled-Label": "Messages Enabled",
 		"messagesEnabled-Hint": "Enable the unified Messages window (party and private conversations).",
 		"toolbarCoffeePubMessagesEnabled-Label": "Show in the Coffee Pub toolbar",
@@ -61,7 +58,7 @@
 		"toolbarCoffeePubBeverageEnabled-Hint": "",
 		"toolbarFoundryBeverageEnabled-Label": "Show in the Foundry toolbar",
 		"toolbarFoundryBeverageEnabled-Hint": "",
-		"headingH3Beverage-Label": "Beverage Messages",
+		"headingH3Beverage-Label": "Beverage Break",
 		"headingH3Beverage-Hint": "",
 		"cardThemeBeverage-Label": "Card Style",
 		"cardThemeBeverage-Hint": "",
@@ -76,7 +73,7 @@
 		"toolbarCoffeePubBioEnabled-Hint": "",
 		"toolbarFoundryBioEnabled-Label": "Show in the Foundry toolbar",
 		"toolbarFoundryBioEnabled-Hint": "",
-		"headingH3Bio-Label": "Bio Break Messages",
+		"headingH3Bio-Label": "Bio Break",
 		"headingH3Bio-Hint": "",
 		"cardThemeBio-Label": "Card Style",
 		"cardThemeBio-Hint": "",
@@ -126,8 +123,6 @@
 		"toolbarCoffeePubInvestigationEnabled-Hint": "",
 		"toolbarFoundryInvestigationEnabled-Label": "Show in the Foundry toolbar",
 		"toolbarFoundryInvestigationEnabled-Hint": "",
-		"headingH3Investigation-Label": "Investigations",
-		"headingH3Investigation-Hint": "",
 		"headingH3Currency-Label": "Currency",
 		"headingH3Currency-Hint": "",
 		"headingH3Items-Label": "Items",
@@ -350,7 +345,7 @@
 		"injurySoundVolume-Hint": "",
 
 
-		"headingH2Encounters-Label": "Encounters",
+		"headingH2Encounters-Label": "Quick Encounters",
 		"headingH2Encounters-Hint": "Set the odds of encountering a monster, configure your thresholds, and the Quick Encounter tool does the rest.",
 
 		"headingH2Investigations-Label": "Investigations",
