@@ -44,7 +44,6 @@ When enabled, Investigation runs a full search flow with narrative, optional coi
 
 ### Other Character Interactions
 
-- Gift and Shady Goods (single table roll, single item to inventory)
 - Beverage system
 - Character biography integration
 - Insult and praise mechanics
@@ -53,7 +52,6 @@ When enabled, Investigation runs a full search flow with narrative, optional coi
 
 - Critical hit and fumble card generation
 - Inspiration tracking
-- Deck of Many Things integration
 - Injury system with active effect application
 - Status effect management
 

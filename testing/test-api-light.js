@@ -33,8 +33,8 @@ const macroSettings = [
     'encounterMacroGeneral', 'encounterMacroCave', 'encounterMacroDesert',
     'encounterMacroDungeon', 'encounterMacroForest', 'encounterMacroMountain',
     'encounterMacroSky', 'encounterMacroSnow', 'encounterMacroUrban',
-    'encounterMacroWater', 'investigationMacro', 'giftMacro', 'shadygoodsMacro',
-    'criticalMacro', 'fumbleMacro', 'inspirationMacro', 'domtMacro',
+    'encounterMacroWater', 'investigationMacro',
+    'criticalMacro', 'fumbleMacro', 'inspirationMacro',
     'beverageMacro', 'bioMacro', 'insultsMacro', 'praiseMacro',
     'partyMessageMacro', 'privateMessageMacro', 'injuriesMacroGlobal'
 ];

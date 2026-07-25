@@ -1317,44 +1317,13 @@ export const registerSettings = () => {
 		});
 
 
-		// ********** ROLL TABLES **********
+		// ********** INSPIRATION **********
 
 		// ---------- HEADING ----------
-		game.settings.register(MODULE.ID, "headingH2RollTables", {
-			name: MODULE.ID + '.headingH2RollTables-Label',
-			hint: MODULE.ID + '.headingH2RollTables-Hint',
+		game.settings.register(MODULE.ID, "headingH2Inspiration", {
+			name: MODULE.ID + '.headingH2Inspiration-Label',
+			hint: MODULE.ID + '.headingH2Inspiration-Hint',
 			scope: "world",
-			config: true,
-			default: "",
-			type: String,
-		});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		// ** INSPIRATION **
-
-		// ---------- SUBHEADING ----------
-		game.settings.register(MODULE.ID, "headingH3Inspiration", {
-			name: MODULE.ID + '.headingH3Inspiration-Label',
-			hint: MODULE.ID + '.headingH3Inspiration-Hint',
-			scope: "client",
 			config: true,
 			default: "",
 			type: String,
@@ -1389,7 +1358,6 @@ export const registerSettings = () => {
 			scope: 'user',
 			default: false,
 		});
-
 		// -- Inspiration Theme --
 		game.settings.register(MODULE.ID, 'cardThemeInspiration', {
 			name: MODULE.ID + '.cardThemeInspiration-Label',
@@ -1422,197 +1390,16 @@ export const registerSettings = () => {
 		});
 
 
-		// ---------- SUBHEADING ----------
-		game.settings.register(MODULE.ID, "headingH3Gifts", {
-			name: MODULE.ID + '.headingH3Gifts-Label',
-			hint: MODULE.ID + '.headingH3Gifts-Hint',
-			scope: "client",
+		// ********** ROLL TABLES **********
+
+		// ---------- HEADING ----------
+		game.settings.register(MODULE.ID, "headingH2RollTables", {
+			name: MODULE.ID + '.headingH2RollTables-Label',
+			hint: MODULE.ID + '.headingH2RollTables-Hint',
+			scope: "world",
 			config: true,
 			default: "",
 			type: String,
-		});
-		// -------------------------------------
-		game.settings.register(MODULE.ID, 'giftEnabled', {
-			name: MODULE.ID + '.giftEnabled-Label',
-			hint: MODULE.ID + '.giftEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'world',
-			default: false,
-		});
-		// -- Gift Coffee Pub Toolbar --
-		game.settings.register(MODULE.ID, 'toolbarCoffeePubGiftEnabled', {
-			name: MODULE.ID + '.toolbarCoffeePubGiftEnabled-Label',
-			hint: MODULE.ID + '.toolbarCoffeePubGiftEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'user',
-			default: true,
-		});
-		// -- Gift Foundry Toolbar --
-		game.settings.register(MODULE.ID, 'toolbarFoundryGiftEnabled', {
-			name: MODULE.ID + '.toolbarFoundryGiftEnabled-Label',
-			hint: MODULE.ID + '.toolbarFoundryGiftEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'user',
-			default: false,
-		});
-		// -- Gift Theme --
-		game.settings.register(MODULE.ID, 'cardThemeGift', {
-			name: MODULE.ID + '.cardThemeGift-Label',
-			hint: MODULE.ID + '.cardThemeGift-Hint',
-			scope: 'world',
-			config: true,
-			requiresReload: false,
-			default: 'theme-default',
-			choices: themeChoices
-		});
-		// -- Gift Table --
-		game.settings.register(MODULE.ID,'giftTable', {
-			name: MODULE.ID + '.giftTable-Label',
-			hint: MODULE.ID + '.giftTable-Hint',
-			scope: "world",
-			config: true,
-			requiresReload: false,
-			default: '-- Choose a Roll Table --',
-			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
-		});
-
-		// -- Gift Macro --
-		game.settings.register(MODULE.ID,'giftMacro', {
-			name: MODULE.ID + '.giftMacro-Label',
-			hint: MODULE.ID + '.giftMacro-Hint',
-			scope: "world",
-			config: true,
-			requiresReload: true,
-			default: '-- Choose a Macro --',
-			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
-		});
-
-		// ---------- SUBHEADING ----------
-		game.settings.register(MODULE.ID, "headingH3ShadyGoods", {
-			name: MODULE.ID + '.headingH3ShadyGoods-Label',
-			hint: MODULE.ID + '.headingH3ShadyGoods-Hint',
-			scope: "client",
-			config: true,
-			default: "",
-			type: String,
-		});
-		// -------------------------------------
-		game.settings.register(MODULE.ID, 'shadygoodsEnabled', {
-			name: MODULE.ID + '.shadygoodsEnabled-Label',
-			hint: MODULE.ID + '.shadygoodsEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'world',
-			default: false,
-		});
-		// -- Shady Goods Coffee Pub Toolbar --
-		game.settings.register(MODULE.ID, 'toolbarCoffeePubShadygoodsEnabled', {
-			name: MODULE.ID + '.toolbarCoffeePubShadygoodsEnabled-Label',
-			hint: MODULE.ID + '.toolbarCoffeePubShadygoodsEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'user',
-			default: true,
-		});
-		// -- Shady Goods Foundry Toolbar --
-		game.settings.register(MODULE.ID, 'toolbarFoundryShadygoodsEnabled', {
-			name: MODULE.ID + '.toolbarFoundryShadygoodsEnabled-Label',
-			hint: MODULE.ID + '.toolbarFoundryShadygoodsEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'user',
-			default: false,
-		});
-		// -- Shady Goods Theme --
-		game.settings.register(MODULE.ID, 'cardThemeShadygoods', {
-			name: MODULE.ID + '.cardThemeShadygoods-Label',
-			hint: MODULE.ID + '.cardThemeShadygoods-Hint',
-			scope: 'world',
-			config: true,
-			requiresReload: false,
-			default: 'theme-default',
-			choices: themeChoices
-		});
-		// -- Shady Goods Table --
-		game.settings.register(MODULE.ID,'shadygoodsTable', {
-			name: MODULE.ID + '.shadygoodsTable-Label',
-			hint: MODULE.ID + 'shadygoodsTable-Hint',
-			scope: "world",
-			config: true,
-			requiresReload: false,
-			default: '-- Choose a Roll Table --',
-			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
-		});
-		// -- Shady Goods Macro --
-		game.settings.register(MODULE.ID,'shadygoodsMacro', {
-			name: MODULE.ID + '.shadygoodsMacro-Label',
-			hint: MODULE.ID + '.shadygoodsMacro-Hint',
-			scope: "world",
-			config: true,
-			requiresReload: true,
-			default: '-- Choose a Macro --',
-			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
-		});
-
-		// ** DOMT **
-
-		// ---------- SUBHEADING ----------
-		game.settings.register(MODULE.ID, "headingH3DOMT", {
-			name: MODULE.ID + '.headingH3DOMT-Label',
-			hint: MODULE.ID + '.headingH3DOMT-Hint',
-			scope: "client",
-			config: true,
-			default: "",
-			type: String,
-		});
-		// -------------------------------------
-		game.settings.register(MODULE.ID, 'domtEnabled', {
-			name: MODULE.ID + '.domtEnabled-Label',
-			hint: MODULE.ID + '.domtEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'world',
-			default: false,
-		});
-		// -- DOMT Theme --
-		game.settings.register(MODULE.ID, 'cardThemeDOMT', {
-			name: MODULE.ID + '.cardThemeDOMT-Label',
-			hint: MODULE.ID + '.cardThemeDOMT-Hint',
-			scope: 'world',
-			config: true,
-			requiresReload: false,
-			default: 'theme-default',
-			choices: themeChoices
-		});
-		// -- DOMT Table --
-		game.settings.register(MODULE.ID,'domtTable', {
-			name: MODULE.ID + '.domtTable-Label',
-			hint: MODULE.ID + '.domtTable-Hint',
-			scope: "world",
-			config: true,
-			requiresReload: false,
-			default: '-- Choose a Roll Table --',
-			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
-		});
-		// -- DOMT Macro --
-		game.settings.register(MODULE.ID,'domtMacro', {
-			name: MODULE.ID + '.domtMacro-Label',
-			hint: MODULE.ID + '.domtMacro-Hint',
-			scope: "world",
-			config: true,
-			requiresReload: true,
-			default: '-- Choose a Macro --',
-			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
 		});
 
 		// ** BEVERAGE **

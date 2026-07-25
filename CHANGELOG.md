@@ -15,10 +15,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Inspiration promoted to its own section:** Moved out of Special Roll Tables into a top-level banner section above it, ahead of its planned evolution into a multi-card "deck" experience.
 - **Settings reorganized:** The settings sheet now flows General → Messaging → Critical Hits → Fumbles → Injuries → Quick Encounters → Investigations → Special Roll Tables (Inspiration, Random Gifts, Shady Goods, Deck of Many Things, Beverage Break, Bio Break, Random Insults, Random Praise). Messaging is its own top-level section (was "Messages" under Communications, now removed as an empty shell), "Encounters" is retitled Quick Encounters, and "Beverage Messages"/"Bio Break Messages" are now Beverage Break/Bio Break. No setting keys changed — all stored values carry over.
 
 ### Removed
 
+- **Deck of Many Things:** Removed entirely — settings, macro binding, card branch, theme case, card-type flag, and language strings. The concept returns later as part of a planned "deck" experience built on Inspiration (see TODO.md).
+- **Random Gifts and Shady Goods:** Both features are gone entirely — settings (including their Special Roll Tables subsections), toolbar buttons, macro bindings, the shared search-style chat card (`createChatCardSearch`) and its item-lookup helper, card-type flags, and language strings. Any macros users pointed at these features simply revert to their original behavior.
 - **Dead roll-detection hooks:** The non-functional `createChatMessage` crit/fumble announcer (broken since Foundry v10 — it read `msg.rolls.total` on an array and compared against a hardcoded AC 15) and the empty `updateToken` HP-loss stub are gone, replaced by the rolls-API integration above.
 
 ## [13.3.2]

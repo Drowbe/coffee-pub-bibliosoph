@@ -89,8 +89,6 @@ export const BIBLIOSOPH = {
     CARDTYPEENCOUNTER: false,
     CARDTYPEINJURY: false,
     CARDTYPEINVESTIGATION: false,
-    CARDTYPEGIFT: false,
-    CARDTYPESHADYGOODS: false,
     CARDTYPECRIT: false,
     CARDTYPEFUMBLE: false,
     CARDTYPEBIO: false,
@@ -98,7 +96,6 @@ export const BIBLIOSOPH = {
     CARDTYPEINSULT: false,
     CARDTYPEPRAISE: false,
     CARDTYPEINSPIRATION: false,
-    CARDTYPEDOMT: false,
     MACRO_ID: "",
     CHAT_TYPE_OTHER: "OTHER",
 }

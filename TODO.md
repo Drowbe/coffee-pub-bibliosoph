@@ -2,7 +2,11 @@
 
 ## Crits & Fumbles
 
-- Automate rolling from the crit and fumble tables when a player rolls a natural 20 / natural 1. The placeholder `createChatMessage` hook in bibliosoph.js (announces "X made a critical hit!") was the start of this — it currently never fires (`msg.rolls.total` reads off an array) and should be replaced with a real implementation: detect nat 20 / nat 1 on attack rolls, roll the configured critical/fumble table, and post the card automatically.
+- Phase 2 of the rolls-API integration (phase 1 — crit/fumble toasts via Blacksmith `api.rolls` — shipped in `manager-roll-toasts.js`): when a nat 20 / nat 1 lands, either auto-roll the configured critical/fumble table, or post a clickable prompt so the player gets to roll it themselves. Phase 3: "announcer" moments (biggest hit, broken records) using the Blacksmith stats API.
+
+## Inspiration
+
+- Migrate the Inspiration card experience into a "deck" experience that can use many types of cards — draw from a configurable deck (inspiration boons, and other card types down the road) instead of a single roll table. Deck of Many Things was removed as a standalone feature; a DOMT-style deck should return as just another deck under this system.
 
 ## Messages
 

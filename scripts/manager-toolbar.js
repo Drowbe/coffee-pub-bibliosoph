@@ -192,42 +192,6 @@ const TOOLBAR_TOOLS = {
             }
         }
     },
-    'bibliosoph-gift': {
-        icon: "fa-solid fa-gift",
-        name: "bibliosoph-gift",
-        title: "Gifts",
-        zone: "rolls",
-        order: 5,
-        moduleId: "coffee-pub-bibliosoph",
-        enabled: () => getSetting('giftEnabled', false),
-        onCoffeePub: () => getSetting('toolbarCoffeePubGiftEnabled', true),
-        onFoundry: () => getSetting('toolbarFoundryGiftEnabled', false),
-        onClick: () => {
-            if (typeof window.triggerGiftMacro === 'function') {
-                window.triggerGiftMacro();
-            } else {
-                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Gift function not available", "", false, false);
-            }
-        }
-    },
-    'bibliosoph-shadygoods': {
-        icon: "fa-solid fa-mask",
-        name: "bibliosoph-shadygoods",
-        title: "Shady Goods",
-        zone: "rolls",
-        order: 6,
-        moduleId: "coffee-pub-bibliosoph",
-        enabled: () => getSetting('shadygoodsEnabled', false),
-        onCoffeePub: () => getSetting('toolbarCoffeePubShadygoodsEnabled', true),
-        onFoundry: () => getSetting('toolbarFoundryShadygoodsEnabled', false),
-        onClick: () => {
-            if (typeof window.triggerShadygoodsMacro === 'function') {
-                window.triggerShadygoodsMacro();
-            } else {
-                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Shadygoods function not available", "", false, false);
-            }
-        }
-    },
     'bibliosoph-inspiration': {
         icon: "fa-solid fa-lightbulb",
         name: "bibliosoph-inspiration",

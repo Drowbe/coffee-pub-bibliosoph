@@ -318,40 +318,6 @@ function triggerPraiseMacro() {
     publishChatCard();
 }
 
-// Trigger gift macro (for toolbar integration)
-function triggerGiftMacro() {
-    const strGiftMacro = BlacksmithUtils.getSettingSafely(MODULE.ID, 'giftMacro', '') || '';
-    
-    if (!strGiftMacro || strGiftMacro === '-- Choose a Macro --' || strGiftMacro === 'none') {
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Gift macro not configured", "", false, false);
-        return;
-    }
-
-    // Build the chat message (same as macro click handler)
-    resetBibliosophVars();
-    BIBLIOSOPH.CARDTYPEGIFT = true;
-    BIBLIOSOPH.CARDTYPE = "General";
-    // Build the card
-    publishChatCard();
-}
-
-// Trigger shadygoods macro (for toolbar integration)
-function triggerShadygoodsMacro() {
-    const strShadygoodsMacro = BlacksmithUtils.getSettingSafely(MODULE.ID, 'shadygoodsMacro', '') || '';
-    
-    if (!strShadygoodsMacro || strShadygoodsMacro === '-- Choose a Macro --' || strShadygoodsMacro === 'none') {
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Shadygoods macro not configured", "", false, false);
-        return;
-    }
-
-    // Build the chat message (same as macro click handler)
-    resetBibliosophVars();
-    BIBLIOSOPH.CARDTYPESHADYGOODS = true;
-    BIBLIOSOPH.CARDTYPE = "General";
-    // Build the card
-    publishChatCard();
-}
-
 // Trigger inspiration macro (for toolbar integration)
 function triggerInspirationMacro() {
     const strInspirationMacro = BlacksmithUtils.getSettingSafely(MODULE.ID, 'inspirationMacro', '') || '';
@@ -378,8 +344,6 @@ window.triggerBeverageMacro = triggerBeverageMacro;
 window.triggerBioMacro = triggerBioMacro;
 window.triggerInsultsMacro = triggerInsultsMacro;
 window.triggerPraiseMacro = triggerPraiseMacro;
-window.triggerGiftMacro = triggerGiftMacro;
-window.triggerShadygoodsMacro = triggerShadygoodsMacro;
 window.triggerInspirationMacro = triggerInspirationMacro;
 
 
@@ -392,12 +356,9 @@ function validateMandatorySettings() {
     // Check all mandatory macro settings
     const macroChecks = [
         { name: 'Investigations', setting: game.settings.get(MODULE.ID, 'investigationMacro'), required: true },
-        { name: 'Gifts', setting: game.settings.get(MODULE.ID, 'giftMacro'), required: true },
-        { name: 'Shady Goods', setting: game.settings.get(MODULE.ID, 'shadygoodsMacro'), required: true },
         { name: 'Critical Hits', setting: game.settings.get(MODULE.ID, 'criticalMacro'), required: true },
         { name: 'Fumbles', setting: game.settings.get(MODULE.ID, 'fumbleMacro'), required: true },
         { name: 'Inspiration', setting: game.settings.get(MODULE.ID, 'inspirationMacro'), required: true },
-        { name: 'Deck of Many Things', setting: game.settings.get(MODULE.ID, 'domtMacro'), required: true },
         { name: 'Beverage Break', setting: game.settings.get(MODULE.ID, 'beverageMacro'), required: true },
         { name: 'Bio Break', setting: game.settings.get(MODULE.ID, 'bioMacro'), required: true },
         { name: 'Insults', setting: game.settings.get(MODULE.ID, 'insultsMacro'), required: true },
@@ -606,30 +567,6 @@ Hooks.on("ready", async () => {
         });
 
         bindSimpleMacro({
-            label: "Gift",
-            enabledKey: 'giftEnabled',
-            macroKey: 'giftMacro',
-            onExecute: async () => {
-                resetBibliosophVars();
-                BIBLIOSOPH.CARDTYPEGIFT = true;
-                BIBLIOSOPH.CARDTYPE = "Gift";
-                publishChatCard();
-            }
-        });
-
-        bindSimpleMacro({
-            label: "Shady Goods",
-            enabledKey: 'shadygoodsEnabled',
-            macroKey: 'shadygoodsMacro',
-            onExecute: async () => {
-                resetBibliosophVars();
-                BIBLIOSOPH.CARDTYPESHADYGOODS = true;
-                BIBLIOSOPH.CARDTYPE = "General";
-                publishChatCard();
-            }
-        });
-
-        bindSimpleMacro({
             label: "Critical Hit",
             enabledKey: 'criticalEnabled',
             macroKey: 'criticalMacro',
@@ -660,18 +597,6 @@ Hooks.on("ready", async () => {
             onExecute: async () => {
                 resetBibliosophVars();
                 BIBLIOSOPH.CARDTYPEINSPIRATION = true;
-                BIBLIOSOPH.CARDTYPE = "General";
-                publishChatCard();
-            }
-        });
-
-        bindSimpleMacro({
-            label: "Deck of Many Things",
-            enabledKey: 'domtEnabled',
-            macroKey: 'domtMacro',
-            onExecute: async () => {
-                resetBibliosophVars();
-                BIBLIOSOPH.CARDTYPEDOMT = true;
                 BIBLIOSOPH.CARDTYPE = "General";
                 publishChatCard();
             }
@@ -752,12 +677,9 @@ Hooks.on("ready", async () => {
     // Resolve a macro value (name or id) to a Macro document
     // SET VARIABLES using Blacksmith's safe settings access
     var strInvestigationMacro = getSetting('investigationMacro', '');
-    var strGiftMacro = getSetting('giftMacro', '');
-    var strShadygoodsMacro = getSetting('shadygoodsMacro', '');
     var strCriticalMacro = getSetting('criticalMacro', '');
     var strFumbleMacro = getSetting('fumbleMacro', '');
     var strInspirationMacro = getSetting('inspirationMacro', '');
-    var strDOMTMacro = getSetting('domtMacro', '');
     var strBeverageMacro = getSetting('beverageMacro', '');
     var strBioMacro = getSetting('bioMacro', '');
     var strInsultMacro = getSetting('insultsMacro', '');
@@ -770,12 +692,9 @@ Hooks.on("ready", async () => {
     var blnBioEnabled = getSetting('bioEnabled', false);
     var blnInsultsEnabled = getSetting('insultsEnabled', false);
     var blnPraiseEnabled = getSetting('praiseEnabled', false);
-    var blnGiftEnabled = getSetting('giftEnabled', false);
-    var blnShadygoodsEnabled = getSetting('shadygoodsEnabled', false);
     var blnCriticalEnabled = getSetting('criticalEnabled', false);
     var blnFumbleEnabled = getSetting('fumbleEnabled', false);
     var blnInspirationEnabled = getSetting('inspirationEnabled', false);
-    var blndomtEnabled = getSetting('domtEnabled', false);
     var blninjuriesEnabledGlobal = getSetting('injuriesEnabledGlobal', false);
     // NOTE: investigation settings are re-fetched inside bindInvestigation() for fresh values
 
@@ -848,52 +767,6 @@ Hooks.on("ready", async () => {
             }
         }
     });
-    // *** GIFTS ***
-    if (blnGiftEnabled) {
-        if (strGiftMacro) {
-            let GiftMacro = getMacroByIdOrName(strGiftMacro);
-            if(GiftMacro) {
-                GiftMacro.execute = async () => {
-                    //BlacksmithUtils.postConsoleAndNotification("Macro Clicked: ", "Gift", false, true, false);
-                    // Build the chat message
-                    resetBibliosophVars();
-                    BIBLIOSOPH.CARDTYPEGIFT = true;
-                    BIBLIOSOPH.CARDTYPE = "Gift";
-                    // Build the card
-                    publishChatCard();
-                };
-            } else {
-                // User needs to know about macro configuration issues
-                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Gifts Macro "${strGiftMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
-            }
-        } else {
-            // They haven't set this macro
-            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Gifts not set.`, "", false, false);
-        }
-    }
-    // *** SHADY GOODS ***
-    if (blnShadygoodsEnabled) {
-        if (strShadygoodsMacro) {
-            let ShadygoodsMacro = getMacroByIdOrName(strShadygoodsMacro);
-            if(ShadygoodsMacro) {
-                ShadygoodsMacro.execute = async () => {
-                    //BlacksmithUtils.postConsoleAndNotification("Macro Clicked: ", "Shady Goods", false, true, false);
-                    // Build the chat message
-                    resetBibliosophVars();
-                    BIBLIOSOPH.CARDTYPESHADYGOODS = true;
-                    BIBLIOSOPH.CARDTYPE = "Shady Goods";
-                    // Build the card
-                    publishChatCard();
-                };
-            } else {
-                // User needs to know about macro configuration issues
-                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Shady Goods Macro "${strShadygoodsMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
-            }
-        } else {
-            // They haven't set this macro
-            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Shady Goods not set.`, "", false, false);
-        }
-    }
     // ************* CRITS AND FUMBLES *************
     // *** CRITICAL ***
     if (blnCriticalEnabled) {
@@ -963,29 +836,6 @@ Hooks.on("ready", async () => {
         } else {
             // They haven't set this macro
             BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Inspiration not set.`, "", false, false);
-        }
-    }
-    // *** DOMT ***
-    if (blndomtEnabled) {
-        if(strDOMTMacro) {
-            let DOMTMacro = getMacroByIdOrName(strDOMTMacro);
-            if(DOMTMacro) {
-                DOMTMacro.execute = async () => {
-                    //BlacksmithUtils.postConsoleAndNotification("Macro Clicked: ", "Deck of Many Things", false, true, false);
-                    // Build the chat message
-                    resetBibliosophVars();
-                    BIBLIOSOPH.CARDTYPEDOMT = true;
-                    BIBLIOSOPH.CARDTYPE = "DOMT";
-                    // Build the card
-                    publishChatCard();
-                };
-            } else {
-                // User needs to know about macro configuration issues
-                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Deck of Many Things Macro "${strDOMTMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
-            }
-        } else {
-            // They haven't set this macro
-            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Deck of Many Things not set.`, "", false, false);
         }
     }
     // ************* PARTY MESSAGES *************
@@ -1224,15 +1074,7 @@ async function publishChatCard() {
         // INVESTIGATION (new flow: narrative + slots + per-rarity tables)
         compiledHtml = await createChatCardInvestigation();
     }
-    else if (BIBLIOSOPH.CARDTYPEGIFT) {
-        // GIFTS
-        strRollTableName = game.settings.get(MODULE.ID, 'giftTable');
-        compiledHtml = await createChatCardSearch(strRollTableName);
-    } else if (BIBLIOSOPH.CARDTYPESHADYGOODS) {
-        // SHADY GOODS
-        strRollTableName = game.settings.get(MODULE.ID, 'shadygoodsTable');
-        compiledHtml = await createChatCardSearch(strRollTableName);
-    } else if (BIBLIOSOPH.CARDTYPECRIT) {
+    else if (BIBLIOSOPH.CARDTYPECRIT) {
         // CRITICAL
         //BlacksmithUtils.postConsoleAndNotification("Card Type: ", "Crit", false, true, false);
         strRollTableName = game.settings.get(MODULE.ID, 'criticalTable');
@@ -1245,10 +1087,6 @@ async function publishChatCard() {
     } else if (BIBLIOSOPH.CARDTYPEINSPIRATION) {
         // INSPIRATION
         strRollTableName = game.settings.get(MODULE.ID, 'inspirationTable');
-        compiledHtml = await createChatCardGeneral(strRollTableName);
-    } else if (BIBLIOSOPH.CARDTYPEDOMT) {
-        // DECK OF MANY THINGS
-        strRollTableName = game.settings.get(MODULE.ID, 'domtTable');
         compiledHtml = await createChatCardGeneral(strRollTableName);
     } else if (BIBLIOSOPH.CARDTYPEBEVERAGE) {
         // BEVERAGE
@@ -1394,13 +1232,6 @@ async function createChatCardGeneral(strRollTableName) {
             strTheme = game.settings.get(MODULE.ID, 'cardThemePraise');
             strSound = "modules/coffee-pub-blacksmith/sounds/reaction-ahhhhh.mp3";
             strIconStyle = "fa-flower-tulip";
-            strActionLabel = "";
-            break;
-        case (BIBLIOSOPH.CARDTYPEDOMT):
-            // DECK OF MANY THINGS
-            strTheme = game.settings.get(MODULE.ID, 'cardThemeDOMT');
-            strSound = "modules/coffee-pub-blacksmith/sounds/fanfare-harp.mp3";
-            strIconStyle = "fa-cards-blank";
             strActionLabel = "";
             break;
         case (BIBLIOSOPH.CARDTYPEBEVERAGE):
@@ -1967,154 +1798,6 @@ async function createChatCardInvestigation() {
 }
 
 // ************************************
-// ** CREATE Search Card (Gift / Shady Goods — single table, single item)
-// ************************************
-async function createChatCardSearch(strRollTableName) {  
-    // User Info
-    var strUserName = "";
-    var strUserAvatar = "";
-    var strPlayerType = "";
-    var strCharacterName = "";
-    // Set the defaults
-    var strSound = "modules/coffee-pub-blacksmith/sounds/chest-treasure.mp3";
-    var strVolume = "0.7";
-    var strTheme = BIBLIOSOPH.CARDTYPEGIFT
-        ? (game.settings.get(MODULE.ID, 'cardThemeGift') ?? 'theme-default')
-        : (game.settings.get(MODULE.ID, 'cardThemeShadygoods') ?? 'theme-default');
-    var strIconStyle = "fa-eye";
-    var strType = BIBLIOSOPH.CARDTYPE;
-    var strImageBackground = "themecolor";
-    var strDescriptionBefore = "";
-    var strDescriptionReveal = "";
-    var strDescriptionAfter = "";
-    var strTableName = "";
-    var strTableImage = "";
-    var strName = "";
-    var strImage = "";
-    var strDetails = "";
-    var strKind = "";
-    var strRarity = "";
-    var strValue = "";
-    var intQuantity = 1;
-    var strQuantity = "one";
-    var strInventoryAddedMessage = "";
-    var strCompendiumName = "";
-    var strCompendiumID = "";
-    var strCompendiumType = "Item";
-    var strCompendiumLink = "";
-    strUserName = game.user.name;
-    strUserAvatar = game.user.avatar;
-    if (game.user.isTheGM) {
-        strPlayerType = "Gamemaster";
-        strCharacterName = "Cocktail Craftsman and Moderator";
-    } else {
-        strPlayerType = "Player";
-        strCharacterName = game.user.character?.name ?? "No Character Set";
-    }
-
-    // Gift / Shady Goods: single table roll, single item
-    let arrTable = game.tables.getName(strRollTableName);
-    if (!arrTable) {
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "You need to choose a roll table in settings.", strRollTableName, false, false);
-        return "";
-    }
-    strTableImage = arrTable.img;
-    strTableName = arrTable.name;
-    let rollResults = await arrTable.roll();
-    if (game.settings.get(MODULE.ID, 'showDiceRolls') && rollResults.roll) {
-        BlacksmithUtils.rollCoffeePubDice(rollResults.roll);
-    }
-    strName = rollResults.results[0].name || rollResults.results[0].description || rollResults.results[0].text;
-    strImage = rollResults.results[0].img;
-    const documentUuid = rollResults.results[0].documentUuid;
-    if (documentUuid) {
-        strCompendiumLink = "@UUID[" + documentUuid + "]{" + strName + "}";
-        if (documentUuid.startsWith("Compendium.")) {
-            const match = documentUuid.match(/^Compendium\.(.+?)\.(Actor|Item|JournalEntry|Macro|Playlist|RollTable|Scene|Item)\.(.+)$/);
-            if (match) {
-                strCompendiumName = match[1];
-                strCompendiumID = match[3];
-            } else {
-                try {
-                    const parsed = foundry.utils.parseUuid(documentUuid);
-                    if (parsed?.collection) {
-                        strCompendiumName = parsed.collection;
-                        strCompendiumID = parsed.id;
-                    }
-                } catch (e) {}
-            }
-        } else if (documentUuid.startsWith("Item.")) {
-            strCompendiumName = "Item";
-            strCompendiumID = documentUuid.replace("Item.", "");
-        }
-    } else {
-        strCompendiumName = rollResults.results[0].documentCollection || "";
-        strCompendiumID = rollResults.results[0].documentId;
-        strCompendiumLink = strCompendiumName === "Item"
-            ? "@UUID[" + strCompendiumType + "." + strCompendiumID + "]{" + strName + "}"
-            : "@UUID[Compendium." + strCompendiumName + "." + strCompendiumType + "." + strCompendiumID + "]{" + strName + "}";
-    }
-    const ITEMDATA = getItemDataById(strCompendiumID);
-    strKind = ITEMDATA?.strKind ?? "";
-    strDetails = ITEMDATA?.strDescritption ?? "";
-    strRarity = ITEMDATA?.strRarity ?? "";
-    strValue = ITEMDATA?.strValue ?? "";
-
-    const actor = game.user.character ?? canvas.tokens?.controlled?.[0]?.actor;
-    if (documentUuid && actor) {
-        try {
-            const itemDoc = await fromUuid(documentUuid);
-            if (itemDoc instanceof Item) {
-                const baseData = itemDoc.toObject();
-                delete baseData._id;
-                const hasQuantity = foundry.utils.getProperty(baseData, "system.quantity") !== undefined;
-                if (hasQuantity) foundry.utils.setProperty(baseData, "system.quantity", 1);
-                await actor.createEmbeddedDocuments("Item", [baseData]);
-                strInventoryAddedMessage = `1 ${strName} was added to ${actor.name}'s inventory.`;
-            }
-        } catch (err) {
-            console.warn(MODULE.ID + " | Could not add item to inventory:", err);
-        }
-    }
-
-    // Set the template type to Search (Gift / Shady Goods)
-    const templatePath = BIBLIOSOPH.MESSAGE_TEMPLATE_CARD;
-    const response = await fetch(templatePath);
-    const templateText = await response.text();
-    const template = Handlebars.compile(templateText);
-    // Pass the data to the template
-    const CARDDATA = {
-        userName: strUserName,
-        userAvatar: strUserAvatar,
-        playerType: strPlayerType,
-        characterName: strCharacterName,
-        theme: strTheme,
-        iconStyle: strIconStyle,
-        cardTitle: strType,
-        imageBackground: strImageBackground,
-        descriptionBefore: strDescriptionBefore,
-        descriptionReveal: strDescriptionReveal,
-        descriptionAfter: strDescriptionAfter, 
-        title: strName,
-        image: strImage,
-        quantitynum: intQuantity,
-        quantityword: strQuantity,
-        tablename: strTableName,
-        link: strCompendiumLink,
-        inventoryAddedMessage: strInventoryAddedMessage,
-        // Item Specific
-        kind: strKind,
-        details: strDetails,
-        rarity: strRarity,
-        value: strValue,
-    };
-    // Play the Sound
-    BlacksmithUtils.playSound(strSound,strVolume);
-    // Return the template
-    return template(CARDDATA);
-}
-
-// ************************************
 // ** UTILITY Roll Table
 // ************************************
 
@@ -2311,35 +1994,6 @@ function removeHTMLTags(str) {
     // Regular expression to identify HTML tags in the input string. 
     // Replacing the identified HTML tag with a null string.
     return str.replace(/(<([^>]+)>)/ig, '');
-}
-
-// ************************************
-// ** UTILITY Get Item by ID
-// ************************************
-
-// This script looks up the rarity of an item knowing its id.
-// To use it, simply call the function `getRarityById()` with the id of the item as the argument.
-// The function will return a string containing the rarity of the item, or "Unknown" if the item is not found.
-function getItemDataById(id) {
-   
-    // Get the item from the database.
-    const item = game.items.get(id);
-
-    // If the item is not found, return "Unknown".
-    if (!item) {
-        return "Unknown";
-    }
-    // Set the item data
-    const ITEMDATA = {
-        strKind: item.type,
-        strDescritption: removeHTMLTags(item.system.description.value),
-        strRarity: item.system.rarity,
-        strValue: item.system.price.value,
-        strQuantity: item.system.quantity,
-    }; 
-
-    // Return the itemdata.
-    return ITEMDATA;
 }
 
 // ************************************
@@ -2799,8 +2453,6 @@ function resetBibliosophVars() {
     BIBLIOSOPH.CARDTYPEINJURY = false;
     BIBLIOSOPH.CARDTYPEENCOUNTER = false;
     BIBLIOSOPH.CARDTYPEINVESTIGATION = false;
-    BIBLIOSOPH.CARDTYPEGIFT = false;
-    BIBLIOSOPH.CARDTYPESHADYGOODS = false;
     BIBLIOSOPH.CARDTYPECRIT = false;
     BIBLIOSOPH.CARDTYPEFUMBLE = false;
     BIBLIOSOPH.CARDTYPEBIO = false;
@@ -2808,7 +2460,6 @@ function resetBibliosophVars() {
     BIBLIOSOPH.CARDTYPEINSULT = false;
     BIBLIOSOPH.CARDTYPEPRAISE = false;
     BIBLIOSOPH.CARDTYPEINSPIRATION = false;
-    BIBLIOSOPH.CARDTYPEDOMT = false;
     BIBLIOSOPH.MACRO_ID = "";
 }
 
