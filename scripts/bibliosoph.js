@@ -122,6 +122,14 @@ Hooks.once('ready', async () => {
             console.error(MODULE.ID + ' | Failed to initialize Messages system:', error);
         }
 
+        // ROLL TOASTS: crit/fumble announcements via the Blacksmith rolls API
+        try {
+            const { RollToastManager } = await import('./manager-roll-toasts.js');
+            await RollToastManager.initialize();
+        } catch (error) {
+            console.error(MODULE.ID + ' | Failed to initialize Roll Toasts:', error);
+        }
+
         // NOW register toolbar tools after module registration is complete
         // In v13, we need to wait for Blacksmith to be fully ready
         // Try multiple times with increasing delays to ensure API is available
@@ -1201,54 +1209,7 @@ Hooks.on("renderChatMessage", (message, html) => {
 
 
 
-Hooks.on('updateToken', (scene, token, updateData) => {
-    if (updateData.actorData) {
-      const newHP = getProperty(updateData, 'actorData.system.attributes.hp.value');
-      if (newHP !== undefined) {
-        const actor = canvas.tokens.get(token._id).actor;
-        const oldHP = actor.system.attributes.hp.value;
-        if (oldHP - newHP > 5) {
-          // This is debug info - only log if really needed for troubleshooting
-          // console.log(`Actor ${actor.name} was hit for more than 5 HP.`);
-        }
-      }
-    }
-});
-
-Hooks.on('createChatMessage', (msg) => {
-    // Removed excessive debug logging - this was flooding the console
-    // Only log critical information when needed for troubleshooting
-    
-   //if (msg.flavor) {
-    if (msg.rolls.total) {
-        const totalRoll = msg.rolls.total;
-        const targetAC = 15; // Replace with appropriate function to get target's AC
-        // Critical Hit
-        if (totalRoll === 20) {
-            ChatMessage.create({
-                content: `${msg.user.name} made a critical hit!`
-            });
-        } 
-        // Fumble
-        else if (totalRoll === 1) {
-            ChatMessage.create({
-                content: `${msg.user.name} fumbled their attack.`
-            });
-        } 
-        // Normal Hit
-        else if (totalRoll >= targetAC) {
-            ChatMessage.create({
-                content: `${msg.user.name} hit their target!`
-            });
-        } 
-        // Miss
-        else {
-            ChatMessage.create({
-                content: `${msg.user.name} missed their target.`
-            });
-        }
-    }
-});
+// Crit/fumble detection lives in manager-roll-toasts.js (Blacksmith rolls API).
 
 // ************************************
 // ** PUBLISH Chat Cards

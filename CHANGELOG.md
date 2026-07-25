@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+## [Unreleased]
+
+### Added
+
+- **Roll Toasts (crits & fumbles):** Phase 1 of the Blacksmith rolls-API integration. When an attack roll resolves as a critical or a fumble, an on-screen toast announces it to every player — no chat-card parsing, no manual button press. Detection rides Blacksmith's new `module.api.rolls` classification (`attackResolved`, fired on the GM client; requires a Blacksmith release newer than 13.11.3 — on older builds the feature stays dormant), delivery rides the Blacksmith socket API, and each client renders locally via the toast API. New **Roll Toasts** settings section: separate critical and fumble toasts, each with enable toggle, title, message (`{name}` inserts the roller's token/actor name), FontAwesome icon, size, duration, animation, sound, and border/background colors — plus a shared "Whose Rolls Trigger Toasts" filter (everyone vs. players only). Hidden/blind/private rolls never broadcast: the GM still gets the toast, the table does not. Off by default.
+
+### Removed
+
+- **Dead roll-detection hooks:** The non-functional `createChatMessage` crit/fumble announcer (broken since Foundry v10 — it read `msg.rolls.total` on an array and compared against a hardcoded AC 15) and the empty `updateToken` HP-loss stub are gone, replaced by the rolls-API integration above.
+
 ## [13.3.2]
 
 ### Added

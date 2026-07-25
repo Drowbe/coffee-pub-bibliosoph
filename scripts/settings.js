@@ -1115,6 +1115,238 @@ export const registerSettings = () => {
 			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
 		});
 
+		// ** ROLL TOASTS **
+
+		// Shared choice lists for the crit/fumble toast settings below.
+		// Values map straight onto Blacksmith's toast API config.
+		const toastSizeChoices = {
+			'adapt': 'Adapt to Content',
+			'small': 'Small',
+			'medium': 'Medium',
+			'large': 'Large',
+			'fullscreen': 'Fullscreen'
+		};
+		const toastAnimationChoices = {
+			'none': 'None',
+			'pop': 'Pop — scales in with a springy bounce',
+			'reveal': 'Reveal — icon, then title, then message',
+			'slam': 'Slam — smashes in like a stamp',
+			'shake': 'Shake — rattles in with a wobble',
+			'pulse': 'Pulse — subtle breathe (persistent toasts)'
+		};
+
+		// ---------- SUBHEADING ----------
+		game.settings.register(MODULE.ID, "headingH3RollToasts", {
+			name: MODULE.ID + '.headingH3RollToasts-Label',
+			hint: MODULE.ID + '.headingH3RollToasts-Hint',
+			scope: "client",
+			config: true,
+			default: "",
+			type: String,
+		});
+		// -------------------------------------
+		game.settings.register(MODULE.ID, 'rollToastTriggeredBy', {
+			name: MODULE.ID + '.rollToastTriggeredBy-Label',
+			hint: MODULE.ID + '.rollToastTriggeredBy-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			type: String,
+			default: 'everyone',
+			choices: {
+				'everyone': 'Everyone (players, NPCs, and the GM)',
+				'players': 'Players Only'
+			}
+		});
+		// -- Critical Toast --
+		game.settings.register(MODULE.ID, 'critToastEnabled', {
+			name: MODULE.ID + '.critToastEnabled-Label',
+			hint: MODULE.ID + '.critToastEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: false,
+			scope: 'world',
+			default: false,
+		});
+		game.settings.register(MODULE.ID, 'critToastTitle', {
+			name: MODULE.ID + '.critToastTitle-Label',
+			hint: MODULE.ID + '.critToastTitle-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			type: String,
+			default: 'CRITICAL ROLL!!',
+		});
+		game.settings.register(MODULE.ID, 'critToastMessage', {
+			name: MODULE.ID + '.critToastMessage-Label',
+			hint: MODULE.ID + '.critToastMessage-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			type: String,
+			default: 'This is gonna hurt!',
+		});
+		game.settings.register(MODULE.ID, 'critToastIcon', {
+			name: MODULE.ID + '.critToastIcon-Label',
+			hint: MODULE.ID + '.critToastIcon-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			type: String,
+			default: 'fa-solid fa-burst',
+		});
+		game.settings.register(MODULE.ID, 'critToastSize', {
+			name: MODULE.ID + '.critToastSize-Label',
+			hint: MODULE.ID + '.critToastSize-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			type: String,
+			default: 'large',
+			choices: toastSizeChoices
+		});
+		game.settings.register(MODULE.ID, 'critToastDuration', {
+			name: MODULE.ID + '.critToastDuration-Label',
+			hint: MODULE.ID + '.critToastDuration-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			type: Number,
+			range: { min: 0, max: 30, step: 1 },
+			default: 3,
+		});
+		game.settings.register(MODULE.ID, 'critToastAnimation', {
+			name: MODULE.ID + '.critToastAnimation-Label',
+			hint: MODULE.ID + '.critToastAnimation-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			type: String,
+			default: 'slam',
+			choices: toastAnimationChoices
+		});
+		game.settings.register(MODULE.ID, 'critToastSound', {
+			name: MODULE.ID + '.critToastSound-Label',
+			hint: MODULE.ID + '.critToastSound-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			default: 'modules/coffee-pub-blacksmith/sounds/fanfare-success-1.mp3',
+			choices: getBlacksmithChoices('arrSoundChoices', 'No sounds found. Try reloading Foundry after all modules are enabled.')
+		});
+		game.settings.register(MODULE.ID, 'critToastBorderColor', {
+			name: MODULE.ID + '.critToastBorderColor-Label',
+			hint: MODULE.ID + '.critToastBorderColor-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			type: String,
+			default: '#f5d6d6',
+		});
+		game.settings.register(MODULE.ID, 'critToastBackgroundColor', {
+			name: MODULE.ID + '.critToastBackgroundColor-Label',
+			hint: MODULE.ID + '.critToastBackgroundColor-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			type: String,
+			default: '#620404',
+		});
+		// -- Fumble Toast --
+		game.settings.register(MODULE.ID, 'fumbleToastEnabled', {
+			name: MODULE.ID + '.fumbleToastEnabled-Label',
+			hint: MODULE.ID + '.fumbleToastEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: false,
+			scope: 'world',
+			default: false,
+		});
+		game.settings.register(MODULE.ID, 'fumbleToastTitle', {
+			name: MODULE.ID + '.fumbleToastTitle-Label',
+			hint: MODULE.ID + '.fumbleToastTitle-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			type: String,
+			default: 'FUMBLE!!',
+		});
+		game.settings.register(MODULE.ID, 'fumbleToastMessage', {
+			name: MODULE.ID + '.fumbleToastMessage-Label',
+			hint: MODULE.ID + '.fumbleToastMessage-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			type: String,
+			default: "Well... that didn't go as planned!",
+		});
+		game.settings.register(MODULE.ID, 'fumbleToastIcon', {
+			name: MODULE.ID + '.fumbleToastIcon-Label',
+			hint: MODULE.ID + '.fumbleToastIcon-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			type: String,
+			default: 'fa-solid fa-heart-crack',
+		});
+		game.settings.register(MODULE.ID, 'fumbleToastSize', {
+			name: MODULE.ID + '.fumbleToastSize-Label',
+			hint: MODULE.ID + '.fumbleToastSize-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			type: String,
+			default: 'large',
+			choices: toastSizeChoices
+		});
+		game.settings.register(MODULE.ID, 'fumbleToastDuration', {
+			name: MODULE.ID + '.fumbleToastDuration-Label',
+			hint: MODULE.ID + '.fumbleToastDuration-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			type: Number,
+			range: { min: 0, max: 30, step: 1 },
+			default: 3,
+		});
+		game.settings.register(MODULE.ID, 'fumbleToastAnimation', {
+			name: MODULE.ID + '.fumbleToastAnimation-Label',
+			hint: MODULE.ID + '.fumbleToastAnimation-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			type: String,
+			default: 'shake',
+			choices: toastAnimationChoices
+		});
+		game.settings.register(MODULE.ID, 'fumbleToastSound', {
+			name: MODULE.ID + '.fumbleToastSound-Label',
+			hint: MODULE.ID + '.fumbleToastSound-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			default: 'modules/coffee-pub-blacksmith/sounds/sadtrombone.mp3',
+			choices: getBlacksmithChoices('arrSoundChoices', 'No sounds found. Try reloading Foundry after all modules are enabled.')
+		});
+		game.settings.register(MODULE.ID, 'fumbleToastBorderColor', {
+			name: MODULE.ID + '.fumbleToastBorderColor-Label',
+			hint: MODULE.ID + '.fumbleToastBorderColor-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			type: String,
+			default: '#d6def5',
+		});
+		game.settings.register(MODULE.ID, 'fumbleToastBackgroundColor', {
+			name: MODULE.ID + '.fumbleToastBackgroundColor-Label',
+			hint: MODULE.ID + '.fumbleToastBackgroundColor-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			type: String,
+			default: '#131e42',
+		});
+
 
 		// ** INSPIRATION **
 
