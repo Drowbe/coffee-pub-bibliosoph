@@ -35,7 +35,6 @@ const macroSettings = [
     'encounterMacroSky', 'encounterMacroSnow', 'encounterMacroUrban',
     'encounterMacroWater', 'investigationMacro',
     'criticalMacro', 'fumbleMacro', 'inspirationMacro',
-    'beverageMacro', 'bioMacro', 'insultsMacro', 'praiseMacro',
     'partyMessageMacro', 'privateMessageMacro', 'injuriesMacroGlobal'
 ];
 

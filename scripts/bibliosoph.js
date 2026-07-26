@@ -232,6 +232,20 @@ function triggerFumbleMacro() {
     publishChatCard();
 }
 
+// Roll the configured crit/fumble table and post the chat card. Used by
+// manager-roll-toasts.js for the "Roll Card" auto/notification modes.
+export async function rollOutcomeCard(type) {
+    resetBibliosophVars();
+    if (type === 'crit') {
+        BIBLIOSOPH.CARDTYPECRIT = true;
+        BIBLIOSOPH.CARDTYPE = "Critical";
+    } else {
+        BIBLIOSOPH.CARDTYPEFUMBLE = true;
+        BIBLIOSOPH.CARDTYPE = "Fumble";
+    }
+    await publishChatCard();
+}
+
 // Trigger injuries macro (for toolbar integration)
 function triggerInjuriesMacro() {
     // Run the same code that fires when the injuries macro is clicked
@@ -245,74 +259,6 @@ function triggerInjuriesMacro() {
     // Build the chat message (same as macro click handler)
     resetBibliosophVars();
     BIBLIOSOPH.CARDTYPEINJURY = true;
-    BIBLIOSOPH.CARDTYPE = "General";
-    // Build the card
-    publishChatCard();
-}
-
-// Trigger beverage macro (for toolbar integration)
-function triggerBeverageMacro() {
-    const strBeverageMacro = BlacksmithUtils.getSettingSafely(MODULE.ID, 'beverageMacro', '') || '';
-    
-    if (!strBeverageMacro || strBeverageMacro === '-- Choose a Macro --' || strBeverageMacro === 'none') {
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Beverage macro not configured", "", false, false);
-        return;
-    }
-
-    // Build the chat message (same as macro click handler)
-    resetBibliosophVars();
-    BIBLIOSOPH.CARDTYPEBEVERAGE = true;
-    BIBLIOSOPH.CARDTYPE = "General";
-    // Build the card
-    publishChatCard();
-}
-
-// Trigger bio macro (for toolbar integration)
-function triggerBioMacro() {
-    const strBioMacro = BlacksmithUtils.getSettingSafely(MODULE.ID, 'bioMacro', '') || '';
-    
-    if (!strBioMacro || strBioMacro === '-- Choose a Macro --' || strBioMacro === 'none') {
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Bio macro not configured", "", false, false);
-        return;
-    }
-
-    // Build the chat message (same as macro click handler)
-    resetBibliosophVars();
-    BIBLIOSOPH.CARDTYPEBIO = true;
-    BIBLIOSOPH.CARDTYPE = "General";
-    // Build the card
-    publishChatCard();
-}
-
-// Trigger insults macro (for toolbar integration)
-function triggerInsultsMacro() {
-    const strInsultsMacro = BlacksmithUtils.getSettingSafely(MODULE.ID, 'insultsMacro', '') || '';
-    
-    if (!strInsultsMacro || strInsultsMacro === '-- Choose a Macro --' || strInsultsMacro === 'none') {
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Insults macro not configured", "", false, false);
-        return;
-    }
-
-    // Build the chat message (same as macro click handler)
-    resetBibliosophVars();
-    BIBLIOSOPH.CARDTYPEINSULTS = true;
-    BIBLIOSOPH.CARDTYPE = "General";
-    // Build the card
-    publishChatCard();
-}
-
-// Trigger praise macro (for toolbar integration)
-function triggerPraiseMacro() {
-    const strPraiseMacro = BlacksmithUtils.getSettingSafely(MODULE.ID, 'praiseMacro', '') || '';
-    
-    if (!strPraiseMacro || strPraiseMacro === '-- Choose a Macro --' || strPraiseMacro === 'none') {
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Praise macro not configured", "", false, false);
-        return;
-    }
-
-    // Build the chat message (same as macro click handler)
-    resetBibliosophVars();
-    BIBLIOSOPH.CARDTYPEPRAISE = true;
     BIBLIOSOPH.CARDTYPE = "General";
     // Build the card
     publishChatCard();
@@ -340,10 +286,6 @@ window.triggerInvestigationMacro = triggerInvestigationMacro;
 window.triggerCriticalMacro = triggerCriticalMacro;
 window.triggerFumbleMacro = triggerFumbleMacro;
 window.triggerInjuriesMacro = triggerInjuriesMacro;
-window.triggerBeverageMacro = triggerBeverageMacro;
-window.triggerBioMacro = triggerBioMacro;
-window.triggerInsultsMacro = triggerInsultsMacro;
-window.triggerPraiseMacro = triggerPraiseMacro;
 window.triggerInspirationMacro = triggerInspirationMacro;
 
 
@@ -359,10 +301,6 @@ function validateMandatorySettings() {
         { name: 'Critical Hits', setting: game.settings.get(MODULE.ID, 'criticalMacro'), required: true },
         { name: 'Fumbles', setting: game.settings.get(MODULE.ID, 'fumbleMacro'), required: true },
         { name: 'Inspiration', setting: game.settings.get(MODULE.ID, 'inspirationMacro'), required: true },
-        { name: 'Beverage Break', setting: game.settings.get(MODULE.ID, 'beverageMacro'), required: true },
-        { name: 'Bio Break', setting: game.settings.get(MODULE.ID, 'bioMacro'), required: true },
-        { name: 'Insults', setting: game.settings.get(MODULE.ID, 'insultsMacro'), required: true },
-        { name: 'Praise', setting: game.settings.get(MODULE.ID, 'praiseMacro'), required: true },
         { name: 'General Injuries', setting: game.settings.get(MODULE.ID, 'injuriesMacroGlobal'), required: true }
     ];
     
@@ -603,54 +541,6 @@ Hooks.on("ready", async () => {
         });
 
         bindSimpleMacro({
-            label: "Beverage",
-            enabledKey: 'beverageEnabled',
-            macroKey: 'beverageMacro',
-            onExecute: async () => {
-                resetBibliosophVars();
-                BIBLIOSOPH.CARDTYPEBEVERAGE = true;
-                BIBLIOSOPH.CARDTYPE = "General";
-                publishChatCard();
-            }
-        });
-
-        bindSimpleMacro({
-            label: "Bio",
-            enabledKey: 'bioEnabled',
-            macroKey: 'bioMacro',
-            onExecute: async () => {
-                resetBibliosophVars();
-                BIBLIOSOPH.CARDTYPEBIO = true;
-                BIBLIOSOPH.CARDTYPE = "General";
-                publishChatCard();
-            }
-        });
-
-        bindSimpleMacro({
-            label: "Insults",
-            enabledKey: 'insultsEnabled',
-            macroKey: 'insultsMacro',
-            onExecute: async () => {
-                resetBibliosophVars();
-                BIBLIOSOPH.CARDTYPEINSULTS = true;
-                BIBLIOSOPH.CARDTYPE = "General";
-                publishChatCard();
-            }
-        });
-
-        bindSimpleMacro({
-            label: "Praise",
-            enabledKey: 'praiseEnabled',
-            macroKey: 'praiseMacro',
-            onExecute: async () => {
-                resetBibliosophVars();
-                BIBLIOSOPH.CARDTYPEPRAISE = true;
-                BIBLIOSOPH.CARDTYPE = "General";
-                publishChatCard();
-            }
-        });
-
-        bindSimpleMacro({
             label: "General Injuries",
             enabledKey: 'injuriesEnabledGlobal',
             macroKey: 'injuriesMacroGlobal',
@@ -680,18 +570,10 @@ Hooks.on("ready", async () => {
     var strCriticalMacro = getSetting('criticalMacro', '');
     var strFumbleMacro = getSetting('fumbleMacro', '');
     var strInspirationMacro = getSetting('inspirationMacro', '');
-    var strBeverageMacro = getSetting('beverageMacro', '');
-    var strBioMacro = getSetting('bioMacro', '');
-    var strInsultMacro = getSetting('insultsMacro', '');
-    var strPraiseMacro = getSetting('praiseMacro', '');
 
     var strInjuriesMacroGlobal = getSetting('injuriesMacroGlobal', '');
     var strInjuriesMacroGlobalID = getMacroIdByName(strInjuriesMacroGlobal);
 
-    var blnBeverageEnabled = getSetting('beverageEnabled', false);
-    var blnBioEnabled = getSetting('bioEnabled', false);
-    var blnInsultsEnabled = getSetting('insultsEnabled', false);
-    var blnPraiseEnabled = getSetting('praiseEnabled', false);
     var blnCriticalEnabled = getSetting('criticalEnabled', false);
     var blnFumbleEnabled = getSetting('fumbleEnabled', false);
     var blnInspirationEnabled = getSetting('inspirationEnabled', false);
@@ -837,101 +719,6 @@ Hooks.on("ready", async () => {
             // They haven't set this macro
             BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Inspiration not set.`, "", false, false);
         }
-    }
-    // ************* PARTY MESSAGES *************
-    // *** BEVERAGE ***
-    if (blnBeverageEnabled) {
-        if(strBeverageMacro) {
-            let BeverageMacro = getMacroByIdOrName(strBeverageMacro);
-            if(BeverageMacro) {
-                BeverageMacro.execute = async () => {
-                    //BlacksmithUtils.postConsoleAndNotification("Macro Clicked: ", "Beverage", false, true, false);
-                    // Build the chat message
-                    resetBibliosophVars();
-                    BIBLIOSOPH.CARDTYPEBEVERAGE = true;
-                    BIBLIOSOPH.CARDTYPE = "Beverage";
-                    // Build the card
-                    publishChatCard();
-                };
-            } else {
-                // User needs to know about macro configuration issues
-                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Beverage Break Macro "${strBeverageMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
-            }
-        } else {
-            // They haven't set this macro
-            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Beverage Break not set.`, "", false, false);
-        }
-    }
-    // *** BIO ***
-    if (blnBioEnabled) {
-        if(strBioMacro) {
-            let BioMacro = getMacroByIdOrName(strBioMacro);
-            if(BioMacro) {
-                BioMacro.execute = async () => {
-                    //BlacksmithUtils.postConsoleAndNotification("Macro Clicked: ", "Bio", false, true, false);
-                    // Build the chat message
-                    resetBibliosophVars();
-                    BIBLIOSOPH.CARDTYPEBIO = true;
-                    BIBLIOSOPH.CARDTYPE = "Bio";
-                    // Build the card
-                    publishChatCard();
-                };
-            } else {
-                // User needs to know about macro configuration issues
-                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Bio Break Macro "${strBioMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
-            }
-        } else {
-            // They haven't set this macro
-            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Bio Break not set.`, "", false, false);
-        }
-    }
-    // *** MESSAGES ***
-    // TODO ... Insult and Praise need to go away as main buttons OR be a quick wat to jump into insulting a selected player
-    // *** INSULT ***
-    if (blnInsultsEnabled) {
-        if(strInsultMacro) {
-            let InsultMacro = getMacroByIdOrName(strInsultMacro);
-            if(InsultMacro) {
-                InsultMacro.execute = async () => {
-                    //BlacksmithUtils.postConsoleAndNotification("Macro Clicked: ", "Insult", false, true, false);
-                    // Build the chat message
-                    resetBibliosophVars();
-                    BIBLIOSOPH.CARDTYPEINSULT = true;
-                    BIBLIOSOPH.CARDTYPE = "Insult";
-                    // Build the card
-                    publishChatCard();
-                };
-            } else {
-                // User needs to know about macro configuration issues
-                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Insult Macro "${strInsultMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
-            }
-        } else {
-            // They haven't set this macro
-            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Insults not set.`, "", false, false);
-        } 
-    }
-    // *** PRAISE ***
-    if (blnPraiseEnabled) {
-        if(strPraiseMacro) {
-            let PraiseMacro = getMacroByIdOrName(strPraiseMacro);
-            if(PraiseMacro) {
-                PraiseMacro.execute = async () => {
-                    //BlacksmithUtils.postConsoleAndNotification("Macro Clicked: ", "Praise", false, true, false);
-                    // Build the chat message
-                    resetBibliosophVars();
-                    BIBLIOSOPH.CARDTYPEPRAISE = true;
-                    BIBLIOSOPH.CARDTYPE = "Praise";
-                    // Build the card
-                    publishChatCard();
-                };
-            } else {
-                // User needs to know about macro configuration issues
-                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Praise Macro "${strPraiseMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
-            }
-        } else {
-            // They haven't set this macro
-            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Praise not set.`, "", false, false);
-        } 
     }
     // *** INJURIES: GENERAL ***
     if (blninjuriesEnabledGlobal) {
@@ -1088,22 +875,6 @@ async function publishChatCard() {
         // INSPIRATION
         strRollTableName = game.settings.get(MODULE.ID, 'inspirationTable');
         compiledHtml = await createChatCardGeneral(strRollTableName);
-    } else if (BIBLIOSOPH.CARDTYPEBEVERAGE) {
-        // BEVERAGE
-        strRollTableName = game.settings.get(MODULE.ID, 'beverageTable');
-        compiledHtml = await createChatCardGeneral(strRollTableName);
-    } else if (BIBLIOSOPH.CARDTYPEBIO) {
-        // BIO
-        strRollTableName = game.settings.get(MODULE.ID, 'bioTable');
-        compiledHtml = await createChatCardGeneral(strRollTableName);
-    } else if (BIBLIOSOPH.CARDTYPEINSULT) {
-        // INSULT
-        strRollTableName = game.settings.get(MODULE.ID, 'insultsTable');
-        compiledHtml = await createChatCardGeneral(strRollTableName);
-    } else if (BIBLIOSOPH.CARDTYPEPRAISE) {
-        // PRAISE
-        strRollTableName = game.settings.get(MODULE.ID, 'praiseTable');
-        compiledHtml = await createChatCardGeneral(strRollTableName);
     } else if (BIBLIOSOPH.CARDTYPEINJURY) {
 
         // V12 CONTEXT:
@@ -1218,36 +989,6 @@ async function createChatCardGeneral(strRollTableName) {
             strIconStyle = "fa-sparkles";
             strActionLabel = "";
             break;
-        case (BIBLIOSOPH.CARDTYPEINSULT):
-            // INSULT
-            strTheme = game.settings.get(MODULE.ID, 'cardThemeInsults');
-            // this is from a user
-            strUserName = strUserName; //where used?
-            strSound = "modules/coffee-pub-blacksmith/sounds/reaction-oooooh.mp3";
-            strIconStyle = "fa-person-harassing";
-            strActionLabel = "";
-            break;
-        case (BIBLIOSOPH.CARDTYPEPRAISE):
-            // PRAISE
-            strTheme = game.settings.get(MODULE.ID, 'cardThemePraise');
-            strSound = "modules/coffee-pub-blacksmith/sounds/reaction-ahhhhh.mp3";
-            strIconStyle = "fa-flower-tulip";
-            strActionLabel = "";
-            break;
-        case (BIBLIOSOPH.CARDTYPEBEVERAGE):
-            // BEVERAGE
-            strTheme = game.settings.get(MODULE.ID, 'cardThemeBeverage');
-            strSound = "modules/coffee-pub-blacksmith/sounds/general-cocktail-ice.mp3";
-            strIconStyle = "fa-martini-glass-citrus";
-            strActionLabel = "";
-            break;
-        case (BIBLIOSOPH.CARDTYPEBIO):
-            // BIO
-            strTheme = game.settings.get(MODULE.ID, 'cardThemeBio');
-            strSound = "modules/coffee-pub-blacksmith/sounds/general-toilet-flushing.mp3";
-            strIconStyle = "fa-toilet";
-            strActionLabel = "";
-            break;
         default:
             // NOTHING
             // POST DEBUG
@@ -1260,8 +1001,11 @@ async function createChatCardGeneral(strRollTableName) {
     if (strRollTableName){
         //There is a roll table... get the data from it.
         let arrRollTableResults = await getRollTable(strRollTableName);
-        if (game.settings.get(MODULE.ID, 'showDiceRolls')) {
-            BlacksmithUtils.rollCoffeePubDice(arrRollTableResults.roll);
+        if (!arrRollTableResults) return "";
+        // Animate the REAL table roll and wait for the dice to land before
+        // the card renders — the dice show the number that picked the result.
+        if (game.settings.get(MODULE.ID, 'showDiceRolls') && arrRollTableResults.roll) {
+            await BlacksmithUtils.rollCoffeePubDice(arrRollTableResults.roll);
         }
         // BlacksmithUtils.postConsoleAndNotification("BIBLIOSOPH: createChatCardGeneral arrRollTableResults", arrRollTableResults, false, true, false);
         strTableName = arrRollTableResults.strTableName;
@@ -1833,12 +1577,10 @@ async function getRollTable(tableName) {
     var strResultOfEntity = "";
     var blnHasBeenDrawn = "";
 
-    // Map the results for the returned array
-    let rollResults = await table.roll({rollMode: CONST.DICE_ROLL_MODES.BLIND});
-    // show the dice.
-    if (game.settings.get(MODULE.ID, 'showDiceRolls')) {
-        BlacksmithUtils.rollCoffeePubDice(rollResults.roll);
-    }
+    // Map the results for the returned array. Dice are NOT shown here —
+    // the caller animates ROLLEDRESULT.roll (the real table roll) and
+    // awaits it, so the card lands after the dice.
+    let rollResults = await table.roll();
     // Fix parse the text as needed
     strContent = rollResults.results[0].text;
     strTitle = grabTextBetweenStrings(strContent, "**", "**");
@@ -1856,6 +1598,7 @@ async function getRollTable(tableName) {
     blnHasBeenDrawn =  rollResults.results[0].drawn;
     // map the data to the returned array
     const ROLLEDRESULT = {
+        roll: rollResults.roll, // the actual evaluated table roll, for dice animation
         strTableName: strRollTableName,
         strTableImage: strRollTableImage,
         intResultId: intResultId,
@@ -2455,10 +2198,6 @@ function resetBibliosophVars() {
     BIBLIOSOPH.CARDTYPEINVESTIGATION = false;
     BIBLIOSOPH.CARDTYPECRIT = false;
     BIBLIOSOPH.CARDTYPEFUMBLE = false;
-    BIBLIOSOPH.CARDTYPEBIO = false;
-    BIBLIOSOPH.CARDTYPEBEVERAGE = false;
-    BIBLIOSOPH.CARDTYPEINSULT = false;
-    BIBLIOSOPH.CARDTYPEPRAISE = false;
     BIBLIOSOPH.CARDTYPEINSPIRATION = false;
     BIBLIOSOPH.MACRO_ID = "";
 }

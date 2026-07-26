@@ -83,15 +83,59 @@ export class RollToastManager {
 
         const type = outcome?.isCritical ? 'crit' : (outcome?.isFumble ? 'fumble' : null);
         if (!type) return;
-        if (!getSetting(`${type}ToastEnabled`, false)) return;
+
+        // Automation mode is the master switch: 'off' = no toast, no rolls.
+        const automation = getSetting(`${type}Automation`, 'click');
+        if (automation === 'off') return;
         if (!this._passesSourceFilter(outcome)) return;
 
         const payload = this._buildPayload(type, outcome);
         if (!payload) return;
 
+        // Default: announcement toasts self-dismiss everywhere.
+        payload.duration = 3;
+        const broadcastable = outcome.visibility === 'public';
+
+        // 'click': the ROLLER owns the click. The payload carries plain data
+        // (rollAction + rollUserId); each receiving client — including this
+        // one — arms onClick locally in _showLocal only when it IS that
+        // user, since functions can never ride the socket relay. Hidden
+        // rolls don't broadcast, so the GM takes the click instead.
+        if (automation === 'click') {
+            payload.rollAction = type;
+            payload.rollUserId = (broadcastable ? this._rollerUserId(outcome) : null) ?? game.user.id;
+            log(`Click-to-roll ${type} toast targeted at ${game.users.get(payload.rollUserId)?.name ?? payload.rollUserId}`, '', true, false);
+        }
+
         // Blind/private/self rolls never broadcast — the GM still sees the toast.
-        if (outcome.visibility === 'public') this._broadcast(payload);
+        if (broadcastable) this._broadcast(payload);
         this._showLocal(payload);
+
+        // 'auto' posts the table card immediately (GM side).
+        if (automation === 'auto') this._rollCard(type);
+    }
+
+    /** The user who made the roll: chat message author, else the actor's active player owner. */
+    static _rollerUserId(outcome) {
+        const message = game.messages.get(outcome?.messageId ?? '');
+        const authorId = (message?.author ?? message?.user)?.id;
+        if (authorId) return authorId;
+        const actor = game.actors.get(outcome?.actorId ?? '');
+        const owner = actor
+            ? game.users.find((u) => !u.isGM && u.active && actor.testUserPermission(u, 'OWNER'))
+            : null;
+        log(`Roller lookup fell back to actor owner: ${owner?.name ?? 'none found'}`, '', true, false);
+        return owner?.id ?? null;
+    }
+
+    /** Post the crit/fumble table chat card via the existing card path. */
+    static async _rollCard(type) {
+        try {
+            const { rollOutcomeCard } = await import('./bibliosoph.js');
+            await rollOutcomeCard(type);
+        } catch (error) {
+            log('Roll card failed', error?.message, false, false);
+        }
     }
 
     /** "players" mode skips rolls whose chat message was authored by a GM. */
@@ -122,8 +166,7 @@ export class RollToastManager {
         const size = getSetting(`${type}ToastSize`, 'large');
         if (size && size !== 'adapt') payload.size = size;
 
-        const duration = Number(getSetting(`${type}ToastDuration`, 3));
-        if (Number.isFinite(duration)) payload.duration = duration;
+        // Duration is set by the caller from the Automation mode.
 
         // Animations only apply to sized (billboard) toasts; harmless otherwise.
         const animation = getSetting(`${type}ToastAnimation`, 'none');
@@ -137,6 +180,9 @@ export class RollToastManager {
 
         const backgroundColor = String(getSetting(`${type}ToastBackgroundColor`, '') ?? '').trim();
         if (HEX_COLOR.test(backgroundColor)) payload.backgroundColor = backgroundColor;
+
+        const backgroundImage = String(getSetting(`${type}ToastBackgroundImage`, '') ?? '').trim();
+        if (backgroundImage) payload.backgroundImage = backgroundImage;
 
         return payload;
     }
@@ -157,7 +203,20 @@ export class RollToastManager {
     }
 
     static _showLocal(payload) {
-        getBlacksmith()?.toast?.show?.(payload);
+        const toast = getBlacksmith()?.toast;
+        if (!toast?.show) return;
+        // Receipt-side arming: if this toast carries a roll action and THIS
+        // client is the designated roller, make it persistent and clickable —
+        // clicking posts the crit/fumble table card from this client.
+        const { rollAction, rollUserId, ...config } = payload ?? {};
+        if (rollAction && rollUserId === game.user.id) {
+            config.duration = 0;
+            config.onClick = () => this._rollCard(rollAction);
+            log(`Toast armed for click-to-roll (${rollAction}) on this client`, '', true, false);
+        } else if (rollAction) {
+            log(`Toast is click-to-roll for another user (${rollUserId}); showing plain`, '', true, false);
+        }
+        toast.show(config);
     }
 
     static async _registerSocketHandler(blacksmith) {

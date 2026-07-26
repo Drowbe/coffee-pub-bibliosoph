@@ -13,6 +13,7 @@
 
 import { MODULE } from './const.js';
 import { ConversationManager } from './manager-conversations.js';
+import { SOCIAL_TOASTS, isSocialToastEnabled, triggerSocialToast } from './manager-social-toasts.js';
 
 const APP_ID = 'coffee-pub-bibliosoph-messages';
 const BLACKSMITH_TEMPLATE = 'modules/coffee-pub-blacksmith/templates/window-template.hbs';
@@ -120,7 +121,8 @@ export class MessagesWindow extends resolveBase() {
         'msg-toggle-autoopen': () => MessagesWindow.current?._toggleAutoOpen(),
         'msg-purge-messages': () => MessagesWindow.current?._purgeMessages(),
         'msg-export-messages': () => MessagesWindow.current?._exportMessages(),
-        'msg-clean-images': () => MessagesWindow.current?._cleanImages()
+        'msg-clean-images': () => MessagesWindow.current?._cleanImages(),
+        'msg-social-toast': (_e, btn) => triggerSocialToast(btn.dataset.social)
     };
 
     constructor(options = {}) {
@@ -243,10 +245,29 @@ export class MessagesWindow extends resolveBase() {
             headerIcon,
             windowTitle,
             subtitle,
+            headerRight: this._buildSocialButtons(),
             actionBarLeft,
             actionBarRight,
             bodyContent
         };
+    }
+
+    /**
+     * Social toast buttons (beverage/bio/insult/praise) for the header's
+     * right slot. Each shows only when its feature is enabled; clicking
+     * rolls the feature's table and toasts the result to every client.
+     */
+    _buildSocialButtons() {
+        const buttons = Object.entries(SOCIAL_TOASTS)
+            .filter(([kind]) => isSocialToastEnabled(kind))
+            .map(([kind, config]) => `
+                <button type="button" class="bibliosoph-messages-social-button"
+                    data-action="msg-social-toast" data-social="${kind}"
+                    data-tooltip="${config.label}" aria-label="${config.label}">
+                    <img src="${config.image}" alt="">
+                </button>`)
+            .join('');
+        return buttons ? `<div class="bibliosoph-messages-social-buttons">${buttons}</div>` : '';
     }
 
     /** Whether ENTER sends the message (persisted locally, like Regent). */
