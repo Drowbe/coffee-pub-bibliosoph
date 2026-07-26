@@ -1,6 +1,12 @@
 # Plan: Injuries Automation (damage-threshold triggers)
 
-**Status:** Proposed — awaiting alignment
+**Status:** IMPLEMENTED (phase 1, 2026-07-26) — decisions from §5: % of max HP;
+Triggered By is a setting (default Players); injured player's owner clicks;
+`injuriesMacroGlobal` retired; largest typed component picks category; no
+zero-HP auto-trigger (revisit later). Implementation:
+`scripts/manager-injury-triggers.js` (detection + toast),
+`manager-roll-toasts.js` `deliver()`/injury arming, `rollInjuryCard()` export
+in bibliosoph.js, Injuries settings rebuilt (Configuration + Toast Design).
 **Depends on:** nothing new (dnd5e system hooks + existing Blacksmith socket/toast plumbing)
 **Related:** `plan-injuries-datamodel.md` (the typed-page rebuild — separate track, see §7)
 

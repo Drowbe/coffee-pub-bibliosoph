@@ -1,8 +1,24 @@
 # Coffee Pub Bibliosoph
 
+## Injuries (CURRENT FOCUS — fix and test)
+
+- Play-test the automation end to end: threshold trigger on damage application, toast to all clients, click-to-roll arming on the injured player, injury card by damage type, Apply Injury. Fix what testing surfaces.
+- ~~Migrate injury detection to Blacksmith's `damageResolved` event~~ — DONE (Blacksmith shipped it same-day; manager-injury-triggers.js subscribes via `rolls.on('damageResolved')`).
+- Once Blacksmith wires MIDI attacker/item attribution into `damageResolved`, add `{attacker}`/`{weapon}` codes to the injury toast.
+
+## Blacksmith Requests (NEXT PRIORITY once injuries are good to go)
+
+Send these to the Blacksmith dev, in this order — use the `documentation/request-blacksmith-damage-api.md` format (it worked):
+
+1. **Cut a release (13.11.4+).** Everything this cycle — rolls API, `damageResolved`, toast `callToAction` — exists only on master. Bibliosoph cannot ship to anyone on published 13.11.3 until Blacksmith tags a release; pin the version dependency when both ship.
+2. **Public cross-client toast delivery** — e.g. `toast.publish(config, { recipients })`. Bibliosoph rolls its own socket relay (`coffee-pub-bibliosoph.rollToast`) for crit/fumble/injury/social toasts; every Coffee Pub module that toasts cross-client will rebuild the same plumbing. Receipt-side click-arming stays per-module (functions can't cross sockets) — only the delivery belongs in Blacksmith.
+3. **Stats API surface for the phase 3 announcer** — a query API (`stats.getRecord('damage-dealt')`) or, better, events (`blacksmith.stats.recordBroken`) so "biggest hit / broken record" announcements are subscribers like everything else. Request BEFORE designing phase 3 so it lands event-shaped, same playbook as `damageResolved`.
+4. **MIDI attacker/item attribution on `damageResolved`** — already on Blacksmith's own TODO; nudge it along (unlocks the `{attacker}`/`{weapon}` injury toast codes above).
+5. **Two developer-experience footguns (flag, not formal requests):** `rollCoffeePubDice()` fabricates a decorative 2d20 when passed nothing (caused the fake-dice bug — warn-and-skip would be safer), and `objectToString`/`stringToObject` corrupt prose containing `=` or `|` (ate the Apply-button description — deprecate in favor of JSON helpers).
+
 ## Crits & Fumbles
 
-- Phase 2 of the rolls-API integration (phase 1 — crit/fumble toasts via Blacksmith `api.rolls` — shipped in `manager-roll-toasts.js`): when a nat 20 / nat 1 lands, either auto-roll the configured critical/fumble table, or post a clickable prompt so the player gets to roll it themselves. Phase 3: "announcer" moments (biggest hit, broken records) using the Blacksmith stats API.
+- ~~Phase 2 — auto-roll or click-to-roll on nat 20 / nat 1~~ — SHIPPED (Automation modes in `manager-roll-toasts.js`). Phase 3: "announcer" moments (biggest hit, broken records) using the Blacksmith stats API — blocked on Blacksmith Request #3 above.
 
 ## Inspiration
 

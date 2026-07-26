@@ -108,13 +108,13 @@ const TOOLBAR_TOOLS = {
         order: 4,
         moduleId: "coffee-pub-bibliosoph",
         gmOnly: true,  // Only GMs can see this tool
-        enabled: () => getSetting('injuriesEnabledGlobal', false),
-        onCoffeePub: () => getSetting('toolbarCoffeePubInjuriesEnabled', true),
-        onFoundry: () => getSetting('toolbarFoundryInjuriesEnabled', false),
+        enabled: () => getSetting('injuriesToolbar', 'coffeepub') !== 'none',
+        onCoffeePub: () => ['coffeepub', 'both'].includes(getSetting('injuriesToolbar', 'coffeepub')),
+        onFoundry: () => ['foundry', 'both'].includes(getSetting('injuriesToolbar', 'coffeepub')),
         onClick: () => {
-            // Call the global function that handles injuries
-            if (typeof window.triggerInjuriesMacro === 'function') {
-                window.triggerInjuriesMacro();
+            // Manual injury selector (same card flow as always)
+            if (typeof window.triggerInjuriesRoll === 'function') {
+                window.triggerInjuriesRoll();
             } else {
                 BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Injuries function not available", "", false, false);
             }

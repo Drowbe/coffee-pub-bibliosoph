@@ -5,6 +5,7 @@
 // Grab the module data
 import { MODULE, BIBLIOSOPH } from './const.js';
 import { registerToolbarTools, unregisterToolbarTools } from './manager-toolbar.js';
+import { applyStatusToTokens } from './manager-status-effects.js';
 
 // Resolve a macro reference (UUID, id, or name) to a Macro document
 const getMacroByIdOrName = (macroKey) => {
@@ -29,6 +30,28 @@ const getMacroByIdOrName = (macroKey) => {
 
 // Lightweight logger to trace macro bindings/execution
 const logMacroFix = (msg) => console.log(`MACRO FIX ${msg}`);
+
+// Cached compiled chat-card template — fetched and compiled once per
+// session instead of on every card.
+let _compiledCardTemplate = null;
+async function getCardTemplate() {
+    if (!_compiledCardTemplate) {
+        const response = await fetch(BIBLIOSOPH.MESSAGE_TEMPLATE_CARD);
+        _compiledCardTemplate = Handlebars.compile(await response.text());
+    }
+    return _compiledCardTemplate;
+}
+
+// Cached investigation narrative JSON (static resource)
+let _investigationNarrative = null;
+async function getInvestigationNarrative() {
+    if (!_investigationNarrative) {
+        const res = await fetch(BIBLIOSOPH.INVESTIGATION_NARRATIVE_PATH);
+        if (!res.ok) throw new Error(res.statusText);
+        _investigationNarrative = await res.json();
+    }
+    return _investigationNarrative;
+}
 
 
 
@@ -130,6 +153,14 @@ Hooks.once('ready', async () => {
             console.error(MODULE.ID + ' | Failed to initialize Roll Toasts:', error);
         }
 
+        // INJURY TRIGGERS: damage-threshold injury automation (Blacksmith damageResolved)
+        try {
+            const { InjuryTriggerManager } = await import('./manager-injury-triggers.js');
+            InjuryTriggerManager.initialize();
+        } catch (error) {
+            console.error(MODULE.ID + ' | Failed to initialize Injury Triggers:', error);
+        }
+
         // NOW register toolbar tools after module registration is complete
         // In v13, we need to wait for Blacksmith to be fully ready
         // Try multiple times with increasing delays to ensure API is available
@@ -220,22 +251,30 @@ export async function rollOutcomeCard(type) {
     await publishChatCard();
 }
 
-// Trigger injuries macro (for toolbar integration)
-function triggerInjuriesMacro() {
-    // Run the same code that fires when the injuries macro is clicked
-    const strInjuriesMacroGlobal = BlacksmithUtils.getSettingSafely(MODULE.ID, 'injuriesMacroGlobal', '') || '';
-    
-    if (!strInjuriesMacroGlobal || strInjuriesMacroGlobal === '-- Choose a Macro --' || strInjuriesMacroGlobal === 'none') {
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Injuries macro not configured", "", false, false);
-        return;
-    }
-
-    // Build the chat message (same as macro click handler)
+// Trigger the injuries selector card (toolbar button) — macro-free
+function triggerInjuriesRoll() {
     resetBibliosophVars();
     BIBLIOSOPH.CARDTYPEINJURY = true;
     BIBLIOSOPH.CARDTYPE = "General";
-    // Build the card
     publishChatCard();
+}
+
+// Roll an injury for a specific damage category and post the card directly
+// (skipping the selector). Used by manager-roll-toasts.js for the injury
+// Automation click/auto modes. `target` ({actorId, tokenId}) is the actor
+// who took the damage — the card's Apply button binds to them.
+export async function rollInjuryCard(category, target = null) {
+    resetBibliosophVars();
+    BIBLIOSOPH.CARDTYPEINJURY = true;
+    BIBLIOSOPH.CARDTYPE = "General";
+    const compiledHtml = await createChatCardInjury(category, target);
+    resetBibliosophVars();
+    if (!compiledHtml) return;
+    await ChatMessage.create({
+        user: game.user.id,
+        content: compiledHtml,
+        speaker: ChatMessage.getSpeaker()
+    });
 }
 
 // Trigger inspiration macro (for toolbar integration)
@@ -259,7 +298,7 @@ function triggerInspirationMacro() {
 window.triggerInvestigationMacro = triggerInvestigationMacro;
 window.triggerCriticalRoll = triggerCriticalRoll;
 window.triggerFumbleRoll = triggerFumbleRoll;
-window.triggerInjuriesMacro = triggerInjuriesMacro;
+window.triggerInjuriesRoll = triggerInjuriesRoll;
 window.triggerInspirationMacro = triggerInspirationMacro;
 
 
@@ -272,8 +311,7 @@ function validateMandatorySettings() {
     // Check all mandatory macro settings
     const macroChecks = [
         { name: 'Investigations', setting: game.settings.get(MODULE.ID, 'investigationMacro'), required: true },
-        { name: 'Inspiration', setting: game.settings.get(MODULE.ID, 'inspirationMacro'), required: true },
-        { name: 'General Injuries', setting: game.settings.get(MODULE.ID, 'injuriesMacroGlobal'), required: true }
+        { name: 'Inspiration', setting: game.settings.get(MODULE.ID, 'inspirationMacro'), required: true }
     ];
     
     macroChecks.forEach(check => {
@@ -488,17 +526,6 @@ Hooks.on("ready", async () => {
             }
         });
 
-        bindSimpleMacro({
-            label: "General Injuries",
-            enabledKey: 'injuriesEnabledGlobal',
-            macroKey: 'injuriesMacroGlobal',
-            onExecute: async () => {
-                resetBibliosophVars();
-                BIBLIOSOPH.CARDTYPEINJURY = true;
-                BIBLIOSOPH.CARDTYPE = "General";
-                publishChatCard();
-            }
-        });
     };
 
     // initial + delayed binds to catch late settings load
@@ -517,50 +544,54 @@ Hooks.on("ready", async () => {
     var strInvestigationMacro = getSetting('investigationMacro', '');
     var strInspirationMacro = getSetting('inspirationMacro', '');
 
-    var strInjuriesMacroGlobal = getSetting('injuriesMacroGlobal', '');
-    var strInjuriesMacroGlobalID = getMacroIdByName(strInjuriesMacroGlobal);
-
     var blnInspirationEnabled = getSetting('inspirationEnabled', false);
-    var blninjuriesEnabledGlobal = getSetting('injuriesEnabledGlobal', false);
     // NOTE: investigation settings are re-fetched inside bindInvestigation() for fresh values
 
-    // BUTTON PRESSES IN CHAT
-    document.addEventListener('click', function(event) {
+    // Decode a card button's data-effect payload (JSON+URI, with a fallback
+    // for cards posted before the encoding switch)
+    const decodeEffectPayload = (raw) => {
+        try {
+            return JSON.parse(decodeURIComponent(raw));
+        } catch (_) {
+            return BlacksmithUtils.stringToObject(raw);
+        }
+    };
+
+    // BUTTON PRESSES IN CHAT (closest() so clicks on inner icons land too)
+    document.addEventListener('click', async function(event) {
         // CHECK FOR INJURY BUTTON
-        if(event.target.classList.contains('coffee-pub-bibliosoph-button-injury')) {
+        const injuryButton = event.target.closest?.('.coffee-pub-bibliosoph-button-injury');
+        if (injuryButton) {
+            const arrEffectData = decodeEffectPayload(injuryButton.getAttribute('data-effect'));
 
-            //BlacksmithUtils.postConsoleAndNotification("INJURY BUTTON PRESSED", "", false, false, false);
+            // Automation cards know exactly who took the damage; manual
+            // selector cards fall back to click-time targeting.
+            let explicitActors = null;
+            if (arrEffectData.targetActorId || arrEffectData.targetTokenId) {
+                const targetActor = canvas?.tokens?.get(arrEffectData.targetTokenId ?? '')?.actor
+                    ?? game.actors.get(arrEffectData.targetActorId ?? '');
+                if (targetActor) explicitActors = [targetActor];
+            }
 
-            var strEffectData = event.target.getAttribute('data-effect');
-            var arrEffectData = BlacksmithUtils.stringToObject(strEffectData) || JSON.parse(strEffectData);
-
-            //BlacksmithUtils.postConsoleAndNotification("arrEffectData: ", arrEffectData, false, true, false);
-        
-            // map the data to the token
-            var strLabel = arrEffectData.name;
-            var strIcon = arrEffectData.icon;
-            var intDamage = arrEffectData.damage;
-            var intDuration = arrEffectData.duration;
-            var strStatusEffect = arrEffectData.statuseffect;
-
-            // Apply the active effect
-            applyActiveEffect(strLabel, strIcon, intDamage, intDuration, strStatusEffect)
-
+            const applied = await applyStatusToTokens({
+                name: arrEffectData.name,
+                img: arrEffectData.icon,
+                description: arrEffectData.description || '',
+                durationSeconds: Number(arrEffectData.duration) || null,
+                damage: Number(arrEffectData.damage) || null,
+                statusEffect: arrEffectData.statuseffect || null,
+                kindLabel: 'injury',
+                explicitActors
+            });
+            await markCardButtonApplied(injuryButton, '.coffee-pub-bibliosoph-button-injury', applied);
         }
 
-        // CHECK FOR APPLY CRITICAL / FUMBLE BUTTON (closest() so clicks on
-        // the inner icon land too)
+        // CHECK FOR APPLY CRITICAL / FUMBLE BUTTON
         const applyOutcomeButton = event.target.closest?.('.coffee-pub-bibliosoph-button-apply-outcome');
         if (applyOutcomeButton) {
-            const raw = applyOutcomeButton.getAttribute('data-effect');
-            let data;
-            try {
-                data = JSON.parse(decodeURIComponent(raw));
-            } catch (_) {
-                // Cards posted before the JSON encoding switch
-                data = BlacksmithUtils.stringToObject(raw);
-            }
-            applyOutcomeStatus(data);
+            const data = decodeEffectPayload(applyOutcomeButton.getAttribute('data-effect'));
+            const applied = await applyOutcomeStatus(data);
+            await markCardButtonApplied(applyOutcomeButton, '.coffee-pub-bibliosoph-button-apply-outcome', applied);
         }
 
     });
@@ -632,35 +663,6 @@ Hooks.on("ready", async () => {
             BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Inspiration not set.`, "", false, false);
         }
     }
-    // *** INJURIES: GENERAL ***
-    if (blninjuriesEnabledGlobal) {
-
-        //BlacksmithUtils.postConsoleAndNotification("blninjuriesEnabledGlobal: ", blninjuriesEnabledGlobal, false, true, false);
-
-        if(strInjuriesMacroGlobal) {
-            let InjuryMacro = getMacroByIdOrName(strInjuriesMacroGlobal);
-
-            //BlacksmithUtils.postConsoleAndNotification("InjuryMacro: ", InjuryMacro, false, true, false);
-
-            if(InjuryMacro) {
-                InjuryMacro.execute = async () => {
-                    // Build the chat message
-                    resetBibliosophVars();
-                    BIBLIOSOPH.CARDTYPEINJURY = true;
-                    BIBLIOSOPH.CARDTYPE = "General";
-                    // Build the card
-                    // disable the actual call until ready
-                    publishChatCard();
-                };
-            } else {
-                // User needs to know about macro configuration issues
-                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `"${strWaterMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
-            }
-        } else {
-            // They haven't set this macro
-            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for General Injuries not set.`, "", false, false);
-        }
-    }
 
 });
 
@@ -713,6 +715,9 @@ Hooks.on("renderChatMessage", (message, html) => {
 
     const buttons = nativeHtml.querySelectorAll(".category-button");
     buttons.forEach(button => {
+        // Guard against double-binding on re-renders of the same message
+        if (button.dataset.bibliosophBound) return;
+        button.dataset.bibliosophBound = "1";
         button.addEventListener('click', async (event) => {
         event.preventDefault();
         
@@ -933,10 +938,7 @@ async function createChatCardGeneral(strRollTableName) {
         strAction = arrRollTableResults.strAction;
         strImage = arrRollTableResults.strImage;
     }
-    const templatePath = BIBLIOSOPH.MESSAGE_TEMPLATE_CARD;
-    const response = await fetch(templatePath);
-    const templateText = await response.text();
-    const template = Handlebars.compile(templateText);
+    const template = await getCardTemplate();
     // Apply button: crit/fumble cards carry their result so it can be
     // applied as a status effect on a targeted token straight from the card.
     let strApplyOutcomeData = "";
@@ -993,7 +995,7 @@ async function createChatCardGeneral(strRollTableName) {
 // ** CREATE Injury Card
 // ************************************
 
-async function createChatCardInjury(category) {  
+async function createChatCardInjury(category, target = null) {
 
     // Set the defaults
     var compendiumName = game.settings.get(MODULE.ID, 'injuryCompendium');
@@ -1007,13 +1009,6 @@ async function createChatCardInjury(category) {
     var iconSubStyle = "";
     var strType = BIBLIOSOPH.CARDTYPE + " Injury";
     var strImageBackground = "cobblestone";
-
-    // roll some fake dice "for show" -- this is not used for anything real
-    let rollIsInjury = await new Roll("1d100").evaluate();
-    // Show the fake Dice So Nice roll
-    if (game.settings.get(MODULE.ID, 'showDiceRolls')) {
-        BlacksmithUtils.rollCoffeePubDice(rollIsInjury);
-    }
 
     // Set the defaults
     var strJournalType = "";
@@ -1170,23 +1165,35 @@ async function createChatCardInjury(category) {
 
     }
 
-    // Build Effect Array
+    // Automation knows who took the damage — bind the Apply button to them
+    // and name them on it. Manual selector cards keep click-time targeting.
+    let strTargetName = "";
+    if (target?.actorId || target?.tokenId) {
+        const targetToken = canvas?.tokens?.get(target.tokenId ?? '');
+        const targetActor = game.actors.get(target.actorId ?? '') ?? targetToken?.actor;
+        strTargetName = targetToken?.name || targetActor?.name || "";
+    }
+
+    // Build Effect Array — carries everything the Apply button needs,
+    // including the description so the applied effect explains itself.
     const EFFECTDATA = {
         name: strInjuryTitle,
-        icon: strInjuryImage, 
+        icon: strInjuryImage,
         damage: intInjuryDamage,
         duration: intInjuryDuration,
         statuseffect: strStatusEffect,
-    }; 
+        targetActorId: target?.actorId ?? null,
+        targetTokenId: target?.tokenId ?? null,
+        description: [
+            strInjuryDescription,
+            strInjuryTreatment ? `<strong>Treatment:</strong> ${strInjuryTreatment}` : ''
+        ].filter(Boolean).join('<br><br>'),
+    };
 
-    //BlacksmithUtils.postConsoleAndNotification("EFFECTDATA for the CARDDATA Array: ",EFFECTDATA, false, true, false);
-    // Set the tmeplate type to encounter
-    const templatePath = BIBLIOSOPH.MESSAGE_TEMPLATE_CARD;
-    const response = await fetch(templatePath);
-    const templateText = await response.text();
-    const template = Handlebars.compile(templateText);
-    // Stringify the EFFECTDATA array
-    var strStringifiedEFFECTDATA = BlacksmithUtils.objectToString(EFFECTDATA) || JSON.stringify(EFFECTDATA);
+    const template = await getCardTemplate();
+    // JSON + URI encoding: survives any prose that would corrupt the
+    // legacy key=value|key=value format.
+    var strStringifiedEFFECTDATA = encodeURIComponent(JSON.stringify(EFFECTDATA));
     //BlacksmithUtils.postConsoleAndNotification("EFFECTDATA converted to STRING as strStringifiedEFFECTDATA: ",strStringifiedEFFECTDATA, false, true, false);
     // if they have the image off in settings, hide it
     var strCardImage = "";
@@ -1215,7 +1222,7 @@ async function createChatCardInjury(category) {
         image: strCardImage,
         duration: strInjuryDuration,
         damage: strInjuryDamage,
-        buttontext: strInjuryAction,
+        buttontext: strTargetName ? `Apply to ${strTargetName}` : strInjuryAction,
         statuseffect: strStatusEffect.toUpperCase(), // This one is used on the chat card
         arreffect: strStringifiedEFFECTDATA, // Stringify the EFFECTDATA array
         hasSectionContent: !!strStringifiedEFFECTDATA,
@@ -1248,9 +1255,7 @@ async function createChatCardInvestigation() {
 
     let narrativeJson;
     try {
-        const res = await fetch(BIBLIOSOPH.INVESTIGATION_NARRATIVE_PATH);
-        if (!res.ok) throw new Error(res.statusText);
-        narrativeJson = await res.json();
+        narrativeJson = await getInvestigationNarrative();
     } catch (e) {
         console.warn(MODULE.ID + " | Could not load investigation narrative:", e);
         BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Could not load investigation narrative. Check resources/investigation-narrative.json.", e?.message ?? String(e), false, false);
@@ -1344,9 +1349,7 @@ async function createChatCardInvestigation() {
             coinsDisplayLine,
             coinsSummaryLine,
         };
-        const response = await fetch(BIBLIOSOPH.MESSAGE_TEMPLATE_CARD);
-        const templateText = await response.text();
-        const template = Handlebars.compile(templateText);
+        const template = await getCardTemplate();
         BlacksmithUtils.playSound(foundAnything ? "modules/coffee-pub-blacksmith/sounds/chest-treasure.mp3" : "modules/coffee-pub-blacksmith/sounds/chest-open.mp3", "0.7");
         return template(CARDDATA);
     }
@@ -1472,9 +1475,7 @@ async function createChatCardInvestigation() {
         coinsDisplayLine,
         coinsSummaryLine,
     };
-    const response = await fetch(BIBLIOSOPH.MESSAGE_TEMPLATE_CARD);
-    const templateText = await response.text();
-    const template = Handlebars.compile(templateText);
+    const template = await getCardTemplate();
     BlacksmithUtils.playSound("modules/coffee-pub-blacksmith/sounds/chest-treasure.mp3", "0.7");
     return template(CARDDATA);
 }
@@ -1678,23 +1679,6 @@ function removeHTMLTags(str) {
 }
 
 // ************************************
-// ** UTILITY Get Macro ID
-// ************************************
-function getMacroIdByName(name) {
-    // Iterate over all macros
-    for(let macro of game.macros.contents) {
-        // Compare macro name to input
-        //if(macro.data.name === name) {
-        if(macro.name === name) {
-            // If the names match, return the ID
-            return macro.id;
-        }
-    }
-    // If no match was found, return null
-    return null;
-}
-
-// ************************************
 // ** UTILITY Create Injury Selector
 // ************************************
 
@@ -1719,10 +1703,7 @@ async function createChatCardInjurySelector(compendiumName) {
     // build the buttons
     arrInjuryButtons = await getCategoryButtons(arrCategories);
     
-    const templatePath = BIBLIOSOPH.MESSAGE_TEMPLATE_CARD;
-    const response = await fetch(templatePath);
-    const templateText = await response.text();
-    const template = Handlebars.compile(templateText);
+    const template = await getCardTemplate();
     // Pass the data to the template
     const CARDDATA = {
         theme: strTheme,
@@ -2053,116 +2034,48 @@ async function getInjuryDataFromJournalPages(compendiumName, journalName) {
     * @param {number} intDuration - How long the active effect lasts measured in seconds. 
     * @param {string} [strStatusEffect] - An optional additional status effect.
 */
-// Apply a rolled critical or fumble as a status effect on the TARGETED
-// token(s) (falling back to selected). No mechanical changes — a named,
-// described marker so the table doesn't forget what the card said.
+// Apply a rolled critical or fumble as a status effect — thin mapping onto
+// the shared applier (manager-status-effects.js). No mechanical changes:
+// a named, described marker so the table doesn't forget what the card said.
+// The recipient is chosen at CLICK time (targeted, then selected) — unlike
+// injuries, the right target is a judgment call, not the attack's target.
 async function applyOutcomeStatus(data) {
     const blnIsCrit = data?.kind !== 'fumble';
     const strKindLabel = blnIsCrit ? 'Critical' : 'Fumble';
+    return applyStatusToTokens({
+        name: `${strKindLabel}: ${data?.name || (blnIsCrit ? 'Critical Hit' : 'Fumble')}`,
+        img: blnIsCrit
+            ? "icons/skills/wounds/blood-spurt-spray-red.webp"
+            : "icons/skills/wounds/injury-pain-body-orange.webp",
+        description: data?.description || "",
+        kindLabel: strKindLabel.toLowerCase()
+    });
+}
 
-    const targets = Array.from(game.user.targets ?? []);
-    const tokens = targets.length ? targets : canvas.tokens.controlled;
-    if (!tokens.length) {
-        ui.notifications.warn(`Target a token (or select one) to apply the ${strKindLabel.toLowerCase()} to.`);
-        return;
-    }
-
-    const effectName = `${strKindLabel}: ${data?.name || (blnIsCrit ? 'Critical Hit' : 'Fumble')}`;
-    const effectImg = blnIsCrit
-        ? "icons/skills/wounds/blood-spurt-spray-red.webp"
-        : "icons/skills/wounds/injury-pain-body-orange.webp";
-    for (const token of tokens) {
-        const actor = token.actor;
-        if (!actor) continue;
-        if (!actor.isOwner) {
-            ui.notifications.warn(`You do not have permission to modify ${token.name}.`);
-            continue;
-        }
-        if (actor.effects.some((e) => e.name === effectName)) {
-            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `${token.name} already has "${effectName}", skipping`, "", false, false);
-            continue;
-        }
-        await actor.createEmbeddedDocuments("ActiveEffect", [{
-            name: effectName,
-            img: effectImg,
-            description: data?.description || "",
-            duration: {},
-        }]);
-        ui.notifications.info(`Applied "${effectName}" to ${token.name}.`);
+// After a successful apply, replace the card's button (in the stored chat
+// message) with an "Applied to …" stamp so it can't fire twice and the card
+// records who carries the effect. Skipped silently when the clicking user
+// cannot modify the message (a non-GM clicking someone else's card) — the
+// duplicate guard in the applier still protects against re-clicks.
+async function markCardButtonApplied(buttonEl, buttonSelector, appliedNames) {
+    if (!appliedNames?.length) return;
+    try {
+        const messageId = buttonEl.closest('[data-message-id]')?.dataset?.messageId;
+        const message = game.messages.get(messageId ?? '');
+        if (!message || !message.canUserModify(game.user, 'update')) return;
+        const doc = new DOMParser().parseFromString(message.content, 'text/html');
+        const button = doc.querySelector(buttonSelector);
+        if (!button) return;
+        const stamp = doc.createElement('div');
+        stamp.style.cssText = 'width:100%; text-align:center; font-style:italic; opacity:0.85; padding:4px 0;';
+        stamp.textContent = `✓ Applied to ${appliedNames.join(', ')}`;
+        button.replaceWith(stamp);
+        await message.update({ content: doc.body.innerHTML });
+    } catch (error) {
+        console.warn(MODULE.ID + ' | Could not mark card button applied:', error);
     }
 }
 
-async function applyActiveEffect(strLabel, strIcon, intDamage, intDuration, strStatusEffect) {
-    BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Applying active effects: " + strLabel, "", false, false);
-    
-    // Get the selected token
-    const token = canvas.tokens.controlled[0];
-    // If a token is selected
-    if (token) {
-        // --- Apply Active Effects ---
-        // Prepare the array of official status effects
-        const officialStatusEffects = ["blinded", "charmed", "deafened", "frightened", "grappled", "incapacitated", "invisible", "paralyzed", "petrified", "poisoned", "prone", "restrained", "stunned", "unconscious", "exhaustion"];
-        
-        if (token) {
-            let existingEffect = null;
-            // Check if the token already has the effect
-            for (let effect of token.actor.effects) {
-                if (effect.name === strLabel) {
-                    existingEffect = effect;
-                    break;
-                }
-            }
-            if (!existingEffect) {
-                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Applying active effects on " + token.actor.name + ": " + strLabel, "", false, false);
-                // Create the effect data
-                const effectData = {
-                    name: strLabel,
-                    icon: strIcon,
-                    duration: {
-                        seconds: intDuration,
-                    },
-                    changes: [
-                        {
-                            key: 'system.attributes.hp.value',
-                            mode: 2,
-                            value: `-${intDamage}`,
-                        }
-                    ],
-                };
-                
-                // Create a clean copy of the effect data
-                const cleanEffectData = foundry.utils.deepClone(effectData);
-                
-                // Now create the embedded document
-                await token.actor.createEmbeddedDocuments("ActiveEffect", [cleanEffectData]);
-                
-                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Applied " + strLabel + " to " + token.actor.name, "", false, false);
-            } else {
-                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Active effect already present on " + token.actor.name + ", skipping: " + strLabel, "", false, false);
-            }
-        }
-        // --- Apply Status Effects, if needed ---
-        if(game.modules.get("dfreds-convenient-effects")?.active) { 
-            if (strStatusEffect && officialStatusEffects.map(eff => eff.toLowerCase()).includes(strStatusEffect.toLowerCase())) {
-                let statusEffectName = strStatusEffect.charAt(0).toUpperCase() + strStatusEffect.slice(1);
-                try {
-                    let hasEffect = token.actor.effects.find(e => e.data.label === statusEffectName);
-                    if (!hasEffect){
-                        game.dfreds.effectInterface.toggleEffect(statusEffectName, token.actor);
-                        console.log(`Toggled ${statusEffectName} for ${token.actor.name}`);
-                        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Added status effect " + statusEffectName + " to " + token.actor.name, "", false, false);
-                    } else {
-                        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, token.actor.name + " already has status effect " + statusEffectName + ". Skipping adding the status effect.", "", false, false);
-                    }
-                } catch (err) {
-                    BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Error while toggling status effect " + statusEffectName + ": " + err.toString(), "", false, false);
-                }
-            }
-        } else {
-            console.log("DFreds Convenient Effects module is not installed or not active.");
-        }
-    }
-}
 
 // ************************************
 // ** UTILITY Reset Bibliosoph Vars

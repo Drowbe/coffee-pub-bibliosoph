@@ -35,7 +35,7 @@ const macroSettings = [
     'encounterMacroSky', 'encounterMacroSnow', 'encounterMacroUrban',
     'encounterMacroWater', 'investigationMacro',
     'inspirationMacro',
-    'partyMessageMacro', 'privateMessageMacro', 'injuriesMacroGlobal'
+    'partyMessageMacro', 'privateMessageMacro'
 ];
 
 macroSettings.forEach(setting => {

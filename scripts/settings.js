@@ -768,36 +768,60 @@ export const registerSettings = () => {
 		// -------------------------------------
 
 
-		// LETS MAKE IT EVENTUALLY SO I CAN BE ROLLED MANUALLY OR AUTOMATED BASED ON CRITERIA
-
-		game.settings.register(MODULE.ID, 'injuriesEnabledGlobal', {
-			name: MODULE.ID + '.injuriesEnabledGlobal-Label',
-			hint: MODULE.ID + '.injuriesEnabledGlobal-Hint',
-			type: Boolean,
+		// ---------- SUBHEADING: Configuration ----------
+		game.settings.register(MODULE.ID, "headingH3InjuriesConfiguration", {
+			name: MODULE.ID + '.headingH3InjuriesConfiguration-Label',
+			hint: MODULE.ID + '.headingH3InjuriesConfiguration-Hint',
+			scope: "client",
 			config: true,
-			requiresReload: true,
+			default: "",
+			type: String,
+		});
+		// -------------------------------------
+		game.settings.register(MODULE.ID, 'injuryAutomation', {
+			name: MODULE.ID + '.injuryAutomation-Label',
+			hint: MODULE.ID + '.injuryAutomation-Hint',
 			scope: 'world',
-			default: false,
+			config: true,
+			requiresReload: false,
+			type: String,
+			default: 'click',
+			choices: automationChoices
 		});
-		// -- Injuries Coffee Pub Toolbar --
-		game.settings.register(MODULE.ID, 'toolbarCoffeePubInjuriesEnabled', {
-			name: MODULE.ID + '.toolbarCoffeePubInjuriesEnabled-Label',
-			hint: MODULE.ID + '.toolbarCoffeePubInjuriesEnabled-Hint',
-			type: Boolean,
+		game.settings.register(MODULE.ID, 'injuryThreshold', {
+			name: MODULE.ID + '.injuryThreshold-Label',
+			hint: MODULE.ID + '.injuryThreshold-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			type: Number,
+			range: { min: 5, max: 100, step: 5 },
+			default: 50,
+		});
+		game.settings.register(MODULE.ID, 'injuryTriggerSource', {
+			name: MODULE.ID + '.injuryTriggerSource-Label',
+			hint: MODULE.ID + '.injuryTriggerSource-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			type: String,
+			default: 'players',
+			choices: {
+				'everyone': 'Everyone',
+				'players': 'Players',
+				'npcs': 'NPCs and Monsters'
+			}
+		});
+		// -- Injuries Toolbar (manual selector button) --
+		game.settings.register(MODULE.ID, 'injuriesToolbar', {
+			name: MODULE.ID + '.injuriesToolbar-Label',
+			hint: MODULE.ID + '.injuriesToolbar-Hint',
+			scope: 'user',
 			config: true,
 			requiresReload: true,
-			scope: 'user',
-			default: true,
-		});
-		// -- Injuries Foundry Toolbar --
-		game.settings.register(MODULE.ID, 'toolbarFoundryInjuriesEnabled', {
-			name: MODULE.ID + '.toolbarFoundryInjuriesEnabled-Label',
-			hint: MODULE.ID + '.toolbarFoundryInjuriesEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'user',
-			default: false,
+			type: String,
+			default: 'coffeepub',
+			choices: toolbarChoices
 		});
 		game.settings.register(MODULE.ID,'injuryCompendium', {
 			name: MODULE.ID + '.injuryCompendium-Label',
@@ -808,17 +832,6 @@ export const registerSettings = () => {
 			default: 'coffee-pub-bibliosoph.injuries',
 			choices: getBlacksmithChoices('arrCompendiumChoices', 'No compendiums found. Try reloading Foundry after all modules are enabled.')
 		});
-
-		game.settings.register(MODULE.ID,'injuriesMacroGlobal', {
-			name: MODULE.ID + '.injuriesMacroGlobal-Label',
-			hint: MODULE.ID + '.injuriesMacroGlobal-Hint',
-			scope: "world",
-			config: true,
-			requiresReload: true,
-			default: '-- Choose a Macro --',
-			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
-		});
-
 		// -- Injury Theme --
 		game.settings.register(MODULE.ID, 'cardThemeInjury', {
 			name: MODULE.ID + '.cardThemeInjury-Label',
@@ -829,8 +842,6 @@ export const registerSettings = () => {
 			default: 'theme-default',
 			choices: themeChoices
 		});
-
-
 		// -- Injury Image --
 		game.settings.register(MODULE.ID, 'injuryImageEnabled', {
 			name: MODULE.ID + '.injuryImageEnabled-Label',
@@ -841,9 +852,7 @@ export const registerSettings = () => {
 			scope: 'world',
 			default: false,
 		});
-
-
-		// -- Injury Sound --
+		// -- Injury Sound (chat card) --
 		game.settings.register(MODULE.ID,'injurySound', {
 			name: MODULE.ID + '.injurySound-Label',
 			hint: MODULE.ID + '.injurySound-Hint',
@@ -853,8 +862,6 @@ export const registerSettings = () => {
 			default: 'none',
 			choices: getBlacksmithChoices('arrSoundChoices', 'No sounds found. Try reloading Foundry after all modules are enabled.')
 		});
-
-		// -- Injury Sound VOlume --
 		game.settings.register(MODULE.ID,'injurySoundVolume', {
 			name: MODULE.ID + '.injurySoundVolume-Label',
 			hint: MODULE.ID + '.injurySoundVolume-Hint',
@@ -868,6 +875,101 @@ export const registerSettings = () => {
 			step: 0.05,
 			},
 			default: 0.7,
+		});
+
+		// ---------- SUBHEADING: Toast Design ----------
+		game.settings.register(MODULE.ID, "headingH3InjuriesToastDesign", {
+			name: MODULE.ID + '.headingH3InjuriesToastDesign-Label',
+			hint: MODULE.ID + '.headingH3InjuriesToastDesign-Hint',
+			scope: "client",
+			config: true,
+			default: "",
+			type: String,
+		});
+		// -------------------------------------
+		game.settings.register(MODULE.ID, 'injuryToastTitle', {
+			name: MODULE.ID + '.injuryToastTitle-Label',
+			hint: MODULE.ID + '.injuryToastTitle-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			type: String,
+			default: 'INJURY!!',
+		});
+		game.settings.register(MODULE.ID, 'injuryToastMessage', {
+			name: MODULE.ID + '.injuryToastMessage-Label',
+			hint: MODULE.ID + '.injuryToastMessage-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			type: String,
+			default: '{name} took a brutal {type} hit — that may leave a mark!',
+		});
+		game.settings.register(MODULE.ID, 'injuryToastButton', {
+			name: MODULE.ID + '.injuryToastButton-Label',
+			hint: MODULE.ID + '.injuryToastButton-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			type: String,
+			default: 'Roll for the Injury',
+		});
+		game.settings.register(MODULE.ID, 'injuryToastSize', {
+			name: MODULE.ID + '.injuryToastSize-Label',
+			hint: MODULE.ID + '.injuryToastSize-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			type: String,
+			default: 'large',
+			choices: toastSizeChoices
+		});
+		game.settings.register(MODULE.ID, 'injuryToastAnimation', {
+			name: MODULE.ID + '.injuryToastAnimation-Label',
+			hint: MODULE.ID + '.injuryToastAnimation-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			type: String,
+			default: 'shake',
+			choices: toastAnimationChoices
+		});
+		game.settings.register(MODULE.ID, 'injuryToastSound', {
+			name: MODULE.ID + '.injuryToastSound-Label',
+			hint: MODULE.ID + '.injuryToastSound-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			default: 'modules/coffee-pub-blacksmith/sounds/reactions/reaction-man-pain.mp3',
+			choices: getBlacksmithChoices('arrSoundChoices', 'No sounds found. Try reloading Foundry after all modules are enabled.')
+		});
+		game.settings.register(MODULE.ID, 'injuryToastBorderColor', {
+			name: MODULE.ID + '.injuryToastBorderColor-Label',
+			hint: MODULE.ID + '.injuryToastBorderColor-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			type: new foundry.data.fields.ColorField({ required: false, blank: true }),
+			default: '#f5ded6',
+		});
+		game.settings.register(MODULE.ID, 'injuryToastBackgroundColor', {
+			name: MODULE.ID + '.injuryToastBackgroundColor-Label',
+			hint: MODULE.ID + '.injuryToastBackgroundColor-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			type: new foundry.data.fields.ColorField({ required: false, blank: true }),
+			default: '#4a1204',
+		});
+		game.settings.register(MODULE.ID, 'injuryToastBackgroundImage', {
+			name: MODULE.ID + '.injuryToastBackgroundImage-Label',
+			hint: MODULE.ID + '.injuryToastBackgroundImage-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			type: String,
+			filePicker: 'image',
+			default: '',
 		});
 
 		// ---------- HEADING ----------

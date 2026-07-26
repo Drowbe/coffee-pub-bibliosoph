@@ -128,14 +128,33 @@ export class RollToastManager {
         return owner?.id ?? null;
     }
 
-    /** Post the crit/fumble table chat card via the existing card path. */
-    static async _rollCard(type) {
+    /**
+     * Post the outcome chat card via the existing card paths:
+     * crit/fumble roll their table, injury rolls the journal compendium
+     * for the given damage category (target = who took the damage).
+     */
+    static async _rollCard(type, category, target) {
         try {
-            const { rollOutcomeCard } = await import('./bibliosoph.js');
-            await rollOutcomeCard(type);
+            if (type === 'injury') {
+                const { rollInjuryCard } = await import('./bibliosoph.js');
+                await rollInjuryCard(category || 'General', target ?? null);
+            } else {
+                const { rollOutcomeCard } = await import('./bibliosoph.js');
+                await rollOutcomeCard(type);
+            }
         } catch (error) {
             log('Roll card failed', error?.message, false, false);
         }
+    }
+
+    /**
+     * Show a toast locally and relay it to every other client. Entry point
+     * for sibling managers (injury triggers) that reuse this socket and
+     * the receipt-side click-arming in _showLocal.
+     */
+    static deliver(payload, { broadcast = true } = {}) {
+        if (broadcast) this._broadcast(payload);
+        this._showLocal(payload);
     }
 
     /**
@@ -239,10 +258,10 @@ export class RollToastManager {
         // Receipt-side arming: if this toast carries a roll action and THIS
         // client is the designated roller, make it persistent and clickable —
         // clicking posts the crit/fumble table card from this client.
-        const { rollAction, rollUserId, ...config } = payload ?? {};
+        const { rollAction, rollUserId, rollCategory, rollTarget, ...config } = payload ?? {};
         if (rollAction && rollUserId === game.user.id) {
             config.duration = 0;
-            config.onClick = () => this._rollCard(rollAction);
+            config.onClick = () => this._rollCard(rollAction, rollCategory, rollTarget);
             // Button-styled pill on the armed toast only (Blacksmith renders
             // it solely when onClick is live, on small/medium/large sizes).
             // Configurable text; blank hides the pill (toast stays clickable).
