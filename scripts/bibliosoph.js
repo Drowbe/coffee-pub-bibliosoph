@@ -196,44 +196,18 @@ function triggerInvestigationMacro() {
     publishChatCard();
 }
 
-// Trigger critical hit macro (for toolbar integration)
-function triggerCriticalMacro() {
-    // Run the same code that fires when the critical macro is clicked
-    const strCriticalMacro = BlacksmithUtils.getSettingSafely(MODULE.ID, 'criticalMacro', '') || '';
-    
-    if (!strCriticalMacro || strCriticalMacro === '-- Choose a Macro --' || strCriticalMacro === 'none') {
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Critical hit macro not configured", "", false, false);
-        return;
-    }
-
-    // Build the chat message (same as macro click handler)
-    resetBibliosophVars();
-    BIBLIOSOPH.CARDTYPECRIT = true;
-    BIBLIOSOPH.CARDTYPE = "Critical";
-    // Build the card
-    publishChatCard();
+// Manual roll triggers (toolbar buttons) — same path as click-to-roll
+function triggerCriticalRoll() {
+    rollOutcomeCard('crit');
 }
 
-// Trigger fumble macro (for toolbar integration)
-function triggerFumbleMacro() {
-    // Run the same code that fires when the fumble macro is clicked
-    const strFumbleMacro = BlacksmithUtils.getSettingSafely(MODULE.ID, 'fumbleMacro', '') || '';
-    
-    if (!strFumbleMacro || strFumbleMacro === '-- Choose a Macro --' || strFumbleMacro === 'none') {
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Fumble macro not configured", "", false, false);
-        return;
-    }
-
-    // Build the chat message (same as macro click handler)
-    resetBibliosophVars();
-    BIBLIOSOPH.CARDTYPEFUMBLE = true;
-    BIBLIOSOPH.CARDTYPE = "Fumble";
-    // Build the card
-    publishChatCard();
+function triggerFumbleRoll() {
+    rollOutcomeCard('fumble');
 }
 
 // Roll the configured crit/fumble table and post the chat card. Used by
-// manager-roll-toasts.js for the "Roll Card" auto/notification modes.
+// the toolbar buttons above and by manager-roll-toasts.js for the
+// Automation click/auto modes.
 export async function rollOutcomeCard(type) {
     resetBibliosophVars();
     if (type === 'crit') {
@@ -283,8 +257,8 @@ function triggerInspirationMacro() {
 
 // Make functions globally available for toolbar manager
 window.triggerInvestigationMacro = triggerInvestigationMacro;
-window.triggerCriticalMacro = triggerCriticalMacro;
-window.triggerFumbleMacro = triggerFumbleMacro;
+window.triggerCriticalRoll = triggerCriticalRoll;
+window.triggerFumbleRoll = triggerFumbleRoll;
 window.triggerInjuriesMacro = triggerInjuriesMacro;
 window.triggerInspirationMacro = triggerInspirationMacro;
 
@@ -298,8 +272,6 @@ function validateMandatorySettings() {
     // Check all mandatory macro settings
     const macroChecks = [
         { name: 'Investigations', setting: game.settings.get(MODULE.ID, 'investigationMacro'), required: true },
-        { name: 'Critical Hits', setting: game.settings.get(MODULE.ID, 'criticalMacro'), required: true },
-        { name: 'Fumbles', setting: game.settings.get(MODULE.ID, 'fumbleMacro'), required: true },
         { name: 'Inspiration', setting: game.settings.get(MODULE.ID, 'inspirationMacro'), required: true },
         { name: 'General Injuries', setting: game.settings.get(MODULE.ID, 'injuriesMacroGlobal'), required: true }
     ];
@@ -505,30 +477,6 @@ Hooks.on("ready", async () => {
         });
 
         bindSimpleMacro({
-            label: "Critical Hit",
-            enabledKey: 'criticalEnabled',
-            macroKey: 'criticalMacro',
-            onExecute: async () => {
-                resetBibliosophVars();
-                BIBLIOSOPH.CARDTYPECRIT = true;
-                BIBLIOSOPH.CARDTYPE = "Critical";
-                publishChatCard();
-            }
-        });
-
-        bindSimpleMacro({
-            label: "Fumble",
-            enabledKey: 'fumbleEnabled',
-            macroKey: 'fumbleMacro',
-            onExecute: async () => {
-                resetBibliosophVars();
-                BIBLIOSOPH.CARDTYPEFUMBLE = true;
-                BIBLIOSOPH.CARDTYPE = "Fumble";
-                publishChatCard();
-            }
-        });
-
-        bindSimpleMacro({
             label: "Inspiration",
             enabledKey: 'inspirationEnabled',
             macroKey: 'inspirationMacro',
@@ -567,15 +515,11 @@ Hooks.on("ready", async () => {
     // Resolve a macro value (name or id) to a Macro document
     // SET VARIABLES using Blacksmith's safe settings access
     var strInvestigationMacro = getSetting('investigationMacro', '');
-    var strCriticalMacro = getSetting('criticalMacro', '');
-    var strFumbleMacro = getSetting('fumbleMacro', '');
     var strInspirationMacro = getSetting('inspirationMacro', '');
 
     var strInjuriesMacroGlobal = getSetting('injuriesMacroGlobal', '');
     var strInjuriesMacroGlobalID = getMacroIdByName(strInjuriesMacroGlobal);
 
-    var blnCriticalEnabled = getSetting('criticalEnabled', false);
-    var blnFumbleEnabled = getSetting('fumbleEnabled', false);
     var blnInspirationEnabled = getSetting('inspirationEnabled', false);
     var blninjuriesEnabledGlobal = getSetting('injuriesEnabledGlobal', false);
     // NOTE: investigation settings are re-fetched inside bindInvestigation() for fresh values
@@ -649,53 +593,6 @@ Hooks.on("ready", async () => {
             }
         }
     });
-    // ************* CRITS AND FUMBLES *************
-    // *** CRITICAL ***
-    if (blnCriticalEnabled) {
-        if (strCriticalMacro) {
-            let CriticalMacro = getMacroByIdOrName(strCriticalMacro);
-            if(CriticalMacro) {
-                CriticalMacro.execute = async () => {
-                    //BlacksmithUtils.postConsoleAndNotification("Macro Clicked: ", "Critical", false, true, false);
-                    // Build the chat message
-                    resetBibliosophVars();
-                    BIBLIOSOPH.CARDTYPECRIT = true;
-                    BIBLIOSOPH.CARDTYPE = "Critical";
-                    // Build the card
-                    publishChatCard();
-                };
-            } else {
-                // User needs to know about macro configuration issues
-                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Critical Hits Macro "${strCriticalMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
-            }
-        } else {
-            // They haven't set this macro
-            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Critical Hits not set.`, "", false, false);
-        }
-    }
-    // *** FUMBLE ***
-    if (blnFumbleEnabled) {
-        if(strFumbleMacro) {
-            let FumbleMacro = getMacroByIdOrName(strFumbleMacro);
-            if(FumbleMacro) {
-                FumbleMacro.execute = async () => {
-                    //BlacksmithUtils.postConsoleAndNotification("Macro Clicked: ", "Fumble", false, true, false);
-                    // Build the chat message
-                    resetBibliosophVars();
-                    BIBLIOSOPH.CARDTYPEFUMBLE = true;
-                    BIBLIOSOPH.CARDTYPE = "Fumble";
-                    // Build the card
-                    publishChatCard();
-                };
-            } else {
-                // User needs to know about macro configuration issues
-                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Fumble Macro "${strFumbleMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
-            }
-        } else {
-            // They haven't set this macro
-            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Fumbles not set.`, "", false, false);
-        }
-    }
     // ************* CARD ROLLS *************
     // *** INSPIRATION ***
     if (blnInspirationEnabled) {
@@ -1002,10 +899,15 @@ async function createChatCardGeneral(strRollTableName) {
         //There is a roll table... get the data from it.
         let arrRollTableResults = await getRollTable(strRollTableName);
         if (!arrRollTableResults) return "";
-        // Animate the REAL table roll and wait for the dice to land before
-        // the card renders — the dice show the number that picked the result.
-        if (game.settings.get(MODULE.ID, 'showDiceRolls') && arrRollTableResults.roll) {
-            await BlacksmithUtils.rollCoffeePubDice(arrRollTableResults.roll);
+        // Show Dice So Nice (when installed) for the REAL table roll and
+        // wait for the dice to land before the card renders — same gate and
+        // call as Blacksmith's roll tools (manager-rolls.js).
+        if (game.dice3d && game.settings.get(MODULE.ID, 'showDiceRolls') && arrRollTableResults.roll) {
+            try {
+                await game.dice3d.showForRoll(arrRollTableResults.roll, game.user, true, null, false, null, null, { ghost: false, secret: false });
+            } catch (err) {
+                // Dice are cosmetic — never block the card on an animation error
+            }
         }
         // BlacksmithUtils.postConsoleAndNotification("BIBLIOSOPH: createChatCardGeneral arrRollTableResults", arrRollTableResults, false, true, false);
         strTableName = arrRollTableResults.strTableName;

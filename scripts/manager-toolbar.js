@@ -69,13 +69,13 @@ const TOOLBAR_TOOLS = {
         zone: "rolls",
         order: 2,
         moduleId: "coffee-pub-bibliosoph",
-        enabled: () => getSetting('criticalEnabled', false),
-        onCoffeePub: () => getSetting('toolbarCoffeePubCriticalEnabled', true),
-        onFoundry: () => getSetting('toolbarFoundryCriticalEnabled', false),
+        enabled: () => getSetting('criticalToolbar', 'coffeepub') !== 'none',
+        onCoffeePub: () => ['coffeepub', 'both'].includes(getSetting('criticalToolbar', 'coffeepub')),
+        onFoundry: () => ['foundry', 'both'].includes(getSetting('criticalToolbar', 'coffeepub')),
         onClick: () => {
-            // Call the global function that handles critical hit
-            if (typeof window.triggerCriticalMacro === 'function') {
-                window.triggerCriticalMacro();
+            // Manual roll of the critical table (same path as click-to-roll)
+            if (typeof window.triggerCriticalRoll === 'function') {
+                window.triggerCriticalRoll();
             } else {
                 BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Critical hit function not available", "", false, false);
             }
@@ -88,13 +88,13 @@ const TOOLBAR_TOOLS = {
         zone: "rolls",
         order: 3,
         moduleId: "coffee-pub-bibliosoph",
-        enabled: () => getSetting('fumbleEnabled', false),
-        onCoffeePub: () => getSetting('toolbarCoffeePubFumbleEnabled', true),
-        onFoundry: () => getSetting('toolbarFoundryFumbleEnabled', false),
+        enabled: () => getSetting('fumbleToolbar', 'coffeepub') !== 'none',
+        onCoffeePub: () => ['coffeepub', 'both'].includes(getSetting('fumbleToolbar', 'coffeepub')),
+        onFoundry: () => ['foundry', 'both'].includes(getSetting('fumbleToolbar', 'coffeepub')),
         onClick: () => {
-            // Call the global function that handles fumble
-            if (typeof window.triggerFumbleMacro === 'function') {
-                window.triggerFumbleMacro();
+            // Manual roll of the fumble table (same path as click-to-roll)
+            if (typeof window.triggerFumbleRoll === 'function') {
+                window.triggerFumbleRoll();
             } else {
                 BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Fumble function not available", "", false, false);
             }

@@ -138,19 +138,44 @@ export class RollToastManager {
         }
     }
 
-    /** "players" mode skips rolls whose chat message was authored by a GM. */
+    /**
+     * Filter on WHAT is rolling — the actor type — not which account
+     * controls it. 'players' = character actors; 'npcs' = everything else.
+     * Unknown actors pass rather than silently eating outcomes.
+     */
     static _passesSourceFilter(outcome) {
-        if (getSetting('rollToastTriggeredBy', 'everyone') !== 'players') return true;
-        const message = game.messages.get(outcome?.messageId ?? '');
-        const author = message?.author ?? message?.user;
-        return author ? !author.isGM : true;
+        const mode = getSetting('rollTriggerSource', 'everyone');
+        if (mode === 'everyone') return true;
+        const actor = game.actors.get(outcome?.actorId ?? '')
+            ?? canvas?.tokens?.get(outcome?.tokenId ?? '')?.actor;
+        if (!actor) return true;
+        const isCharacter = actor.type === 'character';
+        return mode === 'players' ? isCharacter : !isCharacter;
     }
 
     static _buildPayload(type, outcome) {
-        const tokenName = canvas?.tokens?.get(outcome?.tokenId ?? '')?.name;
-        const actorName = game.actors.get(outcome?.actorId ?? '')?.name;
-        const rollerName = tokenName || actorName || 'Someone';
-        const interpolate = (text) => String(text ?? '').replaceAll('{name}', rollerName);
+        const token = canvas?.tokens?.get(outcome?.tokenId ?? '');
+        const actor = game.actors.get(outcome?.actorId ?? '') ?? token?.actor;
+        const rollerName = token?.name || actor?.name || 'Someone';
+
+        // Substitution codes for the title/message settings.
+        let weaponName = 'their weapon';
+        try {
+            weaponName = (outcome?.itemUuid && fromUuidSync(outcome.itemUuid)?.name) || 'their weapon';
+        } catch (_) { /* compendium-index misses resolve to the fallback */ }
+        let targetName = 'their target';
+        try {
+            const targetUuid = outcome?.hitTargets?.[0]
+                ?? outcome?.missTargets?.[0]
+                ?? outcome?.targets?.[0]?.uuid;
+            targetName = (targetUuid && fromUuidSync(targetUuid)?.name) || 'their target';
+        } catch (_) { /* no target stays generic */ }
+        const interpolate = (text) => String(text ?? '')
+            .replaceAll('{name}', rollerName)
+            .replaceAll('{target}', targetName)
+            .replaceAll('{weapon}', weaponName)
+            .replaceAll('{d20}', String(outcome?.d20 ?? '?'))
+            .replaceAll('{total}', String(outcome?.total ?? '?'));
 
         const title = interpolate(getSetting(`${type}ToastTitle`, ''));
         if (!title) return null;
@@ -160,8 +185,14 @@ export class RollToastManager {
         const subtitle = interpolate(getSetting(`${type}ToastMessage`, ''));
         if (subtitle) payload.subtitle = subtitle;
 
-        const icon = String(getSetting(`${type}ToastIcon`, '') ?? '').trim();
-        if (icon && icon !== 'none') payload.icon = icon;
+        // The roller's portrait is the toast avatar (image wins over icon in
+        // the toast API); a fixed icon is the no-portrait fallback.
+        const portrait = actor?.img || token?.document?.texture?.src || null;
+        if (portrait) {
+            payload.image = portrait;
+        } else {
+            payload.icon = type === 'crit' ? 'fa-solid fa-burst' : 'fa-solid fa-heart-crack';
+        }
 
         const size = getSetting(`${type}ToastSize`, 'large');
         if (size && size !== 'adapt') payload.size = size;
@@ -212,6 +243,11 @@ export class RollToastManager {
         if (rollAction && rollUserId === game.user.id) {
             config.duration = 0;
             config.onClick = () => this._rollCard(rollAction);
+            // Button-styled pill on the armed toast only (Blacksmith renders
+            // it solely when onClick is live, on small/medium/large sizes).
+            // Configurable text; blank hides the pill (toast stays clickable).
+            const buttonText = String(getSetting(`${rollAction}ToastButton`, '') ?? '').trim();
+            if (buttonText) config.callToAction = buttonText;
             log(`Toast armed for click-to-roll (${rollAction}) on this client`, '', true, false);
         } else if (rollAction) {
             log(`Toast is click-to-roll for another user (${rollUserId}); showing plain`, '', true, false);

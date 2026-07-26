@@ -408,6 +408,13 @@ export const registerSettings = () => {
 			'click': 'Toast — click to roll',
 			'auto': 'Toast — automatic rolls'
 		};
+		// One dropdown covers all toolbar-visibility combos (manual roll button)
+		const toolbarChoices = {
+			'none': 'None',
+			'foundry': 'Foundry Toolbar',
+			'coffeepub': 'Coffee Pub Toolbar',
+			'both': 'Both'
+		};
 
 		// ** CRITICAL **
 
@@ -421,34 +428,53 @@ export const registerSettings = () => {
 			type: String,
 		});
 		// -------------------------------------
-		game.settings.register(MODULE.ID, 'criticalEnabled', {
-			name: MODULE.ID + '.criticalEnabled-Label',
-			hint: MODULE.ID + '.criticalEnabled-Hint',
-			type: Boolean,
+
+		// ---------- SUBHEADING: Configuration ----------
+		game.settings.register(MODULE.ID, "headingH3CriticalConfiguration", {
+			name: MODULE.ID + '.headingH3CriticalConfiguration-Label',
+			hint: MODULE.ID + '.headingH3CriticalConfiguration-Hint',
+			scope: "client",
 			config: true,
-			requiresReload: true,
+			default: "",
+			type: String,
+		});
+		// -------------------------------------
+		game.settings.register(MODULE.ID, 'critAutomation', {
+			name: MODULE.ID + '.critAutomation-Label',
+			hint: MODULE.ID + '.critAutomation-Hint',
 			scope: 'world',
-			default: false,
+			config: true,
+			requiresReload: false,
+			type: String,
+			default: 'click',
+			choices: automationChoices
 		});
-		// -- Critical Coffee Pub Toolbar --
-		game.settings.register(MODULE.ID, 'toolbarCoffeePubCriticalEnabled', {
-			name: MODULE.ID + '.toolbarCoffeePubCriticalEnabled-Label',
-			hint: MODULE.ID + '.toolbarCoffeePubCriticalEnabled-Hint',
-			type: Boolean,
+		// Applies to crits AND fumbles. Filters on WHAT is rolling (the
+		// actor type), not which account controls it.
+		game.settings.register(MODULE.ID, 'rollTriggerSource', {
+			name: MODULE.ID + '.rollTriggerSource-Label',
+			hint: MODULE.ID + '.rollTriggerSource-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			type: String,
+			default: 'everyone',
+			choices: {
+				'everyone': 'Everyone',
+				'players': 'Players',
+				'npcs': 'NPCs and Monsters'
+			}
+		});
+		// -- Critical Toolbar (manual roll button) --
+		game.settings.register(MODULE.ID, 'criticalToolbar', {
+			name: MODULE.ID + '.criticalToolbar-Label',
+			hint: MODULE.ID + '.criticalToolbar-Hint',
+			scope: 'user',
 			config: true,
 			requiresReload: true,
-			scope: 'user',
-			default: true,
-		});
-		// -- Critical Foundry Toolbar --
-		game.settings.register(MODULE.ID, 'toolbarFoundryCriticalEnabled', {
-			name: MODULE.ID + '.toolbarFoundryCriticalEnabled-Label',
-			hint: MODULE.ID + '.toolbarFoundryCriticalEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'user',
-			default: true,
+			type: String,
+			default: 'coffeepub',
+			choices: toolbarChoices
 		});
 		// -- Critical Theme --
 		game.settings.register(MODULE.ID, 'cardThemeCritical', {
@@ -470,40 +496,17 @@ export const registerSettings = () => {
 			default: '-- Choose a Roll Table --',
 			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
 		});
-		// -- Critical Macro --
-		game.settings.register(MODULE.ID,'criticalMacro', {
-			name: MODULE.ID + '.criticalMacro-Label',
-			hint: MODULE.ID + '.criticalMacro-Hint',
-			scope: "world",
+
+		// ---------- SUBHEADING: Toast Design ----------
+		game.settings.register(MODULE.ID, "headingH3CriticalToastDesign", {
+			name: MODULE.ID + '.headingH3CriticalToastDesign-Label',
+			hint: MODULE.ID + '.headingH3CriticalToastDesign-Hint',
+			scope: "client",
 			config: true,
-			requiresReload: true,
-			default: '-- Choose a Macro --',
-			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
-		});
-		// -- Critical Toast --
-		game.settings.register(MODULE.ID, 'critAutomation', {
-			name: MODULE.ID + '.critAutomation-Label',
-			hint: MODULE.ID + '.critAutomation-Hint',
-			scope: 'world',
-			config: true,
-			requiresReload: false,
+			default: "",
 			type: String,
-			default: 'click',
-			choices: automationChoices
 		});
-		game.settings.register(MODULE.ID, 'rollToastTriggeredBy', {
-			name: MODULE.ID + '.rollToastTriggeredBy-Label',
-			hint: MODULE.ID + '.rollToastTriggeredBy-Hint',
-			scope: 'world',
-			config: true,
-			requiresReload: false,
-			type: String,
-			default: 'everyone',
-			choices: {
-				'everyone': 'Everyone (players, NPCs, and the GM)',
-				'players': 'Players Only'
-			}
-		});
+		// -------------------------------------
 		game.settings.register(MODULE.ID, 'critToastTitle', {
 			name: MODULE.ID + '.critToastTitle-Label',
 			hint: MODULE.ID + '.critToastTitle-Hint',
@@ -522,14 +525,14 @@ export const registerSettings = () => {
 			type: String,
 			default: 'This is gonna hurt!',
 		});
-		game.settings.register(MODULE.ID, 'critToastIcon', {
-			name: MODULE.ID + '.critToastIcon-Label',
-			hint: MODULE.ID + '.critToastIcon-Hint',
+		game.settings.register(MODULE.ID, 'critToastButton', {
+			name: MODULE.ID + '.critToastButton-Label',
+			hint: MODULE.ID + '.critToastButton-Hint',
 			scope: 'world',
 			config: true,
 			requiresReload: false,
 			type: String,
-			default: 'fa-solid fa-burst',
+			default: 'Roll for the Critical Card',
 		});
 		game.settings.register(MODULE.ID, 'critToastSize', {
 			name: MODULE.ID + '.critToastSize-Label',
@@ -601,34 +604,37 @@ export const registerSettings = () => {
 			type: String,
 		});
 		// -------------------------------------
-		game.settings.register(MODULE.ID, 'fumbleEnabled', {
-			name: MODULE.ID + '.fumbleEnabled-Label',
-			hint: MODULE.ID + '.fumbleEnabled-Hint',
-			type: Boolean,
+
+		// ---------- SUBHEADING: Configuration ----------
+		game.settings.register(MODULE.ID, "headingH3FumbleConfiguration", {
+			name: MODULE.ID + '.headingH3FumbleConfiguration-Label',
+			hint: MODULE.ID + '.headingH3FumbleConfiguration-Hint',
+			scope: "client",
 			config: true,
-			requiresReload: true,
+			default: "",
+			type: String,
+		});
+		// -------------------------------------
+		game.settings.register(MODULE.ID, 'fumbleAutomation', {
+			name: MODULE.ID + '.fumbleAutomation-Label',
+			hint: MODULE.ID + '.fumbleAutomation-Hint',
 			scope: 'world',
-			default: false,
+			config: true,
+			requiresReload: false,
+			type: String,
+			default: 'click',
+			choices: automationChoices
 		});
-		// -- Fumble Coffee Pub Toolbar --
-		game.settings.register(MODULE.ID, 'toolbarCoffeePubFumbleEnabled', {
-			name: MODULE.ID + '.toolbarCoffeePubFumbleEnabled-Label',
-			hint: MODULE.ID + '.toolbarCoffeePubFumbleEnabled-Hint',
-			type: Boolean,
+		// -- Fumble Toolbar (manual roll button) --
+		game.settings.register(MODULE.ID, 'fumbleToolbar', {
+			name: MODULE.ID + '.fumbleToolbar-Label',
+			hint: MODULE.ID + '.fumbleToolbar-Hint',
+			scope: 'user',
 			config: true,
 			requiresReload: true,
-			scope: 'user',
-			default: true,
-		});
-		// -- Fumble Foundry Toolbar --
-		game.settings.register(MODULE.ID, 'toolbarFoundryFumbleEnabled', {
-			name: MODULE.ID + '.toolbarFoundryFumbleEnabled-Label',
-			hint: MODULE.ID + '.toolbarFoundryFumbleEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'user',
-			default: true,
+			type: String,
+			default: 'coffeepub',
+			choices: toolbarChoices
 		});
 		// -- Fumble Theme --
 		game.settings.register(MODULE.ID, 'cardThemeFumble', {
@@ -651,28 +657,17 @@ export const registerSettings = () => {
 			default: '-- Choose a Roll Table --',
 			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
 		});
-		// -- Fumble Macro --
-		game.settings.register(MODULE.ID,'fumbleMacro', {
-			name: MODULE.ID + '.fumbleMacro-Label',
-			hint: MODULE.ID + '.fumbleMacro-Hint',
-			scope: "world",
-			config: true,
-			requiresReload: true,
-			default: '-- Choose a Macro --',
-			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
-		});
 
-		// -- Fumble Toast --
-		game.settings.register(MODULE.ID, 'fumbleAutomation', {
-			name: MODULE.ID + '.fumbleAutomation-Label',
-			hint: MODULE.ID + '.fumbleAutomation-Hint',
-			scope: 'world',
+		// ---------- SUBHEADING: Toast Design ----------
+		game.settings.register(MODULE.ID, "headingH3FumbleToastDesign", {
+			name: MODULE.ID + '.headingH3FumbleToastDesign-Label',
+			hint: MODULE.ID + '.headingH3FumbleToastDesign-Hint',
+			scope: "client",
 			config: true,
-			requiresReload: false,
+			default: "",
 			type: String,
-			default: 'click',
-			choices: automationChoices
 		});
+		// -------------------------------------
 		game.settings.register(MODULE.ID, 'fumbleToastTitle', {
 			name: MODULE.ID + '.fumbleToastTitle-Label',
 			hint: MODULE.ID + '.fumbleToastTitle-Hint',
@@ -691,14 +686,14 @@ export const registerSettings = () => {
 			type: String,
 			default: "Well... that didn't go as planned!",
 		});
-		game.settings.register(MODULE.ID, 'fumbleToastIcon', {
-			name: MODULE.ID + '.fumbleToastIcon-Label',
-			hint: MODULE.ID + '.fumbleToastIcon-Hint',
+		game.settings.register(MODULE.ID, 'fumbleToastButton', {
+			name: MODULE.ID + '.fumbleToastButton-Label',
+			hint: MODULE.ID + '.fumbleToastButton-Hint',
 			scope: 'world',
 			config: true,
 			requiresReload: false,
 			type: String,
-			default: 'fa-solid fa-heart-crack',
+			default: 'Roll for the Fumble Card',
 		});
 		game.settings.register(MODULE.ID, 'fumbleToastSize', {
 			name: MODULE.ID + '.fumbleToastSize-Label',
