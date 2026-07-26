@@ -553,7 +553,13 @@ Hooks.on("ready", async () => {
         const applyOutcomeButton = event.target.closest?.('.coffee-pub-bibliosoph-button-apply-outcome');
         if (applyOutcomeButton) {
             const raw = applyOutcomeButton.getAttribute('data-effect');
-            const data = BlacksmithUtils.stringToObject(raw) || JSON.parse(raw);
+            let data;
+            try {
+                data = JSON.parse(decodeURIComponent(raw));
+            } catch (_) {
+                // Cards posted before the JSON encoding switch
+                data = BlacksmithUtils.stringToObject(raw);
+            }
             applyOutcomeStatus(data);
         }
 
@@ -943,7 +949,9 @@ async function createChatCardGeneral(strRollTableName) {
             name: strTitle || (blnIsCrit ? "Critical Hit" : "Fumble"),
             description: strContent || ""
         };
-        strApplyOutcomeData = BlacksmithUtils.objectToString(APPLYDATA) || JSON.stringify(APPLYDATA);
+        // JSON + URI encoding: survives any prose (quotes, =, |, HTML) that
+        // would corrupt the legacy key=value|key=value format.
+        strApplyOutcomeData = encodeURIComponent(JSON.stringify(APPLYDATA));
         strApplyOutcomeLabel = blnIsCrit ? "Apply Critical" : "Apply Fumble";
         strApplyOutcomeIcon = blnIsCrit ? "fa-burst" : "fa-heart-crack";
     }
