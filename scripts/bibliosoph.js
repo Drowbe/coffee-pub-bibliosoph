@@ -548,6 +548,15 @@ Hooks.on("ready", async () => {
 
         }
 
+        // CHECK FOR APPLY CRITICAL / FUMBLE BUTTON (closest() so clicks on
+        // the inner icon land too)
+        const applyOutcomeButton = event.target.closest?.('.coffee-pub-bibliosoph-button-apply-outcome');
+        if (applyOutcomeButton) {
+            const raw = applyOutcomeButton.getAttribute('data-effect');
+            const data = BlacksmithUtils.stringToObject(raw) || JSON.parse(raw);
+            applyOutcomeStatus(data);
+        }
+
     });
 
     //************* ITEM ROLLS *************
@@ -922,6 +931,22 @@ async function createChatCardGeneral(strRollTableName) {
     const response = await fetch(templatePath);
     const templateText = await response.text();
     const template = Handlebars.compile(templateText);
+    // Apply button: crit/fumble cards carry their result so it can be
+    // applied as a status effect on a targeted token straight from the card.
+    let strApplyOutcomeData = "";
+    let strApplyOutcomeLabel = "";
+    let strApplyOutcomeIcon = "";
+    if ((BIBLIOSOPH.CARDTYPECRIT || BIBLIOSOPH.CARDTYPEFUMBLE) && (strTitle || strContent)) {
+        const blnIsCrit = BIBLIOSOPH.CARDTYPECRIT;
+        const APPLYDATA = {
+            kind: blnIsCrit ? "crit" : "fumble",
+            name: strTitle || (blnIsCrit ? "Critical Hit" : "Fumble"),
+            description: strContent || ""
+        };
+        strApplyOutcomeData = BlacksmithUtils.objectToString(APPLYDATA) || JSON.stringify(APPLYDATA);
+        strApplyOutcomeLabel = blnIsCrit ? "Apply Critical" : "Apply Fumble";
+        strApplyOutcomeIcon = blnIsCrit ? "fa-burst" : "fa-heart-crack";
+    }
     // Pass the data to the template
     const CARDDATA = {
         userName: strUserName,
@@ -941,8 +966,11 @@ async function createChatCardGeneral(strRollTableName) {
         arrPrivateRecipients,
         privateRecipientsCompressed,
         strRecipients, //used for the hidden input for replies
-        hasSectionContent: !!(strAction || (arrPrivateRecipients && arrPrivateRecipients.length)),
-    }; 
+        applyoutcome: strApplyOutcomeData,
+        applyoutcomelabel: strApplyOutcomeLabel,
+        applyoutcomeicon: strApplyOutcomeIcon,
+        hasSectionContent: !!(strAction || strApplyOutcomeData || (arrPrivateRecipients && arrPrivateRecipients.length)),
+    };
     // Play the Sound
     BlacksmithUtils.playSound(strSound,strVolume);
     // POST DEBUG
@@ -2017,6 +2045,45 @@ async function getInjuryDataFromJournalPages(compendiumName, journalName) {
     * @param {number} intDuration - How long the active effect lasts measured in seconds. 
     * @param {string} [strStatusEffect] - An optional additional status effect.
 */
+// Apply a rolled critical or fumble as a status effect on the TARGETED
+// token(s) (falling back to selected). No mechanical changes — a named,
+// described marker so the table doesn't forget what the card said.
+async function applyOutcomeStatus(data) {
+    const blnIsCrit = data?.kind !== 'fumble';
+    const strKindLabel = blnIsCrit ? 'Critical' : 'Fumble';
+
+    const targets = Array.from(game.user.targets ?? []);
+    const tokens = targets.length ? targets : canvas.tokens.controlled;
+    if (!tokens.length) {
+        ui.notifications.warn(`Target a token (or select one) to apply the ${strKindLabel.toLowerCase()} to.`);
+        return;
+    }
+
+    const effectName = `${strKindLabel}: ${data?.name || (blnIsCrit ? 'Critical Hit' : 'Fumble')}`;
+    const effectImg = blnIsCrit
+        ? "icons/skills/wounds/blood-spurt-spray-red.webp"
+        : "icons/skills/wounds/injury-pain-body-orange.webp";
+    for (const token of tokens) {
+        const actor = token.actor;
+        if (!actor) continue;
+        if (!actor.isOwner) {
+            ui.notifications.warn(`You do not have permission to modify ${token.name}.`);
+            continue;
+        }
+        if (actor.effects.some((e) => e.name === effectName)) {
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `${token.name} already has "${effectName}", skipping`, "", false, false);
+            continue;
+        }
+        await actor.createEmbeddedDocuments("ActiveEffect", [{
+            name: effectName,
+            img: effectImg,
+            description: data?.description || "",
+            duration: {},
+        }]);
+        ui.notifications.info(`Applied "${effectName}" to ${token.name}.`);
+    }
+}
+
 async function applyActiveEffect(strLabel, strIcon, intDamage, intDuration, strStatusEffect) {
     BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Applying active effects: " + strLabel, "", false, false);
     

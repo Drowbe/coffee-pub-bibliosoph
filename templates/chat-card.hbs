@@ -256,6 +256,11 @@
                 <button id="cards-button-cardsdark" title="Apply this injury to the selected token..." class="coffee-pub-bibliosoph-button-injury" data-effect="{{arreffect}}" style="width: 100%;"><i class="fa-solid {{iconStyle}}"></i>{{buttontext}}</button>
             {{/if}}
 
+            <!-- APPLY CRITICAL / FUMBLE BUTTON -->
+            {{#if applyoutcome}}
+                <button id="cards-button-cardsdark" title="Apply this result as a status effect to the targeted token..." class="coffee-pub-bibliosoph-button-apply-outcome" data-effect="{{applyoutcome}}" style="width: 100%;"><i class="fa-solid {{applyoutcomeicon}}"></i>{{applyoutcomelabel}}</button>
+            {{/if}}
+
             <!-- PRIVATE MESSAGE -->
             {{#if arrPrivateRecipients}}
                 <!-- Reply Button -->
