@@ -5,6 +5,37 @@
 - Play-test the automation end to end: threshold trigger on damage application, toast to all clients, click-to-roll arming on the injured player, injury card by damage type, Apply Injury. Fix what testing surfaces.
 - ~~Migrate injury detection to Blacksmith's `damageResolved` event~~ — DONE (Blacksmith shipped it same-day; manager-injury-triggers.js subscribes via `rolls.on('damageResolved')`).
 - Once Blacksmith wires MIDI attacker/item attribution into `damageResolved`, add `{attacker}`/`{weapon}` codes to the injury toast.
+- ~~Decide the 13 flavor-only status effects~~ — **DONE (2026-07-26): all recommendations below applied (including burning) and the compendium rebuilt.** Six injuries intentionally keep flavor-only text (confused ×3 minors, disoriented ×2, clumsy fingers) — they display on cards and skip gracefully; the schema split (`condition` id + `flavor` text) remains the long-term answer for those. Table kept for the record:
+
+  | Category | Injury | Current | Recommendation | Why |
+  |---|---|---|---|---|
+  | bludgeoning | Cranial Cacophony (major) | confused | `stunned` | Major head trauma deserves teeth; closest 5e analog |
+  | psychic | Cerebral Overload (major) | confused | `stunned` | Same — major mental disruption |
+  | psychic | Psionic Meltdown (major) | confused | `stunned` | Same |
+  | psychic | Brain Fizzle (minor) | confused | none (flavor) | Stunned is too brutal for a minor; no light 5e analog |
+  | psychic | Mindbender's Migraine (minor) | confused | none (flavor) | Same |
+  | psychic | Mindquake Madness (minor) | confused | none (flavor) | Same |
+  | psychic | Cerebral Backfire (moderate) | disoriented | none (flavor) | Memory lapses have no 5e condition |
+  | psychic | Psionic Feedback (moderate) | disoriented | none (flavor) | Same |
+  | cold | Frostbitten Fingertips (minor) | clumsy fingers | none (flavor) | Numb fingers have no 5e condition; great card text |
+  | cold | Frozen Heartbeat (moderate) | chilled to the bone | `exhaustion` | DMG extreme-cold rules deal exhaustion — perfect fit |
+  | cold | Slippery Slope Syndrome (minor) | sluggish | `exhaustion` | Same logic; drop to none if too harsh for a minor |
+  | thunder | Electric Shockwave (major) | twitching | `stunned` | Uncontrollable muscle spasms, major severity |
+  | thunder | Thunderous Migraine (moderate) | headache | `deafened` | Booming thunder → deafened is the thematic condition |
+
+  **Upgrade candidates** — currently `none`, but a dnd5e 5.x condition fits well:
+
+  | Category | Injury | Recommendation | Why |
+  |---|---|---|---|
+  | lightning | Thunderous Tinnitus (minor) | `deafened` | It is literally tinnitus |
+  | slashing | Bleeding Edge (moderate) | `bleeding` | The name says it; 5.x has the condition |
+  | slashing | Jagged Gash (moderate) | `bleeding` | Open wound |
+  | slashing | Rending Rift (moderate) | `bleeding` | "Gaping chasm of agony" — it bleeds |
+  | slashing | Sashimi Slice (moderate) | `bleeding` | Same |
+  | necrotic | Decaying Limb (moderate) | `diseased` | Rotting flesh → diseased |
+  | necrotic | Wight's Weakness (minor) | `exhaustion` | Life-drain weakness is exhaustion's whole thing |
+  | fire | Fiery Footsies (minor) | `burning` (maybe) | 5.x burning deals ongoing fire damage — fun but real teeth for a minor; GM's call |
+- **Tighten the injury definition schema and code against it.** Today an injury's mechanical fields (damage, duration, statuseffect, severity, odds) are loosely-typed strings parsed out of journal HTML, with unclear semantics we've had to reverse-engineer (is damage one-time or ongoing? is duration seconds? which status ids are legal?). Define the schema explicitly — field names, types, units, allowed condition ids from CONFIG.statusEffects, what severity/odds mean — validate on read, and make the apply path consume only the validated shape. This is the contract half of the data-model rebuild (`plan-injuries-datamodel.md`): the typed JournalEntryPage model should implement this schema, not invent another one.
 
 ## Blacksmith Requests (NEXT PRIORITY once injuries are good to go)
 

@@ -14,19 +14,14 @@
 //   - The effect carries name, image, and a DESCRIPTION (visible on the
 //     effect sheet and dnd5e tooltips) so the table never forgets what
 //     the card said.
-//   - Optional mechanics: immediate HP damage, duration in seconds, and
-//     an official condition toggled via DFreds Convenient Effects when
-//     that module is active.
+//   - Optional mechanics: immediate one-time HP damage, duration in
+//     seconds, and an official condition applied via CORE Foundry
+//     (Actor#toggleStatusEffect, validated against CONFIG.statusEffects).
+//     DFreds Convenient Effects is used when active, but is never
+//     required — no third-party dependency.
 // ==================================================================
 
 import { MODULE } from './const.js';
-
-/** Official dnd5e conditions eligible for the DFreds toggle. */
-const OFFICIAL_STATUS_EFFECTS = [
-    'blinded', 'charmed', 'deafened', 'frightened', 'grappled',
-    'incapacitated', 'invisible', 'paralyzed', 'petrified', 'poisoned',
-    'prone', 'restrained', 'stunned', 'unconscious', 'exhaustion'
-];
 
 function log(message, data = '', debug = true, notify = false) {
     if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
@@ -47,8 +42,8 @@ function log(message, data = '', debug = true, notify = false) {
  * @param {string} config.img              Effect/token icon image path
  * @param {string} [config.description]    Text/HTML stored on the effect
  * @param {number|null} [config.durationSeconds]  Effect duration; null = until removed
- * @param {number|null} [config.damage]    Immediate HP loss applied via the effect
- * @param {string|null} [config.statusEffect]     Official condition name to toggle via DFreds
+ * @param {number|null} [config.damage]    One-time HP damage dealt on apply
+ * @param {string|null} [config.statusEffect]     Official condition name (core toggle; DFreds when active)
  * @param {string} [config.kindLabel]      For user-facing warnings ("critical", "injury", ...)
  * @param {Actor[]|null} [config.explicitActors]  Known recipients; skips target/selection entirely
  * @returns {Promise<string[]>} Display names the effect is now on (including
@@ -108,26 +103,48 @@ export async function applyStatusToTokens({
             duration: Number.isFinite(durationSeconds) && durationSeconds > 0
                 ? { seconds: durationSeconds }
                 : {},
-            changes: Number.isFinite(damage) && damage > 0
-                ? [{ key: 'system.attributes.hp.value', mode: 2, value: `-${damage}` }]
-                : []
+            changes: []
         };
         await actor.createEmbeddedDocuments('ActiveEffect', [effectData]);
         ui.notifications.info(`Applied "${name}" to ${displayName}.`);
         applied.push(displayName);
 
-        // Official condition via DFreds Convenient Effects, when present
-        if (statusEffect && game.modules.get('dfreds-convenient-effects')?.active
-            && OFFICIAL_STATUS_EFFECTS.includes(String(statusEffect).toLowerCase())) {
-            const conditionName = String(statusEffect).charAt(0).toUpperCase() + String(statusEffect).slice(1).toLowerCase();
+        // One-time HP damage, dealt on apply as a direct update. This
+        // deliberately bypasses the damage pipeline (Actor#applyDamage) so
+        // an injury's own damage can never re-trigger the injury automation.
+        if (Number.isFinite(damage) && damage > 0) {
+            const hp = actor.system?.attributes?.hp;
+            if (hp) {
+                await actor.update({
+                    'system.attributes.hp.value': Math.max(0, (Number(hp.value) || 0) - damage)
+                });
+                log(`Dealt ${damage} HP to ${displayName} from "${name}"`, '', false, false);
+            }
+        }
+
+        // Official condition: DFreds Convenient Effects when active, CORE
+        // Foundry otherwise (Actor#toggleStatusEffect against the conditions
+        // the system registers in CONFIG.statusEffects). Never required.
+        if (statusEffect) {
+            const statusId = String(statusEffect).toLowerCase();
             try {
-                const hasCondition = actor.effects.some((e) => e.name === conditionName);
-                if (!hasCondition) {
-                    await game.dfreds.effectInterface.toggleEffect(conditionName, actor);
-                    log(`Toggled condition ${conditionName} on ${displayName}`, '', false, false);
+                if (game.modules.get('dfreds-convenient-effects')?.active && game.dfreds?.effectInterface) {
+                    const conditionName = statusId.charAt(0).toUpperCase() + statusId.slice(1);
+                    const hasCondition = actor.effects.some((e) => e.name === conditionName);
+                    if (!hasCondition) {
+                        await game.dfreds.effectInterface.toggleEffect(conditionName, actor);
+                        log(`Toggled condition ${conditionName} (DFreds) on ${displayName}`, '', false, false);
+                    }
+                } else if (CONFIG.statusEffects?.some((s) => s.id === statusId)) {
+                    if (!actor.statuses?.has(statusId)) {
+                        await actor.toggleStatusEffect(statusId, { active: true });
+                        log(`Toggled condition ${statusId} (core) on ${displayName}`, '', false, false);
+                    }
+                } else {
+                    log(`Unknown status effect "${statusEffect}" — not in CONFIG.statusEffects, skipped`, '', false, false);
                 }
             } catch (error) {
-                log(`Could not toggle condition ${conditionName}`, error?.message, false, false);
+                log(`Could not toggle condition ${statusId}`, error?.message, false, false);
             }
         }
     }
