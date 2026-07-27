@@ -101,7 +101,7 @@ const TOOLBAR_TOOLS = {
         }
     },
     'bibliosoph-injuries': {
-        icon: "fa-solid fa-bandage",
+        icon: "fa-solid fa-user-injured",
         name: "bibliosoph-injuries",
         title: "Injuries",
         zone: "rolls",

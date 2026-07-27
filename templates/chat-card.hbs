@@ -261,16 +261,17 @@
                 <button id="cards-button-cardsdark" title="Apply this result as a status effect to the targeted token..." class="coffee-pub-bibliosoph-button-apply-outcome" data-effect="{{applyoutcome}}" style="width: 100%;"><i class="fa-solid {{applyoutcomeicon}}"></i>{{applyoutcomelabel}}</button>
             {{/if}}
 
-            <!-- CHECK-UP / TREATMENT ROWS -->
-            {{#if treatmentrows}}
-                {{#each treatmentrows}}
-                    <div style="display: flex; gap: 8px; align-items: center; margin: 6px 0;">
-                        <img src="{{this.img}}" alt="" data-tooltip="{{this.tooltip}}" data-tooltip-direction="LEFT" style="width: 36px; height: 36px; border: none; flex: 0 0 auto; border-radius: 4px; cursor: help;" />
-                        <div style="flex: 1; min-width: 0;">
-                            <p style="margin: 0 0 3px 0;"><strong>{{this.name}}</strong>{{#if this.conditions}} <span style="font-size: 0.85em; opacity: 0.8;">— {{this.conditions}}</span>{{/if}}</p>
-                            <button id="cards-button-cardsdark" title="Remove this affliction and unwind its condition..." class="coffee-pub-bibliosoph-button-treat" data-treat="{{this.payload}}" style="width: 100%;"><i class="fa-solid fa-hand-holding-medical"></i>Treat</button>
+            <!-- CHECK-UP: ZONED TREATMENT ROWS -->
+            {{#if treatmentgroups}}
+                {{#each treatmentgroups}}
+                    <p style="margin: 10px 0 2px 0; text-transform: uppercase; font-size: 0.82em; letter-spacing: 0.5px; opacity: 0.8; border-bottom: 1px solid rgba(0,0,0,0.25);">{{this.label}}</p>
+                    {{#each this.rows}}
+                        <div style="display: flex; gap: 8px; align-items: center; margin: 4px 0;">
+                            <img src="{{this.img}}" alt="" data-tooltip="{{this.tooltip}}" data-tooltip-direction="LEFT" style="width: 30px; height: 30px; border: none; flex: 0 0 auto; border-radius: 4px; cursor: help;" />
+                            <p style="flex: 1; min-width: 0; margin: 0;"><strong>{{this.name}}</strong>{{#if this.conditions}} <span style="font-size: 0.85em; opacity: 0.8;">— {{this.conditions}}</span>{{/if}}</p>
+                            <button id="cards-button-cardsdark" title="Treat: remove this affliction and unwind its condition" class="coffee-pub-bibliosoph-button-treat" data-treat="{{this.payload}}" style="flex: 0 0 auto; width: 38px; padding: 4px 0;"><i class="fa-solid fa-bandage"></i></button>
                         </div>
-                    </div>
+                    {{/each}}
                 {{/each}}
             {{/if}}
 

@@ -400,9 +400,9 @@ async function createChatCardTreatment(token) {
     };
 
     const treatmentrows = afflictions.map((effect) => {
+        const flag = effect.getFlag(MODULE.ID, 'outcomeBurst');
         const statusIds = new Set(effect.statuses ?? []);
-        const flagCondition = effect.getFlag(MODULE.ID, 'outcomeBurst')?.condition;
-        if (flagCondition) statusIds.add(flagCondition);
+        if (flag?.condition) statusIds.add(flag.condition);
         const conditions = [...statusIds].map(conditionLabel).join(', ');
         // Hover card for the row icon: name, conditions, and the effect's
         // full description (injury text + Treatment prose ride along).
@@ -414,6 +414,7 @@ async function createChatCardTreatment(token) {
             + (description ? `<hr>${description}` : '')
             + `</section>`;
         return {
+            kind: ['injury', 'crit', 'fumble'].includes(flag?.kind) ? flag.kind : 'other',
             name: effect.name,
             img: effect.img || 'icons/svg/aura.svg',
             conditions,
@@ -425,6 +426,18 @@ async function createChatCardTreatment(token) {
             }))
         };
     });
+
+    // Four zones, fixed order: injuries (bundles), then the d20 outcomes,
+    // then loose effects & conditions. Empty zones are omitted.
+    const GROUP_ORDER = [
+        { key: 'injury', label: 'Injuries' },
+        { key: 'crit', label: 'Criticals' },
+        { key: 'fumble', label: 'Fumbles' },
+        { key: 'other', label: 'Effects & Conditions' }
+    ];
+    const treatmentgroups = GROUP_ORDER
+        .map((g) => ({ label: g.label, rows: treatmentrows.filter((r) => r.kind === g.key) }))
+        .filter((g) => g.rows.length);
 
     // Diagnosis narrative from the actor's state
     const hp = actor.system?.attributes?.hp;
@@ -452,8 +465,8 @@ async function createChatCardTreatment(token) {
         playerType: 'Patient',
         characterName: healthDesc.charAt(0).toUpperCase() + healthDesc.slice(1),
         content: diagnosis,
-        treatmentrows,
-        hasSectionContent: treatmentrows.length > 0,
+        treatmentgroups,
+        hasSectionContent: treatmentgroups.length > 0,
     };
     BlacksmithUtils.playSound("modules/coffee-pub-blacksmith/sounds/notification.mp3", "0.7");
     return template(CARDDATA);
@@ -2306,7 +2319,7 @@ async function markTreatButtonDone(buttonEl, raw) {
             .find((b) => b.getAttribute('data-treat') === raw);
         if (!button) return;
         const stamp = doc.createElement('div');
-        stamp.style.cssText = 'width:100%; text-align:center; font-style:italic; opacity:0.85; padding:4px 0;';
+        stamp.style.cssText = 'flex:0 0 auto; text-align:center; font-style:italic; opacity:0.85; padding:4px 6px; white-space:nowrap;';
         stamp.textContent = '✓ Treated';
         button.replaceWith(stamp);
         await message.update({ content: doc.body.innerHTML });
