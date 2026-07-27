@@ -83,8 +83,10 @@ export class InjuryTriggerManager {
         const amount = Number(outcome?.amount);
         if (!Number.isFinite(amount) || amount <= 0) return;
 
+        // Automation ladder: 'off' and 'manual' both mean no detection —
+        // manual keeps the toolbar selector for hand-rolled injuries.
         const automation = getSetting('injuryAutomation', 'click');
-        if (automation === 'off') return;
+        if (automation === 'off' || automation === 'manual') return;
 
         const actor = game.actors.get(outcome?.actorId ?? '')
             ?? canvas?.tokens?.get(outcome?.tokenId ?? '')?.actor;

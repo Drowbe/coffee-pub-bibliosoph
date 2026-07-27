@@ -400,21 +400,21 @@ export const registerSettings = () => {
 			'shake': 'Shake — rattles in with a wobble',
 			'pulse': 'Pulse — subtle breathe (persistent toasts)'
 		};
-		// Automation also fixes the toast duration: 'click' stays until
-		// clicked (GM side); the other toast modes self-dismiss after 3s.
-		const automationChoices = {
-			'off': 'Off — no toast or rolls',
-			'manual': 'Toast — manual rolls',
-			'click': 'Toast — click to roll',
-			'auto': 'Toast — automatic rolls'
-		};
-		// One dropdown covers all toolbar-visibility combos (manual roll button)
-		const toolbarChoices = {
-			'none': 'None',
-			'foundry': 'Foundry Toolbar',
-			'coffeepub': 'Coffee Pub Toolbar',
-			'both': 'Both'
-		};
+		// The automation ladder: how much the module does for you.
+		// off    = feature unused (toolbar button hidden, no detection)
+		// manual = toolbar button only — no detection, no toasts
+		// click  = detection on; toast with a roll button for the owner
+		// auto   = detection on; toast + card posts automatically
+		// Labels are generated per feature so each dropdown speaks its
+		// own noun ("Detect injuries...", "Detect criticals...").
+		const automationChoicesFor = (singular, plural) => ({
+			'off': `Off: ${singular} automations disabled.`,
+			'manual': `Manual ${plural}: Roll ${plural.toLowerCase()} from the toolbar.`,
+			'click': `Automated Detection: Detect ${plural.toLowerCase()}, show a Toast Button to roll.`,
+			'auto': `Fully Automated: Detect ${plural.toLowerCase()} and automatically roll.`
+		});
+		// Toolbar buttons need no settings: any Automation mode other than
+		// 'off' shows the feature's button in BOTH toolbars.
 
 		// ** CRITICAL **
 
@@ -447,7 +447,7 @@ export const registerSettings = () => {
 			requiresReload: false,
 			type: String,
 			default: 'click',
-			choices: automationChoices
+			choices: automationChoicesFor('Critical', 'Criticals')
 		});
 		// Applies to crits AND fumbles. Filters on WHAT is rolling (the
 		// actor type), not which account controls it.
@@ -465,18 +465,16 @@ export const registerSettings = () => {
 				'npcs': 'NPCs and Monsters'
 			}
 		});
-		// -- Critical Toolbar (manual roll button) --
-		game.settings.register(MODULE.ID, 'criticalToolbar', {
-			name: MODULE.ID + '.criticalToolbar-Label',
-			hint: MODULE.ID + '.criticalToolbar-Hint',
-			scope: 'user',
+		// ---------- SUBHEADING: Chat Card ----------
+		game.settings.register(MODULE.ID, "headingH3CriticalChatCard", {
+			name: MODULE.ID + '.headingH3CriticalChatCard-Label',
+			hint: MODULE.ID + '.headingH3CriticalChatCard-Hint',
+			scope: "client",
 			config: true,
-			requiresReload: true,
+			default: "",
 			type: String,
-			default: 'coffeepub',
-			choices: toolbarChoices
 		});
-		// -- Critical Theme --
+		// -------------------------------------
 		game.settings.register(MODULE.ID, 'cardThemeCritical', {
 			name: MODULE.ID + '.cardThemeCritical-Label',
 			hint: MODULE.ID + '.cardThemeCritical-Hint',
@@ -623,20 +621,18 @@ export const registerSettings = () => {
 			requiresReload: false,
 			type: String,
 			default: 'click',
-			choices: automationChoices
+			choices: automationChoicesFor('Fumble', 'Fumbles')
 		});
-		// -- Fumble Toolbar (manual roll button) --
-		game.settings.register(MODULE.ID, 'fumbleToolbar', {
-			name: MODULE.ID + '.fumbleToolbar-Label',
-			hint: MODULE.ID + '.fumbleToolbar-Hint',
-			scope: 'user',
+		// ---------- SUBHEADING: Chat Card ----------
+		game.settings.register(MODULE.ID, "headingH3FumbleChatCard", {
+			name: MODULE.ID + '.headingH3FumbleChatCard-Label',
+			hint: MODULE.ID + '.headingH3FumbleChatCard-Hint',
+			scope: "client",
 			config: true,
-			requiresReload: true,
+			default: "",
 			type: String,
-			default: 'coffeepub',
-			choices: toolbarChoices
 		});
-		// -- Fumble Theme --
+		// -------------------------------------
 		game.settings.register(MODULE.ID, 'cardThemeFumble', {
 			name: MODULE.ID + '.cardThemeFumble-Label',
 			hint: MODULE.ID + '.cardThemeFumble-Hint',
@@ -786,7 +782,7 @@ export const registerSettings = () => {
 			requiresReload: false,
 			type: String,
 			default: 'click',
-			choices: automationChoices
+			choices: automationChoicesFor('Injury', 'Injuries')
 		});
 		game.settings.register(MODULE.ID, 'injuryThreshold', {
 			name: MODULE.ID + '.injuryThreshold-Label',
@@ -812,17 +808,16 @@ export const registerSettings = () => {
 				'npcs': 'NPCs and Monsters'
 			}
 		});
-		// -- Injuries Toolbar (manual selector button) --
-		game.settings.register(MODULE.ID, 'injuriesToolbar', {
-			name: MODULE.ID + '.injuriesToolbar-Label',
-			hint: MODULE.ID + '.injuriesToolbar-Hint',
-			scope: 'user',
+		// ---------- SUBHEADING: Chat Card ----------
+		game.settings.register(MODULE.ID, "headingH3InjuriesChatCard", {
+			name: MODULE.ID + '.headingH3InjuriesChatCard-Label',
+			hint: MODULE.ID + '.headingH3InjuriesChatCard-Hint',
+			scope: "client",
 			config: true,
-			requiresReload: true,
+			default: "",
 			type: String,
-			default: 'coffeepub',
-			choices: toolbarChoices
 		});
+		// -------------------------------------
 		game.settings.register(MODULE.ID,'injuryCompendium', {
 			name: MODULE.ID + '.injuryCompendium-Label',
 			hint: MODULE.ID + '.injuryCompendium-Hint',

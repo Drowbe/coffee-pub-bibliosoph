@@ -692,8 +692,9 @@ Hooks.on('blacksmithUpdated', (newBlacksmith) => {
 // ** HOOK TEST INJURY CHAT BUTTON
 // ************************************
 
-Hooks.on("renderChatMessage", (message, html) => {
-    // v13: Detect and convert jQuery to native DOM if needed
+Hooks.on("renderChatMessageHTML", (message, html) => {
+    // renderChatMessageHTML delivers a native HTMLElement; keep the jQuery
+    // normalization as a belt-and-suspenders for any shimmed callers.
     let nativeHtml = html;
     if (html && (html.jquery || typeof html.find === 'function')) {
         nativeHtml = html[0] || html.get?.(0) || html;

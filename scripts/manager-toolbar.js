@@ -69,9 +69,9 @@ const TOOLBAR_TOOLS = {
         zone: "rolls",
         order: 2,
         moduleId: "coffee-pub-bibliosoph",
-        enabled: () => getSetting('criticalToolbar', 'coffeepub') !== 'none',
-        onCoffeePub: () => ['coffeepub', 'both'].includes(getSetting('criticalToolbar', 'coffeepub')),
-        onFoundry: () => ['foundry', 'both'].includes(getSetting('criticalToolbar', 'coffeepub')),
+        enabled: () => getSetting('critAutomation', 'click') !== 'off',
+        onCoffeePub: () => true,
+        onFoundry: () => true,
         onClick: () => {
             // Manual roll of the critical table (same path as click-to-roll)
             if (typeof window.triggerCriticalRoll === 'function') {
@@ -88,9 +88,9 @@ const TOOLBAR_TOOLS = {
         zone: "rolls",
         order: 3,
         moduleId: "coffee-pub-bibliosoph",
-        enabled: () => getSetting('fumbleToolbar', 'coffeepub') !== 'none',
-        onCoffeePub: () => ['coffeepub', 'both'].includes(getSetting('fumbleToolbar', 'coffeepub')),
-        onFoundry: () => ['foundry', 'both'].includes(getSetting('fumbleToolbar', 'coffeepub')),
+        enabled: () => getSetting('fumbleAutomation', 'click') !== 'off',
+        onCoffeePub: () => true,
+        onFoundry: () => true,
         onClick: () => {
             // Manual roll of the fumble table (same path as click-to-roll)
             if (typeof window.triggerFumbleRoll === 'function') {
@@ -108,9 +108,9 @@ const TOOLBAR_TOOLS = {
         order: 4,
         moduleId: "coffee-pub-bibliosoph",
         gmOnly: true,  // Only GMs can see this tool
-        enabled: () => getSetting('injuriesToolbar', 'coffeepub') !== 'none',
-        onCoffeePub: () => ['coffeepub', 'both'].includes(getSetting('injuriesToolbar', 'coffeepub')),
-        onFoundry: () => ['foundry', 'both'].includes(getSetting('injuriesToolbar', 'coffeepub')),
+        enabled: () => getSetting('injuryAutomation', 'click') !== 'off',
+        onCoffeePub: () => true,
+        onFoundry: () => true,
         onClick: () => {
             // Manual injury selector (same card flow as always)
             if (typeof window.triggerInjuriesRoll === 'function') {

@@ -84,9 +84,11 @@ export class RollToastManager {
         const type = outcome?.isCritical ? 'crit' : (outcome?.isFumble ? 'fumble' : null);
         if (!type) return;
 
-        // Automation mode is the master switch: 'off' = no toast, no rolls.
+        // Automation ladder: 'off' and 'manual' both mean no detection —
+        // manual keeps the toolbar button for hand-rolled cards, off hides
+        // even that. Only 'click' and 'auto' automate.
         const automation = getSetting(`${type}Automation`, 'click');
-        if (automation === 'off') return;
+        if (automation === 'off' || automation === 'manual') return;
         if (!this._passesSourceFilter(outcome)) return;
 
         const payload = this._buildPayload(type, outcome);
@@ -111,7 +113,7 @@ export class RollToastManager {
         if (broadcastable) this._broadcast(payload);
         this._showLocal(payload);
 
-        // 'auto' posts the table card immediately (GM side).
+        // 'auto' (fully automated) posts the table card immediately (GM side).
         if (automation === 'auto') this._rollCard(type);
     }
 

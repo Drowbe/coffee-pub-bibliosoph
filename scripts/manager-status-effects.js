@@ -17,8 +17,7 @@
 //   - Optional mechanics: immediate one-time HP damage, duration in
 //     seconds, and an official condition applied via CORE Foundry
 //     (Actor#toggleStatusEffect, validated against CONFIG.statusEffects).
-//     DFreds Convenient Effects is used when active, but is never
-//     required — no third-party dependency.
+//     No third-party dependency.
 // ==================================================================
 
 import { MODULE } from './const.js';
@@ -96,6 +95,27 @@ export async function applyStatusToTokens({
             continue;
         }
 
+        // Resolve the condition up front. Real conditions (in
+        // CONFIG.statusEffects) toggle as their own effect after ours is
+        // created. dnd5e "pseudo" conditions (bleeding, burning, diseased —
+        // rules-reference hazards the system deliberately makes
+        // non-toggleable) are conveyed BY the injury effect itself via its
+        // statuses array, which is exactly how dnd5e means them to be used:
+        // actor.statuses reports them, and the injury's own icon marks the
+        // token.
+        let toggleId = null;
+        let pseudoId = null;
+        if (statusEffect) {
+            const statusId = String(statusEffect).toLowerCase();
+            if (CONFIG.statusEffects?.some((s) => s.id === statusId)) {
+                toggleId = statusId;
+            } else if (CONFIG.DND5E?.conditionTypes?.[statusId]) {
+                pseudoId = statusId;
+            } else if (statusId !== 'none') {
+                log(`Unknown status effect "${statusEffect}" — not a condition or dnd5e pseudo-condition, skipped`, '', false, false);
+            }
+        }
+
         const effectData = {
             name,
             img,
@@ -103,9 +123,11 @@ export async function applyStatusToTokens({
             duration: Number.isFinite(durationSeconds) && durationSeconds > 0
                 ? { seconds: durationSeconds }
                 : {},
+            statuses: pseudoId ? [pseudoId] : [],
             changes: []
         };
         await actor.createEmbeddedDocuments('ActiveEffect', [effectData]);
+        if (pseudoId) log(`"${name}" conveys ${pseudoId} (dnd5e pseudo-condition) on ${displayName}`, '', false, false);
         ui.notifications.info(`Applied "${name}" to ${displayName}.`);
         applied.push(displayName);
 
@@ -122,29 +144,18 @@ export async function applyStatusToTokens({
             }
         }
 
-        // Official condition: DFreds Convenient Effects when active, CORE
-        // Foundry otherwise (Actor#toggleStatusEffect against the conditions
-        // the system registers in CONFIG.statusEffects). Never required.
-        if (statusEffect) {
-            const statusId = String(statusEffect).toLowerCase();
+        // Real condition via CORE Foundry only: Actor#toggleStatusEffect.
+        // (DFreds was dropped after testing: its toggle API rejected our calls
+        // and it lacks the dnd5e 5.x conditions. Core conditions render fine
+        // in DFreds' panel when that module is active.)
+        if (toggleId) {
             try {
-                if (game.modules.get('dfreds-convenient-effects')?.active && game.dfreds?.effectInterface) {
-                    const conditionName = statusId.charAt(0).toUpperCase() + statusId.slice(1);
-                    const hasCondition = actor.effects.some((e) => e.name === conditionName);
-                    if (!hasCondition) {
-                        await game.dfreds.effectInterface.toggleEffect(conditionName, actor);
-                        log(`Toggled condition ${conditionName} (DFreds) on ${displayName}`, '', false, false);
-                    }
-                } else if (CONFIG.statusEffects?.some((s) => s.id === statusId)) {
-                    if (!actor.statuses?.has(statusId)) {
-                        await actor.toggleStatusEffect(statusId, { active: true });
-                        log(`Toggled condition ${statusId} (core) on ${displayName}`, '', false, false);
-                    }
-                } else {
-                    log(`Unknown status effect "${statusEffect}" — not in CONFIG.statusEffects, skipped`, '', false, false);
+                if (!actor.statuses?.has(toggleId)) {
+                    await actor.toggleStatusEffect(toggleId, { active: true });
+                    log(`Toggled condition ${toggleId} (core) on ${displayName}`, '', false, false);
                 }
             } catch (error) {
-                log(`Could not toggle condition ${statusId}`, error?.message, false, false);
+                log(`Could not toggle condition ${toggleId}`, error?.message, false, false);
             }
         }
     }
