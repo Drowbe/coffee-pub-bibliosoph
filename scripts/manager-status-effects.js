@@ -45,6 +45,7 @@ function log(message, data = '', debug = true, notify = false) {
  * @param {string|null} [config.statusEffect]     Official condition name (core toggle; DFreds when active)
  * @param {string} [config.kindLabel]      For user-facing warnings ("critical", "injury", ...)
  * @param {Actor[]|null} [config.explicitActors]  Known recipients; skips target/selection entirely
+ * @param {{category: string}|null} [config.burst]  Tag the effect so every client plays the injury burst on the token
  * @returns {Promise<string[]>} Display names the effect is now on (including
  *          recipients who already carried it) — empty when nothing applied.
  */
@@ -56,7 +57,8 @@ export async function applyStatusToTokens({
     damage = null,
     statusEffect = null,
     kindLabel = 'effect',
-    explicitActors = null
+    explicitActors = null,
+    burst = null
 } = {}) {
     if (!name) return [];
 
@@ -124,7 +126,10 @@ export async function applyStatusToTokens({
                 ? { seconds: durationSeconds }
                 : {},
             statuses: pseudoId ? [pseudoId] : [],
-            changes: []
+            changes: [],
+            // The burst flag makes createActiveEffect play the canvas
+            // injury burst on every connected client (manager-injury-effects)
+            ...(burst ? { flags: { [MODULE.ID]: { injuryBurst: { category: burst.category ?? 'General', name } } } } : {})
         };
         await actor.createEmbeddedDocuments('ActiveEffect', [effectData]);
         if (pseudoId) log(`"${name}" conveys ${pseudoId} (dnd5e pseudo-condition) on ${displayName}`, '', false, false);

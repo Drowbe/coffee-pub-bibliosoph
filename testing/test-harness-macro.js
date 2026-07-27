@@ -264,6 +264,20 @@ const SCENARIOS = [
     },
     {
         tab: 'tools',
+        label: '💢 Injury burst preview (random type → subject)',
+        run: async () => {
+            const token = getSubjectToken();
+            if (!token) return;
+            const { playInjuryBurst } = await import(`${MODULE_PATH}/manager-injury-effects.js`);
+            const cats = ['Acid', 'Bludgeoning', 'Cold', 'Fire', 'Force', 'Lightning', 'Necrotic',
+                'Piercing', 'Poison', 'Psychic', 'Radiant', 'Slashing', 'Thunder', 'General'];
+            const cat = cats[Math.floor(Math.random() * cats.length)];
+            playInjuryBurst(token, cat, `${cat} Injury`);
+            ui.notifications.info(`Burst preview: ${cat} (preview is local-only; real applies burst on every client).`);
+        }
+    },
+    {
+        tab: 'tools',
         label: '🔎 Audit compendium status effects (live data)',
         run: async () => {
             const packId = game.settings.get('coffee-pub-bibliosoph', 'injuryCompendium');

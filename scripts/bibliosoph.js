@@ -161,6 +161,14 @@ Hooks.once('ready', async () => {
             console.error(MODULE.ID + ' | Failed to initialize Injury Triggers:', error);
         }
 
+        // INJURY EFFECTS: canvas burst on injury application (every client)
+        try {
+            const { InjuryEffectsManager } = await import('./manager-injury-effects.js');
+            InjuryEffectsManager.initialize();
+        } catch (error) {
+            console.error(MODULE.ID + ' | Failed to initialize Injury Effects:', error);
+        }
+
         // NOW register toolbar tools after module registration is complete
         // In v13, we need to wait for Blacksmith to be fully ready
         // Try multiple times with increasing delays to ensure API is available
@@ -293,7 +301,8 @@ export async function rollInjuryCard(category, target = null) {
                     damage: Number(data.damage) || null,
                     statusEffect: data.statuseffect || null,
                     kindLabel: 'injury',
-                    explicitActors: [targetActor]
+                    explicitActors: [targetActor],
+                    burst: { category: data.category || 'General' }
                 });
                 if (applied.length) {
                     const stamp = doc.createElement('div');
@@ -619,7 +628,8 @@ Hooks.on("ready", async () => {
                 damage: Number(arrEffectData.damage) || null,
                 statusEffect: arrEffectData.statuseffect || null,
                 kindLabel: 'injury',
-                explicitActors
+                explicitActors,
+                burst: { category: arrEffectData.category || 'General' }
             });
             await markCardButtonApplied(injuryButton, '.coffee-pub-bibliosoph-button-injury', applied);
         }
@@ -1221,6 +1231,7 @@ async function createChatCardInjury(category, target = null) {
         damage: intInjuryDamage,
         duration: intInjuryDuration,
         statuseffect: strStatusEffect,
+        category: strInjuryCategory || 'General',
         targetActorId: target?.actorId ?? null,
         targetTokenId: target?.tokenId ?? null,
         description: [
