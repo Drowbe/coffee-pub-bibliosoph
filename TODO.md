@@ -2,7 +2,7 @@
 
 ## Injuries (CURRENT FOCUS — fix and test)
 
-- **ON DECK: "Automatically Apply Injury" checkbox** — unchecked by default, placed right after Automation in the Injuries Configuration section. When checked (and Automation is Fully Automated), the injury card skips the Apply button and instead shows the "✓ Applied to X" stamp directly — the injury lands on the damaged actor with no clicks at all. Plumbing already exists: `rollInjuryCard` knows the target, and `applyStatusToTokens` + the stamp are shared.
+- ~~ON DECK: "Automatically Apply Injury" checkbox~~ — DONE (2026-07-26): `injuryAutoApply` (default off) sits right after Automation. Automation-created cards (click or fully automated) apply to the damaged actor before posting and arrive pre-stamped "✓ Applied to X"; manual selector cards keep the button (no known target). Falls back to the normal button on any failure.
 
 - Play-test the automation end to end: threshold trigger on damage application, toast to all clients, click-to-roll arming on the injured player, injury card by damage type, Apply Injury. Fix what testing surfaces.
 - ~~Migrate injury detection to Blacksmith's `damageResolved` event~~ — DONE (Blacksmith shipped it same-day; manager-injury-triggers.js subscribes via `rolls.on('damageResolved')`).

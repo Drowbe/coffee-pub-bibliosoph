@@ -228,6 +228,8 @@
 		"headingH3InjuriesChatCard-Hint": "",
 		"injuryAutomation-Label": "Automation",
 		"injuryAutomation-Hint": "",
+		"injuryAutoApply-Label": "Automatically Apply Injury",
+		"injuryAutoApply-Hint": "Automation-created injury cards skip the Apply button — the injury lands on the damaged character immediately and the card shows who it was applied to.",
 		"injuryThreshold-Label": "Injury Threshold (% of Max HP)",
 		"injuryThreshold-Hint": "",
 		"injuryTriggerSource-Label": "Triggered By",

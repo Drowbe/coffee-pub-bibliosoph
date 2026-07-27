@@ -784,6 +784,15 @@ export const registerSettings = () => {
 			default: 'click',
 			choices: automationChoicesFor('Injury', 'Injuries')
 		});
+		game.settings.register(MODULE.ID, 'injuryAutoApply', {
+			name: MODULE.ID + '.injuryAutoApply-Label',
+			hint: MODULE.ID + '.injuryAutoApply-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: false,
+			scope: 'world',
+			default: false,
+		});
 		game.settings.register(MODULE.ID, 'injuryThreshold', {
 			name: MODULE.ID + '.injuryThreshold-Label',
 			hint: MODULE.ID + '.injuryThreshold-Hint',

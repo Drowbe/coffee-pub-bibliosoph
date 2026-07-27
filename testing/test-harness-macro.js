@@ -106,9 +106,12 @@ function expectInjury(token, qualifies) {
     const blocked = sourceFilterBlocks('injuryTriggerSource', token);
     if (blocked) return `expect NOTHING (${blocked}).`;
     if (!qualifies) return 'expect NOTHING (below threshold).';
-    return automation === 'auto'
+    const autoApply = setting('injuryAutoApply', false)
+        ? ' Auto-Apply is ON: the card arrives pre-stamped and the injury is already applied.'
+        : '';
+    return (automation === 'auto'
         ? 'expect a toast AND the injury card immediately (fully automated).'
-        : 'expect a toast with a roll button for the owner.';
+        : 'expect a toast with a roll button for the owner.') + autoApply;
 }
 
 function expectAttack(kind, token) {
@@ -308,6 +311,7 @@ const settingsBox = (rows) => `
 const TAB_SETTINGS = {
     injuries: settingsBox(
         `Automation: <strong>${setting('injuryAutomation', 'click')}</strong> ·
+         Auto-Apply: <strong>${setting('injuryAutoApply', false) ? 'ON' : 'off'}</strong> ·
          Threshold: <strong>${threshold()}%</strong> of max HP ·
          Triggered By: <strong>${setting('injuryTriggerSource', 'players')}</strong>`
     ),

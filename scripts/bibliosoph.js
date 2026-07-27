@@ -267,9 +267,47 @@ export async function rollInjuryCard(category, target = null) {
     resetBibliosophVars();
     BIBLIOSOPH.CARDTYPEINJURY = true;
     BIBLIOSOPH.CARDTYPE = "General";
-    const compiledHtml = await createChatCardInjury(category, target);
+    let compiledHtml = await createChatCardInjury(category, target);
     resetBibliosophVars();
     if (!compiledHtml) return;
+
+    // Automatically Apply Injury: with a known target, apply BEFORE posting
+    // and swap the card's Apply button for the applied stamp. Runs on the
+    // rolling client (the injured player in click mode, the GM in auto),
+    // both of whom own the target actor. Any failure falls back to posting
+    // the normal button.
+    const autoApply = BlacksmithUtils.getSettingSafely(MODULE.ID, 'injuryAutoApply', false);
+    if (autoApply && (target?.actorId || target?.tokenId)) {
+        try {
+            const doc = new DOMParser().parseFromString(compiledHtml, 'text/html');
+            const button = doc.querySelector('.coffee-pub-bibliosoph-button-injury');
+            const targetActor = canvas?.tokens?.get(target.tokenId ?? '')?.actor
+                ?? game.actors.get(target.actorId ?? '');
+            if (button && targetActor) {
+                const data = JSON.parse(decodeURIComponent(button.getAttribute('data-effect')));
+                const applied = await applyStatusToTokens({
+                    name: data.name,
+                    img: data.icon,
+                    description: data.description || '',
+                    durationSeconds: Number(data.duration) || null,
+                    damage: Number(data.damage) || null,
+                    statusEffect: data.statuseffect || null,
+                    kindLabel: 'injury',
+                    explicitActors: [targetActor]
+                });
+                if (applied.length) {
+                    const stamp = doc.createElement('div');
+                    stamp.style.cssText = 'width:100%; text-align:center; font-style:italic; opacity:0.85; padding:4px 0;';
+                    stamp.textContent = `✓ Applied to ${applied.join(', ')}`;
+                    button.replaceWith(stamp);
+                    compiledHtml = doc.body.innerHTML;
+                }
+            }
+        } catch (error) {
+            console.warn(MODULE.ID + ' | Auto-apply injury failed; posting card with the button:', error);
+        }
+    }
+
     await ChatMessage.create({
         user: game.user.id,
         content: compiledHtml,
