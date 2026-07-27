@@ -73,6 +73,14 @@ function stripHtml(text) {
     return String(text ?? '').replace(/(<([^>]+)>)/ig, '').trim();
 }
 
+function log(message, data = '', debug = true, notify = false) {
+    if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `SOCIAL TOASTS | ${message}`, data, debug, notify);
+    } else {
+        console.log(`${MODULE.ID} | SOCIAL TOASTS | ${message}`, data);
+    }
+}
+
 /** The feature's configured table name, or null when set to None/unset. */
 function getConfiguredTableName(config) {
     const tableName = getSetting(config.tableKey, 'none');
@@ -137,7 +145,7 @@ export async function triggerSocialToast(kind) {
             await sockets.emit(SOCKET_ROLL_TOAST, payload);
         }
     } catch (error) {
-        console.warn(`${MODULE.ID} | Social toast relay failed:`, error);
+        log('Toast relay failed', error?.message, false, false);
     }
     blacksmith?.toast?.show?.(payload);
 }

@@ -154,11 +154,17 @@ export class InjuryTriggerManager {
     static _buildPayload(actor, amount, pct, category) {
         const token = actor.token?.object ?? actor.getActiveTokens?.()[0] ?? null;
         const injuredName = token?.name || actor.name || 'Someone';
+        // 'General' is the absence of a type — render {type} as nothing and
+        // collapse the leftover whitespace so the sentence reads cleanly
+        // ("took a brutal hit" instead of "took a brutal General hit").
+        const displayType = category === 'General' ? '' : category;
         const interpolate = (text) => String(text ?? '')
             .replaceAll('{name}', injuredName)
-            .replaceAll('{type}', category)
+            .replaceAll('{type}', displayType)
             .replaceAll('{damage}', String(Math.round(amount)))
-            .replaceAll('{percent}', String(Math.round(pct)));
+            .replaceAll('{percent}', String(Math.round(pct)))
+            .replace(/\s{2,}/g, ' ')
+            .trim();
 
         const title = interpolate(getSetting('injuryToastTitle', ''));
         if (!title) return null;

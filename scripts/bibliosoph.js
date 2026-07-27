@@ -31,6 +31,16 @@ const getMacroByIdOrName = (macroKey) => {
 // Lightweight logger to trace macro bindings/execution
 const logMacroFix = (msg) => console.log(`MACRO FIX ${msg}`);
 
+// Log through Blacksmith's console tool wherever possible; raw console is
+// reserved for bootstrap failures where Blacksmith itself is unavailable.
+function logBib(message, data = '', debug = true, notify = false) {
+    if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, message, data, debug, notify);
+    } else {
+        console.log(`${MODULE.ID} | ${message}`, data);
+    }
+}
+
 // Cached compiled chat-card template — fetched and compiled once per
 // session instead of on every card.
 let _compiledCardTemplate = null;
@@ -90,7 +100,7 @@ Hooks.once('ready', async () => {
                 name: MODULE.NAME,
                 version: MODULE.VERSION
             });
-            console.log(MODULE.ID + ' | ✅ Module ' + MODULE.NAME + ' registered with Blacksmith successfully');
+            logBib('✅ Module registered with Blacksmith successfully', '', false, false);
         }
         
         // MESSAGES: conversation system + window registry
@@ -142,7 +152,7 @@ Hooks.once('ready', async () => {
                 }
             }
         } catch (error) {
-            console.error(MODULE.ID + ' | Failed to initialize Messages system:', error);
+            logBib('Failed to initialize Messages system', error?.message, false, false);
         }
 
         // ROLL TOASTS: crit/fumble announcements via the Blacksmith rolls API
@@ -150,7 +160,7 @@ Hooks.once('ready', async () => {
             const { RollToastManager } = await import('./manager-roll-toasts.js');
             await RollToastManager.initialize();
         } catch (error) {
-            console.error(MODULE.ID + ' | Failed to initialize Roll Toasts:', error);
+            logBib('Failed to initialize Roll Toasts', error?.message, false, false);
         }
 
         // INJURY TRIGGERS: damage-threshold injury automation (Blacksmith damageResolved)
@@ -158,7 +168,7 @@ Hooks.once('ready', async () => {
             const { InjuryTriggerManager } = await import('./manager-injury-triggers.js');
             InjuryTriggerManager.initialize();
         } catch (error) {
-            console.error(MODULE.ID + ' | Failed to initialize Injury Triggers:', error);
+            logBib('Failed to initialize Injury Triggers', error?.message, false, false);
         }
 
         // INJURY EFFECTS: canvas burst on injury application (every client)
@@ -166,7 +176,7 @@ Hooks.once('ready', async () => {
             const { InjuryEffectsManager } = await import('./manager-injury-effects.js');
             InjuryEffectsManager.initialize();
         } catch (error) {
-            console.error(MODULE.ID + ' | Failed to initialize Injury Effects:', error);
+            logBib('Failed to initialize Injury Effects', error?.message, false, false);
         }
 
         // NOW register toolbar tools after module registration is complete
@@ -186,7 +196,7 @@ Hooks.once('ready', async () => {
                     registerToolbarTools();
                 } catch (error) {
                     BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `TOOLBAR | Error during toolbar registration: ${error.message}`, "", true, false);
-                    console.error(MODULE.ID + ' | Toolbar registration error:', error);
+                    logBib('Toolbar registration error', error?.message, false, false);
                 }
             } else if (attempts < maxAttempts) {
                 // Blacksmith not ready yet, try again
@@ -194,7 +204,7 @@ Hooks.once('ready', async () => {
             } else {
                 // Max attempts reached
                 BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `TOOLBAR | Failed to register tools after ${maxAttempts} attempts. Blacksmith API may not be available.`, "", false, false);
-                console.error(MODULE.ID + ' | Failed to register toolbar tools - Blacksmith API not available');
+                logBib('Failed to register toolbar tools - Blacksmith API not available', '', false, false);
             }
         };
         
@@ -302,7 +312,7 @@ export async function rollInjuryCard(category, target = null) {
                     statusEffect: data.statuseffect || null,
                     kindLabel: 'injury',
                     explicitActors: [targetActor],
-                    burst: { category: data.category || 'General' }
+                    burst: { kind: 'injury', category: data.category || 'General' }
                 });
                 if (applied.length) {
                     const stamp = doc.createElement('div');
@@ -313,7 +323,7 @@ export async function rollInjuryCard(category, target = null) {
                 }
             }
         } catch (error) {
-            console.warn(MODULE.ID + ' | Auto-apply injury failed; posting card with the button:', error);
+            logBib('Auto-apply injury failed; posting card with the button', error?.message, false, false);
         }
     }
 
@@ -322,6 +332,131 @@ export async function rollInjuryCard(category, target = null) {
         content: compiledHtml,
         speaker: ChatMessage.getSpeaker()
     });
+}
+
+// Treatment: post a card listing the subject's Bibliosoph afflictions,
+// each with an Apply Treatment button (toolbar; targeted-then-selected)
+async function triggerTreatmentCard() {
+    const targeted = Array.from(game.user.targets ?? []);
+    const token = targeted[0] ?? canvas.tokens.controlled[0] ?? null;
+    if (!token?.actor) {
+        ui.notifications.warn("Target (or select) a token to treat.");
+        return;
+    }
+    const compiledHtml = await createChatCardTreatment(token);
+    if (!compiledHtml) return;
+    await ChatMessage.create({
+        user: game.user.id,
+        content: compiledHtml,
+        speaker: ChatMessage.getSpeaker()
+    });
+}
+
+// Build the CHECK-UP card: portrait + diagnosis narrative, then one row
+// per active affliction — Bibliosoph-applied outcomes AND any temporary
+// effect or condition on the actor, whatever put it there. Each row shows
+// the effect's icon, its conveyed conditions, treatment prose when the
+// injury carries it, and its own Treat button.
+async function createChatCardTreatment(token) {
+    const actor = token.actor;
+
+    // Treatable = our flagged afflictions, any active temporary effect
+    // (conditions are temporary effects), anything carrying a status
+    // marker, and — because conditions are sometimes hand-authored with
+    // no duration or status and land under "Passive Effects" — any effect
+    // whose NAME matches a registered condition. Disabled and suppressed
+    // effects, and genuinely passive feats/items, stay excluded.
+    const conditionNames = new Set([
+        ...(CONFIG.statusEffects ?? []).map((s) => game.i18n.localize(s.name ?? '').toLowerCase()),
+        ...Object.values(CONFIG.DND5E?.conditionTypes ?? {}).map((c) => game.i18n.localize(c.name ?? '').toLowerCase())
+    ].filter(Boolean));
+    const allEffects = Array.from(actor.effects ?? []);
+    logBib(`Check-Up: examining ${allEffects.length} effects on ${token.name}`, '', true, false);
+    const afflictions = allEffects.filter((e) => {
+        try {
+            let verdict = 'excluded (passive, not a condition)';
+            let include = false;
+            if (e.disabled) verdict = 'excluded (disabled)';
+            else if (e.isSuppressed) verdict = 'excluded (suppressed)';
+            else if (e.getFlag(MODULE.ID, 'outcomeBurst')) { include = true; verdict = 'included (Bibliosoph affliction)'; }
+            else if (e.isTemporary) { include = true; verdict = 'included (temporary)'; }
+            else if (e.statuses?.size) { include = true; verdict = 'included (carries statuses)'; }
+            else if (conditionNames.has(String(e.name ?? '').toLowerCase())) { include = true; verdict = 'included (condition name)'; }
+            logBib(`Check-Up: "${e.name}" — ${verdict}`, '', true, false);
+            return include;
+        } catch (error) {
+            logBib(`Check-Up: "${e?.name}" — filter error, skipped`, error?.message, false, false);
+            return false;
+        }
+    });
+
+    // Human name for a condition id, from the system's registrations
+    const conditionLabel = (id) => {
+        const se = CONFIG.statusEffects?.find((s) => s.id === id);
+        if (se?.name) return game.i18n.localize(se.name);
+        const ct = CONFIG.DND5E?.conditionTypes?.[id];
+        if (ct?.name) return game.i18n.localize(ct.name);
+        return id.charAt(0).toUpperCase() + id.slice(1);
+    };
+
+    const treatmentrows = afflictions.map((effect) => {
+        const statusIds = new Set(effect.statuses ?? []);
+        const flagCondition = effect.getFlag(MODULE.ID, 'outcomeBurst')?.condition;
+        if (flagCondition) statusIds.add(flagCondition);
+        const conditions = [...statusIds].map(conditionLabel).join(', ');
+        // Hover card for the row icon: name, conditions, and the effect's
+        // full description (injury text + Treatment prose ride along).
+        // Foundry's TooltipManager renders data-tooltip content as HTML.
+        const description = String(effect.description ?? '').trim();
+        const tooltip = `<section style="max-width: 320px; text-align: left;">`
+            + `<strong>${effect.name}</strong>`
+            + (conditions ? `<br><em>${conditions}</em>` : '')
+            + (description ? `<hr>${description}` : '')
+            + `</section>`;
+        return {
+            name: effect.name,
+            img: effect.img || 'icons/svg/aura.svg',
+            conditions,
+            tooltip,
+            payload: encodeURIComponent(JSON.stringify({
+                actorId: actor.id,
+                tokenId: token.id,
+                effectId: effect.id
+            }))
+        };
+    });
+
+    // Diagnosis narrative from the actor's state
+    const hp = actor.system?.attributes?.hp;
+    const pctHp = hp?.max ? Math.round((Number(hp.value) / Number(hp.max)) * 100) : null;
+    const healthDesc = pctHp === null ? 'of indeterminate health'
+        : pctHp >= 100 ? 'in perfect health'
+        : pctHp >= 75 ? 'lightly wounded'
+        : pctHp >= 50 ? 'wounded'
+        : pctHp >= 25 ? 'badly wounded'
+        : pctHp > 0 ? 'gravely wounded'
+        : 'down';
+    const hpNote = pctHp === null ? '' : ` (${hp.value}/${hp.max} HP)`;
+    const diagnosis = treatmentrows.length
+        ? `${token.name} is ${healthDesc}${hpNote} and suffering from ${treatmentrows.length} affliction${treatmentrows.length === 1 ? '' : 's'}.`
+        : `${token.name} is ${healthDesc}${hpNote} with no afflictions found. A clean bill of health.`;
+
+    const template = await getCardTemplate();
+    const CARDDATA = {
+        theme: game.settings.get(MODULE.ID, 'cardThemeInjury'),
+        iconStyle: 'fa-stethoscope',
+        cardTitle: 'Check-Up',
+        imageBackground: 'cobblestone',
+        userName: token.name,
+        userAvatar: actor.img || token.document?.texture?.src || '',
+        playerType: 'Patient',
+        characterName: healthDesc.charAt(0).toUpperCase() + healthDesc.slice(1),
+        content: diagnosis,
+        treatmentrows,
+        hasSectionContent: treatmentrows.length > 0,
+    };
+    BlacksmithUtils.playSound("modules/coffee-pub-blacksmith/sounds/notification.mp3", "0.7");
+    return template(CARDDATA);
 }
 
 // Trigger inspiration macro (for toolbar integration)
@@ -346,6 +481,7 @@ window.triggerInvestigationMacro = triggerInvestigationMacro;
 window.triggerCriticalRoll = triggerCriticalRoll;
 window.triggerFumbleRoll = triggerFumbleRoll;
 window.triggerInjuriesRoll = triggerInjuriesRoll;
+window.triggerTreatmentCard = triggerTreatmentCard;
 window.triggerInspirationMacro = triggerInspirationMacro;
 
 
@@ -386,10 +522,10 @@ function validateMandatorySettings() {
         
         // Detailed console logging
         if (missingSettings.length > 0) {
-            console.warn(`BIBLIOSOPH | Missing mandatory macro settings:`, missingSettings);
+            logBib('Missing mandatory macro settings', missingSettings, false, false);
         }
         if (invalidMacros.length > 0) {
-            console.warn(`BIBLIOSOPH | Invalid macro names in settings:`, invalidMacros);
+            logBib('Invalid macro names in settings', invalidMacros, false, false);
         }
         
         return false; // Setup incomplete
@@ -422,7 +558,7 @@ registerSettings();
 // Hook that loads as the module loads
 Hooks.once('init', async function() {
     // Module initialization - Blacksmith registration is now handled by the proper API import
-    console.log(MODULE.ID + ' | Module initialized');
+    logBib('Module initialized', '', false, false);
 });
 
 // ***** READY *****
@@ -629,7 +765,7 @@ Hooks.on("ready", async () => {
                 statusEffect: arrEffectData.statuseffect || null,
                 kindLabel: 'injury',
                 explicitActors,
-                burst: { category: arrEffectData.category || 'General' }
+                burst: { kind: 'injury', category: arrEffectData.category || 'General' }
             });
             await markCardButtonApplied(injuryButton, '.coffee-pub-bibliosoph-button-injury', applied);
         }
@@ -640,6 +776,15 @@ Hooks.on("ready", async () => {
             const data = decodeEffectPayload(applyOutcomeButton.getAttribute('data-effect'));
             const applied = await applyOutcomeStatus(data);
             await markCardButtonApplied(applyOutcomeButton, '.coffee-pub-bibliosoph-button-apply-outcome', applied);
+        }
+
+        // CHECK FOR APPLY TREATMENT BUTTON
+        const treatButton = event.target.closest?.('.coffee-pub-bibliosoph-button-treat');
+        if (treatButton) {
+            const raw = treatButton.getAttribute('data-treat');
+            let data = null;
+            try { data = JSON.parse(decodeURIComponent(raw)); } catch (_) { /* malformed row */ }
+            if (data) await treatAffliction(treatButton, raw, data);
         }
 
     });
@@ -2098,8 +2243,76 @@ async function applyOutcomeStatus(data) {
             ? "icons/skills/wounds/blood-spurt-spray-red.webp"
             : "icons/skills/wounds/injury-pain-body-orange.webp",
         description: data?.description || "",
-        kindLabel: strKindLabel.toLowerCase()
+        kindLabel: strKindLabel.toLowerCase(),
+        burst: { kind: blnIsCrit ? 'crit' : 'fumble' }
     });
+}
+
+// Remove a Bibliosoph affliction and unwind its condition. GM discretion:
+// requires ownership of the actor (the GM always qualifies). The heal
+// burst plays automatically everywhere via the deleteActiveEffect hook.
+async function treatAffliction(buttonEl, raw, data) {
+    const actor = canvas?.tokens?.get(data.tokenId ?? '')?.actor
+        ?? game.actors.get(data.actorId ?? '');
+    if (!actor) return ui.notifications.warn("Could not find the actor to treat.");
+    if (!actor.isOwner) return ui.notifications.warn(`You do not have permission to modify ${actor.name}.`);
+
+    const effect = actor.effects.get(data.effectId);
+    if (!effect) {
+        ui.notifications.info("That affliction is already gone.");
+        await markTreatButtonDone(buttonEl, raw);
+        return;
+    }
+    const flag = effect.getFlag(MODULE.ID, 'outcomeBurst');
+    const condition = flag?.condition ?? null;
+    const effectName = effect.name;
+    // Non-Bibliosoph effects (plain conditions, other modules' effects) get
+    // the flag stamped just before deletion so the heal burst plays on
+    // every client via the deleteActiveEffect hook.
+    if (!flag) {
+        try {
+            await effect.setFlag(MODULE.ID, 'outcomeBurst', { kind: 'treated', name: effectName });
+        } catch (_) { /* burst is cosmetic; never block treatment */ }
+    }
+    await effect.delete();
+
+    // Unwind the toggled condition — unless another untreated affliction
+    // on this actor still conveys the same condition
+    if (condition) {
+        const stillConveyed = actor.effects.some(
+            (e) => e.getFlag(MODULE.ID, 'outcomeBurst')?.condition === condition
+        );
+        if (!stillConveyed && actor.statuses?.has(condition)) {
+            try {
+                await actor.toggleStatusEffect(condition, { active: false });
+            } catch (error) {
+                logBib('Could not unwind condition ' + condition, error?.message, false, false);
+            }
+        }
+    }
+    ui.notifications.info(`Treated "${effectName}" on ${actor.name}.`);
+    await markTreatButtonDone(buttonEl, raw);
+}
+
+// Replace one treatment row's button (matched by its payload — rows share
+// a class) with a "Treated" stamp in the stored message.
+async function markTreatButtonDone(buttonEl, raw) {
+    try {
+        const messageId = buttonEl.closest('[data-message-id]')?.dataset?.messageId;
+        const message = game.messages.get(messageId ?? '');
+        if (!message || !message.canUserModify(game.user, 'update')) return;
+        const doc = new DOMParser().parseFromString(message.content, 'text/html');
+        const button = Array.from(doc.querySelectorAll('.coffee-pub-bibliosoph-button-treat'))
+            .find((b) => b.getAttribute('data-treat') === raw);
+        if (!button) return;
+        const stamp = doc.createElement('div');
+        stamp.style.cssText = 'width:100%; text-align:center; font-style:italic; opacity:0.85; padding:4px 0;';
+        stamp.textContent = '✓ Treated';
+        button.replaceWith(stamp);
+        await message.update({ content: doc.body.innerHTML });
+    } catch (error) {
+        logBib('Could not mark treatment done', error?.message, false, false);
+    }
 }
 
 // After a successful apply, replace the card's button (in the stored chat
@@ -2122,7 +2335,7 @@ async function markCardButtonApplied(buttonEl, buttonSelector, appliedNames) {
         button.replaceWith(stamp);
         await message.update({ content: doc.body.innerHTML });
     } catch (error) {
-        console.warn(MODULE.ID + ' | Could not mark card button applied:', error);
+        logBib('Could not mark card button applied', error?.message, false, false);
     }
 }
 

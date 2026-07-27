@@ -45,7 +45,7 @@ function log(message, data = '', debug = true, notify = false) {
  * @param {string|null} [config.statusEffect]     Official condition name (core toggle; DFreds when active)
  * @param {string} [config.kindLabel]      For user-facing warnings ("critical", "injury", ...)
  * @param {Actor[]|null} [config.explicitActors]  Known recipients; skips target/selection entirely
- * @param {{category: string}|null} [config.burst]  Tag the effect so every client plays the injury burst on the token
+ * @param {{kind?: string, category?: string}|null} [config.burst]  Tag the effect so every client plays the outcome burst on the token (kind: 'injury' | 'crit' | 'fumble')
  * @returns {Promise<string[]>} Display names the effect is now on (including
  *          recipients who already carried it) — empty when nothing applied.
  */
@@ -128,8 +128,15 @@ export async function applyStatusToTokens({
             statuses: pseudoId ? [pseudoId] : [],
             changes: [],
             // The burst flag makes createActiveEffect play the canvas
-            // injury burst on every connected client (manager-injury-effects)
-            ...(burst ? { flags: { [MODULE.ID]: { injuryBurst: { category: burst.category ?? 'General', name } } } } : {})
+            // outcome burst on every connected client (manager-injury-effects).
+            // It also records the toggled condition so Treatment knows what
+            // to unwind when this affliction is removed.
+            ...(burst ? { flags: { [MODULE.ID]: { outcomeBurst: {
+                kind: burst.kind ?? 'injury',
+                category: burst.category ?? 'General',
+                name,
+                condition: toggleId ?? null
+            } } } } : {})
         };
         await actor.createEmbeddedDocuments('ActiveEffect', [effectData]);
         if (pseudoId) log(`"${name}" conveys ${pseudoId} (dnd5e pseudo-condition) on ${displayName}`, '', false, false);

@@ -228,6 +228,17 @@ const SCENARIOS = [
         }
     },
     {
+        tab: 'injuries',
+        label: '🩺 Check-Up card (all subject\'s afflictions)',
+        run: () => {
+            if (typeof window.triggerTreatmentCard === 'function') {
+                window.triggerTreatmentCard();
+            } else {
+                ui.notifications.warn('Treatment not available — reload after the module update.');
+            }
+        }
+    },
+    {
         tab: 'tools',
         label: '🍺 Social toasts (all configured)',
         run: async () => {
@@ -264,7 +275,7 @@ const SCENARIOS = [
     },
     {
         tab: 'tools',
-        label: '💢 Injury burst preview (random type → subject)',
+        label: '💢 Burst: injury (random type → subject)',
         run: async () => {
             const token = getSubjectToken();
             if (!token) return;
@@ -272,8 +283,38 @@ const SCENARIOS = [
             const cats = ['Acid', 'Bludgeoning', 'Cold', 'Fire', 'Force', 'Lightning', 'Necrotic',
                 'Piercing', 'Poison', 'Psychic', 'Radiant', 'Slashing', 'Thunder', 'General'];
             const cat = cats[Math.floor(Math.random() * cats.length)];
-            playInjuryBurst(token, cat, `${cat} Injury`);
-            ui.notifications.info(`Burst preview: ${cat} (preview is local-only; real applies burst on every client).`);
+            playInjuryBurst(token, cat, cat === 'General' ? 'Injury' : `${cat} Injury`);
+            ui.notifications.info(`Burst preview: INJURY (${cat}). Local-only; real applies burst on every client.`);
+        }
+    },
+    {
+        tab: 'tools',
+        label: '✨ Burst: crit (gold starburst → subject)',
+        run: async () => {
+            const token = getSubjectToken();
+            if (!token) return;
+            const { playCritBurst } = await import(`${MODULE_PATH}/manager-injury-effects.js`);
+            playCritBurst(token, 'Critical Hit');
+        }
+    },
+    {
+        tab: 'tools',
+        label: '💀 Burst: fumble (impact + debris → subject)',
+        run: async () => {
+            const token = getSubjectToken();
+            if (!token) return;
+            const { playFumbleBurst } = await import(`${MODULE_PATH}/manager-injury-effects.js`);
+            playFumbleBurst(token, 'Fumble');
+        }
+    },
+    {
+        tab: 'tools',
+        label: '💚 Burst: treatment (heal motes → subject)',
+        run: async () => {
+            const token = getSubjectToken();
+            if (!token) return;
+            const { playTreatmentBurst } = await import(`${MODULE_PATH}/manager-injury-effects.js`);
+            playTreatmentBurst(token, 'Treated');
         }
     },
     {

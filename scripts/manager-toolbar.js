@@ -120,6 +120,26 @@ const TOOLBAR_TOOLS = {
             }
         }
     },
+    'bibliosoph-treat': {
+        icon: "fa-solid fa-stethoscope",
+        name: "bibliosoph-treat",
+        title: "Check-Up",
+        zone: "rolls",
+        order: 5,
+        moduleId: "coffee-pub-bibliosoph",
+        gmOnly: true,
+        enabled: () => getSetting('injuryAutomation', 'click') !== 'off',
+        onCoffeePub: () => true,
+        onFoundry: () => true,
+        onClick: () => {
+            // Post the afflictions card for the targeted/selected token
+            if (typeof window.triggerTreatmentCard === 'function') {
+                window.triggerTreatmentCard();
+            } else {
+                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Treatment function not available", "", false, false);
+            }
+        }
+    },
     'bibliosoph-inspiration': {
         icon: "fa-solid fa-lightbulb",
         name: "bibliosoph-inspiration",
