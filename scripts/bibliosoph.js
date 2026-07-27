@@ -399,25 +399,69 @@ async function createChatCardTreatment(token) {
         return id.charAt(0).toUpperCase() + id.slice(1);
     };
 
-    const treatmentrows = afflictions.map((effect) => {
+    const TextEditorImpl = foundry.applications?.ux?.TextEditor?.implementation ?? TextEditor;
+
+    // For a loose condition effect (Prone, Charmed…), find the flagged
+    // affliction that conveys it, so its row can say "via Severed Strands"
+    // instead of repeating its own name.
+    const conveyedBy = (effect) => {
+        if (!effect.statuses?.size) return null;
+        for (const other of afflictions) {
+            if (other === effect) continue;
+            const otherFlag = other.getFlag(MODULE.ID, 'outcomeBurst');
+            if (!['injury', 'crit', 'fumble'].includes(otherFlag?.kind)) continue;
+            const conveyed = new Set(other.statuses ?? []);
+            if (otherFlag.condition) conveyed.add(otherFlag.condition);
+            for (const statusId of effect.statuses) {
+                if (conveyed.has(statusId)) return other.name;
+            }
+        }
+        return null;
+    };
+
+    const treatmentrows = await Promise.all(afflictions.map(async (effect) => {
         const flag = effect.getFlag(MODULE.ID, 'outcomeBurst');
+        const kind = ['injury', 'crit', 'fumble'].includes(flag?.kind) ? flag.kind : 'other';
         const statusIds = new Set(effect.statuses ?? []);
         if (flag?.condition) statusIds.add(flag.condition);
         const conditions = [...statusIds].map(conditionLabel).join(', ');
+        // The row's after-dash detail: flagged afflictions list what they
+        // convey; loose conditions credit their source; standalone effects
+        // show remaining duration or nothing.
+        let detail = conditions;
+        if (kind === 'other') {
+            const source = conveyedBy(effect);
+            if (source) {
+                detail = `via ${source}`;
+            } else {
+                const duration = effect.duration;
+                detail = (duration?.type && duration.type !== 'none' && duration.label) ? duration.label : '';
+            }
+        }
         // Hover card for the row icon: name, conditions, and the effect's
         // full description (injury text + Treatment prose ride along).
         // Foundry's TooltipManager renders data-tooltip content as HTML.
-        const description = String(effect.description ?? '').trim();
+        // dnd5e condition descriptions are enricher syntax (@Embed of the
+        // rules journal page), so run everything through the enricher.
+        let description = String(effect.description ?? '').trim();
+        if (description) {
+            try {
+                description = String(await TextEditorImpl.enrichHTML(description, {
+                    relativeTo: effect,
+                    rollData: actor.getRollData?.() ?? {}
+                })).trim();
+            } catch (_) { /* fall back to the raw text */ }
+        }
         const tooltip = `<section style="max-width: 320px; text-align: left;">`
             + `<strong>${effect.name}</strong>`
-            + (conditions ? `<br><em>${conditions}</em>` : '')
+            + (detail ? `<br><em>${detail}</em>` : '')
             + (description ? `<hr>${description}` : '')
             + `</section>`;
         return {
-            kind: ['injury', 'crit', 'fumble'].includes(flag?.kind) ? flag.kind : 'other',
+            kind,
             name: effect.name,
             img: effect.img || 'icons/svg/aura.svg',
-            conditions,
+            detail,
             tooltip,
             payload: encodeURIComponent(JSON.stringify({
                 actorId: actor.id,
@@ -425,7 +469,7 @@ async function createChatCardTreatment(token) {
                 effectId: effect.id
             }))
         };
-    });
+    }));
 
     // Four zones, fixed order: injuries (bundles), then the d20 outcomes,
     // then loose effects & conditions. Empty zones are omitted.
