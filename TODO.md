@@ -56,7 +56,7 @@ Send these to the Blacksmith dev, in this order — use the `documentation/reque
 ## Notes to Other Coffee Pub Devs
 
 - **Squire dev — status effects & descriptions know-how (from the Check-Up build).** ✅ Note drafted and ready to send: `documentation/note-squire-status-effects.md` — covers correct apply/remove code, enumerating conditions from the system (incl. pseudo-conditions), the `@Embed` description workaround, categorizing Bibliosoph injuries/crits/fumbles via the `outcomeBurst` flag, the show/remove-anything filter + condition unwind, and assorted hard-won gotchas.
-- **Crier dev — active-penalty report on the turn card.** Suggest a compact "reminders" block on the turn card that scans the current combatant's active effects at turn start and summarizes ongoing modifiers — "-2 on attacks (2 rounds left)", "Prone — half movement to stand", "Burning — 1d4 fire at start of turn" — from effect changes + remaining duration. Pairs with Bibliosoph injuries/crit/fumble effects once our card data model carries machine-readable penalties (see Injuries TODO below).
+- **Crier dev — active effects & conditions on the turn card.** ✅ Note drafted and ready to send: `documentation/note-crier-turn-effects.md` — display-only version of the Check-Up rows (icon tiles, two-line rows, "via" attribution, durations, enriched hover tooltips) as an optional turn-card block, with the filter/enrichment code to lift and a pointer to the future machine-readable-penalties upgrade ("-2 on attacks, 2 rounds left") once our card data model carries them.
 
 ## Crits & Fumbles
 
