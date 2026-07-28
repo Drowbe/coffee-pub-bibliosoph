@@ -179,6 +179,14 @@ Hooks.once('ready', async () => {
             logBib('Failed to initialize Injury Effects', error?.message, false, false);
         }
 
+        // TREAT STAMPS: players can't edit GM-owned chat messages, so a
+        // player's treat click relays a stamp-sweep intent to the active GM
+        try {
+            await registerTreatStampSocket();
+        } catch (error) {
+            logBib('Failed to register treat-stamp socket', error?.message, false, false);
+        }
+
         // NOW register toolbar tools after module registration is complete
         // In v13, we need to wait for Blacksmith to be fully ready
         // Try multiple times with increasing delays to ensure API is available
@@ -865,7 +873,7 @@ Hooks.on("ready", async () => {
             const raw = treatButton.getAttribute('data-treat');
             let data = null;
             try { data = JSON.parse(decodeURIComponent(raw)); } catch (_) { /* malformed row */ }
-            if (data) await treatAffliction(treatButton, raw, data);
+            if (data) await treatAffliction(treatButton, data);
         }
 
     });
@@ -2332,7 +2340,7 @@ async function applyOutcomeStatus(data) {
 // Remove a Bibliosoph affliction and unwind its condition. GM discretion:
 // requires ownership of the actor (the GM always qualifies). The heal
 // burst plays automatically everywhere via the deleteActiveEffect hook.
-async function treatAffliction(buttonEl, raw, data) {
+async function treatAffliction(buttonEl, data) {
     const actor = canvas?.tokens?.get(data.tokenId ?? '')?.actor
         ?? game.actors.get(data.actorId ?? '');
     if (!actor) return ui.notifications.warn("Could not find the actor to treat.");
@@ -2341,7 +2349,7 @@ async function treatAffliction(buttonEl, raw, data) {
     const effect = actor.effects.get(data.effectId);
     if (!effect) {
         ui.notifications.info("That affliction is already gone.");
-        await markTreatButtonDone(buttonEl, raw);
+        await markTreatButtonDone(buttonEl);
         return;
     }
     const flag = effect.getFlag(MODULE.ID, 'outcomeBurst');
@@ -2372,31 +2380,65 @@ async function treatAffliction(buttonEl, raw, data) {
         }
     }
     ui.notifications.info(`Treated "${effectName}" on ${actor.name}.`);
-    await markTreatButtonDone(buttonEl, raw);
+    await markTreatButtonDone(buttonEl);
 }
 
-// Sweep the stored message's treatment rows: stamp the treated row (matched
-// by payload) AND any other row whose effect is no longer on the actor —
-// treating a bundled injury also deletes the condition effects it conveyed,
-// so their rows flip in the same pass.
-async function markTreatButtonDone(buttonEl, raw) {
+// Flip treated rows to bandaid stamps in the stored message. Players cannot
+// persistently edit a GM-owned ChatMessage, so when the clicker lacks update
+// permission the click becomes an INTENT relayed to the active GM over the
+// Blacksmith socket layer, and the GM performs the authoritative
+// message.update (Foundry then syncs the new content to every client).
+// The sweep itself never trusts the request: it stamps only rows whose
+// effect is verifiably gone from the actor at sweep time.
+const SOCKET_TREAT_STAMP = `${MODULE.ID}.treatStamp`;
+
+async function registerTreatStampSocket() {
+    const sockets = game.modules.get('coffee-pub-blacksmith')?.api?.sockets;
+    if (!sockets) return;
+    await sockets.waitForReady();
+    await sockets.register(SOCKET_TREAT_STAMP, async (payload) => {
+        if (game.users.activeGM?.id !== game.user.id) return;
+        const message = game.messages.get(payload?.messageId ?? '');
+        if (!message) return;
+        await sweepTreatStamps(message);
+    });
+}
+
+async function markTreatButtonDone(buttonEl) {
+    const messageId = buttonEl.closest('[data-message-id]')?.dataset?.messageId;
+    const message = game.messages.get(messageId ?? '');
+    if (!message) return;
+    if (message.canUserModify(game.user, 'update')) {
+        await sweepTreatStamps(message);
+        return;
+    }
+    const sockets = game.modules.get('coffee-pub-blacksmith')?.api?.sockets;
+    if (!sockets) return logBib('Cannot relay treat stamp: Blacksmith sockets unavailable', '', false, false);
     try {
-        const messageId = buttonEl.closest('[data-message-id]')?.dataset?.messageId;
-        const message = game.messages.get(messageId ?? '');
-        if (!message || !message.canUserModify(game.user, 'update')) return;
+        await sockets.waitForReady();
+        await sockets.emit(SOCKET_TREAT_STAMP, { messageId: message.id });
+    } catch (error) {
+        logBib('Treat stamp relay failed', error?.message, false, false);
+    }
+}
+
+// Sweep every treatment row in the message: any row whose effect is no
+// longer on its actor gets its button replaced with the bandaid stamp —
+// the clicked row, the condition rows a bundled injury took with it, and
+// rows that went stale any other way.
+async function sweepTreatStamps(message) {
+    try {
+        if (!message.canUserModify(game.user, 'update')) return;
         const doc = new DOMParser().parseFromString(message.content, 'text/html');
         let changed = false;
         for (const button of Array.from(doc.querySelectorAll('.coffee-pub-bibliosoph-button-treat'))) {
-            const payload = button.getAttribute('data-treat') ?? '';
-            let gone = payload === raw;
-            if (!gone) {
-                try {
-                    const data = JSON.parse(decodeURIComponent(payload));
-                    const actor = canvas?.tokens?.get(data.tokenId ?? '')?.actor
-                        ?? game.actors.get(data.actorId ?? '');
-                    gone = !!actor && !actor.effects.get(data.effectId ?? '');
-                } catch (_) { /* unreadable payload — leave the button alone */ }
-            }
+            let gone = false;
+            try {
+                const data = JSON.parse(decodeURIComponent(button.getAttribute('data-treat') ?? ''));
+                const actor = canvas?.tokens?.get(data.tokenId ?? '')?.actor
+                    ?? game.actors.get(data.actorId ?? '');
+                gone = !!actor && !actor.effects.get(data.effectId ?? '');
+            } catch (_) { /* unreadable payload — leave the button alone */ }
             if (!gone) continue;
             const stamp = doc.createElement('div');
             stamp.style.cssText = 'flex:0 0 auto; width:40px; height:40px; display:flex; align-items:center; justify-content:center; opacity:0.6; font-size:1.1em;';
