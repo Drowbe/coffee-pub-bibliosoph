@@ -1,18 +1,17 @@
 # Coffee Pub Bibliosoph
 
-## Injuries (NEXT FOCUS — the data model)
+## Injuries
 
-**Spec ready to build: `documentation/spec-injury-schema.md`** — one contract covering the record schema, legal values, the generated page layout, the rewritten authoring prompt, validation rules, and the rebuild pipeline. All six decisions resolved 2026-07-28: implement `odds` weighting, `damage` stays flat by severity band, `imagetitle` becomes required and displays on the card, author 10–12 `general` injuries, `treatmentdc` stays on the severity ladder, and images are per-injury with no category defaults (two mis-matched images to replace).
+**Data model rebuilt and rebalanced 2026-07-28 — see `documentation/spec-injury-schema.md`** (schema, legal values, page layout, rewritten authoring prompt, validation rules, pipeline). Shipped: a strict schema with a validator, generated journal pages (display and metadata can no longer drift), the record stamped as a flag on every page with the runtime reading flag-first, odds-weighted selection, `imagetitle` on the chat card, 17 new injuries (10 `general`, 4 `force`, 3 `fire`), a full balance pass, and the dead `journaltype` / `foldername` / `action` fields removed. 127 → 144 injuries, validator 868 errors → 0. Tooling: `npm run injuries:validate` / `injuries:generate` / `injuries:build`.
 
-Build order: validator → generator → regenerate all 127 → weighted picker → card shows `imagetitle` → author the general injuries.
+Compendium rebuilt and verified 2026-07-28: 14 journals / 144 pages, every page carrying its injury flag, checked back out of the compiled LevelDB against `resources/injuries.json`.
 
-Approach agreed: **rebuild rather than migrate in place.** `resources/injuries.json` is already the clean flat export, and `packs:extract`/`packs:build` already round-trip, so the pipeline is injuries.json → validator → generator → packs/_source → build. Generated pages make display/metadata drift structurally impossible (today Stabbing Pain's card says "Duration: 50" while its metadata says 300), and the same generator stamps record flags so the eventual flag-reading switch needs no second migration. No Blacksmith dependency for the rebuild.
+Remaining on the data model:
 
-The remaining entries below are facets of that one job — the keystone that unlocks the Crier turn-card penalty report, exhaustion-aware treatment, countdown displays on Check-Up rows, and retires the last flavor-only status strings.
-
-- **Tighten the injury definition schema and code against it.** An injury's mechanical fields (damage, duration, statuseffect, severity, odds) are loosely-typed strings with semantics we had to reverse-engineer (is damage one-time or ongoing? is duration seconds? which status ids are legal?). Define the schema explicitly — field names, types, units, allowed condition ids from `CONFIG.statusEffects`, what severity/odds mean — validate on read, and make the apply path consume only the validated shape. This is the contract half of the data-model rebuild (`plan-injuries-datamodel.md`): the typed JournalEntryPage model should implement this schema, not invent another one. Six injuries still carry flavor-only status text (confused ×3 minor, disoriented ×2, clumsy fingers) awaiting the `condition` id + `flavor` text split.
-- **Extend the model to carry machine-readable mechanics.** Today an outcome is prose + at most one condition + one-time damage. Add round-based durations we can count down and display ("2 rounds remain"), roll penalties/bonuses as ActiveEffect changes ("-2 on next two attack rolls"), recurring damage ticks, and expiry behavior.
-- **Review and update the injury import prompt** (used to author injury journals; Blacksmith is reviewing it too). Fold in the schema requirements: legal condition ids from `CONFIG.statusEffects` + the pseudo list, `damage` = one-time real HP integer, `duration` in seconds (0 = permanent), severity/odds semantics, the optional `treatmentdc` override (severity sets it otherwise: minor 10 / moderate 15 / major 20), single condition until the schema split, the canonical 14 damage categories.
+- **Extend the model to carry machine-readable mechanics.** Today an outcome is prose + at most one condition + one-time damage. Add round-based durations we can count down and display ("2 rounds remain"), roll penalties/bonuses as ActiveEffect changes ("-2 on next two attack rolls"), recurring damage ticks, and expiry behavior. This is what unlocks the Crier turn-card penalty report and exhaustion-aware treatment.
+- **Retire HTML metadata parsing** once the compendium is rebuilt and settled — `readInjuryRecord` already prefers the page flag, so this is deleting the fallback and `getHTMLMetadata`.
+- **Split `statuseffect` into `condition` + `flavor`.** Six injuries lost flavor-only status text ("Confused", "Disoriented", "Clumsy Fingers") to `none` in the migration; their prose still carries the colour, but a flavor field would let the card show it again.
+- **Damage scaling** (deferred by decision D2): flat 0–12 HP is brutal at level 1 and trivial at level 15. Revisit with the mechanics work.
 
 Also pending:
 

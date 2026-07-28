@@ -1,242 +1,494 @@
 {
-    "name": "Fire",
-    "pages": [
-        {
-            "type": "text",
-            "name": "Fiery Footsies",
-            "text": {
-                "content": "<h5>Injuries • Fire • Fiery Footsies</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Fiery Footsies</h4>\n    <p>You suddenly have an uncontrollable urge to do a hot shoe dance. Your feet, however, seem to be on fire, and despite your best efforts, you can't put them out! It's like having your own personal campfire.</p>\n        <h5>Dancing Flames</h5>\n        <img src=\"icons/magic/fire/flame-burning-creature-skeleton.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Cool your feet with water from a nearby source or a friend's water skin. Or maybe try doing a rain dance to summon a helpful drizzle. Or simply enjoy the warm ambiance.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Fire</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 2 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 10</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Burning</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Fire</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 10</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Fiery Footsies</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Dancing Flames</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/fire/flame-burning-creature-skeleton.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> You suddenly have an uncontrollable urge to do a hot shoe dance. Your feet, however, seem to be on fire, and despite your best efforts, you can't put them out! It's like having your own personal campfire.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Cool your feet with water from a nearby source or a friend's water skin. Or maybe try doing a rain dance to summon a helpful drizzle. Or simply enjoy the warm ambiance.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 60</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Fire Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Burning</p>\n    </li>\n</ul>",
-                "format": 1
-            },
-            "_id": "8IWppNw2RulehgtN",
-            "system": {},
-            "title": {
-                "show": true,
-                "level": 1
-            },
-            "image": {},
-            "video": {
-                "controls": true,
-                "volume": 0.5
-            },
-            "src": null,
-            "category": null,
-            "sort": 0,
-            "flags": {},
-            "_stats": {
-                "compendiumSource": null,
-                "duplicateSource": null,
-                "exportSource": null,
-                "coreVersion": "13.351",
-                "systemId": "dnd5e",
-                "systemVersion": "5.2.5",
-                "lastModifiedBy": null
-            },
-            "ownership": {
-                "default": -1
-            },
-            "_key": "!journal.pages!BBJpgf73p7ogMltD.8IWppNw2RulehgtN"
-        },
-        {
-            "type": "text",
-            "name": "Flaming Feathered Fiasco",
-            "text": {
-                "content": "<h5>Injuries • Fire • Flaming Feathered Fiasco</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Flaming Feathered Fiasco</h4>\n    <p>You find a colorful, fiery feathered creature doing a triumphant dance. As you approach, it emits a brilliant burst of flames, leaving you with singed eyebrows and an unusual craving for spicy foods.</p>\n        <h5>Scorched Plume Surprise</h5>\n        <img src=\"icons/skills/wounds/bone-broken-marrow-red.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Seek out a skilled chef for a taste of surprisingly beneficial spicy dishes with healing properties.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Fire</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 6 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 50</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Charmed</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Fire</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 15</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Flaming Feathered Fiasco</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Scorched Plume Surprise</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/wounds/bone-broken-marrow-red.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> You find a colorful, fiery feathered creature doing a triumphant dance. As you approach, it emits a brilliant burst of flames, leaving you with singed eyebrows and an unusual craving for spicy foods.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Seek out a skilled chef for a taste of surprisingly beneficial spicy dishes with healing properties.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 6</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 300</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Fire Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Charmed</p>\n    </li>\n</ul>",
-                "format": 1
-            },
-            "_id": "HMekCuiwYpHHkOG2",
-            "system": {},
-            "title": {
-                "show": true,
-                "level": 1
-            },
-            "image": {},
-            "video": {
-                "controls": true,
-                "volume": 0.5
-            },
-            "src": null,
-            "category": null,
-            "sort": 0,
-            "flags": {},
-            "_stats": {
-                "compendiumSource": null,
-                "duplicateSource": null,
-                "exportSource": null,
-                "coreVersion": "13.351",
-                "systemId": "dnd5e",
-                "systemVersion": "5.2.5",
-                "lastModifiedBy": null
-            },
-            "ownership": {
-                "default": -1
-            },
-            "_key": "!journal.pages!BBJpgf73p7ogMltD.HMekCuiwYpHHkOG2"
-        },
-        {
-            "type": "text",
-            "name": "Marshmallow Fingers",
-            "text": {
-                "content": "<h5>Injuries • Fire • Marshmallow Fingers</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Marshmallow Fingers</h4>\n    <p>After a particularly intense encounter with a flame, your fingers now emanate a warm orange glow reminiscent of a perfectly toasted marshmallow. They are oddly satisfying to heat up cold soup, but be cautious when shaking hands!</p>\n        <h5>Smoldering Delight</h5>\n        <img src=\"icons/magic/fire/flame-burning-creature-skeleton.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Immerse fingers in ice-cold water for 1 hour or until the glow subsides</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Fire</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 2 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 300</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Charmed</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Fire</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 10</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Marshmallow Fingers</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Smoldering Delight</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/fire/flame-burning-creature-skeleton.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> After a particularly intense encounter with a flame, your fingers now emanate a warm orange glow reminiscent of a perfectly toasted marshmallow. They are oddly satisfying to heat up cold soup, but be cautious when shaking hands!</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Immerse fingers in ice-cold water for 1 hour or until the glow subsides</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 1800</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Fire Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Charmed</p>\n    </li>\n</ul>",
-                "format": 1
-            },
-            "_id": "2BCoozIRdDnmgEQS",
-            "system": {},
-            "title": {
-                "show": true,
-                "level": 1
-            },
-            "image": {},
-            "video": {
-                "controls": true,
-                "volume": 0.5
-            },
-            "src": null,
-            "category": null,
-            "sort": 0,
-            "flags": {},
-            "_stats": {
-                "compendiumSource": null,
-                "duplicateSource": null,
-                "exportSource": null,
-                "coreVersion": "13.351",
-                "systemId": "dnd5e",
-                "systemVersion": "5.2.5",
-                "lastModifiedBy": null
-            },
-            "ownership": {
-                "default": -1
-            },
-            "_key": "!journal.pages!BBJpgf73p7ogMltD.2BCoozIRdDnmgEQS"
-        },
-        {
-            "type": "text",
-            "name": "Roasted Rump Injury",
-            "text": {
-                "content": "<h5>Injuries • Fire • Roasted Rump Injury</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Roasted Rump Injury</h4>\n    <p>In the heat of battle, you experience a close encounter with a fire… wall torch maybe? Anyway, your backside got a little too toasty, leaving you with charred buttocks. The smell of burnt bacon follows you wherever you go.</p>\n        <h5>Singed Cheeks</h5>\n        <img src=\"icons/magic/fire/flame-burning-creature-skeleton.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Cooling poultices or spells to soothe the burn</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Fire</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 7 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 20</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Exhaustion</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Fire</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 5</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Roasted Rump Injury</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Singed Cheeks</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/fire/flame-burning-creature-skeleton.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> In the heat of battle, you experience a close encounter with a fire… wall torch maybe? Anyway, your backside got a little too toasty, leaving you with charred buttocks. The smell of burnt bacon follows you wherever you go.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Cooling poultices or spells to soothe the burn</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 7</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 120</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Fire Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Exhaustion</p>\n    </li>\n</ul>",
-                "format": 1
-            },
-            "_id": "6nMlbtPjecfu0kJv",
-            "system": {},
-            "title": {
-                "show": true,
-                "level": 1
-            },
-            "image": {},
-            "video": {
-                "controls": true,
-                "volume": 0.5
-            },
-            "src": null,
-            "category": null,
-            "sort": 0,
-            "flags": {},
-            "_stats": {
-                "compendiumSource": null,
-                "duplicateSource": null,
-                "exportSource": null,
-                "coreVersion": "13.351",
-                "systemId": "dnd5e",
-                "systemVersion": "5.2.5",
-                "lastModifiedBy": null
-            },
-            "ownership": {
-                "default": -1
-            },
-            "_key": "!journal.pages!BBJpgf73p7ogMltD.6nMlbtPjecfu0kJv"
-        },
-        {
-            "type": "text",
-            "name": "Singed Beard Syndrome",
-            "text": {
-                "content": "<h5>Injuries • Fire • Singed Beard Syndrome</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Singed Beard Syndrome</h4>\n    <p>Lingering aftermath of an unexpected fireball mishap. Your once luscious beard now resembles a charcoal briquette. Smoke still rises whenever you speak.</p>\n        <h5>Fiery Facial Farewell</h5>\n        <img src=\"icons/magic/fire/flame-burning-creature-skeleton.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Apply a soothing ointment made of aloe vera and crushed ice from a frost giant's freezer.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Fire</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 2 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 100</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Charmed</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Fire</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 20</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Singed Beard Syndrome</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Fiery Facial Farewell</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/fire/flame-burning-creature-skeleton.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Lingering aftermath of an unexpected fireball mishap. Your once luscious beard now resembles a charcoal briquette. Smoke still rises whenever you speak.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Apply a soothing ointment made of aloe vera and crushed ice from a frost giant's freezer.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 600</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Fire Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Charmed</p>\n    </li>\n</ul>",
-                "format": 1
-            },
-            "_id": "5rggF73J4T3NoH3D",
-            "system": {},
-            "title": {
-                "show": true,
-                "level": 1
-            },
-            "image": {},
-            "video": {
-                "controls": true,
-                "volume": 0.5
-            },
-            "src": null,
-            "category": null,
-            "sort": 0,
-            "flags": {},
-            "_stats": {
-                "compendiumSource": null,
-                "duplicateSource": null,
-                "exportSource": null,
-                "coreVersion": "13.351",
-                "systemId": "dnd5e",
-                "systemVersion": "5.2.5",
-                "lastModifiedBy": null
-            },
-            "ownership": {
-                "default": -1
-            },
-            "_key": "!journal.pages!BBJpgf73p7ogMltD.5rggF73J4T3NoH3D"
-        },
-        {
-            "type": "text",
-            "name": "Singed Socks Syndrome",
-            "text": {
-                "content": "<h5>Injuries • Fire • Singed Socks Syndrome</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Singed Socks Syndrome</h4>\n    <p>Suffering from Singed Socks Syndrome, your feet feel like they've danced on a bonfire. The heat emanating from your boots could roast a turkey. Be careful, or you might leave a trail of cinders behind.</p>\n        <h5>Fiery Foot Fries</h5>\n        <img src=\"icons/magic/fire/flame-burning-creature-skeleton.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Soak your feet in a potion of frost, or find a pair of enchanted ice skates to cool those tootsies down.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Fire</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 6 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 300</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Blinded</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Fire</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 15</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Singed Socks Syndrome</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Fiery Foot Fries</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/fire/flame-burning-creature-skeleton.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Suffering from Singed Socks Syndrome, your feet feel like they've danced on a bonfire. The heat emanating from your boots could roast a turkey. Be careful, or you might leave a trail of cinders behind.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Soak your feet in a potion of frost, or find a pair of enchanted ice skates to cool those tootsies down.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 6</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 1800</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Fire Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Blinded</p>\n    </li>\n</ul>",
-                "format": 1
-            },
-            "_id": "PQ9r4Dt24ep3AyUu",
-            "system": {},
-            "title": {
-                "show": true,
-                "level": 1
-            },
-            "image": {},
-            "video": {
-                "controls": true,
-                "volume": 0.5
-            },
-            "src": null,
-            "category": null,
-            "sort": 0,
-            "flags": {},
-            "_stats": {
-                "compendiumSource": null,
-                "duplicateSource": null,
-                "exportSource": null,
-                "coreVersion": "13.351",
-                "systemId": "dnd5e",
-                "systemVersion": "5.2.5",
-                "lastModifiedBy": null
-            },
-            "ownership": {
-                "default": -1
-            },
-            "_key": "!journal.pages!BBJpgf73p7ogMltD.PQ9r4Dt24ep3AyUu"
+  "name": "Fire",
+  "pages": [
+    {
+      "type": "text",
+      "name": "Blistered Palms",
+      "text": {
+        "content": "<img src=\"icons/magic/fire/blast-jet-stream-embers-orange.webp\" alt=\"Blistered Palms\" />\n<p><em>A Grip Best Avoided</em></p>\n<p>Your palms have risen in protest, each blister a small tight dome of regret. Closing your hand is possible but unwise, and gripping anything reminds you of the exact moment you reached for it. You have begun carrying things in the crooks of your arms like a person hiding evidence.</p>\n<h2>Treatment</h2>\n<p>Cool water, clean wrapping, and do not open the blisters. Grip strength returns as they settle.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> fire</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Blistered Palms</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/fire/blast-jet-stream-embers-orange.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> A Grip Best Avoided</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Your palms have risen in protest, each blister a small tight dome of regret. Closing your hand is possible but unwise, and gripping anything reminds you of the exact moment you reached for it. You have begun carrying things in the crooks of your arms like a person hiding evidence.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Cool water, clean wrapping, and do not open the blisters. Grip strength returns as they settle.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 3</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 600</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 50</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "NrYcdqNTUMkmlffT",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {
+        "coffee-pub-bibliosoph": {
+          "injury": {
+            "category": "fire",
+            "title": "Blistered Palms",
+            "image": "icons/magic/fire/blast-jet-stream-embers-orange.webp",
+            "imagetitle": "A Grip Best Avoided",
+            "description": "Your palms have risen in protest, each blister a small tight dome of regret. Closing your hand is possible but unwise, and gripping anything reminds you of the exact moment you reached for it. You have begun carrying things in the crooks of your arms like a person hiding evidence.",
+            "treatment": "Cool water, clean wrapping, and do not open the blisters. Grip strength returns as they settle.",
+            "severity": "minor",
+            "damage": 3,
+            "duration": 600,
+            "statuseffect": "none",
+            "odds": 50
+          }
         }
-    ],
-    "folder": null,
-    "_id": "BBJpgf73p7ogMltD",
-    "categories": [],
-    "flags": {},
-    "_stats": {
+      },
+      "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null,
         "coreVersion": "13.351",
         "systemId": "dnd5e",
         "systemVersion": "5.2.5",
-        "createdTime": 1784237483935,
-        "modifiedTime": 1784237483935,
-        "lastModifiedBy": "B4d9pDwUBOtAfJFE"
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!BBJpgf73p7ogMltD.NrYcdqNTUMkmlffT"
     },
-    "ownership": {
-        "default": 0,
-        "B4d9pDwUBOtAfJFE": 3
+    {
+      "type": "text",
+      "name": "Charred To The Quick",
+      "text": {
+        "content": "<img src=\"icons/magic/fire/flame-burning-creature-skeleton.webp\" alt=\"Charred To The Quick\" />\n<p><em>Burned Past Feeling</em></p>\n<p>The burn went deeper than pain, into the strange numb country underneath it. The skin has gone tight and pale at the centre where it should hurt most, ringed by everything that still does. You find yourself checking the wound repeatedly, unsettled by how little it has to say.</p>\n<h2>Treatment</h2>\n<p>Serious, immediate care: cool the wound, cover it loosely, and get proper healing. Deep burns do not mend on their own and invite infection.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> fire</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Charred To The Quick</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/fire/flame-burning-creature-skeleton.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Burned Past Feeling</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The burn went deeper than pain, into the strange numb country underneath it. The skin has gone tight and pale at the centre where it should hurt most, ringed by everything that still does. You find yourself checking the wound repeatedly, unsettled by how little it has to say.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Serious, immediate care: cool the wound, cover it loosely, and get proper healing. Deep burns do not mend on their own and invite infection.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> major</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 10</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 0</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 8</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "3cYIbqaVMRnXM8KK",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 100,
+      "flags": {
+        "coffee-pub-bibliosoph": {
+          "injury": {
+            "category": "fire",
+            "title": "Charred To The Quick",
+            "image": "icons/magic/fire/flame-burning-creature-skeleton.webp",
+            "imagetitle": "Burned Past Feeling",
+            "description": "The burn went deeper than pain, into the strange numb country underneath it. The skin has gone tight and pale at the centre where it should hurt most, ringed by everything that still does. You find yourself checking the wound repeatedly, unsettled by how little it has to say.",
+            "treatment": "Serious, immediate care: cool the wound, cover it loosely, and get proper healing. Deep burns do not mend on their own and invite infection.",
+            "severity": "major",
+            "damage": 10,
+            "duration": 0,
+            "statuseffect": "none",
+            "odds": 8
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!BBJpgf73p7ogMltD.3cYIbqaVMRnXM8KK"
     },
-    "sort": 0,
-    "_key": "!journal!BBJpgf73p7ogMltD"
+    {
+      "type": "text",
+      "name": "Fiery Footsies",
+      "text": {
+        "content": "<img src=\"icons/magic/fire/flame-burning-creature-skeleton.webp\" alt=\"Fiery Footsies\" />\n<p><em>Dancing Flames</em></p>\n<p>You suddenly have an uncontrollable urge to do a hot shoe dance. Your feet, however, seem to be on fire, and despite your best efforts, you can't put them out! It's like having your own personal campfire.</p>\n<h2>Treatment</h2>\n<p>Cool your feet with water from a nearby source or a friend's water skin. Or maybe try doing a rain dance to summon a helpful drizzle. Or simply enjoy the warm ambiance.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> fire</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Fiery Footsies</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/fire/flame-burning-creature-skeleton.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Dancing Flames</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> You suddenly have an uncontrollable urge to do a hot shoe dance. Your feet, however, seem to be on fire, and despite your best efforts, you can't put them out! It's like having your own personal campfire.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Cool your feet with water from a nearby source or a friend's water skin. Or maybe try doing a rain dance to summon a helpful drizzle. Or simply enjoy the warm ambiance.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 60</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> burning</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 10</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "jYVnX6w3NXGmv9D4",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 200,
+      "flags": {
+        "coffee-pub-bibliosoph": {
+          "injury": {
+            "category": "fire",
+            "title": "Fiery Footsies",
+            "image": "icons/magic/fire/flame-burning-creature-skeleton.webp",
+            "imagetitle": "Dancing Flames",
+            "description": "You suddenly have an uncontrollable urge to do a hot shoe dance. Your feet, however, seem to be on fire, and despite your best efforts, you can't put them out! It's like having your own personal campfire.",
+            "treatment": "Cool your feet with water from a nearby source or a friend's water skin. Or maybe try doing a rain dance to summon a helpful drizzle. Or simply enjoy the warm ambiance.",
+            "severity": "minor",
+            "damage": 2,
+            "duration": 60,
+            "statuseffect": "burning",
+            "odds": 10
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!BBJpgf73p7ogMltD.jYVnX6w3NXGmv9D4"
+    },
+    {
+      "type": "text",
+      "name": "Flaming Feathered Fiasco",
+      "text": {
+        "content": "<img src=\"icons/magic/fire/flame-burning-creature-skeleton.webp\" alt=\"Flaming Feathered Fiasco\" />\n<p><em>Scorched Plume Surprise</em></p>\n<p>You find a colorful, fiery feathered creature doing a triumphant dance. As you approach, it emits a brilliant burst of flames, leaving you with singed eyebrows and an unusual craving for spicy foods.</p>\n<h2>Treatment</h2>\n<p>Seek out a skilled chef for a taste of surprisingly beneficial spicy dishes with healing properties.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> fire</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Flaming Feathered Fiasco</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/fire/flame-burning-creature-skeleton.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Scorched Plume Surprise</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> You find a colorful, fiery feathered creature doing a triumphant dance. As you approach, it emits a brilliant burst of flames, leaving you with singed eyebrows and an unusual craving for spicy foods.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Seek out a skilled chef for a taste of surprisingly beneficial spicy dishes with healing properties.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 6</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 300</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> charmed</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 15</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "xfZwffMcXDc2xHnP",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 300,
+      "flags": {
+        "coffee-pub-bibliosoph": {
+          "injury": {
+            "category": "fire",
+            "title": "Flaming Feathered Fiasco",
+            "image": "icons/magic/fire/flame-burning-creature-skeleton.webp",
+            "imagetitle": "Scorched Plume Surprise",
+            "description": "You find a colorful, fiery feathered creature doing a triumphant dance. As you approach, it emits a brilliant burst of flames, leaving you with singed eyebrows and an unusual craving for spicy foods.",
+            "treatment": "Seek out a skilled chef for a taste of surprisingly beneficial spicy dishes with healing properties.",
+            "severity": "moderate",
+            "damage": 6,
+            "duration": 300,
+            "statuseffect": "charmed",
+            "odds": 15
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!BBJpgf73p7ogMltD.xfZwffMcXDc2xHnP"
+    },
+    {
+      "type": "text",
+      "name": "Marshmallow Fingers",
+      "text": {
+        "content": "<img src=\"icons/magic/fire/flame-burning-creature-skeleton.webp\" alt=\"Marshmallow Fingers\" />\n<p><em>Smoldering Delight</em></p>\n<p>After a particularly intense encounter with a flame, your fingers now emanate a warm orange glow reminiscent of a perfectly toasted marshmallow. They are oddly satisfying to heat up cold soup, but be cautious when shaking hands!</p>\n<h2>Treatment</h2>\n<p>Immerse fingers in ice-cold water for 1 hour or until the glow subsides</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> fire</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Marshmallow Fingers</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/fire/flame-burning-creature-skeleton.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Smoldering Delight</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> After a particularly intense encounter with a flame, your fingers now emanate a warm orange glow reminiscent of a perfectly toasted marshmallow. They are oddly satisfying to heat up cold soup, but be cautious when shaking hands!</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Immerse fingers in ice-cold water for 1 hour or until the glow subsides</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 600</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> charmed</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 10</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "i6rTITTG0DJVIh8U",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 400,
+      "flags": {
+        "coffee-pub-bibliosoph": {
+          "injury": {
+            "category": "fire",
+            "title": "Marshmallow Fingers",
+            "image": "icons/magic/fire/flame-burning-creature-skeleton.webp",
+            "imagetitle": "Smoldering Delight",
+            "description": "After a particularly intense encounter with a flame, your fingers now emanate a warm orange glow reminiscent of a perfectly toasted marshmallow. They are oddly satisfying to heat up cold soup, but be cautious when shaking hands!",
+            "treatment": "Immerse fingers in ice-cold water for 1 hour or until the glow subsides",
+            "severity": "minor",
+            "damage": 2,
+            "duration": 600,
+            "statuseffect": "charmed",
+            "odds": 10
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!BBJpgf73p7ogMltD.i6rTITTG0DJVIh8U"
+    },
+    {
+      "type": "text",
+      "name": "Roasted Rump Injury",
+      "text": {
+        "content": "<img src=\"icons/magic/fire/flame-burning-creature-skeleton.webp\" alt=\"Roasted Rump Injury\" />\n<p><em>Singed Cheeks</em></p>\n<p>In the heat of battle, you experience a close encounter with a fire… wall torch maybe? Anyway, your backside got a little too toasty, leaving you with charred buttocks. The smell of burnt bacon follows you wherever you go.</p>\n<h2>Treatment</h2>\n<p>Cooling poultices or spells to soothe the burn</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> fire</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Roasted Rump Injury</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/fire/flame-burning-creature-skeleton.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Singed Cheeks</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> In the heat of battle, you experience a close encounter with a fire… wall torch maybe? Anyway, your backside got a little too toasty, leaving you with charred buttocks. The smell of burnt bacon follows you wherever you go.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Cooling poultices or spells to soothe the burn</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 7</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 120</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> exhaustion</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 5</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "0hqYBUhUJtgKlkOh",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 500,
+      "flags": {
+        "coffee-pub-bibliosoph": {
+          "injury": {
+            "category": "fire",
+            "title": "Roasted Rump Injury",
+            "image": "icons/magic/fire/flame-burning-creature-skeleton.webp",
+            "imagetitle": "Singed Cheeks",
+            "description": "In the heat of battle, you experience a close encounter with a fire… wall torch maybe? Anyway, your backside got a little too toasty, leaving you with charred buttocks. The smell of burnt bacon follows you wherever you go.",
+            "treatment": "Cooling poultices or spells to soothe the burn",
+            "severity": "moderate",
+            "damage": 7,
+            "duration": 120,
+            "statuseffect": "exhaustion",
+            "odds": 5
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!BBJpgf73p7ogMltD.0hqYBUhUJtgKlkOh"
+    },
+    {
+      "type": "text",
+      "name": "Singed Beard Syndrome",
+      "text": {
+        "content": "<img src=\"icons/magic/fire/flame-burning-creature-skeleton.webp\" alt=\"Singed Beard Syndrome\" />\n<p><em>Fiery Facial Farewell</em></p>\n<p>Lingering aftermath of an unexpected fireball mishap. Your once luscious beard now resembles a charcoal briquette. Smoke still rises whenever you speak.</p>\n<h2>Treatment</h2>\n<p>Apply a soothing ointment made of aloe vera and crushed ice from a frost giant's freezer.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> fire</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Singed Beard Syndrome</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/fire/flame-burning-creature-skeleton.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Fiery Facial Farewell</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Lingering aftermath of an unexpected fireball mishap. Your once luscious beard now resembles a charcoal briquette. Smoke still rises whenever you speak.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Apply a soothing ointment made of aloe vera and crushed ice from a frost giant's freezer.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 600</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> charmed</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 20</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "YdJekgWXf83KqTos",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 600,
+      "flags": {
+        "coffee-pub-bibliosoph": {
+          "injury": {
+            "category": "fire",
+            "title": "Singed Beard Syndrome",
+            "image": "icons/magic/fire/flame-burning-creature-skeleton.webp",
+            "imagetitle": "Fiery Facial Farewell",
+            "description": "Lingering aftermath of an unexpected fireball mishap. Your once luscious beard now resembles a charcoal briquette. Smoke still rises whenever you speak.",
+            "treatment": "Apply a soothing ointment made of aloe vera and crushed ice from a frost giant's freezer.",
+            "severity": "minor",
+            "damage": 2,
+            "duration": 600,
+            "statuseffect": "charmed",
+            "odds": 20
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!BBJpgf73p7ogMltD.YdJekgWXf83KqTos"
+    },
+    {
+      "type": "text",
+      "name": "Singed Socks Syndrome",
+      "text": {
+        "content": "<img src=\"icons/magic/fire/flame-burning-creature-skeleton.webp\" alt=\"Singed Socks Syndrome\" />\n<p><em>Fiery Foot Fries</em></p>\n<p>Suffering from Singed Socks Syndrome, your feet feel like they've danced on a bonfire. The heat emanating from your boots could roast a turkey. Be careful, or you might leave a trail of cinders behind.</p>\n<h2>Treatment</h2>\n<p>Soak your feet in a potion of frost, or find a pair of enchanted ice skates to cool those tootsies down.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> fire</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Singed Socks Syndrome</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/fire/flame-burning-creature-skeleton.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Fiery Foot Fries</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Suffering from Singed Socks Syndrome, your feet feel like they've danced on a bonfire. The heat emanating from your boots could roast a turkey. Be careful, or you might leave a trail of cinders behind.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Soak your feet in a potion of frost, or find a pair of enchanted ice skates to cool those tootsies down.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 6</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 1800</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> blinded</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 15</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "5UfDH0zQfzBETC2i",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 700,
+      "flags": {
+        "coffee-pub-bibliosoph": {
+          "injury": {
+            "category": "fire",
+            "title": "Singed Socks Syndrome",
+            "image": "icons/magic/fire/flame-burning-creature-skeleton.webp",
+            "imagetitle": "Fiery Foot Fries",
+            "description": "Suffering from Singed Socks Syndrome, your feet feel like they've danced on a bonfire. The heat emanating from your boots could roast a turkey. Be careful, or you might leave a trail of cinders behind.",
+            "treatment": "Soak your feet in a potion of frost, or find a pair of enchanted ice skates to cool those tootsies down.",
+            "severity": "moderate",
+            "damage": 6,
+            "duration": 1800,
+            "statuseffect": "blinded",
+            "odds": 15
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!BBJpgf73p7ogMltD.5UfDH0zQfzBETC2i"
+    },
+    {
+      "type": "text",
+      "name": "Smoke-Scoured Lungs",
+      "text": {
+        "content": "<img src=\"icons/magic/fire/flame-burning-campfire-smoke.webp\" alt=\"Smoke-Scoured Lungs\" />\n<p><em>Breathing Through Ash</em></p>\n<p>You breathed when you should not have, and the air took something with it on the way out. Every inhale rasps, every exhale tastes faintly of the fire, and your voice has dropped an octave you never asked for. Speaking more than a sentence sets off a cough that takes a while to negotiate with.</p>\n<h2>Treatment</h2>\n<p>Clean air, water, and silence. Do not let the patient near smoke again today.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> fire</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Smoke-Scoured Lungs</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/fire/flame-burning-campfire-smoke.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Breathing Through Ash</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> You breathed when you should not have, and the air took something with it on the way out. Every inhale rasps, every exhale tastes faintly of the fire, and your voice has dropped an octave you never asked for. Speaking more than a sentence sets off a cough that takes a while to negotiate with.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Clean air, water, and silence. Do not let the patient near smoke again today.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 6</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 2700</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 25</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "rDFnafiRcvfmXjry",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 800,
+      "flags": {
+        "coffee-pub-bibliosoph": {
+          "injury": {
+            "category": "fire",
+            "title": "Smoke-Scoured Lungs",
+            "image": "icons/magic/fire/flame-burning-campfire-smoke.webp",
+            "imagetitle": "Breathing Through Ash",
+            "description": "You breathed when you should not have, and the air took something with it on the way out. Every inhale rasps, every exhale tastes faintly of the fire, and your voice has dropped an octave you never asked for. Speaking more than a sentence sets off a cough that takes a while to negotiate with.",
+            "treatment": "Clean air, water, and silence. Do not let the patient near smoke again today.",
+            "severity": "moderate",
+            "damage": 6,
+            "duration": 2700,
+            "statuseffect": "none",
+            "odds": 25
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!BBJpgf73p7ogMltD.rDFnafiRcvfmXjry"
+    }
+  ],
+  "folder": null,
+  "_id": "BBJpgf73p7ogMltD",
+  "categories": [],
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1784237483935,
+    "modifiedTime": 1785256145104,
+    "lastModifiedBy": "B4d9pDwUBOtAfJFE"
+  },
+  "ownership": {
+    "default": 0,
+    "B4d9pDwUBOtAfJFE": 3
+  },
+  "sort": 0,
+  "_key": "!journal!BBJpgf73p7ogMltD"
 }

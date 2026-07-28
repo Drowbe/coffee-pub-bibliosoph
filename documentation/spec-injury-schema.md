@@ -1,6 +1,16 @@
 # Injury Schema & Authoring Prompt
 
-**Status:** Decisions resolved 2026-07-28 (Part 3) — ready to build. This doc is the single contract for four consumers: the authoring prompt, the generator that builds journal pages, the validator, and a future Blacksmith `journal.injury` importer profile.
+**Status: IMPLEMENTED 2026-07-28.** All decisions resolved (Part 3) and built. This doc is the single contract for four consumers: the authoring prompt, the generator that builds journal pages, the validator, and a future Blacksmith `journal.injury` importer profile.
+
+**Tooling** (`npm run …`):
+
+| Script | Does |
+|---|---|
+| `injuries:validate` | Checks `resources/injuries.json` against Part 6. Exits non-zero on error. |
+| `injuries:generate` | Validate → generate `packs/_source/injuries` → verify every page round-trips. |
+| `injuries:build` | The above, then `packs:build`. **Foundry must be closed.** |
+
+`tools/injury-schema.mjs` holds the machine-readable copy of Part 2 (categories, severities, conditions, bands) so the validator and generator cannot drift from each other. `tools/normalize-injuries.mjs` was the one-time migration onto this schema and has already been run.
 
 **Why one doc:** the current authoring prompt's JSON template *is* the record shape of `resources/injuries.json`, which *is* what our parser reads back out of the journal metadata. Prompt, schema, and parser have always been the same contract — written down in three places and drifted in all three (the prompt says `foldername: "Blacksmith: Injuries"`, every record says `"Injuries"`; the prompt mandates one image per category, the data has five for acid; the prompt says `Blind`, dnd5e wants `blinded`). One doc, one truth.
 
@@ -51,10 +61,12 @@ One injury = one flat JSON object. A category's injuries are collected into one 
 | `poisoned`, `diseased` | `diseased` is a pseudo-condition (see below) |
 | `bleeding`, `burning` | Pseudo-conditions; ongoing damage |
 | `prone`, `grappled`, `restrained` | Movement |
-| `stunned`, `paralyzed`, `incapacitated`, `unconscious` | Action denial — reserve for major |
+| `stunned` | Serious; moderate and up (warning on a minor) |
+| `paralyzed`, `incapacitated`, `unconscious` | Takes the whole turn away — **major only** (validator error otherwise) |
 | `exhaustion` | Leveled; applies level 1 |
 | `frightened`, `charmed` | Mental |
 | `petrified` | Extreme; major only, and rarely |
+| | **Guidance bands** (validator warnings, calibrated to the authored corpus): odds — minor 5–75, moderate 5–40, major 1–20. Duration — minor 60–1800s, moderate 60–7200s, major 1800–86400s or 0. |
 | `none` | No mechanical condition — the injury is narrative |
 
 **Pseudo-conditions** (`bleeding`, `burning`, `diseased`) cannot be toggled in dnd5e; they ride on the injury effect itself via its `statuses` array. Our applier already handles that difference — authors just name them like any other.
@@ -63,7 +75,9 @@ One injury = one flat JSON object. A category's injuries are collected into one 
 
 ## Part 3 — Decisions (resolved 2026-07-28)
 
-**D1 — `odds` drives selection. DECIDED: implement weighted picking.** The field is authored with real intent (minor injuries average 38, major 15) but the current picker chooses uniformly at random, so majors land ~2.5× more often than authored. `getJournalCategoryPageData` changes from `random(pages)` to a weighted draw on each page's `odds`. Records missing or with an invalid `odds` default to weight 1 rather than being skipped.
+**D1 — `odds` drives selection. DECIDED: implement weighted picking. DONE.** `getJournalCategoryPageData` now takes a weighted draw on each page's `odds`; records with a missing or invalid value default to weight 1 rather than dropping out of the pool. Measured effect over 40,000 simulated rolls: the severity mix moves from 46% minor / 33% moderate / **20% major** to 64% / 26% / **10% major** — majors are now roughly as rare as the authoring always intended.
+
+**Balance pass done (`tools/balance-injuries.mjs`).** With odds live, entries that fought their own severity were corrected: nine odds values (the worst being `Electric Shockwave`, a major at 75 that took 18% of all thunder rolls), thirteen durations (`Gravity Defiance`, a *major*, expired in 30 seconds; `Beastly Puncture Wound`, a *minor*, ran four hours), and six conditions — five minors were applying `incapacitated`, `stunned`, or `paralyzed`, taking a player's entire turn away for a light wound. The corpus was **not** rescaled: the authored medians already formed a clean 4:2:1 ladder (minor 40 / moderate 20 / major 10) and were left alone. Final mix over 60,000 simulated rolls: **67% minor / 25% moderate / 7% major**, with every category's most-likely result now a minor.
 
 **D2 — `damage` stays flat. DECIDED: integer HP by severity band** (minor 0–4, moderate 5–8, major 9–12). It doesn't scale with level; the GM adjudicates. Revisit alongside the mechanics rebuild rather than re-authoring 127 damage values now.
 
@@ -109,7 +123,7 @@ Page order:
 
 The separate hand-written "DETAILS" bullet list is **removed**. The metadata block is already a legible bullet list and serves as both the machine source and the human-readable mechanics. One copy, no drift.
 
-*Forward-looking:* the same generator stamps the record onto the page as a flag (`flags.coffee-pub-bibliosoph.injury`), so the eventual switch from HTML-parsing to flag-reading needs no second migration.
+The generator also stamps the record onto the page as a flag (`flags.coffee-pub-bibliosoph.injury`). **The runtime already prefers the flag** (`readInjuryRecord` in `scripts/bibliosoph.js`) and falls back to parsing the metadata HTML, so pages built before the generator keep working and the eventual removal of HTML parsing needs no second migration.
 
 ## Part 5 — The authoring prompt
 

@@ -1342,9 +1342,7 @@ async function createChatCardInjury(category, target = null) {
     var strImageBackground = "cobblestone";
 
     // Set the defaults
-    var strJournalType = "";
     var strInjuryCategory = "";
-    var strInjuryFolderName = "";
     var intOdds = "";
     var strInjuryTitle = "";
     var strInjuryImageTitle = "";
@@ -1365,12 +1363,10 @@ async function createChatCardInjury(category, target = null) {
     if (!objInjuryData) {
         BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "objInjuryData is null or undefined", "", true, false);
     } else {
-        strJournalType = objInjuryData.journaltype; // not used
         strInjuryCategory = objInjuryData.category;
-        strInjuryFolderName = objInjuryData.foldername; //not used
-        intOdds = objInjuryData.odds // not used
+        intOdds = objInjuryData.odds; // weights which injury gets picked
         strInjuryTitle = objInjuryData.title;
-        strInjuryImageTitle = objInjuryData.imagetitle; // not used
+        strInjuryImageTitle = objInjuryData.imagetitle; // caption under the card art
         strInjuryImage = objInjuryData.image;
         strInjuryDescription = objInjuryData.description;
         strInjuryTreatment = objInjuryData.treatment;
@@ -1383,7 +1379,6 @@ async function createChatCardInjury(category, target = null) {
         if (!Number.isFinite(intInjuryTreatmentDC) || intInjuryTreatmentDC <= 0) intInjuryTreatmentDC = null;
         intInjuryDamage = objInjuryData.damage;
         intInjuryDuration = objInjuryData.duration;
-        strInjuryAction = objInjuryData.action;
         strStatusEffect = objInjuryData.statuseffect;
         if (!strInjuryCategory) {
             strInjuryCategory = "General";
@@ -1480,10 +1475,12 @@ async function createChatCardInjury(category, target = null) {
             // Data was returned
         }
         
+        // The apply-button label is derived, not authored — it was always
+        // "Apply the {category} Injury" in the data, so the field is gone.
         if (!strInjuryAction) {
-            strInjuryAction = "Apply Injury to Token";
-        } else {
-            // Data was returned
+            strInjuryAction = strInjuryCategory && strInjuryCategory !== 'General'
+                ? `Apply the ${strInjuryCategory} Injury`
+                : "Apply Injury to Token";
         }
         
         if (intInjuryDuration === undefined || intInjuryDuration === null || intInjuryDuration === "") {
@@ -1553,6 +1550,7 @@ async function createChatCardInjury(category, target = null) {
         // cardSubTitle: strInjuryTitle, // simplifying this for now
         cardSubTitle: "",
         imageBackground: strImageBackground,
+        imagecaption: strCardImage ? (strInjuryImageTitle || "") : "",
         title: "",
         content: strInjuryDescription,
         injurycategory: strInjuryCategory, // added for new injury category
@@ -2184,6 +2182,34 @@ async function getCompendiumJournalList(compendiumName) {
 // ************************************
 
 
+// Pick one item weighted by its `odds` (1-100, higher = more common).
+// Records with a missing or unusable value fall back to weight 1 rather
+// than dropping out of the pool entirely.
+function weightedPick(items, weightOf) {
+    const weights = items.map((item) => {
+        const w = Number(weightOf(item));
+        return Number.isFinite(w) && w > 0 ? w : 1;
+    });
+    const total = weights.reduce((sum, w) => sum + w, 0);
+    let roll = Math.random() * total;
+    for (let i = 0; i < items.length; i++) {
+        roll -= weights[i];
+        if (roll <= 0) return items[i];
+    }
+    return items[items.length - 1];
+}
+
+// Read an injury record off a journal page. The generator stamps the
+// record as a flag, which is authoritative; parsing the HTML metadata is
+// the fallback for pages built before that (and the migration path off
+// HTML entirely — see documentation/spec-injury-schema.md).
+function readInjuryRecord(page) {
+    const flagged = page?.flags?.[MODULE.ID]?.injury;
+    if (flagged && flagged.title) return flagged;
+    const content = page?.text?.content;
+    return content ? getHTMLMetadata(content) : null;
+}
+
 async function getJournalCategoryPageData(compendiumName,category) {
 
 
@@ -2222,18 +2248,19 @@ async function getJournalCategoryPageData(compendiumName,category) {
 
     //BlacksmithUtils.postConsoleAndNotification("*** getJournalCategoryPageData arrCategoryPages" , arrCategoryPages, false, true, false); 
 
-    // Randomly select a Page
-    const randomPage = arrCategoryPages[Math.floor(Math.random() * arrCategoryPages.length)];
-
-    //BlacksmithUtils.postConsoleAndNotification("*** getJournalCategoryPageData randomPage" , randomPage, false, true, false); 
-
-   //BlacksmithUtils.postConsoleAndNotification("*** getJournalCategoryPageData randomPage.name" , randomPage.name, false, true, false); 
-    //BlacksmithUtils.postConsoleAndNotification("*** getJournalCategoryPageData randomPage.text.content" , randomPage.text.content, false, true, false); 
-
-    let metadataObject = getHTMLMetadata(randomPage.text.content);
-    //BlacksmithUtils.postConsoleAndNotification("*** getJournalCategoryPageData metadataObject" , metadataObject, false, true, false); 
-
-    return metadataObject;
+    // Select a page weighted by each injury's authored `odds`, so rarer
+    // (nastier) injuries stay rare instead of every page being equally
+    // likely. Unreadable pages drop out of the pool.
+    const arrCandidates = arrCategoryPages
+        .map((page) => ({ page, record: readInjuryRecord(page) }))
+        .filter((c) => c.record);
+    if (!arrCandidates.length) {
+        logBib(`No readable injuries in category "${category}"`, '', false, false);
+        return null;
+    }
+    const picked = weightedPick(arrCandidates, (c) => c.record.odds);
+    logBib(`Injury picked: "${picked.record.title}" (odds ${picked.record.odds ?? 'n/a'} of ${arrCandidates.length} in ${category})`, '', true, false);
+    return picked.record;
 }
 
 

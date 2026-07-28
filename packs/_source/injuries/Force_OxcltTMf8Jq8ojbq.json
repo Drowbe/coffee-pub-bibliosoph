@@ -5,10 +5,10 @@
       "type": "text",
       "name": "Boop Nose",
       "text": {
-        "content": "<h5>Injuries • Force • Boop Nose</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Boop Nose</h4>\n    <p>A mischievous force playfully boops your nose at unexpected moments, causing irritation and distraction. The playful spirit makes it hard to focus as your nose tingles annoyingly.</p>\n        <h5>Playful Spirit</h5>\n        <img src=\"icons/magic/earth/strike-fist-stone-gray.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Gentle nosemassages.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Force</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 3 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 15</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Deafened</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Force</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 20</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Boop Nose</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Playful Spirit</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/earth/strike-fist-stone-gray.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A mischievous force playfully boops your nose at unexpected moments, causing irritation and distraction. The playful spirit makes it hard to focus as your nose tingles annoyingly.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Gentle nosemassages.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 3</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 90</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Force Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Deafened</p>\n    </li>\n</ul>",
+        "content": "<img src=\"icons/magic/earth/strike-fist-stone-gray.webp\" alt=\"Boop Nose\" />\n<p><em>Playful Spirit</em></p>\n<p>A mischievous force playfully boops your nose at unexpected moments, causing irritation and distraction. The playful spirit makes it hard to focus as your nose tingles annoyingly.</p>\n<h2>Treatment</h2>\n<p>Gentle nosemassages.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> force</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Boop Nose</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/earth/strike-fist-stone-gray.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Playful Spirit</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A mischievous force playfully boops your nose at unexpected moments, causing irritation and distraction. The playful spirit makes it hard to focus as your nose tingles annoyingly.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Gentle nosemassages.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 3</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 90</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> deafened</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 20</p>\n    </li>\n</ul>",
         "format": 1
       },
-      "_id": "viDJOLzBQH60Z1HN",
+      "_id": "uZjBzzcSdgRJyooR",
       "system": {},
       "title": {
         "show": true,
@@ -22,7 +22,23 @@
       "src": null,
       "category": null,
       "sort": 0,
-      "flags": {},
+      "flags": {
+        "coffee-pub-bibliosoph": {
+          "injury": {
+            "category": "force",
+            "title": "Boop Nose",
+            "image": "icons/magic/earth/strike-fist-stone-gray.webp",
+            "imagetitle": "Playful Spirit",
+            "description": "A mischievous force playfully boops your nose at unexpected moments, causing irritation and distraction. The playful spirit makes it hard to focus as your nose tingles annoyingly.",
+            "treatment": "Gentle nosemassages.",
+            "severity": "minor",
+            "damage": 3,
+            "duration": 90,
+            "statuseffect": "deafened",
+            "odds": 20
+          }
+        }
+      },
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -35,16 +51,120 @@
       "ownership": {
         "default": -1
       },
-      "_key": "!journal.pages!OxcltTMf8Jq8ojbq.viDJOLzBQH60Z1HN"
+      "_key": "!journal.pages!OxcltTMf8Jq8ojbq.uZjBzzcSdgRJyooR"
+    },
+    {
+      "type": "text",
+      "name": "Compressed Ribs",
+      "text": {
+        "content": "<img src=\"icons/magic/earth/barrier-stone-explosion-debris.webp\" alt=\"Compressed Ribs\" />\n<p><em>Squeezed From All Sides</em></p>\n<p>For one long moment the air around you decided to be somewhere else, and took your breath with it. Your ribs ache in a ring rather than a spot, as though you had been briefly and firmly hugged by a building. Deep breaths are now a project rather than a reflex.</p>\n<h2>Treatment</h2>\n<p>Rest, shallow breathing, and no heavy lifting. Watch for worsening pain, which suggests something cracked rather than compressed.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> force</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Compressed Ribs</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/earth/barrier-stone-explosion-debris.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Squeezed From All Sides</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> For one long moment the air around you decided to be somewhere else, and took your breath with it. Your ribs ache in a ring rather than a spot, as though you had been briefly and firmly hugged by a building. Deep breaths are now a project rather than a reflex.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Rest, shallow breathing, and no heavy lifting. Watch for worsening pain, which suggests something cracked rather than compressed.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 6</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 1800</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 25</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "8ZgSKYumdU6OK7iU",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 100,
+      "flags": {
+        "coffee-pub-bibliosoph": {
+          "injury": {
+            "category": "force",
+            "title": "Compressed Ribs",
+            "image": "icons/magic/earth/barrier-stone-explosion-debris.webp",
+            "imagetitle": "Squeezed From All Sides",
+            "description": "For one long moment the air around you decided to be somewhere else, and took your breath with it. Your ribs ache in a ring rather than a spot, as though you had been briefly and firmly hugged by a building. Deep breaths are now a project rather than a reflex.",
+            "treatment": "Rest, shallow breathing, and no heavy lifting. Watch for worsening pain, which suggests something cracked rather than compressed.",
+            "severity": "moderate",
+            "damage": 6,
+            "duration": 1800,
+            "statuseffect": "none",
+            "odds": 25
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!OxcltTMf8Jq8ojbq.8ZgSKYumdU6OK7iU"
+    },
+    {
+      "type": "text",
+      "name": "Concussive Ring",
+      "text": {
+        "content": "<img src=\"icons/magic/sonic/explosion-impact-shock-wave.webp\" alt=\"Concussive Ring\" />\n<p><em>The Air Struck Back</em></p>\n<p>The blow never touched you and still it landed. A wall of pressure rang through your chest and left everything humming at a pitch just below hearing. You keep swallowing to clear ears that were never blocked.</p>\n<h2>Treatment</h2>\n<p>Sit somewhere still until the humming fades. There is nothing to bandage, which patients find deeply unsatisfying.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> force</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Concussive Ring</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/sonic/explosion-impact-shock-wave.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> The Air Struck Back</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The blow never touched you and still it landed. A wall of pressure rang through your chest and left everything humming at a pitch just below hearing. You keep swallowing to clear ears that were never blocked.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Sit somewhere still until the humming fades. There is nothing to bandage, which patients find deeply unsatisfying.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 300</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 55</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "pN7jGP0iLOPx7ZJk",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 200,
+      "flags": {
+        "coffee-pub-bibliosoph": {
+          "injury": {
+            "category": "force",
+            "title": "Concussive Ring",
+            "image": "icons/magic/sonic/explosion-impact-shock-wave.webp",
+            "imagetitle": "The Air Struck Back",
+            "description": "The blow never touched you and still it landed. A wall of pressure rang through your chest and left everything humming at a pitch just below hearing. You keep swallowing to clear ears that were never blocked.",
+            "treatment": "Sit somewhere still until the humming fades. There is nothing to bandage, which patients find deeply unsatisfying.",
+            "severity": "minor",
+            "damage": 2,
+            "duration": 300,
+            "statuseffect": "none",
+            "odds": 55
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!OxcltTMf8Jq8ojbq.pN7jGP0iLOPx7ZJk"
     },
     {
       "type": "text",
       "name": "Dancing Limbs",
       "text": {
-        "content": "<h5>Injuries • Force • Dancing Limbs</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Dancing Limbs</h4>\n    <p>Your arms and legs move uncontrollably, as if dancing to an unseen tune. The bizarre movements can be quite entertaining to watch, but exhausting for you as it drains your energy.</p>\n        <h5>Uncontrollable Movements</h5>\n        <img src=\"icons/magic/earth/strike-fist-stone-gray.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Impromptu dance breaks.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Force</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 7 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 10</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Stunned</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Force</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 10</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Dancing Limbs</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Uncontrollable Movements</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/earth/strike-fist-stone-gray.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Your arms and legs move uncontrollably, as if dancing to an unseen tune. The bizarre movements can be quite entertaining to watch, but exhausting for you as it drains your energy.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Impromptu dance breaks.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 7</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 60</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Force Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Stunned</p>\n    </li>\n</ul>",
+        "content": "<img src=\"icons/magic/earth/strike-fist-stone-gray.webp\" alt=\"Dancing Limbs\" />\n<p><em>Uncontrollable Movements</em></p>\n<p>Your arms and legs move uncontrollably, as if dancing to an unseen tune. The bizarre movements can be quite entertaining to watch, but exhausting for you as it drains your energy.</p>\n<h2>Treatment</h2>\n<p>Impromptu dance breaks.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> force</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Dancing Limbs</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/earth/strike-fist-stone-gray.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Uncontrollable Movements</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Your arms and legs move uncontrollably, as if dancing to an unseen tune. The bizarre movements can be quite entertaining to watch, but exhausting for you as it drains your energy.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Impromptu dance breaks.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 7</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 60</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> stunned</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 10</p>\n    </li>\n</ul>",
         "format": 1
       },
-      "_id": "NvaSc5n7uOzdC4mw",
+      "_id": "mLiEHp1eQ2WRBolz",
       "system": {},
       "title": {
         "show": true,
@@ -57,8 +177,24 @@
       },
       "src": null,
       "category": null,
-      "sort": 0,
-      "flags": {},
+      "sort": 300,
+      "flags": {
+        "coffee-pub-bibliosoph": {
+          "injury": {
+            "category": "force",
+            "title": "Dancing Limbs",
+            "image": "icons/magic/earth/strike-fist-stone-gray.webp",
+            "imagetitle": "Uncontrollable Movements",
+            "description": "Your arms and legs move uncontrollably, as if dancing to an unseen tune. The bizarre movements can be quite entertaining to watch, but exhausting for you as it drains your energy.",
+            "treatment": "Impromptu dance breaks.",
+            "severity": "moderate",
+            "damage": 7,
+            "duration": 60,
+            "statuseffect": "stunned",
+            "odds": 10
+          }
+        }
+      },
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -71,16 +207,16 @@
       "ownership": {
         "default": -1
       },
-      "_key": "!journal.pages!OxcltTMf8Jq8ojbq.NvaSc5n7uOzdC4mw"
+      "_key": "!journal.pages!OxcltTMf8Jq8ojbq.mLiEHp1eQ2WRBolz"
     },
     {
       "type": "text",
       "name": "Gravity Defiance",
       "text": {
-        "content": "<h5>Injuries • Force • Gravity Defiance</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Gravity Defiance</h4>\n    <p>Your perception of gravity shifts randomly, causing disorientation and imbalance. Up becomes down and down becomes up, challenging your sense of direction whenever the force decides to play tricks on you.</p>\n        <h5>Up Is Down</h5>\n        <img src=\"icons/magic/earth/strike-fist-stone-gray.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Inverting your perspective.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Force</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Major</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 11 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 5</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Poisoned</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Force</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 5</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Gravity Defiance</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Up Is Down</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/earth/strike-fist-stone-gray.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Your perception of gravity shifts randomly, causing disorientation and imbalance. Up becomes down and down becomes up, challenging your sense of direction whenever the force decides to play tricks on you.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Inverting your perspective.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Major</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 11</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 30</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Force Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Poisoned</p>\n    </li>\n</ul>",
+        "content": "<img src=\"icons/magic/earth/strike-fist-stone-gray.webp\" alt=\"Gravity Defiance\" />\n<p><em>Up Is Down</em></p>\n<p>Your perception of gravity shifts randomly, causing disorientation and imbalance. Up becomes down and down becomes up, challenging your sense of direction whenever the force decides to play tricks on you.</p>\n<h2>Treatment</h2>\n<p>Inverting your perspective.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> force</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Gravity Defiance</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/earth/strike-fist-stone-gray.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Up Is Down</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Your perception of gravity shifts randomly, causing disorientation and imbalance. Up becomes down and down becomes up, challenging your sense of direction whenever the force decides to play tricks on you.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Inverting your perspective.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> major</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 11</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 1800</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> poisoned</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 5</p>\n    </li>\n</ul>",
         "format": 1
       },
-      "_id": "Yw413MUZxVogh4AW",
+      "_id": "RbPehRf19U2vXmac",
       "system": {},
       "title": {
         "show": true,
@@ -93,8 +229,24 @@
       },
       "src": null,
       "category": null,
-      "sort": 0,
-      "flags": {},
+      "sort": 400,
+      "flags": {
+        "coffee-pub-bibliosoph": {
+          "injury": {
+            "category": "force",
+            "title": "Gravity Defiance",
+            "image": "icons/magic/earth/strike-fist-stone-gray.webp",
+            "imagetitle": "Up Is Down",
+            "description": "Your perception of gravity shifts randomly, causing disorientation and imbalance. Up becomes down and down becomes up, challenging your sense of direction whenever the force decides to play tricks on you.",
+            "treatment": "Inverting your perspective.",
+            "severity": "major",
+            "damage": 11,
+            "duration": 1800,
+            "statuseffect": "poisoned",
+            "odds": 5
+          }
+        }
+      },
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -107,16 +259,120 @@
       "ownership": {
         "default": -1
       },
-      "_key": "!journal.pages!OxcltTMf8Jq8ojbq.Yw413MUZxVogh4AW"
+      "_key": "!journal.pages!OxcltTMf8Jq8ojbq.RbPehRf19U2vXmac"
+    },
+    {
+      "type": "text",
+      "name": "Kinetic Whiplash",
+      "text": {
+        "content": "<img src=\"icons/magic/sonic/projectile-shock-wave-blue.webp\" alt=\"Kinetic Whiplash\" />\n<p><em>Stopped Too Suddenly</em></p>\n<p>You were moving, then very much not, and your body is still filing complaints about the transition. Your neck turns in one direction reluctantly and the other not at all. Looking behind you has become a whole-body manoeuvre.</p>\n<h2>Treatment</h2>\n<p>Warmth, gentle movement, and no sudden turns. It stiffens considerably before it eases.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> force</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Kinetic Whiplash</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/sonic/projectile-shock-wave-blue.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Stopped Too Suddenly</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> You were moving, then very much not, and your body is still filing complaints about the transition. Your neck turns in one direction reluctantly and the other not at all. Looking behind you has become a whole-body manoeuvre.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Warmth, gentle movement, and no sudden turns. It stiffens considerably before it eases.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 5</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 2400</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 20</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "VhKagKSV4T6zMyTd",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 500,
+      "flags": {
+        "coffee-pub-bibliosoph": {
+          "injury": {
+            "category": "force",
+            "title": "Kinetic Whiplash",
+            "image": "icons/magic/sonic/projectile-shock-wave-blue.webp",
+            "imagetitle": "Stopped Too Suddenly",
+            "description": "You were moving, then very much not, and your body is still filing complaints about the transition. Your neck turns in one direction reluctantly and the other not at all. Looking behind you has become a whole-body manoeuvre.",
+            "treatment": "Warmth, gentle movement, and no sudden turns. It stiffens considerably before it eases.",
+            "severity": "moderate",
+            "damage": 5,
+            "duration": 2400,
+            "statuseffect": "none",
+            "odds": 20
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!OxcltTMf8Jq8ojbq.VhKagKSV4T6zMyTd"
+    },
+    {
+      "type": "text",
+      "name": "Shoved Sideways",
+      "text": {
+        "content": "<img src=\"icons/magic/earth/strike-fist-stone-gray.webp\" alt=\"Shoved Sideways\" />\n<p><em>An Argument With Physics</em></p>\n<p>Something invisible disagreed with where you were standing and resolved the matter directly. You arrived somewhere else, mostly intact, with your sense of balance still in transit. Every few steps your body braces for a second shove that never comes.</p>\n<h2>Treatment</h2>\n<p>Check for the bruises the landing left rather than the blow itself. Balance returns within the hour.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> force</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Shoved Sideways</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/earth/strike-fist-stone-gray.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> An Argument With Physics</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Something invisible disagreed with where you were standing and resolved the matter directly. You arrived somewhere else, mostly intact, with your sense of balance still in transit. Every few steps your body braces for a second shove that never comes.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Check for the bruises the landing left rather than the blow itself. Balance returns within the hour.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 3</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 420</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> prone</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 45</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "cPbzlnTOhWU2fJmz",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 600,
+      "flags": {
+        "coffee-pub-bibliosoph": {
+          "injury": {
+            "category": "force",
+            "title": "Shoved Sideways",
+            "image": "icons/magic/earth/strike-fist-stone-gray.webp",
+            "imagetitle": "An Argument With Physics",
+            "description": "Something invisible disagreed with where you were standing and resolved the matter directly. You arrived somewhere else, mostly intact, with your sense of balance still in transit. Every few steps your body braces for a second shove that never comes.",
+            "treatment": "Check for the bruises the landing left rather than the blow itself. Balance returns within the hour.",
+            "severity": "minor",
+            "damage": 3,
+            "duration": 420,
+            "statuseffect": "prone",
+            "odds": 45
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!OxcltTMf8Jq8ojbq.cPbzlnTOhWU2fJmz"
     },
     {
       "type": "text",
       "name": "Tickle Fingers",
       "text": {
-        "content": "<h5>Injuries • Force • Tickle Fingers</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Tickle Fingers</h4>\n    <p>Whenever you try to grasp something, an invisible force tickles your fingers, causing you to fumble frequently. The mysterious energy surge overwhelms your hands, making precision tasks difficult.</p>\n        <h5>Mysterious Energy Surge</h5>\n        <img src=\"icons/magic/earth/strike-fist-stone-gray.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Giggling therapy sessions.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Force</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 2 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 20</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Prone</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Force</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 15</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Tickle Fingers</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Mysterious Energy Surge</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/earth/strike-fist-stone-gray.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Whenever you try to grasp something, an invisible force tickles your fingers, causing you to fumble frequently. The mysterious energy surge overwhelms your hands, making precision tasks difficult.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Giggling therapy sessions.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 120</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Force Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Prone</p>\n    </li>\n</ul>",
+        "content": "<img src=\"icons/magic/earth/strike-fist-stone-gray.webp\" alt=\"Tickle Fingers\" />\n<p><em>Mysterious Energy Surge</em></p>\n<p>Whenever you try to grasp something, an invisible force tickles your fingers, causing you to fumble frequently. The mysterious energy surge overwhelms your hands, making precision tasks difficult.</p>\n<h2>Treatment</h2>\n<p>Giggling therapy sessions.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> force</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Tickle Fingers</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/earth/strike-fist-stone-gray.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Mysterious Energy Surge</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Whenever you try to grasp something, an invisible force tickles your fingers, causing you to fumble frequently. The mysterious energy surge overwhelms your hands, making precision tasks difficult.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Giggling therapy sessions.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 120</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> prone</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 15</p>\n    </li>\n</ul>",
         "format": 1
       },
-      "_id": "TmZKIQPv7tqnynpN",
+      "_id": "SCBCRntYfChNqL1n",
       "system": {},
       "title": {
         "show": true,
@@ -129,8 +385,24 @@
       },
       "src": null,
       "category": null,
-      "sort": 0,
-      "flags": {},
+      "sort": 700,
+      "flags": {
+        "coffee-pub-bibliosoph": {
+          "injury": {
+            "category": "force",
+            "title": "Tickle Fingers",
+            "image": "icons/magic/earth/strike-fist-stone-gray.webp",
+            "imagetitle": "Mysterious Energy Surge",
+            "description": "Whenever you try to grasp something, an invisible force tickles your fingers, causing you to fumble frequently. The mysterious energy surge overwhelms your hands, making precision tasks difficult.",
+            "treatment": "Giggling therapy sessions.",
+            "severity": "minor",
+            "damage": 2,
+            "duration": 120,
+            "statuseffect": "prone",
+            "odds": 15
+          }
+        }
+      },
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -143,7 +415,7 @@
       "ownership": {
         "default": -1
       },
-      "_key": "!journal.pages!OxcltTMf8Jq8ojbq.TmZKIQPv7tqnynpN"
+      "_key": "!journal.pages!OxcltTMf8Jq8ojbq.SCBCRntYfChNqL1n"
     }
   ],
   "folder": null,
@@ -158,7 +430,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1784237483935,
+    "modifiedTime": 1785256145108,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

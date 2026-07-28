@@ -1,314 +1,442 @@
 {
-    "name": "Necrotic",
-    "pages": [
-        {
-            "type": "text",
-            "name": "Curse Of The Lich",
-            "text": {
-                "content": "<h5>Injuries • Necrotic • Curse Of The Lich</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Curse Of The Lich</h4>\n    <p>A malevolent laughter echoes in your mind as a shadowy grasp tightens around your heart. The touch of undeath lingers, draining the vitality from your very soul.</p>\n        <h5>Deathly Pledge</h5>\n        <img src=\"icons/magic/death/skull-energy-light-purple.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Embark on a perilous quest to find the remains of the long-forgotten lich or beseech a celestial being for deliverance from this nefarious curse.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Necrotic</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 6 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 900</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Exhaustion</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Necrotic</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 10</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Curse Of The Lich</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Deathly Pledge</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/death/skull-energy-light-purple.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A malevolent laughter echoes in your mind as a shadowy grasp tightens around your heart. The touch of undeath lingers, draining the vitality from your very soul.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Embark on a perilous quest to find the remains of the long-forgotten lich or beseech a celestial being for deliverance from this nefarious curse.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 6</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 5400</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Necrotic Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Exhaustion</p>\n    </li>\n</ul>",
-                "format": 1
-            },
-            "_id": "f5rajkvP2CtoqnUn",
-            "system": {},
-            "title": {
-                "show": true,
-                "level": 1
-            },
-            "image": {},
-            "video": {
-                "controls": true,
-                "volume": 0.5
-            },
-            "src": null,
-            "category": null,
-            "sort": 0,
-            "flags": {},
-            "_stats": {
-                "compendiumSource": null,
-                "duplicateSource": null,
-                "exportSource": null,
-                "coreVersion": "13.351",
-                "systemId": "dnd5e",
-                "systemVersion": "5.2.5",
-                "lastModifiedBy": null
-            },
-            "ownership": {
-                "default": -1
-            },
-            "_key": "!journal.pages!7uknyQYVAPOuOk1r.f5rajkvP2CtoqnUn"
-        },
-        {
-            "type": "text",
-            "name": "Decaying Limb",
-            "text": {
-                "content": "<h5>Injuries • Necrotic • Decaying Limb</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Decaying Limb</h4>\n    <p>A necrotic wound has caused one of your party member's limbs to decay slowly. The affected limb feels heavy and sluggish, impacting their combat maneuvers and movement speed.</p>\n        <h5>Rotten Grasp</h5>\n        <img src=\"icons/magic/death/skull-energy-light-purple.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Cleansing ritual or powerful restoration spell</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Necrotic</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Moderate</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 8 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 30</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Diseased</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Necrotic</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 15</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Decaying Limb</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Rotten Grasp</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/death/skull-energy-light-purple.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A necrotic wound has caused one of your party member's limbs to decay slowly. The affected limb feels heavy and sluggish, impacting their combat maneuvers and movement speed.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Cleansing ritual or powerful restoration spell</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 8</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 180</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Necrotic Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Diseased</p>\n    </li>\n</ul>",
-                "format": 1
-            },
-            "_id": "zBLVxDA5wQBIW709",
-            "system": {},
-            "title": {
-                "show": true,
-                "level": 1
-            },
-            "image": {},
-            "video": {
-                "controls": true,
-                "volume": 0.5
-            },
-            "src": null,
-            "category": null,
-            "sort": 0,
-            "flags": {},
-            "_stats": {
-                "compendiumSource": null,
-                "duplicateSource": null,
-                "exportSource": null,
-                "coreVersion": "13.351",
-                "systemId": "dnd5e",
-                "systemVersion": "5.2.5",
-                "lastModifiedBy": null
-            },
-            "ownership": {
-                "default": -1
-            },
-            "_key": "!journal.pages!7uknyQYVAPOuOk1r.zBLVxDA5wQBIW709"
-        },
-        {
-            "type": "text",
-            "name": "Frostbite Fingers",
-            "text": {
-                "content": "<h5>Injuries • Necrotic • Frostbite Fingers</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Frostbite Fingers</h4>\n    <p>After a particularly frosty encounter, your party member's fingers have taken on a deathly chill. They find it difficult to handle objects or cast spells requiring delicate hand movements.</p>\n        <h5>Chill Touch</h5>\n        <img src=\"icons/magic/air/wind-weather-snow-gusts.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Intense heat exposure or magical healing</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Necrotic</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 2 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 50</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: none</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Necrotic</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 50</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Frostbite Fingers</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Chill Touch</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/wind-weather-snow-gusts.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> After a particularly frosty encounter, your party member's fingers have taken on a deathly chill. They find it difficult to handle objects or cast spells requiring delicate hand movements.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Intense heat exposure or magical healing</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 300</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Necrotic Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n</ul>",
-                "format": 1
-            },
-            "_id": "CRCd9zDTFbVl9k2f",
-            "system": {},
-            "title": {
-                "show": true,
-                "level": 1
-            },
-            "image": {},
-            "video": {
-                "controls": true,
-                "volume": 0.5
-            },
-            "src": null,
-            "category": null,
-            "sort": 0,
-            "flags": {},
-            "_stats": {
-                "compendiumSource": null,
-                "duplicateSource": null,
-                "exportSource": null,
-                "coreVersion": "13.351",
-                "systemId": "dnd5e",
-                "systemVersion": "5.2.5",
-                "lastModifiedBy": null
-            },
-            "ownership": {
-                "default": -1
-            },
-            "_key": "!journal.pages!7uknyQYVAPOuOk1r.CRCd9zDTFbVl9k2f"
-        },
-        {
-            "type": "text",
-            "name": "Goblin's Gloom",
-            "text": {
-                "content": "<h5>Injuries • Necrotic • Goblin's Gloom</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Goblin's Gloom</h4>\n    <p>After rummaging through a goblin den, a dark aura seeps into your skin. Your limbs feel heavy, and a sense of dread fills your mind.</p>\n        <h5>Mystic Decay</h5>\n        <img src=\"icons/magic/death/skull-energy-light-purple.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Seek the help of a powerful healer or visit a temple to rid yourself of this dark curse.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Necrotic</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 3 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 600</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: none</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Necrotic</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 15</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Goblin's Gloom</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Mystic Decay</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/death/skull-energy-light-purple.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> After rummaging through a goblin den, a dark aura seeps into your skin. Your limbs feel heavy, and a sense of dread fills your mind.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Seek the help of a powerful healer or visit a temple to rid yourself of this dark curse.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 3</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 3600</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Necrotic Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n</ul>",
-                "format": 1
-            },
-            "_id": "hC6XhuL3uMWqJlbq",
-            "system": {},
-            "title": {
-                "show": true,
-                "level": 1
-            },
-            "image": {},
-            "video": {
-                "controls": true,
-                "volume": 0.5
-            },
-            "src": null,
-            "category": null,
-            "sort": 0,
-            "flags": {},
-            "_stats": {
-                "compendiumSource": null,
-                "duplicateSource": null,
-                "exportSource": null,
-                "coreVersion": "13.351",
-                "systemId": "dnd5e",
-                "systemVersion": "5.2.5",
-                "lastModifiedBy": null
-            },
-            "ownership": {
-                "default": -1
-            },
-            "_key": "!journal.pages!7uknyQYVAPOuOk1r.hC6XhuL3uMWqJlbq"
-        },
-        {
-            "type": "text",
-            "name": "Skeletal Sneeze",
-            "text": {
-                "content": "<h5>Injuries • Necrotic • Skeletal Sneeze</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Skeletal Sneeze</h4>\n    <p>As you investigate an ancient tomb, a ghostly presence causes a bone-chilling sneeze that leaves your body feeling frail and hollow.</p>\n        <h5>Bone Chill</h5>\n        <img src=\"icons/magic/death/skull-energy-light-purple.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Consume rare herbs from a forgotten grove or seek the aid of a seasoned druid to heal this spectral affliction.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Necrotic</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 2 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 450</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: none</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Necrotic</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 20</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Skeletal Sneeze</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Bone Chill</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/death/skull-energy-light-purple.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> As you investigate an ancient tomb, a ghostly presence causes a bone-chilling sneeze that leaves your body feeling frail and hollow.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Consume rare herbs from a forgotten grove or seek the aid of a seasoned druid to heal this spectral affliction.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 2700</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Necrotic Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n</ul>",
-                "format": 1
-            },
-            "_id": "NTbiADd8jSAisWOf",
-            "system": {},
-            "title": {
-                "show": true,
-                "level": 1
-            },
-            "image": {},
-            "video": {
-                "controls": true,
-                "volume": 0.5
-            },
-            "src": null,
-            "category": null,
-            "sort": 0,
-            "flags": {},
-            "_stats": {
-                "compendiumSource": null,
-                "duplicateSource": null,
-                "exportSource": null,
-                "coreVersion": "13.351",
-                "systemId": "dnd5e",
-                "systemVersion": "5.2.5",
-                "lastModifiedBy": null
-            },
-            "ownership": {
-                "default": -1
-            },
-            "_key": "!journal.pages!7uknyQYVAPOuOk1r.NTbiADd8jSAisWOf"
-        },
-        {
-            "type": "text",
-            "name": "Soul Erosion",
-            "text": {
-                "content": "<h5>Injuries • Necrotic • Soul Erosion</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Soul Erosion</h4>\n    <p>The touch of a powerful necrotic force has eroded a part of your party member's soul. They feel a deep sense of melancholy, affecting their will to fight and casting abilities.</p>\n        <h5>Life's Escape</h5>\n        <img src=\"icons/magic/death/skull-energy-light-purple.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Celestial intervention or potent healing magic</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Necrotic</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Major</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 11 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 20</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Exhaustion</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Necrotic</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 5</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Soul Erosion</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Life's Escape</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/death/skull-energy-light-purple.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The touch of a powerful necrotic force has eroded a part of your party member's soul. They feel a deep sense of melancholy, affecting their will to fight and casting abilities.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Celestial intervention or potent healing magic</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Major</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 11</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 120</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Necrotic Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Exhaustion</p>\n    </li>\n</ul>",
-                "format": 1
-            },
-            "_id": "AHGH38nTNHkawdaL",
-            "system": {},
-            "title": {
-                "show": true,
-                "level": 1
-            },
-            "image": {},
-            "video": {
-                "controls": true,
-                "volume": 0.5
-            },
-            "src": null,
-            "category": null,
-            "sort": 0,
-            "flags": {},
-            "_stats": {
-                "compendiumSource": null,
-                "duplicateSource": null,
-                "exportSource": null,
-                "coreVersion": "13.351",
-                "systemId": "dnd5e",
-                "systemVersion": "5.2.5",
-                "lastModifiedBy": null
-            },
-            "ownership": {
-                "default": -1
-            },
-            "_key": "!journal.pages!7uknyQYVAPOuOk1r.AHGH38nTNHkawdaL"
-        },
-        {
-            "type": "text",
-            "name": "Soul Shredder",
-            "text": {
-                "content": "<h5>Injuries • Necrotic • Soul Shredder</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Soul Shredder</h4>\n    <p>A soul-rending scream pierces the night, chilling you to the bone. Dark tendrils wrap around your spirit, threatening to tear it asunder.</p>\n        <h5>Doomed Essence</h5>\n        <img src=\"icons/magic/death/skull-energy-light-purple.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Only the most potent of healers can mend the rift in your soul caused by this malevolent force. Seek out divine intervention or face a fate worse than death.</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Necrotic</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Major</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 10 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 1200</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Poisoned</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Necrotic</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 5</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Soul Shredder</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Doomed Essence</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/death/skull-energy-light-purple.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A soul-rending scream pierces the night, chilling you to the bone. Dark tendrils wrap around your spirit, threatening to tear it asunder.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Only the most potent of healers can mend the rift in your soul caused by this malevolent force. Seek out divine intervention or face a fate worse than death.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Major</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 10</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 7200</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Necrotic Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Poisoned</p>\n    </li>\n</ul>",
-                "format": 1
-            },
-            "_id": "IS8dlyMADCxYykte",
-            "system": {},
-            "title": {
-                "show": true,
-                "level": 1
-            },
-            "image": {},
-            "video": {
-                "controls": true,
-                "volume": 0.5
-            },
-            "src": null,
-            "category": null,
-            "sort": 0,
-            "flags": {},
-            "_stats": {
-                "compendiumSource": null,
-                "duplicateSource": null,
-                "exportSource": null,
-                "coreVersion": "13.351",
-                "systemId": "dnd5e",
-                "systemVersion": "5.2.5",
-                "lastModifiedBy": null
-            },
-            "ownership": {
-                "default": -1
-            },
-            "_key": "!journal.pages!7uknyQYVAPOuOk1r.IS8dlyMADCxYykte"
-        },
-        {
-            "type": "text",
-            "name": "Wight's Weakness",
-            "text": {
-                "content": "<h5>Injuries • Necrotic • Wight's Weakness</h5>\n<h2>Injury Card</h2>\n<blockquote>\n    <h4>Wight's Weakness</h4>\n    <p>A wight's touch has left your party member drained, feeling weaker and struggling to keep up with their companions. They find it harder to land hits in combat.</p>\n        <h5>Unseen Opposition</h5>\n        <img src=\"icons/magic/death/skull-energy-light-purple.webp\" />\n        <hr />\n    <h5>Treatment</h5>\n    <p>Purifying magic or potion of strength</p>\n    <h5>Details</h5>\n    <ul>\n        <li>\n            <p><strong>Category</strong>: Necrotic</p>\n        </li>\n        <li>\n            <p><strong>Severity</strong>: Minor</p>\n        </li>\n        <li>\n            <p><strong>Damage</strong>: 3 Hit Points</p>\n        </li>\n        <li>\n            <p><strong>Duration</strong>: 40</p>\n        </li>\n        <li>\n            <p><strong>Status Effect</strong>: Exhaustion</p>\n        </li>\n    </ul>\n</blockquote>\n<h2>Metadata</h2>\n<p>The metadata is used to generate the Injury in the chat window. Poorly formatted metadata will result in broken or nonfunctional injuries.</p>\n<ul>\n    <li>\n        <p><strong>journaltype:</strong> injury</p>\n    </li>\n    <li>\n        <p><strong>category:</strong> Necrotic</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 30</p>\n    </li>\n    <li>\n        <p><strong>foldername:</strong> Injuries</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Wight's Weakness</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Unseen Opposition</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/death/skull-energy-light-purple.webp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A wight's touch has left your party member drained, feeling weaker and struggling to keep up with their companions. They find it harder to land hits in combat.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Purifying magic or potion of strength</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> Minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 3</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 240</p>\n    </li>\n    <li>\n        <p><strong>action:</strong> Apply the Necrotic Injury</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> Exhaustion</p>\n    </li>\n</ul>",
-                "format": 1
-            },
-            "_id": "ZhV5pfr9YIdQahMb",
-            "system": {},
-            "title": {
-                "show": true,
-                "level": 1
-            },
-            "image": {},
-            "video": {
-                "controls": true,
-                "volume": 0.5
-            },
-            "src": null,
-            "category": null,
-            "sort": 0,
-            "flags": {},
-            "_stats": {
-                "compendiumSource": null,
-                "duplicateSource": null,
-                "exportSource": null,
-                "coreVersion": "13.351",
-                "systemId": "dnd5e",
-                "systemVersion": "5.2.5",
-                "lastModifiedBy": null
-            },
-            "ownership": {
-                "default": -1
-            },
-            "_key": "!journal.pages!7uknyQYVAPOuOk1r.ZhV5pfr9YIdQahMb"
+  "name": "Necrotic",
+  "pages": [
+    {
+      "type": "text",
+      "name": "Curse Of The Lich",
+      "text": {
+        "content": "<img src=\"icons/magic/death/skull-energy-light-purple.webp\" alt=\"Curse Of The Lich\" />\n<p><em>Deathly Pledge</em></p>\n<p>A malevolent laughter echoes in your mind as a shadowy grasp tightens around your heart. The touch of undeath lingers, draining the vitality from your very soul.</p>\n<h2>Treatment</h2>\n<p>Embark on a perilous quest to find the remains of the long-forgotten lich or beseech a celestial being for deliverance from this nefarious curse.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> necrotic</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Curse Of The Lich</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/death/skull-energy-light-purple.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Deathly Pledge</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A malevolent laughter echoes in your mind as a shadowy grasp tightens around your heart. The touch of undeath lingers, draining the vitality from your very soul.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Embark on a perilous quest to find the remains of the long-forgotten lich or beseech a celestial being for deliverance from this nefarious curse.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 6</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 5400</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> exhaustion</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 10</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "L9BcLxxnkxuWlC1A",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {
+        "coffee-pub-bibliosoph": {
+          "injury": {
+            "category": "necrotic",
+            "title": "Curse Of The Lich",
+            "image": "icons/magic/death/skull-energy-light-purple.webp",
+            "imagetitle": "Deathly Pledge",
+            "description": "A malevolent laughter echoes in your mind as a shadowy grasp tightens around your heart. The touch of undeath lingers, draining the vitality from your very soul.",
+            "treatment": "Embark on a perilous quest to find the remains of the long-forgotten lich or beseech a celestial being for deliverance from this nefarious curse.",
+            "severity": "moderate",
+            "damage": 6,
+            "duration": 5400,
+            "statuseffect": "exhaustion",
+            "odds": 10
+          }
         }
-    ],
-    "folder": null,
-    "_id": "7uknyQYVAPOuOk1r",
-    "categories": [],
-    "flags": {},
-    "_stats": {
+      },
+      "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null,
         "coreVersion": "13.351",
         "systemId": "dnd5e",
         "systemVersion": "5.2.5",
-        "createdTime": 1784237483935,
-        "modifiedTime": 1784237483935,
-        "lastModifiedBy": "B4d9pDwUBOtAfJFE"
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!7uknyQYVAPOuOk1r.L9BcLxxnkxuWlC1A"
     },
-    "ownership": {
-        "default": 0,
-        "B4d9pDwUBOtAfJFE": 3
+    {
+      "type": "text",
+      "name": "Decaying Limb",
+      "text": {
+        "content": "<img src=\"icons/magic/death/skull-energy-light-purple.webp\" alt=\"Decaying Limb\" />\n<p><em>Rotten Grasp</em></p>\n<p>A necrotic wound has caused one of your party member's limbs to decay slowly. The affected limb feels heavy and sluggish, impacting their combat maneuvers and movement speed.</p>\n<h2>Treatment</h2>\n<p>Cleansing ritual or powerful restoration spell</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> necrotic</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Decaying Limb</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/death/skull-energy-light-purple.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Rotten Grasp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A necrotic wound has caused one of your party member's limbs to decay slowly. The affected limb feels heavy and sluggish, impacting their combat maneuvers and movement speed.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Cleansing ritual or powerful restoration spell</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 8</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 180</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> diseased</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 15</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "BgWaUTW5SZHFoI7L",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 100,
+      "flags": {
+        "coffee-pub-bibliosoph": {
+          "injury": {
+            "category": "necrotic",
+            "title": "Decaying Limb",
+            "image": "icons/magic/death/skull-energy-light-purple.webp",
+            "imagetitle": "Rotten Grasp",
+            "description": "A necrotic wound has caused one of your party member's limbs to decay slowly. The affected limb feels heavy and sluggish, impacting their combat maneuvers and movement speed.",
+            "treatment": "Cleansing ritual or powerful restoration spell",
+            "severity": "moderate",
+            "damage": 8,
+            "duration": 180,
+            "statuseffect": "diseased",
+            "odds": 15
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!7uknyQYVAPOuOk1r.BgWaUTW5SZHFoI7L"
     },
-    "sort": 0,
-    "_key": "!journal!7uknyQYVAPOuOk1r"
+    {
+      "type": "text",
+      "name": "Frostbite Fingers",
+      "text": {
+        "content": "<img src=\"icons/magic/death/hand-withered-gray.webp\" alt=\"Frostbite Fingers\" />\n<p><em>Chill Touch</em></p>\n<p>After a particularly frosty encounter, your party member's fingers have taken on a deathly chill. They find it difficult to handle objects or cast spells requiring delicate hand movements.</p>\n<h2>Treatment</h2>\n<p>Intense heat exposure or magical healing</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> necrotic</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Frostbite Fingers</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/death/hand-withered-gray.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Chill Touch</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> After a particularly frosty encounter, your party member's fingers have taken on a deathly chill. They find it difficult to handle objects or cast spells requiring delicate hand movements.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Intense heat exposure or magical healing</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 300</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 50</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "MqWxFScZolPB7s7L",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 200,
+      "flags": {
+        "coffee-pub-bibliosoph": {
+          "injury": {
+            "category": "necrotic",
+            "title": "Frostbite Fingers",
+            "image": "icons/magic/death/hand-withered-gray.webp",
+            "imagetitle": "Chill Touch",
+            "description": "After a particularly frosty encounter, your party member's fingers have taken on a deathly chill. They find it difficult to handle objects or cast spells requiring delicate hand movements.",
+            "treatment": "Intense heat exposure or magical healing",
+            "severity": "minor",
+            "damage": 2,
+            "duration": 300,
+            "statuseffect": "none",
+            "odds": 50
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!7uknyQYVAPOuOk1r.MqWxFScZolPB7s7L"
+    },
+    {
+      "type": "text",
+      "name": "Goblin's Gloom",
+      "text": {
+        "content": "<img src=\"icons/magic/death/skull-energy-light-purple.webp\" alt=\"Goblin's Gloom\" />\n<p><em>Mystic Decay</em></p>\n<p>After rummaging through a goblin den, a dark aura seeps into your skin. Your limbs feel heavy, and a sense of dread fills your mind.</p>\n<h2>Treatment</h2>\n<p>Seek the help of a powerful healer or visit a temple to rid yourself of this dark curse.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> necrotic</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Goblin's Gloom</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/death/skull-energy-light-purple.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Mystic Decay</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> After rummaging through a goblin den, a dark aura seeps into your skin. Your limbs feel heavy, and a sense of dread fills your mind.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Seek the help of a powerful healer or visit a temple to rid yourself of this dark curse.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 3</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 900</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 15</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "4OwYKu5PZaDHPYOc",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 300,
+      "flags": {
+        "coffee-pub-bibliosoph": {
+          "injury": {
+            "category": "necrotic",
+            "title": "Goblin's Gloom",
+            "image": "icons/magic/death/skull-energy-light-purple.webp",
+            "imagetitle": "Mystic Decay",
+            "description": "After rummaging through a goblin den, a dark aura seeps into your skin. Your limbs feel heavy, and a sense of dread fills your mind.",
+            "treatment": "Seek the help of a powerful healer or visit a temple to rid yourself of this dark curse.",
+            "severity": "minor",
+            "damage": 3,
+            "duration": 900,
+            "statuseffect": "none",
+            "odds": 15
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!7uknyQYVAPOuOk1r.4OwYKu5PZaDHPYOc"
+    },
+    {
+      "type": "text",
+      "name": "Skeletal Sneeze",
+      "text": {
+        "content": "<img src=\"icons/magic/death/skull-energy-light-purple.webp\" alt=\"Skeletal Sneeze\" />\n<p><em>Bone Chill</em></p>\n<p>As you investigate an ancient tomb, a ghostly presence causes a bone-chilling sneeze that leaves your body feeling frail and hollow.</p>\n<h2>Treatment</h2>\n<p>Consume rare herbs from a forgotten grove or seek the aid of a seasoned druid to heal this spectral affliction.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> necrotic</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Skeletal Sneeze</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/death/skull-energy-light-purple.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Bone Chill</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> As you investigate an ancient tomb, a ghostly presence causes a bone-chilling sneeze that leaves your body feeling frail and hollow.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Consume rare herbs from a forgotten grove or seek the aid of a seasoned druid to heal this spectral affliction.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 900</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 20</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "aB8g34l7OYoFJdQU",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 400,
+      "flags": {
+        "coffee-pub-bibliosoph": {
+          "injury": {
+            "category": "necrotic",
+            "title": "Skeletal Sneeze",
+            "image": "icons/magic/death/skull-energy-light-purple.webp",
+            "imagetitle": "Bone Chill",
+            "description": "As you investigate an ancient tomb, a ghostly presence causes a bone-chilling sneeze that leaves your body feeling frail and hollow.",
+            "treatment": "Consume rare herbs from a forgotten grove or seek the aid of a seasoned druid to heal this spectral affliction.",
+            "severity": "minor",
+            "damage": 2,
+            "duration": 900,
+            "statuseffect": "none",
+            "odds": 20
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!7uknyQYVAPOuOk1r.aB8g34l7OYoFJdQU"
+    },
+    {
+      "type": "text",
+      "name": "Soul Erosion",
+      "text": {
+        "content": "<img src=\"icons/magic/death/skull-energy-light-purple.webp\" alt=\"Soul Erosion\" />\n<p><em>Life's Escape</em></p>\n<p>The touch of a powerful necrotic force has eroded a part of your party member's soul. They feel a deep sense of melancholy, affecting their will to fight and casting abilities.</p>\n<h2>Treatment</h2>\n<p>Celestial intervention or potent healing magic</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> necrotic</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Soul Erosion</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/death/skull-energy-light-purple.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Life's Escape</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The touch of a powerful necrotic force has eroded a part of your party member's soul. They feel a deep sense of melancholy, affecting their will to fight and casting abilities.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Celestial intervention or potent healing magic</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> major</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 11</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 0</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> exhaustion</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 5</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "cCCswxKYf3Xju5Vy",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 500,
+      "flags": {
+        "coffee-pub-bibliosoph": {
+          "injury": {
+            "category": "necrotic",
+            "title": "Soul Erosion",
+            "image": "icons/magic/death/skull-energy-light-purple.webp",
+            "imagetitle": "Life's Escape",
+            "description": "The touch of a powerful necrotic force has eroded a part of your party member's soul. They feel a deep sense of melancholy, affecting their will to fight and casting abilities.",
+            "treatment": "Celestial intervention or potent healing magic",
+            "severity": "major",
+            "damage": 11,
+            "duration": 0,
+            "statuseffect": "exhaustion",
+            "odds": 5
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!7uknyQYVAPOuOk1r.cCCswxKYf3Xju5Vy"
+    },
+    {
+      "type": "text",
+      "name": "Soul Shredder",
+      "text": {
+        "content": "<img src=\"icons/magic/death/skull-energy-light-purple.webp\" alt=\"Soul Shredder\" />\n<p><em>Doomed Essence</em></p>\n<p>A soul-rending scream pierces the night, chilling you to the bone. Dark tendrils wrap around your spirit, threatening to tear it asunder.</p>\n<h2>Treatment</h2>\n<p>Only the most potent of healers can mend the rift in your soul caused by this malevolent force. Seek out divine intervention or face a fate worse than death.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> necrotic</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Soul Shredder</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/death/skull-energy-light-purple.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Doomed Essence</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A soul-rending scream pierces the night, chilling you to the bone. Dark tendrils wrap around your spirit, threatening to tear it asunder.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Only the most potent of healers can mend the rift in your soul caused by this malevolent force. Seek out divine intervention or face a fate worse than death.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> major</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 10</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 7200</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> poisoned</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 5</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "pKsSn4RcQ0u6cfzH",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 600,
+      "flags": {
+        "coffee-pub-bibliosoph": {
+          "injury": {
+            "category": "necrotic",
+            "title": "Soul Shredder",
+            "image": "icons/magic/death/skull-energy-light-purple.webp",
+            "imagetitle": "Doomed Essence",
+            "description": "A soul-rending scream pierces the night, chilling you to the bone. Dark tendrils wrap around your spirit, threatening to tear it asunder.",
+            "treatment": "Only the most potent of healers can mend the rift in your soul caused by this malevolent force. Seek out divine intervention or face a fate worse than death.",
+            "severity": "major",
+            "damage": 10,
+            "duration": 7200,
+            "statuseffect": "poisoned",
+            "odds": 5
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!7uknyQYVAPOuOk1r.pKsSn4RcQ0u6cfzH"
+    },
+    {
+      "type": "text",
+      "name": "Wight's Weakness",
+      "text": {
+        "content": "<img src=\"icons/magic/death/skull-energy-light-purple.webp\" alt=\"Wight's Weakness\" />\n<p><em>Unseen Opposition</em></p>\n<p>A wight's touch has left your party member drained, feeling weaker and struggling to keep up with their companions. They find it harder to land hits in combat.</p>\n<h2>Treatment</h2>\n<p>Purifying magic or potion of strength</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> necrotic</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Wight's Weakness</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/death/skull-energy-light-purple.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Unseen Opposition</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A wight's touch has left your party member drained, feeling weaker and struggling to keep up with their companions. They find it harder to land hits in combat.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Purifying magic or potion of strength</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 3</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 240</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> exhaustion</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 30</p>\n    </li>\n</ul>",
+        "format": 1
+      },
+      "_id": "YYMpmhok9SkfkVWZ",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 700,
+      "flags": {
+        "coffee-pub-bibliosoph": {
+          "injury": {
+            "category": "necrotic",
+            "title": "Wight's Weakness",
+            "image": "icons/magic/death/skull-energy-light-purple.webp",
+            "imagetitle": "Unseen Opposition",
+            "description": "A wight's touch has left your party member drained, feeling weaker and struggling to keep up with their companions. They find it harder to land hits in combat.",
+            "treatment": "Purifying magic or potion of strength",
+            "severity": "minor",
+            "damage": 3,
+            "duration": 240,
+            "statuseffect": "exhaustion",
+            "odds": 30
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!7uknyQYVAPOuOk1r.YYMpmhok9SkfkVWZ"
+    }
+  ],
+  "folder": null,
+  "_id": "7uknyQYVAPOuOk1r",
+  "categories": [],
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1784237483935,
+    "modifiedTime": 1785256145120,
+    "lastModifiedBy": "B4d9pDwUBOtAfJFE"
+  },
+  "ownership": {
+    "default": 0,
+    "B4d9pDwUBOtAfJFE": 3
+  },
+  "sort": 0,
+  "_key": "!journal!7uknyQYVAPOuOk1r"
 }

@@ -453,6 +453,48 @@ const SCENARIOS = [
         }
     },
     {
+        tab: 'injuries',
+        label: '🎲 Audit injury pool: odds weighting + severity mix',
+        run: async () => {
+            const packId = game.settings.get('coffee-pub-bibliosoph', 'injuryCompendium');
+            const pack = game.packs.get(packId);
+            if (!pack) return ui.notifications.warn(`Compendium "${packId}" not found.`);
+            const MODULE_ID = 'coffee-pub-bibliosoph';
+            const readRecord = (page) => {
+                const flagged = page?.flags?.[MODULE_ID]?.injury;
+                if (flagged?.title) return { rec: flagged, via: 'flag' };
+                const m = String(page?.text?.content ?? '').match(/<h2>Metadata<\/h2>[\s\S]*?<ul>([\s\S]*?)<\/ul>/i);
+                if (!m) return null;
+                const rec = {};
+                for (const li of m[1].matchAll(/<strong>([^<:]+):<\/strong>\s*([^<]*)</g)) rec[li[1].trim()] = li[2].trim();
+                return rec.title ? { rec, via: 'html' } : null;
+            };
+            const lines = [];
+            let flagCount = 0, htmlCount = 0;
+            const mix = { minor: 0, moderate: 0, major: 0 };
+            for (const journal of await pack.getDocuments()) {
+                const recs = [];
+                for (const page of journal.pages) {
+                    const read = readRecord(page._source ?? page);
+                    if (!read) continue;
+                    read.via === 'flag' ? flagCount++ : htmlCount++;
+                    recs.push(read.rec);
+                }
+                if (!recs.length) continue;
+                const total = recs.reduce((s, r) => s + (Number(r.odds) || 1), 0);
+                const worst = recs.slice().sort((a, b) => (Number(b.odds) || 1) - (Number(a.odds) || 1))[0];
+                for (const r of recs) mix[String(r.severity).toLowerCase()] = (mix[String(r.severity).toLowerCase()] ?? 0) + 1;
+                lines.push(`${journal.name.padEnd(12)} ${String(recs.length).padStart(3)} injuries · most likely: ${worst.title} (${Math.round(100 * (Number(worst.odds) || 1) / total)}%)`);
+            }
+            console.log(`BIBLIOSOPH INJURY POOL\n  source: ${flagCount} pages via FLAG, ${htmlCount} via HTML fallback\n  severity mix: ${JSON.stringify(mix)}\n  ${lines.join('\n  ')}`);
+            ui.notifications.info(
+                `Injury pool: ${flagCount + htmlCount} injuries (${flagCount} flagged, ${htmlCount} legacy HTML). `
+                + `Per-category breakdown in console (F12).`
+                + (htmlCount ? ' Run "npm run packs:build" with Foundry closed to finish the rebuild.' : '')
+            );
+        }
+    },
+    {
         tab: 'tools',
         label: '🔎 Audit compendium status effects (live data)',
         run: async () => {
