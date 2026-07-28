@@ -29,7 +29,7 @@ function getBlacksmith() {
 }
 
 function getSetting(key, defaultValue) {
-    if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.getSettingSafely) {
+    if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils?.getSettingSafely) {
         return BlacksmithUtils.getSettingSafely(MODULE.ID, key, defaultValue);
     }
     try {
@@ -40,7 +40,7 @@ function getSetting(key, defaultValue) {
 }
 
 function log(message, data = '', debug = true, notify = false) {
-    if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
+    if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils?.postConsoleAndNotification) {
         BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `MESSAGES | ${message}`, data, debug, notify);
     } else {
         console.log(`${MODULE.ID} | MESSAGES | ${message}`, data);
@@ -187,7 +187,7 @@ export class ConversationManager {
         if (!settingKey) return;
         const sound = getSetting(settingKey, 'none');
         if (!sound || sound === 'none') return;
-        if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.playSound) {
+        if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils?.playSound) {
             BlacksmithUtils.playSound(sound, 0.7, false, false);
         }
     }
@@ -778,7 +778,7 @@ export class ConversationManager {
             .replace(/&/g, '&amp;')
             .replace(/</g, '&lt;');
         let html;
-        if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.markdownToHtml) {
+        if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils?.markdownToHtml) {
             try {
                 html = BlacksmithUtils.markdownToHtml(escaped);
             } catch (_) { /* fall through to plain text */ }

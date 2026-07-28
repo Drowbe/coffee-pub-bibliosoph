@@ -15,10 +15,24 @@
 import { MODULE } from './const.js';
 
 function log(message, data = '', debug = true, notify = false) {
-    if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
+    if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils?.postConsoleAndNotification) {
         BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `OUTCOME BURSTS | ${message}`, data, debug, notify);
     } else {
         console.log(`${MODULE.ID} | OUTCOME BURSTS | ${message}`, data);
+    }
+}
+
+// Apply/recovery sounds ride the same hooks as the bursts: those fire on
+// every connected client, so each one plays locally and the whole table
+// hears it once — no relay needed.
+function playOutcomeSound(soundKey, volumeKey) {
+    try {
+        const sound = game.settings.get(MODULE.ID, soundKey);
+        if (!sound || sound === 'none') return;
+        const volume = game.settings.get(MODULE.ID, volumeKey) ?? 0.7;
+        BlacksmithUtils?.playSound?.(sound, String(volume));
+    } catch (error) {
+        log(`Could not play the ${soundKey} sound`, error?.message, false, false);
     }
 }
 
@@ -423,6 +437,7 @@ export class InjuryEffectsManager {
                 if (burst.kind === 'crit') playCritBurst(token, burst.name);
                 else if (burst.kind === 'fumble') playFumbleBurst(token, burst.name);
                 else playInjuryBurst(token, burst.category, burst.name);
+                playOutcomeSound('injuryApplySound', 'injuryApplySoundVolume');
             } catch (error) {
                 log('Outcome burst hook failed', error?.message, false, false);
             }
@@ -438,6 +453,7 @@ export class InjuryEffectsManager {
                 const actor = effect.parent;
                 const token = actor?.token?.object ?? actor?.getActiveTokens?.()[0] ?? null;
                 if (token) playTreatmentBurst(token, 'Treated');
+                playOutcomeSound('injuryTreatmentSound', 'injuryTreatmentSoundVolume');
             } catch (error) {
                 log('Treatment burst hook failed', error?.message, false, false);
             }

@@ -23,10 +23,21 @@
 import { MODULE } from './const.js';
 
 function log(message, data = '', debug = true, notify = false) {
-    if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
+    if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils?.postConsoleAndNotification) {
         BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `STATUS EFFECTS | ${message}`, data, debug, notify);
     } else {
         console.log(`${MODULE.ID} | STATUS EFFECTS | ${message}`, data);
+    }
+}
+
+// Info notices ride Blacksmith's adaptive toast (3s), falling back to a
+// Foundry notification when the toast API is absent.
+function showStatusToast(title, subtitle = '', icon = 'fa-solid fa-burst') {
+    const toast = game.modules.get('coffee-pub-blacksmith')?.api?.toast;
+    if (toast?.show) {
+        toast.show({ title, subtitle, icon, duration: 3, moduleId: MODULE.ID });
+    } else {
+        ui.notifications.info(subtitle ? `${title} — ${subtitle}` : title);
     }
 }
 
@@ -75,7 +86,7 @@ export async function applyStatusToTokens({
         const targets = Array.from(game.user.targets ?? []);
         const tokens = targets.length ? targets : canvas.tokens.controlled;
         if (!tokens.length) {
-            ui.notifications.warn(`Target a token (or select one) to apply the ${kindLabel} to.`);
+            showStatusToast('No Target', `Target or select a token to apply the ${kindLabel} to.`, 'fa-solid fa-crosshairs');
             return [];
         }
         recipients = tokens
@@ -86,12 +97,12 @@ export async function applyStatusToTokens({
     const applied = [];
     for (const { actor, displayName } of recipients) {
         if (!actor.isOwner) {
-            ui.notifications.warn(`You do not have permission to modify ${displayName}.`);
+            showStatusToast('No Permission', `You cannot modify ${displayName}.`, 'fa-solid fa-lock');
             continue;
         }
         if (actor.effects.some((e) => e.name === name)) {
             // Already carrying it — the desired state exists, count it applied
-            ui.notifications.info(`${displayName} already has "${name}".`);
+            showStatusToast('Already Applied', `${displayName} already has "${name}".`, 'fa-solid fa-circle-check');
             log(`${displayName} already has "${name}", skipping`, '', false, false);
             applied.push(displayName);
             continue;
@@ -135,12 +146,14 @@ export async function applyStatusToTokens({
                 kind: burst.kind ?? 'injury',
                 category: burst.category ?? 'General',
                 name,
-                condition: toggleId ?? null
+                condition: toggleId ?? null,
+                // Treatment-roll DC source (minor 10 / moderate 15 / major 20)
+                severity: burst.severity ?? null
             } } } } : {})
         };
         await actor.createEmbeddedDocuments('ActiveEffect', [effectData]);
         if (pseudoId) log(`"${name}" conveys ${pseudoId} (dnd5e pseudo-condition) on ${displayName}`, '', false, false);
-        ui.notifications.info(`Applied "${name}" to ${displayName}.`);
+        showStatusToast('Applied', `"${name}" now afflicts ${displayName}.`, 'fa-solid fa-burst');
         applied.push(displayName);
 
         // One-time HP damage, dealt on apply as a direct update. This

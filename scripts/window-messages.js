@@ -54,7 +54,7 @@ function resolveBase() {
 }
 
 function getSetting(key, defaultValue) {
-    if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.getSettingSafely) {
+    if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils?.getSettingSafely) {
         return BlacksmithUtils.getSettingSafely(MODULE.ID, key, defaultValue);
     }
     try {
@@ -702,7 +702,7 @@ export class MessagesWindow extends resolveBase() {
     async _toggleAutoOpen() {
         const current = getSetting('messageAutoOpen', false);
         try {
-            if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.setSettingSafely) {
+            if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils?.setSettingSafely) {
                 await BlacksmithUtils.setSettingSafely(MODULE.ID, 'messageAutoOpen', !current);
             } else {
                 await game.settings.set(MODULE.ID, 'messageAutoOpen', !current);

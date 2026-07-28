@@ -793,6 +793,29 @@ export const registerSettings = () => {
 			scope: 'world',
 			default: false,
 		});
+		game.settings.register(MODULE.ID, 'injuryApplySound', {
+			name: MODULE.ID + '.injuryApplySound-Label',
+			hint: MODULE.ID + '.injuryApplySound-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: false,
+			default: 'modules/coffee-pub-blacksmith/sounds/reactions/reaction-man-pain.mp3',
+			choices: getBlacksmithChoices('arrSoundChoices', 'No sounds found. Try reloading Foundry after all modules are enabled.')
+		});
+		game.settings.register(MODULE.ID, 'injuryApplySoundVolume', {
+			name: MODULE.ID + '.injuryApplySoundVolume-Label',
+			hint: MODULE.ID + '.injuryApplySoundVolume-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: false,
+			type: Number,
+			range: {
+				min: 0,
+				max: 1,
+				step: 0.05,
+			},
+			default: 0.7,
+		});
 		game.settings.register(MODULE.ID, 'injuryThreshold', {
 			name: MODULE.ID + '.injuryThreshold-Label',
 			hint: MODULE.ID + '.injuryThreshold-Hint',
@@ -974,6 +997,72 @@ export const registerSettings = () => {
 			type: String,
 			filePicker: 'image',
 			default: '',
+		});
+
+		// ---------- SUBHEADING: Treatment ----------
+		game.settings.register(MODULE.ID, "headingH3InjuriesTreatment", {
+			name: MODULE.ID + '.headingH3InjuriesTreatment-Label',
+			hint: MODULE.ID + '.headingH3InjuriesTreatment-Hint',
+			scope: "client",
+			config: true,
+			default: "",
+			type: String,
+		});
+		// -------------------------------------
+		game.settings.register(MODULE.ID, 'injuryTreatmentRolls', {
+			name: MODULE.ID + '.injuryTreatmentRolls-Label',
+			hint: MODULE.ID + '.injuryTreatmentRolls-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: false,
+			scope: 'world',
+			default: true,
+		});
+		game.settings.register(MODULE.ID, 'injuryTreatmentCritFumble', {
+			name: MODULE.ID + '.injuryTreatmentCritFumble-Label',
+			hint: MODULE.ID + '.injuryTreatmentCritFumble-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: false,
+			scope: 'world',
+			default: true,
+		});
+		game.settings.register(MODULE.ID, 'injuryTreatmentKitUses', {
+			name: MODULE.ID + '.injuryTreatmentKitUses-Label',
+			hint: MODULE.ID + '.injuryTreatmentKitUses-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			type: String,
+			default: 'attempt',
+			choices: {
+				'attempt': 'Every Attempt: A use is spent whenever the kit helps, success or not',
+				'success': 'On Success Only: Failed attempts never spend a use',
+				'never': 'Never: Owning the kit is enough'
+			}
+		});
+		game.settings.register(MODULE.ID, 'injuryTreatmentSound', {
+			name: MODULE.ID + '.injuryTreatmentSound-Label',
+			hint: MODULE.ID + '.injuryTreatmentSound-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: false,
+			default: 'modules/coffee-pub-blacksmith/sounds/reactions/reaction-gasp.mp3',
+			choices: getBlacksmithChoices('arrSoundChoices', 'No sounds found. Try reloading Foundry after all modules are enabled.')
+		});
+		game.settings.register(MODULE.ID, 'injuryTreatmentSoundVolume', {
+			name: MODULE.ID + '.injuryTreatmentSoundVolume-Label',
+			hint: MODULE.ID + '.injuryTreatmentSoundVolume-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: false,
+			type: Number,
+			range: {
+				min: 0,
+				max: 1,
+				step: 0.05,
+			},
+			default: 0.7,
 		});
 
 		// ---------- HEADING ----------

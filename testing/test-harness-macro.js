@@ -131,6 +131,7 @@ function expectAttack(kind, token) {
 
 const TABS = [
     { id: 'injuries', label: '🩸 Injuries' },
+    { id: 'treatment', label: '🩹 Treatment' },
     { id: 'rolls', label: '🎲 Crits & Fumbles' },
     { id: 'tools', label: '🧰 Apply, Social & Audit' }
 ];
@@ -191,6 +192,140 @@ const SCENARIOS = [
                 isHealing: true
             }));
             ui.notifications.info(`Sent healing for ${token.name} — expect NOTHING (healing never triggers).`);
+        }
+    },
+    {
+        tab: 'treatment',
+        label: '🤕 Apply treatable test injury (moderate, DC 15) → subject',
+        run: async () => {
+            const token = getSubjectToken();
+            if (!token) return;
+            const applied = await applyStatusToTokens({
+                name: 'Test: Treatable Wound',
+                img: 'icons/skills/wounds/injury-pain-body-orange.webp',
+                description: 'Harness injury for treatment-roll testing. Moderate severity → DC 15 (13 with a kit). Conveys Prone.',
+                durationSeconds: 600,
+                damage: null,
+                statusEffect: 'prone',
+                kindLabel: 'injury',
+                explicitActors: [token.actor],
+                burst: { kind: 'injury', category: 'Slashing', severity: 'moderate' }
+            });
+            ui.notifications.info(
+                `Applied treatable wound to [${applied.join(', ') || 'nobody'}]. `
+                + `Now post a Check-Up for ${token.name} and treat it from a PLAYER client to test the roll flow.`
+            );
+        }
+    },
+    {
+        tab: 'treatment',
+        label: '🎒 Give Healer\'s Kit (10 uses) → subject',
+        run: async () => {
+            const token = getSubjectToken();
+            if (!token) return;
+            await token.actor.createEmbeddedDocuments('Item', [{
+                name: "Healer's Kit",
+                type: 'consumable',
+                img: 'icons/containers/bags/pack-leather-white-tan.webp',
+                system: {
+                    type: { value: 'trinket' },
+                    uses: { max: '10', spent: 0 }
+                }
+            }]);
+            ui.notifications.info(`Gave ${token.name} a Healer's Kit (10 uses). Their treats now roll with Advantage at DC −2.`);
+        }
+    },
+    {
+        tab: 'treatment',
+        label: '🧽 Reset kit uses (spent → 0) on subject',
+        run: async () => {
+            const token = getSubjectToken();
+            if (!token) return;
+            const kits = token.actor.items.filter((i) => i.name?.toLowerCase() === "healer's kit");
+            for (const kit of kits) {
+                if (kit.system?.uses) await kit.update({ 'system.uses.spent': 0 });
+            }
+            ui.notifications.info(kits.length
+                ? `Reset uses on ${kits.length} Healer's Kit(s) for ${token.name}.`
+                : `${token.name} has no Healer's Kit.`);
+        }
+    },
+    {
+        tab: 'treatment',
+        label: '🗑️ Remove Healer\'s Kits from subject',
+        run: async () => {
+            const token = getSubjectToken();
+            if (!token) return;
+            const ids = token.actor.items.filter((i) => i.name?.toLowerCase() === "healer's kit").map((i) => i.id);
+            if (ids.length) await token.actor.deleteEmbeddedDocuments('Item', ids);
+            ui.notifications.info(ids.length
+                ? `Removed ${ids.length} Healer's Kit(s) from ${token.name}. Their treats lose the kit bonuses.`
+                : `${token.name} has no Healer's Kit.`);
+        }
+    },
+    {
+        tab: 'treatment',
+        label: '🔁 Clear treatment attempts on subject (retest)',
+        run: async () => {
+            const token = getSubjectToken();
+            if (!token) return;
+            let cleared = 0;
+            for (const effect of token.actor.effects) {
+                if (effect.getFlag('coffee-pub-bibliosoph', 'treatAttempts')) {
+                    await effect.unsetFlag('coffee-pub-bibliosoph', 'treatAttempts');
+                    cleared++;
+                }
+            }
+            ui.notifications.info(cleared
+                ? `Cleared treatment attempts on ${cleared} effect(s) for ${token.name} — everyone may retry.`
+                : `${token.name} has no recorded treatment attempts.`);
+        }
+    },
+    {
+        tab: 'treatment',
+        label: '📋 Report treatment state (subject + your character)',
+        run: () => {
+            const token = getSubjectToken();
+            if (!token) return;
+            const DCS = { minor: 10, moderate: 15, major: 20 };
+            const lines = [];
+            for (const effect of token.actor.effects) {
+                const flag = effect.getFlag('coffee-pub-bibliosoph', 'outcomeBurst');
+                if (flag?.kind !== 'injury') continue;
+                const dc = flag.dc ?? DCS[String(flag.severity ?? '').toLowerCase()] ?? 15;
+                const tried = (effect.getFlag('coffee-pub-bibliosoph', 'treatAttempts') ?? [])
+                    .map((id) => game.actors.get(id)?.name ?? id);
+                lines.push(`${effect.name}: severity=${flag.severity ?? 'none (legacy)'}, DC=${dc}, tried=[${tried.join(', ')}]`);
+            }
+            const me = game.user.character;
+            const kit = me?.items?.find((i) => i.name?.toLowerCase() === "healer's kit");
+            const uses = kit?.system?.uses;
+            const kitLine = !me ? 'no assigned character'
+                : !kit ? `${me.name}: no Healer's Kit`
+                : Number(uses?.max) > 0 ? `${me.name}: kit with ${Math.max(0, Number(uses.max) - Number(uses.spent ?? 0))}/${uses.max} uses`
+                : `${me.name}: kit (no uses pool — presence-only)`;
+            console.log(`BIBLIOSOPH TREATMENT | ${token.name} injuries:\n  ${lines.join('\n  ') || '(none)'}\n  Roller: ${kitLine}`);
+            ui.notifications.info(`${token.name}: ${lines.length} treatable injuries — details in console (F12). Roller: ${kitLine}.`);
+        }
+    },
+    {
+        tab: 'treatment',
+        label: '🖼️ Preview all 4 outcome cards (success/crit/fail/fumble)',
+        run: async () => {
+            const token = getSubjectToken();
+            if (!token) return;
+            const { postTreatmentOutcome } = await import(`${MODULE_PATH}/bibliosoph.js`);
+            const healer = game.user.character ?? token.actor;
+            for (const outcome of ['success', 'crit', 'fail', 'fumble']) {
+                await postTreatmentOutcome({
+                    healer,
+                    patient: token.actor,
+                    effectName: 'Test: Treatable Wound',
+                    effectImg: 'icons/skills/wounds/injury-pain-body-orange.webp',
+                    outcome
+                });
+            }
+            ui.notifications.info('Posted all 4 outcome-card variants (no mechanics ran — preview only).');
         }
     },
     {
@@ -369,6 +504,11 @@ const TAB_SETTINGS = {
          Auto-Apply: <strong>${setting('injuryAutoApply', false) ? 'ON' : 'off'}</strong> ·
          Threshold: <strong>${threshold()}%</strong> of max HP ·
          Triggered By: <strong>${setting('injuryTriggerSource', 'players')}</strong>`
+    ),
+    treatment: settingsBox(
+        `Player Rolls: <strong>${setting('injuryTreatmentRolls', true) ? 'ON' : 'off'}</strong> ·
+         Crits/Fumbles: <strong>${setting('injuryTreatmentCritFumble', true) ? 'ON' : 'off'}</strong> ·
+         Kit Uses: <strong>${setting('injuryTreatmentKitUses', 'attempt')}</strong>`
     ),
     rolls: settingsBox(
         `Crit: <strong>${setting('critAutomation', 'click')}</strong> ·

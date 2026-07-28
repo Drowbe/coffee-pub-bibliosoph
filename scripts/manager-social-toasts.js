@@ -59,7 +59,7 @@ function getBlacksmith() {
 }
 
 function getSetting(key, defaultValue) {
-    if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.getSettingSafely) {
+    if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils?.getSettingSafely) {
         return BlacksmithUtils.getSettingSafely(MODULE.ID, key, defaultValue);
     }
     try {
@@ -74,7 +74,7 @@ function stripHtml(text) {
 }
 
 function log(message, data = '', debug = true, notify = false) {
-    if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
+    if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils?.postConsoleAndNotification) {
         BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `SOCIAL TOASTS | ${message}`, data, debug, notify);
     } else {
         console.log(`${MODULE.ID} | SOCIAL TOASTS | ${message}`, data);

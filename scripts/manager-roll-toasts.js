@@ -18,6 +18,8 @@ import { MODULE } from './const.js';
 
 /** Socket event: GM tells clients to render a roll-outcome toast. */
 export const SOCKET_ROLL_TOAST = `${MODULE.ID}.rollToast`;
+/** Socket event: an armed client rolled — everyone else stands down. */
+export const SOCKET_ROLL_CLAIMED = `${MODULE.ID}.rollClaimed`;
 
 const HEX_COLOR = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i;
 
@@ -26,7 +28,7 @@ function getBlacksmith() {
 }
 
 function getSetting(key, defaultValue) {
-    if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.getSettingSafely) {
+    if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils?.getSettingSafely) {
         return BlacksmithUtils.getSettingSafely(MODULE.ID, key, defaultValue);
     }
     try {
@@ -37,7 +39,7 @@ function getSetting(key, defaultValue) {
 }
 
 function log(message, data = '', debug = true, notify = false) {
-    if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
+    if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils?.postConsoleAndNotification) {
         BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `ROLL TOASTS | ${message}`, data, debug, notify);
     } else {
         console.log(`${MODULE.ID} | ROLL TOASTS | ${message}`, data);
@@ -155,6 +157,11 @@ export class RollToastManager {
      * the receipt-side click-arming in _showLocal.
      */
     static deliver(payload, { broadcast = true } = {}) {
+        // Unique id so a claimed roll (roller OR the GM backup clicked) can
+        // dismiss every other client's still-armed toast for the same event.
+        if (payload?.rollAction && !payload.rollId) {
+            payload.rollId = foundry.utils.randomID();
+        }
         if (broadcast) this._broadcast(payload);
         this._showLocal(payload);
     }
@@ -258,12 +265,17 @@ export class RollToastManager {
         const toast = getBlacksmith()?.toast;
         if (!toast?.show) return;
         // Receipt-side arming: if this toast carries a roll action and THIS
-        // client is the designated roller, make it persistent and clickable —
-        // clicking posts the crit/fumble table card from this client.
-        const { rollAction, rollUserId, rollCategory, rollTarget, ...config } = payload ?? {};
-        if (rollAction && rollUserId === game.user.id) {
+        // client is the designated roller — or the GM, who is always the
+        // backup in case the roller walked away — make it persistent and
+        // clickable; clicking posts the card from this client and tells
+        // every other armed client to stand down.
+        const { rollAction, rollUserId, rollCategory, rollTarget, rollId, ...config } = payload ?? {};
+        if (rollAction && (rollUserId === game.user.id || game.user.isGM)) {
             config.duration = 0;
-            config.onClick = () => this._rollCard(rollAction, rollCategory, rollTarget);
+            config.onClick = () => {
+                if (rollId) this._claimRoll(rollId);
+                this._rollCard(rollAction, rollCategory, rollTarget);
+            };
             // Button-styled pill on the armed toast only (Blacksmith renders
             // it solely when onClick is live, on small/medium/large sizes).
             // Configurable text; blank hides the pill (toast stays clickable).
@@ -273,7 +285,38 @@ export class RollToastManager {
         } else if (rollAction) {
             log(`Toast is click-to-roll for another user (${rollUserId}); showing plain`, '', true, false);
         }
-        toast.show(config);
+        const armed = config.duration === 0 && rollId;
+        if (armed) {
+            config.onDismiss = () => this._armedToasts.delete(rollId);
+            const toastId = toast.show(config);
+            if (toastId) this._armedToasts.set(rollId, toastId);
+        } else {
+            toast.show(config);
+        }
+    }
+
+    // rollId -> local toastId, so a claim from another client can dismiss
+    // this client's still-armed toast for the same roll event.
+    static _armedToasts = new Map();
+
+    static async _claimRoll(rollId) {
+        this._armedToasts.delete(rollId);
+        const sockets = getBlacksmith()?.sockets;
+        if (!sockets) return;
+        try {
+            await sockets.waitForReady();
+            await sockets.emit(SOCKET_ROLL_CLAIMED, { rollId });
+        } catch (error) {
+            log('Roll-claim relay failed', error?.message, false, false);
+        }
+    }
+
+    static _onRollClaimed(rollId) {
+        const toastId = this._armedToasts.get(rollId ?? '');
+        if (!toastId) return;
+        this._armedToasts.delete(rollId);
+        getBlacksmith()?.toast?.remove?.(toastId);
+        log('Armed toast dismissed — roll claimed by another client', '', true, false);
     }
 
     static async _registerSocketHandler(blacksmith) {
@@ -291,6 +334,9 @@ export class RollToastManager {
         await sockets.waitForReady();
         await sockets.register(SOCKET_ROLL_TOAST, (data) => {
             if (data && typeof data === 'object') this._showLocal(data);
+        });
+        await sockets.register(SOCKET_ROLL_CLAIMED, (data) => {
+            this._onRollClaimed(data?.rollId);
         });
     }
 }

@@ -1,6 +1,6 @@
 # Plan: Player Treatment via Medicine Rolls
 
-**Status:** Approved — all decisions made. Build after Step 0.
+**Status:** BUILT (2026-07-27) — phase 1 implemented. Step 0 verified: `openRequestRollDialog` silent mode covers actor/DC/hidden-DC/Medicine + `blacksmith.requestRollComplete` GM-side resolution with full roll JSON (d20 face extractable). Gap: request cannot force advantage/disadvantage → filed as Blacksmith Request #6; interim = required mode in the request title + GM-side formula detection with mismatch logging. Attempt tracking shipped in phase 1 (`treatAttempts` flag; no reset mechanism yet — reset-on-rest remains phase 2).
 **Depends on:** Blacksmith rolls API request-side verification (Step 0 — do this first).
 
 ## The experience

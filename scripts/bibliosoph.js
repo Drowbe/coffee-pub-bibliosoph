@@ -34,7 +34,7 @@ const logMacroFix = (msg) => console.log(`MACRO FIX ${msg}`);
 // Log through Blacksmith's console tool wherever possible; raw console is
 // reserved for bootstrap failures where Blacksmith itself is unavailable.
 function logBib(message, data = '', debug = true, notify = false) {
-    if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.postConsoleAndNotification) {
+    if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils?.postConsoleAndNotification) {
         BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, message, data, debug, notify);
     } else {
         console.log(`${MODULE.ID} | ${message}`, data);
@@ -187,6 +187,13 @@ Hooks.once('ready', async () => {
             logBib('Failed to register treat-stamp socket', error?.message, false, false);
         }
 
+        // TREATMENT ROLLS: player Medicine checks resolve on the active GM
+        try {
+            await registerTreatRollSocket();
+        } catch (error) {
+            logBib('Failed to register treatment-roll socket', error?.message, false, false);
+        }
+
         // NOW register toolbar tools after module registration is complete
         // In v13, we need to wait for Blacksmith to be fully ready
         // Try multiple times with increasing delays to ensure API is available
@@ -320,7 +327,7 @@ export async function rollInjuryCard(category, target = null) {
                     statusEffect: data.statuseffect || null,
                     kindLabel: 'injury',
                     explicitActors: [targetActor],
-                    burst: { kind: 'injury', category: data.category || 'General' }
+                    burst: { kind: 'injury', category: data.category || 'General', severity: data.severity || null }
                 });
                 if (applied.length) {
                     const stamp = doc.createElement('div');
@@ -348,7 +355,7 @@ async function triggerTreatmentCard() {
     const targeted = Array.from(game.user.targets ?? []);
     const token = targeted[0] ?? canvas.tokens.controlled[0] ?? null;
     if (!token?.actor) {
-        ui.notifications.warn("Target (or select) a token to treat.");
+        showBibToast('No Patient', 'Target or select a token to treat.', 'fa-solid fa-crosshairs');
         return;
     }
     const compiledHtml = await createChatCardTreatment(token);
@@ -365,6 +372,9 @@ async function triggerTreatmentCard() {
 // effect or condition on the actor, whatever put it there. Each row shows
 // the effect's icon, its conveyed conditions, treatment prose when the
 // injury carries it, and its own Treat button.
+// Treatment-roll DC ladder by injury severity (fallback 15)
+const SEVERITY_DCS = { minor: 10, moderate: 15, major: 20 };
+
 async function createChatCardTreatment(token) {
     const actor = token.actor;
 
@@ -449,6 +459,10 @@ async function createChatCardTreatment(token) {
             detail = source ? `via ${source}` : '';
         }
         if (durationLabel) detail = detail ? `${detail} · ${durationLabel}` : durationLabel;
+        // Failed treatment attempts show who has already tried
+        const attempts = (effect.getFlag(MODULE.ID, 'treatAttempts') ?? [])
+            .map((id) => game.actors.get(id)?.name).filter(Boolean);
+        if (attempts.length) detail = detail ? `${detail} · tried: ${attempts.join(', ')}` : `tried: ${attempts.join(', ')}`;
         // Hover card for the row icon: name, conditions, and the effect's
         // full description (injury text + Treatment prose ride along).
         // Foundry's TooltipManager renders data-tooltip content as HTML.
@@ -468,16 +482,27 @@ async function createChatCardTreatment(token) {
             + (detail ? `<br><em>${detail}</em>` : '')
             + (description ? `<hr>${description}` : '')
             + `</section>`;
+        // Injuries carry the treatment-roll DC (explicit > severity ladder
+        // minor 10 / moderate 15 / major 20 > flat 15). The bandaid belongs
+        // to rollable treatment; crit/fumble/condition rows get the GM-only
+        // dismiss eraser (pruned for players at render time).
+        const dc = flag?.dc ?? SEVERITY_DCS[String(flag?.severity ?? '').toLowerCase()] ?? 15;
         return {
             kind,
             name: rowName,
             img: effect.img || 'icons/svg/aura.svg',
             detail,
             tooltip,
+            buttonIcon: kind === 'injury' ? 'fa-bandage'
+                : (kind === 'crit' || kind === 'fumble') ? 'fa-burst'
+                : 'fa-sparkles',
             payload: encodeURIComponent(JSON.stringify({
                 actorId: actor.id,
                 tokenId: token.id,
-                effectId: effect.id
+                effectId: effect.id,
+                kind,
+                name: rowName,
+                dc
             }))
         };
     }));
@@ -854,7 +879,7 @@ Hooks.on("ready", async () => {
                 statusEffect: arrEffectData.statuseffect || null,
                 kindLabel: 'injury',
                 explicitActors,
-                burst: { kind: 'injury', category: arrEffectData.category || 'General' }
+                burst: { kind: 'injury', category: arrEffectData.category || 'General', severity: arrEffectData.severity || null }
             });
             await markCardButtonApplied(injuryButton, '.coffee-pub-bibliosoph-button-injury', applied);
         }
@@ -994,6 +1019,29 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
             gmView.style.display = 'none';
             playerView.style.display = '';
         }
+    });
+
+    // GM-only buttons, pruned on player clients (the card HTML is identical
+    // for every viewer): applying crits/fumbles/injuries is the GM's call,
+    // and on the Check-Up only injury rows are player-treatable (Medicine
+    // roll) — crit/fumble/condition rows are GM dismiss-only. Surviving
+    // treat buttons get a per-viewer tooltip saying exactly how THIS user
+    // would roll (kit/self advantage state) — computed at render time since
+    // it depends on the viewer, never baked into the shared HTML.
+    if (!game.user.isGM) {
+        nativeHtml?.querySelectorAll?.('.coffee-pub-bibliosoph-button-injury, .coffee-pub-bibliosoph-button-apply-outcome')?.forEach((btn) => btn.remove());
+    }
+    nativeHtml?.querySelectorAll?.('.coffee-pub-bibliosoph-button-treat[data-kind]')?.forEach((btn) => {
+        const kind = btn.dataset.kind;
+        if (!game.user.isGM && kind !== 'injury') return btn.remove();
+        btn.removeAttribute('title');
+        btn.dataset.tooltip = game.user.isGM
+            ? (kind === 'injury' ? 'Treat instantly — GM discretion, no roll.'
+                : kind === 'crit' ? 'Dismiss this critical (GM only).'
+                : kind === 'fumble' ? 'Dismiss this fumble (GM only).'
+                : 'Remove this effect and unwind its condition (GM only).')
+            : buildTreatTooltip(btn);
+        btn.dataset.tooltipDirection = 'UP';
     });
 
     const buttons = nativeHtml.querySelectorAll(".category-button");
@@ -1466,6 +1514,7 @@ async function createChatCardInjury(category, target = null) {
         duration: intInjuryDuration,
         statuseffect: strStatusEffect,
         category: strInjuryCategory || 'General',
+        severity: strInjurySeverity || null,
         targetActorId: target?.actorId ?? null,
         targetTokenId: target?.tokenId ?? null,
         description: [
@@ -2337,36 +2386,62 @@ async function applyOutcomeStatus(data) {
     });
 }
 
-// Remove a Bibliosoph affliction and unwind its condition. GM discretion:
-// requires ownership of the actor (the GM always qualifies). The heal
-// burst plays automatically everywhere via the deleteActiveEffect hook.
+// Treat dispatch. The GM (or anyone, when Player Treatment Rolls is off)
+// treats instantly, ownership-gated. With rolls on, a player clicking an
+// INJURY row triggers a Medicine check against the injury's DC instead —
+// see requestTreatmentRoll. Non-injury rows are GM-only (pruned at render).
 async function treatAffliction(buttonEl, data) {
+    const rollsOn = getSettingSafe('injuryTreatmentRolls', true);
+    if (!game.user.isGM && rollsOn && data.kind === 'injury') {
+        return requestTreatmentRoll(buttonEl, data);
+    }
     const actor = canvas?.tokens?.get(data.tokenId ?? '')?.actor
         ?? game.actors.get(data.actorId ?? '');
-    if (!actor) return ui.notifications.warn("Could not find the actor to treat.");
-    if (!actor.isOwner) return ui.notifications.warn(`You do not have permission to modify ${actor.name}.`);
+    if (!actor) return showBibToast('Patient Not Found', 'Could not find the actor to treat.', 'fa-solid fa-triangle-exclamation');
+    if (!actor.isOwner) return showBibToast('No Permission', `You cannot modify ${actor.name}.`, 'fa-solid fa-lock');
 
     const effect = actor.effects.get(data.effectId);
     if (!effect) {
-        ui.notifications.info("That affliction is already gone.");
+        showBibToast('Already Gone', 'That affliction is no longer on the patient.', 'fa-solid fa-sparkles');
         await markTreatButtonDone(buttonEl);
         return;
     }
+    const effectName = effect.name;
+    await removeAffliction(actor, effect);
+    showBibToast('Treated', `"${effectName}" removed from ${actor.name}.`, 'fa-solid fa-bandage');
+    await markTreatButtonDone(buttonEl);
+}
+
+function getSettingSafe(key, fallback) {
+    try { return game.settings.get(MODULE.ID, key); } catch (_) { return fallback; }
+}
+
+// Local info notices ride Blacksmith's adaptive toast (3s, icon), falling
+// back to a Foundry notification when the toast API is absent.
+export function showBibToast(title, subtitle = '', icon = 'fa-solid fa-bandage') {
+    const toast = game.modules.get('coffee-pub-blacksmith')?.api?.toast;
+    if (toast?.show) {
+        toast.show({ title, subtitle, icon, duration: 3, moduleId: MODULE.ID });
+    } else {
+        ui.notifications.info(subtitle ? `${title} — ${subtitle}` : title);
+    }
+}
+
+// The shared removal core: delete the affliction and unwind its toggled
+// condition unless another untreated affliction still conveys it. The heal
+// burst plays automatically everywhere via the deleteActiveEffect hook.
+async function removeAffliction(actor, effect) {
     const flag = effect.getFlag(MODULE.ID, 'outcomeBurst');
     const condition = flag?.condition ?? null;
-    const effectName = effect.name;
     // Non-Bibliosoph effects (plain conditions, other modules' effects) get
     // the flag stamped just before deletion so the heal burst plays on
     // every client via the deleteActiveEffect hook.
     if (!flag) {
         try {
-            await effect.setFlag(MODULE.ID, 'outcomeBurst', { kind: 'treated', name: effectName });
+            await effect.setFlag(MODULE.ID, 'outcomeBurst', { kind: 'treated', name: effect.name });
         } catch (_) { /* burst is cosmetic; never block treatment */ }
     }
     await effect.delete();
-
-    // Unwind the toggled condition — unless another untreated affliction
-    // on this actor still conveys the same condition
     if (condition) {
         const stillConveyed = actor.effects.some(
             (e) => e.getFlag(MODULE.ID, 'outcomeBurst')?.condition === condition
@@ -2379,8 +2454,332 @@ async function treatAffliction(buttonEl, data) {
             }
         }
     }
-    ui.notifications.info(`Treated "${effectName}" on ${actor.name}.`);
-    await markTreatButtonDone(buttonEl);
+}
+
+// ==================================================================
+// ===== TREATMENT ROLLS (players heal via Medicine checks) =========
+// ==================================================================
+// The rules matrix: kit = Advantage + DC-2, self-treatment =
+// Disadvantage, both = normal + DC-2. Nat 20 = crit heal (+5 HP),
+// nat 1 = fumbled heal (-5 HP), per the shared toggle. The Blacksmith
+// request API cannot force advantage/disadvantage yet (Blacksmith
+// Request #6) — the required mode rides in the request title and the
+// roller clicks the matching button; the GM resolver reads what was
+// actually rolled from the roll formula.
+
+const SOCKET_TREAT_ROLL = `${MODULE.ID}.treatRoll`;
+const pendingTreatRolls = new Map();
+
+// Per-viewer hover text for an injury Treat button: a PREVIEW of what
+// clicking will do for THIS user, in future tense — not narration.
+// Never reveals the DC (hidden from players).
+function buildTreatTooltip(btn) {
+    if (!getSettingSafe('injuryTreatmentRolls', true)) {
+        return 'Click to remove this affliction (you must own this character).';
+    }
+    let data = null;
+    try { data = JSON.parse(decodeURIComponent(btn.getAttribute('data-treat') ?? '')); } catch (_) { /* legacy card */ }
+    const roller = game.user.character;
+    if (!roller) return 'Clicking will roll a Medicine check to treat this injury — assign a character to your user first.';
+    const self = roller.id === (data?.actorId ?? '');
+    const kit = findHealersKit(roller);
+    const useKit = !!kit?.usable;
+    const kitNote = kit?.hasPool ? ` (${kit.remaining} use${kit.remaining === 1 ? '' : 's'} left)` : '';
+    let modeLine;
+    if (useKit && !self) modeLine = `You'll roll with <strong>Advantage</strong> at a lowered DC — your Healer's Kit${kitNote} helps.`;
+    else if (useKit && self) modeLine = `You'll roll normally at a lowered DC — self-treatment Disadvantage and your Healer's Kit${kitNote} Advantage cancel out.`;
+    else if (self) modeLine = `You'll roll with <strong>Disadvantage</strong> — treating yourself without a Healer's Kit.`;
+    else modeLine = `You'll roll normally — no Healer's Kit.`;
+    return `<strong>Click to attempt treatment</strong><br>${roller.name} will roll a Medicine check against this injury.<br>${modeLine}<br><em>One attempt per character per injury.</em>`;
+}
+
+function findHealersKit(actor) {
+    const kit = (actor?.items ?? []).find((i) => i.name?.toLowerCase() === "healer's kit");
+    if (!kit) return null;
+    const uses = kit.system?.uses;
+    const hasPool = Number(uses?.max) > 0;
+    const remaining = hasPool ? Math.max(0, Number(uses.max) - Number(uses.spent ?? 0)) : null;
+    return { item: kit, hasPool, remaining, usable: !hasPool || remaining > 0 };
+}
+
+// Player side: build the roll context, post a silent Medicine request via
+// Blacksmith, and relay the treatment context to the active GM, who owns
+// all resolution (validation, effect removal, HP changes, kit uses).
+async function requestTreatmentRoll(buttonEl, data) {
+    const api = game.modules.get('coffee-pub-blacksmith')?.api;
+    if (!api?.openRequestRollDialog) {
+        return showBibToast('Blacksmith Needed', 'Treatment rolls need a newer Blacksmith build — ask your GM to treat instead.', 'fa-solid fa-triangle-exclamation');
+    }
+    const roller = game.user.character;
+    if (!roller) {
+        return showBibToast('No Character', 'Assign a character to your user to attempt treatment.', 'fa-solid fa-user-slash');
+    }
+    const patientActor = canvas?.tokens?.get(data.tokenId ?? '')?.actor
+        ?? game.actors.get(data.actorId ?? '');
+    // Best-effort client-side attempt check; the GM re-validates.
+    const priorAttempts = patientActor?.effects?.get(data.effectId)?.getFlag(MODULE.ID, 'treatAttempts') ?? [];
+    if (priorAttempts.includes(roller.id)) {
+        return showBibToast('Already Attempted', `${roller.name} has already tried to treat this injury.`, 'fa-solid fa-hand');
+    }
+
+    const self = roller.id === (patientActor?.id ?? data.actorId);
+    const kit = findHealersKit(roller);
+    const useKit = !!kit?.usable;
+    const baseDc = Number(data.dc) || 15;
+    const dc = useKit ? Math.max(1, baseDc - 2) : baseDc;
+    const mode = useKit && !self ? 'advantage' : (!useKit && self ? 'disadvantage' : 'normal');
+    // The request API has no explainer field yet (Blacksmith Request #6) —
+    // the roll-mode guidance rides a toast and the button's hover tooltip.
+    const modeToast = mode === 'advantage'
+        ? ['Roll with Advantage', "Your Healer's Kit steadies your hands and lowers the difficulty."]
+        : mode === 'disadvantage'
+        ? ['Roll with Disadvantage', 'Treating your own wounds is never easy.']
+        : useKit
+        ? ['Roll Normally', 'Kit advantage and self-treatment disadvantage cancel out — the kit still lowers the difficulty.']
+        : ['Roll Normally', "No Healer's Kit — a bare-handed Medicine check."];
+
+    const rollerToken = canvas?.tokens?.placeables?.find((t) => t.actor?.id === roller.id);
+    const { messageId } = await api.openRequestRollDialog({
+        silent: true,
+        title: `Treat ${data.name || 'the injury'}`,
+        initialType: 'skill',
+        initialValue: 'medicine',
+        dc,
+        showDC: false,
+        groupRoll: false,
+        actors: [rollerToken ? { tokenId: rollerToken.id, actorId: roller.id, name: roller.name } : roller]
+    });
+    if (!messageId) return;
+    showBibToast(modeToast[0], modeToast[1], 'fa-solid fa-dice-d20');
+
+    const context = {
+        rollMessageId: messageId,
+        cardMessageId: buttonEl.closest('[data-message-id]')?.dataset?.messageId ?? null,
+        patientTokenId: data.tokenId ?? null,
+        patientActorId: data.actorId ?? null,
+        effectId: data.effectId,
+        effectName: data.name || 'the injury',
+        rollerActorId: roller.id,
+        rollerUserId: game.user.id,
+        dc,
+        usedKit: useKit,
+        kitItemId: kit?.item?.id ?? null,
+        expectedMode: mode
+    };
+    // The GM may be this client (a GM player-testing); handle locally then.
+    if (game.users.activeGM?.id === game.user.id) {
+        pendingTreatRolls.set(messageId, context);
+        return;
+    }
+    const sockets = api.sockets;
+    if (!sockets) return showBibToast('Relay Failed', 'Blacksmith sockets unavailable — the GM will not see this treatment roll.', 'fa-solid fa-triangle-exclamation');
+    try {
+        await sockets.waitForReady();
+        await sockets.emit(SOCKET_TREAT_ROLL, context);
+    } catch (error) {
+        logBib('Treatment roll relay failed', error?.message, false, false);
+    }
+}
+
+// Pull the total and the ACTIVE d20 face out of the delivered roll JSON
+// (kh/kl advantage rolls mark the dropped die inactive).
+function extractRollNumbers(result) {
+    const total = Number(result?.total ?? NaN);
+    let d20 = null;
+    let sawAdvMode = 'normal';
+    for (const term of result?.terms ?? []) {
+        if (Number(term?.faces) !== 20) continue;
+        const results = term.results ?? [];
+        if (results.length > 1) {
+            const mods = String(term.modifiers ?? []);
+            sawAdvMode = mods.includes('kl') ? 'disadvantage' : 'advantage';
+        }
+        const active = results.find((r) => r.active !== false);
+        d20 = Number(active?.result ?? null);
+        break;
+    }
+    return { total, d20, rolledMode: sawAdvMode };
+}
+
+// GM side: register the context relay and resolve completed rolls.
+async function registerTreatRollSocket() {
+    const sockets = game.modules.get('coffee-pub-blacksmith')?.api?.sockets;
+    if (sockets) {
+        await sockets.waitForReady();
+        await sockets.register(SOCKET_TREAT_ROLL, (context) => {
+            if (game.users.activeGM?.id !== game.user.id) return;
+            if (!context?.rollMessageId || !context?.effectId) return;
+            pendingTreatRolls.set(context.rollMessageId, context);
+        });
+    }
+    Hooks.on('blacksmith.requestRollComplete', async (payload) => {
+        if (game.users.activeGM?.id !== game.user.id) return;
+        const context = pendingTreatRolls.get(payload?.messageId ?? '');
+        if (!context || !payload?.result) return;
+        pendingTreatRolls.delete(payload.messageId);
+        try {
+            await resolveTreatmentRoll(context, payload);
+        } catch (error) {
+            logBib('Treatment roll resolution failed', error?.message, false, false);
+        }
+    });
+}
+
+// All rules run here, GM-authoritative — the relayed context is treated as
+// a claim, re-validated against live state before anything changes.
+async function resolveTreatmentRoll(context, payload) {
+    const patient = canvas?.tokens?.get(context.patientTokenId ?? '')?.actor
+        ?? game.actors.get(context.patientActorId ?? '');
+    if (!patient) return;
+    const roller = game.actors.get(context.rollerActorId ?? '');
+    const rollerName = roller?.name ?? 'Someone';
+
+    const effect = patient.effects.get(context.effectId ?? '');
+    if (!effect) {
+        await postTreatmentOutcome(`${rollerName} treats ${patient.name} — but the affliction was already gone.`);
+        await sweepStampsById(context.cardMessageId);
+        return;
+    }
+    const attempts = effect.getFlag(MODULE.ID, 'treatAttempts') ?? [];
+    if (roller && attempts.includes(roller.id)) {
+        logBib(`Treatment roll rejected: ${rollerName} already attempted "${effect.name}"`, '', false, false);
+        return;
+    }
+
+    const { total, d20, rolledMode } = extractRollNumbers(payload.result);
+    if (!Number.isFinite(total)) return;
+    if (context.expectedMode && context.expectedMode !== rolledMode) {
+        logBib(`Treatment roll mode mismatch: expected ${context.expectedMode}, rolled ${rolledMode} — accepting (GM discretion)`, '', false, false);
+    }
+    const critFumbleOn = getSettingSafe('injuryTreatmentCritFumble', true);
+    const isNat20 = critFumbleOn && d20 === 20;
+    const isNat1 = critFumbleOn && d20 === 1;
+    const success = isNat20 || (!isNat1 && total >= Number(context.dc ?? 15));
+
+    // Kit consumption per the Consume Kit Uses mode
+    const kitMode = getSettingSafe('injuryTreatmentKitUses', 'attempt');
+    if (context.usedKit && roller && context.kitItemId
+        && (kitMode === 'attempt' || (kitMode === 'success' && success))) {
+        const kitItem = roller.items.get(context.kitItemId);
+        const uses = kitItem?.system?.uses;
+        if (kitItem && Number(uses?.max) > 0) {
+            try {
+                await kitItem.update({ 'system.uses.spent': Math.min(Number(uses.max), Number(uses.spent ?? 0) + 1) });
+            } catch (error) {
+                logBib('Could not consume Healer\'s Kit use', error?.message, false, false);
+            }
+        }
+    }
+
+    // Captured before removal — the card badges the affliction's own icon
+    const effectName = effect.name;
+    const effectImg = effect.img;
+    if (success) {
+        await removeAffliction(patient, effect);
+        if (isNat20) await adjustPatientHp(patient, +5);
+        await postTreatmentOutcome({ healer: roller, patient, effectName, effectImg, outcome: isNat20 ? 'crit' : 'success' });
+        await sweepStampsById(context.cardMessageId);
+    } else {
+        try {
+            await effect.setFlag(MODULE.ID, 'treatAttempts', [...attempts, ...(roller ? [roller.id] : [])]);
+        } catch (error) {
+            logBib('Could not record treatment attempt', error?.message, false, false);
+        }
+        if (isNat1) await adjustPatientHp(patient, -5);
+        await postTreatmentOutcome({ healer: roller, patient, effectName, effectImg, outcome: isNat1 ? 'fumble' : 'fail' });
+    }
+}
+
+// One-time real HP change, clamped, outside the damage pipeline (so a
+// fumbled heal can never re-trigger injury detection).
+async function adjustPatientHp(actor, delta) {
+    const hp = actor.system?.attributes?.hp;
+    if (!hp) return;
+    const next = Math.max(0, Math.min(Number(hp.max ?? 0), Number(hp.value ?? 0) + delta));
+    try {
+        await actor.update({ 'system.attributes.hp.value': next });
+    } catch (error) {
+        logBib('Could not adjust patient HP', error?.message, false, false);
+    }
+}
+
+// Treatment outcomes post as proper Blacksmith-styled cards: a centered
+// [healer portrait] [bandaid] [patient portrait] strip, then the narrative
+// (crit/fumble bonus as its own emphasized line). Accepts a plain string
+// for the odd informational case (affliction already gone). Copy uses
+// names and "their" — the module can't know a character's pronouns.
+export async function postTreatmentOutcome(data) {
+    try {
+        const template = await getCardTemplate();
+        let content = data;
+        let treatoutcome = null;
+        if (typeof data !== 'string') {
+            const { healer, patient, effectName, effectImg, outcome } = data;
+            const healerName = healer?.name ?? 'Someone';
+            const patientName = patient?.name ?? 'the patient';
+            const self = !!healer && !!patient && healer.id === patient.id;
+            const strong = (s) => `<strong>${s}</strong>`;
+            const injury = `<strong>"${effectName}"</strong>`;
+            let narrative;
+            let bonus = '';
+            switch (outcome) {
+                case 'crit':
+                    narrative = self
+                        ? `${strong(healerName)} critically heals themselves, treating their case of ${injury}.`
+                        : `${strong(healerName)} critically heals ${strong(patientName)}, treating their case of ${injury}.`;
+                    bonus = `A critical success! ${patientName} recovers an extra 5 HP.`;
+                    break;
+                case 'fumble':
+                    narrative = self
+                        ? `${strong(healerName)} badly fumbles treating their own ${injury}.`
+                        : `${strong(healerName)} fumbles treating ${strong(patientName)}'s ${injury}.`;
+                    bonus = `A natural 1! ${patientName} takes 5 damage.`;
+                    break;
+                case 'fail':
+                    narrative = self
+                        ? `${strong(healerName)} tries to treat their own ${injury} — without success.`
+                        : `${strong(healerName)} tries to treat ${strong(patientName)}'s ${injury} — without success.`;
+                    break;
+                default:
+                    narrative = self
+                        ? `${strong(healerName)} successfully treats their own case of ${injury}.`
+                        : `${strong(healerName)} treats ${strong(patientName)}, curing their case of ${injury}.`;
+            }
+            content = bonus ? `${narrative}<br><br>${strong(bonus)}` : narrative;
+            // Self-treatment keeps the same symmetric layout — the patient's
+            // portrait simply appears on both sides.
+            treatoutcome = {
+                healerImg: healer?.img || 'icons/svg/mystery-man.svg',
+                healerName,
+                patientImg: patient?.img || 'icons/svg/mystery-man.svg',
+                patientName,
+                afflictionImg: effectImg || null,
+                afflictionName: effectName,
+                icon: outcome === 'fumble' ? 'fa-burst'
+                    : outcome === 'fail' ? 'fa-heart-crack'
+                    : 'fa-bandage'
+            };
+        }
+        const html = template({
+            theme: getSettingSafe('cardThemeInjury', 'cardsdefault'),
+            iconStyle: 'fa-bandage',
+            cardTitle: 'Treatment',
+            treatoutcome,
+            content
+        });
+        await ChatMessage.create({
+            user: game.user.id,
+            content: html,
+            speaker: { alias: 'Treatment' }
+        });
+    } catch (error) {
+        logBib('Could not post treatment outcome', error?.message, false, false);
+    }
+}
+
+async function sweepStampsById(messageId) {
+    const message = game.messages.get(messageId ?? '');
+    if (message) await sweepTreatStamps(message);
 }
 
 // Flip treated rows to bandaid stamps in the stored message. Players cannot

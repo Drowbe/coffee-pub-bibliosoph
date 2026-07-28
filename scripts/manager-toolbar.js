@@ -10,7 +10,7 @@ import { BlacksmithAPI } from '/modules/coffee-pub-blacksmith/api/blacksmith-api
 // Helper function to get setting value using Blacksmith API
 function getSetting(key, defaultValue) {
     // Use the global BlacksmithUtils object as per API documentation
-    if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils.getSettingSafely) {
+    if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils?.getSettingSafely) {
         return BlacksmithUtils.getSettingSafely(MODULE.ID, key, defaultValue);
     }
     // Fallback if Blacksmith API not available
