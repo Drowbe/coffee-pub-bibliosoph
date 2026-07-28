@@ -422,22 +422,25 @@ async function createChatCardTreatment(token) {
     const treatmentrows = await Promise.all(afflictions.map(async (effect) => {
         const flag = effect.getFlag(MODULE.ID, 'outcomeBurst');
         const kind = ['injury', 'crit', 'fumble'].includes(flag?.kind) ? flag.kind : 'other';
+        // The zone header already says Criticals/Fumbles — drop the effect
+        // name's prefix on the row (the full name stays on the token/sheet)
+        const rowName = kind === 'crit' ? effect.name.replace(/^Critical:\s*/i, '')
+            : kind === 'fumble' ? effect.name.replace(/^Fumble:\s*/i, '')
+            : effect.name;
         const statusIds = new Set(effect.statuses ?? []);
         if (flag?.condition) statusIds.add(flag.condition);
         const conditions = [...statusIds].map(conditionLabel).join(', ');
-        // The row's after-dash detail: flagged afflictions list what they
-        // convey; loose conditions credit their source; standalone effects
-        // show remaining duration or nothing.
+        // The row's second line: flagged afflictions list what they convey;
+        // loose conditions credit their source; any row with a duration
+        // gets the remaining time appended.
+        const duration = effect.duration;
+        const durationLabel = (duration?.type && duration.type !== 'none' && duration.label) ? duration.label : '';
         let detail = conditions;
         if (kind === 'other') {
             const source = conveyedBy(effect);
-            if (source) {
-                detail = `via ${source}`;
-            } else {
-                const duration = effect.duration;
-                detail = (duration?.type && duration.type !== 'none' && duration.label) ? duration.label : '';
-            }
+            detail = source ? `via ${source}` : '';
         }
+        if (durationLabel) detail = detail ? `${detail} · ${durationLabel}` : durationLabel;
         // Hover card for the row icon: name, conditions, and the effect's
         // full description (injury text + Treatment prose ride along).
         // Foundry's TooltipManager renders data-tooltip content as HTML.
@@ -459,7 +462,7 @@ async function createChatCardTreatment(token) {
             + `</section>`;
         return {
             kind,
-            name: effect.name,
+            name: rowName,
             img: effect.img || 'icons/svg/aura.svg',
             detail,
             tooltip,
@@ -498,6 +501,25 @@ async function createChatCardTreatment(token) {
         ? `${token.name} is ${healthDesc}${hpNote} and suffering from ${treatmentrows.length} affliction${treatmentrows.length === 1 ? '' : 's'}.`
         : `${token.name} is ${healthDesc}${hpNote} with no afflictions found. A clean bill of health.`;
 
+    // Portrait blood overlay — same 5%-stepped frames as Blacksmith's
+    // combat-bar hover card (blood-0..100.webp by damage taken, 101 = down)
+    let portraitBlood = '';
+    if (pctHp !== null) {
+        const bloodStep = Math.round((100 - Math.max(0, Math.min(100, pctHp))) / 5) * 5;
+        const bloodValue = Number(hp.value) <= 0 ? 101 : bloodStep;
+        if (bloodValue > 0) portraitBlood = `modules/coffee-pub-blacksmith/images/portraits/blood/blood-${bloodValue}.webp`;
+    }
+    // Health bar — Crier's turn-card bands and colors
+    const hpBar = pctHp === null ? null : {
+        percent: Math.max(0, Math.min(100, pctHp)),
+        label: `${hp.value}/${hp.max} HP`,
+        color: Number(hp.value) <= 0 ? 'rgba(66, 66, 66, 0.9)'
+            : pctHp >= 75 ? 'rgba(98, 150, 2, 0.9)'
+            : pctHp >= 50 ? 'rgba(223, 134, 1, 0.9)'
+            : pctHp >= 25 ? 'rgba(119, 40, 16, 0.9)'
+            : 'rgba(119, 20, 16, 0.9)'
+    };
+
     const template = await getCardTemplate();
     const CARDDATA = {
         theme: game.settings.get(MODULE.ID, 'cardThemeInjury'),
@@ -506,6 +528,8 @@ async function createChatCardTreatment(token) {
         imageBackground: 'cobblestone',
         userName: token.name,
         userAvatar: actor.img || token.document?.texture?.src || '',
+        portraitBlood,
+        hpBar,
         playerType: 'Patient',
         characterName: healthDesc.charAt(0).toUpperCase() + healthDesc.slice(1),
         content: diagnosis,
@@ -2351,22 +2375,37 @@ async function treatAffliction(buttonEl, raw, data) {
     await markTreatButtonDone(buttonEl, raw);
 }
 
-// Replace one treatment row's button (matched by its payload — rows share
-// a class) with a "Treated" stamp in the stored message.
+// Sweep the stored message's treatment rows: stamp the treated row (matched
+// by payload) AND any other row whose effect is no longer on the actor —
+// treating a bundled injury also deletes the condition effects it conveyed,
+// so their rows flip in the same pass.
 async function markTreatButtonDone(buttonEl, raw) {
     try {
         const messageId = buttonEl.closest('[data-message-id]')?.dataset?.messageId;
         const message = game.messages.get(messageId ?? '');
         if (!message || !message.canUserModify(game.user, 'update')) return;
         const doc = new DOMParser().parseFromString(message.content, 'text/html');
-        const button = Array.from(doc.querySelectorAll('.coffee-pub-bibliosoph-button-treat'))
-            .find((b) => b.getAttribute('data-treat') === raw);
-        if (!button) return;
-        const stamp = doc.createElement('div');
-        stamp.style.cssText = 'flex:0 0 auto; text-align:center; font-style:italic; opacity:0.85; padding:4px 6px; white-space:nowrap;';
-        stamp.textContent = '✓ Treated';
-        button.replaceWith(stamp);
-        await message.update({ content: doc.body.innerHTML });
+        let changed = false;
+        for (const button of Array.from(doc.querySelectorAll('.coffee-pub-bibliosoph-button-treat'))) {
+            const payload = button.getAttribute('data-treat') ?? '';
+            let gone = payload === raw;
+            if (!gone) {
+                try {
+                    const data = JSON.parse(decodeURIComponent(payload));
+                    const actor = canvas?.tokens?.get(data.tokenId ?? '')?.actor
+                        ?? game.actors.get(data.actorId ?? '');
+                    gone = !!actor && !actor.effects.get(data.effectId ?? '');
+                } catch (_) { /* unreadable payload — leave the button alone */ }
+            }
+            if (!gone) continue;
+            const stamp = doc.createElement('div');
+            stamp.style.cssText = 'flex:0 0 auto; width:40px; height:40px; display:flex; align-items:center; justify-content:center; opacity:0.6; font-size:1.1em;';
+            stamp.title = 'Treated';
+            stamp.innerHTML = '<i class="fa-solid fa-bandage" style="margin:0;"></i>';
+            button.replaceWith(stamp);
+            changed = true;
+        }
+        if (changed) await message.update({ content: doc.body.innerHTML });
     } catch (error) {
         logBib('Could not mark treatment done', error?.message, false, false);
     }

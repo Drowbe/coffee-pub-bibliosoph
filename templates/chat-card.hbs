@@ -115,7 +115,14 @@
     <!-- SENDER -->
     {{#if userName}}
         <div class="container-user">
-            <img class="token-image" src="{{userAvatar}}" alt="" />
+            {{#if portraitBlood}}
+                <span style="position: relative; display: inline-block; flex: 0 0 auto; line-height: 0;">
+                    <img class="token-image" src="{{userAvatar}}" alt="" style="display: block;" />
+                    <img class="token-image" src="{{portraitBlood}}" alt="" aria-hidden="true" style="position: absolute; top: 0; left: 0; margin: 0; pointer-events: none;" />
+                </span>
+            {{else}}
+                <img class="token-image" src="{{userAvatar}}" alt="" />
+            {{/if}}
             <div class="token-text-wrapper">
                 <span class="token-name">{{userName}}</span>
                 {{#if characterName}}<span class="token-character">{{characterName}}</span>{{/if}}
@@ -180,6 +187,12 @@
             {{#if title}}
                 <div class="section-header">
                     <i class="fa-solid fa-dice"></i> {{title}}
+                </div>
+            {{/if}}
+            <!-- CHECK-UP: HEALTH BAR (Crier turn-card styling) -->
+            {{#if hpBar}}
+                <div title="{{hpBar.label}}" style="border-radius: 4px; padding: 3px; margin-bottom: 8px; background-color: rgba(0,0,0,0.1);">
+                    <div style="height: 10px; border-radius: 2px; width: {{hpBar.percent}}%; background: {{hpBar.color}};"></div>
                 </div>
             {{/if}}
             <!-- CONTENT - NORMAL -->
@@ -267,9 +280,12 @@
                     <p style="margin: 10px 0 2px 0; text-transform: uppercase; font-size: 0.82em; letter-spacing: 0.5px; opacity: 0.8; border-bottom: 1px solid rgba(0,0,0,0.25);">{{this.label}}</p>
                     {{#each this.rows}}
                         <div style="display: flex; gap: 8px; align-items: center; margin: 4px 0;">
-                            <img src="{{this.img}}" alt="" data-tooltip="{{this.tooltip}}" data-tooltip-direction="LEFT" style="width: 30px; height: 30px; border: none; flex: 0 0 auto; border-radius: 4px; cursor: help;" />
-                            <p style="flex: 1; min-width: 0; margin: 0;"><strong>{{this.name}}</strong>{{#if this.detail}} <span style="font-size: 0.85em; opacity: 0.8;">— {{this.detail}}</span>{{/if}}</p>
-                            <button id="cards-button-cardsdark" title="Treat: remove this affliction and unwind its condition" class="coffee-pub-bibliosoph-button-treat" data-treat="{{this.payload}}" style="flex: 0 0 auto; width: 38px; padding: 4px 0;"><i class="fa-solid fa-bandage"></i></button>
+                            <img src="{{this.img}}" alt="" data-tooltip="{{this.tooltip}}" data-tooltip-direction="LEFT" style="width: 40px; height: 40px; padding: 4px; box-sizing: border-box; object-fit: contain; border: 1px solid rgba(0,0,0,0.1); flex: 0 0 auto; border-radius: 4px; background: rgba(0,0,0,0.5); cursor: help;" />
+                            <div style="flex: 1; min-width: 0;">
+                                <p style="margin: 0; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><strong>{{this.name}}</strong></p>
+                                {{#if this.detail}}<p style="margin: 0; font-size: 0.85em; opacity: 0.8; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{this.detail}}</p>{{/if}}
+                            </div>
+                            <button id="cards-button-cardsdark" title="Treat: remove this affliction and unwind its condition" class="coffee-pub-bibliosoph-button-treat" data-treat="{{this.payload}}" style="flex: 0 0 auto; width: 40px; height: 40px; margin: 0; padding: 0; display: flex; align-items: center; justify-content: center;"><i class="fa-solid fa-bandage" style="margin: 0;"></i></button>
                         </div>
                     {{/each}}
                 {{/each}}
