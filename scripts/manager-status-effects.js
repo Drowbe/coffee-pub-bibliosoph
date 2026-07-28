@@ -147,8 +147,10 @@ export async function applyStatusToTokens({
                 category: burst.category ?? 'General',
                 name,
                 condition: toggleId ?? null,
-                // Treatment-roll DC source (minor 10 / moderate 15 / major 20)
-                severity: burst.severity ?? null
+                // Treatment-roll DC: an authored `dc` wins, else the severity
+                // ladder (minor 10 / moderate 15 / major 20), else a flat 15.
+                severity: burst.severity ?? null,
+                dc: Number.isFinite(Number(burst.dc)) && Number(burst.dc) > 0 ? Number(burst.dc) : null
             } } } } : {})
         };
         await actor.createEmbeddedDocuments('ActiveEffect', [effectData]);

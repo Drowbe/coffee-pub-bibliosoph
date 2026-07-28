@@ -33,8 +33,8 @@ Anyone at the table can try to treat an injury. The Check-Up card (and the injur
 
 ## DC source (severity ladder)
 
-1. Explicit `treatmentDC` on the injury (schema-tightening TODO adds the field).
-2. Severity-derived default: minor **10**, moderate **15**, major **20**.
+1. Explicit authored DC on the injury — **SHIPPED 2026-07-28**: add `<strong>treatmentdc:</strong> 18` to a page's Metadata list and it overrides the ladder. Parsed generically, threaded through `EFFECTDATA.treatmentDC` → the burst → `flags.outcomeBurst.dc`. No authored injury uses it yet (all 127 rely on severity); the field is there for hand-tuned injuries and for the schema rebuild to adopt.
+2. Severity-derived default: minor **10**, moderate **15**, major **20**. **This is the live source today** — all 127 injuries carry a valid severity (58 minor, 43 moderate, 26 major), so nothing falls through to step 3.
 3. Neither known → flat **15**.
 
 ## Architecture — GM-authoritative intents (the Blacksmith pattern)

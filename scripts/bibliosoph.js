@@ -327,7 +327,7 @@ export async function rollInjuryCard(category, target = null) {
                     statusEffect: data.statuseffect || null,
                     kindLabel: 'injury',
                     explicitActors: [targetActor],
-                    burst: { kind: 'injury', category: data.category || 'General', severity: data.severity || null }
+                    burst: { kind: 'injury', category: data.category || 'General', severity: data.severity || null, dc: data.treatmentDC ?? null }
                 });
                 if (applied.length) {
                     const stamp = doc.createElement('div');
@@ -879,7 +879,7 @@ Hooks.on("ready", async () => {
                 statusEffect: arrEffectData.statuseffect || null,
                 kindLabel: 'injury',
                 explicitActors,
-                burst: { kind: 'injury', category: arrEffectData.category || 'General', severity: arrEffectData.severity || null }
+                burst: { kind: 'injury', category: arrEffectData.category || 'General', severity: arrEffectData.severity || null, dc: arrEffectData.treatmentDC ?? null }
             });
             await markCardButtonApplied(injuryButton, '.coffee-pub-bibliosoph-button-injury', applied);
         }
@@ -1352,6 +1352,7 @@ async function createChatCardInjury(category, target = null) {
     var strInjuryDescription = "";
     var strInjuryTreatment =  "";
     var strInjurySeverity =  "";
+    var intInjuryTreatmentDC = null;
     var intInjuryDamage = "";
     var strInjuryDamage = "";
     var intInjuryDuration = "";
@@ -1373,7 +1374,13 @@ async function createChatCardInjury(category, target = null) {
         strInjuryImage = objInjuryData.image;
         strInjuryDescription = objInjuryData.description;
         strInjuryTreatment = objInjuryData.treatment;
-        strInjurySeverity = objInjuryData.severity; // not used
+        strInjurySeverity = objInjuryData.severity; // drives the treatment DC (minor 10 / moderate 15 / major 20)
+        // Optional authored override, e.g. "<strong>treatmentdc:</strong> 18"
+        // in the page metadata. Wins over the severity ladder when present.
+        intInjuryTreatmentDC = Number(
+            objInjuryData.treatmentdc ?? objInjuryData.treatmentDC ?? objInjuryData['treatment dc']
+        );
+        if (!Number.isFinite(intInjuryTreatmentDC) || intInjuryTreatmentDC <= 0) intInjuryTreatmentDC = null;
         intInjuryDamage = objInjuryData.damage;
         intInjuryDuration = objInjuryData.duration;
         strInjuryAction = objInjuryData.action;
@@ -1515,6 +1522,7 @@ async function createChatCardInjury(category, target = null) {
         statuseffect: strStatusEffect,
         category: strInjuryCategory || 'General',
         severity: strInjurySeverity || null,
+        treatmentDC: intInjuryTreatmentDC,
         targetActorId: target?.actorId ?? null,
         targetTokenId: target?.tokenId ?? null,
         description: [
