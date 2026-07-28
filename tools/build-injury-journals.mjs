@@ -40,58 +40,33 @@ function idFrom(seed) {
     return out;
 }
 
-const esc = (s) => String(s ?? '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-
 /**
- * The page body. Order per spec: image, caption, description, treatment,
- * then the Metadata block the runtime parser reads. The page's own name
- * renders as the heading above all of this, so no title element here.
+ * Pages are the typed `coffee-pub-bibliosoph.injury` subtype: every
+ * mechanical field lives in `system`, validated by Foundry on write, and
+ * rendered by the injury page sheet. Nothing is encoded in HTML any more,
+ * which is what let the old displayed values drift from the real ones.
  *
- * The metadata <ul> must be a sibling of the <h2>Metadata</h2> and follow
- * it — that is exactly what getHTMLMetadata() looks for.
+ * `text.content` is left empty and belongs to the GM as free-form notes.
  */
-function pageContent(rec) {
-    const metaKeys = ['category', 'title', 'image', 'imagetitle', 'description',
-        'treatment', 'severity', 'damage', 'duration', 'statuseffect', 'odds'];
-    if (rec.treatmentdc !== undefined) metaKeys.push('treatmentdc');
-
-    const metaItems = metaKeys
-        .map((k) => `    <li>\n        <p><strong>${k}:</strong> ${esc(rec[k])}</p>\n    </li>`)
-        .join('\n');
-
-    return [
-        `<img src="${esc(rec.image)}" alt="${esc(rec.title)}" />`,
-        `<p><em>${esc(rec.imagetitle)}</em></p>`,
-        `<p>${esc(rec.description)}</p>`,
-        `<h2>Treatment</h2>`,
-        `<p>${esc(rec.treatment)}</p>`,
-        `<h2>Metadata</h2>`,
-        `<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>`,
-        `<ul>\n${metaItems}\n</ul>`
-    ].join('\n');
-}
-
 function buildPage(rec, journalId, sort) {
     const pageId = idFrom(`${MODULE_ID}:page:${rec.category}:${rec.title}`);
+    const { title, ...system } = rec;      // the page name IS the title
     return {
-        type: 'text',
-        name: rec.title,
-        text: { content: pageContent(rec), format: 1 },
+        type: `${MODULE_ID}.injury`,
+        name: title,
+        text: { content: '', format: 1 },
         _id: pageId,
-        system: {},
+        system: {
+            ...system,
+            treatmentdc: rec.treatmentdc ?? null
+        },
         title: { show: true, level: 1 },
         image: {},
         video: { controls: true, volume: 0.5 },
         src: null,
         category: null,
         sort,
-        // The record rides along as a flag: the runtime prefers this over
-        // parsing the HTML, and it is the migration path off HTML entirely.
-        flags: { [MODULE_ID]: { injury: { ...rec } } },
+        flags: {},
         _stats: {
             compendiumSource: null,
             duplicateSource: null,

@@ -150,7 +150,11 @@ export async function applyStatusToTokens({
                 // Treatment-roll DC: an authored `dc` wins, else the severity
                 // ladder (minor 10 / moderate 15 / major 20), else a flat 15.
                 severity: burst.severity ?? null,
-                dc: Number.isFinite(Number(burst.dc)) && Number(burst.dc) > 0 ? Number(burst.dc) : null
+                dc: Number.isFinite(Number(burst.dc)) && Number(burst.dc) > 0 ? Number(burst.dc) : null,
+                // Points back at the injury's journal page so the GM can
+                // read its notes later; the notes themselves are never
+                // copied into chat, where players could read the DOM.
+                sourceUuid: burst.sourceUuid ?? null
             } } } } : {})
         };
         await actor.createEmbeddedDocuments('ActiveEffect', [effectData]);

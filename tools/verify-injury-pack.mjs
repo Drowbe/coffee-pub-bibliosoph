@@ -21,6 +21,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PACK = path.join(ROOT, 'packs', 'injuries');
 const SOURCE = path.join(ROOT, 'resources', 'injuries.json');
 const MODULE_ID = 'coffee-pub-bibliosoph';
+const PAGE_TYPE = `${MODULE_ID}.injury`;
 const TMP = path.join(os.tmpdir(), `bibliosoph-pack-verify-${process.pid}`);
 
 if (!fs.existsSync(path.join(PACK, 'CURRENT'))) {
@@ -39,28 +40,29 @@ const files = fs.readdirSync(TMP).filter((f) => f.endsWith('.json'));
 const problems = [];
 const seen = new Set();
 let pages = 0;
-let flagged = 0;
+let typed = 0;
 
 for (const file of files) {
     const doc = JSON.parse(fs.readFileSync(path.join(TMP, file), 'utf8'));
     for (const page of doc.pages ?? []) {
         pages++;
-        const rec = page.flags?.[MODULE_ID]?.injury;
-        if (!rec) { problems.push(`${doc.name}/${page.name}: no injury flag in the compiled pack`); continue; }
-        flagged++;
+        if (page.type !== PAGE_TYPE) {
+            problems.push(`${doc.name}/${page.name}: page type is "${page.type}", expected "${PAGE_TYPE}"`);
+            continue;
+        }
+        const system = page.system;
+        if (!system?.category) { problems.push(`${doc.name}/${page.name}: no system data in the compiled pack`); continue; }
+        typed++;
 
-        const key = `${rec.category}::${rec.title}`;
+        const key = `${system.category}::${page.name}`;
         seen.add(key);
         const source = byKey.get(key);
-        if (!source) { problems.push(`${doc.name}/${page.name}: flag matches no source record`); continue; }
+        if (!source) { problems.push(`${doc.name}/${page.name}: matches no source record`); continue; }
         for (const [field, value] of Object.entries(source)) {
-            if (String(rec[field]) !== String(value)) {
-                problems.push(`${doc.name}/${page.name}: "${field}" is "${rec[field]}" in the pack, "${value}" in source`);
+            if (field === 'title') continue;               // carried by page.name
+            if (String(system[field]) !== String(value)) {
+                problems.push(`${doc.name}/${page.name}: "${field}" is "${system[field]}" in the pack, "${value}" in source`);
             }
-        }
-        if (page.name !== source.title) problems.push(`${doc.name}: page named "${page.name}" but record says "${source.title}"`);
-        if (!String(page.text?.content ?? '').includes('<h2>Metadata</h2>')) {
-            problems.push(`${doc.name}/${page.name}: metadata block missing from the compiled page`);
         }
     }
 }
@@ -71,7 +73,7 @@ for (const key of byKey.keys()) {
 
 fs.rmSync(TMP, { recursive: true, force: true });
 
-console.log(`Compiled pack: ${files.length} journals, ${pages} pages, ${flagged} carrying the injury flag`);
+console.log(`Compiled pack: ${files.length} journals, ${pages} pages, ${typed} typed injury pages`);
 console.log(`Source: ${records.length} records`);
 
 if (problems.length) {

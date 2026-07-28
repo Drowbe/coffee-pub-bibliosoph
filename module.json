@@ -20,6 +20,12 @@
   "socket": {},
   "library": {},
 
+  "documentTypes": {
+    "JournalEntryPage": {
+      "injury": {}
+    }
+  },
+
   "authors": [
     {
       "name": "COFFEE PUB",

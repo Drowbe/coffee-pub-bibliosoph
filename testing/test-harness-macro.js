@@ -461,6 +461,8 @@ const SCENARIOS = [
             if (!pack) return ui.notifications.warn(`Compendium "${packId}" not found.`);
             const MODULE_ID = 'coffee-pub-bibliosoph';
             const readRecord = (page) => {
+                const system = page?.system;
+                if (system?.category) return { rec: { ...system, title: page.name || system.title }, via: 'system' };
                 const flagged = page?.flags?.[MODULE_ID]?.injury;
                 if (flagged?.title) return { rec: flagged, via: 'flag' };
                 const m = String(page?.text?.content ?? '').match(/<h2>Metadata<\/h2>[\s\S]*?<ul>([\s\S]*?)<\/ul>/i);
@@ -470,14 +472,14 @@ const SCENARIOS = [
                 return rec.title ? { rec, via: 'html' } : null;
             };
             const lines = [];
-            let flagCount = 0, htmlCount = 0;
+            const tiers = { system: 0, flag: 0, html: 0 };
             const mix = { minor: 0, moderate: 0, major: 0 };
             for (const journal of await pack.getDocuments()) {
                 const recs = [];
                 for (const page of journal.pages) {
                     const read = readRecord(page._source ?? page);
                     if (!read) continue;
-                    read.via === 'flag' ? flagCount++ : htmlCount++;
+                    tiers[read.via]++;
                     recs.push(read.rec);
                 }
                 if (!recs.length) continue;
@@ -486,11 +488,12 @@ const SCENARIOS = [
                 for (const r of recs) mix[String(r.severity).toLowerCase()] = (mix[String(r.severity).toLowerCase()] ?? 0) + 1;
                 lines.push(`${journal.name.padEnd(12)} ${String(recs.length).padStart(3)} injuries · most likely: ${worst.title} (${Math.round(100 * (Number(worst.odds) || 1) / total)}%)`);
             }
-            console.log(`BIBLIOSOPH INJURY POOL\n  source: ${flagCount} pages via FLAG, ${htmlCount} via HTML fallback\n  severity mix: ${JSON.stringify(mix)}\n  ${lines.join('\n  ')}`);
+            const total = tiers.system + tiers.flag + tiers.html;
+            console.log(`BIBLIOSOPH INJURY POOL\n  storage: ${tiers.system} typed (system), ${tiers.flag} flag, ${tiers.html} legacy HTML\n  severity mix: ${JSON.stringify(mix)}\n  ${lines.join('\n  ')}`);
             ui.notifications.info(
-                `Injury pool: ${flagCount + htmlCount} injuries (${flagCount} flagged, ${htmlCount} legacy HTML). `
-                + `Per-category breakdown in console (F12).`
-                + (htmlCount ? ' Run "npm run packs:build" with Foundry closed to finish the rebuild.' : '')
+                `Injury pool: ${total} injuries — ${tiers.system} typed pages`
+                + (tiers.flag || tiers.html ? `, ${tiers.flag} flag, ${tiers.html} legacy HTML (run "npm run packs:build" with Foundry closed)` : ' (all migrated)')
+                + `. Breakdown in console (F12).`
             );
         }
     },

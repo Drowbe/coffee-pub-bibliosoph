@@ -6,6 +6,9 @@
 import { MODULE, BIBLIOSOPH } from './const.js';
 import { registerToolbarTools, unregisterToolbarTools } from './manager-toolbar.js';
 import { applyStatusToTokens } from './manager-status-effects.js';
+import { InjuryPageModel, INJURY_PAGE_TYPE } from './data/injury-page-model.js';
+import { InjuryPageSheet } from './sheets/injury-page-sheet.js';
+import { SEVERITY_DCS as INJURY_SEVERITY_DCS } from './data/injury-schema.js';
 
 // Resolve a macro reference (UUID, id, or name) to a Macro document
 const getMacroByIdOrName = (macroKey) => {
@@ -327,7 +330,7 @@ export async function rollInjuryCard(category, target = null) {
                     statusEffect: data.statuseffect || null,
                     kindLabel: 'injury',
                     explicitActors: [targetActor],
-                    burst: { kind: 'injury', category: data.category || 'General', severity: data.severity || null, dc: data.treatmentDC ?? null }
+                    burst: { kind: 'injury', category: data.category || 'General', severity: data.severity || null, dc: data.treatmentDC ?? null, sourceUuid: data.sourceUuid ?? null }
                 });
                 if (applied.length) {
                     const stamp = doc.createElement('div');
@@ -493,6 +496,10 @@ async function createChatCardTreatment(token) {
             img: effect.img || 'icons/svg/aura.svg',
             detail,
             tooltip,
+            // The journal page this came from. Only the reference travels in
+            // the card; a GM's own client fetches the notes at render time,
+            // so the text never reaches a player's browser.
+            sourceUuid: flag?.sourceUuid ?? '',
             buttonIcon: kind === 'injury' ? 'fa-bandage'
                 : (kind === 'crit' || kind === 'fumble') ? 'fa-burst'
                 : 'fa-sparkles',
@@ -671,6 +678,23 @@ registerSettings();
 // ***** INIT *****
 // Hook that loads as the module loads
 Hooks.once('init', async function() {
+    // Register the injury page subtype: data model + sheet. Injuries are
+    // typed JournalEntryPages so Foundry validates every field on write
+    // and GMs can author their own through a real sheet — the metadata
+    // block this replaces was HTML that nothing could validate.
+    try {
+        Object.assign(CONFIG.JournalEntryPage.dataModels, {
+            [INJURY_PAGE_TYPE]: InjuryPageModel
+        });
+        foundry.applications.apps.DocumentSheetConfig.registerSheet(JournalEntryPage, MODULE.ID, InjuryPageSheet, {
+            types: [INJURY_PAGE_TYPE],
+            makeDefault: true,
+            label: 'Bibliosoph Injury'
+        });
+    } catch (error) {
+        logBib('Failed to register the injury page subtype', error?.message, false, false);
+    }
+
     // Module initialization - Blacksmith registration is now handled by the proper API import
     logBib('Module initialized', '', false, false);
 });
@@ -879,7 +903,7 @@ Hooks.on("ready", async () => {
                 statusEffect: arrEffectData.statuseffect || null,
                 kindLabel: 'injury',
                 explicitActors,
-                burst: { kind: 'injury', category: arrEffectData.category || 'General', severity: arrEffectData.severity || null, dc: arrEffectData.treatmentDC ?? null }
+                burst: { kind: 'injury', category: arrEffectData.category || 'General', severity: arrEffectData.severity || null, dc: arrEffectData.treatmentDC ?? null, sourceUuid: arrEffectData.sourceUuid ?? null }
             });
             await markCardButtonApplied(injuryButton, '.coffee-pub-bibliosoph-button-injury', applied);
         }
@@ -1030,6 +1054,8 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
     // it depends on the viewer, never baked into the shared HTML.
     if (!game.user.isGM) {
         nativeHtml?.querySelectorAll?.('.coffee-pub-bibliosoph-button-injury, .coffee-pub-bibliosoph-button-apply-outcome')?.forEach((btn) => btn.remove());
+    } else {
+        appendGmNotesToTooltips(nativeHtml);
     }
     nativeHtml?.querySelectorAll?.('.coffee-pub-bibliosoph-button-treat[data-kind]')?.forEach((btn) => {
         const kind = btn.dataset.kind;
@@ -1520,6 +1546,7 @@ async function createChatCardInjury(category, target = null) {
         category: strInjuryCategory || 'General',
         severity: strInjurySeverity || null,
         treatmentDC: intInjuryTreatmentDC,
+        sourceUuid: objInjuryData?.sourceUuid ?? null,
         targetActorId: target?.actorId ?? null,
         targetTokenId: target?.tokenId ?? null,
         description: [
@@ -2199,15 +2226,31 @@ function weightedPick(items, weightOf) {
     return items[items.length - 1];
 }
 
-// Read an injury record off a journal page. The generator stamps the
-// record as a flag, which is authoritative; parsing the HTML metadata is
-// the fallback for pages built before that (and the migration path off
-// HTML entirely — see documentation/spec-injury-schema.md).
+// Read an injury record off a journal page, newest storage first:
+//   1. system  — typed page subtype, validated by Foundry (current)
+//   2. flag    — the interim format the generator stamped
+//   3. HTML    — the original metadata block
+// Older packs keep working; see documentation/spec-injury-schema.md.
 function readInjuryRecord(page) {
+    // `sourceUuid` lets the applied effect point back at its journal page,
+    // so GM notes stay live (and are never copied into chat HTML, where a
+    // player could read them out of the DOM).
+    const sourceUuid = page?.uuid ?? null;
+    const system = page?.system;
+    if (system && system.category && (page?.name || system.title)) {
+        const fields = system.toObject?.() ?? system;
+        return {
+            ...fields,
+            title: page?.name || fields.title || '',
+            treatmentdc: fields.treatmentdc ?? undefined,
+            sourceUuid
+        };
+    }
     const flagged = page?.flags?.[MODULE.ID]?.injury;
-    if (flagged && flagged.title) return flagged;
+    if (flagged && flagged.title) return { ...flagged, sourceUuid };
     const content = page?.text?.content;
-    return content ? getHTMLMetadata(content) : null;
+    const parsed = content ? getHTMLMetadata(content) : null;
+    return parsed ? { ...parsed, sourceUuid } : null;
 }
 
 async function getJournalCategoryPageData(compendiumName,category) {
@@ -2231,13 +2274,12 @@ async function getJournalCategoryPageData(compendiumName,category) {
 
     //BlacksmithUtils.postConsoleAndNotification("*** getJournalCategoryPageData entries" , entries, false, true, false); 
 
-    // Collect all available categories
+    // Collect all available categories. Page DOCUMENTS (not _source) so
+    // each one carries its data model and its uuid.
     let arrCategoryPages = [];
     for (let entry of entries) {
-        //BlacksmithUtils.postConsoleAndNotification("*** getJournalCategoryPageData entry" , entry, false, true, false); 
-        // Look for the right journal
         if (entry.name.toLowerCase() == strMatchingCategory) {
-            arrCategoryPages = entry._source.pages;
+            arrCategoryPages = Array.from(entry.pages ?? []);
         }
     }
     // If no pages
@@ -2504,6 +2546,32 @@ async function removeAffliction(actor, effect) {
 
 const SOCKET_TREAT_ROLL = `${MODULE.ID}.treatRoll`;
 const pendingTreatRolls = new Map();
+
+// GM-only: fold an injury's journal GM Notes into its Check-Up hover card.
+//
+// The notes are deliberately NOT baked into the message — a player could
+// read them straight out of the DOM. The card carries only the page's
+// uuid; each GM's own client fetches the text and rewrites its local
+// tooltip. That also keeps the notes live: editing the journal updates
+// what the hover shows, with no need to repost the card.
+async function appendGmNotesToTooltips(root) {
+    const icons = root?.querySelectorAll?.('.coffee-pub-bibliosoph-affliction-icon[data-source]') ?? [];
+    for (const icon of icons) {
+        const uuid = icon.dataset.source;
+        if (!uuid || icon.dataset.gmNotesChecked) continue;
+        icon.dataset.gmNotesChecked = '1';
+        try {
+            const page = await fromUuid(uuid);
+            if (!page?.system?.hasNotes) continue;
+            const notes = String(page.text?.content ?? '').trim();
+            if (!notes) continue;
+            icon.dataset.tooltip = `${icon.dataset.tooltip ?? ''}`
+                + `<hr><section style="text-align:left;"><strong><i class="fa-solid fa-scroll"></i> GM Notes</strong>${notes}</section>`;
+        } catch (error) {
+            logBib('Could not load GM notes for ' + uuid, error?.message, true, false);
+        }
+    }
+}
 
 // Per-viewer hover text for an injury Treat button: a PREVIEW of what
 // clicking will do for THIS user, in future tense — not narration.

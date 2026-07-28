@@ -123,7 +123,19 @@ Page order:
 
 The separate hand-written "DETAILS" bullet list is **removed**. The metadata block is already a legible bullet list and serves as both the machine source and the human-readable mechanics. One copy, no drift.
 
-The generator also stamps the record onto the page as a flag (`flags.coffee-pub-bibliosoph.injury`). **The runtime already prefers the flag** (`readInjuryRecord` in `scripts/bibliosoph.js`) and falls back to parsing the metadata HTML, so pages built before the generator keep working and the eventual removal of HTML parsing needs no second migration.
+### Typed pages (2026-07-28)
+
+Injury pages are now the registered subtype **`coffee-pub-bibliosoph.injury`**, not text pages:
+
+- `module.json` declares `documentTypes.JournalEntryPage.injury` (**a world relaunch is required** for Foundry to see a new document subtype).
+- `scripts/data/injury-page-model.js` defines `InjuryPageModel extends TypeDataModel` — every mechanical field lives in `page.system` with **Foundry validating each write**, including closed choice lists for category, severity, and condition. Derived getters cover `treatmentDC`, `actionLabel`, `categoryLabel`, and `record`.
+- `scripts/sheets/injury-page-sheet.js` gives GMs a real editing sheet (fields in edit mode, a formatted block in view mode), so **users can author their own injuries** — the reason for the move.
+- The page's `name` is the title (never stored twice) and `text.content` is now free-form **GM notes**.
+- `scripts/data/injury-schema.js` is the one schema definition; `tools/injury-schema.mjs` re-exports it so the Foundry runtime and the Node tools cannot drift.
+
+The structure deliberately mirrors Squire's CODEX (`data/codex-page-model.js`, `sheets/codex-page-sheet.js`) so the two can be diffed and their common scaffolding extracted into a shared Coffee Pub toolkit later.
+
+**Read order at runtime** (`readInjuryRecord` in `scripts/bibliosoph.js`): `system` → page flag → HTML metadata. Older packs keep working through the fallbacks; once every world is rebuilt, tiers 2 and 3 and `getHTMLMetadata` can be deleted.
 
 ## Part 5 — The authoring prompt
 

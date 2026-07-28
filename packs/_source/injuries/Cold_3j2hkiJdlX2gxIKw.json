@@ -2,14 +2,26 @@
   "name": "Cold",
   "pages": [
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Arctic Awakening",
       "text": {
-        "content": "<img src=\"icons/magic/air/wind-weather-snow-gusts.webp\" alt=\"Arctic Awakening\" />\n<p><em>Glacial Transformation</em></p>\n<p>A haze of frost surrounds you, your very breath crystallizing in the air. Your body becomes one with the winter landscape, as if the frost itself has claimed you as its own.</p>\n<h2>Treatment</h2>\n<p>Seeking a powerful mage of warmth to draw forth the latent heat within you is your only chance to escape becoming a permanent fixture in the snow.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> cold</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Arctic Awakening</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/wind-weather-snow-gusts.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Glacial Transformation</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A haze of frost surrounds you, your very breath crystallizing in the air. Your body becomes one with the winter landscape, as if the frost itself has claimed you as its own.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Seeking a powerful mage of warmth to draw forth the latent heat within you is your only chance to escape becoming a permanent fixture in the snow.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> major</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 12</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 0</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> paralyzed</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 10</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "zw13AC1odTUHkC3L",
-      "system": {},
+      "system": {
+        "category": "cold",
+        "image": "icons/magic/air/wind-weather-snow-gusts.webp",
+        "imagetitle": "Glacial Transformation",
+        "description": "A haze of frost surrounds you, your very breath crystallizing in the air. Your body becomes one with the winter landscape, as if the frost itself has claimed you as its own.",
+        "treatment": "Seeking a powerful mage of warmth to draw forth the latent heat within you is your only chance to escape becoming a permanent fixture in the snow.",
+        "severity": "major",
+        "damage": 12,
+        "duration": 0,
+        "statuseffect": "paralyzed",
+        "odds": 10,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -22,23 +34,7 @@
       "src": null,
       "category": null,
       "sort": 0,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "cold",
-            "title": "Arctic Awakening",
-            "image": "icons/magic/air/wind-weather-snow-gusts.webp",
-            "imagetitle": "Glacial Transformation",
-            "description": "A haze of frost surrounds you, your very breath crystallizing in the air. Your body becomes one with the winter landscape, as if the frost itself has claimed you as its own.",
-            "treatment": "Seeking a powerful mage of warmth to draw forth the latent heat within you is your only chance to escape becoming a permanent fixture in the snow.",
-            "severity": "major",
-            "damage": 12,
-            "duration": 0,
-            "statuseffect": "paralyzed",
-            "odds": 10
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -54,14 +50,26 @@
       "_key": "!journal.pages!3j2hkiJdlX2gxIKw.zw13AC1odTUHkC3L"
     },
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Frostbitten Fingertips",
       "text": {
-        "content": "<img src=\"icons/magic/air/wind-weather-snow-gusts.webp\" alt=\"Frostbitten Fingertips\" />\n<p><em>Chilling Grasp</em></p>\n<p>Your fingertips turn a frosty hue, feeling numb and unresponsive to touch. Even the warmest flames offer only fleeting relief as the cold magic's hold tightens.</p>\n<h2>Treatment</h2>\n<p>Rubbing your hands vigorously with infused frostweed oil and wearing insulated gloves will gradually restore sensation.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> cold</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Frostbitten Fingertips</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/wind-weather-snow-gusts.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Chilling Grasp</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Your fingertips turn a frosty hue, feeling numb and unresponsive to touch. Even the warmest flames offer only fleeting relief as the cold magic's hold tightens.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Rubbing your hands vigorously with infused frostweed oil and wearing insulated gloves will gradually restore sensation.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 240</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 40</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "fIglydkUNEH2CPGB",
-      "system": {},
+      "system": {
+        "category": "cold",
+        "image": "icons/magic/air/wind-weather-snow-gusts.webp",
+        "imagetitle": "Chilling Grasp",
+        "description": "Your fingertips turn a frosty hue, feeling numb and unresponsive to touch. Even the warmest flames offer only fleeting relief as the cold magic's hold tightens.",
+        "treatment": "Rubbing your hands vigorously with infused frostweed oil and wearing insulated gloves will gradually restore sensation.",
+        "severity": "minor",
+        "damage": 2,
+        "duration": 240,
+        "statuseffect": "none",
+        "odds": 40,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -74,23 +82,7 @@
       "src": null,
       "category": null,
       "sort": 100,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "cold",
-            "title": "Frostbitten Fingertips",
-            "image": "icons/magic/air/wind-weather-snow-gusts.webp",
-            "imagetitle": "Chilling Grasp",
-            "description": "Your fingertips turn a frosty hue, feeling numb and unresponsive to touch. Even the warmest flames offer only fleeting relief as the cold magic's hold tightens.",
-            "treatment": "Rubbing your hands vigorously with infused frostweed oil and wearing insulated gloves will gradually restore sensation.",
-            "severity": "minor",
-            "damage": 2,
-            "duration": 240,
-            "statuseffect": "none",
-            "odds": 40
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -106,14 +98,26 @@
       "_key": "!journal.pages!3j2hkiJdlX2gxIKw.fIglydkUNEH2CPGB"
     },
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Frosty Fingers",
       "text": {
-        "content": "<img src=\"icons/magic/air/wind-weather-snow-gusts.webp\" alt=\"Frosty Fingers\" />\n<p><em>Chilling Touch</em></p>\n<p>The character's fingers have become numb and frostbitten, causing them to fumble with objects and weapons. Everything they touch turns to icicles, including their sense of dexterity.</p>\n<h2>Treatment</h2>\n<p>Warm up by the fire or use hand warmers to regain feeling and control in the frosty fingers.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> cold</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Frosty Fingers</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/wind-weather-snow-gusts.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Chilling Touch</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The character's fingers have become numb and frostbitten, causing them to fumble with objects and weapons. Everything they touch turns to icicles, including their sense of dexterity.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Warm up by the fire or use hand warmers to regain feeling and control in the frosty fingers.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 7</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 180</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> restrained</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 15</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "ZEdree610YTbjwPu",
-      "system": {},
+      "system": {
+        "category": "cold",
+        "image": "icons/magic/air/wind-weather-snow-gusts.webp",
+        "imagetitle": "Chilling Touch",
+        "description": "The character's fingers have become numb and frostbitten, causing them to fumble with objects and weapons. Everything they touch turns to icicles, including their sense of dexterity.",
+        "treatment": "Warm up by the fire or use hand warmers to regain feeling and control in the frosty fingers.",
+        "severity": "moderate",
+        "damage": 7,
+        "duration": 180,
+        "statuseffect": "restrained",
+        "odds": 15,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -126,23 +130,7 @@
       "src": null,
       "category": null,
       "sort": 200,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "cold",
-            "title": "Frosty Fingers",
-            "image": "icons/magic/air/wind-weather-snow-gusts.webp",
-            "imagetitle": "Chilling Touch",
-            "description": "The character's fingers have become numb and frostbitten, causing them to fumble with objects and weapons. Everything they touch turns to icicles, including their sense of dexterity.",
-            "treatment": "Warm up by the fire or use hand warmers to regain feeling and control in the frosty fingers.",
-            "severity": "moderate",
-            "damage": 7,
-            "duration": 180,
-            "statuseffect": "restrained",
-            "odds": 15
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -158,14 +146,26 @@
       "_key": "!journal.pages!3j2hkiJdlX2gxIKw.ZEdree610YTbjwPu"
     },
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Frozen Fingers",
       "text": {
-        "content": "<img src=\"icons/magic/air/air-smoke-casting.webp\" alt=\"Frozen Fingers\" />\n<p><em>Ten Blue Strangers</em></p>\n<p>Your fingers become numb, turning a shade of blue that rivals the frost itself. Fumbling with objects becomes a comedy of errors as you struggle to maintain your grip, feeling as though you've unknowingly entered a slapstick routine.</p>\n<h2>Treatment</h2>\n<p>Warming up your hands with a cozy fire or a hot beverage can help thaw out your frozen digits. Avoiding further exposure to extreme cold is also advisable to prevent prolonged discomfort.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> cold</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Frozen Fingers</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/air-smoke-casting.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Ten Blue Strangers</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Your fingers become numb, turning a shade of blue that rivals the frost itself. Fumbling with objects becomes a comedy of errors as you struggle to maintain your grip, feeling as though you've unknowingly entered a slapstick routine.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Warming up your hands with a cozy fire or a hot beverage can help thaw out your frozen digits. Avoiding further exposure to extreme cold is also advisable to prevent prolonged discomfort.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 3</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 300</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> prone</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 40</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "ur60n5UMYftHukyT",
-      "system": {},
+      "system": {
+        "category": "cold",
+        "image": "icons/magic/air/air-smoke-casting.webp",
+        "imagetitle": "Ten Blue Strangers",
+        "description": "Your fingers become numb, turning a shade of blue that rivals the frost itself. Fumbling with objects becomes a comedy of errors as you struggle to maintain your grip, feeling as though you've unknowingly entered a slapstick routine.",
+        "treatment": "Warming up your hands with a cozy fire or a hot beverage can help thaw out your frozen digits. Avoiding further exposure to extreme cold is also advisable to prevent prolonged discomfort.",
+        "severity": "minor",
+        "damage": 3,
+        "duration": 300,
+        "statuseffect": "prone",
+        "odds": 40,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -178,23 +178,7 @@
       "src": null,
       "category": null,
       "sort": 300,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "cold",
-            "title": "Frozen Fingers",
-            "image": "icons/magic/air/air-smoke-casting.webp",
-            "imagetitle": "Ten Blue Strangers",
-            "description": "Your fingers become numb, turning a shade of blue that rivals the frost itself. Fumbling with objects becomes a comedy of errors as you struggle to maintain your grip, feeling as though you've unknowingly entered a slapstick routine.",
-            "treatment": "Warming up your hands with a cozy fire or a hot beverage can help thaw out your frozen digits. Avoiding further exposure to extreme cold is also advisable to prevent prolonged discomfort.",
-            "severity": "minor",
-            "damage": 3,
-            "duration": 300,
-            "statuseffect": "prone",
-            "odds": 40
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -210,14 +194,26 @@
       "_key": "!journal.pages!3j2hkiJdlX2gxIKw.ur60n5UMYftHukyT"
     },
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Frozen Heartbeat",
       "text": {
-        "content": "<img src=\"icons/magic/air/wind-weather-snow-gusts.webp\" alt=\"Frozen Heartbeat\" />\n<p><em>Icy Pulse</em></p>\n<p>Your heart beats to the slow, steady rhythm of an ancient glacier, each pulse sending a frigid shiver through your body. The winter's icy grasp threatens to freeze your very core.</p>\n<h2>Treatment</h2>\n<p>Drinking a steaming tonic brewed with hearthfire moss and receiving a warm embrace can help thaw the chill within.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> cold</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Frozen Heartbeat</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/wind-weather-snow-gusts.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Icy Pulse</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Your heart beats to the slow, steady rhythm of an ancient glacier, each pulse sending a frigid shiver through your body. The winter's icy grasp threatens to freeze your very core.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Drinking a steaming tonic brewed with hearthfire moss and receiving a warm embrace can help thaw the chill within.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 7</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 600</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> exhaustion</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 20</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "VIKXEWYbrMjWLzmN",
-      "system": {},
+      "system": {
+        "category": "cold",
+        "image": "icons/magic/air/wind-weather-snow-gusts.webp",
+        "imagetitle": "Icy Pulse",
+        "description": "Your heart beats to the slow, steady rhythm of an ancient glacier, each pulse sending a frigid shiver through your body. The winter's icy grasp threatens to freeze your very core.",
+        "treatment": "Drinking a steaming tonic brewed with hearthfire moss and receiving a warm embrace can help thaw the chill within.",
+        "severity": "moderate",
+        "damage": 7,
+        "duration": 600,
+        "statuseffect": "exhaustion",
+        "odds": 20,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -230,23 +226,7 @@
       "src": null,
       "category": null,
       "sort": 400,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "cold",
-            "title": "Frozen Heartbeat",
-            "image": "icons/magic/air/wind-weather-snow-gusts.webp",
-            "imagetitle": "Icy Pulse",
-            "description": "Your heart beats to the slow, steady rhythm of an ancient glacier, each pulse sending a frigid shiver through your body. The winter's icy grasp threatens to freeze your very core.",
-            "treatment": "Drinking a steaming tonic brewed with hearthfire moss and receiving a warm embrace can help thaw the chill within.",
-            "severity": "moderate",
-            "damage": 7,
-            "duration": 600,
-            "statuseffect": "exhaustion",
-            "odds": 20
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -262,14 +242,26 @@
       "_key": "!journal.pages!3j2hkiJdlX2gxIKw.VIKXEWYbrMjWLzmN"
     },
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Frozen Noggin",
       "text": {
-        "content": "<img src=\"icons/magic/air/wind-weather-snow-gusts.webp\" alt=\"Frozen Noggin\" />\n<p><em>Chilling Accident</em></p>\n<p>The character's head has been chilled to the core, causing brain freeze and rendering them unable to concentrate. Spells may fizzle out unexpectedly and thoughts become as frozen as a winter fruit smoothie.</p>\n<h2>Treatment</h2>\n<p>Consume a warm beverage, like a nice cup of tea, to help melt away the cold inside the brain.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> cold</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Frozen Noggin</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/wind-weather-snow-gusts.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Chilling Accident</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The character's head has been chilled to the core, causing brain freeze and rendering them unable to concentrate. Spells may fizzle out unexpectedly and thoughts become as frozen as a winter fruit smoothie.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Consume a warm beverage, like a nice cup of tea, to help melt away the cold inside the brain.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 3</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 120</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 30</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "tXPcg4IkaSRl5ZxT",
-      "system": {},
+      "system": {
+        "category": "cold",
+        "image": "icons/magic/air/wind-weather-snow-gusts.webp",
+        "imagetitle": "Chilling Accident",
+        "description": "The character's head has been chilled to the core, causing brain freeze and rendering them unable to concentrate. Spells may fizzle out unexpectedly and thoughts become as frozen as a winter fruit smoothie.",
+        "treatment": "Consume a warm beverage, like a nice cup of tea, to help melt away the cold inside the brain.",
+        "severity": "minor",
+        "damage": 3,
+        "duration": 120,
+        "statuseffect": "none",
+        "odds": 30,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -282,23 +274,7 @@
       "src": null,
       "category": null,
       "sort": 500,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "cold",
-            "title": "Frozen Noggin",
-            "image": "icons/magic/air/wind-weather-snow-gusts.webp",
-            "imagetitle": "Chilling Accident",
-            "description": "The character's head has been chilled to the core, causing brain freeze and rendering them unable to concentrate. Spells may fizzle out unexpectedly and thoughts become as frozen as a winter fruit smoothie.",
-            "treatment": "Consume a warm beverage, like a nice cup of tea, to help melt away the cold inside the brain.",
-            "severity": "minor",
-            "damage": 3,
-            "duration": 120,
-            "statuseffect": "none",
-            "odds": 30
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -314,14 +290,26 @@
       "_key": "!journal.pages!3j2hkiJdlX2gxIKw.tXPcg4IkaSRl5ZxT"
     },
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Icy Heart",
       "text": {
-        "content": "<img src=\"icons/magic/air/wind-weather-snow-gusts.webp\" alt=\"Icy Heart\" />\n<p><em>Frozen Emotions</em></p>\n<p>The character's heart has been encased in ice, turning them into a cold, emotionless husk. Friendships freeze over, and love thaws out. They become as chilly as an iceberg in the ocean of feelings.</p>\n<h2>Treatment</h2>\n<p>Warmth can only be found in the heartfelt words of companions or by performing acts of kindness to melt the icy barriers around the heart.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> cold</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Icy Heart</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/wind-weather-snow-gusts.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Frozen Emotions</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The character's heart has been encased in ice, turning them into a cold, emotionless husk. Friendships freeze over, and love thaws out. They become as chilly as an iceberg in the ocean of feelings.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Warmth can only be found in the heartfelt words of companions or by performing acts of kindness to melt the icy barriers around the heart.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> major</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 11</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 0</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> charmed</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 10</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "y3pp0TUVyNaE6ZSL",
-      "system": {},
+      "system": {
+        "category": "cold",
+        "image": "icons/magic/air/wind-weather-snow-gusts.webp",
+        "imagetitle": "Frozen Emotions",
+        "description": "The character's heart has been encased in ice, turning them into a cold, emotionless husk. Friendships freeze over, and love thaws out. They become as chilly as an iceberg in the ocean of feelings.",
+        "treatment": "Warmth can only be found in the heartfelt words of companions or by performing acts of kindness to melt the icy barriers around the heart.",
+        "severity": "major",
+        "damage": 11,
+        "duration": 0,
+        "statuseffect": "charmed",
+        "odds": 10,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -334,23 +322,7 @@
       "src": null,
       "category": null,
       "sort": 600,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "cold",
-            "title": "Icy Heart",
-            "image": "icons/magic/air/wind-weather-snow-gusts.webp",
-            "imagetitle": "Frozen Emotions",
-            "description": "The character's heart has been encased in ice, turning them into a cold, emotionless husk. Friendships freeze over, and love thaws out. They become as chilly as an iceberg in the ocean of feelings.",
-            "treatment": "Warmth can only be found in the heartfelt words of companions or by performing acts of kindness to melt the icy barriers around the heart.",
-            "severity": "major",
-            "damage": 11,
-            "duration": 0,
-            "statuseffect": "charmed",
-            "odds": 10
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -366,14 +338,26 @@
       "_key": "!journal.pages!3j2hkiJdlX2gxIKw.y3pp0TUVyNaE6ZSL"
     },
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Slippery Slope Syndrome",
       "text": {
-        "content": "<img src=\"icons/magic/air/wind-weather-snow-gusts.webp\" alt=\"Slippery Slope Syndrome\" />\n<p><em>Frosty Misstep</em></p>\n<p>You feel a sudden chill as if a mischievous winter spirit has taken up residency in your veins. Your movements become slightly clumsy, as if you're trying to ice skate on solid ground.</p>\n<h2>Treatment</h2>\n<p>Warm tea made from snowberry leaves and resting by a cozy fire will help alleviate symptoms.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> cold</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Slippery Slope Syndrome</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/wind-weather-snow-gusts.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Frosty Misstep</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> You feel a sudden chill as if a mischievous winter spirit has taken up residency in your veins. Your movements become slightly clumsy, as if you're trying to ice skate on solid ground.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Warm tea made from snowberry leaves and resting by a cozy fire will help alleviate symptoms.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 3</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 300</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> exhaustion</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 50</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "DRLskN07g6ASga1C",
-      "system": {},
+      "system": {
+        "category": "cold",
+        "image": "icons/magic/air/wind-weather-snow-gusts.webp",
+        "imagetitle": "Frosty Misstep",
+        "description": "You feel a sudden chill as if a mischievous winter spirit has taken up residency in your veins. Your movements become slightly clumsy, as if you're trying to ice skate on solid ground.",
+        "treatment": "Warm tea made from snowberry leaves and resting by a cozy fire will help alleviate symptoms.",
+        "severity": "minor",
+        "damage": 3,
+        "duration": 300,
+        "statuseffect": "exhaustion",
+        "odds": 50,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -386,23 +370,7 @@
       "src": null,
       "category": null,
       "sort": 700,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "cold",
-            "title": "Slippery Slope Syndrome",
-            "image": "icons/magic/air/wind-weather-snow-gusts.webp",
-            "imagetitle": "Frosty Misstep",
-            "description": "You feel a sudden chill as if a mischievous winter spirit has taken up residency in your veins. Your movements become slightly clumsy, as if you're trying to ice skate on solid ground.",
-            "treatment": "Warm tea made from snowberry leaves and resting by a cozy fire will help alleviate symptoms.",
-            "severity": "minor",
-            "damage": 3,
-            "duration": 300,
-            "statuseffect": "exhaustion",
-            "odds": 50
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -418,14 +386,26 @@
       "_key": "!journal.pages!3j2hkiJdlX2gxIKw.DRLskN07g6ASga1C"
     },
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Slippery Slopes",
       "text": {
-        "content": "<img src=\"icons/magic/air/wind-weather-snow-gusts.webp\" alt=\"Slippery Slopes\" />\n<p><em>Icy Misstep</em></p>\n<p>The character's feet have turned into blocks of ice, making walking as precarious as wearing socks on a frozen lake. Every step is a potential slip and slide, causing embarrassment and bruised tailbones.</p>\n<h2>Treatment</h2>\n<p>Walk carefully on heated floors or wear warm, grippy socks to regain stability.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> cold</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Slippery Slopes</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/wind-weather-snow-gusts.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Icy Misstep</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The character's feet have turned into blocks of ice, making walking as precarious as wearing socks on a frozen lake. Every step is a potential slip and slide, causing embarrassment and bruised tailbones.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Walk carefully on heated floors or wear warm, grippy socks to regain stability.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 90</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> prone</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 25</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "yKyWyiCbxIh2YNha",
-      "system": {},
+      "system": {
+        "category": "cold",
+        "image": "icons/magic/air/wind-weather-snow-gusts.webp",
+        "imagetitle": "Icy Misstep",
+        "description": "The character's feet have turned into blocks of ice, making walking as precarious as wearing socks on a frozen lake. Every step is a potential slip and slide, causing embarrassment and bruised tailbones.",
+        "treatment": "Walk carefully on heated floors or wear warm, grippy socks to regain stability.",
+        "severity": "minor",
+        "damage": 2,
+        "duration": 90,
+        "statuseffect": "prone",
+        "odds": 25,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -438,23 +418,7 @@
       "src": null,
       "category": null,
       "sort": 800,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "cold",
-            "title": "Slippery Slopes",
-            "image": "icons/magic/air/wind-weather-snow-gusts.webp",
-            "imagetitle": "Icy Misstep",
-            "description": "The character's feet have turned into blocks of ice, making walking as precarious as wearing socks on a frozen lake. Every step is a potential slip and slide, causing embarrassment and bruised tailbones.",
-            "treatment": "Walk carefully on heated floors or wear warm, grippy socks to regain stability.",
-            "severity": "minor",
-            "damage": 2,
-            "duration": 90,
-            "statuseffect": "prone",
-            "odds": 25
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -482,7 +446,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785256145099,
+    "modifiedTime": 1785261249425,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

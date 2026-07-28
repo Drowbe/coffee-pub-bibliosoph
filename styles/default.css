@@ -4,6 +4,7 @@
 /* @import must come before any rules below */
 
 @import "window-messages.css";
+@import "page-injury.css";
 
 /* ------------------------------------------------------- */
 /* --- ALL CSS HANDLED IN COFFEE PUB BLACKSMITH ---------- */

@@ -2,14 +2,26 @@
   "name": "General",
   "pages": [
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Absurd Attraction Aura",
       "text": {
-        "content": "<img src=\"icons/skills/trades/construction-mason-stonecutter-sculpture.webp\" alt=\"Absurd Attraction Aura\" />\n<p><em>Everything Comes Closer</em></p>\n<p>Objects seemingly have a mind of their own in your vicinity, gravitating towards you in a bizarre display of magnetism. It's as if you've become a walking anomaly, attracting items with a peculiar sense of humor.</p>\n<h2>Treatment</h2>\n<p>Creating a designated space for items and organizing your surroundings can help reduce the chaos caused by the attraction aura. Being mindful of your proximity to objects can prevent inadvertent collisions.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> general</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Absurd Attraction Aura</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/trades/construction-mason-stonecutter-sculpture.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Everything Comes Closer</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Objects seemingly have a mind of their own in your vicinity, gravitating towards you in a bizarre display of magnetism. It's as if you've become a walking anomaly, attracting items with a peculiar sense of humor.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Creating a designated space for items and organizing your surroundings can help reduce the chaos caused by the attraction aura. Being mindful of your proximity to objects can prevent inadvertent collisions.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 4</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 360</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> grappled</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 40</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "g4ewiyd1H9hniVTg",
-      "system": {},
+      "system": {
+        "category": "general",
+        "image": "icons/skills/trades/construction-mason-stonecutter-sculpture.webp",
+        "imagetitle": "Everything Comes Closer",
+        "description": "Objects seemingly have a mind of their own in your vicinity, gravitating towards you in a bizarre display of magnetism. It's as if you've become a walking anomaly, attracting items with a peculiar sense of humor.",
+        "treatment": "Creating a designated space for items and organizing your surroundings can help reduce the chaos caused by the attraction aura. Being mindful of your proximity to objects can prevent inadvertent collisions.",
+        "severity": "minor",
+        "damage": 4,
+        "duration": 360,
+        "statuseffect": "grappled",
+        "odds": 40,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -22,23 +34,7 @@
       "src": null,
       "category": null,
       "sort": 0,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "general",
-            "title": "Absurd Attraction Aura",
-            "image": "icons/skills/trades/construction-mason-stonecutter-sculpture.webp",
-            "imagetitle": "Everything Comes Closer",
-            "description": "Objects seemingly have a mind of their own in your vicinity, gravitating towards you in a bizarre display of magnetism. It's as if you've become a walking anomaly, attracting items with a peculiar sense of humor.",
-            "treatment": "Creating a designated space for items and organizing your surroundings can help reduce the chaos caused by the attraction aura. Being mindful of your proximity to objects can prevent inadvertent collisions.",
-            "severity": "minor",
-            "damage": 4,
-            "duration": 360,
-            "statuseffect": "grappled",
-            "odds": 40
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -54,14 +50,26 @@
       "_key": "!journal.pages!oAL7dpX6XFm8IPzh.g4ewiyd1H9hniVTg"
     },
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Bruised To The Bone",
       "text": {
-        "content": "<img src=\"icons/skills/wounds/injury-body-pain-gray.webp\" alt=\"Bruised To The Bone\" />\n<p><em>Deep And Patient</em></p>\n<p>The bruise has gone somewhere bruises are not supposed to reach. It aches beneath the muscle, in a place you cannot press or rub or reason with, and it deepens in colour each time you check on it. You have begun moving in a way that avoids one entire side of yourself.</p>\n<h2>Treatment</h2>\n<p>Cold first, warmth later, and no weight on the limb for a day. Deep bruising fades slowly and dramatically.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> general</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Bruised To The Bone</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/wounds/injury-body-pain-gray.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Deep And Patient</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The bruise has gone somewhere bruises are not supposed to reach. It aches beneath the muscle, in a place you cannot press or rub or reason with, and it deepens in colour each time you check on it. You have begun moving in a way that avoids one entire side of yourself.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Cold first, warmth later, and no weight on the limb for a day. Deep bruising fades slowly and dramatically.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 5</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 2400</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 40</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "8jCfSSvaK6cIHLDh",
-      "system": {},
+      "system": {
+        "category": "general",
+        "image": "icons/skills/wounds/injury-body-pain-gray.webp",
+        "imagetitle": "Deep And Patient",
+        "description": "The bruise has gone somewhere bruises are not supposed to reach. It aches beneath the muscle, in a place you cannot press or rub or reason with, and it deepens in colour each time you check on it. You have begun moving in a way that avoids one entire side of yourself.",
+        "treatment": "Cold first, warmth later, and no weight on the limb for a day. Deep bruising fades slowly and dramatically.",
+        "severity": "moderate",
+        "damage": 5,
+        "duration": 2400,
+        "statuseffect": "none",
+        "odds": 40,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -74,23 +82,7 @@
       "src": null,
       "category": null,
       "sort": 100,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "general",
-            "title": "Bruised To The Bone",
-            "image": "icons/skills/wounds/injury-body-pain-gray.webp",
-            "imagetitle": "Deep And Patient",
-            "description": "The bruise has gone somewhere bruises are not supposed to reach. It aches beneath the muscle, in a place you cannot press or rub or reason with, and it deepens in colour each time you check on it. You have begun moving in a way that avoids one entire side of yourself.",
-            "treatment": "Cold first, warmth later, and no weight on the limb for a day. Deep bruising fades slowly and dramatically.",
-            "severity": "moderate",
-            "damage": 5,
-            "duration": 2400,
-            "statuseffect": "none",
-            "odds": 40
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -106,14 +98,26 @@
       "_key": "!journal.pages!oAL7dpX6XFm8IPzh.8jCfSSvaK6cIHLDh"
     },
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Concussive Confusion",
       "text": {
-        "content": "<img src=\"icons/skills/wounds/injury-face-impact-orange.webp\" alt=\"Concussive Confusion\" />\n<p><em>The Room Rearranged</em></p>\n<p>The blow landed and the world has not fully reassembled since. Names arrive a beat late, the floor keeps adjusting its angle, and you have asked the same question twice without noticing either time. Somewhere behind your eyes a light is flickering and nobody can reach the switch.</p>\n<h2>Treatment</h2>\n<p>Complete rest in a dark, quiet place, watched by someone who will notice if things worsen. Under no circumstances should the patient return to the fight.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> general</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Concussive Confusion</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/wounds/injury-face-impact-orange.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> The Room Rearranged</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The blow landed and the world has not fully reassembled since. Names arrive a beat late, the floor keeps adjusting its angle, and you have asked the same question twice without noticing either time. Somewhere behind your eyes a light is flickering and nobody can reach the switch.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Complete rest in a dark, quiet place, watched by someone who will notice if things worsen. Under no circumstances should the patient return to the fight.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> major</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 9</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 7200</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> stunned</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 12</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "oe8KCAcuJD48adwi",
-      "system": {},
+      "system": {
+        "category": "general",
+        "image": "icons/skills/wounds/injury-face-impact-orange.webp",
+        "imagetitle": "The Room Rearranged",
+        "description": "The blow landed and the world has not fully reassembled since. Names arrive a beat late, the floor keeps adjusting its angle, and you have asked the same question twice without noticing either time. Somewhere behind your eyes a light is flickering and nobody can reach the switch.",
+        "treatment": "Complete rest in a dark, quiet place, watched by someone who will notice if things worsen. Under no circumstances should the patient return to the fight.",
+        "severity": "major",
+        "damage": 9,
+        "duration": 7200,
+        "statuseffect": "stunned",
+        "odds": 12,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -126,23 +130,7 @@
       "src": null,
       "category": null,
       "sort": 200,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "general",
-            "title": "Concussive Confusion",
-            "image": "icons/skills/wounds/injury-face-impact-orange.webp",
-            "imagetitle": "The Room Rearranged",
-            "description": "The blow landed and the world has not fully reassembled since. Names arrive a beat late, the floor keeps adjusting its angle, and you have asked the same question twice without noticing either time. Somewhere behind your eyes a light is flickering and nobody can reach the switch.",
-            "treatment": "Complete rest in a dark, quiet place, watched by someone who will notice if things worsen. Under no circumstances should the patient return to the fight.",
-            "severity": "major",
-            "damage": 9,
-            "duration": 7200,
-            "statuseffect": "stunned",
-            "odds": 12
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -158,14 +146,26 @@
       "_key": "!journal.pages!oAL7dpX6XFm8IPzh.oe8KCAcuJD48adwi"
     },
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Cracked Rib Chorus",
       "text": {
-        "content": "<img src=\"icons/skills/wounds/anatomy-bone-joint.webp\" alt=\"Cracked Rib Chorus\" />\n<p><em>Music On Every Breath</em></p>\n<p>A rib or three have shifted from structural to decorative. Every inhale produces a small private sound that only you can hear, and laughing has become an act of genuine courage. You have started breathing in careful halves, as though the air might notice.</p>\n<h2>Treatment</h2>\n<p>Wrap the chest firmly but not tightly, and keep the patient still. Ribs mend on their own schedule and resent being rushed.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> general</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Cracked Rib Chorus</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/wounds/anatomy-bone-joint.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Music On Every Breath</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A rib or three have shifted from structural to decorative. Every inhale produces a small private sound that only you can hear, and laughing has become an act of genuine courage. You have started breathing in careful halves, as though the air might notice.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Wrap the chest firmly but not tightly, and keep the patient still. Ribs mend on their own schedule and resent being rushed.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 6</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 3600</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 35</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "MFgAgIN5dI4T6IhE",
-      "system": {},
+      "system": {
+        "category": "general",
+        "image": "icons/skills/wounds/anatomy-bone-joint.webp",
+        "imagetitle": "Music On Every Breath",
+        "description": "A rib or three have shifted from structural to decorative. Every inhale produces a small private sound that only you can hear, and laughing has become an act of genuine courage. You have started breathing in careful halves, as though the air might notice.",
+        "treatment": "Wrap the chest firmly but not tightly, and keep the patient still. Ribs mend on their own schedule and resent being rushed.",
+        "severity": "moderate",
+        "damage": 6,
+        "duration": 3600,
+        "statuseffect": "none",
+        "odds": 35,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -178,23 +178,7 @@
       "src": null,
       "category": null,
       "sort": 300,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "general",
-            "title": "Cracked Rib Chorus",
-            "image": "icons/skills/wounds/anatomy-bone-joint.webp",
-            "imagetitle": "Music On Every Breath",
-            "description": "A rib or three have shifted from structural to decorative. Every inhale produces a small private sound that only you can hear, and laughing has become an act of genuine courage. You have started breathing in careful halves, as though the air might notice.",
-            "treatment": "Wrap the chest firmly but not tightly, and keep the patient still. Ribs mend on their own schedule and resent being rushed.",
-            "severity": "moderate",
-            "damage": 6,
-            "duration": 3600,
-            "statuseffect": "none",
-            "odds": 35
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -210,14 +194,26 @@
       "_key": "!journal.pages!oAL7dpX6XFm8IPzh.MFgAgIN5dI4T6IhE"
     },
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Dizzying Dance Dilemma",
       "text": {
-        "content": "<img src=\"icons/skills/movement/feet-bladed-boots-fire.webp\" alt=\"Dizzying Dance Dilemma\" />\n<p><em>The World Tilts</em></p>\n<p>The world spins around you in a dizzying display of disorientation, turning your balance into a precarious waltz with unseen partners. It's a dance routine you never signed up for, with each step feeling like a misstep waiting to happen.</p>\n<h2>Treatment</h2>\n<p>Finding a stable surface to rest on and focusing on a fixed point can help alleviate the vertigo induced by the dizzying dance dilemma. Slow, deliberate movements are key to navigating this impromptu dance floor without stumbling.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> general</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Dizzying Dance Dilemma</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/movement/feet-bladed-boots-fire.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> The World Tilts</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The world spins around you in a dizzying display of disorientation, turning your balance into a precarious waltz with unseen partners. It's a dance routine you never signed up for, with each step feeling like a misstep waiting to happen.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Finding a stable surface to rest on and focusing on a fixed point can help alleviate the vertigo induced by the dizzying dance dilemma. Slow, deliberate movements are key to navigating this impromptu dance floor without stumbling.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 6</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 480</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> charmed</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 20</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "gwiiV7bIwLqgkHvs",
-      "system": {},
+      "system": {
+        "category": "general",
+        "image": "icons/skills/movement/feet-bladed-boots-fire.webp",
+        "imagetitle": "The World Tilts",
+        "description": "The world spins around you in a dizzying display of disorientation, turning your balance into a precarious waltz with unseen partners. It's a dance routine you never signed up for, with each step feeling like a misstep waiting to happen.",
+        "treatment": "Finding a stable surface to rest on and focusing on a fixed point can help alleviate the vertigo induced by the dizzying dance dilemma. Slow, deliberate movements are key to navigating this impromptu dance floor without stumbling.",
+        "severity": "moderate",
+        "damage": 6,
+        "duration": 480,
+        "statuseffect": "charmed",
+        "odds": 20,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -230,23 +226,7 @@
       "src": null,
       "category": null,
       "sort": 400,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "general",
-            "title": "Dizzying Dance Dilemma",
-            "image": "icons/skills/movement/feet-bladed-boots-fire.webp",
-            "imagetitle": "The World Tilts",
-            "description": "The world spins around you in a dizzying display of disorientation, turning your balance into a precarious waltz with unseen partners. It's a dance routine you never signed up for, with each step feeling like a misstep waiting to happen.",
-            "treatment": "Finding a stable surface to rest on and focusing on a fixed point can help alleviate the vertigo induced by the dizzying dance dilemma. Slow, deliberate movements are key to navigating this impromptu dance floor without stumbling.",
-            "severity": "moderate",
-            "damage": 6,
-            "duration": 480,
-            "statuseffect": "charmed",
-            "odds": 20
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -262,14 +242,26 @@
       "_key": "!journal.pages!oAL7dpX6XFm8IPzh.gwiiV7bIwLqgkHvs"
     },
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Everything Hurts",
       "text": {
-        "content": "<img src=\"icons/skills/wounds/injury-pain-body-orange.webp\" alt=\"Everything Hurts\" />\n<p><em>A Comprehensive Ache</em></p>\n<p>Nothing in particular is broken, which somehow makes it worse. Every joint files its own complaint, every muscle answers with a second one, and standing up becomes a negotiation. You have reached the stage of adventuring where the whole body simply sends one unified invoice.</p>\n<h2>Treatment</h2>\n<p>Rest, warm compresses, and someone willing to hear about it at length. A day of light activity resolves most of the complaint.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> general</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Everything Hurts</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/wounds/injury-pain-body-orange.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> A Comprehensive Ache</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Nothing in particular is broken, which somehow makes it worse. Every joint files its own complaint, every muscle answers with a second one, and standing up becomes a negotiation. You have reached the stage of adventuring where the whole body simply sends one unified invoice.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Rest, warm compresses, and someone willing to hear about it at length. A day of light activity resolves most of the complaint.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 600</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 70</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "LeIsQZQwqdZ8Fbcw",
-      "system": {},
+      "system": {
+        "category": "general",
+        "image": "icons/skills/wounds/injury-pain-body-orange.webp",
+        "imagetitle": "A Comprehensive Ache",
+        "description": "Nothing in particular is broken, which somehow makes it worse. Every joint files its own complaint, every muscle answers with a second one, and standing up becomes a negotiation. You have reached the stage of adventuring where the whole body simply sends one unified invoice.",
+        "treatment": "Rest, warm compresses, and someone willing to hear about it at length. A day of light activity resolves most of the complaint.",
+        "severity": "minor",
+        "damage": 2,
+        "duration": 600,
+        "statuseffect": "none",
+        "odds": 70,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -282,23 +274,7 @@
       "src": null,
       "category": null,
       "sort": 500,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "general",
-            "title": "Everything Hurts",
-            "image": "icons/skills/wounds/injury-pain-body-orange.webp",
-            "imagetitle": "A Comprehensive Ache",
-            "description": "Nothing in particular is broken, which somehow makes it worse. Every joint files its own complaint, every muscle answers with a second one, and standing up becomes a negotiation. You have reached the stage of adventuring where the whole body simply sends one unified invoice.",
-            "treatment": "Rest, warm compresses, and someone willing to hear about it at length. A day of light activity resolves most of the complaint.",
-            "severity": "minor",
-            "damage": 2,
-            "duration": 600,
-            "statuseffect": "none",
-            "odds": 70
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -314,14 +290,26 @@
       "_key": "!journal.pages!oAL7dpX6XFm8IPzh.LeIsQZQwqdZ8Fbcw"
     },
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Ringing Silence",
       "text": {
-        "content": "<img src=\"icons/skills/wounds/anatomy-organ-brain-pink-red.webp\" alt=\"Ringing Silence\" />\n<p><em>A Bell Still Sounding</em></p>\n<p>Something struck you hard enough that the world went quiet and then refused to come back. A single clear tone hangs behind your eyes, patient and unwelcome. Voices arrive as shapes rather than words, and you find yourself nodding at people who have not finished speaking.</p>\n<h2>Treatment</h2>\n<p>Quiet and dark for several hours. Do not let the patient take another blow to the head before the ringing stops.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> general</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Ringing Silence</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/wounds/anatomy-organ-brain-pink-red.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> A Bell Still Sounding</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Something struck you hard enough that the world went quiet and then refused to come back. A single clear tone hangs behind your eyes, patient and unwelcome. Voices arrive as shapes rather than words, and you find yourself nodding at people who have not finished speaking.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Quiet and dark for several hours. Do not let the patient take another blow to the head before the ringing stops.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 5</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 1800</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> deafened</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 30</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "3f3ygHfnq5HQCMjA",
-      "system": {},
+      "system": {
+        "category": "general",
+        "image": "icons/skills/wounds/anatomy-organ-brain-pink-red.webp",
+        "imagetitle": "A Bell Still Sounding",
+        "description": "Something struck you hard enough that the world went quiet and then refused to come back. A single clear tone hangs behind your eyes, patient and unwelcome. Voices arrive as shapes rather than words, and you find yourself nodding at people who have not finished speaking.",
+        "treatment": "Quiet and dark for several hours. Do not let the patient take another blow to the head before the ringing stops.",
+        "severity": "moderate",
+        "damage": 5,
+        "duration": 1800,
+        "statuseffect": "deafened",
+        "odds": 30,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -334,23 +322,7 @@
       "src": null,
       "category": null,
       "sort": 600,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "general",
-            "title": "Ringing Silence",
-            "image": "icons/skills/wounds/anatomy-organ-brain-pink-red.webp",
-            "imagetitle": "A Bell Still Sounding",
-            "description": "Something struck you hard enough that the world went quiet and then refused to come back. A single clear tone hangs behind your eyes, patient and unwelcome. Voices arrive as shapes rather than words, and you find yourself nodding at people who have not finished speaking.",
-            "treatment": "Quiet and dark for several hours. Do not let the patient take another blow to the head before the ringing stops.",
-            "severity": "moderate",
-            "damage": 5,
-            "duration": 1800,
-            "statuseffect": "deafened",
-            "odds": 30
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -366,14 +338,26 @@
       "_key": "!journal.pages!oAL7dpX6XFm8IPzh.3f3ygHfnq5HQCMjA"
     },
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Split Lip Saga",
       "text": {
-        "content": "<img src=\"icons/skills/wounds/bone-broken-tooth-fang-red.webp\" alt=\"Split Lip Saga\" />\n<p><em>The Taste Of Copper</em></p>\n<p>Your mouth has become an unreliable narrator. The split reopens whenever you speak, eat, or smile, which rules out most of the pleasant things in life. You have developed a lopsided way of talking that everyone has politely agreed not to mention.</p>\n<h2>Treatment</h2>\n<p>Cold pressure, clean water, and a few hours of not talking. The last part proves hardest for most patients.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> general</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Split Lip Saga</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/wounds/bone-broken-tooth-fang-red.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> The Taste Of Copper</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Your mouth has become an unreliable narrator. The split reopens whenever you speak, eat, or smile, which rules out most of the pleasant things in life. You have developed a lopsided way of talking that everyone has politely agreed not to mention.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Cold pressure, clean water, and a few hours of not talking. The last part proves hardest for most patients.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 1</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 420</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 65</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "G08zzgSIcGBWcdsM",
-      "system": {},
+      "system": {
+        "category": "general",
+        "image": "icons/skills/wounds/bone-broken-tooth-fang-red.webp",
+        "imagetitle": "The Taste Of Copper",
+        "description": "Your mouth has become an unreliable narrator. The split reopens whenever you speak, eat, or smile, which rules out most of the pleasant things in life. You have developed a lopsided way of talking that everyone has politely agreed not to mention.",
+        "treatment": "Cold pressure, clean water, and a few hours of not talking. The last part proves hardest for most patients.",
+        "severity": "minor",
+        "damage": 1,
+        "duration": 420,
+        "statuseffect": "none",
+        "odds": 65,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -386,23 +370,7 @@
       "src": null,
       "category": null,
       "sort": 700,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "general",
-            "title": "Split Lip Saga",
-            "image": "icons/skills/wounds/bone-broken-tooth-fang-red.webp",
-            "imagetitle": "The Taste Of Copper",
-            "description": "Your mouth has become an unreliable narrator. The split reopens whenever you speak, eat, or smile, which rules out most of the pleasant things in life. You have developed a lopsided way of talking that everyone has politely agreed not to mention.",
-            "treatment": "Cold pressure, clean water, and a few hours of not talking. The last part proves hardest for most patients.",
-            "severity": "minor",
-            "damage": 1,
-            "duration": 420,
-            "statuseffect": "none",
-            "odds": 65
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -418,14 +386,26 @@
       "_key": "!journal.pages!oAL7dpX6XFm8IPzh.G08zzgSIcGBWcdsM"
     },
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Total System Failure",
       "text": {
-        "content": "<img src=\"icons/skills/wounds/blood-drip-droplet-red.webp\" alt=\"Total System Failure\" />\n<p><em>The Body Resigns</em></p>\n<p>Your body has reviewed the day's events and elected to stop participating. Legs first, then everything else, in a slow cascade of departments closing early. You are dimly aware of the ground arriving and of someone shouting your name from what sounds like the far end of a hallway.</p>\n<h2>Treatment</h2>\n<p>Immediate and serious attention: stabilise, keep them warm, and do not move them further than necessary. This one does not resolve on stubbornness alone.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> general</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Total System Failure</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/wounds/blood-drip-droplet-red.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> The Body Resigns</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Your body has reviewed the day's events and elected to stop participating. Legs first, then everything else, in a slow cascade of departments closing early. You are dimly aware of the ground arriving and of someone shouting your name from what sounds like the far end of a hallway.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Immediate and serious attention: stabilise, keep them warm, and do not move them further than necessary. This one does not resolve on stubbornness alone.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> major</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 11</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 0</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> unconscious</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 4</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "asnqhDIN2nVNNCWB",
-      "system": {},
+      "system": {
+        "category": "general",
+        "image": "icons/skills/wounds/blood-drip-droplet-red.webp",
+        "imagetitle": "The Body Resigns",
+        "description": "Your body has reviewed the day's events and elected to stop participating. Legs first, then everything else, in a slow cascade of departments closing early. You are dimly aware of the ground arriving and of someone shouting your name from what sounds like the far end of a hallway.",
+        "treatment": "Immediate and serious attention: stabilise, keep them warm, and do not move them further than necessary. This one does not resolve on stubbornness alone.",
+        "severity": "major",
+        "damage": 11,
+        "duration": 0,
+        "statuseffect": "unconscious",
+        "odds": 4,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -438,23 +418,7 @@
       "src": null,
       "category": null,
       "sort": 800,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "general",
-            "title": "Total System Failure",
-            "image": "icons/skills/wounds/blood-drip-droplet-red.webp",
-            "imagetitle": "The Body Resigns",
-            "description": "Your body has reviewed the day's events and elected to stop participating. Legs first, then everything else, in a slow cascade of departments closing early. You are dimly aware of the ground arriving and of someone shouting your name from what sounds like the far end of a hallway.",
-            "treatment": "Immediate and serious attention: stabilise, keep them warm, and do not move them further than necessary. This one does not resolve on stubbornness alone.",
-            "severity": "major",
-            "damage": 11,
-            "duration": 0,
-            "statuseffect": "unconscious",
-            "odds": 4
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -470,14 +434,26 @@
       "_key": "!journal.pages!oAL7dpX6XFm8IPzh.asnqhDIN2nVNNCWB"
     },
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Winded Wreck",
       "text": {
-        "content": "<img src=\"icons/skills/wounds/anatomy-organ-heart-red.webp\" alt=\"Winded Wreck\" />\n<p><em>Borrowed Breath</em></p>\n<p>Your lungs have decided to work part-time. Each breath comes shallow and late, arriving just after you needed it, and your vision narrows whenever you move with purpose. Talking and walking have become mutually exclusive activities.</p>\n<h2>Treatment</h2>\n<p>Sit upright, breathe slowly, and stop doing whatever caused this. Recovery is a matter of patience rather than medicine.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> general</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Winded Wreck</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/wounds/anatomy-organ-heart-red.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Borrowed Breath</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Your lungs have decided to work part-time. Each breath comes shallow and late, arriving just after you needed it, and your vision narrows whenever you move with purpose. Talking and walking have become mutually exclusive activities.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Sit upright, breathe slowly, and stop doing whatever caused this. Recovery is a matter of patience rather than medicine.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 300</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> exhaustion</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 60</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "if2UWT5uCytXRRaO",
-      "system": {},
+      "system": {
+        "category": "general",
+        "image": "icons/skills/wounds/anatomy-organ-heart-red.webp",
+        "imagetitle": "Borrowed Breath",
+        "description": "Your lungs have decided to work part-time. Each breath comes shallow and late, arriving just after you needed it, and your vision narrows whenever you move with purpose. Talking and walking have become mutually exclusive activities.",
+        "treatment": "Sit upright, breathe slowly, and stop doing whatever caused this. Recovery is a matter of patience rather than medicine.",
+        "severity": "minor",
+        "damage": 2,
+        "duration": 300,
+        "statuseffect": "exhaustion",
+        "odds": 60,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -490,23 +466,7 @@
       "src": null,
       "category": null,
       "sort": 900,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "general",
-            "title": "Winded Wreck",
-            "image": "icons/skills/wounds/anatomy-organ-heart-red.webp",
-            "imagetitle": "Borrowed Breath",
-            "description": "Your lungs have decided to work part-time. Each breath comes shallow and late, arriving just after you needed it, and your vision narrows whenever you move with purpose. Talking and walking have become mutually exclusive activities.",
-            "treatment": "Sit upright, breathe slowly, and stop doing whatever caused this. Recovery is a matter of patience rather than medicine.",
-            "severity": "minor",
-            "damage": 2,
-            "duration": 300,
-            "statuseffect": "exhaustion",
-            "odds": 60
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -522,14 +482,26 @@
       "_key": "!journal.pages!oAL7dpX6XFm8IPzh.if2UWT5uCytXRRaO"
     },
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Wobbly Knees",
       "text": {
-        "content": "<img src=\"icons/skills/wounds/bone-broken-knee-beam.webp\" alt=\"Wobbly Knees\" />\n<p><em>Unreliable Architecture</em></p>\n<p>Your knees have developed opinions and none of them involve holding you up. They buckle at inconvenient moments, usually while something is watching. Every step is a small wager on whether the ground will stay where you left it.</p>\n<h2>Treatment</h2>\n<p>Bind the joint, keep weight off it, and avoid stairs, ladders, and dramatic entrances until the swelling subsides.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> general</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Wobbly Knees</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/wounds/bone-broken-knee-beam.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Unreliable Architecture</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Your knees have developed opinions and none of them involve holding you up. They buckle at inconvenient moments, usually while something is watching. Every step is a small wager on whether the ground will stay where you left it.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Bind the joint, keep weight off it, and avoid stairs, ladders, and dramatic entrances until the swelling subsides.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 3</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 480</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> prone</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 55</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "5J37Sj9x99Endz7d",
-      "system": {},
+      "system": {
+        "category": "general",
+        "image": "icons/skills/wounds/bone-broken-knee-beam.webp",
+        "imagetitle": "Unreliable Architecture",
+        "description": "Your knees have developed opinions and none of them involve holding you up. They buckle at inconvenient moments, usually while something is watching. Every step is a small wager on whether the ground will stay where you left it.",
+        "treatment": "Bind the joint, keep weight off it, and avoid stairs, ladders, and dramatic entrances until the swelling subsides.",
+        "severity": "minor",
+        "damage": 3,
+        "duration": 480,
+        "statuseffect": "prone",
+        "odds": 55,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -542,23 +514,7 @@
       "src": null,
       "category": null,
       "sort": 1000,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "general",
-            "title": "Wobbly Knees",
-            "image": "icons/skills/wounds/bone-broken-knee-beam.webp",
-            "imagetitle": "Unreliable Architecture",
-            "description": "Your knees have developed opinions and none of them involve holding you up. They buckle at inconvenient moments, usually while something is watching. Every step is a small wager on whether the ground will stay where you left it.",
-            "treatment": "Bind the joint, keep weight off it, and avoid stairs, ladders, and dramatic entrances until the swelling subsides.",
-            "severity": "minor",
-            "damage": 3,
-            "duration": 480,
-            "statuseffect": "prone",
-            "odds": 55
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -574,14 +530,26 @@
       "_key": "!journal.pages!oAL7dpX6XFm8IPzh.5J37Sj9x99Endz7d"
     },
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Wrenched Everything",
       "text": {
-        "content": "<img src=\"icons/skills/wounds/injury-hand-blood-red.webp\" alt=\"Wrenched Everything\" />\n<p><em>Wrung Out Entirely</em></p>\n<p>Something twisted you in a direction the design never allowed for. Shoulders, wrists, and hips all report the same grievance in slightly different words, and gripping anything smaller than a doorframe has become theoretical. You feel like laundry that was wrung out and hung up wrong.</p>\n<h2>Treatment</h2>\n<p>Immobilise the worst joint, rest the rest, and expect a long day of small indignities. Massage helps once the swelling settles.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> general</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Wrenched Everything</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/skills/wounds/injury-hand-blood-red.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Wrung Out Entirely</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Something twisted you in a direction the design never allowed for. Shoulders, wrists, and hips all report the same grievance in slightly different words, and gripping anything smaller than a doorframe has become theoretical. You feel like laundry that was wrung out and hung up wrong.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Immobilise the worst joint, rest the rest, and expect a long day of small indignities. Massage helps once the swelling settles.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 7</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 2700</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 25</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "qHApfJxC2EtRtpLO",
-      "system": {},
+      "system": {
+        "category": "general",
+        "image": "icons/skills/wounds/injury-hand-blood-red.webp",
+        "imagetitle": "Wrung Out Entirely",
+        "description": "Something twisted you in a direction the design never allowed for. Shoulders, wrists, and hips all report the same grievance in slightly different words, and gripping anything smaller than a doorframe has become theoretical. You feel like laundry that was wrung out and hung up wrong.",
+        "treatment": "Immobilise the worst joint, rest the rest, and expect a long day of small indignities. Massage helps once the swelling settles.",
+        "severity": "moderate",
+        "damage": 7,
+        "duration": 2700,
+        "statuseffect": "none",
+        "odds": 25,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -594,23 +562,7 @@
       "src": null,
       "category": null,
       "sort": 1100,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "general",
-            "title": "Wrenched Everything",
-            "image": "icons/skills/wounds/injury-hand-blood-red.webp",
-            "imagetitle": "Wrung Out Entirely",
-            "description": "Something twisted you in a direction the design never allowed for. Shoulders, wrists, and hips all report the same grievance in slightly different words, and gripping anything smaller than a doorframe has become theoretical. You feel like laundry that was wrung out and hung up wrong.",
-            "treatment": "Immobilise the worst joint, rest the rest, and expect a long day of small indignities. Massage helps once the swelling settles.",
-            "severity": "moderate",
-            "damage": 7,
-            "duration": 2700,
-            "statuseffect": "none",
-            "odds": 25
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -638,7 +590,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785256145112,
+    "modifiedTime": 1785261249434,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

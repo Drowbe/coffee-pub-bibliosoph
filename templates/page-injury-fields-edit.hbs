@@ -1,0 +1,97 @@
+<section class="bibliosoph-injury-page-fields bibliosoph-injury-page-edit">
+    <div class="injury-edit-section-header">
+        <i class="fa-solid fa-user-injured"></i>
+        <span>Injury</span>
+    </div>
+
+    {{#if warnings.length}}
+        <div class="injury-edit-warnings">
+            {{#each warnings}}
+                <p><i class="fa-solid fa-triangle-exclamation"></i> {{this}}</p>
+            {{/each}}
+        </div>
+    {{/if}}
+
+    <p class="injury-edit-hint">The page title is the injury's name. These fields drive the chat card and the effect applied to the token.</p>
+
+    <div class="injury-edit-grid">
+        <div class="form-group">
+            <label for="{{document.id}}-injury-category">Damage Type</label>
+            <select id="{{document.id}}-injury-category" name="system.category">
+                {{#each categoryChoices}}
+                    <option value="{{this.value}}" {{#if (eq this.value ../system.category)}}selected{{/if}}>{{this.label}}</option>
+                {{/each}}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="{{document.id}}-injury-severity">Severity</label>
+            <select id="{{document.id}}-injury-severity" name="system.severity">
+                {{#each severityChoices}}
+                    <option value="{{this.value}}" {{#if (eq this.value ../system.severity)}}selected{{/if}}>{{this.label}}</option>
+                {{/each}}
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group injury-edit-full">
+        <label for="{{document.id}}-injury-image">Image</label>
+        <file-picker id="{{document.id}}-injury-image" name="system.image" type="image" value="{{system.image}}"
+            placeholder="icons/skills/wounds/injury-pain-body-orange.webp"></file-picker>
+    </div>
+
+    <div class="form-group injury-edit-full">
+        <label for="{{document.id}}-injury-imagetitle">Caption</label>
+        <input type="text" id="{{document.id}}-injury-imagetitle" name="system.imagetitle" value="{{system.imagetitle}}"
+            placeholder="A short evocative line shown under the art">
+    </div>
+
+    <div class="form-group injury-edit-full">
+        <label for="{{document.id}}-injury-description">Description</label>
+        <textarea id="{{document.id}}-injury-description" name="system.description" rows="5"
+            placeholder="What the character experiences, in second person. Three to five sentences.">{{system.description}}</textarea>
+    </div>
+
+    <div class="form-group injury-edit-full">
+        <label for="{{document.id}}-injury-treatment">Treatment</label>
+        <textarea id="{{document.id}}-injury-treatment" name="system.treatment" rows="3"
+            placeholder="How a healer would tend it. This is the GM's adjudication text.">{{system.treatment}}</textarea>
+    </div>
+
+    <div class="injury-edit-section-header">
+        <i class="fa-solid fa-gears"></i>
+        <span>Mechanics</span>
+    </div>
+
+    <div class="injury-edit-grid">
+        <div class="form-group">
+            <label for="{{document.id}}-injury-damage">Damage (HP, one time)</label>
+            <input type="number" id="{{document.id}}-injury-damage" name="system.damage" value="{{system.damage}}" min="0" step="1">
+        </div>
+        <div class="form-group">
+            <label for="{{document.id}}-injury-duration">Duration (seconds, 0 = permanent)</label>
+            <input type="number" id="{{document.id}}-injury-duration" name="system.duration" value="{{system.duration}}" min="0" step="30">
+        </div>
+        <div class="form-group">
+            <label for="{{document.id}}-injury-status">Condition</label>
+            <select id="{{document.id}}-injury-status" name="system.statuseffect">
+                {{#each conditionChoices}}
+                    <option value="{{this.value}}" {{#if (eq this.value ../system.statuseffect)}}selected{{/if}}>{{this.label}}</option>
+                {{/each}}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="{{document.id}}-injury-odds">Odds (1–100, higher is commoner)</label>
+            <input type="number" id="{{document.id}}-injury-odds" name="system.odds" value="{{system.odds}}" min="1" max="100" step="1">
+        </div>
+        <div class="form-group">
+            <label for="{{document.id}}-injury-dc">Treatment DC <span class="injury-edit-note">(blank = {{treatmentDC}} from severity)</span></label>
+            <input type="number" id="{{document.id}}-injury-dc" name="system.treatmentdc" value="{{system.treatmentdc}}" min="1" step="1" placeholder="{{treatmentDC}}">
+        </div>
+    </div>
+
+    <div class="injury-edit-section-header">
+        <i class="fa-solid fa-scroll"></i>
+        <span>GM Notes</span>
+    </div>
+    <p class="injury-edit-hint">Free-form notes for your own reference. These never appear on the chat card.</p>
+</section>

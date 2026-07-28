@@ -2,14 +2,26 @@
   "name": "Thunder",
   "pages": [
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Ear-ringer",
       "text": {
-        "content": "<img src=\"icons/magic/air/air-wave-gust-blue.webp\" alt=\"Ear-ringer\" />\n<p><em>Thunder Blast</em></p>\n<p>After a particularly loud thunderous boom, your ears start ringing incessantly. You find it hard to focus as the sound drowns out everything around you, making communication a challenge.</p>\n<h2>Treatment</h2>\n<p>Resting in a quiet area for a few hours can alleviate the ringing. Alternatively, a caster could attempt to dispel the temporary deafness.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> thunder</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Ear-ringer</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/air-wave-gust-blue.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Thunder Blast</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> After a particularly loud thunderous boom, your ears start ringing incessantly. You find it hard to focus as the sound drowns out everything around you, making communication a challenge.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Resting in a quiet area for a few hours can alleviate the ringing. Alternatively, a caster could attempt to dispel the temporary deafness.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 300</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> deafened</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 50</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "PLS2ZsJPYqwSd9v3",
-      "system": {},
+      "system": {
+        "category": "thunder",
+        "image": "icons/magic/air/air-wave-gust-blue.webp",
+        "imagetitle": "Thunder Blast",
+        "description": "After a particularly loud thunderous boom, your ears start ringing incessantly. You find it hard to focus as the sound drowns out everything around you, making communication a challenge.",
+        "treatment": "Resting in a quiet area for a few hours can alleviate the ringing. Alternatively, a caster could attempt to dispel the temporary deafness.",
+        "severity": "minor",
+        "damage": 2,
+        "duration": 300,
+        "statuseffect": "deafened",
+        "odds": 50,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -22,23 +34,7 @@
       "src": null,
       "category": null,
       "sort": 0,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "thunder",
-            "title": "Ear-ringer",
-            "image": "icons/magic/air/air-wave-gust-blue.webp",
-            "imagetitle": "Thunder Blast",
-            "description": "After a particularly loud thunderous boom, your ears start ringing incessantly. You find it hard to focus as the sound drowns out everything around you, making communication a challenge.",
-            "treatment": "Resting in a quiet area for a few hours can alleviate the ringing. Alternatively, a caster could attempt to dispel the temporary deafness.",
-            "severity": "minor",
-            "damage": 2,
-            "duration": 300,
-            "statuseffect": "deafened",
-            "odds": 50
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -54,14 +50,26 @@
       "_key": "!journal.pages!BmkfEyb2NrQwwrMu.PLS2ZsJPYqwSd9v3"
     },
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Ear-ringing Shockwave",
       "text": {
-        "content": "<img src=\"icons/magic/air/air-wave-gust-blue.webp\" alt=\"Ear-ringing Shockwave\" />\n<p><em>Sound Blast Echo</em></p>\n<p>During a fierce thunderous clash, you found yourself too close to a deafening blast of sound. The intense pressure rattled your eardrums, leaving your hearing muddled and distant.</p>\n<h2>Treatment</h2>\n<p>To soothe your ears, you must rest in a quiet environment and avoid exposure to loud noises.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> thunder</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Ear-ringing Shockwave</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/air-wave-gust-blue.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Sound Blast Echo</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> During a fierce thunderous clash, you found yourself too close to a deafening blast of sound. The intense pressure rattled your eardrums, leaving your hearing muddled and distant.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> To soothe your ears, you must rest in a quiet environment and avoid exposure to loud noises.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 6</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 600</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> deafened</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 20</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "d8clT2oPzmnh2Brw",
-      "system": {},
+      "system": {
+        "category": "thunder",
+        "image": "icons/magic/air/air-wave-gust-blue.webp",
+        "imagetitle": "Sound Blast Echo",
+        "description": "During a fierce thunderous clash, you found yourself too close to a deafening blast of sound. The intense pressure rattled your eardrums, leaving your hearing muddled and distant.",
+        "treatment": "To soothe your ears, you must rest in a quiet environment and avoid exposure to loud noises.",
+        "severity": "moderate",
+        "damage": 6,
+        "duration": 600,
+        "statuseffect": "deafened",
+        "odds": 20,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -74,23 +82,7 @@
       "src": null,
       "category": null,
       "sort": 100,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "thunder",
-            "title": "Ear-ringing Shockwave",
-            "image": "icons/magic/air/air-wave-gust-blue.webp",
-            "imagetitle": "Sound Blast Echo",
-            "description": "During a fierce thunderous clash, you found yourself too close to a deafening blast of sound. The intense pressure rattled your eardrums, leaving your hearing muddled and distant.",
-            "treatment": "To soothe your ears, you must rest in a quiet environment and avoid exposure to loud noises.",
-            "severity": "moderate",
-            "damage": 6,
-            "duration": 600,
-            "statuseffect": "deafened",
-            "odds": 20
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -106,14 +98,26 @@
       "_key": "!journal.pages!BmkfEyb2NrQwwrMu.d8clT2oPzmnh2Brw"
     },
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Ear-shattering Boom",
       "text": {
-        "content": "<img src=\"icons/magic/air/air-wave-gust-blue.webp\" alt=\"Ear-shattering Boom\" />\n<p><em>Tinnitus Echo</em></p>\n<p>During a powerful thunderous strike, your ears are bombarded with a resonating boom that seems to linger. You can now hear everything as if you're underwater, with distant echoes distorting sounds around you. The louder the noise, the more painful the reverberation.</p>\n<h2>Treatment</h2>\n<p>Visit a skilled healer who can help recalibrate your inner ear balance, or endure the ringing until it fades naturally.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> thunder</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Ear-shattering Boom</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/air-wave-gust-blue.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Tinnitus Echo</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> During a powerful thunderous strike, your ears are bombarded with a resonating boom that seems to linger. You can now hear everything as if you're underwater, with distant echoes distorting sounds around you. The louder the noise, the more painful the reverberation.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Visit a skilled healer who can help recalibrate your inner ear balance, or endure the ringing until it fades naturally.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 7</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 300</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> deafened</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 10</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "fwDBmdYpNlOZcJyO",
-      "system": {},
+      "system": {
+        "category": "thunder",
+        "image": "icons/magic/air/air-wave-gust-blue.webp",
+        "imagetitle": "Tinnitus Echo",
+        "description": "During a powerful thunderous strike, your ears are bombarded with a resonating boom that seems to linger. You can now hear everything as if you're underwater, with distant echoes distorting sounds around you. The louder the noise, the more painful the reverberation.",
+        "treatment": "Visit a skilled healer who can help recalibrate your inner ear balance, or endure the ringing until it fades naturally.",
+        "severity": "moderate",
+        "damage": 7,
+        "duration": 300,
+        "statuseffect": "deafened",
+        "odds": 10,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -126,23 +130,7 @@
       "src": null,
       "category": null,
       "sort": 200,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "thunder",
-            "title": "Ear-shattering Boom",
-            "image": "icons/magic/air/air-wave-gust-blue.webp",
-            "imagetitle": "Tinnitus Echo",
-            "description": "During a powerful thunderous strike, your ears are bombarded with a resonating boom that seems to linger. You can now hear everything as if you're underwater, with distant echoes distorting sounds around you. The louder the noise, the more painful the reverberation.",
-            "treatment": "Visit a skilled healer who can help recalibrate your inner ear balance, or endure the ringing until it fades naturally.",
-            "severity": "moderate",
-            "damage": 7,
-            "duration": 300,
-            "statuseffect": "deafened",
-            "odds": 10
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -158,14 +146,26 @@
       "_key": "!journal.pages!BmkfEyb2NrQwwrMu.fwDBmdYpNlOZcJyO"
     },
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Eardrum Rupture",
       "text": {
-        "content": "<img src=\"icons/magic/air/air-wave-gust-blue.webp\" alt=\"Eardrum Rupture\" />\n<p><em>Sonic Boom Echo</em></p>\n<p>After being caught in a thunderous clap, your eardrums shatter, leaving you with muffled hearing and a tendency to yell everything you say. The world feels oddly silent; even the loudest noises dim in comparison to the constant ringing in your ears.</p>\n<h2>Treatment</h2>\n<p>Seek out a skilled bard or healer to cast a mending spell on your ears. Avoid sudden loud noises to prevent further damage.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> thunder</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Eardrum Rupture</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/air-wave-gust-blue.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Sonic Boom Echo</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> After being caught in a thunderous clap, your eardrums shatter, leaving you with muffled hearing and a tendency to yell everything you say. The world feels oddly silent; even the loudest noises dim in comparison to the constant ringing in your ears.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Seek out a skilled bard or healer to cast a mending spell on your ears. Avoid sudden loud noises to prevent further damage.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 6</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 300</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> deafened</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 25</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "MxN4hcyJdfgKLxYY",
-      "system": {},
+      "system": {
+        "category": "thunder",
+        "image": "icons/magic/air/air-wave-gust-blue.webp",
+        "imagetitle": "Sonic Boom Echo",
+        "description": "After being caught in a thunderous clap, your eardrums shatter, leaving you with muffled hearing and a tendency to yell everything you say. The world feels oddly silent; even the loudest noises dim in comparison to the constant ringing in your ears.",
+        "treatment": "Seek out a skilled bard or healer to cast a mending spell on your ears. Avoid sudden loud noises to prevent further damage.",
+        "severity": "moderate",
+        "damage": 6,
+        "duration": 300,
+        "statuseffect": "deafened",
+        "odds": 25,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -178,23 +178,7 @@
       "src": null,
       "category": null,
       "sort": 300,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "thunder",
-            "title": "Eardrum Rupture",
-            "image": "icons/magic/air/air-wave-gust-blue.webp",
-            "imagetitle": "Sonic Boom Echo",
-            "description": "After being caught in a thunderous clap, your eardrums shatter, leaving you with muffled hearing and a tendency to yell everything you say. The world feels oddly silent; even the loudest noises dim in comparison to the constant ringing in your ears.",
-            "treatment": "Seek out a skilled bard or healer to cast a mending spell on your ears. Avoid sudden loud noises to prevent further damage.",
-            "severity": "moderate",
-            "damage": 6,
-            "duration": 300,
-            "statuseffect": "deafened",
-            "odds": 25
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -210,14 +194,26 @@
       "_key": "!journal.pages!BmkfEyb2NrQwwrMu.MxN4hcyJdfgKLxYY"
     },
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Electric Shockwave",
       "text": {
-        "content": "<img src=\"icons/magic/air/air-wave-gust-blue.webp\" alt=\"Electric Shockwave\" />\n<p><em>Zapped</em></p>\n<p>Hit by a powerful burst of electricity, your muscles twitch uncontrollably and your nerves feel on edge.</p>\n<h2>Treatment</h2>\n<p>Rest and avoid contact with water to prevent further electric surges.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> thunder</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Electric Shockwave</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/air-wave-gust-blue.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Zapped</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Hit by a powerful burst of electricity, your muscles twitch uncontrollably and your nerves feel on edge.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Rest and avoid contact with water to prevent further electric surges.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> major</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 10</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 3600</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> stunned</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 8</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "kkCYw6mAbwm7h4tl",
-      "system": {},
+      "system": {
+        "category": "thunder",
+        "image": "icons/magic/air/air-wave-gust-blue.webp",
+        "imagetitle": "Zapped",
+        "description": "Hit by a powerful burst of electricity, your muscles twitch uncontrollably and your nerves feel on edge.",
+        "treatment": "Rest and avoid contact with water to prevent further electric surges.",
+        "severity": "major",
+        "damage": 10,
+        "duration": 3600,
+        "statuseffect": "stunned",
+        "odds": 8,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -230,23 +226,7 @@
       "src": null,
       "category": null,
       "sort": 400,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "thunder",
-            "title": "Electric Shockwave",
-            "image": "icons/magic/air/air-wave-gust-blue.webp",
-            "imagetitle": "Zapped",
-            "description": "Hit by a powerful burst of electricity, your muscles twitch uncontrollably and your nerves feel on edge.",
-            "treatment": "Rest and avoid contact with water to prevent further electric surges.",
-            "severity": "major",
-            "damage": 10,
-            "duration": 3600,
-            "statuseffect": "stunned",
-            "odds": 8
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -262,14 +242,26 @@
       "_key": "!journal.pages!BmkfEyb2NrQwwrMu.kkCYw6mAbwm7h4tl"
     },
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Lightning Tickles",
       "text": {
-        "content": "<img src=\"icons/magic/air/air-wave-gust-blue.webp\" alt=\"Lightning Tickles\" />\n<p><em>Electric Sensation</em></p>\n<p>A bolt of lightning grazes your skin, leaving a tingling sensation and making it hard to hold onto things.</p>\n<h2>Treatment</h2>\n<p>Massage the affected area to reduce the tingling sensation.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> thunder</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Lightning Tickles</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/air-wave-gust-blue.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Electric Sensation</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A bolt of lightning grazes your skin, leaving a tingling sensation and making it hard to hold onto things.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Massage the affected area to reduce the tingling sensation.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 900</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 75</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "huHy0xmte9WQU1Pj",
-      "system": {},
+      "system": {
+        "category": "thunder",
+        "image": "icons/magic/air/air-wave-gust-blue.webp",
+        "imagetitle": "Electric Sensation",
+        "description": "A bolt of lightning grazes your skin, leaving a tingling sensation and making it hard to hold onto things.",
+        "treatment": "Massage the affected area to reduce the tingling sensation.",
+        "severity": "minor",
+        "damage": 2,
+        "duration": 900,
+        "statuseffect": "none",
+        "odds": 75,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -282,23 +274,7 @@
       "src": null,
       "category": null,
       "sort": 500,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "thunder",
-            "title": "Lightning Tickles",
-            "image": "icons/magic/air/air-wave-gust-blue.webp",
-            "imagetitle": "Electric Sensation",
-            "description": "A bolt of lightning grazes your skin, leaving a tingling sensation and making it hard to hold onto things.",
-            "treatment": "Massage the affected area to reduce the tingling sensation.",
-            "severity": "minor",
-            "damage": 2,
-            "duration": 900,
-            "statuseffect": "none",
-            "odds": 75
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -314,14 +290,26 @@
       "_key": "!journal.pages!BmkfEyb2NrQwwrMu.huHy0xmte9WQU1Pj"
     },
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Roaring Thunderclap",
       "text": {
-        "content": "<img src=\"icons/magic/air/air-wave-gust-blue.webp\" alt=\"Roaring Thunderclap\" />\n<p><em>Cacophonous Boom</em></p>\n<p>Caught in the epicenter of a deafening thunderclap, your very essence quivers in response to the overwhelming force. Your vision blurs, and even the slightest sound feels like a hammer blow.</p>\n<h2>Treatment</h2>\n<p>Only the most skilled of healers can mend the internal damage caused by the thunderclap. Resting in complete silence may slowly restore your senses.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> thunder</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Roaring Thunderclap</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/air-wave-gust-blue.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Cacophonous Boom</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Caught in the epicenter of a deafening thunderclap, your very essence quivers in response to the overwhelming force. Your vision blurs, and even the slightest sound feels like a hammer blow.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Only the most skilled of healers can mend the internal damage caused by the thunderclap. Resting in complete silence may slowly restore your senses.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> major</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 11</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 0</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> blinded</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 10</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "zxoI3C7ACnSWqf0c",
-      "system": {},
+      "system": {
+        "category": "thunder",
+        "image": "icons/magic/air/air-wave-gust-blue.webp",
+        "imagetitle": "Cacophonous Boom",
+        "description": "Caught in the epicenter of a deafening thunderclap, your very essence quivers in response to the overwhelming force. Your vision blurs, and even the slightest sound feels like a hammer blow.",
+        "treatment": "Only the most skilled of healers can mend the internal damage caused by the thunderclap. Resting in complete silence may slowly restore your senses.",
+        "severity": "major",
+        "damage": 11,
+        "duration": 0,
+        "statuseffect": "blinded",
+        "odds": 10,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -334,23 +322,7 @@
       "src": null,
       "category": null,
       "sort": 600,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "thunder",
-            "title": "Roaring Thunderclap",
-            "image": "icons/magic/air/air-wave-gust-blue.webp",
-            "imagetitle": "Cacophonous Boom",
-            "description": "Caught in the epicenter of a deafening thunderclap, your very essence quivers in response to the overwhelming force. Your vision blurs, and even the slightest sound feels like a hammer blow.",
-            "treatment": "Only the most skilled of healers can mend the internal damage caused by the thunderclap. Resting in complete silence may slowly restore your senses.",
-            "severity": "major",
-            "damage": 11,
-            "duration": 0,
-            "statuseffect": "blinded",
-            "odds": 10
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -366,14 +338,26 @@
       "_key": "!journal.pages!BmkfEyb2NrQwwrMu.zxoI3C7ACnSWqf0c"
     },
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Static Shock",
       "text": {
-        "content": "<img src=\"icons/magic/air/air-wave-gust-blue.webp\" alt=\"Static Shock\" />\n<p><em>Electric Discharge</em></p>\n<p>A sudden jolt of electric energy courses through your body as if you've been struck by a lightning rod. Your muscles twitch uncontrollably, making precise movements a challenge.</p>\n<h2>Treatment</h2>\n<p>Resting and grounding yourself by touching something conductive for a few hours can help dissipate the electric charge. A caster may also attempt to restore your nerve control.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> thunder</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Static Shock</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/air-wave-gust-blue.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Electric Discharge</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A sudden jolt of electric energy courses through your body as if you've been struck by a lightning rod. Your muscles twitch uncontrollably, making precise movements a challenge.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Resting and grounding yourself by touching something conductive for a few hours can help dissipate the electric charge. A caster may also attempt to restore your nerve control.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 3</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 240</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 50</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "qxIn5EhLX9meioEf",
-      "system": {},
+      "system": {
+        "category": "thunder",
+        "image": "icons/magic/air/air-wave-gust-blue.webp",
+        "imagetitle": "Electric Discharge",
+        "description": "A sudden jolt of electric energy courses through your body as if you've been struck by a lightning rod. Your muscles twitch uncontrollably, making precise movements a challenge.",
+        "treatment": "Resting and grounding yourself by touching something conductive for a few hours can help dissipate the electric charge. A caster may also attempt to restore your nerve control.",
+        "severity": "minor",
+        "damage": 3,
+        "duration": 240,
+        "statuseffect": "none",
+        "odds": 50,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -386,23 +370,7 @@
       "src": null,
       "category": null,
       "sort": 700,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "thunder",
-            "title": "Static Shock",
-            "image": "icons/magic/air/air-wave-gust-blue.webp",
-            "imagetitle": "Electric Discharge",
-            "description": "A sudden jolt of electric energy courses through your body as if you've been struck by a lightning rod. Your muscles twitch uncontrollably, making precise movements a challenge.",
-            "treatment": "Resting and grounding yourself by touching something conductive for a few hours can help dissipate the electric charge. A caster may also attempt to restore your nerve control.",
-            "severity": "minor",
-            "damage": 3,
-            "duration": 240,
-            "statuseffect": "none",
-            "odds": 50
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -418,14 +386,26 @@
       "_key": "!journal.pages!BmkfEyb2NrQwwrMu.qxIn5EhLX9meioEf"
     },
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Thunderous Migraine",
       "text": {
-        "content": "<img src=\"icons/magic/air/air-wave-gust-blue.webp\" alt=\"Thunderous Migraine\" />\n<p><em>Brainstorm</em></p>\n<p>The booming thunder overhead triggers a debilitating headache that makes focusing on tasks a challenge.</p>\n<h2>Treatment</h2>\n<p>Resting in a quiet and dark environment to ease the headache.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> thunder</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Thunderous Migraine</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/air-wave-gust-blue.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Brainstorm</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The booming thunder overhead triggers a debilitating headache that makes focusing on tasks a challenge.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Resting in a quiet and dark environment to ease the headache.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 7</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 2700</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> deafened</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 30</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "4cm2h8bjhCvHTv3J",
-      "system": {},
+      "system": {
+        "category": "thunder",
+        "image": "icons/magic/air/air-wave-gust-blue.webp",
+        "imagetitle": "Brainstorm",
+        "description": "The booming thunder overhead triggers a debilitating headache that makes focusing on tasks a challenge.",
+        "treatment": "Resting in a quiet and dark environment to ease the headache.",
+        "severity": "moderate",
+        "damage": 7,
+        "duration": 2700,
+        "statuseffect": "deafened",
+        "odds": 30,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -438,23 +418,7 @@
       "src": null,
       "category": null,
       "sort": 800,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "thunder",
-            "title": "Thunderous Migraine",
-            "image": "icons/magic/air/air-wave-gust-blue.webp",
-            "imagetitle": "Brainstorm",
-            "description": "The booming thunder overhead triggers a debilitating headache that makes focusing on tasks a challenge.",
-            "treatment": "Resting in a quiet and dark environment to ease the headache.",
-            "severity": "moderate",
-            "damage": 7,
-            "duration": 2700,
-            "statuseffect": "deafened",
-            "odds": 30
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -470,14 +434,26 @@
       "_key": "!journal.pages!BmkfEyb2NrQwwrMu.4cm2h8bjhCvHTv3J"
     },
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Thunderstruck",
       "text": {
-        "content": "<img src=\"icons/magic/air/air-wave-gust-blue.webp\" alt=\"Thunderstruck\" />\n<p><em>Storm's Fury</em></p>\n<p>A direct hit from a powerful bolt of lightning leaves you feeling like you've danced with the storm itself. Your body tingles with residual electricity, and your movements are sluggish.</p>\n<h2>Treatment</h2>\n<p>Seeking shelter from further electrical discharges and resting for an extended period can help alleviate the effects. A skilled healer might be able to accelerate your recovery.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> thunder</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Thunderstruck</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/air/air-wave-gust-blue.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Storm's Fury</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A direct hit from a powerful bolt of lightning leaves you feeling like you've danced with the storm itself. Your body tingles with residual electricity, and your movements are sluggish.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Seeking shelter from further electrical discharges and resting for an extended period can help alleviate the effects. A skilled healer might be able to accelerate your recovery.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 7</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 600</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 20</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "Mp9dMi5qmxrcrfAn",
-      "system": {},
+      "system": {
+        "category": "thunder",
+        "image": "icons/magic/air/air-wave-gust-blue.webp",
+        "imagetitle": "Storm's Fury",
+        "description": "A direct hit from a powerful bolt of lightning leaves you feeling like you've danced with the storm itself. Your body tingles with residual electricity, and your movements are sluggish.",
+        "treatment": "Seeking shelter from further electrical discharges and resting for an extended period can help alleviate the effects. A skilled healer might be able to accelerate your recovery.",
+        "severity": "moderate",
+        "damage": 7,
+        "duration": 600,
+        "statuseffect": "none",
+        "odds": 20,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -490,23 +466,7 @@
       "src": null,
       "category": null,
       "sort": 900,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "thunder",
-            "title": "Thunderstruck",
-            "image": "icons/magic/air/air-wave-gust-blue.webp",
-            "imagetitle": "Storm's Fury",
-            "description": "A direct hit from a powerful bolt of lightning leaves you feeling like you've danced with the storm itself. Your body tingles with residual electricity, and your movements are sluggish.",
-            "treatment": "Seeking shelter from further electrical discharges and resting for an extended period can help alleviate the effects. A skilled healer might be able to accelerate your recovery.",
-            "severity": "moderate",
-            "damage": 7,
-            "duration": 600,
-            "statuseffect": "none",
-            "odds": 20
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -534,7 +494,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785256145146,
+    "modifiedTime": 1785261249458,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

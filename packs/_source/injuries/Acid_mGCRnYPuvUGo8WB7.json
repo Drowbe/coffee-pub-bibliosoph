@@ -2,14 +2,26 @@
   "name": "Acid",
   "pages": [
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Acidic Aftershock",
       "text": {
-        "content": "<img src=\"icons/commodities/materials/liquid-green.webp\" alt=\"Acidic Aftershock\" />\n<p><em>Lingering Sting</em></p>\n<p>As the initial burn subsides, a lingering tingling sensation spreads through your body, making every movement feel like a small jolt of electricity. It's as if the acid left a parting gift of prickling discomfort to remind you of its potent presence.</p>\n<h2>Treatment</h2>\n<p>Applying a soothing salve or receiving gentle massages can help calm the acidic aftershock. Rest and relaxation are recommended to ease the residual tingling sensation.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> acid</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Acidic Aftershock</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/commodities/materials/liquid-green.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Lingering Sting</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> As the initial burn subsides, a lingering tingling sensation spreads through your body, making every movement feel like a small jolt of electricity. It's as if the acid left a parting gift of prickling discomfort to remind you of its potent presence.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Applying a soothing salve or receiving gentle massages can help calm the acidic aftershock. Rest and relaxation are recommended to ease the residual tingling sensation.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 180</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 40</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "Zwe5B5QCsP7zobzt",
-      "system": {},
+      "system": {
+        "category": "acid",
+        "image": "icons/commodities/materials/liquid-green.webp",
+        "imagetitle": "Lingering Sting",
+        "description": "As the initial burn subsides, a lingering tingling sensation spreads through your body, making every movement feel like a small jolt of electricity. It's as if the acid left a parting gift of prickling discomfort to remind you of its potent presence.",
+        "treatment": "Applying a soothing salve or receiving gentle massages can help calm the acidic aftershock. Rest and relaxation are recommended to ease the residual tingling sensation.",
+        "severity": "minor",
+        "damage": 2,
+        "duration": 180,
+        "statuseffect": "none",
+        "odds": 40,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -22,23 +34,7 @@
       "src": null,
       "category": null,
       "sort": 0,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "acid",
-            "title": "Acidic Aftershock",
-            "image": "icons/commodities/materials/liquid-green.webp",
-            "imagetitle": "Lingering Sting",
-            "description": "As the initial burn subsides, a lingering tingling sensation spreads through your body, making every movement feel like a small jolt of electricity. It's as if the acid left a parting gift of prickling discomfort to remind you of its potent presence.",
-            "treatment": "Applying a soothing salve or receiving gentle massages can help calm the acidic aftershock. Rest and relaxation are recommended to ease the residual tingling sensation.",
-            "severity": "minor",
-            "damage": 2,
-            "duration": 180,
-            "statuseffect": "none",
-            "odds": 40
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -54,14 +50,26 @@
       "_key": "!journal.pages!mGCRnYPuvUGo8WB7.Zwe5B5QCsP7zobzt"
     },
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Corrosive Consequences",
       "text": {
-        "content": "<img src=\"icons/magic/acid/dissolve-pool-bubbles.webp\" alt=\"Corrosive Consequences\" />\n<p><em>Slow Unmaking</em></p>\n<p>The searing touch of acid leaves behind a trail of corrosive consequences, etching its mark on your flesh with a cruel and unforgiving touch. Each drop sizzles and seethes, dissolving everything it touches in a symphony of destruction.</p>\n<h2>Treatment</h2>\n<p>Immediate decontamination and neutralization of the acid are paramount to limit the spread of the corrosive consequences. Thoroughly rinsing the affected area with water and seeking medical attention can help prevent further tissue damage.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> acid</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Corrosive Consequences</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/acid/dissolve-pool-bubbles.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Slow Unmaking</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The searing touch of acid leaves behind a trail of corrosive consequences, etching its mark on your flesh with a cruel and unforgiving touch. Each drop sizzles and seethes, dissolving everything it touches in a symphony of destruction.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Immediate decontamination and neutralization of the acid are paramount to limit the spread of the corrosive consequences. Thoroughly rinsing the affected area with water and seeking medical attention can help prevent further tissue damage.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 7</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 480</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> stunned</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 20</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "dwXpys7E6qwuf8Zt",
-      "system": {},
+      "system": {
+        "category": "acid",
+        "image": "icons/magic/acid/dissolve-pool-bubbles.webp",
+        "imagetitle": "Slow Unmaking",
+        "description": "The searing touch of acid leaves behind a trail of corrosive consequences, etching its mark on your flesh with a cruel and unforgiving touch. Each drop sizzles and seethes, dissolving everything it touches in a symphony of destruction.",
+        "treatment": "Immediate decontamination and neutralization of the acid are paramount to limit the spread of the corrosive consequences. Thoroughly rinsing the affected area with water and seeking medical attention can help prevent further tissue damage.",
+        "severity": "moderate",
+        "damage": 7,
+        "duration": 480,
+        "statuseffect": "stunned",
+        "odds": 20,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -74,23 +82,7 @@
       "src": null,
       "category": null,
       "sort": 100,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "acid",
-            "title": "Corrosive Consequences",
-            "image": "icons/magic/acid/dissolve-pool-bubbles.webp",
-            "imagetitle": "Slow Unmaking",
-            "description": "The searing touch of acid leaves behind a trail of corrosive consequences, etching its mark on your flesh with a cruel and unforgiving touch. Each drop sizzles and seethes, dissolving everything it touches in a symphony of destruction.",
-            "treatment": "Immediate decontamination and neutralization of the acid are paramount to limit the spread of the corrosive consequences. Thoroughly rinsing the affected area with water and seeking medical attention can help prevent further tissue damage.",
-            "severity": "moderate",
-            "damage": 7,
-            "duration": 480,
-            "statuseffect": "stunned",
-            "odds": 20
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -106,14 +98,26 @@
       "_key": "!journal.pages!mGCRnYPuvUGo8WB7.dwXpys7E6qwuf8Zt"
     },
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Fizzbang Fiasco",
       "text": {
-        "content": "<img src=\"icons/magic/acid/dissolve-bone-skull.webp\" alt=\"Fizzbang Fiasco\" />\n<p><em>Mischief In A Flask</em></p>\n<p>During a battle, a mischievous goblin throws a flask of fizzing and popping concoction that you mistake for ale. Your skin becomes bright green and emits a faint smell of citrus. You feel charged with energy but realize you can no longer stand up straight!</p>\n<h2>Treatment</h2>\n<p>Wash the affected area with vinegar-infused soap and rest for 24 hours.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> acid</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Fizzbang Fiasco</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/acid/dissolve-bone-skull.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Mischief In A Flask</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> During a battle, a mischievous goblin throws a flask of fizzing and popping concoction that you mistake for ale. Your skin becomes bright green and emits a faint smell of citrus. You feel charged with energy but realize you can no longer stand up straight!</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Wash the affected area with vinegar-infused soap and rest for 24 hours.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> major</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 10</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 0</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> prone</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 5</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "y4naURwXfwm7kVj3",
-      "system": {},
+      "system": {
+        "category": "acid",
+        "image": "icons/magic/acid/dissolve-bone-skull.webp",
+        "imagetitle": "Mischief In A Flask",
+        "description": "During a battle, a mischievous goblin throws a flask of fizzing and popping concoction that you mistake for ale. Your skin becomes bright green and emits a faint smell of citrus. You feel charged with energy but realize you can no longer stand up straight!",
+        "treatment": "Wash the affected area with vinegar-infused soap and rest for 24 hours.",
+        "severity": "major",
+        "damage": 10,
+        "duration": 0,
+        "statuseffect": "prone",
+        "odds": 5,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -126,23 +130,7 @@
       "src": null,
       "category": null,
       "sort": 200,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "acid",
-            "title": "Fizzbang Fiasco",
-            "image": "icons/magic/acid/dissolve-bone-skull.webp",
-            "imagetitle": "Mischief In A Flask",
-            "description": "During a battle, a mischievous goblin throws a flask of fizzing and popping concoction that you mistake for ale. Your skin becomes bright green and emits a faint smell of citrus. You feel charged with energy but realize you can no longer stand up straight!",
-            "treatment": "Wash the affected area with vinegar-infused soap and rest for 24 hours.",
-            "severity": "major",
-            "damage": 10,
-            "duration": 0,
-            "statuseffect": "prone",
-            "odds": 5
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -158,14 +146,26 @@
       "_key": "!journal.pages!mGCRnYPuvUGo8WB7.y4naURwXfwm7kVj3"
     },
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Fizzler's Folly",
       "text": {
-        "content": "<img src=\"icons/magic/acid/dissolve-bone-skull.webp\" alt=\"Fizzler's Folly\" />\n<p><em>Mysterious Meltdown</em></p>\n<p>After an encounter with a mischievous alchemist, you find your limbs randomly emitting harmless bubbles that pop with noxious gas. So far, they smell of strawberries but who knows what's next!</p>\n<h2>Treatment</h2>\n<p>The only cure seems to be a sip from a flask carried by the alchemist, but you must seek him out first.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> acid</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Fizzler's Folly</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/acid/dissolve-bone-skull.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Mysterious Meltdown</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> After an encounter with a mischievous alchemist, you find your limbs randomly emitting harmless bubbles that pop with noxious gas. So far, they smell of strawberries but who knows what's next!</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> The only cure seems to be a sip from a flask carried by the alchemist, but you must seek him out first.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> moderate</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 6</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 300</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> poisoned</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 10</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "liWlGucw48Gvr8Ge",
-      "system": {},
+      "system": {
+        "category": "acid",
+        "image": "icons/magic/acid/dissolve-bone-skull.webp",
+        "imagetitle": "Mysterious Meltdown",
+        "description": "After an encounter with a mischievous alchemist, you find your limbs randomly emitting harmless bubbles that pop with noxious gas. So far, they smell of strawberries but who knows what's next!",
+        "treatment": "The only cure seems to be a sip from a flask carried by the alchemist, but you must seek him out first.",
+        "severity": "moderate",
+        "damage": 6,
+        "duration": 300,
+        "statuseffect": "poisoned",
+        "odds": 10,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -178,23 +178,7 @@
       "src": null,
       "category": null,
       "sort": 300,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "acid",
-            "title": "Fizzler's Folly",
-            "image": "icons/magic/acid/dissolve-bone-skull.webp",
-            "imagetitle": "Mysterious Meltdown",
-            "description": "After an encounter with a mischievous alchemist, you find your limbs randomly emitting harmless bubbles that pop with noxious gas. So far, they smell of strawberries but who knows what's next!",
-            "treatment": "The only cure seems to be a sip from a flask carried by the alchemist, but you must seek him out first.",
-            "severity": "moderate",
-            "damage": 6,
-            "duration": 300,
-            "statuseffect": "poisoned",
-            "odds": 10
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -210,14 +194,26 @@
       "_key": "!journal.pages!mGCRnYPuvUGo8WB7.liWlGucw48Gvr8Ge"
     },
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Hissing Haze",
       "text": {
-        "content": "<img src=\"icons/magic/acid/projectile-faceted-glob.webp\" alt=\"Hissing Haze\" />\n<p><em>Whispering Vapors</em></p>\n<p>A faint hissing sound accompanies the acid's contact with your skin, creating an eerie backdrop to the searing pain. It's as though the very air around you echoes the potent potency of the acid, enveloping you in a disconcerting auditory haze.</p>\n<h2>Treatment</h2>\n<p>Keeping the affected area clean and dry can help reduce the hissing haze's effects. Avoiding further exposure to irritants and maintaining a calm environment can alleviate the discomfort caused by the unsettling auditory backdrop.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> acid</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Hissing Haze</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/acid/projectile-faceted-glob.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Whispering Vapors</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A faint hissing sound accompanies the acid's contact with your skin, creating an eerie backdrop to the searing pain. It's as though the very air around you echoes the potent potency of the acid, enveloping you in a disconcerting auditory haze.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Keeping the affected area clean and dry can help reduce the hissing haze's effects. Avoiding further exposure to irritants and maintaining a calm environment can alleviate the discomfort caused by the unsettling auditory backdrop.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 3</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 240</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 40</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "DqAnb15XieenYN60",
-      "system": {},
+      "system": {
+        "category": "acid",
+        "image": "icons/magic/acid/projectile-faceted-glob.webp",
+        "imagetitle": "Whispering Vapors",
+        "description": "A faint hissing sound accompanies the acid's contact with your skin, creating an eerie backdrop to the searing pain. It's as though the very air around you echoes the potent potency of the acid, enveloping you in a disconcerting auditory haze.",
+        "treatment": "Keeping the affected area clean and dry can help reduce the hissing haze's effects. Avoiding further exposure to irritants and maintaining a calm environment can alleviate the discomfort caused by the unsettling auditory backdrop.",
+        "severity": "minor",
+        "damage": 3,
+        "duration": 240,
+        "statuseffect": "none",
+        "odds": 40,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -230,23 +226,7 @@
       "src": null,
       "category": null,
       "sort": 400,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "acid",
-            "title": "Hissing Haze",
-            "image": "icons/magic/acid/projectile-faceted-glob.webp",
-            "imagetitle": "Whispering Vapors",
-            "description": "A faint hissing sound accompanies the acid's contact with your skin, creating an eerie backdrop to the searing pain. It's as though the very air around you echoes the potent potency of the acid, enveloping you in a disconcerting auditory haze.",
-            "treatment": "Keeping the affected area clean and dry can help reduce the hissing haze's effects. Avoiding further exposure to irritants and maintaining a calm environment can alleviate the discomfort caused by the unsettling auditory backdrop.",
-            "severity": "minor",
-            "damage": 3,
-            "duration": 240,
-            "statuseffect": "none",
-            "odds": 40
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -262,14 +242,26 @@
       "_key": "!journal.pages!mGCRnYPuvUGo8WB7.DqAnb15XieenYN60"
     },
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Melting Misery",
       "text": {
-        "content": "<img src=\"icons/magic/acid/dissolve-bone-skull.webp\" alt=\"Melting Misery\" />\n<p><em>Softening Resolve</em></p>\n<p>The acid's insidious effects deepen, causing a sensation akin to melting to seep through your skin. Each movement feels like a slow dissolution, as if you're gradually losing form and cohesion under the acidic assault.</p>\n<h2>Treatment</h2>\n<p>Cooling the affected area with ice packs or seeking shelter from heat sources can slow down the melting misery. Rest and hydration are crucial to counteract the disintegrating sensation caused by the acid's corrosive touch.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> acid</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Melting Misery</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/acid/dissolve-bone-skull.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Softening Resolve</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> The acid's insidious effects deepen, causing a sensation akin to melting to seep through your skin. Each movement feels like a slow dissolution, as if you're gradually losing form and cohesion under the acidic assault.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Cooling the affected area with ice packs or seeking shelter from heat sources can slow down the melting misery. Rest and hydration are crucial to counteract the disintegrating sensation caused by the acid's corrosive touch.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 2</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 420</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> poisoned</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 40</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "2BP2WElmg9iYF3La",
-      "system": {},
+      "system": {
+        "category": "acid",
+        "image": "icons/magic/acid/dissolve-bone-skull.webp",
+        "imagetitle": "Softening Resolve",
+        "description": "The acid's insidious effects deepen, causing a sensation akin to melting to seep through your skin. Each movement feels like a slow dissolution, as if you're gradually losing form and cohesion under the acidic assault.",
+        "treatment": "Cooling the affected area with ice packs or seeking shelter from heat sources can slow down the melting misery. Rest and hydration are crucial to counteract the disintegrating sensation caused by the acid's corrosive touch.",
+        "severity": "minor",
+        "damage": 2,
+        "duration": 420,
+        "statuseffect": "poisoned",
+        "odds": 40,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -282,23 +274,7 @@
       "src": null,
       "category": null,
       "sort": 500,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "acid",
-            "title": "Melting Misery",
-            "image": "icons/magic/acid/dissolve-bone-skull.webp",
-            "imagetitle": "Softening Resolve",
-            "description": "The acid's insidious effects deepen, causing a sensation akin to melting to seep through your skin. Each movement feels like a slow dissolution, as if you're gradually losing form and cohesion under the acidic assault.",
-            "treatment": "Cooling the affected area with ice packs or seeking shelter from heat sources can slow down the melting misery. Rest and hydration are crucial to counteract the disintegrating sensation caused by the acid's corrosive touch.",
-            "severity": "minor",
-            "damage": 2,
-            "duration": 420,
-            "statuseffect": "poisoned",
-            "odds": 40
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -314,14 +290,26 @@
       "_key": "!journal.pages!mGCRnYPuvUGo8WB7.2BP2WElmg9iYF3La"
     },
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Pickle Puddle Pains",
       "text": {
-        "content": "<img src=\"icons/magic/acid/dissolve-bone-skull.webp\" alt=\"Pickle Puddle Pains\" />\n<p><em>Vinegary Vexation</em></p>\n<p>Your feet have transformed into pickle jars, complete with the light crunch of pickles as you walk. Sadly, the aroma has attracted some rather odd creatures to follow you around.</p>\n<h2>Treatment</h2>\n<p>A thorough soak in fresh water might dilute the acidic transformation, but don't ask about the side effects.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> acid</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Pickle Puddle Pains</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/acid/dissolve-bone-skull.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Vinegary Vexation</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Your feet have transformed into pickle jars, complete with the light crunch of pickles as you walk. Sadly, the aroma has attracted some rather odd creatures to follow you around.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> A thorough soak in fresh water might dilute the acidic transformation, but don't ask about the side effects.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> major</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 10</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 3600</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> grappled</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 5</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "qQNllKhkQzRqp1zl",
-      "system": {},
+      "system": {
+        "category": "acid",
+        "image": "icons/magic/acid/dissolve-bone-skull.webp",
+        "imagetitle": "Vinegary Vexation",
+        "description": "Your feet have transformed into pickle jars, complete with the light crunch of pickles as you walk. Sadly, the aroma has attracted some rather odd creatures to follow you around.",
+        "treatment": "A thorough soak in fresh water might dilute the acidic transformation, but don't ask about the side effects.",
+        "severity": "major",
+        "damage": 10,
+        "duration": 3600,
+        "statuseffect": "grappled",
+        "odds": 5,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -334,23 +322,7 @@
       "src": null,
       "category": null,
       "sort": 600,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "acid",
-            "title": "Pickle Puddle Pains",
-            "image": "icons/magic/acid/dissolve-bone-skull.webp",
-            "imagetitle": "Vinegary Vexation",
-            "description": "Your feet have transformed into pickle jars, complete with the light crunch of pickles as you walk. Sadly, the aroma has attracted some rather odd creatures to follow you around.",
-            "treatment": "A thorough soak in fresh water might dilute the acidic transformation, but don't ask about the side effects.",
-            "severity": "major",
-            "damage": 10,
-            "duration": 3600,
-            "statuseffect": "grappled",
-            "odds": 5
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -366,14 +338,26 @@
       "_key": "!journal.pages!mGCRnYPuvUGo8WB7.qQNllKhkQzRqp1zl"
     },
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Sizzling Surprise",
       "text": {
-        "content": "<img src=\"icons/magic/acid/dissolve-arm-flesh.webp\" alt=\"Sizzling Surprise\" />\n<p><em>Unwelcome Warmth</em></p>\n<p>A sudden wave of heat radiates from the acid-affected area, causing beads of sweat to form on your forehead. It's as though a hidden furnace has been activated within you, turning up the heat in an unexpected and uncomfortable manner.</p>\n<h2>Treatment</h2>\n<p>Cooling the affected area with a damp cloth or seeking shade can alleviate the sizzling surprise. Hydration and avoiding heat sources can help regulate your body temperature during this unexpected heat wave.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> acid</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Sizzling Surprise</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/acid/dissolve-arm-flesh.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Unwelcome Warmth</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> A sudden wave of heat radiates from the acid-affected area, causing beads of sweat to form on your forehead. It's as though a hidden furnace has been activated within you, turning up the heat in an unexpected and uncomfortable manner.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Cooling the affected area with a damp cloth or seeking shade can alleviate the sizzling surprise. Hydration and avoiding heat sources can help regulate your body temperature during this unexpected heat wave.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 4</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 300</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 40</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "TNsUKHMSgU3R9oZT",
-      "system": {},
+      "system": {
+        "category": "acid",
+        "image": "icons/magic/acid/dissolve-arm-flesh.webp",
+        "imagetitle": "Unwelcome Warmth",
+        "description": "A sudden wave of heat radiates from the acid-affected area, causing beads of sweat to form on your forehead. It's as though a hidden furnace has been activated within you, turning up the heat in an unexpected and uncomfortable manner.",
+        "treatment": "Cooling the affected area with a damp cloth or seeking shade can alleviate the sizzling surprise. Hydration and avoiding heat sources can help regulate your body temperature during this unexpected heat wave.",
+        "severity": "minor",
+        "damage": 4,
+        "duration": 300,
+        "statuseffect": "none",
+        "odds": 40,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -386,23 +370,7 @@
       "src": null,
       "category": null,
       "sort": 700,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "acid",
-            "title": "Sizzling Surprise",
-            "image": "icons/magic/acid/dissolve-arm-flesh.webp",
-            "imagetitle": "Unwelcome Warmth",
-            "description": "A sudden wave of heat radiates from the acid-affected area, causing beads of sweat to form on your forehead. It's as though a hidden furnace has been activated within you, turning up the heat in an unexpected and uncomfortable manner.",
-            "treatment": "Cooling the affected area with a damp cloth or seeking shade can alleviate the sizzling surprise. Hydration and avoiding heat sources can help regulate your body temperature during this unexpected heat wave.",
-            "severity": "minor",
-            "damage": 4,
-            "duration": 300,
-            "statuseffect": "none",
-            "odds": 40
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -418,14 +386,26 @@
       "_key": "!journal.pages!mGCRnYPuvUGo8WB7.TNsUKHMSgU3R9oZT"
     },
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Sour Grapes Syndrome",
       "text": {
-        "content": "<img src=\"icons/magic/acid/dissolve-bone-skull.webp\" alt=\"Sour Grapes Syndrome\" />\n<p><em>Bitter Harvest</em></p>\n<p>Those affected by Sour Grapes Syndrome find their skin enrobed in a faint shade of violet, emitting an unpleasant vinegar-like odor. Physical touch may result in a mild burning sensation. Caution: prolonged exposure may cause spontaneous fermentation.</p>\n<h2>Treatment</h2>\n<p>The affected individual can counteract the effects of Sour Grapes Syndrome with regular applications of sweetened almond oil to the affected areas.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> acid</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Sour Grapes Syndrome</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/acid/dissolve-bone-skull.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Bitter Harvest</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Those affected by Sour Grapes Syndrome find their skin enrobed in a faint shade of violet, emitting an unpleasant vinegar-like odor. Physical touch may result in a mild burning sensation. Caution: prolonged exposure may cause spontaneous fermentation.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> The affected individual can counteract the effects of Sour Grapes Syndrome with regular applications of sweetened almond oil to the affected areas.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> major</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 12</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 0</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> poisoned</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 5</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "e6pXVndOdbLVNA6E",
-      "system": {},
+      "system": {
+        "category": "acid",
+        "image": "icons/magic/acid/dissolve-bone-skull.webp",
+        "imagetitle": "Bitter Harvest",
+        "description": "Those affected by Sour Grapes Syndrome find their skin enrobed in a faint shade of violet, emitting an unpleasant vinegar-like odor. Physical touch may result in a mild burning sensation. Caution: prolonged exposure may cause spontaneous fermentation.",
+        "treatment": "The affected individual can counteract the effects of Sour Grapes Syndrome with regular applications of sweetened almond oil to the affected areas.",
+        "severity": "major",
+        "damage": 12,
+        "duration": 0,
+        "statuseffect": "poisoned",
+        "odds": 5,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -438,23 +418,7 @@
       "src": null,
       "category": null,
       "sort": 800,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "acid",
-            "title": "Sour Grapes Syndrome",
-            "image": "icons/magic/acid/dissolve-bone-skull.webp",
-            "imagetitle": "Bitter Harvest",
-            "description": "Those affected by Sour Grapes Syndrome find their skin enrobed in a faint shade of violet, emitting an unpleasant vinegar-like odor. Physical touch may result in a mild burning sensation. Caution: prolonged exposure may cause spontaneous fermentation.",
-            "treatment": "The affected individual can counteract the effects of Sour Grapes Syndrome with regular applications of sweetened almond oil to the affected areas.",
-            "severity": "major",
-            "damage": 12,
-            "duration": 0,
-            "statuseffect": "poisoned",
-            "odds": 5
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -470,14 +434,26 @@
       "_key": "!journal.pages!mGCRnYPuvUGo8WB7.e6pXVndOdbLVNA6E"
     },
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Sour Note Symphony",
       "text": {
-        "content": "<img src=\"icons/magic/acid/dissolve-bone-skull.webp\" alt=\"Sour Note Symphony\" />\n<p><em>Tangy Tune Trouble</em></p>\n<p>Your voice has taken a musical turn, emitting a range of sour, yet oddly catchy notes every time you try to speak. Your party is considering earplugs as a necessity.</p>\n<h2>Treatment</h2>\n<p>Someone skilled in bardic arts might be able to 'tune' your voice back to normal, but be prepared for an impromptu performance or two.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> acid</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Sour Note Symphony</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/acid/dissolve-bone-skull.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Tangy Tune Trouble</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> Your voice has taken a musical turn, emitting a range of sour, yet oddly catchy notes every time you try to speak. Your party is considering earplugs as a necessity.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Someone skilled in bardic arts might be able to 'tune' your voice back to normal, but be prepared for an impromptu performance or two.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> minor</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 3</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 180</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> none</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 15</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "UeOl4liorBvhw7lT",
-      "system": {},
+      "system": {
+        "category": "acid",
+        "image": "icons/magic/acid/dissolve-bone-skull.webp",
+        "imagetitle": "Tangy Tune Trouble",
+        "description": "Your voice has taken a musical turn, emitting a range of sour, yet oddly catchy notes every time you try to speak. Your party is considering earplugs as a necessity.",
+        "treatment": "Someone skilled in bardic arts might be able to 'tune' your voice back to normal, but be prepared for an impromptu performance or two.",
+        "severity": "minor",
+        "damage": 3,
+        "duration": 180,
+        "statuseffect": "none",
+        "odds": 15,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -490,23 +466,7 @@
       "src": null,
       "category": null,
       "sort": 900,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "acid",
-            "title": "Sour Note Symphony",
-            "image": "icons/magic/acid/dissolve-bone-skull.webp",
-            "imagetitle": "Tangy Tune Trouble",
-            "description": "Your voice has taken a musical turn, emitting a range of sour, yet oddly catchy notes every time you try to speak. Your party is considering earplugs as a necessity.",
-            "treatment": "Someone skilled in bardic arts might be able to 'tune' your voice back to normal, but be prepared for an impromptu performance or two.",
-            "severity": "minor",
-            "damage": 3,
-            "duration": 180,
-            "statuseffect": "none",
-            "odds": 15
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -522,14 +482,26 @@
       "_key": "!journal.pages!mGCRnYPuvUGo8WB7.UeOl4liorBvhw7lT"
     },
     {
-      "type": "text",
+      "type": "coffee-pub-bibliosoph.injury",
       "name": "Spicy Surprise",
       "text": {
-        "content": "<img src=\"icons/magic/acid/dissolve-bone-skull.webp\" alt=\"Spicy Surprise\" />\n<p><em>Fizzing Elixir</em></p>\n<p>After a run-in with a mischievous alchemist's pet, you now have a burning sensation coursing through your veins. The taste of copper fills your mouth, and every sip of water feels like torture.</p>\n<h2>Treatment</h2>\n<p>Diluting the acid with a herbal remedy or magical poultice can help neutralize the effects.</p>\n<h2>Metadata</h2>\n<p>The metadata generates the injury in chat. It is written by the build tools from <code>resources/injuries.json</code> — edit that source and rebuild rather than editing this page, or your change will be overwritten.</p>\n<ul>\n    <li>\n        <p><strong>category:</strong> acid</p>\n    </li>\n    <li>\n        <p><strong>title:</strong> Spicy Surprise</p>\n    </li>\n    <li>\n        <p><strong>image:</strong> icons/magic/acid/dissolve-bone-skull.webp</p>\n    </li>\n    <li>\n        <p><strong>imagetitle:</strong> Fizzing Elixir</p>\n    </li>\n    <li>\n        <p><strong>description:</strong> After a run-in with a mischievous alchemist's pet, you now have a burning sensation coursing through your veins. The taste of copper fills your mouth, and every sip of water feels like torture.</p>\n    </li>\n    <li>\n        <p><strong>treatment:</strong> Diluting the acid with a herbal remedy or magical poultice can help neutralize the effects.</p>\n    </li>\n    <li>\n        <p><strong>severity:</strong> major</p>\n    </li>\n    <li>\n        <p><strong>damage:</strong> 10</p>\n    </li>\n    <li>\n        <p><strong>duration:</strong> 2700</p>\n    </li>\n    <li>\n        <p><strong>statuseffect:</strong> poisoned</p>\n    </li>\n    <li>\n        <p><strong>odds:</strong> 10</p>\n    </li>\n</ul>",
+        "content": "",
         "format": 1
       },
       "_id": "Wlocp1RbfMa3HCbA",
-      "system": {},
+      "system": {
+        "category": "acid",
+        "image": "icons/magic/acid/dissolve-bone-skull.webp",
+        "imagetitle": "Fizzing Elixir",
+        "description": "After a run-in with a mischievous alchemist's pet, you now have a burning sensation coursing through your veins. The taste of copper fills your mouth, and every sip of water feels like torture.",
+        "treatment": "Diluting the acid with a herbal remedy or magical poultice can help neutralize the effects.",
+        "severity": "major",
+        "damage": 10,
+        "duration": 2700,
+        "statuseffect": "poisoned",
+        "odds": 10,
+        "treatmentdc": null
+      },
       "title": {
         "show": true,
         "level": 1
@@ -542,23 +514,7 @@
       "src": null,
       "category": null,
       "sort": 1000,
-      "flags": {
-        "coffee-pub-bibliosoph": {
-          "injury": {
-            "category": "acid",
-            "title": "Spicy Surprise",
-            "image": "icons/magic/acid/dissolve-bone-skull.webp",
-            "imagetitle": "Fizzing Elixir",
-            "description": "After a run-in with a mischievous alchemist's pet, you now have a burning sensation coursing through your veins. The taste of copper fills your mouth, and every sip of water feels like torture.",
-            "treatment": "Diluting the acid with a herbal remedy or magical poultice can help neutralize the effects.",
-            "severity": "major",
-            "damage": 10,
-            "duration": 2700,
-            "statuseffect": "poisoned",
-            "odds": 10
-          }
-        }
-      },
+      "flags": {},
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -586,7 +542,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785256145087,
+    "modifiedTime": 1785261249417,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

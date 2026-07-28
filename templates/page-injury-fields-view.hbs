@@ -1,0 +1,58 @@
+<section class="bibliosoph-injury-page-fields">
+    {{#if system.image}}
+        <img class="injury-page-image" src="{{system.image}}" alt="{{document.name}}">
+        {{#if system.imagetitle}}
+            <p class="injury-page-caption">{{system.imagetitle}}</p>
+        {{/if}}
+    {{/if}}
+
+    {{#if system.description}}
+        <p class="injury-page-description">{{system.description}}</p>
+    {{/if}}
+
+    {{#if system.treatment}}
+        <div class="injury-page-treatment">
+            <span class="injury-page-label"><i class="fa-solid fa-heart-pulse"></i> Treatment</span>
+            <p>{{system.treatment}}</p>
+        </div>
+    {{/if}}
+
+    <div class="injury-page-meta">
+        <div class="injury-page-field">
+            <span class="injury-page-label">Damage Type</span>
+            <span class="injury-page-value">{{categoryLabel}}</span>
+        </div>
+        <div class="injury-page-field">
+            <span class="injury-page-label">Severity</span>
+            <span class="injury-page-value">{{severityLabel}}</span>
+        </div>
+        <div class="injury-page-field">
+            <span class="injury-page-label">Damage</span>
+            <span class="injury-page-value">{{system.damage}} hit points</span>
+        </div>
+        <div class="injury-page-field">
+            <span class="injury-page-label">Duration</span>
+            <span class="injury-page-value">{{durationLabel}}</span>
+        </div>
+        <div class="injury-page-field">
+            <span class="injury-page-label">Condition</span>
+            <span class="injury-page-value">{{conditionLabel}}</span>
+        </div>
+        <div class="injury-page-field">
+            <span class="injury-page-label">Treatment DC</span>
+            <span class="injury-page-value">{{treatmentDC}}</span>
+        </div>
+        <div class="injury-page-field">
+            <span class="injury-page-label">Odds</span>
+            <span class="injury-page-value">{{system.odds}} of 100</span>
+        </div>
+    </div>
+
+    <div class="injury-page-notes-header">
+        <i class="fa-solid fa-scroll"></i> GM Notes
+    </div>
+    {{#unless hasNotes}}
+        <p class="injury-page-notes-empty">No notes yet — edit this page to add your own.</p>
+    {{/unless}}
+    <hr class="injury-page-divider">
+</section>
