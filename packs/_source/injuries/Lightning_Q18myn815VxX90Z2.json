@@ -20,6 +20,7 @@
         "duration": 300,
         "statuseffect": "none",
         "odds": 20,
+        "gmnotes": "Cosmetic and crackling: no stealth, and metal is a hazard. Stinger: \"You keep shocking people who try to shake your hand.\"",
         "treatmentdc": null
       },
       "title": {
@@ -68,6 +69,7 @@
         "duration": 120,
         "statuseffect": "none",
         "odds": 5,
+        "gmnotes": "Two minutes of static — comedy, plus advantage for anyone trying to spot them. Stinger: \"You can hear yourself crackling in the quiet.\"",
         "treatmentdc": null
       },
       "title": {
@@ -116,6 +118,7 @@
         "duration": 3600,
         "statuseffect": "unconscious",
         "odds": 10,
+        "gmnotes": "Unconscious for an hour is a scene-remover. Make reaching them the encounter. Stinger: \"You are still ringing, somewhere far below hearing.\"",
         "treatmentdc": null
       },
       "title": {
@@ -164,6 +167,7 @@
         "duration": 0,
         "statuseffect": "stunned",
         "odds": 3,
+        "gmnotes": "Permanent and stunned — this is a curse, not a wound, and it should worry the whole party in a storm. Stinger: \"The air over you has started to feel interested.\"",
         "treatmentdc": null
       },
       "title": {
@@ -212,6 +216,7 @@
         "duration": 900,
         "statuseffect": "stunned",
         "odds": 15,
+        "gmnotes": "Stunned once, then leave the tingle as flavour. Stinger: \"Your fingers have not stopped buzzing and you have started to like it.\"",
         "treatmentdc": null
       },
       "title": {
@@ -260,6 +265,7 @@
         "duration": 240,
         "statuseffect": "deafened",
         "odds": 15,
+        "gmnotes": "Deafened: no hearing-based Perception, and whispered plans do not reach them. Stinger: \"Under everything, a note you cannot make stop.\"",
         "treatmentdc": null
       },
       "title": {
@@ -308,6 +314,7 @@
         "duration": 180,
         "statuseffect": "none",
         "odds": 10,
+        "gmnotes": "No condition — rule dropped metal or fumbled components on a failed check. Stinger: \"Everything metal has opinions about you now.\"",
         "treatmentdc": null
       },
       "title": {
@@ -356,6 +363,7 @@
         "duration": 600,
         "statuseffect": "none",
         "odds": 25,
+        "gmnotes": "No condition, deliberately: this is a comic buff-that-is-not. Let them act impulsively and pay for it socially. Stinger: \"You feel fantastic. That should worry you.\"",
         "treatmentdc": null
       },
       "title": {
@@ -398,7 +406,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785261249437,
+    "modifiedTime": 1785270400043,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

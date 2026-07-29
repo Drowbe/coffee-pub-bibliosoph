@@ -20,6 +20,7 @@
         "duration": 180,
         "statuseffect": "none",
         "odds": 40,
+        "gmnotes": "No condition, so charge it in concentration: a check to hold still, aim, or keep a spell going. Stinger: \"It stopped burning an hour ago. It has not stopped reminding you.\"",
         "treatmentdc": null
       },
       "title": {
@@ -68,6 +69,7 @@
         "duration": 480,
         "statuseffect": "stunned",
         "odds": 20,
+        "gmnotes": "Stunned once, then let the etched skin be the story — it does not close cleanly and anyone examining it can tell. Stinger: \"The shape of the splash is still there, and it will be tomorrow.\"",
         "treatmentdc": null
       },
       "title": {
@@ -116,6 +118,7 @@
         "duration": 0,
         "statuseffect": "prone",
         "odds": 5,
+        "gmnotes": "Permanent prone until treated is severe — rule that they can crawl and fight from the ground, not that they are helpless. Stinger: \"Every time you get your feet under you, something pops.\"",
         "treatmentdc": null
       },
       "title": {
@@ -164,6 +167,7 @@
         "duration": 300,
         "statuseffect": "poisoned",
         "odds": 10,
+        "gmnotes": "Poisoned is disadvantage on attacks and checks; the harmless light show is pure comedy. Let stealth be impossible. Stinger: \"You are glowing faintly. Intermittently. Audibly.\"",
         "treatmentdc": null
       },
       "title": {
@@ -212,6 +216,7 @@
         "duration": 240,
         "statuseffect": "none",
         "odds": 40,
+        "gmnotes": "Flavour only, so spend it on atmosphere — the sound follows them into quiet rooms and gives away hiding places. Stinger: \"Everyone else has stopped talking to listen to you.\"",
         "treatmentdc": null
       },
       "title": {
@@ -260,6 +265,7 @@
         "duration": 420,
         "statuseffect": "poisoned",
         "odds": 40,
+        "gmnotes": "Poisoned covers the mechanical cost. Play the sensation: they keep checking whether skin is still where they left it. Stinger: \"It feels like it is running. You look. It is not.\"",
         "treatmentdc": null
       },
       "title": {
@@ -308,6 +314,7 @@
         "duration": 3600,
         "statuseffect": "grappled",
         "odds": 5,
+        "gmnotes": "Grappled for an hour is a movement sentence, not a combat one — let them fight, not chase. Lean into the absurdity. Stinger: \"You crunch when you walk. Everything within earshot now knows where you are.\"",
         "treatmentdc": null
       },
       "title": {
@@ -356,6 +363,7 @@
         "duration": 300,
         "statuseffect": "none",
         "odds": 40,
+        "gmnotes": "Nothing mechanical; make it a heat problem — armour is unbearable, cold water is a temptation, sleep is poor. Stinger: \"You are the warmest thing in the room and you can feel everyone noticing.\"",
         "treatmentdc": null
       },
       "title": {
@@ -404,6 +412,7 @@
         "duration": 0,
         "statuseffect": "poisoned",
         "odds": 5,
+        "gmnotes": "Permanent and poisoned: a real problem that wants a real cure, and the violet skin makes social scenes hostile. Stinger: \"The colour has not faded. If anything, it has deepened.\"",
         "treatmentdc": null
       },
       "title": {
@@ -452,6 +461,7 @@
         "duration": 180,
         "statuseffect": "none",
         "odds": 15,
+        "gmnotes": "Verbal spellcasting and any attempt at subtlety are the casualties. Ask for a check to say anything quietly. Stinger: \"You open your mouth to whisper and produce a chord.\"",
         "treatmentdc": null
       },
       "title": {
@@ -500,6 +510,7 @@
         "duration": 2700,
         "statuseffect": "poisoned",
         "odds": 10,
+        "gmnotes": "Poisoned for the better part of an hour — treat it as a fever they are fighting through. Stinger: \"Your own blood feels like it is running hot enough to notice.\"",
         "treatmentdc": null
       },
       "title": {
@@ -542,7 +553,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785261249417,
+    "modifiedTime": 1785270400021,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

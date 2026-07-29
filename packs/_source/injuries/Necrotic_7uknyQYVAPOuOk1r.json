@@ -20,6 +20,7 @@
         "duration": 5400,
         "statuseffect": "exhaustion",
         "odds": 10,
+        "gmnotes": "Exhaustion 1 with a ninety-minute clock, and the laughter is the point. Repeat it, quietly, at bad moments. Stinger: \"Somebody found that funny. Not you.\"",
         "treatmentdc": null
       },
       "title": {
@@ -68,6 +69,7 @@
         "duration": 180,
         "statuseffect": "diseased",
         "odds": 15,
+        "gmnotes": "Diseased and visible rot — this should frighten the party into acting. Rule the limb weak, not useless. Stinger: \"The smell arrives before you do.\"",
         "treatmentdc": null
       },
       "title": {
@@ -116,6 +118,7 @@
         "duration": 300,
         "statuseffect": "none",
         "odds": 50,
+        "gmnotes": "The tissue is dying, not merely cold — that is why it is necrotic. Ruling it as lost feeling in the hand is fair and scary. Stinger: \"The colour is wrong, and it is not coming back on its own.\"",
         "treatmentdc": null
       },
       "title": {
@@ -164,6 +167,7 @@
         "duration": 900,
         "statuseffect": "none",
         "odds": 15,
+        "gmnotes": "Flavour only: play it as low spirits and heavy limbs, good for a bleak travel scene. Stinger: \"Nothing hurts. Nothing much interests you either.\"",
         "treatmentdc": null
       },
       "title": {
@@ -212,6 +216,7 @@
         "duration": 900,
         "statuseffect": "none",
         "odds": 20,
+        "gmnotes": "Harmless, loud, and terrible for hiding. Stinger: \"It echoes. In a tomb, everything echoes.\"",
         "treatmentdc": null
       },
       "title": {
@@ -260,6 +265,7 @@
         "duration": 0,
         "statuseffect": "exhaustion",
         "odds": 5,
+        "gmnotes": "Permanent until treated, and the point is dread rather than numbers. Have the character forget something small and true about themselves. Stinger: \"There was a name you used to say when you were frightened. It is not there now.\"",
         "treatmentdc": null
       },
       "title": {
@@ -308,6 +314,7 @@
         "duration": 7200,
         "statuseffect": "poisoned",
         "odds": 5,
+        "gmnotes": "Poisoned for two hours and genuinely dark — this is the one that should make the party consider retreating. Stinger: \"Something took a piece and did not eat it.\"",
         "treatmentdc": null
       },
       "title": {
@@ -356,6 +363,7 @@
         "duration": 240,
         "statuseffect": "exhaustion",
         "odds": 30,
+        "gmnotes": "Exhaustion 1 — the life-drain classic. Let rest fail to fix it until treated. Stinger: \"You slept eight hours and woke up owing more.\"",
         "treatmentdc": null
       },
       "title": {
@@ -398,7 +406,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785261249441,
+    "modifiedTime": 1785270400047,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

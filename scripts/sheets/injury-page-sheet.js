@@ -15,6 +15,7 @@
 
 import { MODULE } from '../const.js';
 import { CATEGORIES, SEVERITIES, CONDITIONS, displayCategory } from '../data/injury-schema.js';
+import { mountGmNotesField } from '../utility-gm-notes.js';
 
 const JournalEntryPageProseMirrorSheet = foundry.applications.sheets.journal.JournalEntryPageProseMirrorSheet;
 
@@ -53,6 +54,37 @@ export class InjuryPageSheet extends JournalEntryPageProseMirrorSheet {
         return context;
     }
 
+    /**
+     * Mount Blacksmith's GM Notes field into the single reserved host.
+     * The controller is kept on the instance and destroyed before every
+     * re-mount and on close — otherwise each render leaks a hook listener
+     * and an editor instance.
+     */
+    async _onRender(context, options) {
+        await super._onRender?.(context, options);
+        this.#destroyGmNotes();
+        const host = this.element?.querySelector('[data-gm-notes-host]');
+        if (!host) return;
+        try {
+            this.#gmNotes = await mountGmNotesField(host, this.document, { label: 'GM Notes' });
+        } catch (error) {
+            console.warn(`${MODULE.ID} | Could not mount the GM Notes field`, error);
+        }
+    }
+
+    /** @inheritDoc */
+    _onClose(options) {
+        this.#destroyGmNotes();
+        return super._onClose?.(options);
+    }
+
+    #gmNotes = null;
+
+    #destroyGmNotes() {
+        try { this.#gmNotes?.destroy?.(); } catch (_) { /* already gone */ }
+        this.#gmNotes = null;
+    }
+
     /** @inheritDoc */
     async _prepareContentContext(context, options) {
         await super._prepareContentContext(context, options);
@@ -70,7 +102,8 @@ export class InjuryPageSheet extends JournalEntryPageProseMirrorSheet {
                     conditionLabel: system.statuseffect === 'none' ? 'None' : displayCategory(system.statuseffect),
                     durationLabel: system.duration === 0 ? 'Permanent (until treated)' : formatSeconds(system.duration),
                     treatmentDC: system.treatmentDC,
-                    hasNotes: system.hasNotes
+                    hasDetails: system.hasDetails,
+                    isGM: game.user.isGM
                 }
             );
             context.text.enriched = fieldsHtml + (context.text.enriched || '');

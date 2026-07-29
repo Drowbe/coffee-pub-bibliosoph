@@ -20,6 +20,7 @@
         "duration": 300,
         "statuseffect": "bleeding",
         "odds": 20,
+        "gmnotes": "Bleeding is the mechanic; the trail is the drama. Anything that hunts by blood now has a road to follow. Stinger: \"It is going through the bandage faster than you can replace it.\"",
         "treatmentdc": null
       },
       "title": {
@@ -68,6 +69,7 @@
         "duration": 3600,
         "statuseffect": "bleeding",
         "odds": 10,
+        "gmnotes": "Bleeding does the mechanical work; your job is to make it visible. They are marking the floor, the saddle, the water. Trackers get advantage; predators take an interest. Stinger: \"You are leaving a trail. Whatever is behind you will not need to guess.\"",
         "treatmentdc": null
       },
       "title": {
@@ -116,6 +118,7 @@
         "duration": 0,
         "statuseffect": "prone",
         "odds": 6,
+        "gmnotes": "Permanent until treated and unconscious-adjacent in tone: this ends someone's fight. Do not let it become a numbers discussion. Stinger: \"Hold it in. That is the whole plan right now — hold it in.\"",
         "treatmentdc": null
       },
       "title": {
@@ -164,6 +167,7 @@
         "duration": 60,
         "statuseffect": "bleeding",
         "odds": 75,
+        "gmnotes": "Bleeding does the damage; the trail does the drama — trackers and predators find them easily. Stinger: \"It keeps opening. Every time you think it has stopped, it opens.\"",
         "treatmentdc": null
       },
       "title": {
@@ -212,6 +216,7 @@
         "duration": 300,
         "statuseffect": "bleeding",
         "odds": 20,
+        "gmnotes": "Bleeding, and the ragged edges mean it closes badly — worth a scar and a complication later. Stinger: \"It is not a clean cut. It will not be a clean scar.\"",
         "treatmentdc": null
       },
       "title": {
@@ -260,6 +265,7 @@
         "duration": 230,
         "statuseffect": "exhaustion",
         "odds": 20,
+        "gmnotes": "Exhaustion 1 from blood loss — a slow, grinding cost rather than a spike. Stinger: \"You are getting tired in a way that sleep will not fix.\"",
         "treatmentdc": null
       },
       "title": {
@@ -308,6 +314,7 @@
         "duration": 120,
         "statuseffect": "none",
         "odds": 75,
+        "gmnotes": "Trivially small and disproportionately awful. Pure comedy; use it for a failed check at a dignified moment. Stinger: \"It is barely a line. You have never felt anything like it.\"",
         "treatmentdc": null
       },
       "title": {
@@ -356,6 +363,7 @@
         "duration": 300,
         "statuseffect": "restrained",
         "odds": 30,
+        "gmnotes": "Restrained reads as a leg that will not answer — rule movement halved if that suits better. Stinger: \"It holds. Then it does not, and you learn which one you are getting.\"",
         "treatmentdc": null
       },
       "title": {
@@ -404,6 +412,7 @@
         "duration": 375,
         "statuseffect": "bleeding",
         "odds": 20,
+        "gmnotes": "Bleeding from something wide open — the horror is how much of it there is. Stinger: \"You can see more of yourself than anyone should.\"",
         "treatmentdc": null
       },
       "title": {
@@ -452,6 +461,7 @@
         "duration": 120,
         "statuseffect": "bleeding",
         "odds": 30,
+        "gmnotes": "Bleeding plus fragility: rule that the next hit lands harder, or simply describe them as thinner than before. Stinger: \"The cut is so clean you did not notice until you moved.\"",
         "treatmentdc": null
       },
       "title": {
@@ -500,6 +510,7 @@
         "duration": 0,
         "statuseffect": "prone",
         "odds": 10,
+        "gmnotes": "Permanent, prone, and campaign-changing — pause and make sure the player wants this before it stands. Offer regeneration as a quest. Stinger: \"Somebody needs to pick that up, and nobody is moving.\"",
         "treatmentdc": null
       },
       "title": {
@@ -548,6 +559,7 @@
         "duration": 420,
         "statuseffect": "prone",
         "odds": 20,
+        "gmnotes": "The conveyed condition is the cost; the horror is cosmetic and worth a sentence. Anyone with Medicine should be able to see this needs real attention, not a bandage. Stinger: \"It does not hurt yet. That is the part that worries you.\"",
         "treatmentdc": null
       },
       "title": {
@@ -596,6 +608,7 @@
         "duration": 0,
         "statuseffect": "blinded",
         "odds": 20,
+        "gmnotes": "Blinded is enormous — consider ruling it as one eye: disadvantage on ranged attacks and sight Perception rather than full blindness, if that suits your table. Say so out loud before the next roll. Stinger: \"Half the room is simply gone, and you keep turning your head to find it.\"",
         "treatmentdc": null
       },
       "title": {
@@ -644,6 +657,7 @@
         "duration": 180,
         "statuseffect": "prone",
         "odds": 75,
+        "gmnotes": "Prone from flinching — harmless, undignified, and good for a duel. Stinger: \"Something drew a line across you and you did not feel it cut.\"",
         "treatmentdc": null
       },
       "title": {
@@ -692,6 +706,7 @@
         "duration": 60,
         "statuseffect": "none",
         "odds": 75,
+        "gmnotes": "A minute of noise: stealth is impossible and speech is comic. Stinger: \"You take a breath and the wound takes one with you.\"",
         "treatmentdc": null
       },
       "title": {
@@ -734,7 +749,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785261249455,
+    "modifiedTime": 1785270400063,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

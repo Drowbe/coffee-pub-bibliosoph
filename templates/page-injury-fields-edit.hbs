@@ -90,8 +90,22 @@
     </div>
 
     <div class="injury-edit-section-header">
-        <i class="fa-solid fa-scroll"></i>
-        <span>GM Notes</span>
+        <i class="fa-solid fa-masks-theater"></i>
+        <span>Running This Injury</span>
     </div>
-    <p class="injury-edit-hint">Free-form notes for your own reference. These never appear on the chat card.</p>
+    <div class="form-group injury-edit-full">
+        <textarea id="{{document.id}}-injury-gmnotes" name="system.gmnotes" rows="5"
+            placeholder="How to run it at the table: what it costs in combat or movement, what to rule on, and a stinger or two to drop in — &quot;he's leaving a trail of blood; that's not going to go well.&quot;">{{system.gmnotes}}</textarea>
+        <p class="injury-edit-hint">Ships with the injury and updates when it does.</p>
+    </div>
+
+    <!-- Blacksmith's shared GM Notes area: the GM's own note plus our
+         contributed section. Their component owns everything inside. -->
+    <section class="bibliosoph-gm-notes-host" data-gm-notes-host aria-label="GM Notes"></section>
+
+    <div class="injury-edit-section-header">
+        <i class="fa-solid fa-scroll"></i>
+        <span>Extended Description</span>
+    </div>
+    <p class="injury-edit-hint">Optional rich text shown on this page below the fields. Visible to anyone who can read the page.</p>
 </section>

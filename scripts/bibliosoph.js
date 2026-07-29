@@ -197,6 +197,7 @@ Hooks.once('ready', async () => {
             logBib('Failed to register treatment-roll socket', error?.message, false, false);
         }
 
+
         // NOW register toolbar tools after module registration is complete
         // In v13, we need to wait for Blacksmith to be fully ready
         // Try multiple times with increasing delays to ensure API is available
@@ -2560,18 +2561,44 @@ async function appendGmNotesToTooltips(root) {
         const uuid = icon.dataset.source;
         if (!uuid || icon.dataset.gmNotesChecked) continue;
         icon.dataset.gmNotesChecked = '1';
-        try {
-            const page = await fromUuid(uuid);
-            if (!page?.system?.hasNotes) continue;
-            const notes = String(page.text?.content ?? '').trim();
-            if (!notes) continue;
-            icon.dataset.tooltip = `${icon.dataset.tooltip ?? ''}`
-                + `<hr><section style="text-align:left;"><strong><i class="fa-solid fa-scroll"></i> GM Notes</strong>${notes}</section>`;
-        } catch (error) {
-            logBib('Could not load GM notes for ' + uuid, error?.message, true, false);
-        }
+        // Stash the note-free tooltip so a later refresh can rebuild
+        // rather than appending the note a second time.
+        icon.dataset.tooltipBase = icon.dataset.tooltip ?? '';
+        await paintGmNoteTooltip(icon, uuid);
     }
 }
+
+async function paintGmNoteTooltip(icon, uuid) {
+    try {
+        const { readGmNoteHtml } = await import('./utility-gm-notes.js');
+        const base = icon.dataset.tooltipBase ?? '';
+        let extra = '';
+
+        // Shipped run guidance (module content, on the page itself)
+        const page = await fromUuid(uuid);
+        const guidance = String(page?.system?.gmnotes ?? '').trim();
+        if (guidance) {
+            extra += `<hr><section style="text-align:left;"><strong><i class="fa-solid fa-masks-theater"></i> Running This Injury</strong><br>${guidance}</section>`;
+        }
+        // The GM's own private notes (Blacksmith's layer)
+        const notes = (await readGmNoteHtml(page ?? uuid)).trim();
+        if (notes) {
+            extra += `<hr><section style="text-align:left;"><strong><i class="fa-solid fa-user-secret"></i> GM Notes</strong>${notes}</section>`;
+        }
+        icon.dataset.tooltip = base + extra;
+    } catch (error) {
+        logBib('Could not load GM notes for ' + uuid, error?.message, true, false);
+    }
+}
+
+// Live-refresh open Check-Up cards when a note is edited anywhere else.
+// Blacksmith's payload now also carries journal navigation context
+// (parentUuid/parentName/breadcrumb); we key on uuid alone.
+Hooks.on('blacksmith.gmNotesChanged', ({ uuid } = {}) => {
+    if (!game.user.isGM || !uuid) return;
+    document.querySelectorAll(`.coffee-pub-bibliosoph-affliction-icon[data-source="${uuid}"]`)
+        .forEach((icon) => paintGmNoteTooltip(icon, uuid));
+});
 
 // Per-viewer hover text for an injury Treat button: a PREVIEW of what
 // clicking will do for THIS user, in future tense — not narration.

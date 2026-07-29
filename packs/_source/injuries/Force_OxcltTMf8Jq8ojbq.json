@@ -20,6 +20,7 @@
         "duration": 90,
         "statuseffect": "deafened",
         "odds": 20,
+        "gmnotes": "Deafened is a strange fit; play the distraction — concentration checks and nothing else. Stinger: \"Something taps your nose. There is nothing there.\"",
         "treatmentdc": null
       },
       "title": {
@@ -68,6 +69,7 @@
         "duration": 1800,
         "statuseffect": "none",
         "odds": 25,
+        "gmnotes": "Nothing mechanical, so charge deep breaths: shouting, swimming, running, verbal spells. Stinger: \"Your ribs ache in a circle, like something very large hugged you once.\"",
         "treatmentdc": null
       },
       "title": {
@@ -116,6 +118,7 @@
         "duration": 300,
         "statuseffect": "none",
         "odds": 55,
+        "gmnotes": "Flavour only — spend it on concentration checks and missed quiet sounds. Stinger: \"Nothing touched you. Everything still rang.\"",
         "treatmentdc": null
       },
       "title": {
@@ -164,6 +167,7 @@
         "duration": 60,
         "statuseffect": "stunned",
         "odds": 10,
+        "gmnotes": "Stunned once, then let the limbs be a running joke that ruins one careful action. Stinger: \"Your arm has plans and it did not share them.\"",
         "treatmentdc": null
       },
       "title": {
@@ -212,6 +216,7 @@
         "duration": 1800,
         "statuseffect": "poisoned",
         "odds": 5,
+        "gmnotes": "Poisoned covers the mechanics; the fun is in describing rooms wrongly. Ask for checks on ledges and ladders. Stinger: \"Down is somewhere over there now. It will move again shortly.\"",
         "treatmentdc": null
       },
       "title": {
@@ -260,6 +265,7 @@
         "duration": 2400,
         "statuseffect": "none",
         "odds": 20,
+        "gmnotes": "No condition; rule against turning quickly — flanking and rear attacks get easier on them. Stinger: \"Looking behind you is now a decision, not a reflex.\"",
         "treatmentdc": null
       },
       "title": {
@@ -308,6 +314,7 @@
         "duration": 420,
         "statuseffect": "prone",
         "odds": 45,
+        "gmnotes": "Prone and displaced. Good on a ledge, a bridge, or beside anything they would rather not fall into. Stinger: \"You are standing somewhere you did not choose.\"",
         "treatmentdc": null
       },
       "title": {
@@ -356,6 +363,7 @@
         "duration": 120,
         "statuseffect": "prone",
         "odds": 15,
+        "gmnotes": "Prone from dropped items and flailing — target anything they try to carry carefully. Stinger: \"You drop it. Nothing touched you, and you drop it.\"",
         "treatmentdc": null
       },
       "title": {
@@ -398,7 +406,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785261249431,
+    "modifiedTime": 1785270400035,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

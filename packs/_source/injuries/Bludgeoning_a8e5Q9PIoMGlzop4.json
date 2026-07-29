@@ -20,6 +20,7 @@
         "duration": 300,
         "statuseffect": "none",
         "odds": 40,
+        "gmnotes": "No condition, so make it a movement tax: difficult terrain, ladders, and anything requiring grace. Stinger: \"You move like someone doing an impression of yourself.\"",
         "treatmentdc": null
       },
       "title": {
@@ -68,6 +69,7 @@
         "duration": 0,
         "statuseffect": "restrained",
         "odds": 2,
+        "gmnotes": "Permanent restrained until treated is dire — rule it as movement halved rather than immobile if that fits better, and say so. Stinger: \"You can hear yourself moving. From the inside.\"",
         "treatmentdc": null
       },
       "title": {
@@ -116,6 +118,7 @@
         "duration": 120,
         "statuseffect": "frightened",
         "odds": 35,
+        "gmnotes": "Frightened is unusually apt here: the fear is of trying. Aim it at social scenes rather than combat. Stinger: \"You know exactly what to say. You also know exactly how it will land.\"",
         "treatmentdc": null
       },
       "title": {
@@ -164,6 +167,7 @@
         "duration": 420,
         "statuseffect": "stunned",
         "odds": 20,
+        "gmnotes": "Stunned once, then play the concussive noise — they mishear one instruction and act on it. Stinger: \"Somebody said go. You are fairly sure somebody said go.\"",
         "treatmentdc": null
       },
       "title": {
@@ -212,6 +216,7 @@
         "duration": 0,
         "statuseffect": "stunned",
         "odds": 10,
+        "gmnotes": "Stunned once, then let the concussion linger as fiction: slow answers, repeated questions, light hurts. Do not stack more penalties. Stinger: \"Everyone is speaking normally. You are certain they are not.\"",
         "treatmentdc": null
       },
       "title": {
@@ -260,6 +265,7 @@
         "duration": 600,
         "statuseffect": "none",
         "odds": 8,
+        "gmnotes": "Rule the AC loss explicitly (−1 is fair) and let them keep the dent as a badge. Stinger: \"It saved your life and it will never sit right again.\"",
         "treatmentdc": null
       },
       "title": {
@@ -308,6 +314,7 @@
         "duration": 450,
         "statuseffect": "restrained",
         "odds": 10,
+        "gmnotes": "The hand is the point: no two-handed weapons, no shield, disadvantage on anything needing grip. Stinger: \"You can make a fist. You just cannot make it twice.\"",
         "treatmentdc": null
       },
       "title": {
@@ -356,6 +363,7 @@
         "duration": 360,
         "statuseffect": "stunned",
         "odds": 20,
+        "gmnotes": "Stunned once; afterwards let every new hit land on somewhere already hurt. Stinger: \"There is nowhere left on you that is not already sore.\"",
         "treatmentdc": null
       },
       "title": {
@@ -404,6 +412,7 @@
         "duration": 300,
         "statuseffect": "none",
         "odds": 40,
+        "gmnotes": "Cosmetic and cumulative — a good one to reference in later scenes as the party's shared history. Stinger: \"You are running out of skin that is still the right colour.\"",
         "treatmentdc": null
       },
       "title": {
@@ -452,6 +461,7 @@
         "duration": 600,
         "statuseffect": "deafened",
         "odds": 15,
+        "gmnotes": "Deafened plus balance — combine with difficult terrain or heights for real jeopardy. Stinger: \"The room tilts a little every time you turn your head.\"",
         "treatmentdc": null
       },
       "title": {
@@ -500,6 +510,7 @@
         "duration": 300,
         "statuseffect": "prone",
         "odds": 12,
+        "gmnotes": "Prone is the cost; play the lean for comedy between fights. Stinger: \"You have been listing to the left for an hour and nobody has told you.\"",
         "treatmentdc": null
       },
       "title": {
@@ -548,6 +559,7 @@
         "duration": 450,
         "statuseffect": "prone",
         "odds": 5,
+        "gmnotes": "Prone plus a walking sway — good for a chase or a rooftop, harmless on flat ground. Stinger: \"Your legs are no longer having the same conversation.\"",
         "treatmentdc": null
       },
       "title": {
@@ -596,6 +608,7 @@
         "duration": 120,
         "statuseffect": "prone",
         "odds": 20,
+        "gmnotes": "Prone repeatedly — the slapstick is the point, so let them fall at the funniest available moment. Stinger: \"Up, then down. Up, then down. The floor is winning.\"",
         "treatmentdc": null
       },
       "title": {
@@ -644,6 +657,7 @@
         "duration": 60,
         "statuseffect": "none",
         "odds": 25,
+        "gmnotes": "One minute of slapstick. Ask for a check on any move that needs a straight line. Stinger: \"You aimed for the door. You are near the door.\"",
         "treatmentdc": null
       },
       "title": {
@@ -686,7 +700,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785261249422,
+    "modifiedTime": 1785270400025,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

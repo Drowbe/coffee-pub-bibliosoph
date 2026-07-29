@@ -20,6 +20,7 @@
         "duration": 600,
         "statuseffect": "none",
         "odds": 50,
+        "gmnotes": "No condition: rule grip instead — dropped weapons on a failed check, no climbing, no rope. Stinger: \"You close your hand and feel every one of them let go.\"",
         "treatmentdc": null
       },
       "title": {
@@ -68,6 +69,7 @@
         "duration": 0,
         "statuseffect": "none",
         "odds": 8,
+        "gmnotes": "Permanent until treated, and the numbness is the tell — deep burns do not hurt at the centre. Anyone with Medicine should read that as serious. Stinger: \"You press it and feel nothing. You press around it and nearly fall over.\"",
         "treatmentdc": null
       },
       "title": {
@@ -116,6 +118,7 @@
         "duration": 60,
         "statuseffect": "burning",
         "odds": 10,
+        "gmnotes": "Burning deals ongoing damage — real teeth for a minor, so keep the duration short and let them stamp it out. Stinger: \"Stopping does not help. Stopping is worse.\"",
         "treatmentdc": null
       },
       "title": {
@@ -164,6 +167,7 @@
         "duration": 300,
         "statuseffect": "charmed",
         "odds": 15,
+        "gmnotes": "Charmed by a bird is a gift to roleplay: they will defend it, feed it, and argue for it. Stinger: \"It looks at you. You have never felt so understood.\"",
         "treatmentdc": null
       },
       "title": {
@@ -212,6 +216,7 @@
         "duration": 600,
         "statuseffect": "charmed",
         "odds": 10,
+        "gmnotes": "Charmed is a strange fit mechanically, so play the fingers: fumbles on fine work, dropped components, failed sleight of hand. Stinger: \"Your hands answer about half a second late, and not always with what you asked for.\"",
         "treatmentdc": null
       },
       "title": {
@@ -260,6 +265,7 @@
         "duration": 120,
         "statuseffect": "exhaustion",
         "odds": 5,
+        "gmnotes": "Exhaustion 1, and sitting is out of the question — good for a long ride or a formal dinner. Stinger: \"You will be standing for this conversation, thank you.\"",
         "treatmentdc": null
       },
       "title": {
@@ -308,6 +314,7 @@
         "duration": 600,
         "statuseffect": "charmed",
         "odds": 20,
+        "gmnotes": "Cosmetic and charmed: the vanity is the mechanic. Let NPCs comment. Stinger: \"It will grow back. Most of it. Probably.\"",
         "treatmentdc": null
       },
       "title": {
@@ -356,6 +363,7 @@
         "duration": 1800,
         "statuseffect": "blinded",
         "odds": 15,
+        "gmnotes": "Blinded for half an hour is severe — consider ruling it as watering eyes with disadvantage on sight checks instead. Stinger: \"The smell of your own boots is making your eyes stream.\"",
         "treatmentdc": null
       },
       "title": {
@@ -404,6 +412,7 @@
         "duration": 2700,
         "statuseffect": "none",
         "odds": 25,
+        "gmnotes": "Verbal spellcasting and shouting are the pressure points. Ask for a check to speak a full sentence under exertion. Stinger: \"Your own voice comes back a stranger's — lower, and shorter of road.\"",
         "treatmentdc": null
       },
       "title": {
@@ -446,7 +455,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785261249428,
+    "modifiedTime": 1785270400032,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

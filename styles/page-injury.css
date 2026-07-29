@@ -69,6 +69,54 @@
     opacity: 0.7;
 }
 
+.bibliosoph-injury-page-fields .injury-page-guidance {
+    margin: 10px 0;
+    padding: 8px 10px;
+    border-left: 3px solid rgba(150, 110, 40, 0.7);
+    background: rgba(150, 110, 40, 0.08);
+    border-radius: 0 4px 4px 0;
+}
+
+.bibliosoph-injury-page-fields .injury-page-guidance p {
+    margin: 2px 0 0 0;
+}
+
+/* --- GM NOTES HOST (Blacksmith's component mounts inside) ---------- */
+
+.bibliosoph-gm-notes-host:empty {
+    display: none;
+}
+
+.bibliosoph-gm-notes-host .gm-notes-field {
+    margin: 10px 0;
+    padding: 8px 10px;
+    border-left: 3px solid rgba(90, 70, 130, 0.7);
+    background: rgba(90, 70, 130, 0.07);
+    border-radius: 0 4px 4px 0;
+}
+
+.bibliosoph-gm-notes-host .gm-notes-label {
+    display: block;
+    font-size: 0.85em;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.bibliosoph-gm-notes-host .gm-notes-input {
+    width: 100%;
+}
+
+.bibliosoph-gm-notes-host .gm-notes-hint,
+.bibliosoph-gm-notes-host .gm-notes-disabled-reason,
+.bibliosoph-gm-notes-host .gm-notes-unavailable {
+    margin: 4px 0 0 0;
+    font-size: 0.82em;
+    font-style: italic;
+    opacity: 0.7;
+}
+
 .bibliosoph-injury-page-fields .injury-page-notes-empty {
     margin: 2px 0 0 0;
     font-style: italic;

@@ -20,6 +20,7 @@
         "duration": 360,
         "statuseffect": "grappled",
         "odds": 40,
+        "gmnotes": "Grappled by clutter: rule that objects cling, so stealth and fine work suffer. Stinger: \"The cutlery on the next table is leaning towards you.\"",
         "treatmentdc": null
       },
       "title": {
@@ -68,6 +69,7 @@
         "duration": 2400,
         "statuseffect": "none",
         "odds": 40,
+        "gmnotes": "Nothing mechanical, so charge it in positioning — they favour one side, they cannot carry on that shoulder, they flinch from a shove. Stinger: \"The colour of it has gotten worse since you last looked.\"",
         "treatmentdc": null
       },
       "title": {
@@ -116,6 +118,7 @@
         "duration": 7200,
         "statuseffect": "stunned",
         "odds": 12,
+        "gmnotes": "Stunned is turn-ending; use it once and let the aftermath carry the scene. Afterwards, have them ask a question they already asked. Stinger: \"You know these people. Give it a second. You know these people.\"",
         "treatmentdc": null
       },
       "title": {
@@ -164,6 +167,7 @@
         "duration": 3600,
         "statuseffect": "none",
         "odds": 35,
+        "gmnotes": "No condition, so make it situational: a check to do anything requiring a deep breath — shouting, swimming, holding a note, laughing. Stinger: \"Something in your chest clicks when you breathe in. Only when you breathe in.\"",
         "treatmentdc": null
       },
       "title": {
@@ -212,6 +216,7 @@
         "duration": 480,
         "statuseffect": "charmed",
         "odds": 20,
+        "gmnotes": "Charmed by vertigo — play it as being unable to trust their own footing or judgement. Stinger: \"The room finishes turning a moment after you do.\"",
         "treatmentdc": null
       },
       "title": {
@@ -260,6 +265,7 @@
         "duration": 600,
         "statuseffect": "none",
         "odds": 70,
+        "gmnotes": "No mechanical teeth, so let it cost time rather than actions: they are slow to stand, slow to mount, last out of the room. Lean on it during downtime scenes rather than combat. Stinger: \"You get up. It takes you a moment longer than it used to.\"",
         "treatmentdc": null
       },
       "title": {
@@ -308,6 +314,7 @@
         "duration": 1800,
         "statuseffect": "deafened",
         "odds": 30,
+        "gmnotes": "Deafened means no hearing-based Perception and trouble with any spoken command or verbal plan. Play it socially: have them mishear an order at the worst moment. Stinger: \"Someone is shouting your name. You can tell that much.\"",
         "treatmentdc": null
       },
       "title": {
@@ -356,6 +363,7 @@
         "duration": 420,
         "statuseffect": "none",
         "odds": 65,
+        "gmnotes": "Pure flavour, and the fun is in the roleplay tax: verbal spellcasting, negotiation, and anything requiring dignity. Stinger: \"You taste copper every time you open your mouth to speak.\"",
         "treatmentdc": null
       },
       "title": {
@@ -404,6 +412,7 @@
         "duration": 0,
         "statuseffect": "unconscious",
         "odds": 4,
+        "gmnotes": "Unconscious and permanent until treated — this is a scene-ender, not a combat modifier. Make the table decide who stops fighting to reach them. Stinger: \"You hear your name from very far away, and then not.\"",
         "treatmentdc": null
       },
       "title": {
@@ -452,6 +461,7 @@
         "duration": 300,
         "statuseffect": "exhaustion",
         "odds": 60,
+        "gmnotes": "Exhaustion 1 is disadvantage on ability checks — quietly brutal for a skill scene. Have them unable to speak and move in the same breath. Stinger: \"You have the air for running or for talking. Choose.\"",
         "treatmentdc": null
       },
       "title": {
@@ -500,6 +510,7 @@
         "duration": 480,
         "statuseffect": "prone",
         "odds": 55,
+        "gmnotes": "Prone is the whole cost — standing eats half their movement, and that is enough. Consider asking for a check if they try to sprint, jump, or take stairs at speed. Stinger: \"Your knee holds. Then it doesn't.\"",
         "treatmentdc": null
       },
       "title": {
@@ -548,6 +559,7 @@
         "duration": 2700,
         "statuseffect": "none",
         "odds": 25,
+        "gmnotes": "Rule on grip: dropping a weapon on a hard hit, disadvantage to climb or hold a rope. Stinger: \"Everything above your waist has an opinion about that.\"",
         "treatmentdc": null
       },
       "title": {
@@ -590,7 +602,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785261249434,
+    "modifiedTime": 1785270400039,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

@@ -66,7 +66,13 @@ export class InjuryPageModel extends foundry.abstract.TypeDataModel {
             odds: new fields.NumberField({ required: true, integer: true, min: 1, max: 100, initial: 50, nullable: false }),
             // Optional override for the severity-derived treatment DC.
             // Null (the norm) means "use the ladder".
-            treatmentdc: new fields.NumberField({ required: false, integer: true, min: 1, initial: null, nullable: true })
+            treatmentdc: new fields.NumberField({ required: false, integer: true, min: 1, initial: null, nullable: true }),
+            // SHIPPED guidance on running the injury at the table — combat
+            // and movement rulings, narrative stingers. This is module
+            // content: it versions with the injury and updates when the
+            // injury does. Distinct from Blacksmith's GM Notes, which is
+            // the GM's own private layer and is never module-authored.
+            gmnotes: new fields.StringField({ required: false, blank: true, initial: '' })
         };
     }
 
@@ -93,11 +99,13 @@ export class InjuryPageModel extends foundry.abstract.TypeDataModel {
     }
 
     /**
-     * Whether this page carries free-form GM notes below the fields.
-     * Tags are stripped first: opening the editor leaves an empty
-     * paragraph behind, and `<p></p>` is markup, not notes.
+     * Whether this page carries free-form Expanded Details below the
+     * fields. This is authored, page-visible content — private notes live
+     * in Blacksmith's GM Notes layer, never here. Tags are stripped first:
+     * opening the editor leaves an empty paragraph behind, and `<p></p>`
+     * is markup, not content.
      */
-    get hasNotes() {
+    get hasDetails() {
         const content = this.parent?.text?.content;
         if (typeof content !== 'string') return false;
         return content.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim().length > 0;
@@ -121,7 +129,8 @@ export class InjuryPageModel extends foundry.abstract.TypeDataModel {
             duration: this.duration,
             statuseffect: this.statuseffect,
             odds: this.odds,
-            ...(this.treatmentdc ? { treatmentdc: this.treatmentdc } : {})
+            ...(this.treatmentdc ? { treatmentdc: this.treatmentdc } : {}),
+            ...(this.gmnotes ? { gmnotes: this.gmnotes } : {})
         };
     }
 

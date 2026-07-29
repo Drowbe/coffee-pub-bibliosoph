@@ -79,7 +79,7 @@ export const REQUIRED_FIELDS = [
     'treatment', 'severity', 'damage', 'duration', 'statuseffect', 'odds'
 ];
 
-export const OPTIONAL_FIELDS = ['treatmentdc'];
+export const OPTIONAL_FIELDS = ['treatmentdc', 'gmnotes'];
 
 /** Treatment DC by severity, when no explicit treatmentdc is authored. */
 export const SEVERITY_DCS = { minor: 10, moderate: 15, major: 20 };

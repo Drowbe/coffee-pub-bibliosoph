@@ -48,11 +48,23 @@
         </div>
     </div>
 
-    <div class="injury-page-notes-header">
-        <i class="fa-solid fa-scroll"></i> GM Notes
-    </div>
-    {{#unless hasNotes}}
-        <p class="injury-page-notes-empty">No notes yet — edit this page to add your own.</p>
-    {{/unless}}
+    {{#if system.gmnotes}}
+        <div class="injury-page-guidance">
+            <span class="injury-page-label"><i class="fa-solid fa-masks-theater"></i> Running This Injury</span>
+            <p>{{system.gmnotes}}</p>
+        </div>
+    {{/if}}
+
+    {{!-- Blacksmith's GM Notes: the GM's OWN notes on this page, nothing
+          of ours. Our guidance above is ordinary injury data. --}}
+    {{#if isGM}}
+        <section class="bibliosoph-gm-notes-host" data-gm-notes-host aria-label="GM Notes"></section>
+    {{/if}}
+
+    {{#if hasDetails}}
+        <div class="injury-page-notes-header">
+            <i class="fa-solid fa-scroll"></i> Extended Description
+        </div>
+    {{/if}}
     <hr class="injury-page-divider">
 </section>

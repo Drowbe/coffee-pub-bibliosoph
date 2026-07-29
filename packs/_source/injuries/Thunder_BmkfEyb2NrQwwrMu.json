@@ -20,6 +20,7 @@
         "duration": 300,
         "statuseffect": "deafened",
         "odds": 50,
+        "gmnotes": "Deafened for five minutes — enough to miss the plan and act on the wrong one. Stinger: \"Everyone else heard it. You watch them react and guess.\"",
         "treatmentdc": null
       },
       "title": {
@@ -68,6 +69,7 @@
         "duration": 600,
         "statuseffect": "deafened",
         "odds": 20,
+        "gmnotes": "Deafened for ten: coordinate nothing, hear no warnings. Stinger: \"The world has gone underwater and stayed there.\"",
         "treatmentdc": null
       },
       "title": {
@@ -116,6 +118,7 @@
         "duration": 300,
         "statuseffect": "deafened",
         "odds": 10,
+        "gmnotes": "Deafened, and the resonance makes them slow to react. Stinger: \"You feel the next one in your teeth before you hear it.\"",
         "treatmentdc": null
       },
       "title": {
@@ -164,6 +167,7 @@
         "duration": 300,
         "statuseffect": "deafened",
         "odds": 25,
+        "gmnotes": "Deafened with real injury behind it — this one wants treatment, not time. Stinger: \"There is warmth running out of your ear and you know what that means.\"",
         "treatmentdc": null
       },
       "title": {
@@ -212,6 +216,7 @@
         "duration": 3600,
         "statuseffect": "stunned",
         "odds": 8,
+        "gmnotes": "Stunned once, then let the muscles twitch through the next hour — no fine work, no steady aim. Stinger: \"Your hands have not stopped since. You have tried sitting on them.\"",
         "treatmentdc": null
       },
       "title": {
@@ -260,6 +265,7 @@
         "duration": 900,
         "statuseffect": "none",
         "odds": 75,
+        "gmnotes": "Flavour only: rule against concentration and delicate work for fifteen minutes. Stinger: \"Something under your skin is still fizzing quietly.\"",
         "treatmentdc": null
       },
       "title": {
@@ -308,6 +314,7 @@
         "duration": 0,
         "statuseffect": "blinded",
         "odds": 10,
+        "gmnotes": "Blinded and permanent until treated: the most severe thunder result, and it removes them from ranged combat entirely. Stinger: \"The flash is still there when you close your eyes. It has not faded once.\"",
         "treatmentdc": null
       },
       "title": {
@@ -356,6 +363,7 @@
         "duration": 240,
         "statuseffect": "none",
         "odds": 50,
+        "gmnotes": "No condition — every metal object and every handshake is a small event. Stinger: \"You reach for the door handle and think better of it.\"",
         "treatmentdc": null
       },
       "title": {
@@ -404,6 +412,7 @@
         "duration": 2700,
         "statuseffect": "deafened",
         "odds": 30,
+        "gmnotes": "Deafened for three quarters of an hour, with a headache to match — no plans, no lore, no torch-side. Stinger: \"The thunder stopped outside and kept going inside.\"",
         "treatmentdc": null
       },
       "title": {
@@ -452,6 +461,7 @@
         "duration": 600,
         "statuseffect": "none",
         "odds": 20,
+        "gmnotes": "No condition — play the ten minutes as jangled nerves and unsteady hands. Stinger: \"Your whole body is still humming with somebody else's energy.\"",
         "treatmentdc": null
       },
       "title": {
@@ -494,7 +504,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785261249458,
+    "modifiedTime": 1785270400067,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

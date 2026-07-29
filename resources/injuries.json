@@ -10,7 +10,8 @@
 		"damage": 2,
 		"duration": 180,
 		"statuseffect": "none",
-		"odds": 40
+		"odds": 40,
+		"gmnotes": "No condition, so charge it in concentration: a check to hold still, aim, or keep a spell going. Stinger: \"It stopped burning an hour ago. It has not stopped reminding you.\""
 	},
 	{
 		"category": "acid",
@@ -23,7 +24,8 @@
 		"damage": 7,
 		"duration": 480,
 		"statuseffect": "stunned",
-		"odds": 20
+		"odds": 20,
+		"gmnotes": "Stunned once, then let the etched skin be the story — it does not close cleanly and anyone examining it can tell. Stinger: \"The shape of the splash is still there, and it will be tomorrow.\""
 	},
 	{
 		"category": "acid",
@@ -36,7 +38,8 @@
 		"damage": 10,
 		"duration": 0,
 		"statuseffect": "prone",
-		"odds": 5
+		"odds": 5,
+		"gmnotes": "Permanent prone until treated is severe — rule that they can crawl and fight from the ground, not that they are helpless. Stinger: \"Every time you get your feet under you, something pops.\""
 	},
 	{
 		"category": "acid",
@@ -49,7 +52,8 @@
 		"damage": 6,
 		"duration": 300,
 		"statuseffect": "poisoned",
-		"odds": 10
+		"odds": 10,
+		"gmnotes": "Poisoned is disadvantage on attacks and checks; the harmless light show is pure comedy. Let stealth be impossible. Stinger: \"You are glowing faintly. Intermittently. Audibly.\""
 	},
 	{
 		"category": "acid",
@@ -62,7 +66,8 @@
 		"damage": 3,
 		"duration": 240,
 		"statuseffect": "none",
-		"odds": 40
+		"odds": 40,
+		"gmnotes": "Flavour only, so spend it on atmosphere — the sound follows them into quiet rooms and gives away hiding places. Stinger: \"Everyone else has stopped talking to listen to you.\""
 	},
 	{
 		"category": "acid",
@@ -75,7 +80,8 @@
 		"damage": 2,
 		"duration": 420,
 		"statuseffect": "poisoned",
-		"odds": 40
+		"odds": 40,
+		"gmnotes": "Poisoned covers the mechanical cost. Play the sensation: they keep checking whether skin is still where they left it. Stinger: \"It feels like it is running. You look. It is not.\""
 	},
 	{
 		"category": "acid",
@@ -88,7 +94,8 @@
 		"damage": 10,
 		"duration": 3600,
 		"statuseffect": "grappled",
-		"odds": 5
+		"odds": 5,
+		"gmnotes": "Grappled for an hour is a movement sentence, not a combat one — let them fight, not chase. Lean into the absurdity. Stinger: \"You crunch when you walk. Everything within earshot now knows where you are.\""
 	},
 	{
 		"category": "acid",
@@ -101,7 +108,8 @@
 		"damage": 4,
 		"duration": 300,
 		"statuseffect": "none",
-		"odds": 40
+		"odds": 40,
+		"gmnotes": "Nothing mechanical; make it a heat problem — armour is unbearable, cold water is a temptation, sleep is poor. Stinger: \"You are the warmest thing in the room and you can feel everyone noticing.\""
 	},
 	{
 		"category": "acid",
@@ -114,7 +122,8 @@
 		"damage": 12,
 		"duration": 0,
 		"statuseffect": "poisoned",
-		"odds": 5
+		"odds": 5,
+		"gmnotes": "Permanent and poisoned: a real problem that wants a real cure, and the violet skin makes social scenes hostile. Stinger: \"The colour has not faded. If anything, it has deepened.\""
 	},
 	{
 		"category": "acid",
@@ -127,7 +136,8 @@
 		"damage": 3,
 		"duration": 180,
 		"statuseffect": "none",
-		"odds": 15
+		"odds": 15,
+		"gmnotes": "Verbal spellcasting and any attempt at subtlety are the casualties. Ask for a check to say anything quietly. Stinger: \"You open your mouth to whisper and produce a chord.\""
 	},
 	{
 		"category": "acid",
@@ -140,7 +150,8 @@
 		"damage": 10,
 		"duration": 2700,
 		"statuseffect": "poisoned",
-		"odds": 10
+		"odds": 10,
+		"gmnotes": "Poisoned for the better part of an hour — treat it as a fever they are fighting through. Stinger: \"Your own blood feels like it is running hot enough to notice.\""
 	},
 	{
 		"category": "bludgeoning",
@@ -153,7 +164,8 @@
 		"damage": 4,
 		"duration": 300,
 		"statuseffect": "none",
-		"odds": 40
+		"odds": 40,
+		"gmnotes": "No condition, so make it a movement tax: difficult terrain, ladders, and anything requiring grace. Stinger: \"You move like someone doing an impression of yourself.\""
 	},
 	{
 		"category": "bludgeoning",
@@ -166,7 +178,8 @@
 		"damage": 10,
 		"duration": 0,
 		"statuseffect": "restrained",
-		"odds": 2
+		"odds": 2,
+		"gmnotes": "Permanent restrained until treated is dire — rule it as movement halved rather than immobile if that fits better, and say so. Stinger: \"You can hear yourself moving. From the inside.\""
 	},
 	{
 		"category": "bludgeoning",
@@ -179,7 +192,8 @@
 		"damage": 7,
 		"duration": 120,
 		"statuseffect": "frightened",
-		"odds": 35
+		"odds": 35,
+		"gmnotes": "Frightened is unusually apt here: the fear is of trying. Aim it at social scenes rather than combat. Stinger: \"You know exactly what to say. You also know exactly how it will land.\""
 	},
 	{
 		"category": "bludgeoning",
@@ -192,7 +206,8 @@
 		"damage": 6,
 		"duration": 420,
 		"statuseffect": "stunned",
-		"odds": 20
+		"odds": 20,
+		"gmnotes": "Stunned once, then play the concussive noise — they mishear one instruction and act on it. Stinger: \"Somebody said go. You are fairly sure somebody said go.\""
 	},
 	{
 		"category": "bludgeoning",
@@ -205,7 +220,8 @@
 		"damage": 11,
 		"duration": 0,
 		"statuseffect": "stunned",
-		"odds": 10
+		"odds": 10,
+		"gmnotes": "Stunned once, then let the concussion linger as fiction: slow answers, repeated questions, light hurts. Do not stack more penalties. Stinger: \"Everyone is speaking normally. You are certain they are not.\""
 	},
 	{
 		"category": "bludgeoning",
@@ -218,7 +234,8 @@
 		"damage": 7,
 		"duration": 600,
 		"statuseffect": "none",
-		"odds": 8
+		"odds": 8,
+		"gmnotes": "Rule the AC loss explicitly (−1 is fair) and let them keep the dent as a badge. Stinger: \"It saved your life and it will never sit right again.\""
 	},
 	{
 		"category": "bludgeoning",
@@ -231,7 +248,8 @@
 		"damage": 4,
 		"duration": 450,
 		"statuseffect": "restrained",
-		"odds": 10
+		"odds": 10,
+		"gmnotes": "The hand is the point: no two-handed weapons, no shield, disadvantage on anything needing grip. Stinger: \"You can make a fist. You just cannot make it twice.\""
 	},
 	{
 		"category": "bludgeoning",
@@ -244,7 +262,8 @@
 		"damage": 5,
 		"duration": 360,
 		"statuseffect": "stunned",
-		"odds": 20
+		"odds": 20,
+		"gmnotes": "Stunned once; afterwards let every new hit land on somewhere already hurt. Stinger: \"There is nowhere left on you that is not already sore.\""
 	},
 	{
 		"category": "bludgeoning",
@@ -257,7 +276,8 @@
 		"damage": 4,
 		"duration": 300,
 		"statuseffect": "none",
-		"odds": 40
+		"odds": 40,
+		"gmnotes": "Cosmetic and cumulative — a good one to reference in later scenes as the party's shared history. Stinger: \"You are running out of skin that is still the right colour.\""
 	},
 	{
 		"category": "bludgeoning",
@@ -270,7 +290,8 @@
 		"damage": 3,
 		"duration": 600,
 		"statuseffect": "deafened",
-		"odds": 15
+		"odds": 15,
+		"gmnotes": "Deafened plus balance — combine with difficult terrain or heights for real jeopardy. Stinger: \"The room tilts a little every time you turn your head.\""
 	},
 	{
 		"category": "bludgeoning",
@@ -283,7 +304,8 @@
 		"damage": 2,
 		"duration": 300,
 		"statuseffect": "prone",
-		"odds": 12
+		"odds": 12,
+		"gmnotes": "Prone is the cost; play the lean for comedy between fights. Stinger: \"You have been listing to the left for an hour and nobody has told you.\""
 	},
 	{
 		"category": "bludgeoning",
@@ -296,7 +318,8 @@
 		"damage": 6,
 		"duration": 450,
 		"statuseffect": "prone",
-		"odds": 5
+		"odds": 5,
+		"gmnotes": "Prone plus a walking sway — good for a chase or a rooftop, harmless on flat ground. Stinger: \"Your legs are no longer having the same conversation.\""
 	},
 	{
 		"category": "bludgeoning",
@@ -309,7 +332,8 @@
 		"damage": 5,
 		"duration": 120,
 		"statuseffect": "prone",
-		"odds": 20
+		"odds": 20,
+		"gmnotes": "Prone repeatedly — the slapstick is the point, so let them fall at the funniest available moment. Stinger: \"Up, then down. Up, then down. The floor is winning.\""
 	},
 	{
 		"category": "bludgeoning",
@@ -322,7 +346,8 @@
 		"damage": 3,
 		"duration": 60,
 		"statuseffect": "none",
-		"odds": 25
+		"odds": 25,
+		"gmnotes": "One minute of slapstick. Ask for a check on any move that needs a straight line. Stinger: \"You aimed for the door. You are near the door.\""
 	},
 	{
 		"category": "cold",
@@ -335,7 +360,8 @@
 		"damage": 12,
 		"duration": 0,
 		"statuseffect": "paralyzed",
-		"odds": 10
+		"odds": 10,
+		"gmnotes": "Paralyzed and permanent until treated — this removes a player from the fight entirely, so make the rescue the scene. Stinger: \"You are awake. That is the only part of you that still is.\""
 	},
 	{
 		"category": "cold",
@@ -348,7 +374,8 @@
 		"damage": 2,
 		"duration": 240,
 		"statuseffect": "none",
-		"odds": 40
+		"odds": 40,
+		"gmnotes": "No condition: rule fine motor work instead — lockpicking, components, knots. Stinger: \"You touch the blade and feel nothing at all. That is the frightening part.\""
 	},
 	{
 		"category": "cold",
@@ -361,7 +388,8 @@
 		"damage": 7,
 		"duration": 180,
 		"statuseffect": "restrained",
-		"odds": 15
+		"odds": 15,
+		"gmnotes": "Restrained is a heavy read for numb hands; if it suits your table, rule dropped items on a failed check instead. Say which before they roll. Stinger: \"Your grip lets go a half-second before you tell it to.\""
 	},
 	{
 		"category": "cold",
@@ -374,7 +402,8 @@
 		"damage": 3,
 		"duration": 300,
 		"statuseffect": "prone",
-		"odds": 40
+		"odds": 40,
+		"gmnotes": "Prone and blue fingers — the fumbling is the flavour, the falling is the cost. Stinger: \"They have gone a colour that hands should not be.\""
 	},
 	{
 		"category": "cold",
@@ -387,7 +416,8 @@
 		"damage": 7,
 		"duration": 600,
 		"statuseffect": "exhaustion",
-		"odds": 20
+		"odds": 20,
+		"gmnotes": "Exhaustion 1 with a cold flavour: they cannot get warm, and rest is poor until treated. Stinger: \"The shivering stopped an hour ago. That is worse.\""
 	},
 	{
 		"category": "cold",
@@ -400,7 +430,8 @@
 		"damage": 3,
 		"duration": 120,
 		"statuseffect": "none",
-		"odds": 30
+		"odds": 30,
+		"gmnotes": "Pure brain freeze with no condition: rule it as no concentration and no complex plans for two minutes. Stinger: \"You had it. You had the whole plan. It is gone.\""
 	},
 	{
 		"category": "cold",
@@ -413,7 +444,8 @@
 		"damage": 11,
 		"duration": 0,
 		"statuseffect": "charmed",
-		"odds": 10
+		"odds": 10,
+		"gmnotes": "Charmed and permanent — play it as emotional flatness rather than mind control, and let allies notice. Stinger: \"Someone you love is speaking to you and you are simply waiting for them to finish.\""
 	},
 	{
 		"category": "cold",
@@ -426,7 +458,8 @@
 		"damage": 3,
 		"duration": 300,
 		"statuseffect": "exhaustion",
-		"odds": 50
+		"odds": 50,
+		"gmnotes": "Exhaustion 1: disadvantage on checks, and the chill makes rest poor. Stinger: \"The cold got in and made itself comfortable.\""
 	},
 	{
 		"category": "cold",
@@ -439,7 +472,8 @@
 		"damage": 2,
 		"duration": 90,
 		"statuseffect": "prone",
-		"odds": 25
+		"odds": 25,
+		"gmnotes": "Prone, briefly — perfect for ice, stairs, or a ship deck. Stinger: \"Your feet arrive somewhere your body did not agree to.\""
 	},
 	{
 		"category": "fire",
@@ -452,7 +486,8 @@
 		"damage": 3,
 		"duration": 600,
 		"statuseffect": "none",
-		"odds": 50
+		"odds": 50,
+		"gmnotes": "No condition: rule grip instead — dropped weapons on a failed check, no climbing, no rope. Stinger: \"You close your hand and feel every one of them let go.\""
 	},
 	{
 		"category": "fire",
@@ -465,7 +500,8 @@
 		"damage": 10,
 		"duration": 0,
 		"statuseffect": "none",
-		"odds": 8
+		"odds": 8,
+		"gmnotes": "Permanent until treated, and the numbness is the tell — deep burns do not hurt at the centre. Anyone with Medicine should read that as serious. Stinger: \"You press it and feel nothing. You press around it and nearly fall over.\""
 	},
 	{
 		"category": "fire",
@@ -478,7 +514,8 @@
 		"damage": 2,
 		"duration": 60,
 		"statuseffect": "burning",
-		"odds": 10
+		"odds": 10,
+		"gmnotes": "Burning deals ongoing damage — real teeth for a minor, so keep the duration short and let them stamp it out. Stinger: \"Stopping does not help. Stopping is worse.\""
 	},
 	{
 		"category": "fire",
@@ -491,7 +528,8 @@
 		"damage": 6,
 		"duration": 300,
 		"statuseffect": "charmed",
-		"odds": 15
+		"odds": 15,
+		"gmnotes": "Charmed by a bird is a gift to roleplay: they will defend it, feed it, and argue for it. Stinger: \"It looks at you. You have never felt so understood.\""
 	},
 	{
 		"category": "fire",
@@ -504,7 +542,8 @@
 		"damage": 2,
 		"duration": 600,
 		"statuseffect": "charmed",
-		"odds": 10
+		"odds": 10,
+		"gmnotes": "Charmed is a strange fit mechanically, so play the fingers: fumbles on fine work, dropped components, failed sleight of hand. Stinger: \"Your hands answer about half a second late, and not always with what you asked for.\""
 	},
 	{
 		"category": "fire",
@@ -517,7 +556,8 @@
 		"damage": 7,
 		"duration": 120,
 		"statuseffect": "exhaustion",
-		"odds": 5
+		"odds": 5,
+		"gmnotes": "Exhaustion 1, and sitting is out of the question — good for a long ride or a formal dinner. Stinger: \"You will be standing for this conversation, thank you.\""
 	},
 	{
 		"category": "fire",
@@ -530,7 +570,8 @@
 		"damage": 2,
 		"duration": 600,
 		"statuseffect": "charmed",
-		"odds": 20
+		"odds": 20,
+		"gmnotes": "Cosmetic and charmed: the vanity is the mechanic. Let NPCs comment. Stinger: \"It will grow back. Most of it. Probably.\""
 	},
 	{
 		"category": "fire",
@@ -543,7 +584,8 @@
 		"damage": 6,
 		"duration": 1800,
 		"statuseffect": "blinded",
-		"odds": 15
+		"odds": 15,
+		"gmnotes": "Blinded for half an hour is severe — consider ruling it as watering eyes with disadvantage on sight checks instead. Stinger: \"The smell of your own boots is making your eyes stream.\""
 	},
 	{
 		"category": "fire",
@@ -556,7 +598,8 @@
 		"damage": 6,
 		"duration": 2700,
 		"statuseffect": "none",
-		"odds": 25
+		"odds": 25,
+		"gmnotes": "Verbal spellcasting and shouting are the pressure points. Ask for a check to speak a full sentence under exertion. Stinger: \"Your own voice comes back a stranger's — lower, and shorter of road.\""
 	},
 	{
 		"category": "force",
@@ -569,7 +612,8 @@
 		"damage": 3,
 		"duration": 90,
 		"statuseffect": "deafened",
-		"odds": 20
+		"odds": 20,
+		"gmnotes": "Deafened is a strange fit; play the distraction — concentration checks and nothing else. Stinger: \"Something taps your nose. There is nothing there.\""
 	},
 	{
 		"category": "force",
@@ -582,7 +626,8 @@
 		"damage": 6,
 		"duration": 1800,
 		"statuseffect": "none",
-		"odds": 25
+		"odds": 25,
+		"gmnotes": "Nothing mechanical, so charge deep breaths: shouting, swimming, running, verbal spells. Stinger: \"Your ribs ache in a circle, like something very large hugged you once.\""
 	},
 	{
 		"category": "force",
@@ -595,7 +640,8 @@
 		"damage": 2,
 		"duration": 300,
 		"statuseffect": "none",
-		"odds": 55
+		"odds": 55,
+		"gmnotes": "Flavour only — spend it on concentration checks and missed quiet sounds. Stinger: \"Nothing touched you. Everything still rang.\""
 	},
 	{
 		"category": "force",
@@ -608,7 +654,8 @@
 		"damage": 7,
 		"duration": 60,
 		"statuseffect": "stunned",
-		"odds": 10
+		"odds": 10,
+		"gmnotes": "Stunned once, then let the limbs be a running joke that ruins one careful action. Stinger: \"Your arm has plans and it did not share them.\""
 	},
 	{
 		"category": "force",
@@ -621,7 +668,8 @@
 		"damage": 11,
 		"duration": 1800,
 		"statuseffect": "poisoned",
-		"odds": 5
+		"odds": 5,
+		"gmnotes": "Poisoned covers the mechanics; the fun is in describing rooms wrongly. Ask for checks on ledges and ladders. Stinger: \"Down is somewhere over there now. It will move again shortly.\""
 	},
 	{
 		"category": "force",
@@ -634,7 +682,8 @@
 		"damage": 5,
 		"duration": 2400,
 		"statuseffect": "none",
-		"odds": 20
+		"odds": 20,
+		"gmnotes": "No condition; rule against turning quickly — flanking and rear attacks get easier on them. Stinger: \"Looking behind you is now a decision, not a reflex.\""
 	},
 	{
 		"category": "force",
@@ -647,7 +696,8 @@
 		"damage": 3,
 		"duration": 420,
 		"statuseffect": "prone",
-		"odds": 45
+		"odds": 45,
+		"gmnotes": "Prone and displaced. Good on a ledge, a bridge, or beside anything they would rather not fall into. Stinger: \"You are standing somewhere you did not choose.\""
 	},
 	{
 		"category": "force",
@@ -660,7 +710,8 @@
 		"damage": 2,
 		"duration": 120,
 		"statuseffect": "prone",
-		"odds": 15
+		"odds": 15,
+		"gmnotes": "Prone from dropped items and flailing — target anything they try to carry carefully. Stinger: \"You drop it. Nothing touched you, and you drop it.\""
 	},
 	{
 		"category": "general",
@@ -673,7 +724,8 @@
 		"damage": 4,
 		"duration": 360,
 		"statuseffect": "grappled",
-		"odds": 40
+		"odds": 40,
+		"gmnotes": "Grappled by clutter: rule that objects cling, so stealth and fine work suffer. Stinger: \"The cutlery on the next table is leaning towards you.\""
 	},
 	{
 		"category": "general",
@@ -686,7 +738,8 @@
 		"damage": 5,
 		"duration": 2400,
 		"statuseffect": "none",
-		"odds": 40
+		"odds": 40,
+		"gmnotes": "Nothing mechanical, so charge it in positioning — they favour one side, they cannot carry on that shoulder, they flinch from a shove. Stinger: \"The colour of it has gotten worse since you last looked.\""
 	},
 	{
 		"category": "general",
@@ -699,7 +752,8 @@
 		"damage": 9,
 		"duration": 7200,
 		"statuseffect": "stunned",
-		"odds": 12
+		"odds": 12,
+		"gmnotes": "Stunned is turn-ending; use it once and let the aftermath carry the scene. Afterwards, have them ask a question they already asked. Stinger: \"You know these people. Give it a second. You know these people.\""
 	},
 	{
 		"category": "general",
@@ -712,7 +766,8 @@
 		"damage": 6,
 		"duration": 3600,
 		"statuseffect": "none",
-		"odds": 35
+		"odds": 35,
+		"gmnotes": "No condition, so make it situational: a check to do anything requiring a deep breath — shouting, swimming, holding a note, laughing. Stinger: \"Something in your chest clicks when you breathe in. Only when you breathe in.\""
 	},
 	{
 		"category": "general",
@@ -725,7 +780,8 @@
 		"damage": 6,
 		"duration": 480,
 		"statuseffect": "charmed",
-		"odds": 20
+		"odds": 20,
+		"gmnotes": "Charmed by vertigo — play it as being unable to trust their own footing or judgement. Stinger: \"The room finishes turning a moment after you do.\""
 	},
 	{
 		"category": "general",
@@ -738,7 +794,8 @@
 		"damage": 2,
 		"duration": 600,
 		"statuseffect": "none",
-		"odds": 70
+		"odds": 70,
+		"gmnotes": "No mechanical teeth, so let it cost time rather than actions: they are slow to stand, slow to mount, last out of the room. Lean on it during downtime scenes rather than combat. Stinger: \"You get up. It takes you a moment longer than it used to.\""
 	},
 	{
 		"category": "general",
@@ -751,7 +808,8 @@
 		"damage": 5,
 		"duration": 1800,
 		"statuseffect": "deafened",
-		"odds": 30
+		"odds": 30,
+		"gmnotes": "Deafened means no hearing-based Perception and trouble with any spoken command or verbal plan. Play it socially: have them mishear an order at the worst moment. Stinger: \"Someone is shouting your name. You can tell that much.\""
 	},
 	{
 		"category": "general",
@@ -764,7 +822,8 @@
 		"damage": 1,
 		"duration": 420,
 		"statuseffect": "none",
-		"odds": 65
+		"odds": 65,
+		"gmnotes": "Pure flavour, and the fun is in the roleplay tax: verbal spellcasting, negotiation, and anything requiring dignity. Stinger: \"You taste copper every time you open your mouth to speak.\""
 	},
 	{
 		"category": "general",
@@ -777,7 +836,8 @@
 		"damage": 11,
 		"duration": 0,
 		"statuseffect": "unconscious",
-		"odds": 4
+		"odds": 4,
+		"gmnotes": "Unconscious and permanent until treated — this is a scene-ender, not a combat modifier. Make the table decide who stops fighting to reach them. Stinger: \"You hear your name from very far away, and then not.\""
 	},
 	{
 		"category": "general",
@@ -790,7 +850,8 @@
 		"damage": 2,
 		"duration": 300,
 		"statuseffect": "exhaustion",
-		"odds": 60
+		"odds": 60,
+		"gmnotes": "Exhaustion 1 is disadvantage on ability checks — quietly brutal for a skill scene. Have them unable to speak and move in the same breath. Stinger: \"You have the air for running or for talking. Choose.\""
 	},
 	{
 		"category": "general",
@@ -803,7 +864,8 @@
 		"damage": 3,
 		"duration": 480,
 		"statuseffect": "prone",
-		"odds": 55
+		"odds": 55,
+		"gmnotes": "Prone is the whole cost — standing eats half their movement, and that is enough. Consider asking for a check if they try to sprint, jump, or take stairs at speed. Stinger: \"Your knee holds. Then it doesn't.\""
 	},
 	{
 		"category": "general",
@@ -816,7 +878,8 @@
 		"damage": 7,
 		"duration": 2700,
 		"statuseffect": "none",
-		"odds": 25
+		"odds": 25,
+		"gmnotes": "Rule on grip: dropping a weapon on a hard hit, disadvantage to climb or hold a rope. Stinger: \"Everything above your waist has an opinion about that.\""
 	},
 	{
 		"category": "lightning",
@@ -829,7 +892,8 @@
 		"damage": 2,
 		"duration": 300,
 		"statuseffect": "none",
-		"odds": 20
+		"odds": 20,
+		"gmnotes": "Cosmetic and crackling: no stealth, and metal is a hazard. Stinger: \"You keep shocking people who try to shake your hand.\""
 	},
 	{
 		"category": "lightning",
@@ -842,7 +906,8 @@
 		"damage": 6,
 		"duration": 120,
 		"statuseffect": "none",
-		"odds": 5
+		"odds": 5,
+		"gmnotes": "Two minutes of static — comedy, plus advantage for anyone trying to spot them. Stinger: \"You can hear yourself crackling in the quiet.\""
 	},
 	{
 		"category": "lightning",
@@ -855,7 +920,8 @@
 		"damage": 11,
 		"duration": 3600,
 		"statuseffect": "unconscious",
-		"odds": 10
+		"odds": 10,
+		"gmnotes": "Unconscious for an hour is a scene-remover. Make reaching them the encounter. Stinger: \"You are still ringing, somewhere far below hearing.\""
 	},
 	{
 		"category": "lightning",
@@ -868,7 +934,8 @@
 		"damage": 10,
 		"duration": 0,
 		"statuseffect": "stunned",
-		"odds": 3
+		"odds": 3,
+		"gmnotes": "Permanent and stunned — this is a curse, not a wound, and it should worry the whole party in a storm. Stinger: \"The air over you has started to feel interested.\""
 	},
 	{
 		"category": "lightning",
@@ -881,7 +948,8 @@
 		"damage": 7,
 		"duration": 900,
 		"statuseffect": "stunned",
-		"odds": 15
+		"odds": 15,
+		"gmnotes": "Stunned once, then leave the tingle as flavour. Stinger: \"Your fingers have not stopped buzzing and you have started to like it.\""
 	},
 	{
 		"category": "lightning",
@@ -894,7 +962,8 @@
 		"damage": 2,
 		"duration": 240,
 		"statuseffect": "deafened",
-		"odds": 15
+		"odds": 15,
+		"gmnotes": "Deafened: no hearing-based Perception, and whispered plans do not reach them. Stinger: \"Under everything, a note you cannot make stop.\""
 	},
 	{
 		"category": "lightning",
@@ -907,7 +976,8 @@
 		"damage": 3,
 		"duration": 180,
 		"statuseffect": "none",
-		"odds": 10
+		"odds": 10,
+		"gmnotes": "No condition — rule dropped metal or fumbled components on a failed check. Stinger: \"Everything metal has opinions about you now.\""
 	},
 	{
 		"category": "lightning",
@@ -920,7 +990,8 @@
 		"damage": 3,
 		"duration": 600,
 		"statuseffect": "none",
-		"odds": 25
+		"odds": 25,
+		"gmnotes": "No condition, deliberately: this is a comic buff-that-is-not. Let them act impulsively and pay for it socially. Stinger: \"You feel fantastic. That should worry you.\""
 	},
 	{
 		"category": "necrotic",
@@ -933,7 +1004,8 @@
 		"damage": 6,
 		"duration": 5400,
 		"statuseffect": "exhaustion",
-		"odds": 10
+		"odds": 10,
+		"gmnotes": "Exhaustion 1 with a ninety-minute clock, and the laughter is the point. Repeat it, quietly, at bad moments. Stinger: \"Somebody found that funny. Not you.\""
 	},
 	{
 		"category": "necrotic",
@@ -946,7 +1018,8 @@
 		"damage": 8,
 		"duration": 180,
 		"statuseffect": "diseased",
-		"odds": 15
+		"odds": 15,
+		"gmnotes": "Diseased and visible rot — this should frighten the party into acting. Rule the limb weak, not useless. Stinger: \"The smell arrives before you do.\""
 	},
 	{
 		"category": "necrotic",
@@ -959,7 +1032,8 @@
 		"damage": 2,
 		"duration": 300,
 		"statuseffect": "none",
-		"odds": 50
+		"odds": 50,
+		"gmnotes": "The tissue is dying, not merely cold — that is why it is necrotic. Ruling it as lost feeling in the hand is fair and scary. Stinger: \"The colour is wrong, and it is not coming back on its own.\""
 	},
 	{
 		"category": "necrotic",
@@ -972,7 +1046,8 @@
 		"damage": 3,
 		"duration": 900,
 		"statuseffect": "none",
-		"odds": 15
+		"odds": 15,
+		"gmnotes": "Flavour only: play it as low spirits and heavy limbs, good for a bleak travel scene. Stinger: \"Nothing hurts. Nothing much interests you either.\""
 	},
 	{
 		"category": "necrotic",
@@ -985,7 +1060,8 @@
 		"damage": 2,
 		"duration": 900,
 		"statuseffect": "none",
-		"odds": 20
+		"odds": 20,
+		"gmnotes": "Harmless, loud, and terrible for hiding. Stinger: \"It echoes. In a tomb, everything echoes.\""
 	},
 	{
 		"category": "necrotic",
@@ -998,7 +1074,8 @@
 		"damage": 11,
 		"duration": 0,
 		"statuseffect": "exhaustion",
-		"odds": 5
+		"odds": 5,
+		"gmnotes": "Permanent until treated, and the point is dread rather than numbers. Have the character forget something small and true about themselves. Stinger: \"There was a name you used to say when you were frightened. It is not there now.\""
 	},
 	{
 		"category": "necrotic",
@@ -1011,7 +1088,8 @@
 		"damage": 10,
 		"duration": 7200,
 		"statuseffect": "poisoned",
-		"odds": 5
+		"odds": 5,
+		"gmnotes": "Poisoned for two hours and genuinely dark — this is the one that should make the party consider retreating. Stinger: \"Something took a piece and did not eat it.\""
 	},
 	{
 		"category": "necrotic",
@@ -1024,7 +1102,8 @@
 		"damage": 3,
 		"duration": 240,
 		"statuseffect": "exhaustion",
-		"odds": 30
+		"odds": 30,
+		"gmnotes": "Exhaustion 1 — the life-drain classic. Let rest fail to fix it until treated. Stinger: \"You slept eight hours and woke up owing more.\""
 	},
 	{
 		"category": "piercing",
@@ -1037,7 +1116,8 @@
 		"damage": 2,
 		"duration": 1800,
 		"statuseffect": "poisoned",
-		"odds": 60
+		"odds": 60,
+		"gmnotes": "A clean hole that closes badly. Worth a complication later — infection, stiffness the next morning — rather than a combat penalty now. Stinger: \"It is a small wound. It goes a very long way in.\""
 	},
 	{
 		"category": "piercing",
@@ -1050,7 +1130,8 @@
 		"damage": 10,
 		"duration": 0,
 		"statuseffect": "exhaustion",
-		"odds": 12
+		"odds": 12,
+		"gmnotes": "Exhaustion 1 and permanent until treated — a dragon-scale souvenir lodged in them. Removing it should cost something. Stinger: \"It is still warm. It has been days and it is still warm.\""
 	},
 	{
 		"category": "piercing",
@@ -1063,7 +1144,8 @@
 		"damage": 8,
 		"duration": 480,
 		"statuseffect": "none",
-		"odds": 20
+		"odds": 20,
+		"gmnotes": "Rule the limb unusable rather than reaching for a condition: no two-handed weapons, no climbing, no shield. Stinger: \"Whatever went through is still in there, and it moves when you do.\""
 	},
 	{
 		"category": "piercing",
@@ -1076,7 +1158,8 @@
 		"damage": 10,
 		"duration": 0,
 		"statuseffect": "restrained",
-		"odds": 20
+		"odds": 20,
+		"gmnotes": "Restrained and permanent until treated: they are pinned or carrying the object. Removing it is its own scene. Stinger: \"Nobody wants to be the one to pull it out.\""
 	},
 	{
 		"category": "piercing",
@@ -1089,7 +1172,8 @@
 		"damage": 7,
 		"duration": 429,
 		"statuseffect": "none",
-		"odds": 20
+		"odds": 20,
+		"gmnotes": "No condition, so rule the depth: heavy exertion reopens it. Stinger: \"It has stopped bleeding. You would not bet on that lasting.\""
 	},
 	{
 		"category": "piercing",
@@ -1102,7 +1186,8 @@
 		"damage": 4,
 		"duration": 240,
 		"statuseffect": "none",
-		"odds": 40
+		"odds": 40,
+		"gmnotes": "Small, clean, and mostly narrative. Good for a complication later rather than now. Stinger: \"A neat little hole. Neat little holes are how infections start.\""
 	},
 	{
 		"category": "piercing",
@@ -1115,7 +1200,8 @@
 		"damage": 3,
 		"duration": 600,
 		"statuseffect": "poisoned",
-		"odds": 50
+		"odds": 50,
+		"gmnotes": "Poisoned covers it; the hundred-needles image is worth repeating whenever they move fast. Stinger: \"It comes in waves, and the waves are getting closer together.\""
 	},
 	{
 		"category": "piercing",
@@ -1128,7 +1214,8 @@
 		"damage": 3,
 		"duration": 900,
 		"statuseffect": "deafened",
-		"odds": 50
+		"odds": 50,
+		"gmnotes": "Deafened is an odd fit — play the absurdity straight and let it be the party's favourite story. Stinger: \"You are bleeding cherry syrup. It even smells right.\""
 	},
 	{
 		"category": "piercing",
@@ -1141,7 +1228,8 @@
 		"damage": 6,
 		"duration": 7200,
 		"statuseffect": "prone",
-		"odds": 30
+		"odds": 30,
+		"gmnotes": "Prone for two hours: they cannot stay upright long. Make them choose between fighting and standing. Stinger: \"You can straighten up. You will not enjoy it and you will not stay there.\""
 	},
 	{
 		"category": "piercing",
@@ -1154,7 +1242,8 @@
 		"damage": 6,
 		"duration": 360,
 		"statuseffect": "none",
-		"odds": 20
+		"odds": 20,
+		"gmnotes": "No condition, so rule the cavity: it reopens under exertion and stitching is a scene. Stinger: \"It is deeper than it looks, and it looks bad.\""
 	},
 	{
 		"category": "piercing",
@@ -1167,7 +1256,8 @@
 		"damage": 4,
 		"duration": 300,
 		"statuseffect": "exhaustion",
-		"odds": 40
+		"odds": 40,
+		"gmnotes": "Exhaustion 1 from a wound that will not let them rest. Stinger: \"It pulses. You have started counting along with it.\""
 	},
 	{
 		"category": "piercing",
@@ -1180,7 +1270,8 @@
 		"damage": 2,
 		"duration": 900,
 		"statuseffect": "none",
-		"odds": 50
+		"odds": 50,
+		"gmnotes": "Minor and naggy — perfect for a check to sleep, ride, or wear armour. Stinger: \"You have found it with your fingers three times now and it is still there.\""
 	},
 	{
 		"category": "piercing",
@@ -1193,7 +1284,8 @@
 		"damage": 7,
 		"duration": 7200,
 		"statuseffect": "prone",
-		"odds": 40
+		"odds": 40,
+		"gmnotes": "Prone for two hours, and the stretched-arm absurdity is the whole joke. Let them try to use it. Stinger: \"It goes further than it used to. That is not a good thing.\""
 	},
 	{
 		"category": "poison",
@@ -1206,7 +1298,8 @@
 		"damage": 12,
 		"duration": 0,
 		"statuseffect": "poisoned",
-		"odds": 1
+		"odds": 1,
+		"gmnotes": "Permanent and poisoned — the colour-shifting makes disguise and diplomacy hard until cured. Stinger: \"You have gone a shade nobody has a name for.\""
 	},
 	{
 		"category": "poison",
@@ -1219,7 +1312,8 @@
 		"damage": 7,
 		"duration": 2400,
 		"statuseffect": "none",
-		"odds": 5
+		"odds": 5,
+		"gmnotes": "No condition; play the itch — disadvantage on anything needing stillness. Stinger: \"They are not healing. It has been days.\""
 	},
 	{
 		"category": "poison",
@@ -1232,7 +1326,8 @@
 		"damage": 11,
 		"duration": 3600,
 		"statuseffect": "charmed",
-		"odds": 20
+		"odds": 20,
+		"gmnotes": "Verbal components and any social scene are where this bites. Let a botched sentence cost them a negotiation rather than hit points. Stinger: \"You meant to say her name. Something else came out.\""
 	},
 	{
 		"category": "poison",
@@ -1245,7 +1340,8 @@
 		"damage": 2,
 		"duration": 180,
 		"statuseffect": "blinded",
-		"odds": 50
+		"odds": 50,
+		"gmnotes": "Blinded for three minutes, triggered by sneezing — a gift for ruining stealth at the worst moment. Stinger: \"You feel it building. There is nothing you can do about it.\""
 	},
 	{
 		"category": "poison",
@@ -1258,7 +1354,8 @@
 		"damage": 2,
 		"duration": 900,
 		"statuseffect": "none",
-		"odds": 5
+		"odds": 5,
+		"gmnotes": "Comedy with a boot problem: rule against long marches. Stinger: \"Something is growing down there and it is doing well.\""
 	},
 	{
 		"category": "poison",
@@ -1271,7 +1368,8 @@
 		"damage": 3,
 		"duration": 120,
 		"statuseffect": "none",
-		"odds": 40
+		"odds": 40,
+		"gmnotes": "Two minutes of nonsense — spend it during a tense moment for maximum damage. Stinger: \"Your foot has started keeping time. To what, nobody knows.\""
 	},
 	{
 		"category": "poison",
@@ -1284,7 +1382,8 @@
 		"damage": 4,
 		"duration": 900,
 		"statuseffect": "poisoned",
-		"odds": 30
+		"odds": 30,
+		"gmnotes": "Poisoned, and each hiccup is a small hazard for whoever is standing close. Stinger: \"Everyone has quietly taken a step back.\""
 	},
 	{
 		"category": "poison",
@@ -1297,7 +1396,8 @@
 		"damage": 7,
 		"duration": 300,
 		"statuseffect": "poisoned",
-		"odds": 30
+		"odds": 30,
+		"gmnotes": "Poisoned plus hallucination — describe rooms as crawling and let them doubt what they saw. Stinger: \"The wall is moving. You are almost certain the wall is not moving.\""
 	},
 	{
 		"category": "psychic",
@@ -1310,7 +1410,8 @@
 		"damage": 3,
 		"duration": 180,
 		"statuseffect": "none",
-		"odds": 50
+		"odds": 50,
+		"gmnotes": "Flavour only: rule no concentration for three minutes. Stinger: \"Your thoughts arrive out of order and slightly damp.\""
 	},
 	{
 		"category": "psychic",
@@ -1323,7 +1424,8 @@
 		"damage": 7,
 		"duration": 240,
 		"statuseffect": "none",
-		"odds": 25
+		"odds": 25,
+		"gmnotes": "No condition — memory is the cost. Have them forget something small and recent. Stinger: \"You were about to say something important. It was right there.\""
 	},
 	{
 		"category": "psychic",
@@ -1336,7 +1438,8 @@
 		"damage": 10,
 		"duration": 0,
 		"statuseffect": "stunned",
-		"odds": 10
+		"odds": 10,
+		"gmnotes": "Stunned once, then play the migraine: light, noise, and concentration all cost something. Good candidate for losing spell concentration on the next hit. Stinger: \"Thinking about it makes it worse. So does not thinking about it.\""
 	},
 	{
 		"category": "psychic",
@@ -1349,7 +1452,8 @@
 		"damage": 2,
 		"duration": 120,
 		"statuseffect": "none",
-		"odds": 70
+		"odds": 70,
+		"gmnotes": "Two minutes of sharp pain: no planning, no lore recall. Stinger: \"Thinking hurts, so you stop, and then it hurts anyway.\""
 	},
 	{
 		"category": "psychic",
@@ -1362,7 +1466,8 @@
 		"damage": 3,
 		"duration": 120,
 		"statuseffect": "none",
-		"odds": 20
+		"odds": 20,
+		"gmnotes": "Light and noise are unbearable — deny them torch-side or the front rank. Stinger: \"Someone lights a lamp and you feel it behind your eyes.\""
 	},
 	{
 		"category": "psychic",
@@ -1375,7 +1480,8 @@
 		"damage": 3,
 		"duration": 180,
 		"statuseffect": "none",
-		"odds": 50
+		"odds": 50,
+		"gmnotes": "Three minutes of scrambled thinking; let them mishear an instruction with consequences. Stinger: \"Everything you know is still there. It is just not in order.\""
 	},
 	{
 		"category": "psychic",
@@ -1388,7 +1494,8 @@
 		"damage": 2,
 		"duration": 90,
 		"statuseffect": "none",
-		"odds": 20
+		"odds": 20,
+		"gmnotes": "Ninety seconds of distance from their own mind — good for a creepy beat, not a fight. Stinger: \"Your thoughts sound like someone else saying them in the next room.\""
 	},
 	{
 		"category": "psychic",
@@ -1401,7 +1508,8 @@
 		"damage": 7,
 		"duration": 240,
 		"statuseffect": "none",
-		"odds": 25
+		"odds": 25,
+		"gmnotes": "Sharp pain behind the eyes: rule against concentration and reading. Stinger: \"Every time you focus on something, it pushes back.\""
 	},
 	{
 		"category": "psychic",
@@ -1414,7 +1522,8 @@
 		"damage": 10,
 		"duration": 0,
 		"statuseffect": "stunned",
-		"odds": 15
+		"odds": 15,
+		"gmnotes": "Stunned and permanent until treated — the most serious psychic result. Play it as a mind that needs rebuilding. Stinger: \"The lights are on. Nobody has come to the door in a while.\""
 	},
 	{
 		"category": "psychic",
@@ -1427,7 +1536,8 @@
 		"damage": 2,
 		"duration": 120,
 		"statuseffect": "none",
-		"odds": 50
+		"odds": 50,
+		"gmnotes": "Two minutes of interference — perfect for interrupting a ritual or a telepathic ally. Stinger: \"Somewhere under your own thoughts, something else is almost audible.\""
 	},
 	{
 		"category": "radiant",
@@ -1440,7 +1550,8 @@
 		"damage": 2,
 		"duration": 60,
 		"statuseffect": "blinded",
-		"odds": 50
+		"odds": 50,
+		"gmnotes": "Blinded for a minute, and the euphoria makes them enjoy it — which is its own problem. Stinger: \"You cannot see a thing and you have never felt better about it.\""
 	},
 	{
 		"category": "radiant",
@@ -1453,7 +1564,8 @@
 		"damage": 7,
 		"duration": 120,
 		"statuseffect": "none",
-		"odds": 30
+		"odds": 30,
+		"gmnotes": "Cosmetic and glowing: no stealth, and everyone can see where they were hit. Stinger: \"The bruises pulse, slowly, like something inside is keeping time.\""
 	},
 	{
 		"category": "radiant",
@@ -1466,7 +1578,8 @@
 		"damage": 3,
 		"duration": 900,
 		"statuseffect": "none",
-		"odds": 55
+		"odds": 55,
+		"gmnotes": "They are a light source for fifteen minutes. Rule out hiding entirely. Stinger: \"You are the brightest thing in the room and you cannot turn it off.\""
 	},
 	{
 		"category": "radiant",
@@ -1479,7 +1592,8 @@
 		"damage": 3,
 		"duration": 300,
 		"statuseffect": "prone",
-		"odds": 50
+		"odds": 50,
+		"gmnotes": "Prone plus tender skin — armour becomes miserable. Stinger: \"Everything you wear is now an argument.\""
 	},
 	{
 		"category": "radiant",
@@ -1492,7 +1606,8 @@
 		"damage": 3,
 		"duration": 60,
 		"statuseffect": "none",
-		"odds": 50
+		"odds": 50,
+		"gmnotes": "A minute of harmless glow; pure comedy. Stinger: \"You are pink, radiant, and faintly holy. It is not a good look.\""
 	},
 	{
 		"category": "radiant",
@@ -1505,7 +1620,8 @@
 		"damage": 6,
 		"duration": 2400,
 		"statuseffect": "charmed",
-		"odds": 25
+		"odds": 25,
+		"gmnotes": "Charmed by the light itself — play it as reverence they cannot shake. Stinger: \"You keep turning back towards it, and you could not say why.\""
 	},
 	{
 		"category": "radiant",
@@ -1518,7 +1634,8 @@
 		"damage": 2,
 		"duration": 900,
 		"statuseffect": "deafened",
-		"odds": 60
+		"odds": 60,
+		"gmnotes": "Deafened is an odd pairing; lean on the warm glow instead and rule out stealth. Stinger: \"The skin there is hot to the touch and getting brighter.\""
 	},
 	{
 		"category": "radiant",
@@ -1531,7 +1648,8 @@
 		"damage": 11,
 		"duration": 3600,
 		"statuseffect": "exhaustion",
-		"odds": 15
+		"odds": 15,
+		"gmnotes": "Exhaustion 1 for an hour, with a glow that gives away the whole party. Stinger: \"You are lit up like a signal fire, and something is looking for you.\""
 	},
 	{
 		"category": "radiant",
@@ -1544,7 +1662,8 @@
 		"damage": 11,
 		"duration": 2700,
 		"statuseffect": "poisoned",
-		"odds": 20
+		"odds": 20,
+		"gmnotes": "Poisoned and glowing brightly for the better part of an hour — stealth is gone and everything nearby knows where they are. Stinger: \"You are throwing light on the walls. You cannot dim it.\""
 	},
 	{
 		"category": "slashing",
@@ -1557,7 +1676,8 @@
 		"damage": 5,
 		"duration": 300,
 		"statuseffect": "bleeding",
-		"odds": 20
+		"odds": 20,
+		"gmnotes": "Bleeding is the mechanic; the trail is the drama. Anything that hunts by blood now has a road to follow. Stinger: \"It is going through the bandage faster than you can replace it.\""
 	},
 	{
 		"category": "slashing",
@@ -1570,7 +1690,8 @@
 		"damage": 10,
 		"duration": 3600,
 		"statuseffect": "bleeding",
-		"odds": 10
+		"odds": 10,
+		"gmnotes": "Bleeding does the mechanical work; your job is to make it visible. They are marking the floor, the saddle, the water. Trackers get advantage; predators take an interest. Stinger: \"You are leaving a trail. Whatever is behind you will not need to guess.\""
 	},
 	{
 		"category": "slashing",
@@ -1583,7 +1704,8 @@
 		"damage": 10,
 		"duration": 0,
 		"statuseffect": "prone",
-		"odds": 6
+		"odds": 6,
+		"gmnotes": "Permanent until treated and unconscious-adjacent in tone: this ends someone's fight. Do not let it become a numbers discussion. Stinger: \"Hold it in. That is the whole plan right now — hold it in.\""
 	},
 	{
 		"category": "slashing",
@@ -1596,7 +1718,8 @@
 		"damage": 2,
 		"duration": 60,
 		"statuseffect": "bleeding",
-		"odds": 75
+		"odds": 75,
+		"gmnotes": "Bleeding does the damage; the trail does the drama — trackers and predators find them easily. Stinger: \"It keeps opening. Every time you think it has stopped, it opens.\""
 	},
 	{
 		"category": "slashing",
@@ -1609,7 +1732,8 @@
 		"damage": 5,
 		"duration": 300,
 		"statuseffect": "bleeding",
-		"odds": 20
+		"odds": 20,
+		"gmnotes": "Bleeding, and the ragged edges mean it closes badly — worth a scar and a complication later. Stinger: \"It is not a clean cut. It will not be a clean scar.\""
 	},
 	{
 		"category": "slashing",
@@ -1622,7 +1746,8 @@
 		"damage": 5,
 		"duration": 230,
 		"statuseffect": "exhaustion",
-		"odds": 20
+		"odds": 20,
+		"gmnotes": "Exhaustion 1 from blood loss — a slow, grinding cost rather than a spike. Stinger: \"You are getting tired in a way that sleep will not fix.\""
 	},
 	{
 		"category": "slashing",
@@ -1635,7 +1760,8 @@
 		"damage": 3,
 		"duration": 120,
 		"statuseffect": "none",
-		"odds": 75
+		"odds": 75,
+		"gmnotes": "Trivially small and disproportionately awful. Pure comedy; use it for a failed check at a dignified moment. Stinger: \"It is barely a line. You have never felt anything like it.\""
 	},
 	{
 		"category": "slashing",
@@ -1648,7 +1774,8 @@
 		"damage": 6,
 		"duration": 300,
 		"statuseffect": "restrained",
-		"odds": 30
+		"odds": 30,
+		"gmnotes": "Restrained reads as a leg that will not answer — rule movement halved if that suits better. Stinger: \"It holds. Then it does not, and you learn which one you are getting.\""
 	},
 	{
 		"category": "slashing",
@@ -1661,7 +1788,8 @@
 		"damage": 7,
 		"duration": 375,
 		"statuseffect": "bleeding",
-		"odds": 20
+		"odds": 20,
+		"gmnotes": "Bleeding from something wide open — the horror is how much of it there is. Stinger: \"You can see more of yourself than anyone should.\""
 	},
 	{
 		"category": "slashing",
@@ -1674,7 +1802,8 @@
 		"damage": 7,
 		"duration": 120,
 		"statuseffect": "bleeding",
-		"odds": 30
+		"odds": 30,
+		"gmnotes": "Bleeding plus fragility: rule that the next hit lands harder, or simply describe them as thinner than before. Stinger: \"The cut is so clean you did not notice until you moved.\""
 	},
 	{
 		"category": "slashing",
@@ -1687,7 +1816,8 @@
 		"damage": 10,
 		"duration": 0,
 		"statuseffect": "prone",
-		"odds": 10
+		"odds": 10,
+		"gmnotes": "Permanent, prone, and campaign-changing — pause and make sure the player wants this before it stands. Offer regeneration as a quest. Stinger: \"Somebody needs to pick that up, and nobody is moving.\""
 	},
 	{
 		"category": "slashing",
@@ -1700,7 +1830,8 @@
 		"damage": 5,
 		"duration": 420,
 		"statuseffect": "prone",
-		"odds": 20
+		"odds": 20,
+		"gmnotes": "The conveyed condition is the cost; the horror is cosmetic and worth a sentence. Anyone with Medicine should be able to see this needs real attention, not a bandage. Stinger: \"It does not hurt yet. That is the part that worries you.\""
 	},
 	{
 		"category": "slashing",
@@ -1713,7 +1844,8 @@
 		"damage": 8,
 		"duration": 0,
 		"statuseffect": "blinded",
-		"odds": 20
+		"odds": 20,
+		"gmnotes": "Blinded is enormous — consider ruling it as one eye: disadvantage on ranged attacks and sight Perception rather than full blindness, if that suits your table. Say so out loud before the next roll. Stinger: \"Half the room is simply gone, and you keep turning your head to find it.\""
 	},
 	{
 		"category": "slashing",
@@ -1726,7 +1858,8 @@
 		"damage": 2,
 		"duration": 180,
 		"statuseffect": "prone",
-		"odds": 75
+		"odds": 75,
+		"gmnotes": "Prone from flinching — harmless, undignified, and good for a duel. Stinger: \"Something drew a line across you and you did not feel it cut.\""
 	},
 	{
 		"category": "slashing",
@@ -1739,7 +1872,8 @@
 		"damage": 3,
 		"duration": 60,
 		"statuseffect": "none",
-		"odds": 75
+		"odds": 75,
+		"gmnotes": "A minute of noise: stealth is impossible and speech is comic. Stinger: \"You take a breath and the wound takes one with you.\""
 	},
 	{
 		"category": "thunder",
@@ -1752,7 +1886,8 @@
 		"damage": 2,
 		"duration": 300,
 		"statuseffect": "deafened",
-		"odds": 50
+		"odds": 50,
+		"gmnotes": "Deafened for five minutes — enough to miss the plan and act on the wrong one. Stinger: \"Everyone else heard it. You watch them react and guess.\""
 	},
 	{
 		"category": "thunder",
@@ -1765,7 +1900,8 @@
 		"damage": 6,
 		"duration": 600,
 		"statuseffect": "deafened",
-		"odds": 20
+		"odds": 20,
+		"gmnotes": "Deafened for ten: coordinate nothing, hear no warnings. Stinger: \"The world has gone underwater and stayed there.\""
 	},
 	{
 		"category": "thunder",
@@ -1778,7 +1914,8 @@
 		"damage": 7,
 		"duration": 300,
 		"statuseffect": "deafened",
-		"odds": 10
+		"odds": 10,
+		"gmnotes": "Deafened, and the resonance makes them slow to react. Stinger: \"You feel the next one in your teeth before you hear it.\""
 	},
 	{
 		"category": "thunder",
@@ -1791,7 +1928,8 @@
 		"damage": 6,
 		"duration": 300,
 		"statuseffect": "deafened",
-		"odds": 25
+		"odds": 25,
+		"gmnotes": "Deafened with real injury behind it — this one wants treatment, not time. Stinger: \"There is warmth running out of your ear and you know what that means.\""
 	},
 	{
 		"category": "thunder",
@@ -1804,7 +1942,8 @@
 		"damage": 10,
 		"duration": 3600,
 		"statuseffect": "stunned",
-		"odds": 8
+		"odds": 8,
+		"gmnotes": "Stunned once, then let the muscles twitch through the next hour — no fine work, no steady aim. Stinger: \"Your hands have not stopped since. You have tried sitting on them.\""
 	},
 	{
 		"category": "thunder",
@@ -1817,7 +1956,8 @@
 		"damage": 2,
 		"duration": 900,
 		"statuseffect": "none",
-		"odds": 75
+		"odds": 75,
+		"gmnotes": "Flavour only: rule against concentration and delicate work for fifteen minutes. Stinger: \"Something under your skin is still fizzing quietly.\""
 	},
 	{
 		"category": "thunder",
@@ -1830,7 +1970,8 @@
 		"damage": 11,
 		"duration": 0,
 		"statuseffect": "blinded",
-		"odds": 10
+		"odds": 10,
+		"gmnotes": "Blinded and permanent until treated: the most severe thunder result, and it removes them from ranged combat entirely. Stinger: \"The flash is still there when you close your eyes. It has not faded once.\""
 	},
 	{
 		"category": "thunder",
@@ -1843,7 +1984,8 @@
 		"damage": 3,
 		"duration": 240,
 		"statuseffect": "none",
-		"odds": 50
+		"odds": 50,
+		"gmnotes": "No condition — every metal object and every handshake is a small event. Stinger: \"You reach for the door handle and think better of it.\""
 	},
 	{
 		"category": "thunder",
@@ -1856,7 +1998,8 @@
 		"damage": 7,
 		"duration": 2700,
 		"statuseffect": "deafened",
-		"odds": 30
+		"odds": 30,
+		"gmnotes": "Deafened for three quarters of an hour, with a headache to match — no plans, no lore, no torch-side. Stinger: \"The thunder stopped outside and kept going inside.\""
 	},
 	{
 		"category": "thunder",
@@ -1869,6 +2012,7 @@
 		"damage": 7,
 		"duration": 600,
 		"statuseffect": "none",
-		"odds": 20
+		"odds": 20,
+		"gmnotes": "No condition — play the ten minutes as jangled nerves and unsteady hands. Stinger: \"Your whole body is still humming with somebody else's energy.\""
 	}
 ]

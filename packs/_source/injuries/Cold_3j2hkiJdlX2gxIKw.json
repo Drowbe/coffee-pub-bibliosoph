@@ -20,6 +20,7 @@
         "duration": 0,
         "statuseffect": "paralyzed",
         "odds": 10,
+        "gmnotes": "Paralyzed and permanent until treated — this removes a player from the fight entirely, so make the rescue the scene. Stinger: \"You are awake. That is the only part of you that still is.\"",
         "treatmentdc": null
       },
       "title": {
@@ -68,6 +69,7 @@
         "duration": 240,
         "statuseffect": "none",
         "odds": 40,
+        "gmnotes": "No condition: rule fine motor work instead — lockpicking, components, knots. Stinger: \"You touch the blade and feel nothing at all. That is the frightening part.\"",
         "treatmentdc": null
       },
       "title": {
@@ -116,6 +118,7 @@
         "duration": 180,
         "statuseffect": "restrained",
         "odds": 15,
+        "gmnotes": "Restrained is a heavy read for numb hands; if it suits your table, rule dropped items on a failed check instead. Say which before they roll. Stinger: \"Your grip lets go a half-second before you tell it to.\"",
         "treatmentdc": null
       },
       "title": {
@@ -164,6 +167,7 @@
         "duration": 300,
         "statuseffect": "prone",
         "odds": 40,
+        "gmnotes": "Prone and blue fingers — the fumbling is the flavour, the falling is the cost. Stinger: \"They have gone a colour that hands should not be.\"",
         "treatmentdc": null
       },
       "title": {
@@ -212,6 +216,7 @@
         "duration": 600,
         "statuseffect": "exhaustion",
         "odds": 20,
+        "gmnotes": "Exhaustion 1 with a cold flavour: they cannot get warm, and rest is poor until treated. Stinger: \"The shivering stopped an hour ago. That is worse.\"",
         "treatmentdc": null
       },
       "title": {
@@ -260,6 +265,7 @@
         "duration": 120,
         "statuseffect": "none",
         "odds": 30,
+        "gmnotes": "Pure brain freeze with no condition: rule it as no concentration and no complex plans for two minutes. Stinger: \"You had it. You had the whole plan. It is gone.\"",
         "treatmentdc": null
       },
       "title": {
@@ -308,6 +314,7 @@
         "duration": 0,
         "statuseffect": "charmed",
         "odds": 10,
+        "gmnotes": "Charmed and permanent — play it as emotional flatness rather than mind control, and let allies notice. Stinger: \"Someone you love is speaking to you and you are simply waiting for them to finish.\"",
         "treatmentdc": null
       },
       "title": {
@@ -356,6 +363,7 @@
         "duration": 300,
         "statuseffect": "exhaustion",
         "odds": 50,
+        "gmnotes": "Exhaustion 1: disadvantage on checks, and the chill makes rest poor. Stinger: \"The cold got in and made itself comfortable.\"",
         "treatmentdc": null
       },
       "title": {
@@ -404,6 +412,7 @@
         "duration": 90,
         "statuseffect": "prone",
         "odds": 25,
+        "gmnotes": "Prone, briefly — perfect for ice, stairs, or a ship deck. Stinger: \"Your feet arrive somewhere your body did not agree to.\"",
         "treatmentdc": null
       },
       "title": {
@@ -446,7 +455,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785261249425,
+    "modifiedTime": 1785270400029,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

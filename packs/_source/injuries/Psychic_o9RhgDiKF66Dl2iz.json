@@ -20,6 +20,7 @@
         "duration": 180,
         "statuseffect": "none",
         "odds": 50,
+        "gmnotes": "Flavour only: rule no concentration for three minutes. Stinger: \"Your thoughts arrive out of order and slightly damp.\"",
         "treatmentdc": null
       },
       "title": {
@@ -68,6 +69,7 @@
         "duration": 240,
         "statuseffect": "none",
         "odds": 25,
+        "gmnotes": "No condition — memory is the cost. Have them forget something small and recent. Stinger: \"You were about to say something important. It was right there.\"",
         "treatmentdc": null
       },
       "title": {
@@ -116,6 +118,7 @@
         "duration": 0,
         "statuseffect": "stunned",
         "odds": 10,
+        "gmnotes": "Stunned once, then play the migraine: light, noise, and concentration all cost something. Good candidate for losing spell concentration on the next hit. Stinger: \"Thinking about it makes it worse. So does not thinking about it.\"",
         "treatmentdc": null
       },
       "title": {
@@ -164,6 +167,7 @@
         "duration": 120,
         "statuseffect": "none",
         "odds": 70,
+        "gmnotes": "Two minutes of sharp pain: no planning, no lore recall. Stinger: \"Thinking hurts, so you stop, and then it hurts anyway.\"",
         "treatmentdc": null
       },
       "title": {
@@ -212,6 +216,7 @@
         "duration": 120,
         "statuseffect": "none",
         "odds": 20,
+        "gmnotes": "Light and noise are unbearable — deny them torch-side or the front rank. Stinger: \"Someone lights a lamp and you feel it behind your eyes.\"",
         "treatmentdc": null
       },
       "title": {
@@ -260,6 +265,7 @@
         "duration": 180,
         "statuseffect": "none",
         "odds": 50,
+        "gmnotes": "Three minutes of scrambled thinking; let them mishear an instruction with consequences. Stinger: \"Everything you know is still there. It is just not in order.\"",
         "treatmentdc": null
       },
       "title": {
@@ -308,6 +314,7 @@
         "duration": 90,
         "statuseffect": "none",
         "odds": 20,
+        "gmnotes": "Ninety seconds of distance from their own mind — good for a creepy beat, not a fight. Stinger: \"Your thoughts sound like someone else saying them in the next room.\"",
         "treatmentdc": null
       },
       "title": {
@@ -356,6 +363,7 @@
         "duration": 240,
         "statuseffect": "none",
         "odds": 25,
+        "gmnotes": "Sharp pain behind the eyes: rule against concentration and reading. Stinger: \"Every time you focus on something, it pushes back.\"",
         "treatmentdc": null
       },
       "title": {
@@ -404,6 +412,7 @@
         "duration": 0,
         "statuseffect": "stunned",
         "odds": 15,
+        "gmnotes": "Stunned and permanent until treated — the most serious psychic result. Play it as a mind that needs rebuilding. Stinger: \"The lights are on. Nobody has come to the door in a while.\"",
         "treatmentdc": null
       },
       "title": {
@@ -452,6 +461,7 @@
         "duration": 120,
         "statuseffect": "none",
         "odds": 50,
+        "gmnotes": "Two minutes of interference — perfect for interrupting a ritual or a telepathic ally. Stinger: \"Somewhere under your own thoughts, something else is almost audible.\"",
         "treatmentdc": null
       },
       "title": {
@@ -494,7 +504,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785261249449,
+    "modifiedTime": 1785270400056,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

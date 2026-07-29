@@ -20,6 +20,7 @@
         "duration": 0,
         "statuseffect": "poisoned",
         "odds": 1,
+        "gmnotes": "Permanent and poisoned — the colour-shifting makes disguise and diplomacy hard until cured. Stinger: \"You have gone a shade nobody has a name for.\"",
         "treatmentdc": null
       },
       "title": {
@@ -68,6 +69,7 @@
         "duration": 2400,
         "statuseffect": "none",
         "odds": 5,
+        "gmnotes": "No condition; play the itch — disadvantage on anything needing stillness. Stinger: \"They are not healing. It has been days.\"",
         "treatmentdc": null
       },
       "title": {
@@ -116,6 +118,7 @@
         "duration": 3600,
         "statuseffect": "charmed",
         "odds": 20,
+        "gmnotes": "Verbal components and any social scene are where this bites. Let a botched sentence cost them a negotiation rather than hit points. Stinger: \"You meant to say her name. Something else came out.\"",
         "treatmentdc": null
       },
       "title": {
@@ -164,6 +167,7 @@
         "duration": 180,
         "statuseffect": "blinded",
         "odds": 50,
+        "gmnotes": "Blinded for three minutes, triggered by sneezing — a gift for ruining stealth at the worst moment. Stinger: \"You feel it building. There is nothing you can do about it.\"",
         "treatmentdc": null
       },
       "title": {
@@ -212,6 +216,7 @@
         "duration": 900,
         "statuseffect": "none",
         "odds": 5,
+        "gmnotes": "Comedy with a boot problem: rule against long marches. Stinger: \"Something is growing down there and it is doing well.\"",
         "treatmentdc": null
       },
       "title": {
@@ -260,6 +265,7 @@
         "duration": 120,
         "statuseffect": "none",
         "odds": 40,
+        "gmnotes": "Two minutes of nonsense — spend it during a tense moment for maximum damage. Stinger: \"Your foot has started keeping time. To what, nobody knows.\"",
         "treatmentdc": null
       },
       "title": {
@@ -308,6 +314,7 @@
         "duration": 900,
         "statuseffect": "poisoned",
         "odds": 30,
+        "gmnotes": "Poisoned, and each hiccup is a small hazard for whoever is standing close. Stinger: \"Everyone has quietly taken a step back.\"",
         "treatmentdc": null
       },
       "title": {
@@ -356,6 +363,7 @@
         "duration": 300,
         "statuseffect": "poisoned",
         "odds": 30,
+        "gmnotes": "Poisoned plus hallucination — describe rooms as crawling and let them doubt what they saw. Stinger: \"The wall is moving. You are almost certain the wall is not moving.\"",
         "treatmentdc": null
       },
       "title": {
@@ -398,7 +406,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785261249446,
+    "modifiedTime": 1785270400053,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

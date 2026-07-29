@@ -20,6 +20,7 @@
         "duration": 60,
         "statuseffect": "blinded",
         "odds": 50,
+        "gmnotes": "Blinded for a minute, and the euphoria makes them enjoy it — which is its own problem. Stinger: \"You cannot see a thing and you have never felt better about it.\"",
         "treatmentdc": null
       },
       "title": {
@@ -68,6 +69,7 @@
         "duration": 120,
         "statuseffect": "none",
         "odds": 30,
+        "gmnotes": "Cosmetic and glowing: no stealth, and everyone can see where they were hit. Stinger: \"The bruises pulse, slowly, like something inside is keeping time.\"",
         "treatmentdc": null
       },
       "title": {
@@ -116,6 +118,7 @@
         "duration": 900,
         "statuseffect": "none",
         "odds": 55,
+        "gmnotes": "They are a light source for fifteen minutes. Rule out hiding entirely. Stinger: \"You are the brightest thing in the room and you cannot turn it off.\"",
         "treatmentdc": null
       },
       "title": {
@@ -164,6 +167,7 @@
         "duration": 300,
         "statuseffect": "prone",
         "odds": 50,
+        "gmnotes": "Prone plus tender skin — armour becomes miserable. Stinger: \"Everything you wear is now an argument.\"",
         "treatmentdc": null
       },
       "title": {
@@ -212,6 +216,7 @@
         "duration": 60,
         "statuseffect": "none",
         "odds": 50,
+        "gmnotes": "A minute of harmless glow; pure comedy. Stinger: \"You are pink, radiant, and faintly holy. It is not a good look.\"",
         "treatmentdc": null
       },
       "title": {
@@ -260,6 +265,7 @@
         "duration": 2400,
         "statuseffect": "charmed",
         "odds": 25,
+        "gmnotes": "Charmed by the light itself — play it as reverence they cannot shake. Stinger: \"You keep turning back towards it, and you could not say why.\"",
         "treatmentdc": null
       },
       "title": {
@@ -308,6 +314,7 @@
         "duration": 900,
         "statuseffect": "deafened",
         "odds": 60,
+        "gmnotes": "Deafened is an odd pairing; lean on the warm glow instead and rule out stealth. Stinger: \"The skin there is hot to the touch and getting brighter.\"",
         "treatmentdc": null
       },
       "title": {
@@ -356,6 +363,7 @@
         "duration": 3600,
         "statuseffect": "exhaustion",
         "odds": 15,
+        "gmnotes": "Exhaustion 1 for an hour, with a glow that gives away the whole party. Stinger: \"You are lit up like a signal fire, and something is looking for you.\"",
         "treatmentdc": null
       },
       "title": {
@@ -404,6 +412,7 @@
         "duration": 2700,
         "statuseffect": "poisoned",
         "odds": 20,
+        "gmnotes": "Poisoned and glowing brightly for the better part of an hour — stealth is gone and everything nearby knows where they are. Stinger: \"You are throwing light on the walls. You cannot dim it.\"",
         "treatmentdc": null
       },
       "title": {
@@ -446,7 +455,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785261249452,
+    "modifiedTime": 1785270400059,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {
