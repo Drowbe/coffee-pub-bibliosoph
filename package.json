@@ -8,7 +8,11 @@
     "packs:build": "node tools/build-packs.mjs",
     "injuries:validate": "node tools/validate-injuries.mjs",
     "injuries:generate": "node tools/validate-injuries.mjs --quiet && node tools/build-injury-journals.mjs && node tools/verify-injury-roundtrip.mjs",
-    "injuries:build": "npm run injuries:generate && npm run packs:build && node tools/verify-injury-pack.mjs"
+    "injuries:build": "npm run injuries:generate && npm run packs:build && node tools/verify-injury-pack.mjs",
+    "outcomes:validate": "node tools/validate-outcomes.mjs",
+    "outcomes:generate": "node tools/validate-outcomes.mjs --quiet && node tools/build-outcome-journals.mjs",
+    "inspiration:generate": "node tools/build-inspiration-journals.mjs",
+    "content:build": "npm run injuries:generate && npm run outcomes:generate && npm run inspiration:generate && npm run packs:build && node tools/verify-injury-pack.mjs && node tools/verify-outcome-pack.mjs"
   },
   "devDependencies": {
     "@foundryvtt/foundryvtt-cli": "^3.0.4"

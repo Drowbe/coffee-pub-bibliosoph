@@ -1,0 +1,228 @@
+{
+  "name": "Butchery",
+  "pages": [
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Good Job, Here's a Treat",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "9MVq85CkdAMZWdRl",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/melee/weapons-crossed-swords-yellow.webp",
+        "imagetitle": "",
+        "description": "You regain one spell slot or 2 temporary hit points. Good job!",
+        "severity": "minor",
+        "appliesto": "self",
+        "damage": 0,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 25,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!jM69T1uV726oIZyb.9MVq85CkdAMZWdRl"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Jazz Hands",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "s7F5299qnYsgaBkG",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/melee/strike-blade-blood-red.webp",
+        "imagetitle": "",
+        "description": "You distract the target. All characters within mele range of them can move away without an opportunity attack on their next turn.",
+        "severity": "minor",
+        "appliesto": "nearby",
+        "damage": 0,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 25,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 100,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!jM69T1uV726oIZyb.s7F5299qnYsgaBkG"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Stay Down",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "pe6gdvWfz955la0A",
+      "system": {
+        "kind": "crit",
+        "image": "icons/magic/light/explosion-star-glow-blue-purple.webp",
+        "imagetitle": "",
+        "description": "You knock the target prone. They fall down go boom.",
+        "severity": "minor",
+        "appliesto": "target",
+        "damage": 0,
+        "duration": 6,
+        "statuseffect": "prone",
+        "odds": 25,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 200,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!jM69T1uV726oIZyb.pe6gdvWfz955la0A"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "You Have My Attention",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "eDAIK3esDpJ6LXaa",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/melee/strike-blade-blood-red.webp",
+        "imagetitle": "",
+        "description": "Your god noticed. They approve and give you +2 on your next attack. Pray to them.",
+        "severity": "minor",
+        "appliesto": "self",
+        "damage": 0,
+        "duration": 6,
+        "statuseffect": "none",
+        "odds": 25,
+        "modifiers": [
+          {
+            "stat": "attack",
+            "value": 2,
+            "rounds": 1
+          }
+        ],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 300,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!jM69T1uV726oIZyb.eDAIK3esDpJ6LXaa"
+    }
+  ],
+  "folder": null,
+  "_id": "jM69T1uV726oIZyb",
+  "categories": [],
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1784237483935,
+    "modifiedTime": 1785352039536,
+    "lastModifiedBy": "B4d9pDwUBOtAfJFE"
+  },
+  "ownership": {
+    "default": 0,
+    "B4d9pDwUBOtAfJFE": 3
+  },
+  "sort": 0,
+  "_key": "!journal!jM69T1uV726oIZyb"
+}

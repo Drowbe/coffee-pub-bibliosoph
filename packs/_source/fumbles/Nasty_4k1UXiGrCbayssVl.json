@@ -1,0 +1,2015 @@
+{
+  "name": "Nasty",
+  "pages": [
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Ankle Twist",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "TCIibfS4m5sUuCfA",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/skills/wounds/blood-drip-droplet-red.webp",
+        "imagetitle": "",
+        "description": "You twist your ankle and have 1/2 movement speed and cannot charge for 1d4+1 rounds. You have to moan as you move.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 0,
+        "duration": 24,
+        "statuseffect": "none",
+        "odds": 19,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.TCIibfS4m5sUuCfA"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Bad Aim",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "xQWuyFPeEJiyXIft",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/skills/melee/sword-damaged-broken-orange.webp",
+        "imagetitle": "",
+        "description": "You hit an Ally with a basic attack. They need to do a DC 15 DEX save to see if they can duck out of the way or take the damage.",
+        "severity": "moderate",
+        "appliesto": "ally",
+        "damage": 0,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 19,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 100,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.xQWuyFPeEJiyXIft"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Balance Lost",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "Odh593n1eZPzbukg",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/skills/melee/sword-damaged-broken-orange.webp",
+        "imagetitle": "",
+        "description": "You fall Prone in a wildly dramatic way, muttering \"Oh my, I have a case of the vapors\" as you fall.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 0,
+        "duration": 6,
+        "statuseffect": "prone",
+        "odds": 19,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 200,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.Odh593n1eZPzbukg"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Blinded By Your Own Blood",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "f6f7tJlGbyIPvQAl",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/skills/movement/figure-running-gray.webp",
+        "imagetitle": "",
+        "description": "You hit yourself in the head causing a minor flesh wound with 4HP damage. You are blinded by blood flowing into your eyes for [[1d4]] rounds.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 4,
+        "duration": 24,
+        "statuseffect": "blinded",
+        "odds": 19,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 300,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.f6f7tJlGbyIPvQAl"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Butterfingers",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "0IWEFqx4cvwRYYZn",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/skills/movement/figure-running-gray.webp",
+        "imagetitle": "",
+        "description": "You throw your weapon/implement [[1d4]] squares in a direction based on a [[1d8]] roll (where 1 is north). If you hit a party member, they take [[1d6]] damage.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 0,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 19,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 400,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.0IWEFqx4cvwRYYZn"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Coping Mechanism",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "GqAJXGThbUMR13dP",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/skills/movement/figure-running-gray.webp",
+        "imagetitle": "",
+        "description": "That fumble was just too much for you. As a bonus action you pull out a mug of ale and take several big pulls. You are intoxicated for [[1d4]] rounds.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 0,
+        "duration": 24,
+        "statuseffect": "poisoned",
+        "odds": 19,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 500,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.GqAJXGThbUMR13dP"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Counter Attack",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "RcbqFyh9aTnI2xg3",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/skills/wounds/blood-drip-droplet-red.webp",
+        "imagetitle": "",
+        "description": "The target hits you with a basic attack.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 0,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 19,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 600,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.RcbqFyh9aTnI2xg3"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Crappy Neighbor",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "jt7zmJElSITYPALC",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/skills/wounds/injury-pain-body-orange.webp",
+        "imagetitle": "",
+        "description": "\"Head's-up!\" you yell our as your crappy hit misses its mark and hits one of your party members within mele range of the target. GM chooses the party member with a dice roll. Roll damage on the party member and apply half the damage to them, rounding down.",
+        "severity": "moderate",
+        "appliesto": "ally",
+        "damage": 0,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 19,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 700,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.jt7zmJElSITYPALC"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Critical Counter",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "YOHGSfZBGu7JhNUm",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/skills/movement/figure-running-gray.webp",
+        "imagetitle": "",
+        "description": "The target critically hits you with a basic attack. Double the normal damage. Ouch.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 0,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 19,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 800,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.YOHGSfZBGu7JhNUm"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Dislocation",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "xvymiVHZgLZStNqO",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/skills/melee/sword-damaged-broken-orange.webp",
+        "imagetitle": "",
+        "description": "A forceful pop in your shoulder is heard as your arm goes limp. The arm you used to make the attack is incapacitated for 1d4 + 6 rounds.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 0,
+        "duration": 48,
+        "statuseffect": "incapacitated",
+        "odds": 19,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 900,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.xvymiVHZgLZStNqO"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Doesn't Keep Going and Going",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "RAvJMHP3XPYLPpUs",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/skills/wounds/blood-drip-droplet-red.webp",
+        "imagetitle": "",
+        "description": "An item you carry with a buff or magical effect on it flickers out like a dying candle. You can not use the item until after your next long rest.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 0,
+        "duration": 600,
+        "statuseffect": "none",
+        "odds": 19,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 1000,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.RAvJMHP3XPYLPpUs"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Done Broke it",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "qWmrAHx6QAztNBHu",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/skills/wounds/injury-pain-body-orange.webp",
+        "imagetitle": "",
+        "description": "Your Weapon/Implement is broken. You mark it as so and swap it out or use it with -5 and disadvantage. You will have to figure out if it can be repaired.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 0,
+        "duration": 600,
+        "statuseffect": "none",
+        "odds": 19,
+        "modifiers": [
+          {
+            "stat": "attack",
+            "value": -5,
+            "rounds": 100
+          }
+        ],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 1100,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.qWmrAHx6QAztNBHu"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Embarassed",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "g4rb8wnc7CP9vmHu",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/magic/control/fear-fright-shadow-monster-red.webp",
+        "imagetitle": "",
+        "description": "You recieve a -2 penalty to attack rolls against target until you successfully hit target with an attack.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 0,
+        "duration": 60,
+        "statuseffect": "none",
+        "odds": 19,
+        "modifiers": [
+          {
+            "stat": "attack",
+            "value": -2,
+            "rounds": 10
+          }
+        ],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 1200,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.g4rb8wnc7CP9vmHu"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Fatigued",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "SSSQar2PJEaG7bBk",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/skills/wounds/blood-drip-droplet-red.webp",
+        "imagetitle": "",
+        "description": "You are dazed until end of your next turn.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 0,
+        "duration": 6,
+        "statuseffect": "none",
+        "odds": 19,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 1300,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.SSSQar2PJEaG7bBk"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Fifty-Fifty",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "F8H4ePjJ6eRF7xHl",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/magic/control/fear-fright-shadow-monster-red.webp",
+        "imagetitle": "",
+        "description": "You feeling lucky? How lucky? Take [[1d10]] damage or roll 1d20 and hope for the best. If you get 1-10, you roll damage on yourself. If you get 11-20, your fumble becomes a hit and you roll damage on your target. Choose wisely.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 0,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 19,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 1400,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.F8H4ePjJ6eRF7xHl"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Floor is Lava",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "mewNnS5zyM15Obcm",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/skills/movement/figure-running-gray.webp",
+        "imagetitle": "",
+        "description": "You embarrased your god. In turn, they turned the 5 foot square on which you stand to lava for this turn. You take [[1d10]] fire damage.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 5,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 19,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 1500,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.mewNnS5zyM15Obcm"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Friendly Fire",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "kX2GddAik3Jj1wRy",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/magic/control/fear-fright-shadow-monster-red.webp",
+        "imagetitle": "",
+        "description": "You critically hit an ally with a basic attack. Apply half the damage to them and half the damage to yourself. When you round, they get the brunt of it.",
+        "severity": "moderate",
+        "appliesto": "ally",
+        "damage": 0,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 19,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 1600,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.kX2GddAik3Jj1wRy"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Generous",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "oYUXBoEUeEo3fvit",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/skills/wounds/injury-pain-body-orange.webp",
+        "imagetitle": "",
+        "description": "You let the team down. Make ammends by giving them an item from your inventory. They must accept it. You can't attack again until you complete this task. You may have something they've always wanted... or perhaps they like shiny objects.",
+        "severity": "moderate",
+        "appliesto": "ally",
+        "damage": 0,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 19,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 1700,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.oYUXBoEUeEo3fvit"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "God Empathy",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "e0wne6VBKtupCras",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/skills/melee/sword-damaged-broken-orange.webp",
+        "imagetitle": "",
+        "description": "This is a fumble, right? Well, your god feels so bad for you that they roll back time and allow you to re-roll. You lucky duck!",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 0,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 19,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 1800,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.e0wne6VBKtupCras"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Ground Zero",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "xjJytlgt1VtzgGbp",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/skills/melee/sword-damaged-broken-orange.webp",
+        "imagetitle": "",
+        "description": "You're not sure what happened, but your spell blew up in your face. You take the damage + 6. If you did not cast a spell, just take [[1d10]] damage.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 6,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 19,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 1900,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.xjJytlgt1VtzgGbp"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Knee Pop",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "YjzmGpZFTMmTbBXl",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/skills/movement/figure-running-gray.webp",
+        "imagetitle": "",
+        "description": "Your knee hyperextends awkwardly. You have 1/4 movement speed and cannot charge for [[1d4+6]] rounds.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 0,
+        "duration": 48,
+        "statuseffect": "none",
+        "odds": 19,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 2000,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.YjzmGpZFTMmTbBXl"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Life Force",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "w1ajemWubOPcC6yn",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/magic/control/fear-fright-shadow-monster-red.webp",
+        "imagetitle": "",
+        "description": "Every party member donates 2 HP to your target. You donate 4 HP.",
+        "severity": "moderate",
+        "appliesto": "party",
+        "damage": 2,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 19,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 2100,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.w1ajemWubOPcC6yn"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Lit Up",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "pKLAi3eUe2saVQnX",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/skills/movement/figure-running-gray.webp",
+        "imagetitle": "",
+        "description": "Lightening strikes you, as if punishing you for such a crappy roll. Take 1d6 lightening damage.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 4,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 19,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 2200,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.pKLAi3eUe2saVQnX"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Love is in the Air",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "EQELznSNNANZoimq",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/skills/wounds/injury-pain-body-orange.webp",
+        "imagetitle": "",
+        "description": "You feel the love, and bee-line to the closest party member for a mega-hug. They are grappled until they break your grapple. You can not choose to let go... it is love afterall. If your target was within mele and you moved away, they do get an opportunity attack.",
+        "severity": "moderate",
+        "appliesto": "ally",
+        "damage": 0,
+        "duration": 60,
+        "statuseffect": "grappled",
+        "odds": 19,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 2300,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.EQELznSNNANZoimq"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Madvantage",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "rsFp0f0EhssfT2S5",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/skills/wounds/injury-pain-body-orange.webp",
+        "imagetitle": "",
+        "description": "You really anger your target. How dare you make such a feeble attempt against their clear badassery. They roll with advantage for the next [[1d4]] rounds.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 0,
+        "duration": 24,
+        "statuseffect": "none",
+        "odds": 19,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 2400,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.rsFp0f0EhssfT2S5"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "McGyver Time",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "hmKcugbn3ri5UzoT",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/skills/melee/sword-damaged-broken-orange.webp",
+        "imagetitle": "",
+        "description": "Your weapon is jacked. You must spend your next action fixing it with found objects around you.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 0,
+        "duration": 6,
+        "statuseffect": "none",
+        "odds": 19,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 2500,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.hmKcugbn3ri5UzoT"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Overextended",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "hbzv8ih9DnAJj3g6",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/magic/control/fear-fright-shadow-monster-red.webp",
+        "imagetitle": "",
+        "description": "You are stunned until the end of your next turn.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 0,
+        "duration": 6,
+        "statuseffect": "stunned",
+        "odds": 19,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 2600,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.hbzv8ih9DnAJj3g6"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Pulled Muscle",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "fpvXVnspftncaStx",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/skills/wounds/injury-pain-body-orange.webp",
+        "imagetitle": "",
+        "description": "You are weakened until end of your next turn.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 0,
+        "duration": 6,
+        "statuseffect": "none",
+        "odds": 19,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 2700,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.fpvXVnspftncaStx"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Ranger Danger",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "9c200negHEzUCK3R",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/skills/melee/sword-damaged-broken-orange.webp",
+        "imagetitle": "",
+        "description": "Your attack confuses your party and any rangers attack you, by accident, with disadvantage. If you are a ranger, you attack yourself, foolishly, with advantage.",
+        "severity": "moderate",
+        "appliesto": "ally",
+        "damage": 0,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 19,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 2800,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.9c200negHEzUCK3R"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Saturday Night Fever",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "dPexbdF0PCz9kx7L",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/magic/control/fear-fright-shadow-monster-red.webp",
+        "imagetitle": "",
+        "description": "The power of dance compells you! You dance uncontrollably until the end of the next round and suffer 1 level of exhaustion.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 0,
+        "duration": 12,
+        "statuseffect": "exhaustion",
+        "odds": 19,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 2900,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.dPexbdF0PCz9kx7L"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Shut Up",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "VeOUCjgZIbp6pCyM",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/skills/wounds/blood-drip-droplet-red.webp",
+        "imagetitle": "",
+        "description": "You can not speak until the end of combat. Your party members are likely delighted by this.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 0,
+        "duration": 60,
+        "statuseffect": "silenced",
+        "odds": 19,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 3000,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.VeOUCjgZIbp6pCyM"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Spell Backlash",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "AAequO6lZBgGVjwN",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/skills/wounds/blood-drip-droplet-red.webp",
+        "imagetitle": "",
+        "description": "Your spell feeds back to you, doing its damage and effects on yourself. If you didn't cast a spell, you got lucky.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 0,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 19,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 3100,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.AAequO6lZBgGVjwN"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Staggering in Pain",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "bSiNx43EdulSvRKJ",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/skills/wounds/injury-pain-body-orange.webp",
+        "imagetitle": "",
+        "description": "Your opponent parries your awkward attack that causes you to hit yourself in the groin. You have 1/2 movement and -4 to all actions for [[1d6+4]] rounds. Your eyes water, so you are blind until the end of your next turn.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 0,
+        "duration": 48,
+        "statuseffect": "blinded",
+        "odds": 19,
+        "modifiers": [
+          {
+            "stat": "attack",
+            "value": -4,
+            "rounds": 8
+          },
+          {
+            "stat": "checks",
+            "value": -4,
+            "rounds": 8
+          }
+        ],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 3200,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.bSiNx43EdulSvRKJ"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Stinky Pete",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "CEkjE7zhxp3BPymV",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/skills/wounds/blood-drip-droplet-red.webp",
+        "imagetitle": "",
+        "description": "It has been a while since you've bathed... and that last attack really worked up a sweat. You stink. Your party members must only refer to you as \"Stinky Pete\" until your next long rest, which must include bathing.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 0,
+        "duration": 600,
+        "statuseffect": "none",
+        "odds": 19,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 3300,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.CEkjE7zhxp3BPymV"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Suicide Strike",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "Cd3fdlE0AGVp88fN",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/skills/wounds/injury-pain-body-orange.webp",
+        "imagetitle": "",
+        "description": "You hit yourself with same attack you fumbled with, receiving all negative conditions and effects of the attack. Dummy.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 0,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 19,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 3400,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.Cd3fdlE0AGVp88fN"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "That Ain't Booze",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "SvdE4Geah6tZHYsp",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/skills/wounds/blood-drip-droplet-red.webp",
+        "imagetitle": "",
+        "description": "You reach for your flask to calm your nerves, but you accidentally grab poison. You are poisoned for [[1d10]] rounds or until someone addresses the medical issue.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 0,
+        "duration": 60,
+        "statuseffect": "poisoned",
+        "odds": 19,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 3500,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.SvdE4Geah6tZHYsp"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Tough Situation",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "YYfIix9Xkozfahre",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/skills/melee/sword-damaged-broken-orange.webp",
+        "imagetitle": "",
+        "description": "Take [[1d8]] damage or deal [[1d10]] damage to one of the other party members. Your choice. Have fun with it.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 4,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 19,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 3600,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.YYfIix9Xkozfahre"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Turnabout",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "zlYsWubXGnZpUH9M",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/skills/movement/figure-running-gray.webp",
+        "imagetitle": "",
+        "description": "Wow, I mean, what were you thinking? This didn't work out quite like you'd planned, and your target rolls damage on you instead.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 0,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 19,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 3700,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.zlYsWubXGnZpUH9M"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Wrong Strap",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "rNB9kWThpL1eIf6s",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/magic/control/fear-fright-shadow-monster-red.webp",
+        "imagetitle": "",
+        "description": "In an embarrasing move, you cut loose part of your armor and receive a -5 penalty until armor is fixed. Fixing the armor will require [[1d3]] rounds of performing no other action. Good luck with that.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 0,
+        "duration": 60,
+        "statuseffect": "none",
+        "odds": 19,
+        "modifiers": [
+          {
+            "stat": "ac",
+            "value": -5,
+            "rounds": 10
+          }
+        ],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 3800,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.rNB9kWThpL1eIf6s"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Your Bad Side",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "bA8CJi5PNZpIuCLh",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/magic/control/fear-fright-shadow-monster-red.webp",
+        "imagetitle": "",
+        "description": "A copy of you appears next to you. They are filled with self-hate, embarrased by your fumble. They steal 5 HP from you, and take their turn right before you in each round until dead. Consider therapy.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 5,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 19,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 3900,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!4k1UXiGrCbayssVl.bA8CJi5PNZpIuCLh"
+    }
+  ],
+  "folder": null,
+  "_id": "4k1UXiGrCbayssVl",
+  "categories": [],
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1784237483935,
+    "modifiedTime": 1785352039551,
+    "lastModifiedBy": "B4d9pDwUBOtAfJFE"
+  },
+  "ownership": {
+    "default": 0,
+    "B4d9pDwUBOtAfJFE": 3
+  },
+  "sort": 1000,
+  "_key": "!journal!4k1UXiGrCbayssVl"
+}

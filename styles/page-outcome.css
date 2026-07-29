@@ -1,0 +1,279 @@
+/* ================================================================= */
+/* === OUTCOME JOURNAL PAGE (criticals & fumbles) ================== */
+/* ================================================================= */
+/* Mirrors page-injury.css; the two share a visual language on        */
+/* purpose so a GM reads them the same way.                           */
+
+/* --- VIEW MODE ---------------------------------------------------- */
+
+.bibliosoph-outcome-page-fields .outcome-page-image {
+    display: block;
+    max-width: 220px;
+    margin: 0 auto;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    border-radius: 6px;
+}
+
+.bibliosoph-outcome-page-fields .outcome-page-caption {
+    margin: 4px 0 12px 0;
+    text-align: center;
+    font-style: italic;
+    opacity: 0.75;
+}
+
+.bibliosoph-outcome-page-fields .outcome-page-description {
+    margin: 0 0 12px 0;
+}
+
+.bibliosoph-outcome-page-fields .outcome-page-modifiers {
+    margin: 0 0 12px 0;
+    padding: 8px 10px;
+    border-left: 3px solid rgba(70, 100, 150, 0.7);
+    background: rgba(70, 100, 150, 0.08);
+    border-radius: 0 4px 4px 0;
+}
+
+.bibliosoph-outcome-page-fields .outcome-page-modifiers ul {
+    margin: 4px 0 0 0;
+    padding-left: 18px;
+}
+
+.bibliosoph-outcome-page-fields .outcome-page-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 6px 14px;
+    margin: 0 0 10px 0;
+}
+
+.bibliosoph-outcome-page-fields .outcome-page-field {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.bibliosoph-outcome-page-fields .outcome-page-label {
+    font-size: 0.8em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.7;
+}
+
+.bibliosoph-outcome-page-fields .outcome-page-value {
+    font-weight: bold;
+}
+
+.bibliosoph-outcome-page-fields .outcome-page-guidance {
+    margin: 10px 0;
+    padding: 8px 10px;
+    border-left: 3px solid rgba(150, 110, 40, 0.7);
+    background: rgba(150, 110, 40, 0.08);
+    border-radius: 0 4px 4px 0;
+}
+
+.bibliosoph-outcome-page-fields .outcome-page-guidance p {
+    margin: 2px 0 0 0;
+}
+
+.bibliosoph-outcome-page-fields .outcome-page-divider {
+    margin: 10px 0;
+    border: none;
+    border-top: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+/* --- EDIT MODE ---------------------------------------------------- */
+
+.bibliosoph-outcome-page-edit {
+    padding: 0 4px;
+}
+
+.bibliosoph-outcome-page-edit .outcome-edit-section-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 12px 0 6px 0;
+    padding-bottom: 3px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.85em;
+    letter-spacing: 0.5px;
+}
+
+.bibliosoph-outcome-page-edit .outcome-edit-hint {
+    margin: 0 0 8px 0;
+    font-size: 0.85em;
+    opacity: 0.7;
+}
+
+.bibliosoph-outcome-page-edit .outcome-edit-warnings {
+    margin: 0 0 8px 0;
+    padding: 6px 10px;
+    border-left: 3px solid rgba(200, 140, 20, 0.8);
+    background: rgba(200, 140, 20, 0.08);
+    border-radius: 0 4px 4px 0;
+}
+
+.bibliosoph-outcome-page-edit .outcome-edit-warnings p {
+    margin: 2px 0;
+    font-size: 0.88em;
+}
+
+.bibliosoph-outcome-page-edit .outcome-edit-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 8px 12px;
+}
+
+.bibliosoph-outcome-page-edit .outcome-edit-full {
+    display: block;
+    margin: 8px 0;
+}
+
+.bibliosoph-outcome-page-edit .form-group label {
+    display: block;
+    font-size: 0.85em;
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+.bibliosoph-outcome-page-edit textarea,
+.bibliosoph-outcome-page-edit input[type="text"],
+.bibliosoph-outcome-page-edit input[type="number"],
+.bibliosoph-outcome-page-edit select,
+.bibliosoph-outcome-page-edit file-picker {
+    width: 100%;
+}
+
+.bibliosoph-outcome-page-edit .outcome-modifier-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 4px;
+}
+
+/* --- CHAT CARD: mechanics block ----------------------------------- */
+
+.bibliosoph-outcome-mechanics {
+    margin: 8px 0 4px 0;
+    padding: 6px 10px;
+    border-left: 3px solid rgba(0, 0, 0, 0.25);
+    background: rgba(0, 0, 0, 0.06);
+    border-radius: 0 4px 4px 0;
+}
+
+.bibliosoph-outcome-mechanics p {
+    margin: 2px 0;
+    font-weight: bold;
+}
+
+/* ================================================================= */
+/* === INSPIRATION CARD PAGE ======================================= */
+/* ================================================================= */
+/* Same visual language as injuries and outcomes.                    */
+
+.bibliosoph-inspiration-page-fields .inspiration-page-image {
+    display: block;
+    max-width: 220px;
+    margin: 0 auto;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    border-radius: 6px;
+}
+
+.bibliosoph-inspiration-page-fields .inspiration-page-caption {
+    margin: 4px 0 12px 0;
+    text-align: center;
+    font-style: italic;
+    opacity: 0.75;
+}
+
+.bibliosoph-inspiration-page-fields .inspiration-page-description { margin: 0 0 12px 0; }
+
+.bibliosoph-inspiration-page-fields .inspiration-page-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 6px 14px;
+    margin: 0 0 10px 0;
+}
+
+.bibliosoph-inspiration-page-fields .inspiration-page-field { display: flex; flex-direction: column; gap: 1px; }
+
+.bibliosoph-inspiration-page-fields .inspiration-page-label {
+    font-size: 0.8em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.7;
+}
+
+.bibliosoph-inspiration-page-fields .inspiration-page-value { font-weight: bold; }
+
+.bibliosoph-inspiration-page-fields .inspiration-page-guidance {
+    margin: 10px 0;
+    padding: 8px 10px;
+    border-left: 3px solid rgba(150, 110, 40, 0.7);
+    background: rgba(150, 110, 40, 0.08);
+    border-radius: 0 4px 4px 0;
+}
+
+.bibliosoph-inspiration-page-fields .inspiration-page-guidance p { margin: 2px 0 0 0; }
+
+.bibliosoph-inspiration-page-fields .inspiration-page-divider {
+    margin: 10px 0;
+    border: none;
+    border-top: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+/* --- EDIT MODE ---------------------------------------------------- */
+
+.bibliosoph-inspiration-page-edit { padding: 0 4px; }
+
+.bibliosoph-inspiration-page-edit .inspiration-edit-section-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 12px 0 6px 0;
+    padding-bottom: 3px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.85em;
+    letter-spacing: 0.5px;
+}
+
+.bibliosoph-inspiration-page-edit .inspiration-edit-hint {
+    margin: 0 0 8px 0;
+    font-size: 0.85em;
+    opacity: 0.7;
+}
+
+.bibliosoph-inspiration-page-edit .inspiration-edit-note { font-weight: normal; opacity: 0.7; }
+
+.bibliosoph-inspiration-page-edit .inspiration-edit-warnings {
+    margin: 0 0 8px 0;
+    padding: 6px 10px;
+    border-left: 3px solid rgba(200, 140, 20, 0.8);
+    background: rgba(200, 140, 20, 0.08);
+    border-radius: 0 4px 4px 0;
+}
+
+.bibliosoph-inspiration-page-edit .inspiration-edit-warnings p { margin: 2px 0; font-size: 0.88em; }
+
+.bibliosoph-inspiration-page-edit .inspiration-edit-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 8px 12px;
+}
+
+.bibliosoph-inspiration-page-edit .inspiration-edit-full { display: block; margin: 8px 0; }
+
+.bibliosoph-inspiration-page-edit .form-group label {
+    display: block;
+    font-size: 0.85em;
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+.bibliosoph-inspiration-page-edit textarea,
+.bibliosoph-inspiration-page-edit input[type="text"],
+.bibliosoph-inspiration-page-edit input[type="number"],
+.bibliosoph-inspiration-page-edit select,
+.bibliosoph-inspiration-page-edit file-picker { width: 100%; }

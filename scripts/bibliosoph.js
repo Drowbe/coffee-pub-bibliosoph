@@ -8,6 +8,12 @@ import { registerToolbarTools, unregisterToolbarTools } from './manager-toolbar.
 import { applyStatusToTokens } from './manager-status-effects.js';
 import { InjuryPageModel, INJURY_PAGE_TYPE } from './data/injury-page-model.js';
 import { InjuryPageSheet } from './sheets/injury-page-sheet.js';
+import { OutcomePageModel, OUTCOME_PAGE_TYPE } from './data/outcome-page-model.js';
+import { OutcomePageSheet } from './sheets/outcome-page-sheet.js';
+import { describeModifier, modifiersToChanges, secondsToRounds, severityLabel, targetLabel, TARGET_HINTS } from './data/outcome-schema.js';
+import { InspirationPageModel, INSPIRATION_PAGE_TYPE } from './data/inspiration-page-model.js';
+import { InspirationPageSheet } from './sheets/inspiration-page-sheet.js';
+import * as INSPIRATION_ACTIONS from './data/inspiration-schema.js';
 import { SEVERITY_DCS as INJURY_SEVERITY_DCS } from './data/injury-schema.js';
 
 // Resolve a macro reference (UUID, id, or name) to a Macro document
@@ -276,7 +282,24 @@ function triggerFumbleRoll() {
 // Roll the configured crit/fumble table and post the chat card. Used by
 // the toolbar buttons above and by manager-roll-toasts.js for the
 // Automation click/auto modes.
-export async function rollOutcomeCard(type) {
+export async function rollOutcomeCard(type, { title = null, rollerActorId = null, rollerTokenId = null, hitActorId = null } = {}) {
+    // Typed compendium first — it carries real mechanics (conditions,
+    // durations, roll modifiers). Roll tables remain fully supported for
+    // anyone using their own crit/fumble tables.
+    // `title` forces a specific outcome instead of a weighted draw — the
+    // test harness uses it to demo a particular card on demand.
+    // The actor ids are who rolled and who they hit, when the triggering
+    // roll told us — they let the card name people instead of saying
+    // "the roller" and "the creature hit".
+    const compendium = getSettingSafe(type === 'crit' ? 'critCompendium' : 'fumbleCompendium', 'none');
+    if (compendium && compendium !== 'none') {
+        const html = await createChatCardOutcome(type, { title, rollerActorId, rollerTokenId, hitActorId });
+        if (html) {
+            await ChatMessage.create({ user: game.user.id, content: html, speaker: ChatMessage.getSpeaker() });
+            return;
+        }
+        logBib(`No outcome found in "${compendium}" — falling back to the roll table`, '', false, false);
+    }
     resetBibliosophVars();
     if (type === 'crit') {
         BIBLIOSOPH.CARDTYPECRIT = true;
@@ -286,6 +309,202 @@ export async function rollOutcomeCard(type) {
         BIBLIOSOPH.CARDTYPE = "Fumble";
     }
     await publishChatCard();
+}
+
+// Read an outcome record off a typed page (system data is authoritative).
+function readOutcomeRecord(page) {
+    const system = page?.system;
+    if (!system?.kind) return null;
+    const fields = system.toObject?.() ?? system;
+    return { ...fields, title: page?.name || '', sourceUuid: page?.uuid ?? null };
+}
+
+/**
+ * Build a critical/fumble card from the typed compendium: pick weighted
+ * by odds, then render with its mechanics spelled out and an Apply button
+ * that carries the whole record rather than just a name and some prose.
+ */
+async function createChatCardOutcome(type, { title = null, rollerActorId = null, rollerTokenId = null, hitActorId = null } = {}) {
+    const compendiumName = getSettingSafe(type === 'crit' ? 'critCompendium' : 'fumbleCompendium', 'none');
+    const pack = game.packs.get(compendiumName);
+    if (!pack) return '';
+
+    // Scan EVERY journal in the pack. The bucket journals (Butchery,
+    // Carnage, Slaughter…) are organisational; each page states its own
+    // severity and odds, so a renamed or added journal changes nothing.
+    const entries = await pack.getDocuments();
+    const candidates = entries
+        .flatMap((journal) => Array.from(journal.pages ?? []))
+        .map((page) => readOutcomeRecord(page))
+        .filter((rec) => rec && rec.kind === type);
+    if (!candidates.length) return '';
+
+    const rec = title
+        ? candidates.find((c) => c.title === title)
+        : weightedPick(candidates, (c) => c.odds);
+    if (!rec) { logBib(`No outcome titled "${title}"`, '', false, false); return ''; }
+    logBib(`Outcome picked: "${rec.title}" (odds ${rec.odds} of ${candidates.length} ${type}s)`, '', true, false);
+
+    const isCrit = type === 'crit';
+    const modifierLines = (rec.modifiers ?? []).map(describeModifier).filter(Boolean);
+    const rounds = secondsToRounds(rec.duration);
+
+    // Everything the Apply button needs, so applying reproduces the
+    // mechanics rather than just stamping a name on the token.
+    const APPLYDATA = {
+        kind: type,
+        name: rec.title,
+        description: rec.description || '',
+        image: rec.image || '',
+        damage: rec.damage || 0,
+        duration: rec.duration || 0,
+        statuseffect: rec.statuseffect || 'none',
+        modifiers: rec.modifiers ?? [],
+        appliesto: rec.appliesto || (isCrit ? 'target' : 'self'),
+        severity: rec.severity || 'minor',
+        sourceUuid: rec.sourceUuid ?? null
+    };
+
+    const template = await getCardTemplate();
+    const html = template({
+        userName: game.user.name,
+        userAvatar: game.user.avatar,
+        playerType: game.user.isGM ? 'Gamemaster' : 'Player',
+        characterName: game.user.isGM ? 'Cocktail Craftsman and Moderator' : (game.user.character?.name ?? 'No Character Set'),
+        theme: getSettingSafe(isCrit ? 'cardThemeCritical' : 'cardThemeFumble', 'cardsdefault'),
+        iconStyle: isCrit ? 'fa-burst' : 'fa-heart-crack',
+        cardTitle: isCrit ? 'Critical Hit' : 'Fumble',
+        title: rec.title,
+        cardSubTitle: severityLabel(type, rec.severity),
+        iconSubStyle: isCrit ? 'fa-burst' : 'fa-heart-crack',
+        content: rec.description,
+        image: getSettingSafe('outcomeImageEnabled', true) ? (rec.image || '') : '',
+        imagecaption: rec.imagetitle || '',
+        imageBackground: 'themecolor',
+        // Mechanics, spelled out on the card
+        outcomemechanics: buildOutcomeMechanics(rec, modifierLines, rounds),
+        ...buildOutcomeApplyButtons(rec, APPLYDATA, resolveOutcomeCast({ rollerActorId, rollerTokenId, hitActorId })),
+        applyoutcomeicon: isCrit ? 'fa-burst' : 'fa-heart-crack',
+        hasSectionContent: true
+    });
+
+    BlacksmithUtils.playSound(
+        isCrit ? 'modules/coffee-pub-blacksmith/sounds/reaction-yay.mp3'
+            : 'modules/coffee-pub-blacksmith/sounds/sadtrombone.mp3',
+        '0.7'
+    );
+    return html;
+}
+
+/**
+ * The party, best-effort: characters assigned to non-GM users first,
+ * since that is who is actually sitting at the table, falling back to
+ * player-owned character actors for worlds that do not assign.
+ */
+function getPartyActors() {
+    const assigned = game.users
+        .filter((u) => !u.isGM && u.character)
+        .map((u) => u.character);
+    if (assigned.length) return assigned;
+    return game.actors.filter((a) => a.type === 'character' && a.hasPlayerOwner);
+}
+
+/**
+ * Who this card is about: the roller and, for crits, whoever they hit.
+ * A card that can say "Apply to Grimshaw" beats one that says "Apply to
+ * Roller", so we work reasonably hard to put a name to them.
+ *
+ * The ids come from the triggering roll when there was one. Failing that
+ * — the toolbar buttons and the test harness post cards with no event
+ * behind them — we lean on Foundry's own convention: you CONTROL your own
+ * token and TARGET the one you are swinging at. So a lone controlled
+ * token is the roller and a lone target is who they hit. Anything
+ * ambiguous stays unnamed rather than guessed at.
+ */
+function resolveOutcomeCast({ rollerActorId = null, rollerTokenId = null, hitActorId = null } = {}) {
+    const lone = (tokens) => {
+        const pool = Array.from(tokens ?? []);
+        return pool.length === 1 ? (pool[0].actor ?? null) : null;
+    };
+    const roller = game.actors.get(rollerActorId ?? '')
+        ?? canvas?.tokens?.get(rollerTokenId ?? '')?.actor
+        ?? game.user?.character
+        ?? lone(canvas?.tokens?.controlled)
+        ?? null;
+    const hit = game.actors.get(hitActorId ?? '')
+        ?? lone(game.user?.targets)
+        ?? null;
+    return { roller, hit };
+}
+
+/**
+ * The apply controls, which differ by who the outcome lands on:
+ *   party — one button that just does it, to everyone, no selecting
+ *   ally  — one button PER party member, because "you pick who gets
+ *           this" is a decision the table makes out loud
+ *   self  — the roller, named when we know who that is
+ *   else  — the usual single button against the selected token
+ */
+function buildOutcomeApplyButtons(rec, applyData, cast = {}) {
+    const encode = (data) => encodeURIComponent(JSON.stringify(data));
+
+    if (rec.appliesto === 'party') {
+        const party = getPartyActors();
+        return {
+            applyoutcome: encode({ ...applyData, partyMode: true }),
+            applyoutcomelabel: party.length ? `Apply to the Whole Party (${party.length})` : 'Apply to the Whole Party',
+            applyoutcomehint: party.length ? '' : 'No party members found — select tokens instead.'
+        };
+    }
+
+    if (rec.appliesto === 'ally') {
+        const party = getPartyActors();
+        if (party.length) {
+            return {
+                // Some entries say "you pick", others say "GM chooses with a
+                // dice roll" — offer both rather than encoding which is which.
+                applyoutcomerandom: encode({ ...applyData, randomAlly: true }),
+                applyoutcomepicker: party.map((actor) => ({
+                    name: actor.name,
+                    img: actor.img || 'icons/svg/mystery-man.svg',
+                    payload: encode({ ...applyData, targetActorId: actor.id })
+                })),
+                applyoutcomeicon: applyData.kind === 'crit' ? 'fa-burst' : 'fa-heart-crack',
+                applyoutcomehint: 'Pick who it lands on, or let the dice decide.'
+            };
+        }
+    }
+
+    // Name the person when we can, and bind the button to them: the card
+    // records a specific moment, so it should not quietly re-aim at
+    // whatever happens to be selected when someone gets around to clicking.
+    const named = rec.appliesto === 'self' ? cast.roller
+        : (rec.appliesto === 'target' ? (cast.hit ?? null) : null);
+    if (named) {
+        return {
+            applyoutcome: encode({ ...applyData, targetActorId: named.id }),
+            applyoutcomelabel: `Apply to ${named.name}`,
+            applyoutcomehint: ''
+        };
+    }
+
+    return {
+        applyoutcome: encode(applyData),
+        applyoutcomelabel: `Apply to ${targetLabel(rec.appliesto).replace(/^The /, '')}`,
+        applyoutcomehint: TARGET_HINTS[rec.appliesto] ?? ''
+    };
+}
+
+function buildOutcomeMechanics(rec, modifierLines, rounds) {
+    const lines = [];
+    if (rec.damage) lines.push({ icon: 'fa-heart-crack', text: `${rec.damage} damage` });
+    if (rec.statuseffect && rec.statuseffect !== 'none') {
+        const label = rec.statuseffect.charAt(0).toUpperCase() + rec.statuseffect.slice(1);
+        lines.push({ icon: 'fa-sparkles', text: rounds ? `${label} for ${rounds} round${rounds === 1 ? '' : 's'}` : label });
+    }
+    for (const text of modifierLines) lines.push({ icon: 'fa-dice-d20', text });
+    if (!lines.length) lines.push({ icon: 'fa-circle-info', text: 'No lasting effect — the damage is the story.' });
+    return lines;
 }
 
 // Trigger the injuries selector card (toolbar button) — macro-free
@@ -581,8 +800,139 @@ async function createChatCardTreatment(token) {
     return template(CARDDATA);
 }
 
+/**
+ * Draw an inspiration card. Drawing GRANTS the point — using the card
+ * spends it (see the Use button on the posted card).
+ *
+ * @param {Actor|null} actor  who receives the point; defaults to the
+ *                            targeted/selected token's actor
+ * @param {string|null} title  force a specific card by name instead of
+ *                             drawing at random (testing)
+ */
+export async function drawInspirationCard(actor = null, { title = null } = {}) {
+    const compendiumName = getSettingSafe('inspirationCompendium', 'none');
+    const pack = game.packs.get(compendiumName);
+    if (!pack) {
+        showBibToast('No Card Deck', 'Set an Inspiration Cards compendium in the settings.', 'fa-solid fa-lightbulb');
+        return;
+    }
+    const entries = await pack.getDocuments();
+    const cards = entries
+        .flatMap((journal) => Array.from(journal.pages ?? []))
+        .map((page) => {
+            const system = page?.system;
+            if (!system || system.odds === undefined) return null;
+            const fields = system.toObject?.() ?? system;
+            return { ...fields, title: page.name, sourceUuid: page.uuid };
+        })
+        .filter(Boolean);
+    if (!cards.length) {
+        showBibToast('Empty Deck', `No cards found in "${compendiumName}".`, 'fa-solid fa-lightbulb');
+        return;
+    }
+
+    // `title` forces a specific card — the harness uses it to demo each
+    // automated action without waiting for the draw to cooperate.
+    const card = title ? cards.find((c) => c.title === title) : weightedPick(cards, (c) => c.odds);
+    if (!card) {
+        showBibToast('No Such Card', `Nothing titled "${title}" in the deck.`, 'fa-solid fa-lightbulb');
+        return;
+    }
+    const holder = actor
+        ?? Array.from(game.user.targets ?? [])[0]?.actor
+        ?? canvas?.tokens?.controlled?.[0]?.actor
+        ?? null;
+
+    // Drawing gives them the point.
+    let granted = false;
+    if (holder) {
+        const { grantInspiration } = await import('./manager-inspiration.js');
+        granted = await grantInspiration(holder);
+    }
+
+    const template = await getCardTemplate();
+    const html = template({
+        theme: getSettingSafe('cardThemeInspiration', 'cardsdefault'),
+        iconStyle: 'fa-lightbulb',
+        cardTitle: 'Inspiration',
+        cardSubTitle: holder ? holder.name : '',
+        iconSubStyle: 'fa-user',
+        title: card.title,
+        content: card.description,
+        image: card.image || '',
+        imagecaption: card.imagetitle || '',
+        imageBackground: 'themecolor',
+        inspirationnote: holder
+            ? (granted ? `${holder.name} gains an inspiration point — spend it to use this card.`
+                : `${holder.name} already holds a point. Spend it to use this card.`)
+            : 'Nobody selected — grant the point by hand, or draw again with a token selected.',
+        inspirationuse: encodeURIComponent(JSON.stringify({
+            title: card.title,
+            action: card.action ?? 'none',
+            actionamount: card.actionamount ?? null,
+            actionformula: card.actionformula ?? '',
+            holderActorId: holder?.id ?? null,
+            sourceUuid: card.sourceUuid ?? null
+        })),
+        inspirationuselabel: card.action && card.action !== 'none'
+            ? `Use — ${actionButtonFor(card.action)}`
+            : 'Use This Card',
+        inspirationusehint: card.action && card.action !== 'none' ? actionHintFor(card.action) : '',
+        hasSectionContent: true
+    });
+
+    BlacksmithUtils.playSound('modules/coffee-pub-blacksmith/sounds/spell-magic-circle.mp3', '0.7');
+    await ChatMessage.create({ user: game.user.id, content: html, speaker: ChatMessage.getSpeaker() });
+}
+
+function actionButtonFor(action) {
+    const { ACTIONS } = INSPIRATION_ACTIONS;
+    return ACTIONS?.[action]?.button ?? 'Resolve';
+}
+
+function actionHintFor(action) {
+    const { ACTIONS } = INSPIRATION_ACTIONS;
+    return ACTIONS?.[action]?.hint ?? '';
+}
+
+/**
+ * Use a drawn card: spend the point, then run the automation if it has
+ * one. Narrative cards still spend the point — the table resolves the
+ * rest out loud.
+ */
+async function useInspirationCard(buttonEl, data) {
+    const { spendInspiration, runInspirationAction, hasInspiration } = await import('./manager-inspiration.js');
+    const holder = game.actors.get(data?.holderActorId ?? '');
+
+    if (holder && !hasInspiration(holder)) {
+        showBibToast('No Point to Spend', `${holder.name} has no inspiration right now.`, 'fa-solid fa-lightbulb');
+        return;
+    }
+
+    const result = await runInspirationAction(data);
+    if (!result.ok) {
+        showBibToast('Not Yet', result.summary, 'fa-solid fa-crosshairs');
+        return;
+    }
+    if (holder) await spendInspiration(holder);
+
+    showBibToast('Inspiration Used', result.summary || data?.title || '', 'fa-solid fa-lightbulb');
+    await markCardButtonApplied(
+        buttonEl,
+        '.coffee-pub-bibliosoph-button-inspiration',
+        [result.summary || (holder?.name ?? 'the party')]
+    );
+}
+
 // Trigger inspiration macro (for toolbar integration)
 function triggerInspirationMacro() {
+    // Typed card deck first; the roll-table path remains for anyone who
+    // sets the compendium to None.
+    const compendium = getSettingSafe('inspirationCompendium', 'none');
+    if (compendium && compendium !== 'none') {
+        drawInspirationCard();
+        return;
+    }
     const strInspirationMacro = BlacksmithUtils.getSettingSafely(MODULE.ID, 'inspirationMacro', '') || '';
     
     if (!strInspirationMacro || strInspirationMacro === '-- Choose a Macro --' || strInspirationMacro === 'none') {
@@ -691,6 +1041,27 @@ Hooks.once('init', async function() {
             types: [INJURY_PAGE_TYPE],
             makeDefault: true,
             label: 'Bibliosoph Injury'
+        });
+
+        // Criticals and fumbles: the same typed-page treatment, minus
+        // treatment (you do not treat a critical) and plus roll modifiers.
+        Object.assign(CONFIG.JournalEntryPage.dataModels, {
+            [OUTCOME_PAGE_TYPE]: OutcomePageModel
+        });
+        foundry.applications.apps.DocumentSheetConfig.registerSheet(JournalEntryPage, MODULE.ID, OutcomePageSheet, {
+            types: [OUTCOME_PAGE_TYPE],
+            makeDefault: true,
+            label: 'Bibliosoph Critical or Fumble'
+        });
+
+        // Inspiration cards: drawn for a point, spent to use.
+        Object.assign(CONFIG.JournalEntryPage.dataModels, {
+            [INSPIRATION_PAGE_TYPE]: InspirationPageModel
+        });
+        foundry.applications.apps.DocumentSheetConfig.registerSheet(JournalEntryPage, MODULE.ID, InspirationPageSheet, {
+            types: [INSPIRATION_PAGE_TYPE],
+            makeDefault: true,
+            label: 'Bibliosoph Inspiration Card'
         });
     } catch (error) {
         logBib('Failed to register the injury page subtype', error?.message, false, false);
@@ -915,6 +1286,13 @@ Hooks.on("ready", async () => {
             const data = decodeEffectPayload(applyOutcomeButton.getAttribute('data-effect'));
             const applied = await applyOutcomeStatus(data);
             await markCardButtonApplied(applyOutcomeButton, '.coffee-pub-bibliosoph-button-apply-outcome', applied);
+        }
+
+        // CHECK FOR USE-INSPIRATION BUTTON
+        const inspirationButton = event.target.closest?.('.coffee-pub-bibliosoph-button-inspiration');
+        if (inspirationButton) {
+            const data = decodeEffectPayload(inspirationButton.getAttribute('data-inspiration'));
+            if (data) await useInspirationCard(inspirationButton, data);
         }
 
         // CHECK FOR APPLY TREATMENT BUTTON
@@ -2453,14 +2831,51 @@ async function getInjuryDataFromJournalPages(compendiumName, journalName) {
 async function applyOutcomeStatus(data) {
     const blnIsCrit = data?.kind !== 'fumble';
     const strKindLabel = blnIsCrit ? 'Critical' : 'Fumble';
+    const fallbackImg = blnIsCrit
+        ? "icons/skills/wounds/blood-spurt-spray-red.webp"
+        : "icons/skills/wounds/injury-pain-body-orange.webp";
+
+    // Typed outcomes carry real mechanics; table-sourced ones carry only a
+    // name and prose, and the nullish defaults below leave them behaving
+    // exactly as they always have.
+    const modifiers = Array.isArray(data?.modifiers) ? data.modifiers : [];
+    const changes = modifiers.length ? modifiersToChanges(modifiers) : [];
+    const rounds = secondsToRounds(data?.duration ?? 0);
+    const description = [
+        data?.description || '',
+        modifiers.length ? `<p><strong>While this lasts:</strong> ${modifiers.map(describeModifier).filter(Boolean).join('; ')}</p>` : ''
+    ].filter(Boolean).join('');
+
+    // Party outcomes apply to everyone with no selecting; "pick who gets
+    // this" outcomes carry the chosen actor on the button that was clicked.
+    let explicitActors = null;
+    if (data?.partyMode) {
+        const party = getPartyActors();
+        if (party.length) explicitActors = party;
+    } else if (data?.randomAlly) {
+        const party = getPartyActors();
+        if (party.length) explicitActors = [party[Math.floor(Math.random() * party.length)]];
+    } else if (data?.targetActorId) {
+        const actor = game.actors.get(data.targetActorId);
+        if (actor) explicitActors = [actor];
+    }
+
     return applyStatusToTokens({
         name: `${strKindLabel}: ${data?.name || (blnIsCrit ? 'Critical Hit' : 'Fumble')}`,
-        img: blnIsCrit
-            ? "icons/skills/wounds/blood-spurt-spray-red.webp"
-            : "icons/skills/wounds/injury-pain-body-orange.webp",
-        description: data?.description || "",
+        img: data?.image || fallbackImg,
+        description,
+        durationSeconds: Number(data?.duration) || null,
+        damage: Number(data?.damage) || null,
+        statusEffect: data?.statuseffect && data.statuseffect !== 'none' ? data.statuseffect : null,
+        changes,
+        explicitActors,
         kindLabel: strKindLabel.toLowerCase(),
-        burst: { kind: blnIsCrit ? 'crit' : 'fumble' }
+        burst: {
+            kind: blnIsCrit ? 'crit' : 'fumble',
+            severity: data?.severity ?? null,
+            sourceUuid: data?.sourceUuid ?? null,
+            rounds
+        }
     });
 }
 
@@ -2994,12 +3409,16 @@ async function markCardButtonApplied(buttonEl, buttonSelector, appliedNames) {
         const message = game.messages.get(messageId ?? '');
         if (!message || !message.canUserModify(game.user, 'update')) return;
         const doc = new DOMParser().parseFromString(message.content, 'text/html');
-        const button = doc.querySelector(buttonSelector);
-        if (!button) return;
+        const buttons = Array.from(doc.querySelectorAll(buttonSelector));
+        if (!buttons.length) return;
         const stamp = doc.createElement('div');
         stamp.style.cssText = 'width:100%; text-align:center; font-style:italic; opacity:0.85; padding:4px 0;';
         stamp.textContent = `✓ Applied to ${appliedNames.join(', ')}`;
-        button.replaceWith(stamp);
+        // A pick-one card renders a button per party member; choosing one
+        // resolves the whole decision, so every option is replaced by the
+        // single stamp rather than leaving the rest live.
+        buttons[0].replaceWith(stamp);
+        for (const extra of buttons.slice(1)) extra.remove();
         await message.update({ content: doc.body.innerHTML });
     } catch (error) {
         logBib('Could not mark card button applied', error?.message, false, false);

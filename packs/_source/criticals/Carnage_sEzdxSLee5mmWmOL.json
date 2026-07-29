@@ -1,0 +1,2016 @@
+{
+  "name": "Carnage",
+  "pages": [
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Appendage Blow",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "NshObQhb0QVzbxTT",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/wounds/injury-face-impact-orange.webp",
+        "imagetitle": "",
+        "description": "Your target loses a finger. This hand will suffer a -2 penalty on all checks until appropriate healing spell cast upon the target.",
+        "severity": "moderate",
+        "appliesto": "target",
+        "damage": 0,
+        "duration": 600,
+        "statuseffect": "none",
+        "odds": 21,
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -2,
+            "rounds": 100
+          }
+        ],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.NshObQhb0QVzbxTT"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Apple Core",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "P0Nwg1ArYYNUYdMB",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/melee/strike-sword-blood-red.webp",
+        "imagetitle": "",
+        "description": "\"...nothing more. Who's your friend?\" You utter those words and the first party member to call out a target gets to choose who gets a bonus attack. Apply [[1d10]] damage to that target.",
+        "severity": "moderate",
+        "appliesto": "ally",
+        "damage": 0,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 21,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 100,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.P0Nwg1ArYYNUYdMB"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Body Blow",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "8DI5ioTW7epPHysk",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/wounds/injury-face-impact-orange.webp",
+        "imagetitle": "",
+        "description": "Your target's lung is slashed. This results in the target being stunned for 2 rounds with a -1 penalty to combat until healed with appropriate healing spell. If this action is impossible due to the nature of the target, then you do standard critical damage +5, instead.",
+        "severity": "moderate",
+        "appliesto": "target",
+        "damage": 0,
+        "duration": 12,
+        "statuseffect": "stunned",
+        "odds": 21,
+        "modifiers": [
+          {
+            "stat": "attack",
+            "value": -1,
+            "rounds": 2
+          }
+        ],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 200,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.8DI5ioTW7epPHysk"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "El Ka-Bong",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "DB8cBqcOxZ7uNkEL",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/melee/strike-dagger-blood-red.webp",
+        "imagetitle": "",
+        "description": "Off in the distance you hear lute music. It is quickly getting closer and louder. Out of nowhere comes a lute, smacking the target in the head doing [[1d10]] bludgeoning damage.",
+        "severity": "moderate",
+        "appliesto": "target",
+        "damage": 5,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 21,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 300,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.DB8cBqcOxZ7uNkEL"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Eye Gouge",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "zfoC58GfUP68vgyf",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/wounds/injury-face-impact-orange.webp",
+        "imagetitle": "",
+        "description": "Your target is \"blinded\" until the end of its next turn.",
+        "severity": "moderate",
+        "appliesto": "target",
+        "damage": 0,
+        "duration": 6,
+        "statuseffect": "blinded",
+        "odds": 21,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 400,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.zfoC58GfUP68vgyf"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Feeling the Love",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "q6UoPKT59w83xKWB",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/wounds/blood-spurt-spray-red.webp",
+        "imagetitle": "",
+        "description": "You feel the admiration of your party and it fills your heart. Roll a [[1d6]] and add that number in temporary hit points to your character.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 0,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 21,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 500,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.q6UoPKT59w83xKWB"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Forceful Blow",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "XAn7is8gPO25CZxi",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/melee/strike-sword-blood-red.webp",
+        "imagetitle": "",
+        "description": "Your target is \"dazed\" until the end of its next turn.",
+        "severity": "moderate",
+        "appliesto": "target",
+        "damage": 0,
+        "duration": 6,
+        "statuseffect": "none",
+        "odds": 21,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 600,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.XAn7is8gPO25CZxi"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Freeze Frame",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "2LCQGtkpRWm1PpOY",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/wounds/blood-spurt-spray-red.webp",
+        "imagetitle": "",
+        "description": "A catchy tune enters your target's mind. They are paralyzed for [[1d4]] rounds as their OCD forces them to sing the entire song in their head. You can hear them humming it, but they are otherwise motionless. Hum the tune you hear to your party.",
+        "severity": "moderate",
+        "appliesto": "target",
+        "damage": 0,
+        "duration": 24,
+        "statuseffect": "paralyzed",
+        "odds": 21,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 700,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.2LCQGtkpRWm1PpOY"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Gaping Wound",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "KwXgPs1fycf4mhj7",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/melee/strike-dagger-blood-red.webp",
+        "imagetitle": "",
+        "description": "The target takes ongoing 5 +1/2 your level damage (round up).",
+        "severity": "moderate",
+        "appliesto": "target",
+        "damage": 5,
+        "duration": 60,
+        "statuseffect": "bleeding",
+        "odds": 21,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 800,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.KwXgPs1fycf4mhj7"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Hamstring",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "s5eLKy4cnzLWbAyr",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/wounds/blood-spurt-spray-red.webp",
+        "imagetitle": "",
+        "description": "You hamstring the target. While they don't fall prone, the target is \"slowed\" a DC8 DEX ends it.",
+        "severity": "moderate",
+        "appliesto": "target",
+        "damage": 0,
+        "duration": 6,
+        "statuseffect": "none",
+        "odds": 21,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 900,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.s5eLKy4cnzLWbAyr"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Head Blow",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "bq2Fy26pWAYoqjga",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/wounds/blood-spurt-spray-red.webp",
+        "imagetitle": "",
+        "description": "The target loses [[1d6]] bludgeoning for a blow to the skull. They are dazed and permanently grant combat advantage to opponents approaching from whichever side was hit. If this action is impossible due to the nature of the target you do standard critical hit damage +10, instead.",
+        "severity": "moderate",
+        "appliesto": "target",
+        "damage": 3,
+        "duration": 600,
+        "statuseffect": "none",
+        "odds": 21,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 1000,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.bq2Fy26pWAYoqjga"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Inspirational",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "DMEctqUpLUDPXntn",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/melee/strike-sword-blood-red.webp",
+        "imagetitle": "",
+        "description": "@UUID[Macro.N60EOG6dQaf4rbHo]{Inspiration} Your hit dazzles your party... but which is the most dazzeld party member? Each of them must compliment your hit -- chose the best one. They were inspired by you... they get an inspiration point.",
+        "severity": "moderate",
+        "appliesto": "ally",
+        "damage": 0,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 21,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 1100,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.DMEctqUpLUDPXntn"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Inspired",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "R9aeZ946ijIebdM4",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/melee/strike-hammer-destructive-orange.webp",
+        "imagetitle": "",
+        "description": "@UUID[Macro.N60EOG6dQaf4rbHo]{Inspiration} That was pretty bad-ass. You gain one inspiration point.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 0,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 21,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 1200,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.R9aeZ946ijIebdM4"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "It's Not You It's Me",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "XK6YgxZeGbnwqdlO",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/wounds/injury-face-impact-orange.webp",
+        "imagetitle": "",
+        "description": "Your target is \"turned\" for 1 minute or until attacked. It must spend its turns trying to move as far away from you as it can, and it can't willingly move to a space within 30 feet of you. For its Action, it can use only the Dash Action or try to escape from an effect that prevents it from moving.",
+        "severity": "moderate",
+        "appliesto": "target",
+        "damage": 0,
+        "duration": 60,
+        "statuseffect": "frightened",
+        "odds": 21,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 1300,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.XK6YgxZeGbnwqdlO"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Knee Hit",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "1qRxn7EwEV2lHtSZ",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/melee/strike-dagger-blood-red.webp",
+        "imagetitle": "",
+        "description": "Your target's leg is cut off at the knee, and movement reduced to 1/4 speed. Target will have a permanent limp and -5 movement as an after affect. If this action is impossible due to the nature of the target then you do standard critical damage [[1d8]], instead. You point at your leg and wink at the target.",
+        "severity": "moderate",
+        "appliesto": "target",
+        "damage": 0,
+        "duration": 600,
+        "statuseffect": "none",
+        "odds": 21,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 1400,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.1qRxn7EwEV2lHtSZ"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Knockdown",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "bt4xzhbjYBbinWnX",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/melee/strike-sword-blood-red.webp",
+        "imagetitle": "",
+        "description": "You knock the target prone. \"Ouch,\" it thinks, \"I am suddenly having a pretty bad day.\"",
+        "severity": "moderate",
+        "appliesto": "target",
+        "damage": 0,
+        "duration": 6,
+        "statuseffect": "prone",
+        "odds": 21,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 1500,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.bt4xzhbjYBbinWnX"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Knockout Blow",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "iLG17eFo2lvpvw2Z",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/wounds/blood-spurt-spray-red.webp",
+        "imagetitle": "",
+        "description": "You knock the target Unconcious. A DC10 Intelligence check or target taking damage ends.",
+        "severity": "moderate",
+        "appliesto": "target",
+        "damage": 0,
+        "duration": 60,
+        "statuseffect": "unconscious",
+        "odds": 21,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 1600,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.iLG17eFo2lvpvw2Z"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Mighty Blow",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "J6l4xXvii4WcdBcp",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/melee/strike-sword-blood-red.webp",
+        "imagetitle": "",
+        "description": "You do twice the critical hit damage to the target.",
+        "severity": "moderate",
+        "appliesto": "target",
+        "damage": 0,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 21,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 1700,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.J6l4xXvii4WcdBcp"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Need a Hug",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "heGr2MD2DmPVENE9",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/melee/strike-sword-blood-red.webp",
+        "imagetitle": "",
+        "description": "You get a bonus action to try to grapple your target if you choose to do so.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 0,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 21,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 1800,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.heGr2MD2DmPVENE9"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Opportunity",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "2Yzgq503ZMePBVMj",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/melee/strike-hammer-destructive-orange.webp",
+        "imagetitle": "",
+        "description": "You may take an extra standard action this turn.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 0,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 21,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 1900,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.2Yzgq503ZMePBVMj"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Parry",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "FTMIt2ICqawxoLw3",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/wounds/blood-spurt-spray-red.webp",
+        "imagetitle": "",
+        "description": "You gain +2 to all your defenses against attacks from the target until the end of your next turn.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 0,
+        "duration": 6,
+        "statuseffect": "none",
+        "odds": 21,
+        "modifiers": [
+          {
+            "stat": "ac",
+            "value": 2,
+            "rounds": 1
+          }
+        ],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 2000,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.FTMIt2ICqawxoLw3"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Party Animal",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "BNjtXYsQWNN6bFn9",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/wounds/injury-face-impact-orange.webp",
+        "imagetitle": "",
+        "description": "Your target pulls out a mug of ale to dull the pain and finds themselves intoxicated for the next [[1d4]] rounds..",
+        "severity": "moderate",
+        "appliesto": "target",
+        "damage": 0,
+        "duration": 24,
+        "statuseffect": "poisoned",
+        "odds": 21,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 2100,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.BNjtXYsQWNN6bFn9"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Play Date",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "26eggFBYeRYNXstY",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/melee/strike-sword-blood-red.webp",
+        "imagetitle": "",
+        "description": "The party attacks with advantage until the end of the round. If you are the last member of the party in the round, well, better luck next time.",
+        "severity": "moderate",
+        "appliesto": "party",
+        "damage": 0,
+        "duration": 6,
+        "statuseffect": "none",
+        "odds": 21,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 2200,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.26eggFBYeRYNXstY"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Poopy Pants",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "kX73iI1DeseIFXsA",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/melee/strike-dagger-blood-red.webp",
+        "imagetitle": "",
+        "description": "You hit your target hard... real hard. It poops its pants. Your target is stunned until the end of the next round.",
+        "severity": "moderate",
+        "appliesto": "target",
+        "damage": 0,
+        "duration": 6,
+        "statuseffect": "stunned",
+        "odds": 21,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 2300,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.kX73iI1DeseIFXsA"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Pressure Point",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "8miunIvaCvdHLnR1",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/wounds/injury-face-impact-orange.webp",
+        "imagetitle": "",
+        "description": "You got on their nerves, so the target is \"weakened.\" A DC 11 Strength ends it.",
+        "severity": "moderate",
+        "appliesto": "target",
+        "damage": 0,
+        "duration": 12,
+        "statuseffect": "none",
+        "odds": 21,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 2400,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.8miunIvaCvdHLnR1"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Puppet Master",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "xkYUQFeA9ejXGiio",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/wounds/injury-face-impact-orange.webp",
+        "imagetitle": "",
+        "description": "Your target is charmed. It remains so until it is attacked, you release it, or it makes a DC10 Wisdom saving throw.",
+        "severity": "moderate",
+        "appliesto": "target",
+        "damage": 0,
+        "duration": 60,
+        "statuseffect": "charmed",
+        "odds": 21,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 2500,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.xkYUQFeA9ejXGiio"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Restack",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "dh8JMLMsEUeSG7m3",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/melee/strike-dagger-blood-red.webp",
+        "imagetitle": "",
+        "description": "You roll 2d6 and change the initiative of the target of your choice to [[2d6]]. Do this [[1d6]] times and shout, \"Restack, mofo!\" each time.",
+        "severity": "moderate",
+        "appliesto": "target",
+        "damage": 0,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 21,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 2600,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.dh8JMLMsEUeSG7m3"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "See Ya",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "aTRGXTJBbBSU7sfE",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/wounds/blood-spurt-spray-red.webp",
+        "imagetitle": "",
+        "description": "The target moves 50 feet (or until they hit a wall or object) in the direction of your choosing. They take [[1d6]] bludgeoning damage.",
+        "severity": "moderate",
+        "appliesto": "target",
+        "damage": 3,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 21,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 2700,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.aTRGXTJBbBSU7sfE"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Shields Up",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "Rn7LXayNbsluc7Kd",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/wounds/blood-spurt-spray-red.webp",
+        "imagetitle": "",
+        "description": "A mysterious force surrounds you. For the next [[1d4]] rounds attacks against you are -2 to hit.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 0,
+        "duration": 24,
+        "statuseffect": "none",
+        "odds": 21,
+        "modifiers": [
+          {
+            "stat": "ac",
+            "value": 2,
+            "rounds": 4
+          }
+        ],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 2800,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.Rn7LXayNbsluc7Kd"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Shoulder Blow",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "5dc9SeuJENTdvvCB",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/melee/strike-hammer-destructive-orange.webp",
+        "imagetitle": "",
+        "description": "Your target's arm is severed at the shoulder and is \"stunned\" for 2 rounds. This results in a permanent -2 to all checks until healed with appropriate healing spell. If this action is impossible due to the nature of the target, you do standard critical hit damage +7, instead.",
+        "severity": "moderate",
+        "appliesto": "target",
+        "damage": 0,
+        "duration": 12,
+        "statuseffect": "stunned",
+        "odds": 21,
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -2,
+            "rounds": 2
+          }
+        ],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 2900,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.5dc9SeuJENTdvvCB"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Slow-Mo",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "D9aEPz34eQgCadwd",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/melee/strike-hammer-destructive-orange.webp",
+        "imagetitle": "",
+        "description": "Your target can only move half its distance and attacks with disadvantage for the next two rounds.",
+        "severity": "moderate",
+        "appliesto": "target",
+        "damage": 0,
+        "duration": 12,
+        "statuseffect": "none",
+        "odds": 21,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 3000,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.D9aEPz34eQgCadwd"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Spell Slot Mojo",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "WuZo9Kl5VAe8fV5C",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/melee/strike-hammer-destructive-orange.webp",
+        "imagetitle": "",
+        "description": "You regain a spell slot or can gift the same to one of your party members.",
+        "severity": "moderate",
+        "appliesto": "ally",
+        "damage": 0,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 21,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 3100,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.WuZo9Kl5VAe8fV5C"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Stop Hitting Yourself",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "dCMfxaIQiQQSN6oJ",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/melee/strike-dagger-blood-red.webp",
+        "imagetitle": "",
+        "description": "Your target attacks itself with its primary weapon.",
+        "severity": "moderate",
+        "appliesto": "target",
+        "damage": 0,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 21,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 3200,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.dCMfxaIQiQQSN6oJ"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Stunning Blow",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "7GX40O3dqzoJsqZ2",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/melee/strike-sword-blood-red.webp",
+        "imagetitle": "",
+        "description": "Your target is \"stunned\" until the end of its next turn.",
+        "severity": "moderate",
+        "appliesto": "target",
+        "damage": 0,
+        "duration": 6,
+        "statuseffect": "stunned",
+        "odds": 21,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 3300,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.7GX40O3dqzoJsqZ2"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Total Perspective Vortex",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "WWNUSHRfRhFgzQmf",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/melee/strike-hammer-destructive-orange.webp",
+        "imagetitle": "",
+        "description": "For a brief moment your target sees themselves in relation to the totality of the universe. You see a \"You Are Here\" sign flash above their head... after which they suffer [[2d6]] psychic damage and fall to their knees prone.",
+        "severity": "moderate",
+        "appliesto": "target",
+        "damage": 7,
+        "duration": 6,
+        "statuseffect": "prone",
+        "odds": 21,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 3400,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.WWNUSHRfRhFgzQmf"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Turn the Tide",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "fUKaR5puZVUIkkot",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/melee/strike-hammer-destructive-orange.webp",
+        "imagetitle": "",
+        "description": "You gain combat advantage against all enemies on the battlefield until the end of your next turn.",
+        "severity": "moderate",
+        "appliesto": "party",
+        "damage": 0,
+        "duration": 6,
+        "statuseffect": "none",
+        "odds": 21,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 3500,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.fUKaR5puZVUIkkot"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Where Did You Go?",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "a5YbT5iavxhCnOyl",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/melee/strike-dagger-blood-red.webp",
+        "imagetitle": "",
+        "description": "The target is blind until the end of the next round",
+        "severity": "moderate",
+        "appliesto": "target",
+        "damage": 0,
+        "duration": 6,
+        "statuseffect": "blinded",
+        "odds": 21,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 3600,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.a5YbT5iavxhCnOyl"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Wrist Blow",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "ES6DQt8V9AHCtud9",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/melee/strike-dagger-blood-red.webp",
+        "imagetitle": "",
+        "description": "The target's hand is removed at the wrist. There is a 50% chance of either main or off hand... and if main hand, they now roll with disadvantage. Roll a d100 and if [[1d100]] is greater than 50, they lost the hand. If this action is not possible due to the nature of the target, then in addition to standard critical damage, you gain an inspiration point instead.",
+        "severity": "moderate",
+        "appliesto": "target",
+        "damage": 0,
+        "duration": 600,
+        "statuseffect": "none",
+        "odds": 21,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 3700,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.ES6DQt8V9AHCtud9"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "You Seem Familiar",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "J35CkEMTnaKk3OHi",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/wounds/injury-face-impact-orange.webp",
+        "imagetitle": "",
+        "description": "As you attacked your target, you had a childhood memory randomly pop into your head... a little companion from your past. Poof! Next to you appears that pet until your next long rest. Choose one of the following: cat, dog, pig, rabbit, or chicken. They have 5 HP and are your familiar for the day.",
+        "severity": "moderate",
+        "appliesto": "self",
+        "damage": 0,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 21,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 3800,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.J35CkEMTnaKk3OHi"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "You're a Hottie",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "WK4PdryNgM07g4hK",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/melee/strike-hammer-destructive-orange.webp",
+        "imagetitle": "",
+        "description": "You pop a pipe in the mouth of your target... a novelty pipe. It explodes and does an additional [[1d6]] of damage to the target. You look them in the eye and say, \"I learned this from watching you!\"",
+        "severity": "moderate",
+        "appliesto": "target",
+        "damage": 3,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 21,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 3900,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!sEzdxSLee5mmWmOL.WK4PdryNgM07g4hK"
+    }
+  ],
+  "folder": null,
+  "_id": "sEzdxSLee5mmWmOL",
+  "categories": [],
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1784237483935,
+    "modifiedTime": 1785352039540,
+    "lastModifiedBy": "B4d9pDwUBOtAfJFE"
+  },
+  "ownership": {
+    "default": 0,
+    "B4d9pDwUBOtAfJFE": 3
+  },
+  "sort": 1000,
+  "_key": "!journal!sEzdxSLee5mmWmOL"
+}

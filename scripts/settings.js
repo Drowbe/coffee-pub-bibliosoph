@@ -643,6 +643,52 @@ export const registerSettings = () => {
 			default: 'theme-default',
 			choices: themeChoices
 		});
+		// -- Critical / Fumble Compendiums (typed pages with real mechanics) --
+		game.settings.register(MODULE.ID, 'critCompendium', {
+			name: MODULE.ID + '.critCompendium-Label',
+			hint: MODULE.ID + '.critCompendium-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: false,
+			default: 'coffee-pub-bibliosoph.criticals',
+			choices: Object.assign(
+				{ none: 'None — use the roll table below' },
+				getBlacksmithChoices('arrCompendiumChoices', 'No compendiums found. Try reloading Foundry after all modules are enabled.')
+			)
+		});
+		game.settings.register(MODULE.ID, 'fumbleCompendium', {
+			name: MODULE.ID + '.fumbleCompendium-Label',
+			hint: MODULE.ID + '.fumbleCompendium-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: false,
+			default: 'coffee-pub-bibliosoph.fumbles',
+			choices: Object.assign(
+				{ none: 'None — use the roll table below' },
+				getBlacksmithChoices('arrCompendiumChoices', 'No compendiums found. Try reloading Foundry after all modules are enabled.')
+			)
+		});
+		game.settings.register(MODULE.ID, 'inspirationCompendium', {
+			name: MODULE.ID + '.inspirationCompendium-Label',
+			hint: MODULE.ID + '.inspirationCompendium-Hint',
+			scope: "world",
+			config: true,
+			requiresReload: false,
+			default: 'coffee-pub-bibliosoph.inspiration',
+			choices: Object.assign(
+				{ none: 'None — use the roll table below' },
+				getBlacksmithChoices('arrCompendiumChoices', 'No compendiums found. Try reloading Foundry after all modules are enabled.')
+			)
+		});
+		game.settings.register(MODULE.ID, 'outcomeImageEnabled', {
+			name: MODULE.ID + '.outcomeImageEnabled-Label',
+			hint: MODULE.ID + '.outcomeImageEnabled-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: false,
+			scope: 'world',
+			default: true,
+		});
 		// -- Fumble Table --
 		game.settings.register(MODULE.ID,'fumbleTable', {
 			name: MODULE.ID + '.fumbleTable-Label',

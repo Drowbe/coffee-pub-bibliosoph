@@ -1,0 +1,228 @@
+{
+  "name": "Meek",
+  "pages": [
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Chicken Hat",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "xtuqLr1u6gGgu7bP",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/skills/wounds/injury-body-pain-gray.webp",
+        "imagetitle": "",
+        "description": "Out of nowhere, a roast chicken drops on your head like a hat. You are distracted for the next 2 rounds and attack with a -2 penalty. You can't remove it. At the end of the second round the chicken disappears in a puff of feathers.",
+        "severity": "minor",
+        "appliesto": "self",
+        "damage": 0,
+        "duration": 12,
+        "statuseffect": "none",
+        "odds": 50,
+        "modifiers": [
+          {
+            "stat": "attack",
+            "value": -2,
+            "rounds": 2
+          }
+        ],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!SU036drUJ4bLL4JX.xtuqLr1u6gGgu7bP"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Gaseous Maximus",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "28rDGhjJjHYtcglu",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/magic/air/weather-wind-gust.webp",
+        "imagetitle": "",
+        "description": "Something isn't sitting right in your digestive system and you find yourself incredibly flatulent. Anyone within 10 feet of you is poisoned for [[1D4]] rounds.",
+        "severity": "minor",
+        "appliesto": "nearby",
+        "damage": 0,
+        "duration": 24,
+        "statuseffect": "poisoned",
+        "odds": 50,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 100,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!SU036drUJ4bLL4JX.28rDGhjJjHYtcglu"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Health",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "dfuYF5BX7hQbqffW",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/skills/social/intimidation-impressing.webp",
+        "imagetitle": "",
+        "description": "Choose two party members and steal a bit of their health. They each take 1 HP damage while you gain 2 HP of temporary hit points. Creep.",
+        "severity": "minor",
+        "appliesto": "ally",
+        "damage": 0,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 50,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 200,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!SU036drUJ4bLL4JX.dfuYF5BX7hQbqffW"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Too Many Tacos",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "zwPVBnKR3BtveRiP",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/skills/social/intimidation-impressing.webp",
+        "imagetitle": "",
+        "description": "You suddenly feel as if you overdid it at lunch and immediately gain the weight of 1000 tacos. You are encumbered for [[1d4]] rounds.",
+        "severity": "minor",
+        "appliesto": "self",
+        "damage": 0,
+        "duration": 24,
+        "statuseffect": "none",
+        "odds": 50,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 300,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!SU036drUJ4bLL4JX.zwPVBnKR3BtveRiP"
+    }
+  ],
+  "folder": null,
+  "_id": "SU036drUJ4bLL4JX",
+  "categories": [],
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1784237483935,
+    "modifiedTime": 1785352039548,
+    "lastModifiedBy": "B4d9pDwUBOtAfJFE"
+  },
+  "ownership": {
+    "default": 0,
+    "B4d9pDwUBOtAfJFE": 3
+  },
+  "sort": 0,
+  "_key": "!journal!SU036drUJ4bLL4JX"
+}

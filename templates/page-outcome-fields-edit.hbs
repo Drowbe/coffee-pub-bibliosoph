@@ -1,0 +1,129 @@
+<section class="bibliosoph-outcome-page-fields bibliosoph-outcome-page-edit">
+    <div class="outcome-edit-section-header">
+        <i class="fa-solid fa-burst"></i>
+        <span>Outcome</span>
+    </div>
+
+    {{#if warnings.length}}
+        <div class="outcome-edit-warnings">
+            {{#each warnings}}
+                <p><i class="fa-solid fa-triangle-exclamation"></i> {{this}}</p>
+            {{/each}}
+        </div>
+    {{/if}}
+
+    <p class="outcome-edit-hint">The page title is the outcome's name. These fields drive the chat card and what lands on the token.</p>
+
+    <div class="outcome-edit-grid">
+        <div class="form-group">
+            <label for="{{document.id}}-outcome-kind">Type</label>
+            <select id="{{document.id}}-outcome-kind" name="system.kind">
+                {{#each kindChoices}}
+                    <option value="{{this.value}}" {{#if (eq this.value ../system.kind)}}selected{{/if}}>{{this.label}}</option>
+                {{/each}}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="{{document.id}}-outcome-severity">Bucket</label>
+            <select id="{{document.id}}-outcome-severity" name="system.severity">
+                {{#each severityChoices}}
+                    <option value="{{this.value}}" {{#if (eq this.value ../system.severity)}}selected{{/if}}>{{this.label}}</option>
+                {{/each}}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="{{document.id}}-outcome-appliesto">Lands On</label>
+            <select id="{{document.id}}-outcome-appliesto" name="system.appliesto">
+                {{#each targetChoices}}
+                    <option value="{{this.value}}" {{#if (eq this.value ../system.appliesto)}}selected{{/if}}>{{this.label}}</option>
+                {{/each}}
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group outcome-edit-full">
+        <label for="{{document.id}}-outcome-image">Image</label>
+        <file-picker id="{{document.id}}-outcome-image" name="system.image" type="image" value="{{system.image}}"
+            placeholder="icons/skills/melee/strike-blade-blood-red.webp"></file-picker>
+    </div>
+
+    <div class="form-group outcome-edit-full">
+        <label for="{{document.id}}-outcome-imagetitle">Caption</label>
+        <input type="text" id="{{document.id}}-outcome-imagetitle" name="system.imagetitle" value="{{system.imagetitle}}"
+            placeholder="A short evocative line shown under the art">
+    </div>
+
+    <div class="form-group outcome-edit-full">
+        <label for="{{document.id}}-outcome-description">Description</label>
+        <textarea id="{{document.id}}-outcome-description" name="system.description" rows="4"
+            placeholder="What happens, in second person. Two to four sentences.">{{system.description}}</textarea>
+    </div>
+
+    <div class="outcome-edit-section-header">
+        <i class="fa-solid fa-gears"></i>
+        <span>Mechanics</span>
+    </div>
+
+    <div class="outcome-edit-grid">
+        <div class="form-group">
+            <label for="{{document.id}}-outcome-damage">Damage (HP, one time)</label>
+            <input type="number" id="{{document.id}}-outcome-damage" name="system.damage" value="{{system.damage}}" min="0" step="1">
+        </div>
+        <div class="form-group">
+            <label for="{{document.id}}-outcome-rounds">Duration (rounds, 0 = instant)</label>
+            <input type="number" id="{{document.id}}-outcome-rounds" name="system.rounds" value="{{rounds}}" min="0" step="1">
+        </div>
+        <div class="form-group">
+            <label for="{{document.id}}-outcome-status">Condition</label>
+            <select id="{{document.id}}-outcome-status" name="system.statuseffect">
+                {{#each conditionChoices}}
+                    <option value="{{this.value}}" {{#if (eq this.value ../system.statuseffect)}}selected{{/if}}>{{this.label}}</option>
+                {{/each}}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="{{document.id}}-outcome-odds">Odds (1–100, higher is commoner)</label>
+            <input type="number" id="{{document.id}}-outcome-odds" name="system.odds" value="{{system.odds}}" min="1" max="100" step="1">
+        </div>
+    </div>
+
+    <div class="outcome-edit-section-header">
+        <i class="fa-solid fa-dice-d20"></i>
+        <span>Modifiers</span>
+    </div>
+    <p class="outcome-edit-hint">Real bonuses and penalties applied while this lasts — "-2 to attack rolls for 2 rounds". Leave a row blank to ignore it; clear the value to delete one.</p>
+
+    <div class="outcome-edit-modifiers">
+        {{#each modifierRows}}
+            <div class="outcome-modifier-row">
+                <select name="system.modifiers.{{@index}}.stat">
+                    <option value="">—</option>
+                    {{#each ../statChoices}}
+                        <option value="{{this.value}}" {{#if (eq this.value ../this.stat)}}selected{{/if}}>{{this.label}}</option>
+                    {{/each}}
+                </select>
+                <input type="number" name="system.modifiers.{{@index}}.value" value="{{this.value}}" step="1" placeholder="-2" title="Bonus or penalty">
+                <input type="number" name="system.modifiers.{{@index}}.rounds" value="{{this.rounds}}" min="0" step="1" placeholder="rounds" title="How many rounds">
+            </div>
+        {{/each}}
+    </div>
+
+    <div class="outcome-edit-section-header">
+        <i class="fa-solid fa-masks-theater"></i>
+        <span>Running This Outcome</span>
+    </div>
+    <div class="form-group outcome-edit-full">
+        <textarea id="{{document.id}}-outcome-gmnotes" name="system.gmnotes" rows="4"
+            placeholder="How to run it at the table: what to rule on, and a line to say out loud.">{{system.gmnotes}}</textarea>
+        <p class="outcome-edit-hint">Ships with the outcome and updates when it does.</p>
+    </div>
+
+    <!-- Blacksmith's GM Notes: the GM's own notes on this page. -->
+    <section class="bibliosoph-gm-notes-host" data-gm-notes-host aria-label="GM Notes"></section>
+
+    <div class="outcome-edit-section-header">
+        <i class="fa-solid fa-scroll"></i>
+        <span>Extended Description</span>
+    </div>
+    <p class="outcome-edit-hint">Optional rich text shown on this page below the fields.</p>
+</section>

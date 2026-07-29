@@ -105,8 +105,13 @@ export class RollToastManager {
         // one — arms onClick locally in _showLocal only when it IS that
         // user, since functions can never ride the socket relay. Hidden
         // rolls don't broadcast, so the GM takes the click instead.
+        // Who rolled and who they hit, so the card can name them on its
+        // Apply button instead of saying "the roller" / "the creature hit".
+        const cast = this._outcomeCast(outcome);
+
         if (automation === 'click') {
             payload.rollAction = type;
+            payload.rollTarget = cast;
             payload.rollUserId = (broadcastable ? this._rollerUserId(outcome) : null) ?? game.user.id;
             log(`Click-to-roll ${type} toast targeted at ${game.users.get(payload.rollUserId)?.name ?? payload.rollUserId}`, '', true, false);
         }
@@ -116,7 +121,27 @@ export class RollToastManager {
         this._showLocal(payload);
 
         // 'auto' (fully automated) posts the table card immediately (GM side).
-        if (automation === 'auto') this._rollCard(type);
+        if (automation === 'auto') this._rollCard(type, null, cast);
+    }
+
+    /**
+     * Plain ids for the two people a crit/fumble card talks about. Ids
+     * only — this rides the socket to every client, so it has to survive
+     * being JSON, and each client resolves the documents itself.
+     */
+    static _outcomeCast(outcome) {
+        let hitActorId = null;
+        try {
+            const hitUuid = outcome?.hitTargets?.[0] ?? outcome?.targets?.[0]?.uuid;
+            const hit = hitUuid ? fromUuidSync(hitUuid) : null;
+            // hitTargets are token uuids in some paths, actor uuids in others.
+            hitActorId = (hit?.actor ?? hit)?.id ?? null;
+        } catch (_) { /* an unresolvable target just stays generic */ }
+        return {
+            rollerActorId: outcome?.actorId ?? null,
+            rollerTokenId: outcome?.tokenId ?? null,
+            hitActorId
+        };
     }
 
     /** The user who made the roll: chat message author, else the actor's active player owner. */
@@ -135,7 +160,11 @@ export class RollToastManager {
     /**
      * Post the outcome chat card via the existing card paths:
      * crit/fumble roll their table, injury rolls the journal compendium
-     * for the given damage category (target = who took the damage).
+     * for the given damage category.
+     *
+     * `target` is the third argument in both cases, but it means slightly
+     * different things: for injuries it is who took the damage, for
+     * crits/fumbles it is the cast (roller + who they hit).
      */
     static async _rollCard(type, category, target) {
         try {
@@ -144,7 +173,8 @@ export class RollToastManager {
                 await rollInjuryCard(category || 'General', target ?? null);
             } else {
                 const { rollOutcomeCard } = await import('./bibliosoph.js');
-                await rollOutcomeCard(type);
+                // `target` here is the cast: roller + who they hit.
+                await rollOutcomeCard(type, { ...(target ?? {}) });
             }
         } catch (error) {
             log('Roll card failed', error?.message, false, false);

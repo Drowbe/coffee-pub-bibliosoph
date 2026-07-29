@@ -1,0 +1,35 @@
+<section class="bibliosoph-inspiration-page-fields">
+    {{#if system.image}}
+        <img class="inspiration-page-image" src="{{system.image}}" alt="{{document.name}}">
+        {{#if system.imagetitle}}
+            <p class="inspiration-page-caption">{{system.imagetitle}}</p>
+        {{/if}}
+    {{/if}}
+
+    {{#if system.description}}
+        <p class="inspiration-page-description">{{{system.description}}}</p>
+    {{/if}}
+
+    <div class="inspiration-page-meta">
+        <div class="inspiration-page-field">
+            <span class="inspiration-page-label">Automation</span>
+            <span class="inspiration-page-value">{{actionLabel}}</span>
+        </div>
+        <div class="inspiration-page-field">
+            <span class="inspiration-page-label">Odds</span>
+            <span class="inspiration-page-value">{{system.odds}} of 100</span>
+        </div>
+    </div>
+
+    {{#if isGM}}
+        {{#if system.gmnotes}}
+            <div class="inspiration-page-guidance">
+                <span class="inspiration-page-label"><i class="fa-solid fa-masks-theater"></i> Running This Card</span>
+                <p>{{system.gmnotes}}</p>
+            </div>
+        {{/if}}
+        <section class="bibliosoph-gm-notes-host" data-gm-notes-host aria-label="GM Notes"></section>
+    {{/if}}
+
+    <hr class="inspiration-page-divider">
+</section>

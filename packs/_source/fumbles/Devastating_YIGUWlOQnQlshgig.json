@@ -1,0 +1,173 @@
+{
+  "name": "Devastating",
+  "pages": [
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Double Trouble",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "GfDudtdnytZ6Nptg",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/magic/fire/explosion-fireball-medium-orange.webp",
+        "imagetitle": "",
+        "description": "Roll the damage from the weapon or spell you were using on yourself... twice. Each time you must say out loud, \"Shame on me!\" Your target mocks you as you do so.",
+        "severity": "major",
+        "appliesto": "self",
+        "damage": 10,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 17,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!YIGUWlOQnQlshgig.GfDudtdnytZ6Nptg"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "I Need a Doctor",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "Iscx5KF17Vr1W7YR",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/skills/wounds/anatomy-organ-heart-red.webp",
+        "imagetitle": "",
+        "description": "You messed up bad. Real bad. Your insides suddenly burst out of your body and become your outsides. You lose half of your hit points each round for 1D4 rounds as you desperatelty try to stuff them back in. Each round do a DC17 Dexterity Saving Throw to end the cycle. You can't be healed until the cycle ends. Sucks to be you.",
+        "severity": "major",
+        "appliesto": "self",
+        "damage": 12,
+        "duration": 24,
+        "statuseffect": "bleeding",
+        "odds": 17,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 100,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!YIGUWlOQnQlshgig.Iscx5KF17Vr1W7YR"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "It's Not Me It's You",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "lilnmFEQvl2jahXr",
+      "system": {
+        "kind": "fumble",
+        "image": "icons/skills/wounds/blood-spurt-spray-red.webp",
+        "imagetitle": "",
+        "description": "Choose a party member. Attack that party member 2 times with a weapon of your choosing. Now is not the time to score big hits. Sleep with one eye open tonight.",
+        "severity": "major",
+        "appliesto": "ally",
+        "damage": 0,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 17,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 200,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!YIGUWlOQnQlshgig.lilnmFEQvl2jahXr"
+    }
+  ],
+  "folder": null,
+  "_id": "YIGUWlOQnQlshgig",
+  "categories": [],
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1784237483935,
+    "modifiedTime": 1785352039555,
+    "lastModifiedBy": "B4d9pDwUBOtAfJFE"
+  },
+  "ownership": {
+    "default": 0,
+    "B4d9pDwUBOtAfJFE": 3
+  },
+  "sort": 2000,
+  "_key": "!journal!YIGUWlOQnQlshgig"
+}

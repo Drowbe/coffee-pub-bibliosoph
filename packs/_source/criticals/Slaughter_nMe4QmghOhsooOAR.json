@@ -1,0 +1,173 @@
+{
+  "name": "Slaughter",
+  "pages": [
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Decapitate",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "5rLWxjvtQLFxkek5",
+      "system": {
+        "kind": "crit",
+        "image": "icons/magic/death/skull-energy-light-purple.webp",
+        "imagetitle": "",
+        "description": "Your target's head explodes in a shower of blood, bone, and bits. If they have only one head, they are dead. If they have more than one head they lose half their health after damage is applied. You nod at them mockingly.",
+        "severity": "major",
+        "appliesto": "target",
+        "damage": 20,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 17,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!nMe4QmghOhsooOAR.5rLWxjvtQLFxkek5"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Eviscerate",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "UTBigXfrysMbtAdH",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/wounds/blood-cells-red.webp",
+        "imagetitle": "",
+        "description": "The entrails of your enemy explode from their body covering anyone within mele distance in gore. This pumps them up... they get +2 on thier next attack. Double the critical hit damage on this target. Wipe the blood from your face and grin.",
+        "severity": "major",
+        "appliesto": "target",
+        "damage": 10,
+        "duration": 0,
+        "statuseffect": "none",
+        "odds": 17,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 100,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!nMe4QmghOhsooOAR.UTBigXfrysMbtAdH"
+    },
+    {
+      "type": "coffee-pub-bibliosoph.outcome",
+      "name": "Obliterate",
+      "text": {
+        "content": "",
+        "format": 1
+      },
+      "_id": "x5sXo7QOOZ4K125b",
+      "system": {
+        "kind": "crit",
+        "image": "icons/skills/melee/strike-axe-blood-red.webp",
+        "imagetitle": "",
+        "description": "The lower torso of the target is severed from the rest of the body... the target can no longer move as it has no means of movement, but it is not prone. Double the critical hit damage. Rejoice in this golrious bloodbath by doing a happy dance to rub it in. This makes the target sad.",
+        "severity": "major",
+        "appliesto": "target",
+        "damage": 0,
+        "duration": 600,
+        "statuseffect": "restrained",
+        "odds": 17,
+        "modifiers": [],
+        "gmnotes": ""
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "sort": 200,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!nMe4QmghOhsooOAR.x5sXo7QOOZ4K125b"
+    }
+  ],
+  "folder": null,
+  "_id": "nMe4QmghOhsooOAR",
+  "categories": [],
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1784237483935,
+    "modifiedTime": 1785352039543,
+    "lastModifiedBy": "B4d9pDwUBOtAfJFE"
+  },
+  "ownership": {
+    "default": 0,
+    "B4d9pDwUBOtAfJFE": 3
+  },
+  "sort": 2000,
+  "_key": "!journal!nMe4QmghOhsooOAR"
+}

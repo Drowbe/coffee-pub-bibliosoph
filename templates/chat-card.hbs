@@ -153,7 +153,7 @@
     {{/if}}
 
     <!-- MAIN CONTENT - only show section when it has content -->
-    {{#if (or banner cardSubTitle image injurycategory content descriptionReveal descriptionBefore descriptionAfter)}}
+    {{#if (or banner cardSubTitle image injurycategory content outcomemechanics descriptionReveal descriptionBefore descriptionAfter)}}
     <div class="section-content">
 
         <!-- BANNER IMAGE -->
@@ -210,6 +210,15 @@
                     <i class="fa-solid fa-dice"></i> {{title}}
                 </div>
             {{/if}}
+            <!-- OUTCOME MECHANICS: what a crit/fumble actually does -->
+            {{#if outcomemechanics}}
+                <div class="bibliosoph-outcome-mechanics">
+                    {{#each outcomemechanics}}
+                        <p><i class="fa-solid {{this.icon}}"></i> {{this.text}}</p>
+                    {{/each}}
+                </div>
+            {{/if}}
+
             <!-- CHECK-UP: HEALTH BAR (Crier turn-card styling) -->
             {{#if hpBar}}
                 <div title="{{hpBar.label}}" style="border-radius: 4px; padding: 3px; margin-bottom: 8px; background-color: rgba(0,0,0,0.1);">
@@ -269,7 +278,7 @@
 
     </div>
     {{/if}}
-    {{#if hasSectionContent}}
+    {{#if (or hasSectionContent applyoutcomepicker)}}
         <div class="section-content">
 
             <!-- ACTIONS -->
@@ -290,9 +299,36 @@
                 <button id="cards-button-cardsdark" title="Apply this injury as a status effect to the targeted token..." class="coffee-pub-bibliosoph-button-injury" data-effect="{{arreffect}}" style="width: 100%;"><i class="fa-solid {{iconStyle}}"></i>{{buttontext}}</button>
             {{/if}}
 
+            <!-- INSPIRATION: draw grants the point, Use spends it -->
+            {{#if inspirationuse}}
+                {{#if inspirationnote}}<p style="margin: 2px 0 6px 0; font-style: italic; opacity: 0.8;">{{inspirationnote}}</p>{{/if}}
+                <button id="cards-button-cardsdark" title="Spend the inspiration point and resolve this card" class="coffee-pub-bibliosoph-button-inspiration" data-inspiration="{{inspirationuse}}" style="width: 100%;"><i class="fa-solid fa-lightbulb"></i>{{inspirationuselabel}}</button>
+                {{#if inspirationusehint}}<p style="margin: 2px 0 0 0; text-align: center; font-size: 0.85em; font-style: italic; opacity: 0.75;">{{inspirationusehint}}</p>{{/if}}
+            {{/if}}
+
+            <!-- APPLY CRITICAL / FUMBLE: pick-a-party-member -->
+            {{#if applyoutcomepicker}}
+                {{#if applyoutcomehint}}<p style="margin: 4px 0 2px 0; font-size: 0.85em; font-style: italic; opacity: 0.75;">{{applyoutcomehint}}</p>{{/if}}
+                {{#if applyoutcomerandom}}
+                    <button id="cards-button-cardsdark" title="Let the dice choose a party member" class="coffee-pub-bibliosoph-button-apply-outcome" data-effect="{{applyoutcomerandom}}" style="width: 100%; display: flex; align-items: center; gap: 8px; text-align: left; margin: 3px 0;">
+                        <i class="fa-solid fa-dice-d20" style="width: 24px; text-align: center; margin: 0;"></i>
+                        <span style="flex: 1; min-width: 0;">Random Party Member</span>
+                        <i class="fa-solid {{applyoutcomeicon}}" style="margin: 0;"></i>
+                    </button>
+                {{/if}}
+                {{#each applyoutcomepicker}}
+                    <button id="cards-button-cardsdark" title="Apply this result to {{this.name}}" class="coffee-pub-bibliosoph-button-apply-outcome" data-effect="{{this.payload}}" style="width: 100%; display: flex; align-items: center; gap: 8px; text-align: left; margin: 3px 0;">
+                        <img src="{{this.img}}" alt="" style="width: 24px; height: 24px; object-fit: cover; border: none; border-radius: 3px; flex: 0 0 auto; margin: 0;" />
+                        <span style="flex: 1; min-width: 0;">{{this.name}}</span>
+                        <i class="fa-solid {{../applyoutcomeicon}}" style="margin: 0;"></i>
+                    </button>
+                {{/each}}
+            {{/if}}
+
             <!-- APPLY CRITICAL / FUMBLE BUTTON -->
             {{#if applyoutcome}}
-                <button id="cards-button-cardsdark" title="Apply this result as a status effect to the targeted token..." class="coffee-pub-bibliosoph-button-apply-outcome" data-effect="{{applyoutcome}}" style="width: 100%;"><i class="fa-solid {{applyoutcomeicon}}"></i>{{applyoutcomelabel}}</button>
+                <button id="cards-button-cardsdark" title="{{#if applyoutcomehint}}{{applyoutcomehint}}{{else}}{{applyoutcomelabel}} — no need to select anything{{/if}}" class="coffee-pub-bibliosoph-button-apply-outcome" data-effect="{{applyoutcome}}" style="width: 100%;"><i class="fa-solid {{applyoutcomeicon}}"></i>{{applyoutcomelabel}}</button>
+                {{#if applyoutcomehint}}<p style="margin: 2px 0 0 0; text-align: center; font-size: 0.85em; font-style: italic; opacity: 0.75;">{{applyoutcomehint}}</p>{{/if}}
             {{/if}}
 
             <!-- CHECK-UP: ZONED TREATMENT ROWS -->

@@ -44,6 +44,13 @@ Also pending:
 
 ## Crits & Fumbles
 
+**Migrated to typed journal pages 2026-07-29 — see `documentation/spec-outcome-schema.md`.** 46 outcomes (24 crits, 22 fumbles) with severity, damage, round-based durations, conditions, odds weighting, and **modifiers** that apply as real ActiveEffect changes. Roll tables still supported via the "Criticals and Fumbles Source" setting (set to None).
+
+Compendium built and verified 2026-07-29: 2 journals / 46 typed pages, 20 carrying roll modifiers, checked back out of the compiled LevelDB against source.
+
+- Play-test the outcome flow: roll a crit and a fumble, check the mechanics block on the card, apply one and confirm the condition, duration, damage, and modifier all land on the token.
+- **`appliesto: self` only changes the Apply label, not the targeting** — the applier still uses targeted-then-selected. Auto-targeting the roller would need the rolls API to report the actor reliably on every path.
+- Author more outcomes: 24/22 is a good start but repeats will show at a busy table.
 - Phase 3: "announcer" moments (biggest hit, broken records) using the Blacksmith stats API — blocked on Blacksmith Request #3 above.
 
 ## Inspiration

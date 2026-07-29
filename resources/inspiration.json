@@ -1,0 +1,94 @@
+[
+	{
+		"title": "Re-roll",
+		"image": "icons/sundries/gaming/dice-runed-brown.webp",
+		"imagetitle": "A Single Do-Over",
+		"description": "The gods have smiled upon you and have gifted you a single do-over. You may rewind time and roll the dice again. Choose your moment wisely.",
+		"odds": 10,
+		"action": "none",
+		"gmnotes": "The most flexible card in the deck and the hardest to time. Let them hold it and decide later — a re-roll spent on the wrong check is its own lesson. Stinger: \"Say when.\""
+	},
+	{
+		"title": "Life Swap",
+		"image": "icons/magic/life/heart-glowing-red.webp",
+		"imagetitle": "A Tendril Reaches Out",
+		"description": "You feel a tendril of life force reach out from character within sight -- call out their name. You swap health with that character. Once your health is restored you gain the additional health, if any, as temporary hit points.",
+		"odds": 10,
+		"action": "swapHp",
+		"gmnotes": "Select both characters before pressing the button — the swap needs two. Best played by someone nearly dead standing next to someone barely scratched, which is exactly the drama it is for. Stinger: \"Whose name do you call?\""
+	},
+	{
+		"title": "Snake Oil",
+		"image": "icons/consumables/potions/vial-cork-red.webp",
+		"imagetitle": "It Turns To Mist",
+		"description": "You pull a mysterious vial from your pocket. You may use it to heal one creature to full health. The vial will turn to mist once used. Make it count.",
+		"odds": 10,
+		"action": "healFull",
+		"gmnotes": "Full health, any creature — including one that is not theirs. Do not rush the choice; \"make it count\" is the whole card. Stinger: \"The glass is already going cloudy.\""
+	},
+	{
+		"title": "Smite",
+		"image": "icons/magic/death/skull-humanoid-white-red.webp",
+		"imagetitle": "And The Horse You Rode In On",
+		"description": "Make eye contact with a creature... speak the words, \"I smite thee and the horse your rode in on!\" Roll a [[1d10]] and multiply that number by 10. Reduce the health of that poor creature by that percentage.",
+		"odds": 10,
+		"action": "percentDamage",
+		"actionformula": "1d10*10",
+		"gmnotes": "Make them say the line. The button rolls the d10 and takes that percentage of the target's CURRENT health, so a 10 is not quite a kill — it leaves them on nothing. Stinger: \"Say it properly or it doesn't count.\""
+	},
+	{
+		"title": "Deep Thought",
+		"image": "icons/skills/wounds/anatomy-organ-brain-pink-red.webp",
+		"imagetitle": "Just This Once",
+		"description": "Concentrate. Think deep thoughts. Just this once you can know a thing. Anything.",
+		"odds": 10,
+		"action": "none",
+		"gmnotes": "Answer honestly and completely — this card is worthless if you hedge. If the answer would derail the campaign, that is a sign the answer matters. Stinger: \"Ask.\""
+	},
+	{
+		"title": "De Ja Vu",
+		"image": "icons/sundries/misc/hourglass-wood.webp",
+		"imagetitle": "You've Been Here Before",
+		"description": "You get the feeling you've hit this creature before. Take an additional turn in combat, complete with movement, actions, and bonus actions.",
+		"odds": 10,
+		"action": "none",
+		"gmnotes": "A whole extra turn, taken immediately after their current one. Add a second combatant entry or simply let them go twice — do not make them wait for the turn order to come round. Stinger: \"Again. Right now.\""
+	},
+	{
+		"title": "Raise the Dead",
+		"image": "icons/commodities/treasure/token-gold-cross.webp",
+		"imagetitle": "Then You Forget It",
+		"description": "Fall to your knees and pray over a dead creature of your choice. You know a prayer that will raise the dead if you concentrate for 10 minutes. The creature will return to life with 5 hit points of health. You immediately forget the prayer.",
+		"odds": 10,
+		"action": "setHp",
+		"actionamount": 5,
+		"gmnotes": "Ten minutes of concentration means it cannot be used mid-fight — that is the cost. Any dead creature, which includes ones the party killed and now need to talk to. Stinger: \"You know the words. You will not know them in a moment.\""
+	},
+	{
+		"title": "One of Us",
+		"image": "icons/magic/control/control-influence-puppet.webp",
+		"imagetitle": "Until The Very End",
+		"description": "Choose a creature within sight. That creature will fight at your side until its death or until it is the last creature in combat... at which point it will fight you to the death.",
+		"odds": 10,
+		"action": "none",
+		"gmnotes": "Hand the player the creature's stat block and let them run it. The betrayal at the end is not optional and should be announced cheerfully when it arrives. Stinger: \"It turns and looks at you. It is smiling.\""
+	},
+	{
+		"title": "Cat Nap",
+		"image": "icons/consumables/mushrooms/umbontae-bumpy-purple.webp",
+		"imagetitle": "Blank For A Split Second",
+		"description": "You find a mushroom growing in the damp bit of the floor. You eat it, blank for a split second, and have instantly long-rested.",
+		"odds": 10,
+		"action": "longRest",
+		"gmnotes": "A full long rest, instantly, for one character — hit dice, spell slots, the lot. Worth asking whether they look around before eating a floor mushroom. Stinger: \"It tastes exactly as bad as it looks.\""
+	},
+	{
+		"title": "Night School",
+		"image": "icons/magic/life/cross-flared-green.webp",
+		"imagetitle": "Five Points, Wisely",
+		"description": "Distribute 5 points among your attributes, but doing so can't push them past 20.",
+		"odds": 10,
+		"action": "none",
+		"gmnotes": "Permanent ability score increases — the most powerful card here by a distance. Deliberately not automated: watch them spend it, and hold them to the cap of 20. Stinger: \"Take your time. This one is forever.\""
+	}
+]

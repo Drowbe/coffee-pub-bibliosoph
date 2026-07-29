@@ -22,7 +22,9 @@
 
   "documentTypes": {
     "JournalEntryPage": {
-      "injury": {}
+      "injury": {},
+      "outcome": {},
+      "inspiration": {}
     }
   },
 
@@ -72,6 +74,39 @@
       "name": "injuries",
       "label": "Injuries",
       "path": "packs/injuries",
+      "type": "JournalEntry",
+      "system": "dnd5e",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "name": "criticals",
+      "label": "Criticals",
+      "path": "packs/criticals",
+      "type": "JournalEntry",
+      "system": "dnd5e",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "name": "inspiration",
+      "label": "Inspiration Cards",
+      "path": "packs/inspiration",
+      "type": "JournalEntry",
+      "system": "dnd5e",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "name": "fumbles",
+      "label": "Fumbles",
+      "path": "packs/fumbles",
       "type": "JournalEntry",
       "system": "dnd5e",
       "ownership": {

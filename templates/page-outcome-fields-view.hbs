@@ -1,0 +1,64 @@
+<section class="bibliosoph-outcome-page-fields">
+    {{#if system.image}}
+        <img class="outcome-page-image" src="{{system.image}}" alt="{{document.name}}">
+        {{#if system.imagetitle}}
+            <p class="outcome-page-caption">{{system.imagetitle}}</p>
+        {{/if}}
+    {{/if}}
+
+    {{#if system.description}}
+        <p class="outcome-page-description">{{system.description}}</p>
+    {{/if}}
+
+    {{#if modifierLabels.length}}
+        <div class="outcome-page-modifiers">
+            <span class="outcome-page-label"><i class="fa-solid fa-dice-d20"></i> While this lasts</span>
+            <ul>
+                {{#each modifierLabels}}<li>{{this}}</li>{{/each}}
+            </ul>
+        </div>
+    {{/if}}
+
+    <div class="outcome-page-meta">
+        <div class="outcome-page-field">
+            <span class="outcome-page-label">Type</span>
+            <span class="outcome-page-value">{{kindLabel}}</span>
+        </div>
+        <div class="outcome-page-field">
+            <span class="outcome-page-label">Bucket</span>
+            <span class="outcome-page-value">{{severityLabel}}</span>
+        </div>
+        <div class="outcome-page-field">
+            <span class="outcome-page-label">Lands On</span>
+            <span class="outcome-page-value">{{targetLabel}}</span>
+        </div>
+        <div class="outcome-page-field">
+            <span class="outcome-page-label">Damage</span>
+            <span class="outcome-page-value">{{#if system.damage}}{{system.damage}} hit points{{else}}None{{/if}}</span>
+        </div>
+        <div class="outcome-page-field">
+            <span class="outcome-page-label">Duration</span>
+            <span class="outcome-page-value">{{durationLabel}}</span>
+        </div>
+        <div class="outcome-page-field">
+            <span class="outcome-page-label">Condition</span>
+            <span class="outcome-page-value">{{conditionLabel}}</span>
+        </div>
+        <div class="outcome-page-field">
+            <span class="outcome-page-label">Odds</span>
+            <span class="outcome-page-value">{{system.odds}} of 100</span>
+        </div>
+    </div>
+
+    {{#if isGM}}
+        {{#if system.gmnotes}}
+            <div class="outcome-page-guidance">
+                <span class="outcome-page-label"><i class="fa-solid fa-masks-theater"></i> Running This {{kindLabel}}</span>
+                <p>{{system.gmnotes}}</p>
+            </div>
+        {{/if}}
+        <section class="bibliosoph-gm-notes-host" data-gm-notes-host aria-label="GM Notes"></section>
+    {{/if}}
+
+    <hr class="outcome-page-divider">
+</section>

@@ -22,6 +22,9 @@ const { triggerSocialToast } = await import(`${MODULE_PATH}/manager-social-toast
 const { applyStatusToTokens } = await import(`${MODULE_PATH}/manager-status-effects.js`);
 const { rollOutcomeCard, rollInjuryCard } = await import(`${MODULE_PATH}/bibliosoph.js`);
 
+// Scenario buttons sit two-up on the wider dialog; long labels still fit.
+const SCENARIO_COLUMNS = 2;
+
 // --- helpers ------------------------------------------------------
 
 function getSubjectToken() {
@@ -133,6 +136,7 @@ const TABS = [
     { id: 'injuries', label: '🩸 Injuries' },
     { id: 'treatment', label: '🩹 Treatment' },
     { id: 'rolls', label: '🎲 Crits & Fumbles' },
+    { id: 'inspiration', label: '💡 Inspiration' },
     { id: 'tools', label: '🧰 Apply, Social & Audit' }
 ];
 
@@ -354,6 +358,101 @@ const SCENARIOS = [
         run: () => rollOutcomeCard('crit')
     },
     {
+        tab: 'rolls',
+        label: '🃏 Fumble card directly (skip toast)',
+        run: () => rollOutcomeCard('fumble')
+    },
+    {
+        tab: 'rolls',
+        label: '👥 Demo the ALLY picker (pick or roll a party member)',
+        run: async () => {
+            // "Crappy Neighbor" lands on a party member — the card should
+            // show a Random button plus one button per character.
+            await rollOutcomeCard('fumble', { title: 'Crappy Neighbor' });
+            ui.notifications.info('Expect: a "Random Party Member" button plus one per character. Picking one stamps the card and removes the rest.');
+        }
+    },
+    {
+        tab: 'rolls',
+        label: '🎉 Demo the PARTY apply (one button, everyone)',
+        run: async () => {
+            await rollOutcomeCard('crit', { title: 'Play Date' });
+            ui.notifications.info('Expect: a single "Apply to the Whole Party (n)" button — no selecting.');
+        }
+    },
+    {
+        tab: 'rolls',
+        label: '⚔️ Demo MODIFIERS on a card (Chicken Hat: -2 attack, 2 rounds)',
+        run: async () => {
+            await rollOutcomeCard('fumble', { title: 'Chicken Hat' });
+            ui.notifications.info('Expect a mechanics block listing the -2 attack modifier. Apply it, then check the effect\'s Changes tab on the actor.');
+        }
+    },
+    {
+        tab: 'rolls',
+        label: '🎲 Audit outcome pool: buckets, targets, mechanics',
+        run: async () => {
+            const out = [];
+            for (const [kind, settingKey] of [['crit', 'critCompendium'], ['fumble', 'fumbleCompendium']]) {
+                const packId = setting(settingKey, 'none');
+                if (!packId || packId === 'none') { out.push(`${kind}: source is None (roll table path)`); continue; }
+                const pack = game.packs.get(packId);
+                if (!pack) { out.push(`${kind}: compendium "${packId}" not found`); continue; }
+                const recs = [];
+                for (const journal of await pack.getDocuments()) {
+                    for (const page of journal.pages) {
+                        const s = page._source?.system ?? page.system;
+                        if (s?.kind) recs.push({ ...s, title: page.name, journal: journal.name });
+                    }
+                }
+                const buckets = {}; const targets = {};
+                let mech = 0, mods = 0;
+                for (const r of recs) {
+                    buckets[r.journal] = (buckets[r.journal] ?? 0) + 1;
+                    targets[r.appliesto] = (targets[r.appliesto] ?? 0) + 1;
+                    if (r.statuseffect !== 'none' || r.damage || r.modifiers?.length) mech++;
+                    if (r.modifiers?.length) mods++;
+                }
+                const total = recs.reduce((s, r) => s + (Number(r.odds) || 1), 0);
+                const top = [...recs].sort((a, b) => (b.odds || 1) - (a.odds || 1))[0];
+                out.push(`${kind.toUpperCase()} (${recs.length}) from ${packId}`);
+                out.push(`  buckets: ${Object.entries(buckets).map(([k, v]) => `${k} ${v}`).join(' · ')}`);
+                out.push(`  lands on: ${Object.entries(targets).map(([k, v]) => `${k} ${v}`).join(' · ')}`);
+                out.push(`  with mechanics: ${mech}/${recs.length} · with modifiers: ${mods}`);
+                out.push(`  most likely: ${top?.title} (${Math.round(100 * (top?.odds || 1) / total)}%)`);
+            }
+            console.log('BIBLIOSOPH OUTCOME POOL\n  ' + out.join('\n  '));
+            ui.notifications.info('Outcome pool audited — buckets, targets, and mechanics coverage in console (F12).');
+        }
+    },
+    {
+        tab: 'rolls',
+        label: '🎯 Simulate 200 crit rolls (bucket distribution)',
+        run: async () => {
+            const packId = setting('critCompendium', 'none');
+            const pack = game.packs.get(packId);
+            if (!pack) return ui.notifications.warn('Set a Criticals Source compendium first.');
+            const recs = [];
+            for (const journal of await pack.getDocuments()) {
+                for (const page of journal.pages) {
+                    const s = page._source?.system ?? page.system;
+                    if (s?.kind === 'crit') recs.push({ ...s, title: page.name });
+                }
+            }
+            const pick = (items) => {
+                const w = items.map((i) => Math.max(1, Number(i.odds) || 1));
+                const t = w.reduce((a, b) => a + b, 0);
+                let r = Math.random() * t;
+                for (let i = 0; i < items.length; i++) { r -= w[i]; if (r <= 0) return items[i]; }
+                return items.at(-1);
+            };
+            const mix = {};
+            for (let n = 0; n < 200; n++) { const s = pick(recs).severity; mix[s] = (mix[s] ?? 0) + 1; }
+            console.log('BIBLIOSOPH | 200 crit rolls by bucket:', mix);
+            ui.notifications.info(`200 crit rolls: ${Object.entries(mix).map(([k, v]) => `${k} ${Math.round(v / 2)}%`).join(' · ')} (expect roughly 10/85/5).`);
+        }
+    },
+    {
         tab: 'injuries',
         label: '🩻 Injury card directly (Fire → subject)',
         run: () => {
@@ -371,6 +470,113 @@ const SCENARIOS = [
             } else {
                 ui.notifications.warn('Treatment not available — reload after the module update.');
             }
+        }
+    },
+    {
+        tab: 'inspiration',
+        label: '💡 Draw a card (random, grants a point to subject)',
+        run: async () => {
+            const token = getSubjectToken();
+            if (!token) return;
+            const { drawInspirationCard } = await import(`${MODULE_PATH}/bibliosoph.js`);
+            await drawInspirationCard(token.actor);
+            ui.notifications.info(`Drew for ${token.name} — they should now hold an inspiration point. The card's Use button spends it.`);
+        }
+    },
+    {
+        tab: 'inspiration',
+        label: '🧪 Demo AUTOMATED cards (one of each, to subject)',
+        run: async () => {
+            const token = getSubjectToken();
+            if (!token) return;
+            const { drawInspirationCard } = await import(`${MODULE_PATH}/bibliosoph.js`);
+            for (const title of ['Snake Oil', 'Raise the Dead', 'Cat Nap', 'Smite']) {
+                await drawInspirationCard(token.actor, { title });
+            }
+            ui.notifications.info('Posted the four single-target automated cards. Select a token and press Use on each — Smite rolls its own d10.');
+        }
+    },
+    {
+        tab: 'inspiration',
+        label: '🔄 Demo LIFE SWAP (needs TWO tokens selected)',
+        run: async () => {
+            const selected = canvas.tokens.controlled;
+            const { drawInspirationCard } = await import(`${MODULE_PATH}/bibliosoph.js`);
+            await drawInspirationCard(selected[0]?.actor ?? null, { title: 'Life Swap' });
+            ui.notifications.info(selected.length >= 2
+                ? `Posted. With ${selected[0].name} and ${selected[1].name} selected, Use swaps their HP (overflow becomes temp).`
+                : 'Posted — but select TWO tokens before pressing Use, or it will tell you so.');
+        }
+    },
+    {
+        tab: 'inspiration',
+        label: '📖 Demo NARRATIVE cards (no automation, still spends)',
+        run: async () => {
+            const token = getSubjectToken();
+            if (!token) return;
+            const { drawInspirationCard } = await import(`${MODULE_PATH}/bibliosoph.js`);
+            for (const title of ['Re-roll', 'Night School']) {
+                await drawInspirationCard(token.actor, { title });
+            }
+            ui.notifications.info('These have no button action by design — Use spends the point and the table resolves the rest.');
+        }
+    },
+    {
+        tab: 'inspiration',
+        label: '🎁 Grant a point to subject (no card)',
+        run: async () => {
+            const token = getSubjectToken();
+            if (!token) return;
+            const { grantInspiration, hasInspiration } = await import(`${MODULE_PATH}/manager-inspiration.js`);
+            const had = hasInspiration(token.actor);
+            await grantInspiration(token.actor);
+            ui.notifications.info(had ? `${token.name} already had a point.` : `${token.name} now holds an inspiration point.`);
+        }
+    },
+    {
+        tab: 'inspiration',
+        label: '🧹 Clear the subject\'s point (retest)',
+        run: async () => {
+            const token = getSubjectToken();
+            if (!token) return;
+            const { spendInspiration } = await import(`${MODULE_PATH}/manager-inspiration.js`);
+            await spendInspiration(token.actor);
+            ui.notifications.info(`Cleared ${token.name}'s inspiration — the Use button should now refuse.`);
+        }
+    },
+    {
+        tab: 'inspiration',
+        label: '📋 Who holds inspiration right now?',
+        run: async () => {
+            const { hasInspiration } = await import(`${MODULE_PATH}/manager-inspiration.js`);
+            const chars = game.actors.filter((a) => a.type === 'character');
+            const holders = chars.filter((a) => hasInspiration(a)).map((a) => a.name);
+            console.log('BIBLIOSOPH INSPIRATION | holders:', holders, '| of', chars.length, 'characters');
+            ui.notifications.info(holders.length
+                ? `Holding a point: ${holders.join(', ')}`
+                : 'Nobody is holding an inspiration point.');
+        }
+    },
+    {
+        tab: 'inspiration',
+        label: '🎲 Audit the deck (actions, odds, art)',
+        run: async () => {
+            const packId = setting('inspirationCompendium', 'none');
+            if (!packId || packId === 'none') return ui.notifications.warn('Inspiration source is None — set a compendium first.');
+            const pack = game.packs.get(packId);
+            if (!pack) return ui.notifications.warn(`Compendium "${packId}" not found.`);
+            const rows = [];
+            let automated = 0;
+            for (const journal of await pack.getDocuments()) {
+                for (const page of journal.pages) {
+                    const s = page._source?.system ?? page.system;
+                    if (!s) continue;
+                    if (s.action && s.action !== 'none') automated++;
+                    rows.push(`${page.name.padEnd(16)} action=${String(s.action).padEnd(14)} odds=${s.odds}`);
+                }
+            }
+            console.log(`BIBLIOSOPH INSPIRATION DECK (${packId})\n  ${rows.join('\n  ')}`);
+            ui.notifications.info(`${rows.length} cards — ${automated} automated, ${rows.length - automated} narrative. Details in console (F12).`);
         }
     },
     {
@@ -558,21 +764,31 @@ const TAB_SETTINGS = {
     rolls: settingsBox(
         `Crit: <strong>${setting('critAutomation', 'click')}</strong> ·
          Fumble: <strong>${setting('fumbleAutomation', 'click')}</strong> ·
-         Triggered By: <strong>${setting('rollTriggerSource', 'everyone')}</strong>`
+         Triggered By: <strong>${setting('rollTriggerSource', 'everyone')}</strong><br>
+         Criticals Source: <strong>${setting('critCompendium', 'none')}</strong> ·
+         Fumbles Source: <strong>${setting('fumbleCompendium', 'none')}</strong>
+         <em>(None = classic roll tables)</em>`
+    ),
+    inspiration: settingsBox(
+        `Deck Source: <strong>${setting('inspirationCompendium', 'none')}</strong><br>
+         <em>Drawing a card grants a point; using the card spends it.</em>`
     ),
     tools: settingsBox(
         `Injury Compendium: <strong>${setting('injuryCompendium', 'coffee-pub-bibliosoph.injuries')}</strong>`
     )
 };
 
+// Two columns on the wider dialog, so long scenario lists stay on screen.
 const tabPanels = TABS.map((t, i) => `
     <div data-tab-panel="${t.id}" style="display:${i === 0 ? 'block' : 'none'};">
         ${TAB_SETTINGS[t.id] ?? ''}
+        <div style="display:grid; grid-template-columns:repeat(${SCENARIO_COLUMNS}, 1fr); gap:4px;">
         ${SCENARIOS.map((s, si) => s.tab === t.id ? `
             <button type="button" data-scenario="${si}"
-                style="display:block; width:100%; margin:3px 0; padding:6px 10px; text-align:left;">
+                style="display:block; width:100%; margin:0; padding:6px 10px; text-align:left; white-space:normal; line-height:1.25;">
                 ${s.label}
             </button>` : '').join('')}
+        </div>
     </div>`).join('');
 
 await foundry.applications.api.DialogV2.wait({
@@ -583,7 +799,7 @@ await foundry.applications.api.DialogV2.wait({
         <div style="display:flex; gap:2px; margin:0 0 6px 0;">${tabButtons}</div>
         ${tabPanels}`,
     buttons: [{ action: 'close', label: 'Close', default: true }],
-    position: { width: 460 },
+    position: { width: 860, height: 'auto' },
     render: (event, dialog) => {
         const root = dialog?.element ?? dialog;
         root.querySelectorAll('[data-scenario]').forEach((btn) => {

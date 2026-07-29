@@ -69,7 +69,8 @@ export async function applyStatusToTokens({
     statusEffect = null,
     kindLabel = 'effect',
     explicitActors = null,
-    burst = null
+    burst = null,
+    changes = []
 } = {}) {
     if (!name) return [];
 
@@ -137,7 +138,10 @@ export async function applyStatusToTokens({
                 ? { seconds: durationSeconds }
                 : {},
             statuses: pseudoId ? [pseudoId] : [],
-            changes: [],
+            // Real ActiveEffect changes — how a critical's "-2 to attacks
+            // for 2 rounds" becomes a number the system applies rather
+            // than a note the table has to remember.
+            changes: Array.isArray(changes) ? changes : [],
             // The burst flag makes createActiveEffect play the canvas
             // outcome burst on every connected client (manager-injury-effects).
             // It also records the toggled condition so Treatment knows what
