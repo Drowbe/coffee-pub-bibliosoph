@@ -38,12 +38,24 @@ const getSetting = (key, fallback) => {
     try { return game.settings.get(MODULE.ID, key); } catch (_) { return fallback; }
 };
 
-/** Does this actor currently hold an inspiration point? */
+// ==================================================================
+// ===== dnd5e's INSPIRATION FLAG ===================================
+// ==================================================================
+// The card lifecycle does NOT touch this. Drawing a card grants no point
+// and playing one spends none — the card is the currency, so a parallel
+// point would be the same fact recorded twice, and dnd5e's flag is a
+// BOOLEAN that cannot represent a hand of several cards anyway.
+//
+// These two survive for exactly one reason: the `grantInspiration` card
+// action, where handing over a point is the card's own stated effect.
+// That leaves the pip free for whatever else the table uses it for.
+
+/** Does this actor currently hold a dnd5e inspiration point? */
 export function hasInspiration(actor) {
     return !!foundry.utils.getProperty(actor ?? {}, INSPIRATION_PATH);
 }
 
-/** Grant a point. Called when a card is DRAWN. */
+/** Grant a dnd5e inspiration point — the `grantInspiration` card action. */
 export async function grantInspiration(actor) {
     if (!actor) return false;
     if (hasInspiration(actor)) {
@@ -55,18 +67,6 @@ export async function grantInspiration(actor) {
         return true;
     } catch (error) {
         log(`Could not grant inspiration to ${actor.name}`, error?.message, false, false);
-        return false;
-    }
-}
-
-/** Spend a point. Called when a card is USED. */
-export async function spendInspiration(actor) {
-    if (!actor) return false;
-    try {
-        await actor.update({ [INSPIRATION_PATH]: false });
-        return true;
-    } catch (error) {
-        log(`Could not spend inspiration for ${actor.name}`, error?.message, false, false);
         return false;
     }
 }
@@ -193,14 +193,11 @@ export function readCardItem(item) {
 }
 
 /**
- * Using the item IS using the card. dnd5e has already handled the item's
- * own chat message and spent its charge by the time this fires; what is
- * left is ours — spend the inspiration point and run the automation.
+ * Using the item raises the card; a button on the card resolves it.
  *
- * Fires on whichever client clicked, which is normally the owning player.
- * They own their character and their own inspiration flag, so the common
- * path needs no GM. Actions that reach across to somebody else's sheet
- * (Life Swap) relay through the active GM.
+ * Fires on whichever client clicked, normally the owning player. They own
+ * their own character, so the common path needs no GM. Actions that reach
+ * across to somebody else's sheet (Life Swap) relay through the active GM.
  */
 export function registerInspirationItemHook() {
     // Using the item RAISES THE CARD. dnd5e's own usage card is a name and
@@ -208,19 +205,13 @@ export function registerInspirationItemHook() {
     // mechanics and a button per person it could land on. So we take the
     // activity over entirely: veto it, and post the real card instead.
     //
-    // Vetoing also means nothing is spent yet. The charge, the point and
-    // the card all survive until a button actually gets clicked, so
-    // opening a card and thinking better of it costs nothing.
+    // Vetoing also means nothing is spent yet. Both the charge and the card
+    // survive until a button actually gets clicked, so opening a card and
+    // thinking better of it costs nothing.
     Hooks.on('dnd5e.preUseActivity', (activity) => {
         const item = activity?.item;
         const card = readCardItem(item);
         if (!card) return;
-
-        const holder = item?.actor ?? null;
-        if (holder && !hasInspiration(holder)) {
-            toast('No Point to Spend', `${holder.name} has no inspiration right now — the card stays in hand.`, 'fa-solid fa-lightbulb');
-            return false;
-        }
 
         // Fire and forget: the hook is synchronous because it has to
         // return false to stop dnd5e, so the card posts just behind it.
@@ -271,9 +262,9 @@ async function freshenCard(card) {
 }
 
 /**
- * "Use once": the card leaves their inventory the moment it resolves.
- * Nothing was spent when they opened it, so this is the one and only
- * place the item goes away.
+ * "Use once": the card leaves their inventory the moment it resolves, and
+ * that departure IS the cost. Nothing was spent when they opened it, so
+ * this is the one and only place anything is consumed.
  */
 export async function discardCardItem(itemUuid) {
     if (!itemUuid) return;
@@ -283,14 +274,30 @@ export async function discardCardItem(itemUuid) {
     } catch (_) { /* already gone is the goal */ }
 }
 
+/** Is the card still in hand? The only thing that gates a play. */
+async function cardStillHeld(itemUuid) {
+    if (!itemUuid) return true;             // no item behind it: nothing to check
+    try { return !!(await fromUuid(itemUuid)); } catch (_) { return false; }
+}
+
 /**
- * Resolve a card: run its action, spend the point, discard the card.
+ * Resolve a card: run its action, then discard the card. THE CARD IS THE
+ * CURRENCY — holding it is the right to play it, and playing it spends it.
+ * There is no separate point to track, so there is nothing to get out of
+ * step with the hand somebody is holding.
+ *
  * Relays to the active GM when it touches an actor this client cannot
  * write to — Life Swap reaches onto somebody else's sheet.
  */
 export async function applyInspirationCard({ card, holderActorId = null, targetActorIds = [], itemUuid = null }) {
     const holder = game.actors.get(holderActorId ?? '') ?? null;
     const targets = targetActorIds.map((id) => game.actors.get(id)).filter(Boolean);
+
+    // Guards against a stale card sitting in the chat log: the item is
+    // gone, so there is nothing left to play.
+    if (!await cardStillHeld(itemUuid)) {
+        return { ok: false, summary: 'That card has already been played.' };
+    }
 
     const needsGm = targets.some((a) => !a.isOwner) || (holder && !holder.isOwner);
     if (needsGm && !game.user.isGM) {
@@ -301,8 +308,7 @@ export async function applyInspirationCard({ card, holderActorId = null, targetA
     }
 
     const result = await runInspirationAction(card, targets);
-    if (!result.ok) return result;          // card and point both survive
-    if (holder) await spendInspiration(holder);
+    if (!result.ok) return result;          // the card survives a miss
     await discardCardItem(itemUuid);
     return result;
 }
@@ -329,21 +335,20 @@ export async function registerInspirationSocket() {
     await sockets.waitForReady();
     await sockets.register(SOCKET_INSPIRATION_USE, async (payload) => {
         if (game.users.activeGM?.id !== game.user.id) return;
-        const holder = game.actors.get(payload?.holderActorId ?? '');
         // Re-check against live state: the relay is a request, not a fact.
-        if (holder && !hasInspiration(holder)) {
-            log(`Ignoring relayed card "${payload?.card?.title}" — ${holder.name} holds no point`, '', true, false);
+        // The card still being in hand is the whole authorisation now.
+        if (!await cardStillHeld(payload?.itemUuid)) {
+            log(`Ignoring relayed card "${payload?.card?.title}" — already played`, '', true, false);
             return;
         }
         const targets = (payload?.targetActorIds ?? []).map((id) => game.actors.get(id)).filter(Boolean);
         const result = await runInspirationAction(payload?.card ?? {}, targets);
         if (!result.ok) {
-            // The card survives a failed resolution — the player still has
-            // it and their point, and can try again once they select right.
+            // The card survives a failed resolution — the player still holds
+            // it and can try again once they pick a valid target.
             log(`Relayed card "${payload?.card?.title}" did not resolve: ${result.summary}`, '', true, false);
             return;
         }
-        if (holder) await spendInspiration(holder);
         toast('Inspiration Used', result.summary || payload?.card?.title || '', 'fa-solid fa-lightbulb');
         // The player could not necessarily finish this themselves, so the
         // discard belongs here too.
@@ -390,13 +395,40 @@ export async function runInspirationAction(card, explicitActors = null) {
             }
             case 'longRest': {
                 const actor = actors[0];
-                if (typeof actor.longRest === 'function') {
-                    await actor.longRest({ dialog: false, chat: false, newDay: false });
-                } else {
-                    const hp = hpOf(actor);
-                    if (hp) await actor.update({ 'system.attributes.hp.value': hp.max });
+                if (typeof actor.longRest !== 'function') {
+                    return { ok: false, summary: `${actor.name} cannot take a long rest in this system.` };
                 }
-                return { ok: true, summary: `${actor.name} has taken a long rest.` };
+                // A REAL long rest — the same thing the sheet's own button
+                // does, so hit dice, spell slots, limited uses and
+                // exhaustion all recover. Specifically:
+                //   newDay: true   — anything else is a partial rest that
+                //                    silently skips daily-recharge items
+                //   request: true  — the card is the authorisation, so
+                //                    dnd5e's "Allow Rests" player setting
+                //                    must not block it
+                //   advanceTime    — false: the card is instant ("blank
+                //                    for a split second"), no 8 hours pass
+                //   chat: true     — dnd5e's rest summary is the receipt
+                const result = await actor.longRest({
+                    dialog: false, chat: true, newDay: true, request: true, advanceTime: false
+                });
+                // longRest returns undefined when it was refused: a hook
+                // vetoed it, or the actor is a vehicle. Claiming success
+                // there would spend the point and burn the card for nothing.
+                if (!result) {
+                    return { ok: false, summary: `${actor.name}'s long rest did not go through — nothing spent.` };
+                }
+                const dhp = Number(result.dhp) || 0;
+                const dhd = Number(result.dhd) || 0;
+                const gained = [];
+                if (dhp) gained.push(`${dhp} HP`);
+                if (dhd) gained.push(`${dhd} hit ${dhd === 1 ? 'die' : 'dice'}`);
+                return {
+                    ok: true,
+                    summary: gained.length
+                        ? `${actor.name} long-rested — recovered ${gained.join(' and ')}.`
+                        : `${actor.name} long-rested.`
+                };
             }
             case 'percentDamage': {
                 const actor = actors[0];

@@ -855,13 +855,12 @@ export async function drawInspirationCard(actor = null, { title = null } = {}) {
         ?? canvas?.tokens?.controlled?.[0]?.actor
         ?? null;
 
-    // Drawing gives them the point AND the card, as a real item they can
-    // sit on until the moment is right. The item is the trigger from here.
-    let granted = false;
+    // Drawing hands them the card as a real item they can sit on until the
+    // moment is right. THE CARD IS THE CURRENCY — no separate point is
+    // granted, because holding the card is already the right to play it.
     let cardItem = null;
     if (holder) {
-        const { grantInspiration, grantInspirationItem } = await import('./manager-inspiration.js');
-        granted = await grantInspiration(holder);
+        const { grantInspirationItem } = await import('./manager-inspiration.js');
         cardItem = await grantInspirationItem(holder, card);
     }
 
@@ -880,7 +879,7 @@ export async function drawInspirationCard(actor = null, { title = null } = {}) {
         // Same describer the item uses, so the draw card and the card in
         // their inventory say the same thing about what it does.
         outcomemechanics: INSPIRATION_ACTIONS.describeInspirationCard(card),
-        inspirationnote: buildInspirationNote(holder, granted, cardItem),
+        inspirationnote: buildInspirationNote(holder, cardItem),
         // With the card in their inventory, the ITEM is how it gets used —
         // a second button here would just be a way to spend the point
         // without the card leaving their sheet. The button survives only
@@ -1034,13 +1033,14 @@ function buildInspirationPlayButtons(card, holder, itemUuid) {
  * card WENT — a player who does not know it is on their sheet will sit
  * there waiting for a button.
  */
-function buildInspirationNote(holder, granted, cardItem) {
-    if (!holder) return 'Nobody selected — grant the point by hand, or draw again with a token selected.';
-    const point = granted
-        ? `${holder.name} gains an inspiration point`
-        : `${holder.name} already holds a point`;
-    if (cardItem) return `${point}. The card is in their inventory — using it spends the point.`;
-    return `${point}. Spend it to use this card.`;
+function buildInspirationNote(holder, cardItem) {
+    if (!holder) {
+        return 'Nobody selected — select a token and draw again to deal this card to someone.';
+    }
+    if (cardItem) {
+        return `${holder.name} draws this card — it is in their inventory. Using it plays the card, any time they like.`;
+    }
+    return `${holder.name} draws this card, but it could not be added to their inventory — deal it by hand.`;
 }
 
 function actionButtonFor(action) {
@@ -1085,13 +1085,8 @@ function resolveInspirationTargets(data, holder) {
  * spend the point; the table resolves the rest out loud.
  */
 async function useInspirationCard(buttonEl, data) {
-    const { applyInspirationCard, hasInspiration, resolveTargets } = await import('./manager-inspiration.js');
+    const { applyInspirationCard, resolveTargets } = await import('./manager-inspiration.js');
     const holder = game.actors.get(data?.holderActorId ?? '');
-
-    if (holder && !hasInspiration(holder)) {
-        showBibToast('No Point to Spend', `${holder.name} has no inspiration right now.`, 'fa-solid fa-lightbulb');
-        return;
-    }
 
     // The button carries the decision. Life Swap needs the holder in the
     // list too, since swapping is between two people; everything else

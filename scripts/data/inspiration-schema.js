@@ -140,12 +140,12 @@ export function describeInspirationCard(card, { context = 'draw' } = {}) {
         lines.push({ icon: config.icon, text: config.effect });
     }
 
+    // The card IS the cost. Holding it is the right to play it, playing it
+    // spends it, and there is no separate point in the ledger to explain.
     if (context === 'item') {
-        lines.push({ icon: 'fa-lightbulb', text: 'Costs your inspiration point.' });
-        lines.push({ icon: 'fa-clock', text: 'Use it any time. One use only — the card is gone afterwards.' });
+        lines.push({ icon: 'fa-clock', text: 'Use it any time. One use only — playing it discards the card.' });
     } else if (context === 'play') {
-        lines.push({ icon: 'fa-lightbulb', text: 'Spends your inspiration point.' });
-        lines.push({ icon: 'fa-clock', text: 'The card is discarded once it is played.' });
+        lines.push({ icon: 'fa-clock', text: 'Playing this discards the card.' });
     }
     return lines;
 }
