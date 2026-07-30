@@ -203,6 +203,17 @@ Hooks.once('ready', async () => {
             logBib('Failed to register treatment-roll socket', error?.message, false, false);
         }
 
+        // INSPIRATION CARDS: the drawn card is an item, and USING that item
+        // is what spends the point and runs the automation. Every client
+        // watches, because the click happens on the owner's client.
+        try {
+            const { registerInspirationItemHook, registerInspirationSocket } = await import('./manager-inspiration.js');
+            registerInspirationItemHook();
+            await registerInspirationSocket();
+        } catch (error) {
+            logBib('Failed to register inspiration card hooks', error?.message, false, false);
+        }
+
 
         // NOW register toolbar tools after module registration is complete
         // In v13, we need to wait for Blacksmith to be fully ready
@@ -801,10 +812,11 @@ async function createChatCardTreatment(token) {
 }
 
 /**
- * Draw an inspiration card. Drawing GRANTS the point — using the card
- * spends it (see the Use button on the posted card).
+ * Draw an inspiration card. Drawing GRANTS the point and hands the
+ * character the card itself as an inventory item — using that item is
+ * what spends the point and resolves the card.
  *
- * @param {Actor|null} actor  who receives the point; defaults to the
+ * @param {Actor|null} actor  who receives the card; defaults to the
  *                            targeted/selected token's actor
  * @param {string|null} title  force a specific card by name instead of
  *                             drawing at random (testing)
@@ -843,11 +855,14 @@ export async function drawInspirationCard(actor = null, { title = null } = {}) {
         ?? canvas?.tokens?.controlled?.[0]?.actor
         ?? null;
 
-    // Drawing gives them the point.
+    // Drawing gives them the point AND the card, as a real item they can
+    // sit on until the moment is right. The item is the trigger from here.
     let granted = false;
+    let cardItem = null;
     if (holder) {
-        const { grantInspiration } = await import('./manager-inspiration.js');
+        const { grantInspiration, grantInspirationItem } = await import('./manager-inspiration.js');
         granted = await grantInspiration(holder);
+        cardItem = await grantInspirationItem(holder, card);
     }
 
     const template = await getCardTemplate();
@@ -862,27 +877,170 @@ export async function drawInspirationCard(actor = null, { title = null } = {}) {
         image: card.image || '',
         imagecaption: card.imagetitle || '',
         imageBackground: 'themecolor',
-        inspirationnote: holder
-            ? (granted ? `${holder.name} gains an inspiration point — spend it to use this card.`
-                : `${holder.name} already holds a point. Spend it to use this card.`)
-            : 'Nobody selected — grant the point by hand, or draw again with a token selected.',
-        inspirationuse: encodeURIComponent(JSON.stringify({
-            title: card.title,
-            action: card.action ?? 'none',
-            actionamount: card.actionamount ?? null,
-            actionformula: card.actionformula ?? '',
-            holderActorId: holder?.id ?? null,
-            sourceUuid: card.sourceUuid ?? null
-        })),
-        inspirationuselabel: card.action && card.action !== 'none'
-            ? `Use — ${actionButtonFor(card.action)}`
-            : 'Use This Card',
-        inspirationusehint: card.action && card.action !== 'none' ? actionHintFor(card.action) : '',
+        // Same describer the item uses, so the draw card and the card in
+        // their inventory say the same thing about what it does.
+        outcomemechanics: INSPIRATION_ACTIONS.describeInspirationCard(card),
+        inspirationnote: buildInspirationNote(holder, granted, cardItem),
+        // With the card in their inventory, the ITEM is how it gets used —
+        // a second button here would just be a way to spend the point
+        // without the card leaving their sheet. The button survives only
+        // as the fallback for a draw that reached nobody.
+        ...(cardItem ? {} : {
+            inspirationuse: encodeURIComponent(JSON.stringify({
+                title: card.title,
+                action: card.action ?? 'none',
+                actionamount: card.actionamount ?? null,
+                actionformula: card.actionformula ?? '',
+                holderActorId: holder?.id ?? null,
+                sourceUuid: card.sourceUuid ?? null
+            })),
+            inspirationuselabel: card.action && card.action !== 'none'
+                ? `Use — ${actionButtonFor(card.action)}`
+                : 'Use This Card',
+            inspirationusehint: card.action && card.action !== 'none' ? actionHintFor(card.action) : ''
+        }),
         hasSectionContent: true
     });
 
     BlacksmithUtils.playSound('modules/coffee-pub-blacksmith/sounds/spell-magic-circle.mp3', '0.7');
     await ChatMessage.create({ user: game.user.id, content: html, speaker: ChatMessage.getSpeaker() });
+}
+
+/**
+ * PLAY a card: the pretty card, raised by using the item, with a button
+ * for every person it could land on. This is the card the table actually
+ * looks at — art, prose, mechanics, and one click that resolves it.
+ *
+ * Nothing has been spent at this point. The buttons do the spending.
+ */
+export async function postInspirationPlayCard({ card, holder = null, itemUuid = null }) {
+    const template = await getCardTemplate();
+    const html = template({
+        theme: getSettingSafe('cardThemeInspiration', 'cardsdefault'),
+        iconStyle: 'fa-lightbulb',
+        cardTitle: 'Inspiration',
+        cardSubTitle: holder ? holder.name : '',
+        iconSubStyle: 'fa-user',
+        title: card.title,
+        content: card.description,
+        image: card.image || '',
+        imagecaption: card.imagetitle || '',
+        imageBackground: 'themecolor',
+        outcomemechanics: INSPIRATION_ACTIONS.describeInspirationCard(card, { context: 'play' }),
+        ...buildInspirationPlayButtons(card, holder, itemUuid),
+        hasSectionContent: true
+    });
+    BlacksmithUtils.playSound('modules/coffee-pub-blacksmith/sounds/spell-magic-circle.mp3', '0.7');
+    await ChatMessage.create({
+        user: game.user.id,
+        content: html,
+        speaker: holder ? ChatMessage.getSpeaker({ actor: holder }) : ChatMessage.getSpeaker()
+    });
+}
+
+/**
+ * The resolve controls. Which buttons appear comes from the card's target
+ * mode, so the question "who does this land on?" is answered by clicking
+ * a name rather than by remembering to select the right token first.
+ *
+ *   none   — one button; the table resolves the rest
+ *   self   — one button, naming the holder
+ *   ally   — one per party member, plus let-the-dice-decide
+ *   target — one per creature they currently have targeted
+ *   any    — the holder, the party, and anything targeted
+ */
+function buildInspirationPlayButtons(card, holder, itemUuid) {
+    const mode = INSPIRATION_ACTIONS.targetModeFor(card);
+    const base = {
+        title: card.title,
+        action: card.action ?? 'none',
+        actionamount: card.actionamount ?? null,
+        actionformula: card.actionformula ?? '',
+        holderActorId: holder?.id ?? null,
+        sourceUuid: card.sourceUuid ?? null,
+        itemUuid
+    };
+    const encode = (extra) => encodeURIComponent(JSON.stringify({ ...base, ...extra }));
+    const party = getPartyActors();
+    const targeted = Array.from(game.user?.targets ?? []).map((t) => t.actor).filter(Boolean);
+
+    // No aiming to do: one button, and the point is the whole mechanic.
+    // The mechanics block above it already states the cost, so the hint
+    // stays out of the way rather than repeating it.
+    if (mode === 'none') {
+        return {
+            inspirationuse: encode({}),
+            inspirationuselabel: 'Play This Card',
+            inspirationusehint: ''
+        };
+    }
+
+    if (mode === 'self') {
+        return {
+            inspirationuse: encode({ targetActorId: holder?.id ?? null }),
+            inspirationuselabel: holder ? `Use on ${holder.name}` : (actionButtonFor(card.action) || 'Use This Card'),
+            inspirationusehint: ''
+        };
+    }
+
+    // Candidate list, deduped, in the order the player is likeliest to
+    // want: themselves first for "any", then the party, then their target.
+    const candidates = [];
+    const add = (actor, note = '') => {
+        if (!actor || candidates.some((c) => c.actor.id === actor.id)) return;
+        candidates.push({ actor, note });
+    };
+    if (mode === 'any') add(holder, 'yourself');
+    if (mode === 'ally' || mode === 'any') {
+        for (const actor of party) {
+            if (mode === 'ally' && actor.id === holder?.id) continue;   // cannot swap with yourself
+            add(actor);
+        }
+    }
+    for (const actor of targeted) add(actor, 'targeted');
+
+    // Nothing to list — most often a `target` card played before anything
+    // was targeted. The button still works: targets are read when it is
+    // CLICKED, so they can aim now and click without redrawing the card.
+    if (!candidates.length) {
+        return {
+            inspirationuse: encode({}),
+            inspirationuselabel: actionButtonFor(card.action) || 'Use This Card',
+            inspirationusehint: mode === 'target'
+                ? 'Target a creature on the canvas, then click.'
+                : actionHintFor(card.action)
+        };
+    }
+
+    return {
+        // Life Swap-style "call out their name" cards get a dice option
+        // too, for the tables that would rather let fate pick.
+        ...(mode === 'ally' && candidates.length > 1
+            ? { inspirationrandom: encode({ randomAlly: true }) }
+            : {}),
+        inspirationpicker: candidates.map(({ actor, note }) => ({
+            name: note ? `${actor.name} (${note})` : actor.name,
+            img: actor.img || 'icons/svg/mystery-man.svg',
+            payload: encode({ targetActorId: actor.id })
+        })),
+        inspirationusehint: mode === 'target'
+            ? 'Pick the creature it hits.'
+            : 'Pick who it lands on.'
+    };
+}
+
+/**
+ * What the DRAW card says happened. The important sentence is where the
+ * card WENT — a player who does not know it is on their sheet will sit
+ * there waiting for a button.
+ */
+function buildInspirationNote(holder, granted, cardItem) {
+    if (!holder) return 'Nobody selected — grant the point by hand, or draw again with a token selected.';
+    const point = granted
+        ? `${holder.name} gains an inspiration point`
+        : `${holder.name} already holds a point`;
+    if (cardItem) return `${point}. The card is in their inventory — using it spends the point.`;
+    return `${point}. Spend it to use this card.`;
 }
 
 function actionButtonFor(action) {
@@ -896,12 +1054,38 @@ function actionHintFor(action) {
 }
 
 /**
- * Use a drawn card: spend the point, then run the automation if it has
- * one. Narrative cards still spend the point — the table resolves the
- * rest out loud.
+ * Turn a clicked button into the actor list the action wants.
+ *
+ * swapHp is the odd one out: "swap health with that character" needs BOTH
+ * sides, and runInspirationAction reads them as [a, b], so the holder has
+ * to lead. Everything else acts on the one actor that was picked.
+ *
+ * @returns {string[]|null}  null when the button carried no decision, so
+ *                           the caller falls back to token selection
+ */
+function resolveInspirationTargets(data, holder) {
+    let chosenId = data?.targetActorId ?? null;
+
+    if (data?.randomAlly) {
+        const pool = getPartyActors().filter((a) => a.id !== holder?.id);
+        if (!pool.length) return null;
+        chosenId = pool[Math.floor(Math.random() * pool.length)].id;
+    }
+    if (!chosenId) return null;
+
+    if (data?.action === 'swapHp' && holder && holder.id !== chosenId) {
+        return [holder.id, chosenId];
+    }
+    return [chosenId];
+}
+
+/**
+ * Resolve a played card. Reached from the card's buttons — the one the
+ * item raises, and the draw card's fallback button. Narrative cards still
+ * spend the point; the table resolves the rest out loud.
  */
 async function useInspirationCard(buttonEl, data) {
-    const { spendInspiration, runInspirationAction, hasInspiration } = await import('./manager-inspiration.js');
+    const { applyInspirationCard, hasInspiration, resolveTargets } = await import('./manager-inspiration.js');
     const holder = game.actors.get(data?.holderActorId ?? '');
 
     if (holder && !hasInspiration(holder)) {
@@ -909,12 +1093,23 @@ async function useInspirationCard(buttonEl, data) {
         return;
     }
 
-    const result = await runInspirationAction(data);
+    // The button carries the decision. Life Swap needs the holder in the
+    // list too, since swapping is between two people; everything else
+    // acts on the single actor whose name got clicked. Token selection is
+    // only the fallback for cards posted without a picker.
+    const targetActorIds = resolveInspirationTargets(data, holder)
+        ?? resolveTargets().map((a) => a.id);
+
+    const result = await applyInspirationCard({
+        card: data,
+        holderActorId: holder?.id ?? null,
+        targetActorIds,
+        itemUuid: data?.itemUuid ?? null
+    });
     if (!result.ok) {
         showBibToast('Not Yet', result.summary, 'fa-solid fa-crosshairs');
         return;
     }
-    if (holder) await spendInspiration(holder);
 
     showBibToast('Inspiration Used', result.summary || data?.title || '', 'fa-solid fa-lightbulb');
     await markCardButtonApplied(

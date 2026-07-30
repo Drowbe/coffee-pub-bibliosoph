@@ -474,18 +474,18 @@ const SCENARIOS = [
     },
     {
         tab: 'inspiration',
-        label: '💡 Draw a card (random, grants a point to subject)',
+        label: '💡 Draw a card (random) → point + item on subject',
         run: async () => {
             const token = getSubjectToken();
             if (!token) return;
             const { drawInspirationCard } = await import(`${MODULE_PATH}/bibliosoph.js`);
             await drawInspirationCard(token.actor);
-            ui.notifications.info(`Drew for ${token.name} — they should now hold an inspiration point. The card's Use button spends it.`);
+            ui.notifications.info(`Drew for ${token.name} — check their sheet for the "Inspiration: …" item. Using that item raises the PLAY card, and its buttons resolve it.`);
         }
     },
     {
         tab: 'inspiration',
-        label: '🧪 Demo AUTOMATED cards (one of each, to subject)',
+        label: '🧪 Deal the 4 AUTOMATED cards → subject\'s inventory',
         run: async () => {
             const token = getSubjectToken();
             if (!token) return;
@@ -493,24 +493,23 @@ const SCENARIOS = [
             for (const title of ['Snake Oil', 'Raise the Dead', 'Cat Nap', 'Smite']) {
                 await drawInspirationCard(token.actor, { title });
             }
-            ui.notifications.info('Posted the four single-target automated cards. Select a token and press Use on each — Smite rolls its own d10.');
+            ui.notifications.info(`Four cards are in ${token.name}'s inventory. Grant a point, then use them from the sheet. Expect: Snake Oil + Raise the Dead offer self/party/target buttons, Cat Nap one self button, Smite a button per targeted creature.`);
         }
     },
     {
         tab: 'inspiration',
-        label: '🔄 Demo LIFE SWAP (needs TWO tokens selected)',
+        label: '🔄 Deal LIFE SWAP (target the other character on use)',
         run: async () => {
-            const selected = canvas.tokens.controlled;
+            const token = getSubjectToken();
+            if (!token) return;
             const { drawInspirationCard } = await import(`${MODULE_PATH}/bibliosoph.js`);
-            await drawInspirationCard(selected[0]?.actor ?? null, { title: 'Life Swap' });
-            ui.notifications.info(selected.length >= 2
-                ? `Posted. With ${selected[0].name} and ${selected[1].name} selected, Use swaps their HP (overflow becomes temp).`
-                : 'Posted — but select TWO tokens before pressing Use, or it will tell you so.');
+            await drawInspirationCard(token.actor, { title: 'Life Swap' });
+            ui.notifications.info(`In ${token.name}'s inventory. Using it offers a button per OTHER party member plus "Random Party Member" — no selecting. Overflow lands as temp HP.`);
         }
     },
     {
         tab: 'inspiration',
-        label: '📖 Demo NARRATIVE cards (no automation, still spends)',
+        label: '📖 Deal NARRATIVE cards (no automation, still spends)',
         run: async () => {
             const token = getSubjectToken();
             if (!token) return;
@@ -518,12 +517,12 @@ const SCENARIOS = [
             for (const title of ['Re-roll', 'Night School']) {
                 await drawInspirationCard(token.actor, { title });
             }
-            ui.notifications.info('These have no button action by design — Use spends the point and the table resolves the rest.');
+            ui.notifications.info('No automation by design — using the item raises the card with one "Play This Card" button. Clicking it spends the point and discards the card.');
         }
     },
     {
         tab: 'inspiration',
-        label: '🎁 Grant a point to subject (no card)',
+        label: '🎁 Grant a point to subject (no card drawn)',
         run: async () => {
             const token = getSubjectToken();
             if (!token) return;
@@ -535,26 +534,68 @@ const SCENARIOS = [
     },
     {
         tab: 'inspiration',
-        label: '🧹 Clear the subject\'s point (retest)',
+        label: '🧹 Clear the subject\'s point (retest refusal)',
         run: async () => {
             const token = getSubjectToken();
             if (!token) return;
             const { spendInspiration } = await import(`${MODULE_PATH}/manager-inspiration.js`);
             await spendInspiration(token.actor);
-            ui.notifications.info(`Cleared ${token.name}'s inspiration — the Use button should now refuse.`);
+            ui.notifications.info(`Cleared ${token.name}'s inspiration. Using a card item now should refuse and KEEP the card.`);
         }
     },
     {
         tab: 'inspiration',
-        label: '📋 Who holds inspiration right now?',
+        label: '🗑️ Take back the subject\'s card items (retest)',
         run: async () => {
-            const { hasInspiration } = await import(`${MODULE_PATH}/manager-inspiration.js`);
-            const chars = game.actors.filter((a) => a.type === 'character');
-            const holders = chars.filter((a) => hasInspiration(a)).map((a) => a.name);
-            console.log('BIBLIOSOPH INSPIRATION | holders:', holders, '| of', chars.length, 'characters');
-            ui.notifications.info(holders.length
-                ? `Holding a point: ${holders.join(', ')}`
-                : 'Nobody is holding an inspiration point.');
+            const token = getSubjectToken();
+            if (!token) return;
+            const { CARD_FLAG } = await import(`${MODULE_PATH}/manager-inspiration.js`);
+            const ids = token.actor.items.filter((i) => i.getFlag('coffee-pub-bibliosoph', CARD_FLAG)).map((i) => i.id);
+            if (ids.length) await token.actor.deleteEmbeddedDocuments('Item', ids);
+            ui.notifications.info(ids.length
+                ? `Removed ${ids.length} card item(s) from ${token.name}.`
+                : `${token.name} is holding no cards.`);
+        }
+    },
+    {
+        tab: 'inspiration',
+        label: '📋 Who holds points and cards right now?',
+        run: async () => {
+            const { hasInspiration, CARD_FLAG } = await import(`${MODULE_PATH}/manager-inspiration.js`);
+            const lines = [];
+            for (const actor of game.actors.filter((a) => a.type === 'character')) {
+                const cards = actor.items.filter((i) => i.getFlag('coffee-pub-bibliosoph', CARD_FLAG)).map((i) => i.name);
+                if (!hasInspiration(actor) && !cards.length) continue;
+                lines.push(`${actor.name}: point=${hasInspiration(actor) ? 'YES' : 'no'} · cards=[${cards.join(', ') || 'none'}]`);
+            }
+            console.log(`BIBLIOSOPH INSPIRATION\n  ${lines.join('\n  ') || '(nobody holds a point or a card)'}`);
+            ui.notifications.info(lines.length
+                ? `${lines.length} character(s) holding something — details in console (F12).`
+                : 'Nobody holds a point or a card.');
+            // A card with no point behind it is the state to watch for: the
+            // player can see it but cannot cash it in.
+        }
+    },
+    {
+        tab: 'inspiration',
+        label: '🔍 Inspect a card item\'s wiring (uses, activity, flag)',
+        run: async () => {
+            const token = getSubjectToken();
+            if (!token) return;
+            const { CARD_FLAG } = await import(`${MODULE_PATH}/manager-inspiration.js`);
+            const item = token.actor.items.find((i) => i.getFlag('coffee-pub-bibliosoph', CARD_FLAG));
+            if (!item) return ui.notifications.warn(`${token.name} is holding no card items — deal one first.`);
+            const flag = item.getFlag('coffee-pub-bibliosoph', CARD_FLAG);
+            const activities = Array.from(item.system.activities ?? []).map((a) => `${a.type}/${a.name} consumes=${JSON.stringify(a.consumption?.targets ?? [])}`);
+            const report = [
+                `item: ${item.name} (${item.type}/${item.system.type?.value})`,
+                `uses: spent=${item.system.uses?.spent} max=${item.system.uses?.max} autoDestroy=${item.system.uses?.autoDestroy}`,
+                `activities: ${activities.join(' | ') || 'NONE — it will not be usable!'}`,
+                `flag: action=${flag.action} amount=${flag.actionamount} formula=${flag.actionformula || '—'}`,
+                `source: ${flag.sourceUuid ?? 'none'}`
+            ];
+            console.log('BIBLIOSOPH CARD ITEM\n  ' + report.join('\n  '));
+            ui.notifications.info(`${item.name}: ${activities.length} activity, ${item.system.uses?.max} use, autoDestroy=${item.system.uses?.autoDestroy}. Full wiring in console (F12).`);
         }
     },
     {
@@ -771,7 +812,9 @@ const TAB_SETTINGS = {
     ),
     inspiration: settingsBox(
         `Deck Source: <strong>${setting('inspirationCompendium', 'none')}</strong><br>
-         <em>Drawing a card grants a point; using the card spends it.</em>`
+         <em>Draw → point + card item on the sheet. Using the item raises the
+         play card; its buttons pick the target, spend the point, and discard
+         the card. Nothing is spent until a button is clicked.</em>`
     ),
     tools: settingsBox(
         `Injury Compendium: <strong>${setting('injuryCompendium', 'coffee-pub-bibliosoph.injuries')}</strong>`

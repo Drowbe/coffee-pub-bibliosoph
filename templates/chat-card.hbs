@@ -299,7 +299,26 @@
                 <button id="cards-button-cardsdark" title="Apply this injury as a status effect to the targeted token..." class="coffee-pub-bibliosoph-button-injury" data-effect="{{arreffect}}" style="width: 100%;"><i class="fa-solid {{iconStyle}}"></i>{{buttontext}}</button>
             {{/if}}
 
-            <!-- INSPIRATION: draw grants the point, Use spends it -->
+            <!-- INSPIRATION: pick-who-it-lands-on -->
+            {{#if inspirationpicker}}
+                {{#if inspirationusehint}}<p style="margin: 4px 0 2px 0; font-size: 0.85em; font-style: italic; opacity: 0.75;">{{inspirationusehint}}</p>{{/if}}
+                {{#if inspirationrandom}}
+                    <button id="cards-button-cardsdark" title="Let the dice choose a party member" class="coffee-pub-bibliosoph-button-inspiration" data-inspiration="{{inspirationrandom}}" style="width: 100%; display: flex; align-items: center; gap: 8px; text-align: left; margin: 3px 0;">
+                        <i class="fa-solid fa-dice-d20" style="width: 24px; text-align: center; margin: 0;"></i>
+                        <span style="flex: 1; min-width: 0;">Random Party Member</span>
+                        <i class="fa-solid fa-lightbulb" style="margin: 0;"></i>
+                    </button>
+                {{/if}}
+                {{#each inspirationpicker}}
+                    <button id="cards-button-cardsdark" title="Play this card on {{this.name}}" class="coffee-pub-bibliosoph-button-inspiration" data-inspiration="{{this.payload}}" style="width: 100%; display: flex; align-items: center; gap: 8px; text-align: left; margin: 3px 0;">
+                        <img src="{{this.img}}" alt="" style="width: 24px; height: 24px; object-fit: cover; border: none; border-radius: 3px; flex: 0 0 auto; margin: 0;" />
+                        <span style="flex: 1; min-width: 0;">{{this.name}}</span>
+                        <i class="fa-solid fa-lightbulb" style="margin: 0;"></i>
+                    </button>
+                {{/each}}
+            {{/if}}
+
+            <!-- INSPIRATION: single-button cards (self, or nothing to aim) -->
             {{#if inspirationuse}}
                 {{#if inspirationnote}}<p style="margin: 2px 0 6px 0; font-style: italic; opacity: 0.8;">{{inspirationnote}}</p>{{/if}}
                 <button id="cards-button-cardsdark" title="Spend the inspiration point and resolve this card" class="coffee-pub-bibliosoph-button-inspiration" data-inspiration="{{inspirationuse}}" style="width: 100%;"><i class="fa-solid fa-lightbulb"></i>{{inspirationuselabel}}</button>

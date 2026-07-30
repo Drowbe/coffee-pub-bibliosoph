@@ -5,15 +5,20 @@
 //
 // The lifecycle, per the house rules:
 //   DRAW — GM discretion, or a critical that grants access. Drawing a
-//          card GIVES the character an inspiration point.
-//   USE  — spending that point resolves the card.
+//          card GIVES the character an inspiration point AND puts the
+//          card itself in their inventory as a real item.
+//   USE  — using that item spends the point and resolves the card.
 //
-// So the draw grants, the use spends, and a card sits between them.
-// The point is the currency; the card is what it buys.
+// The item is the point of the whole thing. A card the player can see on
+// their sheet, hold onto for six sessions and cash in at the dramatic
+// moment is a different object than a line in a chat log — so the item
+// is the trigger, not a button on a card that has scrolled away.
+// "Use any time, use once": no activation cost, one charge, and it
+// destroys itself on the way out.
 // ==================================================================
 
 import { MODULE } from './const.js';
-import { INSPIRATION_PATH, actionButton, actionHint } from './data/inspiration-schema.js';
+import { INSPIRATION_PATH, actionButton, actionHint, describeInspirationCardHtml } from './data/inspiration-schema.js';
 
 function log(message, data = '', debug = true, notify = false) {
     if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils?.postConsoleAndNotification) {
@@ -67,10 +72,283 @@ export async function spendInspiration(actor) {
 }
 
 /** Targeted tokens, falling back to selected — the usual house rule. */
-function resolveTargets() {
+export function resolveTargets() {
     const targeted = Array.from(game.user.targets ?? []);
     const tokens = targeted.length ? targeted : Array.from(canvas?.tokens?.controlled ?? []);
     return tokens.map((t) => t.actor).filter(Boolean);
+}
+
+// ==================================================================
+// ===== THE CARD AS AN ITEM ========================================
+// ==================================================================
+
+/** Flag key: marks an inventory item as a drawn inspiration card. */
+export const CARD_FLAG = 'inspirationCard';
+
+/**
+ * The item description IS the card — everything the chat card shows when
+ * it is drawn, because the item is what the player still has in front of
+ * them three sessions later when the chat log is long gone. Art, caption,
+ * prose, and the mechanics spelled out.
+ *
+ * The link back to the deck page means they can always read the
+ * authoritative version, and the GM edits one journal page rather than
+ * chasing copies already sitting in six inventories.
+ */
+function buildCardDescription(card) {
+    const parts = ['<p><em>Inspiration Card</em></p>'];
+    if (card.image) {
+        parts.push(`<p><img src="${card.image}" alt="${card.imagetitle || card.title}" /></p>`);
+    }
+    if (card.imagetitle) parts.push(`<p><em>${card.imagetitle}</em></p>`);
+    if (card.description) parts.push(card.description);
+
+    const mechanics = describeInspirationCardHtml(card, { context: 'item' });
+    if (mechanics) parts.push(`<h4>What This Does</h4>${mechanics}`);
+
+    if (card.sourceUuid) parts.push(`<p>@UUID[${card.sourceUuid}]{${card.title}}</p>`);
+    return parts.join('');
+}
+
+// NOTE: no system.description.chat here on purpose. dnd5e's own usage card
+// never posts — preUseActivity vetoes it and the Bibliosoph play card goes
+// up instead — so a chat description would be dead data on every item.
+
+/**
+ * Item data for a drawn card: a one-charge consumable with a single
+ * no-cost activity, so "use any time, use once" is modelled in dnd5e's
+ * own terms rather than bolted on. autoDestroy removes it when the
+ * charge is spent.
+ */
+export function buildInspirationItemData(card, holder = null) {
+    const activityId = foundry.utils.randomID();
+    return {
+        name: `Inspiration: ${card.title}`,
+        type: 'consumable',
+        img: card.image || 'icons/magic/light/explosion-star-glow-silhouette.webp',
+        system: {
+            description: { value: buildCardDescription(card) },
+            type: { value: 'trinket' },
+            quantity: 1,
+            weight: { value: 0, units: 'lb' },
+            price: { value: 0, denomination: 'gp' },
+            rarity: 'veryRare',
+            uses: { spent: 0, max: '1', recovery: [], autoDestroy: true },
+            activities: {
+                [activityId]: {
+                    _id: activityId,
+                    type: 'utility',
+                    name: actionButton(card.action) || 'Play This Card',
+                    activation: { type: 'special', value: null, override: true },
+                    consumption: {
+                        targets: [{ type: 'itemUses', target: '', value: '1' }],
+                        scaling: { allowed: false }
+                    }
+                }
+            }
+        },
+        flags: {
+            [MODULE.ID]: {
+                // The WHOLE card, not just its mechanics. The play card is
+                // rendered straight from this, so art and prose have to be
+                // here — and it has to keep working if the deck page is
+                // later renamed, moved, or the compendium unlinked.
+                [CARD_FLAG]: {
+                    title: card.title,
+                    image: card.image ?? '',
+                    imagetitle: card.imagetitle ?? '',
+                    description: card.description ?? '',
+                    action: card.action ?? 'none',
+                    actionamount: card.actionamount ?? null,
+                    actionformula: card.actionformula ?? '',
+                    appliesto: card.appliesto ?? null,
+                    sourceUuid: card.sourceUuid ?? null,
+                    holderActorId: holder?.id ?? null
+                }
+            }
+        }
+    };
+}
+
+/**
+ * Put the card in the character's hands. Returns the created item, or
+ * null if it could not be made — the draw still stands either way, since
+ * the point is what the rules actually turn on.
+ */
+export async function grantInspirationItem(actor, card) {
+    if (!actor || !card) return null;
+    try {
+        const [item] = await actor.createEmbeddedDocuments('Item', [buildInspirationItemData(card, actor)]);
+        log(`Gave ${actor.name} the "${card.title}" card as an item`, '', true, false);
+        return item ?? null;
+    } catch (error) {
+        log(`Could not create the card item for ${actor.name}`, error?.message, false, false);
+        return null;
+    }
+}
+
+/** The card payload stored on an inventory item, if it is one of ours. */
+export function readCardItem(item) {
+    return item?.getFlag?.(MODULE.ID, CARD_FLAG) ?? null;
+}
+
+/**
+ * Using the item IS using the card. dnd5e has already handled the item's
+ * own chat message and spent its charge by the time this fires; what is
+ * left is ours — spend the inspiration point and run the automation.
+ *
+ * Fires on whichever client clicked, which is normally the owning player.
+ * They own their character and their own inspiration flag, so the common
+ * path needs no GM. Actions that reach across to somebody else's sheet
+ * (Life Swap) relay through the active GM.
+ */
+export function registerInspirationItemHook() {
+    // Using the item RAISES THE CARD. dnd5e's own usage card is a name and
+    // a couple of pills; the Bibliosoph card is the art, the prose, the
+    // mechanics and a button per person it could land on. So we take the
+    // activity over entirely: veto it, and post the real card instead.
+    //
+    // Vetoing also means nothing is spent yet. The charge, the point and
+    // the card all survive until a button actually gets clicked, so
+    // opening a card and thinking better of it costs nothing.
+    Hooks.on('dnd5e.preUseActivity', (activity) => {
+        const item = activity?.item;
+        const card = readCardItem(item);
+        if (!card) return;
+
+        const holder = item?.actor ?? null;
+        if (holder && !hasInspiration(holder)) {
+            toast('No Point to Spend', `${holder.name} has no inspiration right now — the card stays in hand.`, 'fa-solid fa-lightbulb');
+            return false;
+        }
+
+        // Fire and forget: the hook is synchronous because it has to
+        // return false to stop dnd5e, so the card posts just behind it.
+        playCardToChat(item, card).catch((error) => {
+            log(`Could not raise the card for "${card.title}"`, error?.message, false, false);
+        });
+        return false;
+    });
+    log('Watching for inspiration card items being used', '', true, false);
+}
+
+/** Post the playable card. The buttons on it do the actual work. */
+async function playCardToChat(item, card) {
+    const { postInspirationPlayCard } = await import('./bibliosoph.js');
+    await postInspirationPlayCard({
+        card: await freshenCard(card),
+        holder: item?.actor ?? null,
+        itemUuid: item?.uuid ?? null
+    });
+}
+
+/**
+ * Prefer the live deck page over the snapshot in the item's flag, so a GM
+ * who rewords a card sees the change on cards already dealt. Also repairs
+ * cards dealt before the flag carried art and prose at all.
+ *
+ * The flag stays authoritative for anything the page no longer supplies —
+ * a deleted or unlinked page must not blank out somebody's card.
+ */
+async function freshenCard(card) {
+    if (!card?.sourceUuid) return card;
+    try {
+        const page = await fromUuid(card.sourceUuid);
+        const system = page?.system;
+        if (!system) return card;
+        const live = system.toObject?.() ?? system;
+        return {
+            ...card,
+            ...Object.fromEntries(Object.entries(live).filter(([, v]) => v !== undefined && v !== null && v !== '')),
+            title: page.name || card.title,
+            sourceUuid: card.sourceUuid,
+            holderActorId: card.holderActorId ?? null
+        };
+    } catch (error) {
+        log(`Could not re-read the deck page for "${card.title}"`, error?.message, true, false);
+        return card;
+    }
+}
+
+/**
+ * "Use once": the card leaves their inventory the moment it resolves.
+ * Nothing was spent when they opened it, so this is the one and only
+ * place the item goes away.
+ */
+export async function discardCardItem(itemUuid) {
+    if (!itemUuid) return;
+    try {
+        const item = await fromUuid(itemUuid);
+        if (item?.delete) await item.delete();
+    } catch (_) { /* already gone is the goal */ }
+}
+
+/**
+ * Resolve a card: run its action, spend the point, discard the card.
+ * Relays to the active GM when it touches an actor this client cannot
+ * write to — Life Swap reaches onto somebody else's sheet.
+ */
+export async function applyInspirationCard({ card, holderActorId = null, targetActorIds = [], itemUuid = null }) {
+    const holder = game.actors.get(holderActorId ?? '') ?? null;
+    const targets = targetActorIds.map((id) => game.actors.get(id)).filter(Boolean);
+
+    const needsGm = targets.some((a) => !a.isOwner) || (holder && !holder.isOwner);
+    if (needsGm && !game.user.isGM) {
+        const relayed = await relayCardToGm({ card, holderActorId, targetActorIds, itemUuid });
+        return relayed
+            ? { ok: true, relayed: true, summary: 'Sent to the GM to resolve.' }
+            : { ok: false, summary: 'No GM connected to resolve this one.' };
+    }
+
+    const result = await runInspirationAction(card, targets);
+    if (!result.ok) return result;          // card and point both survive
+    if (holder) await spendInspiration(holder);
+    await discardCardItem(itemUuid);
+    return result;
+}
+
+export const SOCKET_INSPIRATION_USE = `${MODULE.ID}.inspirationUse`;
+
+async function relayCardToGm(payload) {
+    const sockets = game.modules.get('coffee-pub-blacksmith')?.api?.sockets;
+    if (!sockets || !game.users.activeGM) return false;
+    try {
+        await sockets.waitForReady();
+        await sockets.emit(SOCKET_INSPIRATION_USE, payload);
+        return true;
+    } catch (error) {
+        log('Card relay to the GM failed', error?.message, false, false);
+        return false;
+    }
+}
+
+/** GM side: perform card resolutions relayed by players. */
+export async function registerInspirationSocket() {
+    const sockets = game.modules.get('coffee-pub-blacksmith')?.api?.sockets;
+    if (!sockets) return;
+    await sockets.waitForReady();
+    await sockets.register(SOCKET_INSPIRATION_USE, async (payload) => {
+        if (game.users.activeGM?.id !== game.user.id) return;
+        const holder = game.actors.get(payload?.holderActorId ?? '');
+        // Re-check against live state: the relay is a request, not a fact.
+        if (holder && !hasInspiration(holder)) {
+            log(`Ignoring relayed card "${payload?.card?.title}" — ${holder.name} holds no point`, '', true, false);
+            return;
+        }
+        const targets = (payload?.targetActorIds ?? []).map((id) => game.actors.get(id)).filter(Boolean);
+        const result = await runInspirationAction(payload?.card ?? {}, targets);
+        if (!result.ok) {
+            // The card survives a failed resolution — the player still has
+            // it and their point, and can try again once they select right.
+            log(`Relayed card "${payload?.card?.title}" did not resolve: ${result.summary}`, '', true, false);
+            return;
+        }
+        if (holder) await spendInspiration(holder);
+        toast('Inspiration Used', result.summary || payload?.card?.title || '', 'fa-solid fa-lightbulb');
+        // The player could not necessarily finish this themselves, so the
+        // discard belongs here too.
+        await discardCardItem(payload?.itemUuid);
+    });
 }
 
 const hpOf = (actor) => actor?.system?.attributes?.hp ?? null;
@@ -80,13 +358,17 @@ const hpOf = (actor) => actor?.system?.attributes?.hp ?? null;
  * with no judgement in it — anything needing a decision stays in the
  * prose and never reaches here.
  *
+ * @param {object} card                  the card record
+ * @param {Actor[]|null} explicitActors  resolved targets; pass these when
+ *                                       the click happened on another
+ *                                       client, since targeting is per-user
  * @returns {Promise<{ok: boolean, summary: string}>}
  */
-export async function runInspirationAction(card) {
+export async function runInspirationAction(card, explicitActors = null) {
     const action = card?.action ?? 'none';
     if (action === 'none') return { ok: true, summary: '' };
 
-    const actors = resolveTargets();
+    const actors = explicitActors?.length ? explicitActors : resolveTargets();
     if (!actors.length) {
         return { ok: false, summary: actionHint(action) || 'Select a token first.' };
     }
