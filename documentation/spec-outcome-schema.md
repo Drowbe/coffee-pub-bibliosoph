@@ -70,3 +70,56 @@ Bands: minor 0–5, moderate 4–12, major 8–25.
 ## Known nuance
 
 `appliesto: self` changes the Apply button's label but not its targeting — the applier still uses targeted-then-selected tokens. For a fumble the GM selects the fumbler. Auto-targeting the roller is a possible refinement once the rolls API reports the actor reliably for every path.
+
+---
+
+# Addendum — 2026-07-30
+
+## Structure as shipped
+
+The spec above predates the migration of the world's own tables. What
+actually ships:
+
+- **Two compendiums**, not one: `coffee-pub-bibliosoph.criticals` and
+  `coffee-pub-bibliosoph.fumbles`. Each is browsable on its own, which is
+  what a GM looking for "a fumble" actually wants.
+- **Three journals per compendium**, named for the severity buckets the
+  original tables used — crits: Butchery / Carnage / Slaughter; fumbles:
+  Meek / Nasty / Devastating. The journals are organisational only: each
+  page states its own `severity` and `odds`, so renaming or adding a
+  journal changes nothing about selection.
+- **94 outcomes** (47 crits, 47 fumbles), migrated verbatim from the
+  world's roll tables with the prose preserved.
+
+## `appliesto` and the pickers
+
+`appliesto` is real targeting, not just a label:
+
+| Value | Apply control |
+|---|---|
+| `target` | One button, naming the creature hit when known |
+| `self` | One button, naming the roller when known |
+| `ally` | One button **per party member**, plus *Random Party Member* |
+| `party` | A single button that applies to everyone, no selecting |
+| `nearby` | One button; the GM selects who is in range |
+
+Named buttons **bind** to that actor via `targetActorId`. A card records a
+specific moment, so it should not quietly re-aim at whatever happens to be
+selected when someone gets around to clicking it.
+
+Who the card is about comes from the triggering roll (`_outcomeCast()`
+relays roller and hit-target ids over the socket). With no roll behind it —
+the toolbar buttons, the test harness — it falls back to Foundry's own
+convention: a lone **controlled** token is the roller, a lone **target**
+is who they hit. Anything ambiguous stays unnamed rather than guessed at.
+
+## `dealscard`
+
+An outcome with `dealscard: true` hands someone a card from the
+inspiration deck instead of applying a status. `appliesto` still decides
+who, so there is no second targeting concept — `self` deals to the roller,
+`ally` offers the party picker.
+
+This exists because `Inspired` and `Inspirational` previously carried
+`@UUID[Macro.…]` links to a macro that only existed in the author's world.
+It is the one place the three content families connect.

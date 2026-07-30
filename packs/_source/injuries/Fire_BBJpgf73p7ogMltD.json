@@ -16,11 +16,18 @@
         "description": "Your palms have risen in protest, each blister a small tight dome of regret. Closing your hand is possible but unwise, and gripping anything reminds you of the exact moment you reached for it. You have begun carrying things in the crooks of your arms like a person hiding evidence.",
         "treatment": "Cool water, clean wrapping, and do not open the blisters. Grip strength returns as they settle.",
         "severity": "minor",
-        "damage": 3,
+        "damage": 4,
         "duration": 600,
         "statuseffect": "none",
         "odds": 50,
         "gmnotes": "No condition: rule grip instead — dropped weapons on a failed check, no climbing, no rope. Stinger: \"You close your hand and feel every one of them let go.\"",
+        "modifiers": [
+          {
+            "stat": "attack",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -65,11 +72,23 @@
         "description": "The burn went deeper than pain, into the strange numb country underneath it. The skin has gone tight and pale at the centre where it should hurt most, ringed by everything that still does. You find yourself checking the wound repeatedly, unsettled by how little it has to say.",
         "treatment": "Serious, immediate care: cool the wound, cover it loosely, and get proper healing. Deep burns do not mend on their own and invite infection.",
         "severity": "major",
-        "damage": 10,
+        "damage": 13,
         "duration": 0,
         "statuseffect": "none",
         "odds": 8,
         "gmnotes": "Permanent until treated, and the numbness is the tell — deep burns do not hurt at the centre. Anyone with Medicine should read that as serious. Stinger: \"You press it and feel nothing. You press around it and nearly fall over.\"",
+        "modifiers": [
+          {
+            "stat": "attack",
+            "value": -3,
+            "rounds": 0
+          },
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -114,11 +133,18 @@
         "description": "You suddenly have an uncontrollable urge to do a hot shoe dance. Your feet, however, seem to be on fire, and despite your best efforts, you can't put them out! It's like having your own personal campfire.",
         "treatment": "Cool your feet with water from a nearby source or a friend's water skin. Or maybe try doing a rain dance to summon a helpful drizzle. Or simply enjoy the warm ambiance.",
         "severity": "minor",
-        "damage": 2,
+        "damage": 3,
         "duration": 60,
         "statuseffect": "burning",
         "odds": 10,
         "gmnotes": "Burning deals ongoing damage — real teeth for a minor, so keep the duration short and let them stamp it out. Stinger: \"Stopping does not help. Stopping is worse.\"",
+        "modifiers": [
+          {
+            "stat": "ac",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -163,7 +189,7 @@
         "description": "You find a colorful, fiery feathered creature doing a triumphant dance. As you approach, it emits a brilliant burst of flames, leaving you with singed eyebrows and an unusual craving for spicy foods.",
         "treatment": "Seek out a skilled chef for a taste of surprisingly beneficial spicy dishes with healing properties.",
         "severity": "moderate",
-        "damage": 6,
+        "damage": 7,
         "duration": 300,
         "statuseffect": "charmed",
         "odds": 15,
@@ -212,11 +238,18 @@
         "description": "After a particularly intense encounter with a flame, your fingers now emanate a warm orange glow reminiscent of a perfectly toasted marshmallow. They are oddly satisfying to heat up cold soup, but be cautious when shaking hands!",
         "treatment": "Immerse fingers in ice-cold water for 1 hour or until the glow subsides",
         "severity": "minor",
-        "damage": 2,
+        "damage": 3,
         "duration": 600,
         "statuseffect": "charmed",
         "odds": 10,
         "gmnotes": "Charmed is a strange fit mechanically, so play the fingers: fumbles on fine work, dropped components, failed sleight of hand. Stinger: \"Your hands answer about half a second late, and not always with what you asked for.\"",
+        "modifiers": [
+          {
+            "stat": "attack",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -261,11 +294,18 @@
         "description": "In the heat of battle, you experience a close encounter with a fire… wall torch maybe? Anyway, your backside got a little too toasty, leaving you with charred buttocks. The smell of burnt bacon follows you wherever you go.",
         "treatment": "Cooling poultices or spells to soothe the burn",
         "severity": "moderate",
-        "damage": 7,
+        "damage": 9,
         "duration": 120,
         "statuseffect": "exhaustion",
         "odds": 5,
         "gmnotes": "Exhaustion 1, and sitting is out of the question — good for a long ride or a formal dinner. Stinger: \"You will be standing for this conversation, thank you.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -2,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -310,11 +350,18 @@
         "description": "Lingering aftermath of an unexpected fireball mishap. Your once luscious beard now resembles a charcoal briquette. Smoke still rises whenever you speak.",
         "treatment": "Apply a soothing ointment made of aloe vera and crushed ice from a frost giant's freezer.",
         "severity": "minor",
-        "damage": 2,
+        "damage": 3,
         "duration": 600,
         "statuseffect": "charmed",
         "odds": 20,
         "gmnotes": "Cosmetic and charmed: the vanity is the mechanic. Let NPCs comment. Stinger: \"It will grow back. Most of it. Probably.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -359,11 +406,23 @@
         "description": "Suffering from Singed Socks Syndrome, your feet feel like they've danced on a bonfire. The heat emanating from your boots could roast a turkey. Be careful, or you might leave a trail of cinders behind.",
         "treatment": "Soak your feet in a potion of frost, or find a pair of enchanted ice skates to cool those tootsies down.",
         "severity": "moderate",
-        "damage": 6,
+        "damage": 7,
         "duration": 1800,
         "statuseffect": "blinded",
         "odds": 15,
         "gmnotes": "Blinded for half an hour is severe — consider ruling it as watering eyes with disadvantage on sight checks instead. Stinger: \"The smell of your own boots is making your eyes stream.\"",
+        "modifiers": [
+          {
+            "stat": "ac",
+            "value": -2,
+            "rounds": 0
+          },
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -408,11 +467,23 @@
         "description": "You breathed when you should not have, and the air took something with it on the way out. Every inhale rasps, every exhale tastes faintly of the fire, and your voice has dropped an octave you never asked for. Speaking more than a sentence sets off a cough that takes a while to negotiate with.",
         "treatment": "Clean air, water, and silence. Do not let the patient near smoke again today.",
         "severity": "moderate",
-        "damage": 6,
+        "damage": 7,
         "duration": 2700,
         "statuseffect": "none",
         "odds": 25,
         "gmnotes": "Verbal spellcasting and shouting are the pressure points. Ask for a check to speak a full sentence under exertion. Stinger: \"Your own voice comes back a stranger's — lower, and shorter of road.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -2,
+            "rounds": 0
+          },
+          {
+            "stat": "saves",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -455,7 +526,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785352038507,
+    "modifiedTime": 1785439085421,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

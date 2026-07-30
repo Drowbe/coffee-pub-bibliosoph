@@ -202,3 +202,27 @@
 .bibliosoph-injury-page-edit string-tags {
     width: 100%;
 }
+
+/* --- MODIFIERS (view + edit) --------------------------------------- */
+/* Mirrors the outcome page's modifier block: injuries and crits carry the
+   same mechanic, so they should not look like two different features. */
+
+.bibliosoph-injury-page-fields .injury-page-modifiers {
+    margin: 0 0 12px 0;
+    padding: 8px 10px;
+    border-left: 3px solid rgba(70, 100, 150, 0.7);
+    background: rgba(70, 100, 150, 0.08);
+    border-radius: 0 4px 4px 0;
+}
+
+.bibliosoph-injury-page-fields .injury-page-modifiers ul {
+    margin: 4px 0 0 0;
+    padding-left: 18px;
+}
+
+.bibliosoph-injury-page-edit .injury-modifier-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 4px;
+}

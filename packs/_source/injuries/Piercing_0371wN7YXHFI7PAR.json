@@ -16,11 +16,18 @@
         "description": "A mischievous goblin has replaced your veins with vines. Bleeding out? More like... watering. Sunlight exposure may lead to sprouting flowers from your ears.",
         "treatment": "Bathe in moonlit water under the guidance of a wise treant. Apply a paste made from crushed sunstones to your wounds.",
         "severity": "minor",
-        "damage": 2,
+        "damage": 3,
         "duration": 1800,
         "statuseffect": "poisoned",
         "odds": 60,
         "gmnotes": "A clean hole that closes badly. Worth a complication later — infection, stiffness the next morning — rather than a combat penalty now. Stinger: \"It is a small wound. It goes a very long way in.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -65,11 +72,23 @@
         "description": "A hyperactive dragon decided to leave a memento of your encounter by embedding a heated dragon's nail in your shoulder. Your new talents include boiling water by just touching it.",
         "treatment": "Cool your wounds by swimming in a freezing glacier. Bring a smith to craft custom ice armor on the affected area.",
         "severity": "major",
-        "damage": 10,
+        "damage": 13,
         "duration": 0,
         "statuseffect": "exhaustion",
         "odds": 12,
         "gmnotes": "Exhaustion 1 and permanent until treated — a dragon-scale souvenir lodged in them. Removing it should cost something. Stinger: \"It is still warm. It has been days and it is still warm.\"",
+        "modifiers": [
+          {
+            "stat": "attack",
+            "value": -3,
+            "rounds": 0
+          },
+          {
+            "stat": "damage",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -114,11 +133,23 @@
         "description": "The brutal impalement of an appendage sends waves of shock through the body, as the offending object pierces through muscle and bone with relentless force. Each movement a torment, as the impaled limb hangs in a precarious balance.",
         "treatment": "The brutal impalement of an appendage sends waves of shock through the body, as the offending object pierces through muscle and bone with relentless force. Each movement a torment, as the impaled limb hangs in a precarious balance.",
         "severity": "moderate",
-        "damage": 8,
+        "damage": 10,
         "duration": 480,
         "statuseffect": "none",
         "odds": 20,
         "gmnotes": "Rule the limb unusable rather than reaching for a condition: no two-handed weapons, no climbing, no shield. Stinger: \"Whatever went through is still in there, and it moves when you do.\"",
+        "modifiers": [
+          {
+            "stat": "ac",
+            "value": -2,
+            "rounds": 0
+          },
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -163,11 +194,28 @@
         "description": "A severe injury has left the character impaled on a sharp object. The pain is excruciating, and movement is severely restricted as blood loss weakens the body.",
         "treatment": "Immediate medical attention needed to remove the impaling object and address the wound.",
         "severity": "major",
-        "damage": 10,
+        "damage": 13,
         "duration": 0,
         "statuseffect": "restrained",
         "odds": 20,
         "gmnotes": "Restrained and permanent until treated: they are pinned or carrying the object. Removing it is its own scene. Stinger: \"Nobody wants to be the one to pull it out.\"",
+        "modifiers": [
+          {
+            "stat": "attack",
+            "value": -3,
+            "rounds": 0
+          },
+          {
+            "stat": "ac",
+            "value": -1,
+            "rounds": 0
+          },
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -212,11 +260,23 @@
         "description": "The penetrating trauma of a deep stab pierces through layers of tissue, leaving a trail of destruction and pain in its wake. Each touch a torment, as the wound bleeds profusely and demands urgent attention.",
         "treatment": "Immediate wound assessment and appropriate hemostatic measures are vital for managing the penetrating trauma. Surgical intervention and ongoing medical care are essential for addressing internal damage and preventing complications.",
         "severity": "moderate",
-        "damage": 7,
+        "damage": 9,
         "duration": 429,
         "statuseffect": "none",
         "odds": 20,
         "gmnotes": "No condition, so rule the depth: heavy exertion reopens it. Stinger: \"It has stopped bleeding. You would not bet on that lasting.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -2,
+            "rounds": 0
+          },
+          {
+            "stat": "saves",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -261,11 +321,18 @@
         "description": "The sharp puncture of the piercing wound penetrates with pinpoint accuracy, leaving a pathway of destruction in its wake. Each stab, a jolt of searing pain, as the wound bleeds freely and demands attention.",
         "treatment": "Immediate wound care, including cleaning, disinfection, and appropriate dressing, is critical for preventing infection and promoting healing. Monitoring for signs of inflammation and seeking medical evaluation for deep punctures are essential for optimal recovery.",
         "severity": "minor",
-        "damage": 4,
+        "damage": 5,
         "duration": 240,
         "statuseffect": "none",
         "odds": 40,
         "gmnotes": "Small, clean, and mostly narrative. Good for a complication later rather than now. Stinger: \"A neat little hole. Neat little holes are how infections start.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -310,11 +377,18 @@
         "description": "The character feels a sudden sharp pain as if pricked by a hundred needles. The discomfort lingers, causing mild irritation and some difficulty in movement.",
         "treatment": "Clean and dress the wound with a healing salve or poultice.",
         "severity": "minor",
-        "damage": 3,
+        "damage": 4,
         "duration": 600,
         "statuseffect": "poisoned",
         "odds": 50,
         "gmnotes": "Poisoned covers it; the hundred-needles image is worth repeating whenever they move fast. Stinger: \"It comes in waves, and the waves are getting closer together.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -359,11 +433,18 @@
         "description": "A mischievous ghost has replaced your blood with cherry syrup. Attacks now pierce as if you're a gelatinous cube. Your party may notice a mysterious sweet scent following you around.",
         "treatment": "Sip a cup of warming tea made from freshly squeezed kelp. Can be found at any apothecary.",
         "severity": "minor",
-        "damage": 3,
+        "damage": 4,
         "duration": 900,
         "statuseffect": "deafened",
         "odds": 50,
         "gmnotes": "Deafened is an odd fit — play the absurdity straight and let it be the party's favourite story. Stinger: \"You are bleeding cherry syrup. It even smells right.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -408,11 +489,18 @@
         "description": "A sharp pain jolts through the character's side as if struck by a spear. The wound throbs persistently, making each movement a reminder of the injury.",
         "treatment": "Stabilize the wound and rest to prevent aggravating the injury.",
         "severity": "moderate",
-        "damage": 6,
+        "damage": 7,
         "duration": 7200,
         "statuseffect": "prone",
         "odds": 30,
         "gmnotes": "Prone for two hours: they cannot stay upright long. Make them choose between fighting and standing. Stinger: \"You can straighten up. You will not enjoy it and you will not stay there.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -2,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -457,11 +545,23 @@
         "description": "The forceful stab into the flesh creates a cavity of agony, where tissue is rent asunder and nerves scream in protest. Each moment a symphony of pain, as the wound throbs with every heartbeat.",
         "treatment": "Stabilizing the stabbed flesh with pressure and controlling bleeding are crucial steps in managing the injury. Seeking medical assessment for deeper penetration or potential organ involvement is essential for proper treatment and preventing complications.",
         "severity": "moderate",
-        "damage": 6,
+        "damage": 7,
         "duration": 360,
         "statuseffect": "none",
         "odds": 20,
         "gmnotes": "No condition, so rule the cavity: it reopens under exertion and stitching is a scene. Stinger: \"It is deeper than it looks, and it looks bad.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -2,
+            "rounds": 0
+          },
+          {
+            "stat": "saves",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -506,11 +606,18 @@
         "description": "The stabbing pain of a puncture wound radiates with relentless intensity, a constant reminder of the invasive nature of the injury. Each breath a struggle, as the wound pulsates with a rhythm of its own.",
         "treatment": "Prompt wound care, including cleaning, disinfection, and dressing, is crucial for preventing infection and promoting healing. Monitoring for signs of complications and seeking medical evaluation for persistent pain are essential for effective management.",
         "severity": "minor",
-        "damage": 4,
+        "damage": 5,
         "duration": 300,
         "statuseffect": "exhaustion",
         "odds": 40,
         "gmnotes": "Exhaustion 1 from a wound that will not let them rest. Stinger: \"It pulses. You have started counting along with it.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -555,11 +662,18 @@
         "description": "A small thorn-like protrusion remains embedded in the character's skin, causing discomfort whenever pressure is applied. Movement feels slightly hindered due to the irritation.",
         "treatment": "Gently extract the thorn and apply a soothing ointment.",
         "severity": "minor",
-        "damage": 2,
+        "damage": 3,
         "duration": 900,
         "statuseffect": "none",
         "odds": 50,
         "gmnotes": "Minor and naggy — perfect for a check to sleep, ride, or wear armour. Stinger: \"You have found it with your fingers three times now and it is still there.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -604,11 +718,23 @@
         "description": "A clumsy tortle mistook your arm for a tree trunk. You now have the ability to stretch your neck like a giraffe - handy for high shelves, not so much in battle. Eating salads whole is the new style.",
         "treatment": "Embrace the gift and introduce yourself to the nearest zoo or circus. Carrots and leafy greens are now your go-to snack.",
         "severity": "moderate",
-        "damage": 7,
+        "damage": 9,
         "duration": 7200,
         "statuseffect": "prone",
         "odds": 40,
         "gmnotes": "Prone for two hours, and the stretched-arm absurdity is the whole joke. Let them try to use it. Stinger: \"It goes further than it used to. That is not a good thing.\"",
+        "modifiers": [
+          {
+            "stat": "attack",
+            "value": -2,
+            "rounds": 0
+          },
+          {
+            "stat": "damage",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -651,7 +777,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785352038526,
+    "modifiedTime": 1785439085445,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

@@ -16,11 +16,18 @@
         "description": "Amidst the chaos of battle, your movements resemble a battered and bruised ballet, choreographed by the unseen hands of your adversaries. Each step becomes a delicate balance between grace and agony, as you dance to the tune of bludgeoning blows.",
         "treatment": "Engaging in gentle physical therapy and maintaining a balanced diet can assist in recovery from the battered and bruised ballet. Rest and gradual reintroduction to physical activity are recommended to prevent setbacks.",
         "severity": "minor",
-        "damage": 4,
+        "damage": 5,
         "duration": 300,
         "statuseffect": "none",
         "odds": 40,
         "gmnotes": "No condition, so make it a movement tax: difficult terrain, ladders, and anything requiring grace. Stinger: \"You move like someone doing an impression of yourself.\"",
+        "modifiers": [
+          {
+            "stat": "attack",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -65,11 +72,18 @@
         "description": "Your entire skeletal structure rattles with each movement, causing discomfort and the occasional eerie sound effect.",
         "treatment": "Consult a skilled cleric or wizard to realign your bones and provide some magical stability.",
         "severity": "major",
-        "damage": 10,
+        "damage": 13,
         "duration": 0,
         "statuseffect": "restrained",
         "odds": 2,
         "gmnotes": "Permanent restrained until treated is dire — rule it as movement halved rather than immobile if that fits better, and say so. Stinger: \"You can hear yourself moving. From the inside.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -3,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -114,11 +128,23 @@
         "description": "Your confidence takes a hit along with your body. Each attempt to impress or intimidate others is met with an uncomfortable reminder of your recent defeat.",
         "treatment": "A boost to morale from companions or a swift victory in combat may help restore your shaken confidence.",
         "severity": "moderate",
-        "damage": 7,
+        "damage": 9,
         "duration": 120,
         "statuseffect": "frightened",
         "odds": 35,
         "gmnotes": "Frightened is unusually apt here: the fear is of trying. Aim it at social scenes rather than combat. Stinger: \"You know exactly what to say. You also know exactly how it will land.\"",
+        "modifiers": [
+          {
+            "stat": "attack",
+            "value": -2,
+            "rounds": 0
+          },
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -163,11 +189,23 @@
         "description": "A relentless barrage of blunt force assaults your senses, turning each impact into a cacophony of concussive chaos. It's like being caught in a tempest of blows, struggling to find solid ground amidst the whirlwind of strikes.",
         "treatment": "Seeking immediate medical attention and rest are crucial to address the aftershocks of the clobbered conundrum. Monitoring for signs of concussion and taking precautions to prevent further head trauma are paramount.",
         "severity": "moderate",
-        "damage": 6,
+        "damage": 7,
         "duration": 420,
         "statuseffect": "stunned",
         "odds": 20,
         "gmnotes": "Stunned once, then play the concussive noise — they mishear one instruction and act on it. Stinger: \"Somebody said go. You are fairly sure somebody said go.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -2,
+            "rounds": 0
+          },
+          {
+            "stat": "saves",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -212,11 +250,23 @@
         "description": "Every thought feels like a cacophony of confusion in your head. Concentration on spells or complex tasks becomes an exhausting endeavor.",
         "treatment": "Complete silence and a mental breather can help calm the chaos in your mind.",
         "severity": "major",
-        "damage": 11,
+        "damage": 16,
         "duration": 0,
         "statuseffect": "stunned",
         "odds": 10,
         "gmnotes": "Stunned once, then let the concussion linger as fiction: slow answers, repeated questions, light hurts. Do not stack more penalties. Stinger: \"Everyone is speaking normally. You are certain they are not.\"",
+        "modifiers": [
+          {
+            "stat": "saves",
+            "value": -3,
+            "rounds": 0
+          },
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -261,11 +311,23 @@
         "description": "Your armor now sports a massive dent, reducing its protective properties but granting you a bit of extra character.",
         "treatment": "Visit a skilled blacksmith to repair the armor while enjoying the tale of how you acquired the dent.",
         "severity": "moderate",
-        "damage": 7,
+        "damage": 9,
         "duration": 600,
         "statuseffect": "none",
         "odds": 8,
         "gmnotes": "Rule the AC loss explicitly (−1 is fair) and let them keep the dent as a badge. Stinger: \"It saved your life and it will never sit right again.\"",
+        "modifiers": [
+          {
+            "stat": "attack",
+            "value": -2,
+            "rounds": 0
+          },
+          {
+            "stat": "damage",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -310,11 +372,18 @@
         "description": "One of your hands is mangled, making it painful and difficult to hold or wield objects effectively.",
         "treatment": "Soak the hand in healing herbs and rest, avoiding putting weight or pressure on it.",
         "severity": "minor",
-        "damage": 4,
+        "damage": 5,
         "duration": 450,
         "statuseffect": "restrained",
         "odds": 10,
         "gmnotes": "The hand is the point: no two-handed weapons, no shield, disadvantage on anything needing grip. Stinger: \"You can make a fist. You just cannot make it twice.\"",
+        "modifiers": [
+          {
+            "stat": "attack",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -359,11 +428,18 @@
         "description": "The relentless pummeling transforms your body into a landscape of pain, where every contour is etched with the memory of each blow. Navigating this unforgiving painscape becomes a test of endurance, as you seek respite from the ceaseless assault.",
         "treatment": "Utilizing pain management techniques and seeking medical evaluation for internal injuries are crucial in navigating the pummeling painscape. Rest and gentle stretching can aid in easing muscle soreness and tension.",
         "severity": "moderate",
-        "damage": 5,
+        "damage": 6,
         "duration": 360,
         "statuseffect": "stunned",
         "odds": 20,
         "gmnotes": "Stunned once; afterwards let every new hit land on somewhere already hurt. Stinger: \"There is nowhere left on you that is not already sore.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -2,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -408,11 +484,18 @@
         "description": "Each strike leaves a vivid mark on your body, painting a picture of your bruised and battered state. It's as if you've become a canvas for the artistic expressions of those wielding blunt weapons, showcasing a palette of purples and blues.",
         "treatment": "Applying cold compresses and gentle massages to the affected areas can help reduce the pain and swelling of your bruises. Rest and avoiding further impact can aid in the healing process.",
         "severity": "minor",
-        "damage": 4,
+        "damage": 5,
         "duration": 300,
         "statuseffect": "none",
         "odds": 40,
         "gmnotes": "Cosmetic and cumulative — a good one to reference in later scenes as the party's shared history. Stinger: \"You are running out of skin that is still the right colour.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -457,11 +540,18 @@
         "description": "After a particularly heavy slam to the head, your ears feel squishy, affecting your balance and ability to hear clearly.",
         "treatment": "Gently massage the ears with healing salve and rest in a quiet place.",
         "severity": "minor",
-        "damage": 3,
+        "damage": 4,
         "duration": 600,
         "statuseffect": "deafened",
         "odds": 15,
         "gmnotes": "Deafened plus balance — combine with difficult terrain or heights for real jeopardy. Stinger: \"The room tilts a little every time you turn your head.\"",
+        "modifiers": [
+          {
+            "stat": "ac",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -506,11 +596,18 @@
         "description": "Your body feels off-balance, causing you to lean to one side awkwardly. It's a real challenge to stand straight.",
         "treatment": "Practice standing still on level ground and focus on correcting your posture.",
         "severity": "minor",
-        "damage": 2,
+        "damage": 3,
         "duration": 300,
         "statuseffect": "prone",
         "odds": 12,
         "gmnotes": "Prone is the cost; play the lean for comedy between fights. Stinger: \"You have been listing to the left for an hour and nobody has told you.\"",
+        "modifiers": [
+          {
+            "stat": "ac",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -555,11 +652,23 @@
         "description": "One of your legs feels shorter than the other, causing you to walk with a humorous sway.",
         "treatment": "Perform leg stretches and exercises to help realign your posture and gait.",
         "severity": "moderate",
-        "damage": 6,
+        "damage": 7,
         "duration": 450,
         "statuseffect": "prone",
         "odds": 5,
         "gmnotes": "Prone plus a walking sway — good for a chase or a rooftop, harmless on flat ground. Stinger: \"Your legs are no longer having the same conversation.\"",
+        "modifiers": [
+          {
+            "stat": "ac",
+            "value": -2,
+            "rounds": 0
+          },
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -604,11 +713,23 @@
         "description": "Every strike sends you reeling, causing a cascade of tumbles and falls in a slapstick symphony of misfortune. It's as if gravity has a personal vendetta against you, conspiring to turn each thump into an inevitable tumble.",
         "treatment": "Focusing on balance exercises and stability training can help mitigate the effects of thump and tumble. Resting and avoiding activities that exacerbate dizziness or loss of equilibrium are advised during recovery.",
         "severity": "moderate",
-        "damage": 5,
+        "damage": 6,
         "duration": 120,
         "statuseffect": "prone",
         "odds": 20,
         "gmnotes": "Prone repeatedly — the slapstick is the point, so let them fall at the funniest available moment. Stinger: \"Up, then down. Up, then down. The floor is winning.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -2,
+            "rounds": 0
+          },
+          {
+            "stat": "saves",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -653,11 +774,18 @@
         "description": "You suddenly find yourself unable to walk straight. Every step feels like a stumble and a trip waiting to happen, much to the amusement of your party members.",
         "treatment": "Resting and avoiding sudden movements can help alleviate the clumsiness.",
         "severity": "minor",
-        "damage": 3,
+        "damage": 4,
         "duration": 60,
         "statuseffect": "none",
         "odds": 25,
         "gmnotes": "One minute of slapstick. Ask for a check on any move that needs a straight line. Stinger: \"You aimed for the door. You are near the door.\"",
+        "modifiers": [
+          {
+            "stat": "ac",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -700,7 +828,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785352038500,
+    "modifiedTime": 1785439085399,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

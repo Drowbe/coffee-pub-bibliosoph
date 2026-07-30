@@ -16,11 +16,18 @@
         "description": "As the initial burn subsides, a lingering tingling sensation spreads through your body, making every movement feel like a small jolt of electricity. It's as if the acid left a parting gift of prickling discomfort to remind you of its potent presence.",
         "treatment": "Applying a soothing salve or receiving gentle massages can help calm the acidic aftershock. Rest and relaxation are recommended to ease the residual tingling sensation.",
         "severity": "minor",
-        "damage": 2,
+        "damage": 3,
         "duration": 180,
         "statuseffect": "none",
         "odds": 40,
         "gmnotes": "No condition, so charge it in concentration: a check to hold still, aim, or keep a spell going. Stinger: \"It stopped burning an hour ago. It has not stopped reminding you.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -65,11 +72,18 @@
         "description": "The searing touch of acid leaves behind a trail of corrosive consequences, etching its mark on your flesh with a cruel and unforgiving touch. Each drop sizzles and seethes, dissolving everything it touches in a symphony of destruction.",
         "treatment": "Immediate decontamination and neutralization of the acid are paramount to limit the spread of the corrosive consequences. Thoroughly rinsing the affected area with water and seeking medical attention can help prevent further tissue damage.",
         "severity": "moderate",
-        "damage": 7,
+        "damage": 9,
         "duration": 480,
         "statuseffect": "stunned",
         "odds": 20,
         "gmnotes": "Stunned once, then let the etched skin be the story — it does not close cleanly and anyone examining it can tell. Stinger: \"The shape of the splash is still there, and it will be tomorrow.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -2,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -114,11 +128,23 @@
         "description": "During a battle, a mischievous goblin throws a flask of fizzing and popping concoction that you mistake for ale. Your skin becomes bright green and emits a faint smell of citrus. You feel charged with energy but realize you can no longer stand up straight!",
         "treatment": "Wash the affected area with vinegar-infused soap and rest for 24 hours.",
         "severity": "major",
-        "damage": 10,
+        "damage": 13,
         "duration": 0,
         "statuseffect": "prone",
         "odds": 5,
         "gmnotes": "Permanent prone until treated is severe — rule that they can crawl and fight from the ground, not that they are helpless. Stinger: \"Every time you get your feet under you, something pops.\"",
+        "modifiers": [
+          {
+            "stat": "ac",
+            "value": -3,
+            "rounds": 0
+          },
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -163,7 +189,7 @@
         "description": "After an encounter with a mischievous alchemist, you find your limbs randomly emitting harmless bubbles that pop with noxious gas. So far, they smell of strawberries but who knows what's next!",
         "treatment": "The only cure seems to be a sip from a flask carried by the alchemist, but you must seek him out first.",
         "severity": "moderate",
-        "damage": 6,
+        "damage": 7,
         "duration": 300,
         "statuseffect": "poisoned",
         "odds": 10,
@@ -212,11 +238,18 @@
         "description": "A faint hissing sound accompanies the acid's contact with your skin, creating an eerie backdrop to the searing pain. It's as though the very air around you echoes the potent potency of the acid, enveloping you in a disconcerting auditory haze.",
         "treatment": "Keeping the affected area clean and dry can help reduce the hissing haze's effects. Avoiding further exposure to irritants and maintaining a calm environment can alleviate the discomfort caused by the unsettling auditory backdrop.",
         "severity": "minor",
-        "damage": 3,
+        "damage": 4,
         "duration": 240,
         "statuseffect": "none",
         "odds": 40,
         "gmnotes": "Flavour only, so spend it on atmosphere — the sound follows them into quiet rooms and gives away hiding places. Stinger: \"Everyone else has stopped talking to listen to you.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -261,11 +294,18 @@
         "description": "The acid's insidious effects deepen, causing a sensation akin to melting to seep through your skin. Each movement feels like a slow dissolution, as if you're gradually losing form and cohesion under the acidic assault.",
         "treatment": "Cooling the affected area with ice packs or seeking shelter from heat sources can slow down the melting misery. Rest and hydration are crucial to counteract the disintegrating sensation caused by the acid's corrosive touch.",
         "severity": "minor",
-        "damage": 2,
+        "damage": 3,
         "duration": 420,
         "statuseffect": "poisoned",
         "odds": 40,
         "gmnotes": "Poisoned covers the mechanical cost. Play the sensation: they keep checking whether skin is still where they left it. Stinger: \"It feels like it is running. You look. It is not.\"",
+        "modifiers": [
+          {
+            "stat": "ac",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -310,11 +350,23 @@
         "description": "Your feet have transformed into pickle jars, complete with the light crunch of pickles as you walk. Sadly, the aroma has attracted some rather odd creatures to follow you around.",
         "treatment": "A thorough soak in fresh water might dilute the acidic transformation, but don't ask about the side effects.",
         "severity": "major",
-        "damage": 10,
+        "damage": 13,
         "duration": 3600,
         "statuseffect": "grappled",
         "odds": 5,
         "gmnotes": "Grappled for an hour is a movement sentence, not a combat one — let them fight, not chase. Lean into the absurdity. Stinger: \"You crunch when you walk. Everything within earshot now knows where you are.\"",
+        "modifiers": [
+          {
+            "stat": "ac",
+            "value": -3,
+            "rounds": 0
+          },
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -359,7 +411,7 @@
         "description": "A sudden wave of heat radiates from the acid-affected area, causing beads of sweat to form on your forehead. It's as though a hidden furnace has been activated within you, turning up the heat in an unexpected and uncomfortable manner.",
         "treatment": "Cooling the affected area with a damp cloth or seeking shade can alleviate the sizzling surprise. Hydration and avoiding heat sources can help regulate your body temperature during this unexpected heat wave.",
         "severity": "minor",
-        "damage": 4,
+        "damage": 5,
         "duration": 300,
         "statuseffect": "none",
         "odds": 40,
@@ -408,11 +460,18 @@
         "description": "Those affected by Sour Grapes Syndrome find their skin enrobed in a faint shade of violet, emitting an unpleasant vinegar-like odor. Physical touch may result in a mild burning sensation. Caution: prolonged exposure may cause spontaneous fermentation.",
         "treatment": "The affected individual can counteract the effects of Sour Grapes Syndrome with regular applications of sweetened almond oil to the affected areas.",
         "severity": "major",
-        "damage": 12,
+        "damage": 18,
         "duration": 0,
         "statuseffect": "poisoned",
         "odds": 5,
         "gmnotes": "Permanent and poisoned: a real problem that wants a real cure, and the violet skin makes social scenes hostile. Stinger: \"The colour has not faded. If anything, it has deepened.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -3,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -457,11 +516,18 @@
         "description": "Your voice has taken a musical turn, emitting a range of sour, yet oddly catchy notes every time you try to speak. Your party is considering earplugs as a necessity.",
         "treatment": "Someone skilled in bardic arts might be able to 'tune' your voice back to normal, but be prepared for an impromptu performance or two.",
         "severity": "minor",
-        "damage": 3,
+        "damage": 4,
         "duration": 180,
         "statuseffect": "none",
         "odds": 15,
         "gmnotes": "Verbal spellcasting and any attempt at subtlety are the casualties. Ask for a check to say anything quietly. Stinger: \"You open your mouth to whisper and produce a chord.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -506,11 +572,18 @@
         "description": "After a run-in with a mischievous alchemist's pet, you now have a burning sensation coursing through your veins. The taste of copper fills your mouth, and every sip of water feels like torture.",
         "treatment": "Diluting the acid with a herbal remedy or magical poultice can help neutralize the effects.",
         "severity": "major",
-        "damage": 10,
+        "damage": 13,
         "duration": 2700,
         "statuseffect": "poisoned",
         "odds": 10,
         "gmnotes": "Poisoned for the better part of an hour — treat it as a fever they are fighting through. Stinger: \"Your own blood feels like it is running hot enough to notice.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -3,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -553,7 +626,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785352038496,
+    "modifiedTime": 1785439085395,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

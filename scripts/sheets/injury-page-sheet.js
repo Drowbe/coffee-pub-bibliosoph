@@ -14,7 +14,7 @@
 // ==================================================================
 
 import { MODULE } from '../const.js';
-import { CATEGORIES, SEVERITIES, CONDITIONS, displayCategory } from '../data/injury-schema.js';
+import { CATEGORIES, SEVERITIES, CONDITIONS, MODIFIER_STATS, displayCategory } from '../data/injury-schema.js';
 import { mountGmNotesField } from '../utility-gm-notes.js';
 
 const JournalEntryPageProseMirrorSheet = foundry.applications.sheets.journal.JournalEntryPageProseMirrorSheet;
@@ -50,6 +50,10 @@ export class InjuryPageSheet extends JournalEntryPageProseMirrorSheet {
             context.conditionChoices = labelled(CONDITIONS, (v) => (v === 'none' ? 'None' : displayCategory(v)));
             context.treatmentDC = system.treatmentDC;
             context.warnings = system.warnings;
+            context.statChoices = Object.entries(MODIFIER_STATS)
+                .map(([value, s]) => ({ value, label: s.label.charAt(0).toUpperCase() + s.label.slice(1) }));
+            // One spare blank row so adding a modifier never needs a button.
+            context.modifierRows = [...(system.modifiers ?? []), { stat: '', value: '', rounds: '' }];
         }
         return context;
     }
@@ -101,6 +105,7 @@ export class InjuryPageSheet extends JournalEntryPageProseMirrorSheet {
                     severityLabel: displayCategory(system.severity),
                     conditionLabel: system.statuseffect === 'none' ? 'None' : displayCategory(system.statuseffect),
                     durationLabel: system.duration === 0 ? 'Permanent (until treated)' : formatSeconds(system.duration),
+                    modifierLabels: system.modifierLabels ?? [],
                     treatmentDC: system.treatmentDC,
                     hasDetails: system.hasDetails,
                     isGM: game.user.isGM

@@ -64,8 +64,9 @@
 
     <div class="injury-edit-grid">
         <div class="form-group">
-            <label for="{{document.id}}-injury-damage">Damage (HP, one time)</label>
-            <input type="number" id="{{document.id}}-injury-damage" name="system.damage" value="{{system.damage}}" min="0" step="1">
+            <label for="{{document.id}}-injury-damage">Damage (% of max HP, one time)</label>
+            <input type="number" id="{{document.id}}-injury-damage" name="system.damage" value="{{system.damage}}" min="0" max="100" step="1"
+                title="A share of maximum hit points, so the wound means the same thing at level 1 and level 15. Floored so it can never drop a character below 1 HP.">
         </div>
         <div class="form-group">
             <label for="{{document.id}}-injury-duration">Duration (seconds, 0 = permanent)</label>
@@ -80,6 +81,12 @@
             </select>
         </div>
         <div class="form-group">
+            <label for="{{document.id}}-injury-flavor">Flavour status (no mechanics)</label>
+            <input type="text" id="{{document.id}}-injury-flavor" name="system.flavor" value="{{system.flavor}}"
+                placeholder="Confused, Clumsy Fingers…"
+                title="Shown on the card when there is no real condition. Applies nothing — a real condition always wins.">
+        </div>
+        <div class="form-group">
             <label for="{{document.id}}-injury-odds">Odds (1–100, higher is commoner)</label>
             <input type="number" id="{{document.id}}-injury-odds" name="system.odds" value="{{system.odds}}" min="1" max="100" step="1">
         </div>
@@ -87,6 +94,27 @@
             <label for="{{document.id}}-injury-dc">Treatment DC <span class="injury-edit-note">(blank = {{treatmentDC}} from severity)</span></label>
             <input type="number" id="{{document.id}}-injury-dc" name="system.treatmentdc" value="{{system.treatmentdc}}" min="1" step="1" placeholder="{{treatmentDC}}">
         </div>
+    </div>
+
+    <div class="injury-edit-section-header">
+        <i class="fa-solid fa-dice-d20"></i>
+        <span>Modifiers</span>
+    </div>
+    <p class="injury-edit-hint">Real penalties applied while the injury lasts — "-2 to attack rolls". Leave rounds at 0 and it lasts as long as the injury does, which is the norm: a broken arm hinders you until it is treated. Clear a row's stat to delete it.</p>
+
+    <div class="injury-edit-modifiers">
+        {{#each modifierRows}}
+            <div class="injury-modifier-row">
+                <select name="system.modifiers.{{@index}}.stat">
+                    <option value="">—</option>
+                    {{#each ../statChoices}}
+                        <option value="{{this.value}}" {{#if (eq this.value ../this.stat)}}selected{{/if}}>{{this.label}}</option>
+                    {{/each}}
+                </select>
+                <input type="number" name="system.modifiers.{{@index}}.value" value="{{this.value}}" step="1" placeholder="-2" title="Bonus or penalty">
+                <input type="number" name="system.modifiers.{{@index}}.rounds" value="{{this.rounds}}" min="0" step="1" placeholder="rounds" title="0 = as long as the injury lasts">
+            </div>
+        {{/each}}
     </div>
 
     <div class="injury-edit-section-header">

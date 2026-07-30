@@ -16,11 +16,23 @@
         "description": "A malevolent laughter echoes in your mind as a shadowy grasp tightens around your heart. The touch of undeath lingers, draining the vitality from your very soul.",
         "treatment": "Embark on a perilous quest to find the remains of the long-forgotten lich or beseech a celestial being for deliverance from this nefarious curse.",
         "severity": "moderate",
-        "damage": 6,
+        "damage": 7,
         "duration": 5400,
         "statuseffect": "exhaustion",
         "odds": 10,
         "gmnotes": "Exhaustion 1 with a ninety-minute clock, and the laughter is the point. Repeat it, quietly, at bad moments. Stinger: \"Somebody found that funny. Not you.\"",
+        "modifiers": [
+          {
+            "stat": "saves",
+            "value": -2,
+            "rounds": 0
+          },
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -65,11 +77,23 @@
         "description": "A necrotic wound has caused one of your party member's limbs to decay slowly. The affected limb feels heavy and sluggish, impacting their combat maneuvers and movement speed.",
         "treatment": "Cleansing ritual or powerful restoration spell",
         "severity": "moderate",
-        "damage": 8,
+        "damage": 10,
         "duration": 180,
         "statuseffect": "diseased",
         "odds": 15,
         "gmnotes": "Diseased and visible rot — this should frighten the party into acting. Rule the limb weak, not useless. Stinger: \"The smell arrives before you do.\"",
+        "modifiers": [
+          {
+            "stat": "saves",
+            "value": -2,
+            "rounds": 0
+          },
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -114,11 +138,18 @@
         "description": "After a particularly frosty encounter, your party member's fingers have taken on a deathly chill. They find it difficult to handle objects or cast spells requiring delicate hand movements.",
         "treatment": "Intense heat exposure or magical healing",
         "severity": "minor",
-        "damage": 2,
+        "damage": 3,
         "duration": 300,
         "statuseffect": "none",
         "odds": 50,
         "gmnotes": "The tissue is dying, not merely cold — that is why it is necrotic. Ruling it as lost feeling in the hand is fair and scary. Stinger: \"The colour is wrong, and it is not coming back on its own.\"",
+        "modifiers": [
+          {
+            "stat": "attack",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -163,11 +194,18 @@
         "description": "After rummaging through a goblin den, a dark aura seeps into your skin. Your limbs feel heavy, and a sense of dread fills your mind.",
         "treatment": "Seek the help of a powerful healer or visit a temple to rid yourself of this dark curse.",
         "severity": "minor",
-        "damage": 3,
+        "damage": 4,
         "duration": 900,
         "statuseffect": "none",
         "odds": 15,
         "gmnotes": "Flavour only: play it as low spirits and heavy limbs, good for a bleak travel scene. Stinger: \"Nothing hurts. Nothing much interests you either.\"",
+        "modifiers": [
+          {
+            "stat": "saves",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -212,11 +250,18 @@
         "description": "As you investigate an ancient tomb, a ghostly presence causes a bone-chilling sneeze that leaves your body feeling frail and hollow.",
         "treatment": "Consume rare herbs from a forgotten grove or seek the aid of a seasoned druid to heal this spectral affliction.",
         "severity": "minor",
-        "damage": 2,
+        "damage": 3,
         "duration": 900,
         "statuseffect": "none",
         "odds": 20,
         "gmnotes": "Harmless, loud, and terrible for hiding. Stinger: \"It echoes. In a tomb, everything echoes.\"",
+        "modifiers": [
+          {
+            "stat": "ac",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -261,11 +306,23 @@
         "description": "The touch of a powerful necrotic force has eroded a part of your party member's soul. They feel a deep sense of melancholy, affecting their will to fight and casting abilities.",
         "treatment": "Celestial intervention or potent healing magic",
         "severity": "major",
-        "damage": 11,
+        "damage": 16,
         "duration": 0,
         "statuseffect": "exhaustion",
         "odds": 5,
         "gmnotes": "Permanent until treated, and the point is dread rather than numbers. Have the character forget something small and true about themselves. Stinger: \"There was a name you used to say when you were frightened. It is not there now.\"",
+        "modifiers": [
+          {
+            "stat": "saves",
+            "value": -3,
+            "rounds": 0
+          },
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -310,11 +367,23 @@
         "description": "A soul-rending scream pierces the night, chilling you to the bone. Dark tendrils wrap around your spirit, threatening to tear it asunder.",
         "treatment": "Only the most potent of healers can mend the rift in your soul caused by this malevolent force. Seek out divine intervention or face a fate worse than death.",
         "severity": "major",
-        "damage": 10,
+        "damage": 13,
         "duration": 7200,
         "statuseffect": "poisoned",
         "odds": 5,
         "gmnotes": "Poisoned for two hours and genuinely dark — this is the one that should make the party consider retreating. Stinger: \"Something took a piece and did not eat it.\"",
+        "modifiers": [
+          {
+            "stat": "saves",
+            "value": -3,
+            "rounds": 0
+          },
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -359,11 +428,18 @@
         "description": "A wight's touch has left your party member drained, feeling weaker and struggling to keep up with their companions. They find it harder to land hits in combat.",
         "treatment": "Purifying magic or potion of strength",
         "severity": "minor",
-        "damage": 3,
+        "damage": 4,
         "duration": 240,
         "statuseffect": "exhaustion",
         "odds": 30,
         "gmnotes": "Exhaustion 1 — the life-drain classic. Let rest fail to fix it until treated. Stinger: \"You slept eight hours and woke up owing more.\"",
+        "modifiers": [
+          {
+            "stat": "saves",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -406,7 +482,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785352038522,
+    "modifiedTime": 1785439085441,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

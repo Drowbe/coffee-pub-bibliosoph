@@ -21,6 +21,7 @@
 // ==================================================================
 
 import { MODULE } from './const.js';
+import { damageFor } from './data/injury-schema.js';
 
 function log(message, data = '', debug = true, notify = false) {
     if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils?.postConsoleAndNotification) {
@@ -52,7 +53,10 @@ function showStatusToast(title, subtitle = '', icon = 'fa-solid fa-burst') {
  * @param {string} config.img              Effect/token icon image path
  * @param {string} [config.description]    Text/HTML stored on the effect
  * @param {number|null} [config.durationSeconds]  Effect duration; null = until removed
- * @param {number|null} [config.damage]    One-time HP damage dealt on apply
+ * @param {number|null} [config.damage]    One-time FLAT HP damage dealt on apply
+ * @param {number|null} [config.damagePercent]  One-time damage as a percentage
+ *        of MAX HP, floored so it never drops the character below 1. Injuries
+ *        use this; it wins over `damage` when both are given.
  * @param {string|null} [config.statusEffect]     Official condition name (core toggle; DFreds when active)
  * @param {string} [config.kindLabel]      For user-facing warnings ("critical", "injury", ...)
  * @param {Actor[]|null} [config.explicitActors]  Known recipients; skips target/selection entirely
@@ -66,6 +70,7 @@ export async function applyStatusToTokens({
     description = '',
     durationSeconds = null,
     damage = null,
+    damagePercent = null,
     statusEffect = null,
     kindLabel = 'effect',
     explicitActors = null,
@@ -169,13 +174,24 @@ export async function applyStatusToTokens({
         // One-time HP damage, dealt on apply as a direct update. This
         // deliberately bypasses the damage pipeline (Actor#applyDamage) so
         // an injury's own damage can never re-trigger the injury automation.
-        if (Number.isFinite(damage) && damage > 0) {
+        //
+        // `damagePercent` is the injury path: a share of MAX HP, so the
+        // same wound means the same thing at level 1 and level 15, floored
+        // so it can never drop a character. `damage` is the flat path that
+        // crits, fumbles and the harness still use.
+        const flat = Number.isFinite(damagePercent) && damagePercent > 0
+            ? damageFor(damagePercent, actor.system?.attributes?.hp)
+            : (Number.isFinite(damage) && damage > 0 ? damage : 0);
+        if (flat > 0) {
             const hp = actor.system?.attributes?.hp;
             if (hp) {
                 await actor.update({
-                    'system.attributes.hp.value': Math.max(0, (Number(hp.value) || 0) - damage)
+                    'system.attributes.hp.value': Math.max(0, (Number(hp.value) || 0) - flat)
                 });
-                log(`Dealt ${damage} HP to ${displayName} from "${name}"`, '', false, false);
+                const how = Number.isFinite(damagePercent) && damagePercent > 0
+                    ? `${flat} HP (${damagePercent}% of ${hp.max})`
+                    : `${flat} HP`;
+                log(`Dealt ${how} to ${displayName} from "${name}"`, '', false, false);
             }
         }
 

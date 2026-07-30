@@ -16,11 +16,23 @@
         "description": "A haze of frost surrounds you, your very breath crystallizing in the air. Your body becomes one with the winter landscape, as if the frost itself has claimed you as its own.",
         "treatment": "Seeking a powerful mage of warmth to draw forth the latent heat within you is your only chance to escape becoming a permanent fixture in the snow.",
         "severity": "major",
-        "damage": 12,
+        "damage": 18,
         "duration": 0,
         "statuseffect": "paralyzed",
         "odds": 10,
         "gmnotes": "Paralyzed and permanent until treated — this removes a player from the fight entirely, so make the rescue the scene. Stinger: \"You are awake. That is the only part of you that still is.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -3,
+            "rounds": 0
+          },
+          {
+            "stat": "saves",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -65,11 +77,19 @@
         "description": "Your fingertips turn a frosty hue, feeling numb and unresponsive to touch. Even the warmest flames offer only fleeting relief as the cold magic's hold tightens.",
         "treatment": "Rubbing your hands vigorously with infused frostweed oil and wearing insulated gloves will gradually restore sensation.",
         "severity": "minor",
-        "damage": 2,
+        "damage": 3,
         "duration": 240,
         "statuseffect": "none",
         "odds": 40,
         "gmnotes": "No condition: rule fine motor work instead — lockpicking, components, knots. Stinger: \"You touch the blade and feel nothing at all. That is the frightening part.\"",
+        "modifiers": [
+          {
+            "stat": "attack",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
+        "flavor": "Clumsy Fingers",
         "treatmentdc": null
       },
       "title": {
@@ -114,11 +134,23 @@
         "description": "The character's fingers have become numb and frostbitten, causing them to fumble with objects and weapons. Everything they touch turns to icicles, including their sense of dexterity.",
         "treatment": "Warm up by the fire or use hand warmers to regain feeling and control in the frosty fingers.",
         "severity": "moderate",
-        "damage": 7,
+        "damage": 9,
         "duration": 180,
         "statuseffect": "restrained",
         "odds": 15,
         "gmnotes": "Restrained is a heavy read for numb hands; if it suits your table, rule dropped items on a failed check instead. Say which before they roll. Stinger: \"Your grip lets go a half-second before you tell it to.\"",
+        "modifiers": [
+          {
+            "stat": "attack",
+            "value": -2,
+            "rounds": 0
+          },
+          {
+            "stat": "damage",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -163,11 +195,18 @@
         "description": "Your fingers become numb, turning a shade of blue that rivals the frost itself. Fumbling with objects becomes a comedy of errors as you struggle to maintain your grip, feeling as though you've unknowingly entered a slapstick routine.",
         "treatment": "Warming up your hands with a cozy fire or a hot beverage can help thaw out your frozen digits. Avoiding further exposure to extreme cold is also advisable to prevent prolonged discomfort.",
         "severity": "minor",
-        "damage": 3,
+        "damage": 4,
         "duration": 300,
         "statuseffect": "prone",
         "odds": 40,
         "gmnotes": "Prone and blue fingers — the fumbling is the flavour, the falling is the cost. Stinger: \"They have gone a colour that hands should not be.\"",
+        "modifiers": [
+          {
+            "stat": "attack",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -212,11 +251,23 @@
         "description": "Your heart beats to the slow, steady rhythm of an ancient glacier, each pulse sending a frigid shiver through your body. The winter's icy grasp threatens to freeze your very core.",
         "treatment": "Drinking a steaming tonic brewed with hearthfire moss and receiving a warm embrace can help thaw the chill within.",
         "severity": "moderate",
-        "damage": 7,
+        "damage": 9,
         "duration": 600,
         "statuseffect": "exhaustion",
         "odds": 20,
         "gmnotes": "Exhaustion 1 with a cold flavour: they cannot get warm, and rest is poor until treated. Stinger: \"The shivering stopped an hour ago. That is worse.\"",
+        "modifiers": [
+          {
+            "stat": "ac",
+            "value": -2,
+            "rounds": 0
+          },
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -261,11 +312,18 @@
         "description": "The character's head has been chilled to the core, causing brain freeze and rendering them unable to concentrate. Spells may fizzle out unexpectedly and thoughts become as frozen as a winter fruit smoothie.",
         "treatment": "Consume a warm beverage, like a nice cup of tea, to help melt away the cold inside the brain.",
         "severity": "minor",
-        "damage": 3,
+        "damage": 4,
         "duration": 120,
         "statuseffect": "none",
         "odds": 30,
         "gmnotes": "Pure brain freeze with no condition: rule it as no concentration and no complex plans for two minutes. Stinger: \"You had it. You had the whole plan. It is gone.\"",
+        "modifiers": [
+          {
+            "stat": "saves",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -310,11 +368,23 @@
         "description": "The character's heart has been encased in ice, turning them into a cold, emotionless husk. Friendships freeze over, and love thaws out. They become as chilly as an iceberg in the ocean of feelings.",
         "treatment": "Warmth can only be found in the heartfelt words of companions or by performing acts of kindness to melt the icy barriers around the heart.",
         "severity": "major",
-        "damage": 11,
+        "damage": 16,
         "duration": 0,
         "statuseffect": "charmed",
         "odds": 10,
         "gmnotes": "Charmed and permanent — play it as emotional flatness rather than mind control, and let allies notice. Stinger: \"Someone you love is speaking to you and you are simply waiting for them to finish.\"",
+        "modifiers": [
+          {
+            "stat": "ac",
+            "value": -3,
+            "rounds": 0
+          },
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -359,11 +429,18 @@
         "description": "You feel a sudden chill as if a mischievous winter spirit has taken up residency in your veins. Your movements become slightly clumsy, as if you're trying to ice skate on solid ground.",
         "treatment": "Warm tea made from snowberry leaves and resting by a cozy fire will help alleviate symptoms.",
         "severity": "minor",
-        "damage": 3,
+        "damage": 4,
         "duration": 300,
         "statuseffect": "exhaustion",
         "odds": 50,
         "gmnotes": "Exhaustion 1: disadvantage on checks, and the chill makes rest poor. Stinger: \"The cold got in and made itself comfortable.\"",
+        "modifiers": [
+          {
+            "stat": "saves",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -408,11 +485,18 @@
         "description": "The character's feet have turned into blocks of ice, making walking as precarious as wearing socks on a frozen lake. Every step is a potential slip and slide, causing embarrassment and bruised tailbones.",
         "treatment": "Walk carefully on heated floors or wear warm, grippy socks to regain stability.",
         "severity": "minor",
-        "damage": 2,
+        "damage": 3,
         "duration": 90,
         "statuseffect": "prone",
         "odds": 25,
         "gmnotes": "Prone, briefly — perfect for ice, stairs, or a ship deck. Stinger: \"Your feet arrive somewhere your body did not agree to.\"",
+        "modifiers": [
+          {
+            "stat": "attack",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -455,7 +539,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785352038503,
+    "modifiedTime": 1785439085416,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

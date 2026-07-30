@@ -9,6 +9,21 @@
 // rather than keeping a second copy that could drift.
 // ==================================================================
 
+// Roll modifiers are defined ONCE, in the outcome schema, and shared.
+// A −2 to attack rolls is the same mechanic whether a fumble or a broken
+// arm caused it, and two copies of MODIFIER_STATS would drift the first
+// time either one gained a stat. (Nothing here runs at import time, so
+// the Node tools can import this file safely.)
+export {
+    MODIFIER_STATS,
+    describeModifier,
+    modifiersToChanges,
+    roundsToSeconds,
+    secondsToRounds
+} from './outcome-schema.js';
+
+import { MODIFIER_STATS as STATS } from './outcome-schema.js';
+
 /** The 14 canonical categories: dnd5e damage types plus the general fallback. */
 export const CATEGORIES = [
     'acid', 'bludgeoning', 'cold', 'fire', 'force', 'general', 'lightning',
@@ -45,12 +60,44 @@ export const MAJOR_ONLY_CONDITIONS = ['paralyzed', 'incapacitated', 'unconscious
  */
 export const MODERATE_PLUS_CONDITIONS = ['stunned'];
 
-/** One-time HP damage bands by severity (inclusive). */
+/**
+ * One-time damage bands by severity, as a PERCENTAGE OF MAX HP.
+ *
+ * Flat HP could not be right at both ends of the level range: an average
+ * major injury was 10.5 HP, which kills a level-1 wizard outright and is
+ * 7% of a level-15 fighter. A percentage is the same wound at every
+ * level. `damageFor()` applies it with a floor so an injury maims and
+ * never kills — dying is what the death saves are for.
+ */
 export const DAMAGE_BANDS = {
-    minor: [0, 4],
-    moderate: [5, 8],
-    major: [9, 12]
+    minor: [0, 5],
+    moderate: [6, 10],
+    major: [11, 18]
 };
+
+/**
+ * An injury must never be the thing that drops a character. It can take
+ * them to 1, and the fight can take them the rest of the way.
+ */
+export const DAMAGE_LEAVES_AT_LEAST = 1;
+
+/**
+ * Resolve an injury's one-time damage against a specific creature.
+ *
+ * @param {number} percent  the authored `damage`, a percent of max HP
+ * @param {object} hp       the actor's hp object ({ value, max })
+ * @returns {number} HP to remove; 0 when there is nothing to take
+ */
+export function damageFor(percent, hp) {
+    const pct = Number(percent) || 0;
+    const max = Number(hp?.max) || 0;
+    const current = Number(hp?.value) || 0;
+    if (pct <= 0 || max <= 0 || current <= 0) return 0;
+    const raw = Math.round(max * (pct / 100));
+    // At least 1 if the injury does anything at all, and never enough to
+    // take the last point of health.
+    return Math.max(0, Math.min(Math.max(1, raw), current - DAMAGE_LEAVES_AT_LEAST));
+}
 
 /**
  * Duration guidance in seconds (warning only; 0 = permanent, always
@@ -79,7 +126,22 @@ export const REQUIRED_FIELDS = [
     'treatment', 'severity', 'damage', 'duration', 'statuseffect', 'odds'
 ];
 
-export const OPTIONAL_FIELDS = ['treatmentdc', 'gmnotes'];
+export const OPTIONAL_FIELDS = ['treatmentdc', 'gmnotes', 'modifiers', 'flavor'];
+
+/**
+ * How many roll modifiers an injury may sensibly carry, and how big they
+ * may get. A wound that stacks four penalties is a spreadsheet, not a
+ * story, and 5e's own maths falls apart past about −5.
+ */
+export const MODIFIER_LIMITS = {
+    maxCount: 3,
+    minValue: -5,
+    maxValue: 5,
+    /** Penalty ceilings by severity — a scratch should not cost you −4. */
+    bySeverity: { minor: 1, moderate: 2, major: 5 }
+};
+
+export const MODIFIER_STAT_KEYS = Object.keys(STATS);
 
 /** Treatment DC by severity, when no explicit treatmentdc is authored. */
 export const SEVERITY_DCS = { minor: 10, moderate: 15, major: 20 };

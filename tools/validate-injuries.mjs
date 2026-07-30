@@ -20,6 +20,7 @@ import { fileURLToPath } from 'node:url';
 import {
     CATEGORIES, SEVERITIES, CONDITIONS, MAJOR_ONLY_CONDITIONS, MODERATE_PLUS_CONDITIONS,
     DAMAGE_BANDS, DURATION_BANDS, ODDS_BANDS,
+    MODIFIER_LIMITS, MODIFIER_STAT_KEYS,
     REQUIRED_FIELDS, OPTIONAL_FIELDS
 } from './injury-schema.mjs';
 
@@ -80,10 +81,14 @@ function validate(records) {
         for (const field of ['damage', 'duration', 'odds']) {
             if (!isInt(rec?.[field])) err(rec, i, `${field} must be an integer, got ${JSON.stringify(rec?.[field])}`);
         }
+        // Damage is a PERCENTAGE of max HP, not flat hit points.
+        if (isInt(rec?.damage) && (rec.damage < 0 || rec.damage > 100)) {
+            err(rec, i, `damage ${rec.damage} must be a percentage of max HP (0-100)`);
+        }
         if (isInt(rec?.damage) && DAMAGE_BANDS[severity]) {
             const [lo, hi] = DAMAGE_BANDS[severity];
             if (rec.damage < lo || rec.damage > hi) {
-                err(rec, i, `damage ${rec.damage} is outside the ${severity} band ${lo}-${hi}`);
+                err(rec, i, `damage ${rec.damage}% is outside the ${severity} band ${lo}-${hi}%`);
             }
         }
         if (isInt(rec?.duration) && rec.duration < 0) err(rec, i, 'duration cannot be negative (0 = permanent)');
@@ -100,6 +105,42 @@ function validate(records) {
             err(rec, i, `condition "${status}" takes the whole turn away and is reserved for major injuries (this one is ${severity})`);
         } else if (MODERATE_PLUS_CONDITIONS.includes(status) && severity === 'minor') {
             warn(rec, i, `condition "${status}" is heavy for a minor injury`);
+        }
+
+        // Roll modifiers — optional, but if present they have to be real.
+        if (rec?.modifiers !== undefined) {
+            if (!Array.isArray(rec.modifiers)) {
+                err(rec, i, 'modifiers must be an array when present');
+            } else {
+                if (rec.modifiers.length > MODIFIER_LIMITS.maxCount) {
+                    warn(rec, i, `${rec.modifiers.length} modifiers is a lot to track at the table (${MODIFIER_LIMITS.maxCount} is the practical ceiling)`);
+                }
+                const cap = MODIFIER_LIMITS.bySeverity[severity];
+                for (const mod of rec.modifiers) {
+                    if (!MODIFIER_STAT_KEYS.includes(String(mod?.stat))) {
+                        err(rec, i, `modifier stat "${mod?.stat}" is not one of: ${MODIFIER_STAT_KEYS.join(', ')}`);
+                    }
+                    if (!isInt(mod?.value) || mod.value === 0) {
+                        err(rec, i, `modifier value must be a non-zero integer, got ${JSON.stringify(mod?.value)}`);
+                    } else if (mod.value < MODIFIER_LIMITS.minValue || mod.value > MODIFIER_LIMITS.maxValue) {
+                        err(rec, i, `modifier value ${mod.value} is outside ${MODIFIER_LIMITS.minValue}..${MODIFIER_LIMITS.maxValue}`);
+                    } else if (cap && Math.abs(mod.value) > cap) {
+                        warn(rec, i, `${mod.value} to ${mod.stat} is heavy for a ${severity} injury (cap ±${cap})`);
+                    }
+                    if (mod?.rounds !== undefined && (!isInt(mod.rounds) || mod.rounds < 0)) {
+                        err(rec, i, `modifier rounds must be a non-negative integer, got ${JSON.stringify(mod?.rounds)}`);
+                    }
+                }
+            }
+        }
+
+        // Flavour status text, for injuries whose "condition" is not a real one.
+        if (rec?.flavor !== undefined) {
+            if (typeof rec.flavor !== 'string') {
+                err(rec, i, 'flavor must be a string when present');
+            } else if (rec.flavor && status !== 'none') {
+                warn(rec, i, `flavor "${rec.flavor}" is ignored because statuseffect is "${status}"`);
+            }
         }
 
         // Art

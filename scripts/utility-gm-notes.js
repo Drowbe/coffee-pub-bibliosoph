@@ -147,11 +147,16 @@ export async function writeGmNote(pageOrUuid, html) {
 /**
  * Mount the GM Notes field into a host element.
  *
- * Prefers Blacksmith's embeddable component the moment it ships — it owns
- * the editor, locked/permission states, live refresh, and styling. The
- * fallback below is a deliberately plain textarea for older builds: it
- * does NOT reproduce Blacksmith's editor or markup, and every write still
- * goes through the API.
+ * Blacksmith's own component does all of it: the editor, the locked-pack
+ * and permission states with their remedy messaging, live refresh,
+ * styling, and cleanup. We supply a host and hold the controller so we
+ * can destroy it.
+ *
+ * There is deliberately no textarea fallback any more. One existed while
+ * `createField()` was pre-release; keeping it would mean shipping a
+ * second, worse notes editor that silently diverges from the real one —
+ * and a missing component is a Blacksmith version problem the GM should
+ * be told about plainly, not papered over.
  *
  * @returns {{destroy: Function}|null} controller — always destroy() before
  *          re-mounting or closing, or hooks and editors leak.
@@ -164,77 +169,27 @@ export async function mountGmNotesField(host, pageOrUuid, { label = 'GM Notes' }
         return null;
     }
 
-    // Canonical path: Blacksmith's own field component. It owns the
-    // editor, the locked-pack and permission states with their remedy
-    // messaging, live refresh, styling, and cleanup — we only give it a
-    // host and remember the controller so we can destroy it.
     const factory = api.createField ?? api.renderField;   // renderField is the compat alias
-    if (typeof factory === 'function') {
-        try {
-            // No `collapsed` option: the group header owns collapse state
-            // and opens by default, so the guidance is readable on sight.
-            const controller = await factory.call(api, pageOrUuid, {
-                label,
-                editable: true,
-                replace: true,
-                className: 'bibliosoph-injury-gm-notes'
-            });
-            controller.mount(host, { replace: true });
-            return controller;
-        } catch (error) {
-            log('Blacksmith field component failed; falling back', error?.message, false, false);
-        }
+    if (typeof factory !== 'function') {
+        log('Blacksmith has no GM Notes field component (createField/renderField)', '', false, false);
+        host.innerHTML = `<p class="gm-notes-unavailable">GM Notes needs a newer Coffee Pub Blacksmith — this build has no notes field to embed.</p>`;
+        return null;
     }
 
-    // Compatibility fallback for Blacksmith builds older than the field API.
-    const capability = await canWriteGmNote(pageOrUuid);
-    const html = await readGmNoteHtml(pageOrUuid);
-    const readonlyNote = !capability.allowed;
-
-    host.innerHTML = `
-        <div class="gm-notes-field">
-            <label class="gm-notes-label"><i class="fa-solid fa-user-secret"></i> ${label}</label>
-            ${readonlyNote
-                ? `<div class="gm-notes-readonly">${html || '<em>No notes.</em>'}</div>
-                   <p class="gm-notes-disabled-reason">${capability.message ?? 'Notes cannot be edited here.'}</p>`
-                : `<textarea class="gm-notes-input" rows="4" placeholder="Private notes only GMs can see.">${foundry.utils.escapeHTML(stripTags(html))}</textarea>
-                   <p class="gm-notes-hint">Saved when you click away. Interim plain-text editor — Blacksmith's rich field replaces this.</p>`}
-        </div>`;
-
-    const listeners = [];
-    if (!readonlyNote) {
-        const input = host.querySelector('.gm-notes-input');
-        const onBlur = async () => {
-            const value = input.value.trim();
-            await writeGmNote(pageOrUuid, value ? `<p>${foundry.utils.escapeHTML(value).replace(/\n/g, '</p><p>')}</p>` : '');
-        };
-        input?.addEventListener('blur', onBlur);
-        listeners.push(() => input?.removeEventListener('blur', onBlur));
+    try {
+        // No `collapsed` option: the group header owns collapse state
+        // and opens by default, so the guidance is readable on sight.
+        const controller = await factory.call(api, pageOrUuid, {
+            label,
+            editable: true,
+            replace: true,
+            className: 'bibliosoph-injury-gm-notes'
+        });
+        controller.mount(host, { replace: true });
+        return controller;
+    } catch (error) {
+        log('Blacksmith GM Notes field failed to mount', error?.message, false, false);
+        host.innerHTML = `<p class="gm-notes-unavailable">GM Notes could not be loaded — see the console.</p>`;
+        return null;
     }
-
-    // Live refresh when another surface edits the same note
-    const uuid = pageOrUuid?.uuid ?? String(pageOrUuid);
-    const changeHook = gmNotesChangeHook();
-    const hookId = Hooks.on(changeHook, (payload) => {
-        if (payload?.uuid !== uuid) return;
-        const input = host.querySelector('.gm-notes-input');
-        const view = host.querySelector('.gm-notes-readonly');
-        const next = payload?.note?.html ?? '';
-        if (input && document.activeElement !== input) input.value = stripTags(next);
-        if (view) view.innerHTML = next || '<em>No notes.</em>';
-    });
-
-    return {
-        destroy() {
-            Hooks.off(changeHook, hookId);
-            for (const off of listeners) off();
-            host.innerHTML = '';
-        }
-    };
 }
-
-const stripTags = (html) => String(html ?? '')
-    .replace(/<\/p>\s*<p>/gi, '\n')
-    .replace(/<[^>]*>/g, '')
-    .replace(/&nbsp;/g, ' ')
-    .trim();

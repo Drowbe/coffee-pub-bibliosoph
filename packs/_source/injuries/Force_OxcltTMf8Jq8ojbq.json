@@ -16,11 +16,18 @@
         "description": "A mischievous force playfully boops your nose at unexpected moments, causing irritation and distraction. The playful spirit makes it hard to focus as your nose tingles annoyingly.",
         "treatment": "Gentle nosemassages.",
         "severity": "minor",
-        "damage": 3,
+        "damage": 4,
         "duration": 90,
         "statuseffect": "deafened",
         "odds": 20,
         "gmnotes": "Deafened is a strange fit; play the distraction — concentration checks and nothing else. Stinger: \"Something taps your nose. There is nothing there.\"",
+        "modifiers": [
+          {
+            "stat": "saves",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -65,11 +72,23 @@
         "description": "For one long moment the air around you decided to be somewhere else, and took your breath with it. Your ribs ache in a ring rather than a spot, as though you had been briefly and firmly hugged by a building. Deep breaths are now a project rather than a reflex.",
         "treatment": "Rest, shallow breathing, and no heavy lifting. Watch for worsening pain, which suggests something cracked rather than compressed.",
         "severity": "moderate",
-        "damage": 6,
+        "damage": 7,
         "duration": 1800,
         "statuseffect": "none",
         "odds": 25,
         "gmnotes": "Nothing mechanical, so charge deep breaths: shouting, swimming, running, verbal spells. Stinger: \"Your ribs ache in a circle, like something very large hugged you once.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -2,
+            "rounds": 0
+          },
+          {
+            "stat": "saves",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -114,11 +133,18 @@
         "description": "The blow never touched you and still it landed. A wall of pressure rang through your chest and left everything humming at a pitch just below hearing. You keep swallowing to clear ears that were never blocked.",
         "treatment": "Sit somewhere still until the humming fades. There is nothing to bandage, which patients find deeply unsatisfying.",
         "severity": "minor",
-        "damage": 2,
+        "damage": 3,
         "duration": 300,
         "statuseffect": "none",
         "odds": 55,
         "gmnotes": "Flavour only — spend it on concentration checks and missed quiet sounds. Stinger: \"Nothing touched you. Everything still rang.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -163,11 +189,23 @@
         "description": "Your arms and legs move uncontrollably, as if dancing to an unseen tune. The bizarre movements can be quite entertaining to watch, but exhausting for you as it drains your energy.",
         "treatment": "Impromptu dance breaks.",
         "severity": "moderate",
-        "damage": 7,
+        "damage": 9,
         "duration": 60,
         "statuseffect": "stunned",
         "odds": 10,
         "gmnotes": "Stunned once, then let the limbs be a running joke that ruins one careful action. Stinger: \"Your arm has plans and it did not share them.\"",
+        "modifiers": [
+          {
+            "stat": "saves",
+            "value": -2,
+            "rounds": 0
+          },
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -212,11 +250,23 @@
         "description": "Your perception of gravity shifts randomly, causing disorientation and imbalance. Up becomes down and down becomes up, challenging your sense of direction whenever the force decides to play tricks on you.",
         "treatment": "Inverting your perspective.",
         "severity": "major",
-        "damage": 11,
+        "damage": 16,
         "duration": 1800,
         "statuseffect": "poisoned",
         "odds": 5,
         "gmnotes": "Poisoned covers the mechanics; the fun is in describing rooms wrongly. Ask for checks on ledges and ladders. Stinger: \"Down is somewhere over there now. It will move again shortly.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -3,
+            "rounds": 0
+          },
+          {
+            "stat": "saves",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -261,11 +311,23 @@
         "description": "You were moving, then very much not, and your body is still filing complaints about the transition. Your neck turns in one direction reluctantly and the other not at all. Looking behind you has become a whole-body manoeuvre.",
         "treatment": "Warmth, gentle movement, and no sudden turns. It stiffens considerably before it eases.",
         "severity": "moderate",
-        "damage": 5,
+        "damage": 6,
         "duration": 2400,
         "statuseffect": "none",
         "odds": 20,
         "gmnotes": "No condition; rule against turning quickly — flanking and rear attacks get easier on them. Stinger: \"Looking behind you is now a decision, not a reflex.\"",
+        "modifiers": [
+          {
+            "stat": "ac",
+            "value": -2,
+            "rounds": 0
+          },
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -310,11 +372,18 @@
         "description": "Something invisible disagreed with where you were standing and resolved the matter directly. You arrived somewhere else, mostly intact, with your sense of balance still in transit. Every few steps your body braces for a second shove that never comes.",
         "treatment": "Check for the bruises the landing left rather than the blow itself. Balance returns within the hour.",
         "severity": "minor",
-        "damage": 3,
+        "damage": 4,
         "duration": 420,
         "statuseffect": "prone",
         "odds": 45,
         "gmnotes": "Prone and displaced. Good on a ledge, a bridge, or beside anything they would rather not fall into. Stinger: \"You are standing somewhere you did not choose.\"",
+        "modifiers": [
+          {
+            "stat": "ac",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -359,11 +428,18 @@
         "description": "Whenever you try to grasp something, an invisible force tickles your fingers, causing you to fumble frequently. The mysterious energy surge overwhelms your hands, making precision tasks difficult.",
         "treatment": "Giggling therapy sessions.",
         "severity": "minor",
-        "damage": 2,
+        "damage": 3,
         "duration": 120,
         "statuseffect": "prone",
         "odds": 15,
         "gmnotes": "Prone from dropped items and flailing — target anything they try to carry carefully. Stinger: \"You drop it. Nothing touched you, and you drop it.\"",
+        "modifiers": [
+          {
+            "stat": "attack",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -406,7 +482,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785352038512,
+    "modifiedTime": 1785439085424,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

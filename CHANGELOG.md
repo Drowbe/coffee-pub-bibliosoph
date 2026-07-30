@@ -6,6 +6,32 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [Unreleased]
+
+### Added
+
+- **Inspiration cards.** A 10-card deck as typed journal pages with their own data model and sheet, five of them automated (heal to full, set hit points, long rest, percentage damage, hit-point swap). Drawing a card puts it in the character's **inventory as a real one-use consumable**; using that item raises the play card, whose buttons pick who it lands on, run the action, and discard the card. The card is the currency — no inspiration points are tracked. GMs deal from a picker showing every card with its art, kind and draw odds; players draw at random from the same toolbar button. See `documentation/spec-inspiration-schema.md`.
+- **Injury roll modifiers.** Injuries now carry real bonuses and penalties, applied as ActiveEffect changes, so a mangled hand costs the attack roll instead of only saying so in prose. 135 of 144 injuries were authored with the penalty their prose implies; the remaining 9 are genuinely cosmetic. Shares one definition with crit/fumble modifiers rather than duplicating it.
+- **Injury flavour statuses.** A `flavor` field for injuries whose "condition" was never a real dnd5e one. The six flattened to `none` by the 2026-07-28 migration — "Confused", "Disoriented", "Clumsy Fingers" — were recovered verbatim from history and restored. A real condition always wins on the card.
+- **Crits that deal inspiration cards.** `Inspired` and `Inspirational` hand a card from the deck to whoever their `appliesto` names, reusing the existing party picker.
+- **Treatment phase 2.** Failed attempts reset on a rest (configurable: long rest, any rest, or never) — previously a failed attempt was permanent until cleared through the test harness. Accepted healer's-kit item names are now a setting, so homebrew and localised kits count. Optional DC escalation per failed attempt, with a fumble counting double. The GM's treat tooltip shows the live DC and who has already tried.
+
+### Changed
+
+- **Injury damage is now a percentage of maximum hit points**, not a flat number, floored so an injury can never drop a character below 1 HP. Flat damage could not be right at both ends of the level range: an average major injury was 10.5 HP, which killed a level-1 wizard outright and was 7% of a level-15 fighter. All 144 injuries were converted, preserving each one's relative position inside its severity band.
+- **Crit and fumble Apply buttons name the person.** "Apply to Roller" became "Apply to Aneda", resolved from the triggering roll and bound to that actor, so a card recorded at one moment cannot quietly re-aim at whatever is selected later.
+
+### Fixed
+
+- **Dead macro links in two critical hits.** `Inspired` and `Inspirational` pointed at `Macro.N60EOG6dQaf4rbHo`, which exists only in the author's world and was a broken link for everyone else.
+- **Cat Nap's long rest was only a partial rest.** It passed `newDay: false`, silently skipping daily-recharge items, suppressed dnd5e's summary card so there was no way to tell, and reported success even when the rest had been refused outright. It is now a genuine long rest that cannot be blocked by the "Allow Rests" player setting, leaves a receipt, and fails honestly.
+- **The inspiration draw card said nothing about where the card went.** The note was nested inside the button block, so removing the button removed the one line telling the player the card was on their sheet.
+
+### Removed
+
+- The pre-release GM Notes textarea fallback. A Blacksmith build without `createField()` now says so plainly rather than shipping a second, worse notes editor that would silently diverge from the real one.
+
+
 ## [13.3.4]
 
 ### Added

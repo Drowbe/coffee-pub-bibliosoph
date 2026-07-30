@@ -28,7 +28,7 @@
         </div>
         <div class="injury-page-field">
             <span class="injury-page-label">Damage</span>
-            <span class="injury-page-value">{{system.damage}} hit points</span>
+            <span class="injury-page-value">{{system.damage}}% of max HP</span>
         </div>
         <div class="injury-page-field">
             <span class="injury-page-label">Duration</span>
@@ -38,6 +38,12 @@
             <span class="injury-page-label">Condition</span>
             <span class="injury-page-value">{{conditionLabel}}</span>
         </div>
+        {{#if system.flavor}}
+            <div class="injury-page-field">
+                <span class="injury-page-label">Flavour</span>
+                <span class="injury-page-value">{{system.flavor}}</span>
+            </div>
+        {{/if}}
         <div class="injury-page-field">
             <span class="injury-page-label">Treatment DC</span>
             <span class="injury-page-value">{{treatmentDC}}</span>
@@ -47,6 +53,15 @@
             <span class="injury-page-value">{{system.odds}} of 100</span>
         </div>
     </div>
+
+    {{#if modifierLabels}}
+        <div class="injury-page-modifiers">
+            <span class="injury-page-label"><i class="fa-solid fa-dice-d20"></i> While this lasts</span>
+            <ul>
+                {{#each modifierLabels}}<li>{{this}}</li>{{/each}}
+            </ul>
+        </div>
+    {{/if}}
 
     {{#if system.gmnotes}}
         <div class="injury-page-guidance">

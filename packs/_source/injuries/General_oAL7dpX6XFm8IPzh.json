@@ -16,7 +16,7 @@
         "description": "Objects seemingly have a mind of their own in your vicinity, gravitating towards you in a bizarre display of magnetism. It's as if you've become a walking anomaly, attracting items with a peculiar sense of humor.",
         "treatment": "Creating a designated space for items and organizing your surroundings can help reduce the chaos caused by the attraction aura. Being mindful of your proximity to objects can prevent inadvertent collisions.",
         "severity": "minor",
-        "damage": 4,
+        "damage": 5,
         "duration": 360,
         "statuseffect": "grappled",
         "odds": 40,
@@ -65,11 +65,18 @@
         "description": "The bruise has gone somewhere bruises are not supposed to reach. It aches beneath the muscle, in a place you cannot press or rub or reason with, and it deepens in colour each time you check on it. You have begun moving in a way that avoids one entire side of yourself.",
         "treatment": "Cold first, warmth later, and no weight on the limb for a day. Deep bruising fades slowly and dramatically.",
         "severity": "moderate",
-        "damage": 5,
+        "damage": 6,
         "duration": 2400,
         "statuseffect": "none",
         "odds": 40,
         "gmnotes": "Nothing mechanical, so charge it in positioning — they favour one side, they cannot carry on that shoulder, they flinch from a shove. Stinger: \"The colour of it has gotten worse since you last looked.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -2,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -114,11 +121,23 @@
         "description": "The blow landed and the world has not fully reassembled since. Names arrive a beat late, the floor keeps adjusting its angle, and you have asked the same question twice without noticing either time. Somewhere behind your eyes a light is flickering and nobody can reach the switch.",
         "treatment": "Complete rest in a dark, quiet place, watched by someone who will notice if things worsen. Under no circumstances should the patient return to the fight.",
         "severity": "major",
-        "damage": 9,
+        "damage": 11,
         "duration": 7200,
         "statuseffect": "stunned",
         "odds": 12,
         "gmnotes": "Stunned is turn-ending; use it once and let the aftermath carry the scene. Afterwards, have them ask a question they already asked. Stinger: \"You know these people. Give it a second. You know these people.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -3,
+            "rounds": 0
+          },
+          {
+            "stat": "saves",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -163,11 +182,23 @@
         "description": "A rib or three have shifted from structural to decorative. Every inhale produces a small private sound that only you can hear, and laughing has become an act of genuine courage. You have started breathing in careful halves, as though the air might notice.",
         "treatment": "Wrap the chest firmly but not tightly, and keep the patient still. Ribs mend on their own schedule and resent being rushed.",
         "severity": "moderate",
-        "damage": 6,
+        "damage": 7,
         "duration": 3600,
         "statuseffect": "none",
         "odds": 35,
         "gmnotes": "No condition, so make it situational: a check to do anything requiring a deep breath — shouting, swimming, holding a note, laughing. Stinger: \"Something in your chest clicks when you breathe in. Only when you breathe in.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -2,
+            "rounds": 0
+          },
+          {
+            "stat": "saves",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -212,11 +243,23 @@
         "description": "The world spins around you in a dizzying display of disorientation, turning your balance into a precarious waltz with unseen partners. It's a dance routine you never signed up for, with each step feeling like a misstep waiting to happen.",
         "treatment": "Finding a stable surface to rest on and focusing on a fixed point can help alleviate the vertigo induced by the dizzying dance dilemma. Slow, deliberate movements are key to navigating this impromptu dance floor without stumbling.",
         "severity": "moderate",
-        "damage": 6,
+        "damage": 7,
         "duration": 480,
         "statuseffect": "charmed",
         "odds": 20,
         "gmnotes": "Charmed by vertigo — play it as being unable to trust their own footing or judgement. Stinger: \"The room finishes turning a moment after you do.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -2,
+            "rounds": 0
+          },
+          {
+            "stat": "saves",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -261,11 +304,18 @@
         "description": "Nothing in particular is broken, which somehow makes it worse. Every joint files its own complaint, every muscle answers with a second one, and standing up becomes a negotiation. You have reached the stage of adventuring where the whole body simply sends one unified invoice.",
         "treatment": "Rest, warm compresses, and someone willing to hear about it at length. A day of light activity resolves most of the complaint.",
         "severity": "minor",
-        "damage": 2,
+        "damage": 3,
         "duration": 600,
         "statuseffect": "none",
         "odds": 70,
         "gmnotes": "No mechanical teeth, so let it cost time rather than actions: they are slow to stand, slow to mount, last out of the room. Lean on it during downtime scenes rather than combat. Stinger: \"You get up. It takes you a moment longer than it used to.\"",
+        "modifiers": [
+          {
+            "stat": "ac",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -310,11 +360,28 @@
         "description": "Something struck you hard enough that the world went quiet and then refused to come back. A single clear tone hangs behind your eyes, patient and unwelcome. Voices arrive as shapes rather than words, and you find yourself nodding at people who have not finished speaking.",
         "treatment": "Quiet and dark for several hours. Do not let the patient take another blow to the head before the ringing stops.",
         "severity": "moderate",
-        "damage": 5,
+        "damage": 6,
         "duration": 1800,
         "statuseffect": "deafened",
         "odds": 30,
         "gmnotes": "Deafened means no hearing-based Perception and trouble with any spoken command or verbal plan. Play it socially: have them mishear an order at the worst moment. Stinger: \"Someone is shouting your name. You can tell that much.\"",
+        "modifiers": [
+          {
+            "stat": "attack",
+            "value": -2,
+            "rounds": 0
+          },
+          {
+            "stat": "ac",
+            "value": -1,
+            "rounds": 0
+          },
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -359,11 +426,18 @@
         "description": "Your mouth has become an unreliable narrator. The split reopens whenever you speak, eat, or smile, which rules out most of the pleasant things in life. You have developed a lopsided way of talking that everyone has politely agreed not to mention.",
         "treatment": "Cold pressure, clean water, and a few hours of not talking. The last part proves hardest for most patients.",
         "severity": "minor",
-        "damage": 1,
+        "damage": 2,
         "duration": 420,
         "statuseffect": "none",
         "odds": 65,
         "gmnotes": "Pure flavour, and the fun is in the roleplay tax: verbal spellcasting, negotiation, and anything requiring dignity. Stinger: \"You taste copper every time you open your mouth to speak.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -408,11 +482,23 @@
         "description": "Your body has reviewed the day's events and elected to stop participating. Legs first, then everything else, in a slow cascade of departments closing early. You are dimly aware of the ground arriving and of someone shouting your name from what sounds like the far end of a hallway.",
         "treatment": "Immediate and serious attention: stabilise, keep them warm, and do not move them further than necessary. This one does not resolve on stubbornness alone.",
         "severity": "major",
-        "damage": 11,
+        "damage": 16,
         "duration": 0,
         "statuseffect": "unconscious",
         "odds": 4,
         "gmnotes": "Unconscious and permanent until treated — this is a scene-ender, not a combat modifier. Make the table decide who stops fighting to reach them. Stinger: \"You hear your name from very far away, and then not.\"",
+        "modifiers": [
+          {
+            "stat": "ac",
+            "value": -3,
+            "rounds": 0
+          },
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -457,11 +543,18 @@
         "description": "Your lungs have decided to work part-time. Each breath comes shallow and late, arriving just after you needed it, and your vision narrows whenever you move with purpose. Talking and walking have become mutually exclusive activities.",
         "treatment": "Sit upright, breathe slowly, and stop doing whatever caused this. Recovery is a matter of patience rather than medicine.",
         "severity": "minor",
-        "damage": 2,
+        "damage": 3,
         "duration": 300,
         "statuseffect": "exhaustion",
         "odds": 60,
         "gmnotes": "Exhaustion 1 is disadvantage on ability checks — quietly brutal for a skill scene. Have them unable to speak and move in the same breath. Stinger: \"You have the air for running or for talking. Choose.\"",
+        "modifiers": [
+          {
+            "stat": "attack",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -506,11 +599,18 @@
         "description": "Your knees have developed opinions and none of them involve holding you up. They buckle at inconvenient moments, usually while something is watching. Every step is a small wager on whether the ground will stay where you left it.",
         "treatment": "Bind the joint, keep weight off it, and avoid stairs, ladders, and dramatic entrances until the swelling subsides.",
         "severity": "minor",
-        "damage": 3,
+        "damage": 4,
         "duration": 480,
         "statuseffect": "prone",
         "odds": 55,
         "gmnotes": "Prone is the whole cost — standing eats half their movement, and that is enough. Consider asking for a check if they try to sprint, jump, or take stairs at speed. Stinger: \"Your knee holds. Then it doesn't.\"",
+        "modifiers": [
+          {
+            "stat": "ac",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -555,11 +655,23 @@
         "description": "Something twisted you in a direction the design never allowed for. Shoulders, wrists, and hips all report the same grievance in slightly different words, and gripping anything smaller than a doorframe has become theoretical. You feel like laundry that was wrung out and hung up wrong.",
         "treatment": "Immobilise the worst joint, rest the rest, and expect a long day of small indignities. Massage helps once the swelling settles.",
         "severity": "moderate",
-        "damage": 7,
+        "damage": 9,
         "duration": 2700,
         "statuseffect": "none",
         "odds": 25,
         "gmnotes": "Rule on grip: dropping a weapon on a hard hit, disadvantage to climb or hold a rope. Stinger: \"Everything above your waist has an opinion about that.\"",
+        "modifiers": [
+          {
+            "stat": "attack",
+            "value": -2,
+            "rounds": 0
+          },
+          {
+            "stat": "damage",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -602,7 +714,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785352038515,
+    "modifiedTime": 1785439085428,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

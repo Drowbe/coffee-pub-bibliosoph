@@ -152,7 +152,19 @@ export const REQUIRED_FIELDS = [
 
 // `imagetitle` is optional here, unlike injuries: an outcome's prose is
 // the flavour, and a caption on top of a punchline is one beat too many.
-export const OPTIONAL_FIELDS = ['imagetitle', 'modifiers', 'gmnotes'];
+export const OPTIONAL_FIELDS = ['imagetitle', 'modifiers', 'gmnotes', 'dealscard'];
+
+/**
+ * `dealscard: true` means this outcome hands someone an inspiration card
+ * from the deck. It is the one place the three content families connect:
+ * a critical hit that says "that was pretty bad-ass" should actually put
+ * a card in the player's hands, not link a macro that only exists in the
+ * author's world.
+ *
+ * WHO gets it comes from `appliesto`, so no second targeting concept is
+ * needed — `self` deals to the roller, `ally` offers the party picker.
+ */
+export const DEALS_CARD_FIELD = 'dealscard';
 
 /** Rounds -> seconds, the unit outcomes are actually authored in. */
 export const roundsToSeconds = (rounds) => Math.max(0, Math.round(Number(rounds) || 0) * 6);

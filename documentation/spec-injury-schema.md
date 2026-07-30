@@ -214,3 +214,55 @@ Warnings (not failures): an `odds` value far outside its severity's typical band
 This removes the current two-hand-maintained-copies hazard: the pack source becomes generated output. Journal/page IDs change on rebuild, which is safe — our lookup is by journal *name* (the category) and picks a page at random, and applied effects are snapshots that never reference the journal.
 
 **Blacksmith:** none of the above needs their importer. That matters separately, for *authoring new content* later — their Importer API (`documentation/api/api-importer.md`) is explicitly a "proposed contract, not yet guaranteed" built around kinds and profiles, where a profile yields the JSON template, the AI prompt, validation, and import. A `journal.injury` profile built from this doc would fold Part 5 and Part 6 into their tooling. Worth requesting; not worth waiting for.
+
+---
+
+# Addendum — 2026-07-30
+
+## Damage is a percentage of max HP
+
+`damage` is no longer flat hit points. It is a **percentage of maximum
+HP**, resolved per-creature by `damageFor(percent, hp)` and floored so an
+injury can take a character to 1 and never past it — dying is what death
+saves are for.
+
+Flat damage could not be correct at both ends of the level range. An
+average major injury was 10.5 HP: lethal to a level-1 wizard with 8 max
+HP, and 7% of a level-15 fighter. A percentage is the same wound at every
+level.
+
+| Severity | Band | L1 wizard (8) | L5 rogue (38) | L15 fighter (140) |
+|---|---|---|---|---|
+| minor | 0–5% | 0–1 | 0–2 | 0–7 |
+| moderate | 6–10% | 1 | 2–4 | 8–14 |
+| major | 11–18% | 1 | 4–7 | 15–25 |
+
+All 144 injuries were converted by `tools/convert-injury-damage.mjs`,
+mapping each onto the percentage band at its old relative position so the
+balance pass that produced the flat numbers was not discarded. That tool
+is **one-shot**: it cannot recognise its own output (a converted minor
+reads 3%, indistinguishable from the 3 HP it was), so it requires an
+explicit `--from-flat` flag and writes a stamp file that refuses reruns.
+
+## Modifiers
+
+Injuries carry `modifiers`: an array of `{ stat, value, rounds }` applied
+as real ActiveEffect changes. `MODIFIER_STATS` is defined **once**, in the
+outcome schema, and re-exported here — a −2 to attack rolls is the same
+mechanic whether a fumble or a broken arm caused it.
+
+- `rounds: 0` (the norm) means the penalty lasts as long as the injury.
+- `MODIFIER_LIMITS.bySeverity` caps penalty size: minor ±1, moderate ±2,
+  major ±5. Exceeding it is a warning, not an error.
+- More than three modifiers warns: a wound that stacks four penalties is a
+  spreadsheet, not a story.
+
+`tools/add-injury-modifiers.mjs` authored 135 of 144 from the injuries'
+own prose. It is idempotent — an injury that already has modifiers is
+never touched, so hand-authored values survive every rerun.
+
+## Flavour statuses
+
+`flavor` holds status text that is not a real dnd5e condition
+("Confused", "Clumsy Fingers"). It applies nothing and is shown on the
+card only when `statuseffect` is `none`; a real condition always wins.

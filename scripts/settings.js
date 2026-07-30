@@ -1087,6 +1087,39 @@ export const registerSettings = () => {
 				'never': 'Never: Owning the kit is enough'
 			}
 		});
+		game.settings.register(MODULE.ID, 'injuryTreatmentKitNames', {
+			name: MODULE.ID + '.injuryTreatmentKitNames-Label',
+			hint: MODULE.ID + '.injuryTreatmentKitNames-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			type: String,
+			default: "Healer's Kit"
+		});
+		game.settings.register(MODULE.ID, 'injuryTreatmentAttemptReset', {
+			name: MODULE.ID + '.injuryTreatmentAttemptReset-Label',
+			hint: MODULE.ID + '.injuryTreatmentAttemptReset-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			type: String,
+			default: 'longRest',
+			choices: {
+				'longRest': 'Long Rest: everyone may try again after a long rest',
+				'shortRest': 'Any Rest: a short rest is enough to try again',
+				'never': 'Never: one attempt per character, permanently'
+			}
+		});
+		game.settings.register(MODULE.ID, 'injuryTreatmentDcEscalation', {
+			name: MODULE.ID + '.injuryTreatmentDcEscalation-Label',
+			hint: MODULE.ID + '.injuryTreatmentDcEscalation-Hint',
+			scope: 'world',
+			config: true,
+			requiresReload: false,
+			type: Number,
+			default: 0,
+			range: { min: 0, max: 5, step: 1 }
+		});
 		game.settings.register(MODULE.ID, 'injuryTreatmentSound', {
 			name: MODULE.ID + '.injuryTreatmentSound-Label',
 			hint: MODULE.ID + '.injuryTreatmentSound-Hint',

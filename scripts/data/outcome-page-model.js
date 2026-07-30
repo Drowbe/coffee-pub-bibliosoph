@@ -50,6 +50,10 @@ export class OutcomePageModel extends foundry.abstract.TypeDataModel {
                 rounds: new fields.NumberField({ required: false, integer: true, min: 0, initial: 1, nullable: false })
             }), { initial: [] }),
             // Shipped "how to run it" guidance, same as injuries.
+            // Hands someone a card from the inspiration deck. WHO comes
+            // from `appliesto`, so this is a flag rather than a target of
+            // its own. The one place crits feed the deck.
+            dealscard: new fields.BooleanField({ required: false, initial: false }),
             gmnotes: new fields.StringField({ required: false, blank: true, initial: '' })
         };
     }
@@ -109,6 +113,7 @@ export class OutcomePageModel extends foundry.abstract.TypeDataModel {
             statuseffect: this.statuseffect,
             odds: this.odds,
             ...(this.modifiers?.length ? { modifiers: this.modifiers.map((m) => ({ ...m })) } : {}),
+            ...(this.dealscard ? { dealscard: true } : {}),
             ...(this.gmnotes ? { gmnotes: this.gmnotes } : {})
         };
     }

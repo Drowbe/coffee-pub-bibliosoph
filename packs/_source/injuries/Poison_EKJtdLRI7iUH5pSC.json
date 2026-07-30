@@ -16,11 +16,23 @@
         "description": "The character's skin starts changing colors randomly, as if affected by a magical poison. Each hue change comes with a wave of weakness and dizziness.",
         "treatment": "Seek the help of an alchemist to create a potion that can stabilize the effects and reverse the poison's influence.",
         "severity": "major",
-        "damage": 12,
+        "damage": 18,
         "duration": 0,
         "statuseffect": "poisoned",
         "odds": 1,
         "gmnotes": "Permanent and poisoned — the colour-shifting makes disguise and diplomacy hard until cured. Stinger: \"You have gone a shade nobody has a name for.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -3,
+            "rounds": 0
+          },
+          {
+            "stat": "saves",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -65,11 +77,18 @@
         "description": "The character is plagued by mystical mosquito bites that never seem to heal, leaving behind glowing welts that attract other insects.",
         "treatment": "Use a special salve made of rare herbs and arcane ingredients to soothe the bites and prevent further infestation.",
         "severity": "moderate",
-        "damage": 7,
+        "damage": 9,
         "duration": 2400,
         "statuseffect": "none",
         "odds": 5,
         "gmnotes": "No condition; play the itch — disadvantage on anything needing stillness. Stinger: \"They are not healing. It has been days.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -2,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -114,11 +133,18 @@
         "description": "Your words now sound like a hissing serpent, which may cause misunderstandings during negotiations",
         "treatment": "Speak only in rhymes for a full moon cycle",
         "severity": "major",
-        "damage": 11,
+        "damage": 16,
         "duration": 3600,
         "statuseffect": "charmed",
         "odds": 20,
         "gmnotes": "Verbal components and any social scene are where this bites. Let a botched sentence cost them a negotiation rather than hit points. Stinger: \"You meant to say her name. Something else came out.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -3,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -163,11 +189,18 @@
         "description": "You were hit by a mischievous druid's sneeze spell. Your sneezes are now random and may cause embarrassing situations",
         "treatment": "Drink a special tea made from four rare herbs found in a hidden glade",
         "severity": "minor",
-        "damage": 2,
+        "damage": 3,
         "duration": 180,
         "statuseffect": "blinded",
         "odds": 50,
         "gmnotes": "Blinded for three minutes, triggered by sneezing — a gift for ruining stealth at the worst moment. Stinger: \"You feel it building. There is nothing you can do about it.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -212,11 +245,18 @@
         "description": "The character's toenails have mysteriously transformed into tiny toadstools, causing mild discomfort and a musty smell that repels insects.",
         "treatment": "Apply a soothing cream made of rare mushroom spores to prevent further fungal growth.",
         "severity": "minor",
-        "damage": 2,
+        "damage": 3,
         "duration": 900,
         "statuseffect": "none",
         "odds": 5,
         "gmnotes": "Comedy with a boot problem: rule against long marches. Stinger: \"Something is growing down there and it is doing well.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -261,11 +301,18 @@
         "description": "Your big toenail has taken on a life of its own and may cause uncontrollable tap-dancing at awkward times",
         "treatment": "Trim the nail under the light of a full moon, while singing a lullaby",
         "severity": "minor",
-        "damage": 3,
+        "damage": 4,
         "duration": 120,
         "statuseffect": "none",
         "odds": 40,
         "gmnotes": "Two minutes of nonsense — spend it during a tense moment for maximum damage. Stinger: \"Your foot has started keeping time. To what, nobody knows.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -310,11 +357,18 @@
         "description": "The character periodically suffers from venomous hiccups, causing small spurts of toxic gas to escape with each hiccup.",
         "treatment": "Consume a concoction of herbal extracts to neutralize the venom and control the hiccups.",
         "severity": "minor",
-        "damage": 4,
+        "damage": 5,
         "duration": 900,
         "statuseffect": "poisoned",
         "odds": 30,
         "gmnotes": "Poisoned, and each hiccup is a small hazard for whoever is standing close. Stinger: \"Everyone has quietly taken a step back.\"",
+        "modifiers": [
+          {
+            "stat": "saves",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -359,11 +413,23 @@
         "description": "Your eyes now perceive everything as if it's made of creepy crawlies. Try not to scream",
         "treatment": "Wear spectacles crafted from the web of a giant spider",
         "severity": "moderate",
-        "damage": 7,
+        "damage": 9,
         "duration": 300,
         "statuseffect": "poisoned",
         "odds": 30,
         "gmnotes": "Poisoned plus hallucination — describe rooms as crawling and let them doubt what they saw. Stinger: \"The wall is moving. You are almost certain the wall is not moving.\"",
+        "modifiers": [
+          {
+            "stat": "attack",
+            "value": -2,
+            "rounds": 0
+          },
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -406,7 +472,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785352038529,
+    "modifiedTime": 1785439085449,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

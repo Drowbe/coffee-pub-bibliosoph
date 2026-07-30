@@ -14,7 +14,7 @@ import { describeModifier, modifiersToChanges, secondsToRounds, severityLabel, t
 import { InspirationPageModel, INSPIRATION_PAGE_TYPE } from './data/inspiration-page-model.js';
 import { InspirationPageSheet } from './sheets/inspiration-page-sheet.js';
 import * as INSPIRATION_ACTIONS from './data/inspiration-schema.js';
-import { SEVERITY_DCS as INJURY_SEVERITY_DCS } from './data/injury-schema.js';
+import { SEVERITY_DCS as INJURY_SEVERITY_DCS, damageFor } from './data/injury-schema.js';
 
 // Resolve a macro reference (UUID, id, or name) to a Macro document
 const getMacroByIdOrName = (macroKey) => {
@@ -201,6 +201,14 @@ Hooks.once('ready', async () => {
             await registerTreatRollSocket();
         } catch (error) {
             logBib('Failed to register treatment-roll socket', error?.message, false, false);
+        }
+
+        // TREATMENT RETRIES: a rest clears failed attempts, so a bad roll
+        // is a setback rather than a permanent dead end.
+        try {
+            registerTreatmentRestReset();
+        } catch (error) {
+            logBib('Failed to register the treatment rest reset', error?.message, false, false);
         }
 
         // INSPIRATION CARDS: the drawn card is an item, and USING that item
@@ -408,6 +416,32 @@ async function createChatCardOutcome(type, { title = null, rollerActorId = null,
 }
 
 /**
+ * A crit that hands somebody a card. Resolves who from the same payload
+ * the status-applying outcomes use, then goes through the normal deal, so
+ * the card lands in their inventory exactly as a GM-dealt one would.
+ *
+ * @returns {Promise<string[]>} names dealt to, for the button stamp
+ */
+async function dealOutcomeCard(data) {
+    let actor = game.actors.get(data?.targetActorId ?? '') ?? null;
+    if (data?.randomAlly) {
+        const party = getPartyActors();
+        if (party.length) actor = party[Math.floor(Math.random() * party.length)];
+    }
+    actor ??= Array.from(game.user.targets ?? [])[0]?.actor
+        ?? canvas?.tokens?.controlled?.[0]?.actor
+        ?? game.user.character
+        ?? null;
+
+    if (!actor) {
+        showBibToast('Nobody to Deal To', 'Select a token, or assign yourself a character.', 'fa-solid fa-lightbulb');
+        return [];
+    }
+    await drawInspirationCard(actor);
+    return [actor.name];
+}
+
+/**
  * The party, best-effort: characters assigned to non-GM users first,
  * since that is who is actually sitting at the table, falling back to
  * player-owned character actors for worlds that do not assign.
@@ -458,6 +492,34 @@ function resolveOutcomeCast({ rollerActorId = null, rollerTokenId = null, hitAct
  */
 function buildOutcomeApplyButtons(rec, applyData, cast = {}) {
     const encode = (data) => encodeURIComponent(JSON.stringify(data));
+
+    // Card-dealing outcomes hand someone a card from the inspiration deck
+    // instead of applying a status. `appliesto` still decides WHO, so this
+    // reuses the same picker rather than inventing a second targeting idea.
+    if (rec.dealscard) {
+        const deal = (extra) => encode({ dealscard: true, name: rec.title, ...extra });
+        if (rec.appliesto === 'ally' || rec.appliesto === 'party') {
+            const party = getPartyActors();
+            if (party.length) {
+                return {
+                    applyoutcomerandom: deal({ randomAlly: true }),
+                    applyoutcomepicker: party.map((actor) => ({
+                        name: actor.name,
+                        img: actor.img || 'icons/svg/mystery-man.svg',
+                        payload: deal({ targetActorId: actor.id })
+                    })),
+                    applyoutcomeicon: 'fa-lightbulb',
+                    applyoutcomehint: 'Pick who draws a card, or let the dice decide.'
+                };
+            }
+        }
+        const named = rec.appliesto === 'self' ? cast.roller : (cast.hit ?? cast.roller);
+        return {
+            applyoutcome: deal({ targetActorId: named?.id ?? null }),
+            applyoutcomelabel: named ? `Deal a Card to ${named.name}` : 'Deal an Inspiration Card',
+            applyoutcomehint: named ? '' : 'Select who draws, or the card goes to your own character.'
+        };
+    }
 
     if (rec.appliesto === 'party') {
         const party = getPartyActors();
@@ -1603,8 +1665,13 @@ Hooks.on("ready", async () => {
                 img: arrEffectData.icon,
                 description: arrEffectData.description || '',
                 durationSeconds: Number(arrEffectData.duration) || null,
-                damage: Number(arrEffectData.damage) || null,
+                // Injury damage is a PERCENTAGE of max HP, floored so an
+                // injury maims and never kills.
+                damagePercent: Number(arrEffectData.damage) || null,
                 statusEffect: arrEffectData.statuseffect || null,
+                // Roll penalties ride along as real ActiveEffect changes, so
+                // a mangled hand costs the attack roll and not just prose.
+                changes: modifiersToChanges(arrEffectData.modifiers ?? []),
                 kindLabel: 'injury',
                 explicitActors,
                 burst: { kind: 'injury', category: arrEffectData.category || 'General', severity: arrEffectData.severity || null, dc: arrEffectData.treatmentDC ?? null, sourceUuid: arrEffectData.sourceUuid ?? null }
@@ -1773,7 +1840,7 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
         if (!game.user.isGM && kind !== 'injury') return btn.remove();
         btn.removeAttribute('title');
         btn.dataset.tooltip = game.user.isGM
-            ? (kind === 'injury' ? 'Treat instantly — GM discretion, no roll.'
+            ? (kind === 'injury' ? `Treat instantly — GM discretion, no roll.${gmDcNote(btn)}`
                 : kind === 'crit' ? 'Dismiss this critical (GM only).'
                 : kind === 'fumble' ? 'Dismiss this fumble (GM only).'
                 : 'Remove this effect and unwind its condition (GM only).')
@@ -2196,8 +2263,17 @@ async function createChatCardInjury(category, target = null) {
         if (!intInjuryDamage) {
             intInjuryDamage = "0";
         } else {
-            // Data was returned
-            strInjuryDamage = intInjuryDamage + " Hit Points";
+            // Damage is a percentage of MAX HP. The card names the share
+            // rather than a hit point count, because the count depends on
+            // who is reading it — and shows the real number for the token
+            // the card is aimed at, when it is aimed at one.
+            const hurtActor = game.actors.get(target?.actorId ?? '')
+                ?? canvas?.tokens?.get(target?.tokenId ?? '')?.actor
+                ?? null;
+            const real = hurtActor ? damageFor(intInjuryDamage, hurtActor.system?.attributes?.hp) : 0;
+            strInjuryDamage = real > 0
+                ? `${real} Hit Points (${intInjuryDamage}% of max)`
+                : `${intInjuryDamage}% of max Hit Points`;
         }
         
         if (!strInjuryDescription) {
@@ -2257,6 +2333,7 @@ async function createChatCardInjury(category, target = null) {
         category: strInjuryCategory || 'General',
         severity: strInjurySeverity || null,
         treatmentDC: intInjuryTreatmentDC,
+        modifiers: objInjuryData?.modifiers ?? [],
         sourceUuid: objInjuryData?.sourceUuid ?? null,
         targetActorId: target?.actorId ?? null,
         targetTokenId: target?.tokenId ?? null,
@@ -2300,7 +2377,14 @@ async function createChatCardInjury(category, target = null) {
         duration: strInjuryDuration,
         damage: strInjuryDamage,
         buttontext: strTargetName ? `Apply to ${strTargetName}` : strInjuryAction,
-        statuseffect: strStatusEffect.toUpperCase(), // This one is used on the chat card
+        // A real condition wins; otherwise fall back to flavour text for
+        // the injuries whose "condition" was never a dnd5e one.
+        statuseffect: (strStatusEffect !== 'none' ? strStatusEffect : (objInjuryData?.flavor || 'none')).toUpperCase(),
+        // Roll penalties, spelled out the same way the crit/fumble cards
+        // spell theirs out.
+        outcomemechanics: (objInjuryData?.modifiers ?? []).map((m) => ({
+            icon: 'fa-dice-d20', text: describeModifier(m)
+        })).filter((line) => line.text),
         arreffect: strStringifiedEFFECTDATA, // Stringify the EFFECTDATA array
         hasSectionContent: !!strStringifiedEFFECTDATA,
     };
@@ -3161,6 +3245,11 @@ async function getInjuryDataFromJournalPages(compendiumName, journalName) {
 // The recipient is chosen at CLICK time (targeted, then selected) — unlike
 // injuries, the right target is a judgment call, not the attack's target.
 async function applyOutcomeStatus(data) {
+    // Card-dealing outcomes are not status effects at all — they reach
+    // into the inspiration deck instead. Handled here because they arrive
+    // on the same Apply button and carry the same targeting payload.
+    if (data?.dealscard) return dealOutcomeCard(data);
+
     const blnIsCrit = data?.kind !== 'fumble';
     const strKindLabel = blnIsCrit ? 'Critical' : 'Fumble';
     const fallbackImg = blnIsCrit
@@ -3370,8 +3459,61 @@ function buildTreatTooltip(btn) {
     return `<strong>Click to attempt treatment</strong><br>${roller.name} will roll a Medicine check against this injury.<br>${modeLine}<br><em>One attempt per character per injury.</em>`;
 }
 
+/**
+ * The DC line for a GM's treat-button tooltip. Players never see the DC
+ * by design — but the GM could not see it either without running a
+ * harness report, which is a gap rather than a design.
+ *
+ * Reads the live effect so escalation from failed attempts is included:
+ * the number shown is the number that will actually be rolled against.
+ */
+function gmDcNote(buttonEl) {
+    try {
+        const data = JSON.parse(decodeURIComponent(buttonEl.getAttribute('data-treat') ?? ''));
+        const actor = canvas?.tokens?.get(data.tokenId ?? '')?.actor ?? game.actors.get(data.actorId ?? '');
+        const effect = actor?.effects?.get(data.effectId ?? '') ?? null;
+        const base = Number(data.dc) || 15;
+        const live = escalatedTreatmentDc(base, effect);
+        const failures = Number(effect?.getFlag?.(MODULE.ID, 'treatFailures') ?? 0) || 0;
+        const tried = (effect?.getFlag?.(MODULE.ID, 'treatAttempts') ?? [])
+            .map((id) => game.actors.get(id)?.name).filter(Boolean);
+        return `<br>DC ${live}${live !== base ? ` (base ${base}, +${live - base} from ${failures} failure${failures === 1 ? '' : 's'})` : ''}`
+            + (tried.length ? `<br>Already tried: ${tried.join(', ')}` : '');
+    } catch (_) {
+        return '';       // a malformed row simply gets the plain tooltip
+    }
+}
+
+/**
+ * An injury's CURRENT treatment DC: its base, plus whatever the failed
+ * attempts so far have added. Without this, failing costs nothing but a
+ * turn and the party simply queues up to roll again.
+ *
+ * @param {number} baseDc
+ * @param {ActiveEffect|null} effect  the injury carrying the attempt list
+ */
+export function escalatedTreatmentDc(baseDc, effect) {
+    const step = Number(getSettingSafe('injuryTreatmentDcEscalation', 0)) || 0;
+    if (step <= 0 || !effect) return baseDc;
+    const failures = Number(effect.getFlag?.(MODULE.ID, 'treatFailures') ?? 0) || 0;
+    return baseDc + (failures * step);
+}
+
+/**
+ * The item names that count as a healer's kit. A single hard-coded
+ * string meant homebrew kits, localised names and "Healer's Satchel"
+ * silently granted nothing, with no way for a GM to tell why.
+ * Comma-separated, matched case-insensitively on the whole name.
+ */
+function healersKitNames() {
+    const raw = String(getSettingSafe('injuryTreatmentKitNames', "Healer's Kit") || "Healer's Kit");
+    const names = raw.split(',').map((n) => n.trim().toLowerCase()).filter(Boolean);
+    return names.length ? names : ["healer's kit"];
+}
+
 function findHealersKit(actor) {
-    const kit = (actor?.items ?? []).find((i) => i.name?.toLowerCase() === "healer's kit");
+    const names = healersKitNames();
+    const kit = (actor?.items ?? []).find((i) => names.includes(String(i.name ?? '').toLowerCase()));
     if (!kit) return null;
     const uses = kit.system?.uses;
     const hasPool = Number(uses?.max) > 0;
@@ -3531,7 +3673,11 @@ async function resolveTreatmentRoll(context, payload) {
     const critFumbleOn = getSettingSafe('injuryTreatmentCritFumble', true);
     const isNat20 = critFumbleOn && d20 === 20;
     const isNat1 = critFumbleOn && d20 === 1;
-    const success = isNat20 || (!isNat1 && total >= Number(context.dc ?? 15));
+    // Re-derive the DC here rather than trusting the relayed one: prior
+    // failures may have raised it since the player's client built the
+    // request, and the GM is the only authority on that.
+    const liveDc = escalatedTreatmentDc(Number(context.dc ?? 15), effect);
+    const success = isNat20 || (!isNat1 && total >= liveDc);
 
     // Kit consumption per the Consume Kit Uses mode
     const kitMode = getSettingSafe('injuryTreatmentKitUses', 'attempt');
@@ -3559,12 +3705,54 @@ async function resolveTreatmentRoll(context, payload) {
     } else {
         try {
             await effect.setFlag(MODULE.ID, 'treatAttempts', [...attempts, ...(roller ? [roller.id] : [])]);
+            // Failures accumulate so the wound gets harder to close. A
+            // fumble counts double: botching it makes a mess.
+            const step = Number(getSettingSafe('injuryTreatmentDcEscalation', 0)) || 0;
+            if (step > 0) {
+                const failures = Number(effect.getFlag(MODULE.ID, 'treatFailures') ?? 0) || 0;
+                const next = failures + (isNat1 ? 2 : 1);
+                await effect.setFlag(MODULE.ID, 'treatFailures', next);
+                logBib(`"${effect.name}" treatment DC is now ${liveDc + (isNat1 ? 2 : 1) * step} after ${next} failure(s)`, '', true, false);
+            }
         } catch (error) {
             logBib('Could not record treatment attempt', error?.message, false, false);
         }
         if (isNat1) await adjustPatientHp(patient, -5);
         await postTreatmentOutcome({ healer: roller, patient, effectName, effectImg, outcome: isNat1 ? 'fumble' : 'fail' });
     }
+}
+
+/**
+ * Rest clears treatment attempts, so a failed roll is a setback rather
+ * than a permanent dead end. Without this the only way back was the test
+ * harness, which is not a thing a table should need.
+ */
+function registerTreatmentRestReset() {
+    const onRest = async (actor, result) => {
+        if (!game.user.isGM || game.users.activeGM?.id !== game.user.id) return;
+        const mode = getSettingSafe('injuryTreatmentAttemptReset', 'longRest');
+        if (mode === 'never') return;
+        const isLong = result?.longRest ?? (result?.type === 'long');
+        if (mode === 'longRest' && !isLong) return;
+
+        let cleared = 0;
+        for (const effect of actor?.effects ?? []) {
+            if (!effect.getFlag(MODULE.ID, 'treatAttempts') && !effect.getFlag(MODULE.ID, 'treatFailures')) continue;
+            try {
+                await effect.unsetFlag(MODULE.ID, 'treatAttempts');
+                await effect.unsetFlag(MODULE.ID, 'treatFailures');
+                cleared++;
+            } catch (error) {
+                logBib('Could not reset treatment attempts', error?.message, false, false);
+            }
+        }
+        if (cleared) {
+            logBib(`Rest cleared treatment attempts on ${cleared} affliction(s) for ${actor.name}`, '', true, false);
+            showBibToast('Treatment Reset', `${actor.name} rested — their afflictions can be treated again.`, 'fa-solid fa-bed');
+        }
+    };
+    Hooks.on('dnd5e.restCompleted', onRest);
+    logBib('Watching rests to reset treatment attempts', '', true, false);
 }
 
 // One-time real HP change, clamped, outside the damage pipeline (so a

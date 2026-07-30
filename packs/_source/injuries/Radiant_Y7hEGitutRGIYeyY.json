@@ -16,11 +16,18 @@
         "description": "The radiant magic coursing through you overwhelms your senses, causing a brief moment of euphoria. However, the intensity of the light leaves your vision temporarily dazzled.",
         "treatment": "Rest in a dark environment and avoid exposure to bright light.",
         "severity": "minor",
-        "damage": 2,
+        "damage": 3,
         "duration": 60,
         "statuseffect": "blinded",
         "odds": 50,
         "gmnotes": "Blinded for a minute, and the euphoria makes them enjoy it — which is its own problem. Stinger: \"You cannot see a thing and you have never felt better about it.\"",
+        "modifiers": [
+          {
+            "stat": "attack",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -65,11 +72,18 @@
         "description": "The radiant force strikes you, leaving behind vibrant, otherworldly bruises that pulse with soft light. Despite their beauty, they ache with a divine intensity.",
         "treatment": "Rest and apply a soothing balm to ease the discomfort.",
         "severity": "moderate",
-        "damage": 7,
+        "damage": 9,
         "duration": 120,
         "statuseffect": "none",
         "odds": 30,
         "gmnotes": "Cosmetic and glowing: no stealth, and everyone can see where they were hit. Stinger: \"The bruises pulse, slowly, like something inside is keeping time.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -2,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -114,7 +128,7 @@
         "description": "The affected area emits a soft, radiant glow that flickers like distant stars on a clear night. It causes a mild feeling of euphoria but leaves the skin slightly sensitive to magical auras.",
         "treatment": "Rest and exposure to natural light help to dissipate the celestial aura.",
         "severity": "minor",
-        "damage": 3,
+        "damage": 4,
         "duration": 900,
         "statuseffect": "none",
         "odds": 55,
@@ -163,11 +177,18 @@
         "description": "After being exposed to a burst of radiant energy, your skin starts to shimmer with faint divine light, causing discomfort and sensitivity to sunlight. You feel like a walking beacon of celestial energy.",
         "treatment": "Applying a soothing salve made of aloe vera leaves and holy water can help alleviate the discomfort and reduce the glowing effect.",
         "severity": "minor",
-        "damage": 3,
+        "damage": 4,
         "duration": 300,
         "statuseffect": "prone",
         "odds": 50,
         "gmnotes": "Prone plus tender skin — armour becomes miserable. Stinger: \"Everything you wear is now an argument.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -212,7 +233,7 @@
         "description": "A burst of radiant energy envelops you, leaving your skin tingling and red as if you spent too much time basking under the celestial sun.",
         "treatment": "Apply aloe vera or a cooling salve to soothe the affected skin.",
         "severity": "minor",
-        "damage": 3,
+        "damage": 4,
         "duration": 60,
         "statuseffect": "none",
         "odds": 50,
@@ -261,11 +282,18 @@
         "description": "A bright beam of radiant energy sears the affected area. The skin takes on a subtle, luminescent quality, giving off a soft light that attracts small creatures. It feels as if a small sun is trapped under the skin, warming from within.",
         "treatment": "Rest, holy water baths, and prayers to radiant deities can help soothe the celestial burn.",
         "severity": "moderate",
-        "damage": 6,
+        "damage": 7,
         "duration": 2400,
         "statuseffect": "charmed",
         "odds": 25,
         "gmnotes": "Charmed by the light itself — play it as reverence they cannot shake. Stinger: \"You keep turning back towards it, and you could not say why.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -2,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -310,11 +338,18 @@
         "description": "The afflicted area glows with a warm light, causing discomfort. It feels like being sunburnt by a celestial being. The radiance gradually fades but leaves the skin tender to the touch.",
         "treatment": "Cooling salves and magical healing can alleviate the discomfort.",
         "severity": "minor",
-        "damage": 2,
+        "damage": 3,
         "duration": 900,
         "statuseffect": "deafened",
         "odds": 60,
         "gmnotes": "Deafened is an odd pairing; lean on the warm glow instead and rule out stealth. Stinger: \"The skin there is hot to the touch and getting brighter.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -359,11 +394,23 @@
         "description": "A burst of blinding radiant light engulfs the area, leaving behind an otherworldly mark. The skin becomes translucent, revealing an inner glow that can be seen faintly pulsing. It feels like having a miniature star trapped within, radiating heat and light.",
         "treatment": "Potent healing magic or divine intervention may be required to diminish the radiant essence infused within the body.",
         "severity": "major",
-        "damage": 11,
+        "damage": 16,
         "duration": 3600,
         "statuseffect": "exhaustion",
         "odds": 15,
         "gmnotes": "Exhaustion 1 for an hour, with a glow that gives away the whole party. Stinger: \"You are lit up like a signal fire, and something is looking for you.\"",
+        "modifiers": [
+          {
+            "stat": "attack",
+            "value": -3,
+            "rounds": 0
+          },
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -408,11 +455,18 @@
         "description": "A surge of radiant power overwhelms you, causing your skin to glow brightly and emit a soft light. The excess energy burns within, threatening to consume you if not controlled.",
         "treatment": "Seek out a skilled healer to help regulate the radiant energy within you.",
         "severity": "major",
-        "damage": 11,
+        "damage": 16,
         "duration": 2700,
         "statuseffect": "poisoned",
         "odds": 20,
         "gmnotes": "Poisoned and glowing brightly for the better part of an hour — stealth is gone and everything nearby knows where they are. Stinger: \"You are throwing light on the walls. You cannot dim it.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -3,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -455,7 +509,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785352038535,
+    "modifiedTime": 1785439085456,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

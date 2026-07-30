@@ -16,11 +16,18 @@
         "description": "After a particularly loud thunderous boom, your ears start ringing incessantly. You find it hard to focus as the sound drowns out everything around you, making communication a challenge.",
         "treatment": "Resting in a quiet area for a few hours can alleviate the ringing. Alternatively, a caster could attempt to dispel the temporary deafness.",
         "severity": "minor",
-        "damage": 2,
+        "damage": 3,
         "duration": 300,
         "statuseffect": "deafened",
         "odds": 50,
         "gmnotes": "Deafened for five minutes — enough to miss the plan and act on the wrong one. Stinger: \"Everyone else heard it. You watch them react and guess.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -65,11 +72,18 @@
         "description": "During a fierce thunderous clash, you found yourself too close to a deafening blast of sound. The intense pressure rattled your eardrums, leaving your hearing muddled and distant.",
         "treatment": "To soothe your ears, you must rest in a quiet environment and avoid exposure to loud noises.",
         "severity": "moderate",
-        "damage": 6,
+        "damage": 7,
         "duration": 600,
         "statuseffect": "deafened",
         "odds": 20,
         "gmnotes": "Deafened for ten: coordinate nothing, hear no warnings. Stinger: \"The world has gone underwater and stayed there.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -2,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -114,11 +128,18 @@
         "description": "During a powerful thunderous strike, your ears are bombarded with a resonating boom that seems to linger. You can now hear everything as if you're underwater, with distant echoes distorting sounds around you. The louder the noise, the more painful the reverberation.",
         "treatment": "Visit a skilled healer who can help recalibrate your inner ear balance, or endure the ringing until it fades naturally.",
         "severity": "moderate",
-        "damage": 7,
+        "damage": 9,
         "duration": 300,
         "statuseffect": "deafened",
         "odds": 10,
         "gmnotes": "Deafened, and the resonance makes them slow to react. Stinger: \"You feel the next one in your teeth before you hear it.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -2,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -163,11 +184,18 @@
         "description": "After being caught in a thunderous clap, your eardrums shatter, leaving you with muffled hearing and a tendency to yell everything you say. The world feels oddly silent; even the loudest noises dim in comparison to the constant ringing in your ears.",
         "treatment": "Seek out a skilled bard or healer to cast a mending spell on your ears. Avoid sudden loud noises to prevent further damage.",
         "severity": "moderate",
-        "damage": 6,
+        "damage": 7,
         "duration": 300,
         "statuseffect": "deafened",
         "odds": 25,
         "gmnotes": "Deafened with real injury behind it — this one wants treatment, not time. Stinger: \"There is warmth running out of your ear and you know what that means.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -2,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -212,11 +240,23 @@
         "description": "Hit by a powerful burst of electricity, your muscles twitch uncontrollably and your nerves feel on edge.",
         "treatment": "Rest and avoid contact with water to prevent further electric surges.",
         "severity": "major",
-        "damage": 10,
+        "damage": 13,
         "duration": 3600,
         "statuseffect": "stunned",
         "odds": 8,
         "gmnotes": "Stunned once, then let the muscles twitch through the next hour — no fine work, no steady aim. Stinger: \"Your hands have not stopped since. You have tried sitting on them.\"",
+        "modifiers": [
+          {
+            "stat": "attack",
+            "value": -3,
+            "rounds": 0
+          },
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -261,11 +301,18 @@
         "description": "A bolt of lightning grazes your skin, leaving a tingling sensation and making it hard to hold onto things.",
         "treatment": "Massage the affected area to reduce the tingling sensation.",
         "severity": "minor",
-        "damage": 2,
+        "damage": 3,
         "duration": 900,
         "statuseffect": "none",
         "odds": 75,
         "gmnotes": "Flavour only: rule against concentration and delicate work for fifteen minutes. Stinger: \"Something under your skin is still fizzing quietly.\"",
+        "modifiers": [
+          {
+            "stat": "attack",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -310,11 +357,23 @@
         "description": "Caught in the epicenter of a deafening thunderclap, your very essence quivers in response to the overwhelming force. Your vision blurs, and even the slightest sound feels like a hammer blow.",
         "treatment": "Only the most skilled of healers can mend the internal damage caused by the thunderclap. Resting in complete silence may slowly restore your senses.",
         "severity": "major",
-        "damage": 11,
+        "damage": 16,
         "duration": 0,
         "statuseffect": "blinded",
         "odds": 10,
         "gmnotes": "Blinded and permanent until treated: the most severe thunder result, and it removes them from ranged combat entirely. Stinger: \"The flash is still there when you close your eyes. It has not faded once.\"",
+        "modifiers": [
+          {
+            "stat": "attack",
+            "value": -3,
+            "rounds": 0
+          },
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -359,11 +418,18 @@
         "description": "A sudden jolt of electric energy courses through your body as if you've been struck by a lightning rod. Your muscles twitch uncontrollably, making precise movements a challenge.",
         "treatment": "Resting and grounding yourself by touching something conductive for a few hours can help dissipate the electric charge. A caster may also attempt to restore your nerve control.",
         "severity": "minor",
-        "damage": 3,
+        "damage": 4,
         "duration": 240,
         "statuseffect": "none",
         "odds": 50,
         "gmnotes": "No condition — every metal object and every handshake is a small event. Stinger: \"You reach for the door handle and think better of it.\"",
+        "modifiers": [
+          {
+            "stat": "attack",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -408,11 +474,23 @@
         "description": "The booming thunder overhead triggers a debilitating headache that makes focusing on tasks a challenge.",
         "treatment": "Resting in a quiet and dark environment to ease the headache.",
         "severity": "moderate",
-        "damage": 7,
+        "damage": 9,
         "duration": 2700,
         "statuseffect": "deafened",
         "odds": 30,
         "gmnotes": "Deafened for three quarters of an hour, with a headache to match — no plans, no lore, no torch-side. Stinger: \"The thunder stopped outside and kept going inside.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -2,
+            "rounds": 0
+          },
+          {
+            "stat": "saves",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -457,11 +535,23 @@
         "description": "A direct hit from a powerful bolt of lightning leaves you feeling like you've danced with the storm itself. Your body tingles with residual electricity, and your movements are sluggish.",
         "treatment": "Seeking shelter from further electrical discharges and resting for an extended period can help alleviate the effects. A skilled healer might be able to accelerate your recovery.",
         "severity": "moderate",
-        "damage": 7,
+        "damage": 9,
         "duration": 600,
         "statuseffect": "none",
         "odds": 20,
         "gmnotes": "No condition — play the ten minutes as jangled nerves and unsteady hands. Stinger: \"Your whole body is still humming with somebody else's energy.\"",
+        "modifiers": [
+          {
+            "stat": "ac",
+            "value": -2,
+            "rounds": 0
+          },
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -504,7 +594,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785352038543,
+    "modifiedTime": 1785439085474,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

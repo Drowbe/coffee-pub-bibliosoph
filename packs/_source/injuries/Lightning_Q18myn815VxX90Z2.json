@@ -16,11 +16,18 @@
         "description": "A sudden burst of lightning has singed your hair and clothes. Your fringe now crackles with energy, making you slightly jittery. It's a shocking fashion statement!",
         "treatment": "Trimming the fried ends may help minimize static buildup and reduce your urge to reach out and touch someone.",
         "severity": "minor",
-        "damage": 2,
+        "damage": 3,
         "duration": 300,
         "statuseffect": "none",
         "odds": 20,
         "gmnotes": "Cosmetic and crackling: no stealth, and metal is a hazard. Stinger: \"You keep shocking people who try to shake your hand.\"",
+        "modifiers": [
+          {
+            "stat": "ac",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -65,7 +72,7 @@
         "description": "Your hair stands on end like you've been electrified. It's not just a fashion statement; the static energy around you is causing mild shocks to anyone who gets too close, making teamwork a bit electrifying.",
         "treatment": "Ground yourself by meditating on a grassy field for an hour.",
         "severity": "moderate",
-        "damage": 6,
+        "damage": 7,
         "duration": 120,
         "statuseffect": "none",
         "odds": 5,
@@ -114,11 +121,18 @@
         "description": "Your encounter with a powerful lightning strike leaves you resonating with a shockwave symphony. Vibrations ripple through you, causing sporadic involuntary movements.",
         "treatment": "Resting in a calm environment and gentle grounding exercises can help silence the electric symphony playing in your muscles.",
         "severity": "major",
-        "damage": 11,
+        "damage": 16,
         "duration": 3600,
         "statuseffect": "unconscious",
         "odds": 10,
         "gmnotes": "Unconscious for an hour is a scene-remover. Make reaching them the encounter. Stinger: \"You are still ringing, somewhere far below hearing.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -3,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -163,7 +177,7 @@
         "description": "Your body has become a lightning rod, attracting bolts from the sky and nearby magic. While it's great for parties, it's not so fun when you're the only one glowing in the dark during stealth missions.",
         "treatment": "Sit out in a storm for an hour and let it all discharge.",
         "severity": "major",
-        "damage": 10,
+        "damage": 13,
         "duration": 0,
         "statuseffect": "stunned",
         "odds": 3,
@@ -212,11 +226,23 @@
         "description": "As lightning courses through your veins, you experience a thunderous tingle that leaves you feeling both exhilarated and slightly jittery. Beware of unexpected shivers!",
         "treatment": "Taking shelter from any stormy weather and avoiding static-inducing fabrics can help reduce the lingering tingling sensation.",
         "severity": "moderate",
-        "damage": 7,
+        "damage": 9,
         "duration": 900,
         "statuseffect": "stunned",
         "odds": 15,
         "gmnotes": "Stunned once, then leave the tingle as flavour. Stinger: \"Your fingers have not stopped buzzing and you have started to like it.\"",
+        "modifiers": [
+          {
+            "stat": "ac",
+            "value": -2,
+            "rounds": 0
+          },
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -261,11 +287,18 @@
         "description": "During the last battle, a lightning strike has left you with the constant sound of thunder in your ears. The effect is worse during silences, making stealth a bit tricky while keeping you constantly on edge.",
         "treatment": "Have a bard play soothing music for an evening.",
         "severity": "minor",
-        "damage": 2,
+        "damage": 3,
         "duration": 240,
         "statuseffect": "deafened",
         "odds": 15,
         "gmnotes": "Deafened: no hearing-based Perception, and whispered plans do not reach them. Stinger: \"Under everything, a note you cannot make stop.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -310,11 +343,18 @@
         "description": "You touched something electrifying and now your fingers feel tingly. Whenever you try to grab something, a small spark jumps. Sometimes it helps light candles, but other times it just zaps you.",
         "treatment": "Rest and avoid touching anything metal for a day.",
         "severity": "minor",
-        "damage": 3,
+        "damage": 4,
         "duration": 180,
         "statuseffect": "none",
         "odds": 10,
         "gmnotes": "No condition — rule dropped metal or fumbled components on a failed check. Stinger: \"Everything metal has opinions about you now.\"",
+        "modifiers": [
+          {
+            "stat": "attack",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -359,7 +399,7 @@
         "description": "After being zapped by lightning, you feel electrifyingly energized! But be careful, that extra zest might make you act impulsively for a while.",
         "treatment": "Resting and avoiding loud noises can help calm your overexcited nerves.",
         "severity": "minor",
-        "damage": 3,
+        "damage": 4,
         "duration": 600,
         "statuseffect": "none",
         "odds": 25,
@@ -406,7 +446,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785352038519,
+    "modifiedTime": 1785439085433,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

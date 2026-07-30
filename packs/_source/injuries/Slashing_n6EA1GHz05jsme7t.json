@@ -16,11 +16,23 @@
         "description": "The cutting edge of the blade opens a torrent of crimson, as blood spills from the lacerations like a scarlet river flowing unchecked. Each slash becomes a reminder of the body's vulnerability, as life essence escapes in a crimson dance.",
         "treatment": "Applying pressure to the bleeding edge and elevating the affected limb can help stem the flow of blood and promote clotting. Seeking medical evaluation for deeper lacerations or signs of excessive bleeding is crucial for proper treatment.",
         "severity": "moderate",
-        "damage": 5,
+        "damage": 6,
         "duration": 300,
         "statuseffect": "bleeding",
         "odds": 20,
         "gmnotes": "Bleeding is the mechanic; the trail is the drama. Anything that hunts by blood now has a road to follow. Stinger: \"It is going through the bandage faster than you can replace it.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -2,
+            "rounds": 0
+          },
+          {
+            "stat": "saves",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -65,11 +77,23 @@
         "description": "A brutal slash carves through your flesh, leaving a deep, gaping wound that bleeds profusely. The pain is excruciating, and moving becomes a challenge as blood loss starts to take its toll.",
         "treatment": "Urgent magical healing or expert medical attention is necessary to prevent further complications or potential death.",
         "severity": "major",
-        "damage": 10,
+        "damage": 13,
         "duration": 3600,
         "statuseffect": "bleeding",
         "odds": 10,
         "gmnotes": "Bleeding does the mechanical work; your job is to make it visible. They are marking the floor, the saddle, the water. Trackers get advantage; predators take an interest. Stinger: \"You are leaving a trail. Whatever is behind you will not need to guess.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -3,
+            "rounds": 0
+          },
+          {
+            "stat": "saves",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -114,11 +138,23 @@
         "description": "Your innards had a brief day out of your body before you managed to stuff them back in. Now, your once trusty armor seems a bit snug.",
         "treatment": "Seek a skilled healer to make sure everything is back where it should be.",
         "severity": "major",
-        "damage": 10,
+        "damage": 13,
         "duration": 0,
         "statuseffect": "prone",
         "odds": 6,
         "gmnotes": "Permanent until treated and unconscious-adjacent in tone: this ends someone's fight. Do not let it become a numbers discussion. Stinger: \"Hold it in. That is the whole plan right now — hold it in.\"",
+        "modifiers": [
+          {
+            "stat": "attack",
+            "value": -3,
+            "rounds": 0
+          },
+          {
+            "stat": "damage",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -163,11 +199,18 @@
         "description": "A deep gash from a sharp blade that just won't stop bleeding, causing a trail of drips wherever you go. Your clothes are now the latest in gruesome fashion.",
         "treatment": "Apply a clean bandage and hope for the best.",
         "severity": "minor",
-        "damage": 2,
+        "damage": 3,
         "duration": 60,
         "statuseffect": "bleeding",
         "odds": 75,
         "gmnotes": "Bleeding does the damage; the trail does the drama — trackers and predators find them easily. Stinger: \"It keeps opening. Every time you think it has stopped, it opens.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -212,11 +255,18 @@
         "description": "The jagged gash left by a slashing strike mirrors the chaos of battle, a ragged tear in the fabric of flesh that oozes with pain and pulsates with every heartbeat. Each movement a reminder of the jagged nature of the wound.",
         "treatment": "Careful cleaning and closure of the jagged gash are essential to prevent infection and promote proper healing. Monitoring for signs of inflammation or delayed healing can guide further treatment and prevent complications.",
         "severity": "moderate",
-        "damage": 5,
+        "damage": 6,
         "duration": 300,
         "statuseffect": "bleeding",
         "odds": 20,
         "gmnotes": "Bleeding, and the ragged edges mean it closes badly — worth a scar and a complication later. Stinger: \"It is not a clean cut. It will not be a clean scar.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -2,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -261,11 +311,23 @@
         "description": "The sharp bite of the blade leaves a lacerating wound, tearing through flesh and rending skin with a merciless ferocity. Each slash, a symphony of pain, as the jagged edge cuts deep and leaves a trail of crimson in its wake.",
         "treatment": "Promptly cleaning and disinfecting the lacerating wound is crucial to prevent infection and promote healing. Proper wound care, bandaging, and monitoring for signs of complications are essential during the recovery process.",
         "severity": "moderate",
-        "damage": 5,
+        "damage": 6,
         "duration": 230,
         "statuseffect": "exhaustion",
         "odds": 20,
         "gmnotes": "Exhaustion 1 from blood loss — a slow, grinding cost rather than a spike. Stinger: \"You are getting tired in a way that sleep will not fix.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -2,
+            "rounds": 0
+          },
+          {
+            "stat": "saves",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -310,11 +372,18 @@
         "description": "You yelp in surprise as you receive a minuscule cut, yet the pain that follows is disproportionate. It feels like a paper cut, but with the fury of a thousand devils.",
         "treatment": "Apply a healing salve and try not to get any more paper cuts, especially from vicious monsters.",
         "severity": "minor",
-        "damage": 3,
+        "damage": 4,
         "duration": 120,
         "statuseffect": "none",
         "odds": 75,
         "gmnotes": "Trivially small and disproportionately awful. Pure comedy; use it for a failed check at a dignified moment. Stinger: \"It is barely a line. You have never felt anything like it.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -359,11 +428,28 @@
         "description": "An enemy's blade grazes you, leaving your ligament partially severed. The pain is sharp and intensifies with each movement you make, hindering your combat capabilities.",
         "treatment": "Seek immediate magical or expert medical attention to repair the ligament before the injury worsens.",
         "severity": "moderate",
-        "damage": 6,
+        "damage": 7,
         "duration": 300,
         "statuseffect": "restrained",
         "odds": 30,
         "gmnotes": "Restrained reads as a leg that will not answer — rule movement halved if that suits better. Stinger: \"It holds. Then it does not, and you learn which one you are getting.\"",
+        "modifiers": [
+          {
+            "stat": "attack",
+            "value": -2,
+            "rounds": 0
+          },
+          {
+            "stat": "ac",
+            "value": -1,
+            "rounds": 0
+          },
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -408,11 +494,23 @@
         "description": "The rending rift carved by a slashing blow leaves behind a gaping chasm of agony, where raw flesh and exposed nerves scream in protest. Each breath a torment, as the wound throbs with a rhythm of its own.",
         "treatment": "Stabilizing the rending rift with sterile dressings and avoiding further trauma to the area are crucial for promoting healing. Seeking medical evaluation for deep wounds or signs of infection can prevent complications and aid in recovery.",
         "severity": "moderate",
-        "damage": 7,
+        "damage": 9,
         "duration": 375,
         "statuseffect": "bleeding",
         "odds": 20,
         "gmnotes": "Bleeding from something wide open — the horror is how much of it there is. Stinger: \"You can see more of yourself than anyone should.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -2,
+            "rounds": 0
+          },
+          {
+            "stat": "saves",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -457,11 +555,18 @@
         "description": "A precise cut that leaves you feeling as thin and fragile as a piece of sashimi, making you more susceptible to further injuries.",
         "treatment": "Tape yourself back together with magic or healing potions.",
         "severity": "moderate",
-        "damage": 7,
+        "damage": 9,
         "duration": 120,
         "statuseffect": "bleeding",
         "odds": 30,
         "gmnotes": "Bleeding plus fragility: rule that the next hit lands harder, or simply describe them as thinner than before. Stinger: \"The cut is so clean you did not notice until you moved.\"",
+        "modifiers": [
+          {
+            "stat": "ac",
+            "value": -2,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -506,11 +611,28 @@
         "description": "The brutal severing of a limb leaves a gaping void where once there was strength and mobility. The stark reality of the loss sends shockwaves through the body, as pain and disbelief collide in a cruel symphony of suffering.",
         "treatment": "Immediate medical intervention is critical for addressing the severed limb, including controlling bleeding, stabilizing the patient, and ensuring proper wound management. Surgical measures and rehabilitation efforts are essential for the long-term well-being and functionality of the individual.",
         "severity": "major",
-        "damage": 10,
+        "damage": 13,
         "duration": 0,
         "statuseffect": "prone",
         "odds": 10,
         "gmnotes": "Permanent, prone, and campaign-changing — pause and make sure the player wants this before it stands. Offer regeneration as a quest. Stinger: \"Somebody needs to pick that up, and nobody is moving.\"",
+        "modifiers": [
+          {
+            "stat": "attack",
+            "value": -3,
+            "rounds": 0
+          },
+          {
+            "stat": "ac",
+            "value": -1,
+            "rounds": 0
+          },
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -555,11 +677,28 @@
         "description": "In the aftermath of a slashing strike, severed strands of flesh hang like tattered remnants of a once-whole canvas. The blade's keen edge cleaves through sinew and muscle, leaving a landscape of destruction in its wake.",
         "treatment": "Seeking immediate medical attention to address the severed strands is essential to prevent further damage and facilitate healing. Surgical intervention and meticulous wound care may be necessary to restore function and prevent complications.",
         "severity": "moderate",
-        "damage": 5,
+        "damage": 6,
         "duration": 420,
         "statuseffect": "prone",
         "odds": 20,
         "gmnotes": "The conveyed condition is the cost; the horror is cosmetic and worth a sentence. Anyone with Medicine should be able to see this needs real attention, not a bandage. Stinger: \"It does not hurt yet. That is the part that worries you.\"",
+        "modifiers": [
+          {
+            "stat": "attack",
+            "value": -2,
+            "rounds": 0
+          },
+          {
+            "stat": "ac",
+            "value": -1,
+            "rounds": 0
+          },
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -604,11 +743,23 @@
         "description": "The vicious slash across the eye sends shards of pain through the delicate orb, leaving a trail of crimson and blurred vision in its wake. The world shifts and distorts, a reminder of the fragility of sight in the face of a brutal assault. The dice have decided your fate: [[1d2]] The roll of a 1 = left and a 2 = right.",
         "treatment": "Immediate evaluation by an ophthalmologist is essential for addressing the slashed eye, including measures to control bleeding, assess vision impairment, and prevent infection. Surgical intervention and ongoing care are crucial for restoring vision and preventing long-term complications.",
         "severity": "moderate",
-        "damage": 8,
+        "damage": 10,
         "duration": 0,
         "statuseffect": "blinded",
         "odds": 20,
         "gmnotes": "Blinded is enormous — consider ruling it as one eye: disadvantage on ranged attacks and sight Perception rather than full blindness, if that suits your table. Say so out loud before the next roll. Stinger: \"Half the room is simply gone, and you keep turning your head to find it.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -2,
+            "rounds": 0
+          },
+          {
+            "stat": "saves",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -653,11 +804,18 @@
         "description": "You feel a light tickling sensation as if a mischievous imp is gently running a blade across your skin. The cut is shallow but surprisingly persistent, causing slight discomfort.",
         "treatment": "Bandage the wound and rest for a short while to let it heal naturally.",
         "severity": "minor",
-        "damage": 2,
+        "damage": 3,
         "duration": 180,
         "statuseffect": "prone",
         "odds": 75,
         "gmnotes": "Prone from flinching — harmless, undignified, and good for a duel. Stinger: \"Something drew a line across you and you did not feel it cut.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -702,11 +860,18 @@
         "description": "A nasty cut that, when you breathe or speak, lets out a high-pitched whistle that is quite distracting to you and your party members.",
         "treatment": "Have someone else do all the talking for you.",
         "severity": "minor",
-        "damage": 3,
+        "damage": 4,
         "duration": 60,
         "statuseffect": "none",
         "odds": 75,
         "gmnotes": "A minute of noise: stealth is impossible and speech is comic. Stinger: \"You take a breath and the wound takes one with you.\"",
+        "modifiers": [
+          {
+            "stat": "checks",
+            "value": -1,
+            "rounds": 0
+          }
+        ],
         "treatmentdc": null
       },
       "title": {
@@ -749,7 +914,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785352038539,
+    "modifiedTime": 1785439085460,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

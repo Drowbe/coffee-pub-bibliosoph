@@ -9,8 +9,8 @@
 
 import { MODULE } from '../const.js';
 import {
-    CATEGORIES, SEVERITIES, CONDITIONS, DAMAGE_BANDS,
-    displayCategory, treatmentDcFor
+    CATEGORIES, SEVERITIES, CONDITIONS, DAMAGE_BANDS, MODIFIER_LIMITS, MODIFIER_STATS,
+    displayCategory, treatmentDcFor, describeModifier, modifiersToChanges, secondsToRounds
 } from './injury-schema.js';
 
 /**
@@ -53,9 +53,12 @@ export class InjuryPageModel extends foundry.abstract.TypeDataModel {
             description: new fields.StringField({ required: false, blank: true, initial: '' }),
             // How it may be treated — the GM's adjudication text.
             treatment: new fields.StringField({ required: false, blank: true, initial: '' }),
-            // One-time real HP lost the moment the injury is applied.
-            // Not ongoing, not a max-HP reduction.
-            damage: new fields.NumberField({ required: true, integer: true, min: 0, initial: 0, nullable: false }),
+            // One-time real HP lost the moment the injury is applied, as a
+            // PERCENTAGE OF MAX HP. A percentage is the same wound at level
+            // 1 and level 15; the flat number it replaced was lethal at one
+            // end and meaningless at the other. Never ongoing, never a
+            // max-HP reduction, and floored so it cannot drop a character.
+            damage: new fields.NumberField({ required: true, integer: true, min: 0, max: 100, initial: 0, nullable: false }),
             // Seconds the effect lasts; 0 = permanent (until treated).
             duration: new fields.NumberField({ required: true, integer: true, min: 0, initial: 0, nullable: false }),
             // Exactly one condition id, or 'none'.
@@ -67,6 +70,29 @@ export class InjuryPageModel extends foundry.abstract.TypeDataModel {
             // Optional override for the severity-derived treatment DC.
             // Null (the norm) means "use the ladder".
             treatmentdc: new fields.NumberField({ required: false, integer: true, min: 1, initial: null, nullable: true }),
+            // Roll modifiers, applied as real ActiveEffect changes so a
+            // mangled hand actually costs you the attack roll instead of
+            // only saying so in prose. Same shape and same stats as the
+            // crit/fumble modifiers — one definition, shared.
+            modifiers: new fields.ArrayField(new fields.SchemaField({
+                stat: new fields.StringField({
+                    required: true, blank: false, initial: 'attack', choices: choicesFrom(Object.keys(MODIFIER_STATS))
+                }),
+                value: new fields.NumberField({
+                    required: true, integer: true, initial: -1, nullable: false,
+                    min: MODIFIER_LIMITS.minValue, max: MODIFIER_LIMITS.maxValue
+                }),
+                // 0 = lasts as long as the injury does, which is the norm:
+                // a broken arm penalises you until it is treated, not for
+                // three rounds. A value here is for the rarer wound that
+                // fades on its own.
+                rounds: new fields.NumberField({ required: false, integer: true, min: 0, initial: 0, nullable: false })
+            }), { required: false, initial: [] }),
+            // Flavour-only status text for injuries whose "condition" is not
+            // a real dnd5e condition — "Confused", "Clumsy Fingers". Shown
+            // on the card; applies nothing. Restores colour that the
+            // migration to a strict `statuseffect` enum flattened to 'none'.
+            flavor: new fields.StringField({ required: false, blank: true, initial: '' }),
             // SHIPPED guidance on running the injury at the table — combat
             // and movement rulings, narrative stingers. This is module
             // content: it versions with the injury and updates when the
@@ -130,8 +156,33 @@ export class InjuryPageModel extends foundry.abstract.TypeDataModel {
             statuseffect: this.statuseffect,
             odds: this.odds,
             ...(this.treatmentdc ? { treatmentdc: this.treatmentdc } : {}),
+            ...(this.modifiers?.length ? { modifiers: this.modifiers.map((m) => ({ ...m })) } : {}),
+            ...(this.flavor ? { flavor: this.flavor } : {}),
             ...(this.gmnotes ? { gmnotes: this.gmnotes } : {})
         };
+    }
+
+    /** Human-readable modifier lines for the card and the sheet. */
+    get modifierLabels() {
+        return (this.modifiers ?? []).map(describeModifier).filter(Boolean);
+    }
+
+    /** ActiveEffect changes for the applier. */
+    get effectChanges() {
+        return modifiersToChanges(this.modifiers ?? []);
+    }
+
+    /** The injury's duration expressed in combat rounds (0 = permanent). */
+    get rounds() {
+        return secondsToRounds(this.duration);
+    }
+
+    /** What the card shows in the status slot: the real condition, else flavour. */
+    get statusLabel() {
+        if (this.statuseffect && this.statuseffect !== 'none') {
+            return this.statuseffect.charAt(0).toUpperCase() + this.statuseffect.slice(1);
+        }
+        return this.flavor || '';
     }
 
     /**
@@ -144,7 +195,21 @@ export class InjuryPageModel extends foundry.abstract.TypeDataModel {
         const out = [];
         const band = DAMAGE_BANDS[this.severity];
         if (band && (this.damage < band[0] || this.damage > band[1])) {
-            out.push(`Damage ${this.damage} is outside the ${this.severity} range ${band[0]}–${band[1]}.`);
+            out.push(`Damage ${this.damage}% is outside the ${this.severity} range ${band[0]}–${band[1]}%.`);
+        }
+        const mods = this.modifiers ?? [];
+        if (mods.length > MODIFIER_LIMITS.maxCount) {
+            out.push(`${mods.length} modifiers is a spreadsheet, not a wound — ${MODIFIER_LIMITS.maxCount} is the practical ceiling.`);
+        }
+        const cap = MODIFIER_LIMITS.bySeverity[this.severity];
+        for (const mod of mods) {
+            const size = Math.abs(Number(mod?.value) || 0);
+            if (cap && size > cap) {
+                out.push(`A ${this.severity} injury with a ${mod.value} to ${MODIFIER_STATS[mod.stat]?.label ?? mod.stat} hits harder than its severity suggests (cap ±${cap}).`);
+            }
+        }
+        if (this.flavor && this.statuseffect !== 'none') {
+            out.push('Flavour text is ignored while a real condition is set — the condition wins on the card.');
         }
         if (!this.image) out.push('No image set — the card and token effect will have no art.');
         return out;
