@@ -474,7 +474,15 @@ const SCENARIOS = [
     },
     {
         tab: 'inspiration',
-        label: '💡 Draw a card (random) → point + item on subject',
+        label: '🃏 Open the DEAL dialog (choose a card, or random)',
+        run: async () => {
+            const { openInspirationDealDialog } = await import(`${MODULE_PATH}/bibliosoph.js`);
+            await openInspirationDealDialog();
+        }
+    },
+    {
+        tab: 'inspiration',
+        label: '💡 Draw a card (random) → item on subject',
         run: async () => {
             const token = getSubjectToken();
             if (!token) return;

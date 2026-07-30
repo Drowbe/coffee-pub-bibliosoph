@@ -812,21 +812,18 @@ async function createChatCardTreatment(token) {
 }
 
 /**
- * Draw an inspiration card. Drawing GRANTS the point and hands the
- * character the card itself as an inventory item — using that item is
- * what spends the point and resolves the card.
+ * Every card in the configured deck. Shared by the random draw and the
+ * GM's deal-a-specific-card picker, so both see exactly the same deck.
  *
- * @param {Actor|null} actor  who receives the card; defaults to the
- *                            targeted/selected token's actor
- * @param {string|null} title  force a specific card by name instead of
- *                             drawing at random (testing)
+ * @returns {Promise<object[]|null>} null when the deck is missing or
+ *          empty, having already told the user why
  */
-export async function drawInspirationCard(actor = null, { title = null } = {}) {
+async function loadInspirationDeck() {
     const compendiumName = getSettingSafe('inspirationCompendium', 'none');
     const pack = game.packs.get(compendiumName);
     if (!pack) {
         showBibToast('No Card Deck', 'Set an Inspiration Cards compendium in the settings.', 'fa-solid fa-lightbulb');
-        return;
+        return null;
     }
     const entries = await pack.getDocuments();
     const cards = entries
@@ -840,11 +837,25 @@ export async function drawInspirationCard(actor = null, { title = null } = {}) {
         .filter(Boolean);
     if (!cards.length) {
         showBibToast('Empty Deck', `No cards found in "${compendiumName}".`, 'fa-solid fa-lightbulb');
-        return;
+        return null;
     }
+    return cards;
+}
 
-    // `title` forces a specific card — the harness uses it to demo each
-    // automated action without waiting for the draw to cooperate.
+/**
+ * Draw an inspiration card and hand it to a character as an inventory
+ * item. THE CARD IS THE CURRENCY — holding it is the right to play it.
+ *
+ * @param {Actor|null} actor  who receives the card; defaults to the
+ *                            targeted/selected token's actor
+ * @param {string|null} title  deal a SPECIFIC card by name instead of
+ *                            drawing at random — the GM's picker and the
+ *                            test harness both go through this
+ */
+export async function drawInspirationCard(actor = null, { title = null } = {}) {
+    const cards = await loadInspirationDeck();
+    if (!cards) return;
+
     const card = title ? cards.find((c) => c.title === title) : weightedPick(cards, (c) => c.odds);
     if (!card) {
         showBibToast('No Such Card', `Nothing titled "${title}" in the deck.`, 'fa-solid fa-lightbulb');
@@ -869,8 +880,8 @@ export async function drawInspirationCard(actor = null, { title = null } = {}) {
         theme: getSettingSafe('cardThemeInspiration', 'cardsdefault'),
         iconStyle: 'fa-lightbulb',
         cardTitle: 'Inspiration',
-        cardSubTitle: holder ? holder.name : '',
-        iconSubStyle: 'fa-user',
+        // No subtitle: the holder's name belongs in the recipient row
+        // below, next to their portrait, not floating above the art.
         title: card.title,
         content: card.description,
         image: card.image || '',
@@ -879,11 +890,11 @@ export async function drawInspirationCard(actor = null, { title = null } = {}) {
         // Same describer the item uses, so the draw card and the card in
         // their inventory say the same thing about what it does.
         outcomemechanics: INSPIRATION_ACTIONS.describeInspirationCard(card),
-        inspirationnote: buildInspirationNote(holder, cardItem),
+        ...buildInspirationRecipient(card, holder, cardItem),
         // With the card in their inventory, the ITEM is how it gets used —
-        // a second button here would just be a way to spend the point
-        // without the card leaving their sheet. The button survives only
-        // as the fallback for a draw that reached nobody.
+        // a second button here would just be a way to play the card
+        // without it leaving their sheet. The button survives only as the
+        // fallback for a draw that reached nobody.
         ...(cardItem ? {} : {
             inspirationuse: encodeURIComponent(JSON.stringify({
                 title: card.title,
@@ -903,6 +914,17 @@ export async function drawInspirationCard(actor = null, { title = null } = {}) {
 
     BlacksmithUtils.playSound('modules/coffee-pub-blacksmith/sounds/spell-magic-circle.mp3', '0.7');
     await ChatMessage.create({ user: game.user.id, content: html, speaker: ChatMessage.getSpeaker() });
+
+    // Say what happened. Dealing from the picker is a click that produces a
+    // chat card somewhere off to the side and an item on a sheet you may
+    // not have open — without this it reads as though nothing happened.
+    if (!holder) {
+        showBibToast('Dealt to No One', `${card.title} went nowhere — select or target a token first.`, 'fa-solid fa-triangle-exclamation');
+    } else if (cardItem) {
+        showBibToast('Card Dealt', `${card.title} → ${holder.name}`, 'fa-solid fa-lightbulb');
+    } else {
+        showBibToast('Card Not Dealt', `${card.title} could not be added to ${holder.name}'s inventory.`, 'fa-solid fa-triangle-exclamation');
+    }
 }
 
 /**
@@ -918,14 +940,22 @@ export async function postInspirationPlayCard({ card, holder = null, itemUuid = 
         theme: getSettingSafe('cardThemeInspiration', 'cardsdefault'),
         iconStyle: 'fa-lightbulb',
         cardTitle: 'Inspiration',
-        cardSubTitle: holder ? holder.name : '',
-        iconSubStyle: 'fa-user',
         title: card.title,
         content: card.description,
         image: card.image || '',
         imagecaption: card.imagetitle || '',
         imageBackground: 'themecolor',
         outcomemechanics: INSPIRATION_ACTIONS.describeInspirationCard(card, { context: 'play' }),
+        // Same portrait row as the draw card, so "whose card is this" reads
+        // identically whether it was just dealt or is being cashed in.
+        // No note line here — the mechanics block above already states that
+        // playing it discards the card, and saying it twice on one card
+        // reads like the card is not sure.
+        ...(holder ? {
+            inspirationnotelabel: 'Played by',
+            inspirationholder: holder.name,
+            inspirationportrait: holder.img || 'icons/svg/mystery-man.svg'
+        } : {}),
         ...buildInspirationPlayButtons(card, holder, itemUuid),
         hasSectionContent: true
     });
@@ -1029,18 +1059,124 @@ function buildInspirationPlayButtons(card, holder, itemUuid) {
 }
 
 /**
- * What the DRAW card says happened. The important sentence is where the
- * card WENT — a player who does not know it is on their sheet will sit
- * there waiting for a button.
+ * The GM's deal dialog: every card in the deck, art and all, plus a
+ * random draw. Dealing a chosen card is a normal part of running this —
+ * "you get Smite for that" — so it belongs in the UI rather than only in
+ * the `title` argument, which nothing the GM can click ever reached.
+ *
+ * Goes through Blacksmith's dialog API so it inherits the house chrome
+ * (blacksmith-dialog: spacing, button row, tokens) instead of looking
+ * like a stock Foundry dialog next to our own windows. Core DialogV2 is
+ * the fallback for a Blacksmith too old to have api.dialog.
  */
-function buildInspirationNote(holder, cardItem) {
+export async function openInspirationDealDialog() {
+    const cards = await loadInspirationDeck();
+    if (!cards) return;
+
+    const holder = Array.from(game.user.targets ?? [])[0]?.actor
+        ?? canvas?.tokens?.controlled?.[0]?.actor
+        ?? null;
+
+    const esc = (s) => Handlebars.escapeExpression(s ?? '');
+    const totalOdds = cards.reduce((sum, c) => sum + (Number(c.odds) || 1), 0);
+    const byName = [...cards].sort((a, b) => a.title.localeCompare(b.title));
+
+    // Short labels only. actionLabel() reads "Swap hit points with another
+    // character", which wrapped and clipped inside a two-column tile; the
+    // button label ("Swap Health") is the same fact in two words.
+    const rows = byName.map((card) => {
+        const chance = Math.round(100 * (Number(card.odds) || 1) / totalOdds);
+        const kind = card.action && card.action !== 'none'
+            ? INSPIRATION_ACTIONS.actionButton(card.action) || 'Automated'
+            : 'Narrative';
+        return `
+            <button type="button" data-deal="${esc(card.title)}"
+                style="display:flex; align-items:center; gap:8px; width:100%; min-height:48px; margin:0; padding:4px 6px; text-align:left; line-height:1.2;">
+                <img src="${esc(card.image)}" alt="" style="flex:0 0 40px; width:40px; height:40px; object-fit:cover; border:none; border-radius:var(--blacksmith-radius-md, 4px); margin:0;" />
+                <span style="flex:1; min-width:0; overflow:hidden;">
+                    <span style="display:block; font-weight:bold; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${esc(card.title)}</span>
+                    <span style="display:block; font-size:0.82em; opacity:0.7; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${esc(kind)} · ${chance}%</span>
+                </span>
+            </button>`;
+    }).join('');
+
+    const content = `
+        <p>Dealing to ${holder ? `<strong>${esc(holder.name)}</strong>` : '<strong>nobody</strong> — select or target a token first'}.</p>
+        <button type="button" data-deal="__random__" style="width:100%; margin:0 0 8px 0;">
+            <i class="fa-solid fa-dice-d20"></i> Deal a Random Card (weighted by odds)
+        </button>
+        <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:4px; max-height:44vh; overflow-y:auto;">${rows}</div>`;
+
+    // One handler for both the random button and every card tile; the
+    // dataset value is the card name, or __random__ for a weighted draw.
+    const wire = (root, close) => {
+        root?.querySelectorAll?.('[data-deal]')?.forEach((btn) => {
+            btn.addEventListener('click', async () => {
+                const pick = btn.dataset.deal;
+                close();
+                await drawInspirationCard(holder, { title: pick === '__random__' ? null : pick });
+            });
+        });
+    };
+
+    const api = game.modules.get('coffee-pub-blacksmith')?.api?.dialog;
+    if (api?.wait) {
+        await api.wait({
+            title: 'Deal an Inspiration Card',
+            content,
+            classes: ['bibliosoph-deal-dialog'],
+            position: { width: 560, height: 'auto' },
+            buttons: [{ action: 'cancel', label: 'Cancel', default: true }],
+            onRender: (...args) => {
+                // Signature varies by Blacksmith build; find the element and
+                // the closer among whatever we were handed.
+                const dialog = args.find((a) => a?.element || a?.close);
+                const root = dialog?.element ?? args.find((a) => a?.querySelectorAll);
+                wire(root, () => dialog?.close?.());
+            }
+        });
+        return;
+    }
+
+    await foundry.applications.api.DialogV2.wait({
+        window: { title: 'Deal an Inspiration Card' },
+        classes: ['blacksmith-dialog', 'bibliosoph-deal-dialog'],
+        content,
+        buttons: [{ action: 'cancel', label: 'Cancel', default: true }],
+        position: { width: 560, height: 'auto' },
+        render: (event, dialog) => wire(dialog?.element ?? dialog, () => dialog?.close?.())
+    });
+}
+
+/**
+ * Who holds this card and what that means — the point of the draw card,
+ * so it gets a portrait and a heading rather than a line of italics. A
+ * player who does not know the card is on their sheet will sit there
+ * waiting for a button that is never coming.
+ *
+ * @returns {object} template fields for the recipient row
+ */
+function buildInspirationRecipient(card, holder, cardItem) {
     if (!holder) {
-        return 'Nobody selected — select a token and draw again to deal this card to someone.';
+        // A GM can fix this by selecting a token; a player cannot, so tell
+        // each of them the thing they can actually act on.
+        return {
+            inspirationnote: game.user.isGM
+                ? 'Nobody was selected, so this card went to no one. Select a token and deal again.'
+                : 'You have no assigned character, so this card went nowhere. Ask the GM to deal it to you.'
+        };
     }
-    if (cardItem) {
-        return `${holder.name} draws this card — it is in their inventory. Using it plays the card, any time they like.`;
-    }
-    return `${holder.name} draws this card, but it could not be added to their inventory — deal it by hand.`;
+    return {
+        inspirationnotelabel: '',
+        inspirationholder: holder.name,
+        inspirationportrait: holder.img || 'icons/svg/mystery-man.svg',
+        // Name kept separate from the sentence so the template can bold it
+        // without anything having to hand-write HTML into a message string.
+        inspirationcardname: card.title,
+        inspirationnote: cardItem
+            ? 'has been added to their inventory.'
+            : 'could not be added. Add it manually.'
+    };
 }
 
 function actionButtonFor(action) {
@@ -1118,9 +1254,15 @@ async function useInspirationCard(buttonEl, data) {
 function triggerInspirationMacro() {
     // Typed card deck first; the roll-table path remains for anyone who
     // sets the compendium to None.
+    //
+    // Same button, different job depending on who pressed it. The GM is
+    // dealing — usually a chosen card, "you get Smite for that" — so they
+    // get the picker. A player is drawing their own luck, so they get the
+    // weighted draw straight away with no menu in the middle of it.
     const compendium = getSettingSafe('inspirationCompendium', 'none');
     if (compendium && compendium !== 'none') {
-        drawInspirationCard();
+        if (game.user.isGM) openInspirationDealDialog();
+        else drawInspirationCard(game.user.character ?? null);
         return;
     }
     const strInspirationMacro = BlacksmithUtils.getSettingSafely(MODULE.ID, 'inspirationMacro', '') || '';
