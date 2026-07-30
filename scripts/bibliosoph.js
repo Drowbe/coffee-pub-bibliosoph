@@ -15,6 +15,7 @@ import { InspirationPageModel, INSPIRATION_PAGE_TYPE } from './data/inspiration-
 import { InspirationPageSheet } from './sheets/inspiration-page-sheet.js';
 import * as INSPIRATION_ACTIONS from './data/inspiration-schema.js';
 import { SEVERITY_DCS as INJURY_SEVERITY_DCS, damageFor } from './data/injury-schema.js';
+import { remainingLabel, registerInjuryTickHooks } from './manager-injury-ticks.js';
 
 // Resolve a macro reference (UUID, id, or name) to a Macro document
 const getMacroByIdOrName = (macroKey) => {
@@ -209,6 +210,22 @@ Hooks.once('ready', async () => {
             registerTreatmentRestReset();
         } catch (error) {
             logBib('Failed to register the treatment rest reset', error?.message, false, false);
+        }
+
+        // CONDITION UNWIND: removing an injury, critical or fumble takes its
+        // conveyed condition with it — however the effect was removed.
+        try {
+            registerConditionUnwindHook();
+        } catch (error) {
+            logBib('Failed to register the condition unwind hook', error?.message, false, false);
+        }
+
+        // TICKS & EXPIRY: wounds that keep bleeding, and wounds that close
+        // on their own. Active GM only — see the module header.
+        try {
+            registerInjuryTickHooks();
+        } catch (error) {
+            logBib('Failed to register injury tick hooks', error?.message, false, false);
         }
 
         // INSPIRATION CARDS: the drawn card is an item, and USING that item
@@ -747,13 +764,26 @@ async function createChatCardTreatment(token) {
         // The row's second line: flagged afflictions list what they convey;
         // loose conditions credit their source; any row with a duration
         // gets the remaining time appended.
+        // Rounds beat Foundry's own duration label here: "2 rounds remain"
+        // is what a table in combat is actually counting, and it is the
+        // same unit the ticking and the modifiers work in.
         const duration = effect.duration;
-        const durationLabel = (duration?.type && duration.type !== 'none' && duration.label) ? duration.label : '';
+        const roundsLeft = remainingLabel(effect);
+        const durationLabel = roundsLeft
+            || ((duration?.type && duration.type !== 'none' && duration.label) ? duration.label : '');
         let detail = conditions;
         if (kind === 'other') {
             const source = conveyedBy(effect);
             detail = source ? `via ${source}` : '';
         }
+        // A bleeding wound says so before it says how long it has left.
+        const tickPct = Number(flag?.tick) || 0;
+        if (tickPct > 0) {
+            const perTurn = damageFor(tickPct, actor.system?.attributes?.hp);
+            const bleed = perTurn > 0 ? `${perTurn} HP per turn` : `${tickPct}% per turn`;
+            detail = detail ? `${detail} · ${bleed}` : bleed;
+        }
+        if (flag?.lingering) detail = detail ? `${detail} · lingering` : 'lingering';
         if (durationLabel) detail = detail ? `${detail} · ${durationLabel}` : durationLabel;
         // Failed treatment attempts show who has already tried
         const attempts = (effect.getFlag(MODULE.ID, 'treatAttempts') ?? [])
@@ -1674,7 +1704,17 @@ Hooks.on("ready", async () => {
                 changes: modifiersToChanges(arrEffectData.modifiers ?? []),
                 kindLabel: 'injury',
                 explicitActors,
-                burst: { kind: 'injury', category: arrEffectData.category || 'General', severity: arrEffectData.severity || null, dc: arrEffectData.treatmentDC ?? null, sourceUuid: arrEffectData.sourceUuid ?? null }
+                burst: {
+                    kind: 'injury',
+                    category: arrEffectData.category || 'General',
+                    severity: arrEffectData.severity || null,
+                    dc: arrEffectData.treatmentDC ?? null,
+                    // Recurring damage and end-of-clock behaviour ride the
+                    // flag so the round ticker can read them off the effect.
+                    tick: Number(arrEffectData.tick) || 0,
+                    expiry: arrEffectData.expiry || 'heal',
+                    sourceUuid: arrEffectData.sourceUuid ?? null
+                }
             });
             await markCardButtonApplied(injuryButton, '.coffee-pub-bibliosoph-button-injury', applied);
         }
@@ -2334,6 +2374,8 @@ async function createChatCardInjury(category, target = null) {
         severity: strInjurySeverity || null,
         treatmentDC: intInjuryTreatmentDC,
         modifiers: objInjuryData?.modifiers ?? [],
+        tick: Number(objInjuryData?.tick) || 0,
+        expiry: objInjuryData?.expiry || 'heal',
         sourceUuid: objInjuryData?.sourceUuid ?? null,
         targetActorId: target?.actorId ?? null,
         targetTokenId: target?.tokenId ?? null,
@@ -3341,12 +3383,33 @@ export function showBibToast(title, subtitle = '', icon = 'fa-solid fa-bandage')
     }
 }
 
+/**
+ * Turn off a condition an affliction was conveying — unless something
+ * else on the actor still conveys it. Shared so that every removal path
+ * behaves the same, whichever one the effect actually left by.
+ */
+export async function unwindConveyedCondition(actor, condition) {
+    if (!actor || !condition) return false;
+    const stillConveyed = actor.effects.some(
+        (e) => e.getFlag(MODULE.ID, 'outcomeBurst')?.condition === condition
+            || (e.statuses?.has?.(condition) && e.getFlag(MODULE.ID, 'outcomeBurst'))
+    );
+    if (stillConveyed || !actor.statuses?.has(condition)) return false;
+    try {
+        await actor.toggleStatusEffect(condition, { active: false });
+        logBib(`Unwound ${condition} from ${actor.name} — nothing conveys it any more`, '', true, false);
+        return true;
+    } catch (error) {
+        logBib(`Could not unwind condition ${condition}`, error?.message, false, false);
+        return false;
+    }
+}
+
 // The shared removal core: delete the affliction and unwind its toggled
 // condition unless another untreated affliction still conveys it. The heal
 // burst plays automatically everywhere via the deleteActiveEffect hook.
 async function removeAffliction(actor, effect) {
     const flag = effect.getFlag(MODULE.ID, 'outcomeBurst');
-    const condition = flag?.condition ?? null;
     // Non-Bibliosoph effects (plain conditions, other modules' effects) get
     // the flag stamped just before deletion so the heal burst plays on
     // every client via the deleteActiveEffect hook.
@@ -3355,19 +3418,45 @@ async function removeAffliction(actor, effect) {
             await effect.setFlag(MODULE.ID, 'outcomeBurst', { kind: 'treated', name: effect.name });
         } catch (_) { /* burst is cosmetic; never block treatment */ }
     }
+    // The unwind itself now happens in the deleteActiveEffect hook, so it
+    // is identical however the effect leaves — this button, the actor
+    // sheet, the token HUD, or a duration running out.
     await effect.delete();
-    if (condition) {
-        const stillConveyed = actor.effects.some(
-            (e) => e.getFlag(MODULE.ID, 'outcomeBurst')?.condition === condition
-        );
-        if (!stillConveyed && actor.statuses?.has(condition)) {
-            try {
-                await actor.toggleStatusEffect(condition, { active: false });
-            } catch (error) {
-                logBib('Could not unwind condition ' + condition, error?.message, false, false);
+}
+
+/**
+ * Unwind conditions whenever a flagged affliction is deleted, by ANY
+ * route. Previously this lived only in the Check-Up card's button, so
+ * deleting a critical from the actor sheet or the token HUD left its
+ * Prone or Blinded stuck on the character with nothing left pointing at
+ * it — the condition outliving the thing that caused it.
+ *
+ * GM-authoritative: the hook fires on every client, and only one of them
+ * should be writing to the actor.
+ */
+function registerConditionUnwindHook() {
+    Hooks.on('deleteActiveEffect', async (effect) => {
+        try {
+            if (!game.user.isGM || game.users.activeGM?.id !== game.user.id) return;
+            const flag = effect?.getFlag?.(MODULE.ID, 'outcomeBurst');
+            if (!flag) return;
+            const actor = effect.parent;
+            if (!actor?.statuses) return;
+
+            // The real condition it toggled, plus any pseudo-conditions it
+            // was carrying on its own statuses array.
+            const conditions = new Set();
+            if (flag.condition) conditions.add(flag.condition);
+            for (const id of effect.statuses ?? []) conditions.add(id);
+
+            for (const condition of conditions) {
+                await unwindConveyedCondition(actor, condition);
             }
+        } catch (error) {
+            logBib('Condition unwind hook failed', error?.message, false, false);
         }
-    }
+    });
+    logBib('Watching affliction removal to unwind conveyed conditions', '', true, false);
 }
 
 // ==================================================================

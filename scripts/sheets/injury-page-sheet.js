@@ -14,7 +14,7 @@
 // ==================================================================
 
 import { MODULE } from '../const.js';
-import { CATEGORIES, SEVERITIES, CONDITIONS, MODIFIER_STATS, displayCategory } from '../data/injury-schema.js';
+import { CATEGORIES, SEVERITIES, CONDITIONS, MODIFIER_STATS, EXPIRIES, EXPIRY_LABELS, displayCategory } from '../data/injury-schema.js';
 import { mountGmNotesField } from '../utility-gm-notes.js';
 
 const JournalEntryPageProseMirrorSheet = foundry.applications.sheets.journal.JournalEntryPageProseMirrorSheet;
@@ -50,6 +50,7 @@ export class InjuryPageSheet extends JournalEntryPageProseMirrorSheet {
             context.conditionChoices = labelled(CONDITIONS, (v) => (v === 'none' ? 'None' : displayCategory(v)));
             context.treatmentDC = system.treatmentDC;
             context.warnings = system.warnings;
+            context.expiryChoices = EXPIRIES.map((value) => ({ value, label: EXPIRY_LABELS[value] }));
             context.statChoices = Object.entries(MODIFIER_STATS)
                 .map(([value, s]) => ({ value, label: s.label.charAt(0).toUpperCase() + s.label.slice(1) }));
             // One spare blank row so adding a modifier never needs a button.
@@ -106,6 +107,7 @@ export class InjuryPageSheet extends JournalEntryPageProseMirrorSheet {
                     conditionLabel: system.statuseffect === 'none' ? 'None' : displayCategory(system.statuseffect),
                     durationLabel: system.duration === 0 ? 'Permanent (until treated)' : formatSeconds(system.duration),
                     modifierLabels: system.modifierLabels ?? [],
+                    expiryLabel: system.expiryLabel,
                     treatmentDC: system.treatmentDC,
                     hasDetails: system.hasDetails,
                     isGM: game.user.isGM

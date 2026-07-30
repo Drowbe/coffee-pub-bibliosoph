@@ -266,3 +266,49 @@ never touched, so hand-authored values survive every rerun.
 `flavor` holds status text that is not a real dnd5e condition
 ("Confused", "Clumsy Fingers"). It applies nothing and is shown on the
 card only when `statuseffect` is `none`; a real condition always wins.
+
+## Recurring damage and expiry
+
+Two fields describe what a wound does over time.
+
+**`tick`** — a percentage of max HP lost at the **start of the victim's
+turn**, for as long as the injury lasts. Same unit as `damage` and for the
+same reason. Bands are deliberately small (minor 0–2%, moderate 0–3%,
+major 0–5%): `damage` is the blow, the tick is the wound refusing to
+close, and it should worry a player rather than kill them. The 1 HP floor
+applies, so a tick can never finish anyone off.
+
+Ticks are tied to **combat turns**, not the game clock. A wound that
+bleeds every six seconds of wall time while the party shops is bookkeeping
+nobody asked for; a wound that bleeds on your turn is a thing you feel.
+
+Only 8 of 144 injuries carry one (`tools/add-injury-ticks.mjs`), and the
+rules are deliberately narrow: an ongoing physical process — still
+bleeding, still burning, poison working through you — never a lasting
+consequence. "It hurts" is a modifier, not a tick.
+
+**`expiry`** — what happens when the duration runs out.
+
+| Value | Behaviour |
+|---|---|
+| `heal` (default) | The effect is deleted and its condition unwinds. Most wounds close on their own. |
+| `linger` | The ticking stops and the roll penalties are cleared, but the injury stays until somebody treats it. |
+
+`linger` is what a bleeding wound actually wants: it stops bleeding, and
+it still wants treating. Seven of the eight ticking injuries use it. A
+duration of `0` is permanent, so `expiry` does not apply.
+
+Both run on the **active GM only** — the combat hooks fire on every
+client, and an HP change applied once per logged-in player is the classic
+version of that bug. See `scripts/manager-injury-ticks.js`.
+
+## Conditions unwind on ANY removal
+
+Deleting a flagged affliction takes its conveyed condition with it —
+whether it left by the Check-Up button, the actor sheet, the token HUD, or
+a duration running out. Previously the unwind lived only in the card's
+button, so a critical deleted from the sheet left its Prone stuck on the
+character with nothing left pointing at it.
+
+A condition survives only while something else still conveys it, so two
+injuries that both cause Prone do not fight over it.

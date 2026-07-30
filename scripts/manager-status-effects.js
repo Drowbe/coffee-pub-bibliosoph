@@ -156,6 +156,11 @@ export async function applyStatusToTokens({
                 category: burst.category ?? 'General',
                 name,
                 condition: toggleId ?? null,
+                // Recurring damage (percent of max HP per turn) and what
+                // happens when the clock runs out. The round ticker reads
+                // both off this flag; 0/absent means neither applies.
+                tick: Number(burst.tick) > 0 ? Number(burst.tick) : 0,
+                expiry: burst.expiry === 'linger' ? 'linger' : 'heal',
                 // Treatment-roll DC: an authored `dc` wins, else the severity
                 // ladder (minor 10 / moderate 15 / major 20), else a flat 15.
                 severity: burst.severity ?? null,

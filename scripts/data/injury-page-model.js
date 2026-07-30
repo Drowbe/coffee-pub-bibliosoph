@@ -10,6 +10,7 @@
 import { MODULE } from '../const.js';
 import {
     CATEGORIES, SEVERITIES, CONDITIONS, DAMAGE_BANDS, MODIFIER_LIMITS, MODIFIER_STATS,
+    TICK_BANDS, EXPIRIES, EXPIRY_LABELS,
     displayCategory, treatmentDcFor, describeModifier, modifiersToChanges, secondsToRounds
 } from './injury-schema.js';
 
@@ -88,6 +89,16 @@ export class InjuryPageModel extends foundry.abstract.TypeDataModel {
                 // fades on its own.
                 rounds: new fields.NumberField({ required: false, integer: true, min: 0, initial: 0, nullable: false })
             }), { required: false, initial: [] }),
+            // Recurring damage: a percentage of max HP at the start of each
+            // of the victim's turns, for as long as the injury lasts. 0 for
+            // the vast majority — this is for wounds that keep bleeding.
+            tick: new fields.NumberField({ required: false, integer: true, min: 0, max: 100, initial: 0, nullable: false }),
+            // What happens when the duration runs out. 'heal' removes it;
+            // 'linger' stops the ticking and the penalties but leaves the
+            // injury for someone to treat.
+            expiry: new fields.StringField({
+                required: false, blank: false, initial: 'heal', choices: choicesFrom(EXPIRIES)
+            }),
             // Flavour-only status text for injuries whose "condition" is not
             // a real dnd5e condition — "Confused", "Clumsy Fingers". Shown
             // on the card; applies nothing. Restores colour that the
@@ -157,6 +168,8 @@ export class InjuryPageModel extends foundry.abstract.TypeDataModel {
             odds: this.odds,
             ...(this.treatmentdc ? { treatmentdc: this.treatmentdc } : {}),
             ...(this.modifiers?.length ? { modifiers: this.modifiers.map((m) => ({ ...m })) } : {}),
+            ...(this.tick ? { tick: this.tick } : {}),
+            ...(this.expiry && this.expiry !== 'heal' ? { expiry: this.expiry } : {}),
             ...(this.flavor ? { flavor: this.flavor } : {}),
             ...(this.gmnotes ? { gmnotes: this.gmnotes } : {})
         };
@@ -175,6 +188,12 @@ export class InjuryPageModel extends foundry.abstract.TypeDataModel {
     /** The injury's duration expressed in combat rounds (0 = permanent). */
     get rounds() {
         return secondsToRounds(this.duration);
+    }
+
+    /** Plain-English expiry line for the sheet and the card. */
+    get expiryLabel() {
+        if (!this.duration) return 'Permanent until treated';
+        return EXPIRY_LABELS[this.expiry] ?? EXPIRY_LABELS.heal;
     }
 
     /** What the card shows in the status slot: the real condition, else flavour. */
@@ -210,6 +229,16 @@ export class InjuryPageModel extends foundry.abstract.TypeDataModel {
         }
         if (this.flavor && this.statuseffect !== 'none') {
             out.push('Flavour text is ignored while a real condition is set — the condition wins on the card.');
+        }
+        const tickBand = TICK_BANDS[this.severity];
+        if (this.tick && tickBand && this.tick > tickBand[1]) {
+            out.push(`A ${this.tick}% tick is heavy for a ${this.severity} injury (cap ${tickBand[1]}%) — recurring damage compounds fast.`);
+        }
+        if (this.tick && !this.duration) {
+            out.push('A tick with no duration bleeds forever — set a duration, or expect the table to treat it quickly.');
+        }
+        if (this.expiry === 'linger' && !this.duration) {
+            out.push('"Linger" needs a duration to linger past; a permanent injury already stays until treated.');
         }
         if (!this.image) out.push('No image set — the card and token effect will have no art.');
         return out;

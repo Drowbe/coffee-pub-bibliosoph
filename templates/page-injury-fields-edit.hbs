@@ -81,6 +81,19 @@
             </select>
         </div>
         <div class="form-group">
+            <label for="{{document.id}}-injury-tick">Recurring damage (% of max HP per turn)</label>
+            <input type="number" id="{{document.id}}-injury-tick" name="system.tick" value="{{system.tick}}" min="0" max="100" step="1"
+                title="Lost at the start of the victim's turn, for as long as the injury lasts. 0 for most injuries — this is for wounds that keep bleeding.">
+        </div>
+        <div class="form-group">
+            <label for="{{document.id}}-injury-expiry">When the duration ends</label>
+            <select id="{{document.id}}-injury-expiry" name="system.expiry">
+                {{#each expiryChoices}}
+                    <option value="{{this.value}}" {{#if (eq this.value ../system.expiry)}}selected{{/if}}>{{this.label}}</option>
+                {{/each}}
+            </select>
+        </div>
+        <div class="form-group">
             <label for="{{document.id}}-injury-flavor">Flavour status (no mechanics)</label>
             <input type="text" id="{{document.id}}-injury-flavor" name="system.flavor" value="{{system.flavor}}"
                 placeholder="Confused, Clumsy Fingers…"

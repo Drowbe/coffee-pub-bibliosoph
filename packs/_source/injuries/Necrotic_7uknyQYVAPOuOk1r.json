@@ -94,6 +94,8 @@
             "rounds": 0
           }
         ],
+        "tick": 2,
+        "expiry": "linger",
         "treatmentdc": null
       },
       "title": {
@@ -482,7 +484,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785439085441,
+    "modifiedTime": 1785441390623,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

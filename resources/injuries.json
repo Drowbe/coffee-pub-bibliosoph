@@ -39,7 +39,9 @@
                 "value": -2,
                 "rounds": 0
             }
-        ]
+        ],
+        "tick": 2,
+        "expiry": "linger"
     },
     {
         "category": "acid",
@@ -224,7 +226,9 @@
                 "value": -3,
                 "rounds": 0
             }
-        ]
+        ],
+        "tick": 3,
+        "expiry": "linger"
     },
     {
         "category": "bludgeoning",
@@ -1627,7 +1631,9 @@
                 "value": -1,
                 "rounds": 0
             }
-        ]
+        ],
+        "tick": 2,
+        "expiry": "linger"
     },
     {
         "category": "necrotic",
@@ -1784,7 +1790,9 @@
                 "value": -1,
                 "rounds": 0
             }
-        ]
+        ],
+        "tick": 1,
+        "expiry": "linger"
     },
     {
         "category": "piercing",
@@ -2690,7 +2698,9 @@
                 "value": -1,
                 "rounds": 0
             }
-        ]
+        ],
+        "tick": 2,
+        "expiry": "linger"
     },
     {
         "category": "slashing",
@@ -2763,7 +2773,9 @@
                 "value": -1,
                 "rounds": 0
             }
-        ]
+        ],
+        "tick": 1,
+        "expiry": "linger"
     },
     {
         "category": "slashing",
@@ -2810,7 +2822,9 @@
                 "value": -1,
                 "rounds": 0
             }
-        ]
+        ],
+        "tick": 2,
+        "expiry": "linger"
     },
     {
         "category": "slashing",
@@ -2997,7 +3011,8 @@
                 "value": -1,
                 "rounds": 0
             }
-        ]
+        ],
+        "tick": 2
     },
     {
         "category": "slashing",

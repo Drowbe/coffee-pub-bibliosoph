@@ -20,7 +20,7 @@ import { fileURLToPath } from 'node:url';
 import {
     CATEGORIES, SEVERITIES, CONDITIONS, MAJOR_ONLY_CONDITIONS, MODERATE_PLUS_CONDITIONS,
     DAMAGE_BANDS, DURATION_BANDS, ODDS_BANDS,
-    MODIFIER_LIMITS, MODIFIER_STAT_KEYS,
+    MODIFIER_LIMITS, MODIFIER_STAT_KEYS, TICK_BANDS, EXPIRIES,
     REQUIRED_FIELDS, OPTIONAL_FIELDS
 } from './injury-schema.mjs';
 
@@ -131,6 +131,28 @@ function validate(records) {
                         err(rec, i, `modifier rounds must be a non-negative integer, got ${JSON.stringify(mod?.rounds)}`);
                     }
                 }
+            }
+        }
+
+        // Recurring damage and end-of-clock behaviour.
+        if (rec?.tick !== undefined) {
+            if (!isInt(rec.tick) || rec.tick < 0 || rec.tick > 100) {
+                err(rec, i, `tick must be a percentage of max HP (0-100), got ${JSON.stringify(rec.tick)}`);
+            } else {
+                const band = TICK_BANDS[severity];
+                if (band && rec.tick > band[1]) {
+                    warn(rec, i, `tick ${rec.tick}% is heavy for a ${severity} injury (cap ${band[1]}%) — recurring damage compounds`);
+                }
+                if (rec.tick > 0 && !rec.duration) {
+                    warn(rec, i, 'a tick with no duration bleeds forever — intended?');
+                }
+            }
+        }
+        if (rec?.expiry !== undefined) {
+            if (!EXPIRIES.includes(String(rec.expiry))) {
+                err(rec, i, `expiry "${rec.expiry}" must be one of: ${EXPIRIES.join(', ')}`);
+            } else if (rec.expiry === 'linger' && !rec.duration) {
+                warn(rec, i, '"linger" needs a duration to linger past; a permanent injury already stays until treated');
             }
         }
 

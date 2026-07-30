@@ -126,7 +126,46 @@ export const REQUIRED_FIELDS = [
     'treatment', 'severity', 'damage', 'duration', 'statuseffect', 'odds'
 ];
 
-export const OPTIONAL_FIELDS = ['treatmentdc', 'gmnotes', 'modifiers', 'flavor'];
+export const OPTIONAL_FIELDS = ['treatmentdc', 'gmnotes', 'modifiers', 'flavor', 'tick', 'expiry'];
+
+/**
+ * RECURRING DAMAGE — a percentage of max HP lost at the start of each of
+ * the victim's turns while the injury lasts. Same unit as `damage`, for
+ * the same reason: a bleed that takes 2 HP a round is a death sentence at
+ * level 1 and a rounding error at level 15.
+ *
+ * Kept deliberately small. `damage` is the blow; the tick is the wound
+ * refusing to close, and it should worry a player rather than kill them.
+ */
+export const TICK_BANDS = {
+    minor: [0, 2],
+    moderate: [0, 3],
+    major: [0, 5]
+};
+
+/**
+ * WHAT HAPPENS WHEN THE CLOCK RUNS OUT.
+ *
+ *   heal   — it is over. The effect is removed and its condition unwinds.
+ *            The right default: most wounds close on their own.
+ *   linger — the duration only governs the ticking and the roll penalties.
+ *            The injury itself stays until somebody treats it, which is
+ *            what a "permanent until treated" wound with a bleed phase
+ *            actually wants.
+ *
+ * A duration of 0 is permanent and never expires, so `expiry` does not
+ * apply to it either way.
+ */
+export const EXPIRIES = ['heal', 'linger'];
+export const EXPIRY_LABELS = {
+    heal: 'Heals on its own when the duration ends',
+    linger: 'Stops ticking, but stays until treated'
+};
+
+/** Damage from one tick, floored the same way the initial blow is. */
+export function tickDamageFor(percent, hp) {
+    return damageFor(percent, hp);
+}
 
 /**
  * How many roll modifiers an injury may sensibly carry, and how big they

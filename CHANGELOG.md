@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [Unreleased]
+## [13.3.5]
 
 ### Added
 
@@ -16,8 +16,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Crits that deal inspiration cards.** `Inspired` and `Inspirational` hand a card from the deck to whoever their `appliesto` names, reusing the existing party picker.
 - **Treatment phase 2.** Failed attempts reset on a rest (configurable: long rest, any rest, or never) — previously a failed attempt was permanent until cleared through the test harness. Accepted healer's-kit item names are now a setting, so homebrew and localised kits count. Optional DC escalation per failed attempt, with a fumble counting double. The GM's treat tooltip shows the live DC and who has already tried.
 
+- **Recurring damage and expiry.** Injuries can bleed: `tick` costs a percentage of maximum hit points at the start of the victim's turn, for as long as the wound lasts. `expiry` decides what happens when the clock runs out — `heal` removes the injury and unwinds its condition, `linger` stops the bleeding and the roll penalties but leaves the wound for somebody to treat. Eight injuries carry a tick, and seven of those linger. Ticks land on combat turns rather than the game clock, so the damage arrives where the table is already looking.
+- **"2 rounds remain" on Check-Up rows**, alongside the bleed rate in real hit points for the character being looked at.
+
 ### Changed
 
+- **Removing an injury, critical or fumble now takes its condition with it however it was removed** — the Check-Up button, the actor sheet, the token HUD, or a duration running out. Previously the unwind lived only in the card's button, so a critical deleted from the sheet left its Prone or Blinded stuck on the character with nothing left pointing at it. A condition still survives while another affliction conveys it.
 - **Injury damage is now a percentage of maximum hit points**, not a flat number, floored so an injury can never drop a character below 1 HP. Flat damage could not be right at both ends of the level range: an average major injury was 10.5 HP, which killed a level-1 wizard outright and was 7% of a level-15 fighter. All 144 injuries were converted, preserving each one's relative position inside its severity band.
 - **Crit and fumble Apply buttons name the person.** "Apply to Roller" became "Apply to Aneda", resolved from the triggering roll and bound to that actor, so a card recorded at one moment cannot quietly re-aim at whatever is selected later.
 

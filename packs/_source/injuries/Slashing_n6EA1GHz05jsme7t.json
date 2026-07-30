@@ -33,6 +33,8 @@
             "rounds": 0
           }
         ],
+        "tick": 2,
+        "expiry": "linger",
         "treatmentdc": null
       },
       "title": {
@@ -211,6 +213,8 @@
             "rounds": 0
           }
         ],
+        "tick": 1,
+        "expiry": "linger",
         "treatmentdc": null
       },
       "title": {
@@ -328,6 +332,8 @@
             "rounds": 0
           }
         ],
+        "tick": 2,
+        "expiry": "linger",
         "treatmentdc": null
       },
       "title": {
@@ -760,6 +766,7 @@
             "rounds": 0
           }
         ],
+        "tick": 2,
         "treatmentdc": null
       },
       "title": {
@@ -914,7 +921,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785439085460,
+    "modifiedTime": 1785441390641,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

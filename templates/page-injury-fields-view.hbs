@@ -34,6 +34,16 @@
             <span class="injury-page-label">Duration</span>
             <span class="injury-page-value">{{durationLabel}}</span>
         </div>
+        {{#if system.tick}}
+            <div class="injury-page-field">
+                <span class="injury-page-label">Recurring</span>
+                <span class="injury-page-value">{{system.tick}}% of max HP per turn</span>
+            </div>
+        {{/if}}
+        <div class="injury-page-field">
+            <span class="injury-page-label">When it ends</span>
+            <span class="injury-page-value">{{expiryLabel}}</span>
+        </div>
         <div class="injury-page-field">
             <span class="injury-page-label">Condition</span>
             <span class="injury-page-value">{{conditionLabel}}</span>
