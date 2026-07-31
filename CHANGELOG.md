@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [Unreleased]
+
+### Changed
+
+- **The treatment advantage matrix is derived in one place.** `treatmentRollPlan()` now owns which situation maps to which roll mode, what the DC becomes, and the sentence explaining it; the roll request and the pre-click tooltip both consume it. They had each been deriving kit/self/mode independently, which is how a tooltip ends up promising Advantage on a roll that requests normal — and now that the requested mode is *locked*, that drift would have shown a player a button the tooltip said should not be there.
+
+### Testing
+
+- Three harness scenarios for the requested-advantage integration, each aimed at a different layer: **report the matrix** (our derivation, no rolling), **fire a locked request per mode** (Blacksmith's rendering — each should show only its own button), and **inspect the last request's flags** (what actually travelled). The last one distinguishes "we never sent it" from "this build dropped it", instead of leaving both looking identical.
+
+
 ## [13.4.1]
 
 ### Changed

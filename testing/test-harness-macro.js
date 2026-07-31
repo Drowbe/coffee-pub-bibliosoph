@@ -374,6 +374,92 @@ const SCENARIOS = [
     },
     {
         tab: 'treatment',
+        label: '🎯 Report the advantage matrix (what WOULD be requested)',
+        run: async () => {
+            const token = getSubjectToken();
+            if (!token) return;
+            const { treatmentRollPlan } = await import(`${MODULE_PATH}/bibliosoph.js`);
+            const roller = game.user.character;
+            if (!roller) return ui.notifications.warn('Assign a character to your user — the plan is computed for the roller.');
+
+            // The live case, then the same roller against themselves, so
+            // both self/other rows show without swapping tokens.
+            const rows = [
+                ['treating ' + token.name, treatmentRollPlan(roller, token.actor.id, 15)],
+                ['treating THEMSELVES', treatmentRollPlan(roller, roller.id, 15)]
+            ];
+            const out = rows.map(([label, p]) =>
+                `${label.padEnd(24)} kit=${p.useKit ? 'YES' + p.kitNote : 'no '} self=${p.self ? 'yes' : 'no '} `
+                + `-> ${p.mode.toUpperCase().padEnd(12)} DC ${p.dc}${p.dc !== p.baseDc ? ` (base ${p.baseDc})` : ''}\n      "${p.explanation}"`);
+            console.log(`BIBLIOSOPH TREATMENT MATRIX | roller: ${roller.name}\n  ${out.join('\n  ')}`);
+            ui.notifications.info(
+                `${roller.name} → ${token.name}: ${rows[0][1].mode} at DC ${rows[0][1].dc} · `
+                + `→ self: ${rows[1][1].mode} at DC ${rows[1][1].dc}. Full matrix + explanations in console (F12).`
+            );
+        }
+    },
+    {
+        tab: 'treatment',
+        label: '🎲 Fire a LOCKED request per mode (adv / dis / normal)',
+        run: async () => {
+            const roller = game.user.character ?? getSubjectToken()?.actor;
+            if (!roller) return ui.notifications.warn('Assign a character or select a token first.');
+            const api = game.modules.get('coffee-pub-blacksmith')?.api;
+            if (!api?.openRequestRollDialog) return ui.notifications.warn('Blacksmith request API unavailable.');
+
+            const token = canvas.tokens.placeables.find((t) => t.actor?.id === roller.id);
+            const entry = token ? { tokenId: token.id, actorId: roller.id, name: roller.name } : { actorId: roller.id, name: roller.name };
+            const CASES = [
+                ['advantage', "A Healer's Kit steadies your hands: roll with Advantage."],
+                ['disadvantage', 'Treating your own wounds is never easy: roll with Disadvantage.'],
+                ['normal', 'Kit Advantage and self-treatment Disadvantage cancel out.']
+            ];
+            for (const [mode, explanation] of CASES) {
+                await api.openRequestRollDialog({
+                    silent: true,
+                    title: `Harness: locked ${mode}`,
+                    initialType: 'skill',
+                    initialValue: 'medicine',
+                    dc: 13,
+                    showDC: false,
+                    groupRoll: false,
+                    rollAdvantage: mode,
+                    lockRollAdvantage: true,
+                    explanation,
+                    actors: [{ ...entry, rollAdvantage: mode }]
+                });
+            }
+            ui.notifications.info(
+                'Posted 3 locked requests. Each should render ONLY its own button and show the explanation under "About this Roll". '
+                + 'If all three buttons appear, this Blacksmith build predates Request #5.'
+            );
+        }
+    },
+    {
+        tab: 'treatment',
+        label: '🔍 Inspect the last request\'s roll-mode flags',
+        run: () => {
+            const msg = game.messages.contents.slice().reverse()
+                .find((m) => m.flags?.['coffee-pub-blacksmith']?.actors);
+            if (!msg) return ui.notifications.warn('No Blacksmith roll request found in chat — fire one first.');
+            const f = msg.flags['coffee-pub-blacksmith'];
+            const report = [
+                `message: ${msg.id}`,
+                `request rollAdvantage : ${f.rollAdvantage ?? '(unset — build predates Request #5?)'}`,
+                `lockRollAdvantage     : ${f.lockRollAdvantage ?? '(unset)'}`,
+                `explanation           : ${f.explanation ? `"${f.explanation}"` : '(unset)'}`,
+                ...(f.actors ?? []).map((a, i) => `actor[${i}] ${String(a.name ?? a.actorId).padEnd(18)} rollAdvantage=${a.rollAdvantage ?? '(inherits)'}`)
+            ];
+            console.log('BIBLIOSOPH REQUEST FLAGS\n  ' + report.join('\n  '));
+            ui.notifications.info(
+                f.rollAdvantage || (f.actors ?? []).some((a) => a.rollAdvantage)
+                    ? `Roll mode travelled: ${f.rollAdvantage ?? 'per-actor'}${f.lockRollAdvantage ? ' (LOCKED)' : ''}. Details in console (F12).`
+                    : 'No rollAdvantage on the request — either it was not sent, or this Blacksmith build drops it. Console (F12).'
+            );
+        }
+    },
+    {
+        tab: 'treatment',
         label: '🖼️ Preview all 4 outcome cards (success/crit/fail/fumble)',
         run: async () => {
             const token = getSubjectToken();

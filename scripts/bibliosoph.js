@@ -3528,6 +3528,44 @@ Hooks.on('blacksmith.gmNotesChanged', ({ uuid } = {}) => {
 // Per-viewer hover text for an injury Treat button: a PREVIEW of what
 // clicking will do for THIS user, in future tense — not narration.
 // Never reveals the DC (hidden from players).
+/**
+ * THE TREATMENT MATRIX, in one place.
+ *
+ *   kit + other  → Advantage,    DC-2
+ *   no kit + self→ Disadvantage, DC
+ *   kit + self   → normal,       DC-2   (the two cancel)
+ *   neither      → normal,       DC
+ *
+ * Everything that needs to know what a treatment roll will look like goes
+ * through here: the request itself, the pre-click tooltip, and the test
+ * harness. They each used to derive it separately, which is exactly how a
+ * tooltip ends up promising Advantage on a roll that requests normal.
+ *
+ * @param {Actor} roller          who is treating
+ * @param {string} patientActorId who is being treated
+ * @param {number} baseDc         the injury's DC before the kit discount
+ */
+export function treatmentRollPlan(roller, patientActorId, baseDc = 15) {
+    const self = !!roller && roller.id === patientActorId;
+    const kit = findHealersKit(roller);
+    const useKit = !!kit?.usable;
+    const mode = useKit && !self ? 'advantage' : (!useKit && self ? 'disadvantage' : 'normal');
+    const dc = useKit ? Math.max(1, Number(baseDc) - 2) : Number(baseDc);
+    const kitNote = kit?.hasPool ? ` (${kit.remaining} use${kit.remaining === 1 ? '' : 's'} left)` : '';
+
+    // One sentence, second person — it rides the request card via
+    // Blacksmith's `explanation`, so it must read as plain text.
+    const explanation = mode === 'advantage'
+        ? "A Healer's Kit steadies your hands: roll with Advantage, and the difficulty is 2 lower."
+        : mode === 'disadvantage'
+        ? 'Treating your own wounds is never easy: roll with Disadvantage.'
+        : useKit
+        ? "Your Healer's Kit grants Advantage and treating yourself imposes Disadvantage, so they cancel — but the kit still lowers the difficulty by 2."
+        : "No Healer's Kit — a bare-handed Medicine check.";
+
+    return { self, kit, useKit, kitNote, mode, dc, baseDc: Number(baseDc), explanation };
+}
+
 function buildTreatTooltip(btn) {
     if (!getSettingSafe('injuryTreatmentRolls', true)) {
         return 'Click to remove this affliction (you must own this character).';
@@ -3536,15 +3574,15 @@ function buildTreatTooltip(btn) {
     try { data = JSON.parse(decodeURIComponent(btn.getAttribute('data-treat') ?? '')); } catch (_) { /* legacy card */ }
     const roller = game.user.character;
     if (!roller) return 'Clicking will roll a Medicine check to treat this injury — assign a character to your user first.';
-    const self = roller.id === (data?.actorId ?? '');
-    const kit = findHealersKit(roller);
-    const useKit = !!kit?.usable;
-    const kitNote = kit?.hasPool ? ` (${kit.remaining} use${kit.remaining === 1 ? '' : 's'} left)` : '';
-    let modeLine;
-    if (useKit && !self) modeLine = `You'll roll with <strong>Advantage</strong> at a lowered DC — your Healer's Kit${kitNote} helps.`;
-    else if (useKit && self) modeLine = `You'll roll normally at a lowered DC — self-treatment Disadvantage and your Healer's Kit${kitNote} Advantage cancel out.`;
-    else if (self) modeLine = `You'll roll with <strong>Disadvantage</strong> — treating yourself without a Healer's Kit.`;
-    else modeLine = `You'll roll normally — no Healer's Kit.`;
+
+    const plan = treatmentRollPlan(roller, data?.actorId ?? '', Number(data?.dc) || 15);
+    const modeLine = plan.mode === 'advantage'
+        ? `You'll roll with <strong>Advantage</strong> at a lowered DC — your Healer's Kit${plan.kitNote} helps.`
+        : plan.mode === 'disadvantage'
+        ? `You'll roll with <strong>Disadvantage</strong> — treating yourself without a Healer's Kit.`
+        : plan.useKit
+        ? `You'll roll normally at a lowered DC — self-treatment Disadvantage and your Healer's Kit${plan.kitNote} Advantage cancel out.`
+        : `You'll roll normally — no Healer's Kit.`;
     return `<strong>Click to attempt treatment</strong><br>${roller.name} will roll a Medicine check against this injury.<br>${modeLine}<br><em>One attempt per character per injury.</em>`;
 }
 
@@ -3630,23 +3668,11 @@ async function requestTreatmentRoll(buttonEl, data) {
         return showBibToast('Already Attempted', `${roller.name} has already tried to treat this injury.`, 'fa-solid fa-hand');
     }
 
-    const self = roller.id === (patientActor?.id ?? data.actorId);
-    const kit = findHealersKit(roller);
-    const useKit = !!kit?.usable;
-    const baseDc = Number(data.dc) || 15;
-    const dc = useKit ? Math.max(1, baseDc - 2) : baseDc;
-    const mode = useKit && !self ? 'advantage' : (!useKit && self ? 'disadvantage' : 'normal');
-
-    // The rules matrix, said out loud on the request card. `normal` is a
-    // real requestable value, not the absence of one — which is exactly
+    // One derivation, shared with the tooltip and the harness. `normal` is
+    // a real requestable value, not the absence of one — which is exactly
     // what the "kit and self cancel out" row needs.
-    const explanation = mode === 'advantage'
-        ? "A Healer's Kit steadies your hands: roll with Advantage, and the difficulty is 2 lower."
-        : mode === 'disadvantage'
-        ? 'Treating your own wounds is never easy: roll with Disadvantage.'
-        : useKit
-        ? "Your Healer's Kit grants Advantage and treating yourself imposes Disadvantage, so they cancel — but the kit still lowers the difficulty by 2."
-        : "No Healer's Kit — a bare-handed Medicine check.";
+    const { mode, dc, useKit, kit, explanation } =
+        treatmentRollPlan(roller, patientActor?.id ?? data.actorId, Number(data.dc) || 15);
 
     const rollerToken = canvas?.tokens?.placeables?.find((t) => t.actor?.id === roller.id);
     const rollerEntry = rollerToken
