@@ -3636,17 +3636,23 @@ async function requestTreatmentRoll(buttonEl, data) {
     const baseDc = Number(data.dc) || 15;
     const dc = useKit ? Math.max(1, baseDc - 2) : baseDc;
     const mode = useKit && !self ? 'advantage' : (!useKit && self ? 'disadvantage' : 'normal');
-    // The request API has no explainer field yet (Blacksmith Request #6) —
-    // the roll-mode guidance rides a toast and the button's hover tooltip.
-    const modeToast = mode === 'advantage'
-        ? ['Roll with Advantage', "Your Healer's Kit steadies your hands and lowers the difficulty."]
+
+    // The rules matrix, said out loud on the request card. `normal` is a
+    // real requestable value, not the absence of one — which is exactly
+    // what the "kit and self cancel out" row needs.
+    const explanation = mode === 'advantage'
+        ? "A Healer's Kit steadies your hands: roll with Advantage, and the difficulty is 2 lower."
         : mode === 'disadvantage'
-        ? ['Roll with Disadvantage', 'Treating your own wounds is never easy.']
+        ? 'Treating your own wounds is never easy: roll with Disadvantage.'
         : useKit
-        ? ['Roll Normally', 'Kit advantage and self-treatment disadvantage cancel out — the kit still lowers the difficulty.']
-        : ['Roll Normally', "No Healer's Kit — a bare-handed Medicine check."];
+        ? "Your Healer's Kit grants Advantage and treating yourself imposes Disadvantage, so they cancel — but the kit still lowers the difficulty by 2."
+        : "No Healer's Kit — a bare-handed Medicine check.";
 
     const rollerToken = canvas?.tokens?.placeables?.find((t) => t.actor?.id === roller.id);
+    const rollerEntry = rollerToken
+        ? { tokenId: rollerToken.id, actorId: roller.id, name: roller.name, rollAdvantage: mode }
+        : { actorId: roller.id, name: roller.name, rollAdvantage: mode };
+
     const { messageId } = await api.openRequestRollDialog({
         silent: true,
         title: `Treat ${data.name || 'the injury'}`,
@@ -3655,10 +3661,18 @@ async function requestTreatmentRoll(buttonEl, data) {
         dc,
         showDC: false,
         groupRoll: false,
-        actors: [rollerToken ? { tokenId: rollerToken.id, actorId: roller.id, name: roller.name } : roller]
+        // Blacksmith carries the decision; we still make it. The DC
+        // arithmetic and which situation maps to which mode stay ours.
+        rollAdvantage: mode,
+        // Locked because this matrix is a RULE, not a suggestion: whether
+        // you hold a kit and whether the patient is you are both facts,
+        // with no judgement in them. A player clicking the wrong button
+        // here would be a mistake, not GM discretion.
+        lockRollAdvantage: true,
+        explanation,
+        actors: [rollerEntry]
     });
     if (!messageId) return;
-    showBibToast(modeToast[0], modeToast[1], 'fa-solid fa-dice-d20');
 
     const context = {
         rollMessageId: messageId,
@@ -3687,6 +3701,25 @@ async function requestTreatmentRoll(buttonEl, data) {
     } catch (error) {
         logBib('Treatment roll relay failed', error?.message, false, false);
     }
+}
+
+/**
+ * What mode Blacksmith actually resolved for this roller, read off the
+ * request flags rather than reverse-engineered from the dice formula.
+ * Per-actor wins over the request-level default, which is their contract.
+ *
+ * @returns {{mode: string|null, locked: boolean}}
+ */
+function requestedRollMode(payload, rollerActorId) {
+    const data = payload?.messageData
+        ?? game.messages.get(payload?.messageId ?? '')?.flags?.['coffee-pub-blacksmith']
+        ?? null;
+    if (!data) return { mode: null, locked: false };
+    const mine = (data.actors ?? []).find((a) => a?.actorId === rollerActorId);
+    return {
+        mode: mine?.rollAdvantage ?? data.rollAdvantage ?? null,
+        locked: !!data.lockRollAdvantage
+    };
 }
 
 // Pull the total and the ACTIVE d20 face out of the delivered roll JSON
@@ -3756,8 +3789,23 @@ async function resolveTreatmentRoll(context, payload) {
 
     const { total, d20, rolledMode } = extractRollNumbers(payload.result);
     if (!Number.isFinite(total)) return;
-    if (context.expectedMode && context.expectedMode !== rolledMode) {
-        logBib(`Treatment roll mode mismatch: expected ${context.expectedMode}, rolled ${rolledMode} — accepting (GM discretion)`, '', false, false);
+
+    // Blacksmith now carries the requested mode on the request flags, and
+    // a locked request only renders the one button. Enforcement lives at
+    // those buttons, though — processRoll is still a dumb consumer of
+    // whatever got clicked — so this stays as a cheap ASSERTION: it logs a
+    // mismatch and does not act on one. If it ever fires, the bug is in
+    // the roll layer and this is the only place that would notice.
+    const requested = requestedRollMode(payload, context.rollerActorId);
+    const expected = requested.mode ?? context.expectedMode;
+    if (expected && expected !== rolledMode) {
+        logBib(
+            `Treatment roll mode mismatch: requested ${expected}${requested.locked ? ' (locked)' : ''}, rolled ${rolledMode}`,
+            requested.locked
+                ? 'A locked request should not have been rollable in another mode — worth reporting to Blacksmith.'
+                : 'Unlocked request, so this is GM discretion. Accepted.',
+            false, false
+        );
     }
     const critFumbleOn = getSettingSafe('injuryTreatmentCritFumble', true);
     const isNat20 = critFumbleOn && d20 === 20;

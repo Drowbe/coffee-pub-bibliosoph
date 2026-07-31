@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [Unreleased]
+
+### Changed
+
+- **Treatment rolls now request their own advantage mode** instead of naming it in the title and hoping the player clicks the matching button. The kit/self matrix is sent as `rollAdvantage` and **locked**, so only the correct button renders — that matrix is a rule, not a suggestion, since whether you hold a kit and whether the patient is you are both facts with no judgement in them. `'normal'` is a real requestable value, which is what the "kit and self cancel out" case needed. The rules explanation rides the request card itself rather than a three-second toast.
+- **The requested roll mode is read from the request flags** (`flags['coffee-pub-blacksmith'].rollAdvantage`, per-actor winning over request-level) instead of being reverse-engineered from the dice formula. The formula check survives as a cheap assertion that logs a mismatch without acting on one: enforcement lives at the buttons rather than in the roll path, so a mismatch on a *locked* request would be a bug worth reporting, and this is the only place that would notice it.
+- **Blacksmith dependency minimum raised from 13.8.5 to 13.12.3.** 13.8.5 could not run this module: the rolls API needs > 13.11.3, so injury detection and crit/fumble toasts silently did nothing on any build below it. The floor now matches what Bibliosoph is actually developed and tested against.
+
+### Requires
+
+- The advantage-mode fields need a Blacksmith build carrying Request #5 (their master, `## [Unreleased]` at time of writing). Older builds ignore the unknown options and fall back to the previous behaviour — the mode in the request title with a GM-side audit — so this does not hard-block on their release.
+
+
 ## [13.4.0]
 
 ### Added
