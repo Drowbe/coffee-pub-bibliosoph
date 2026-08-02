@@ -7,7 +7,7 @@
 // ==================================================================
 
 import { MODULE } from '../const.js';
-import { KINDS, SEVERITIES, TARGETS, CONDITIONS, MODIFIER_STATS, kindLabel, titleCase, severityLabel, targetLabel } from '../data/outcome-schema.js';
+import { KINDS, SEVERITIES, TARGETS, CONDITIONS, MODIFIER_STATS, PICKS_MAX, kindLabel, titleCase, severityLabel, targetLabel } from '../data/outcome-schema.js';
 import { mountGmNotesField } from '../utility-gm-notes.js';
 
 const JournalEntryPageProseMirrorSheet = foundry.applications.sheets.journal.JournalEntryPageProseMirrorSheet;
@@ -46,6 +46,7 @@ export class OutcomePageSheet extends JournalEntryPageProseMirrorSheet {
             context.conditionChoices = labelled(CONDITIONS, (v) => (v === 'none' ? 'None' : titleCase(v)));
             context.statChoices = Object.entries(MODIFIER_STATS).map(([value, s]) => ({ value, label: titleCase(s.label) }));
             context.rounds = system.rounds;
+            context.picksMax = PICKS_MAX;
             context.warnings = system.warnings;
             // Rows are rendered from the stored array plus one blank slot,
             // so adding a modifier needs no JavaScript at all.

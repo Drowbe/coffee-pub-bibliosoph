@@ -33,6 +33,7 @@ Crits and fumbles already had mechanical teeth — "target is blinded for a roun
 | `duration` | integer | Seconds; **0 = instant** |
 | `statuseffect` | condition id \| `none` | Same curated list as injuries |
 | `odds` | 1–100 | Relative likelihood within its kind |
+| `picks` | 1–6, optional | How many party members to choose; `ally` only |
 | `modifiers` | array | `{ stat, value, rounds }` — see below |
 | `gmnotes` | string | Shipped "how to run it" guidance |
 
@@ -112,6 +113,62 @@ relays roller and hit-target ids over the socket). With no roll behind it —
 the toolbar buttons, the test harness — it falls back to Foundry's own
 convention: a lone **controlled** token is the roller, a lone **target**
 is who they hit. Anything ambiguous stays unnamed rather than guessed at.
+
+## `picks` — asking for more than one
+
+`picks` (optional, integer 1–6, default 1) is how many separate party
+members the card asks you to choose. It only means anything with
+`appliesto: ally`, the one target that draws a picker; the sheet and the
+validator both say so.
+
+Before this existed, "two party members each lose 1 HP" lived in the prose
+and the card resolved on the first click, so the second choice was
+silently impossible. Now the picker stays open, the instruction counts
+down ("Pick 1 more party member."), a running `✓ So far:` line names who
+has been chosen, and the closing stamp lists everyone.
+
+The count lives in the **stored message HTML** — `data-picks-remaining`,
+`data-picks-applied` and `data-picks-actors` on the picker container — not
+in any client's memory, so a refresh, a second client, and a relayed
+player click all read the same state.
+
+Two things it deliberately handles:
+
+- A chosen party member's button is retired, so nobody is picked twice.
+  This matters because the applier counts a repeat as *successfully
+  applied* rather than as a no-op, so an unguarded second pick on the same
+  person would silently consume one.
+- *Random Party Member* is resolved to a concrete actor **before** the
+  effect is applied, excluding anyone already chosen — otherwise the card
+  could not know whose button to retire, and the dice could land twice on
+  the same person.
+
+## Who may press Apply
+
+Choosing who a crit lands on is a player decision, so the buttons are not
+GM-only any more. The rule:
+
+- The **GM** always sees every apply control.
+- A **player** sees them when they own the actor whose roll produced the
+  card (`data-roller-actor`, baked in at render).
+- Nobody else sees them.
+
+Buttons marked `data-needs-selection` stay GM-only regardless. Those are
+the unbound ones — "Select the creature that was hit" — which resolve
+against whoever the *clicker* has selected on the canvas. Relayed, they
+would read the GM's selection rather than the player's and land on the
+wrong token, so the player never gets the option.
+
+A player's client cannot create effects on actors it does not own, nor
+edit the GM's chat message, so the click is **relayed** over Blacksmith's
+socket and the GM performs it — the same shape as inspiration cards and
+treatment stamps. Client-side button pruning is presentation only. The GM
+side re-checks everything before acting: the button must still be live in
+the stored card (a spent pick is gone), it must not be selection-bound,
+and the requesting user must genuinely own the roller. The relay is a
+request, not a fact.
+
+With no GM connected, the player is told so and nothing happens.
 
 ## `dealscard`
 

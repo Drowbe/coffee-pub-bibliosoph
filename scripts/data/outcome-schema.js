@@ -86,6 +86,33 @@ export const TARGET_HINTS = {
     nearby: 'Select everyone in range.'
 };
 
+/**
+ * How many separate people an outcome asks you to choose. Only `ally`
+ * offers a picker, so only `ally` can meaningfully ask for more than one
+ * — "each of two party members loses 1 HP" is a real table instruction
+ * that used to live in the prose and get lost.
+ */
+export const PICKS_MAX = 6;
+
+export const picksFor = (rec) => {
+    if (rec?.appliesto !== 'ally') return 1;
+    const n = Math.round(Number(rec?.picks) || 1);
+    return Math.min(PICKS_MAX, Math.max(1, n));
+};
+
+/**
+ * The instruction above the buttons. Multi-pick cards say how many are
+ * left to choose, because the card is the only place that count is
+ * tracked once the prose has scrolled past.
+ */
+export function targetHint(appliesto, picks = 1, remaining = null) {
+    const total = Math.max(1, Math.round(Number(picks) || 1));
+    if (appliesto !== 'ally' || total <= 1) return TARGET_HINTS[appliesto] ?? '';
+    const left = remaining === null ? total : Math.max(0, Math.round(Number(remaining) || 0));
+    if (left === total) return `Pick ${total} party members — one at a time.`;
+    return left === 1 ? 'Pick 1 more party member.' : `Pick ${left} more party members.`;
+}
+
 export const targetLabel = (t) => TARGET_LABELS[t] ?? TARGET_LABELS.target;
 
 /**
@@ -152,7 +179,7 @@ export const REQUIRED_FIELDS = [
 
 // `imagetitle` is optional here, unlike injuries: an outcome's prose is
 // the flavour, and a caption on top of a punchline is one beat too many.
-export const OPTIONAL_FIELDS = ['imagetitle', 'modifiers', 'gmnotes', 'dealscard'];
+export const OPTIONAL_FIELDS = ['imagetitle', 'modifiers', 'gmnotes', 'dealscard', 'picks'];
 
 /**
  * `dealscard: true` means this outcome hands someone an inspiration card

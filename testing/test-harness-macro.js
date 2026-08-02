@@ -520,6 +520,74 @@ const SCENARIOS = [
     },
     {
         tab: 'rolls',
+        label: '✌️ Demo a TWO-PICK ally card (picks: 2)',
+        run: async () => {
+            // No shipped outcome sets picks > 1 yet, so this overrides the
+            // record rather than editing the compendium. The card should
+            // stay open until BOTH choices are made.
+            await rollOutcomeCard('fumble', { title: 'Crappy Neighbor', overrides: { picks: 2 } });
+            ui.notifications.info('Expect: "Pick 2 party members — one at a time." Click one → the hint becomes "Pick 1 more party member.", a "✓ So far:" line appears, and that person\'s button is gone. Click a second → the whole picker collapses to one stamp naming both.');
+        }
+    },
+    {
+        tab: 'rolls',
+        label: '✌️ Two-pick via RANDOM twice (no repeat picks)',
+        run: async () => {
+            await rollOutcomeCard('fumble', { title: 'Crappy Neighbor', overrides: { picks: 3 } });
+            ui.notifications.info('Click "Random Party Member" three times. Expect three DIFFERENT characters — random excludes anyone already chosen, and each pick also removes that character\'s own button.');
+        }
+    },
+    {
+        tab: 'rolls',
+        label: '🔐 Who sees Apply? (roller-owner gate)',
+        run: async () => {
+            const token = getSubjectToken();
+            if (!token) return;
+            await rollOutcomeCard('fumble', {
+                title: 'Crappy Neighbor',
+                rollerActorId: token.actor?.id ?? null,
+                rollerTokenId: token.id
+            });
+            const owners = game.users.filter((u) => !u.isGM && token.actor?.testUserPermission(u, 'OWNER')).map((u) => u.name);
+            ui.notifications.info(
+                `Card posted as ${token.name}'s roll. GM sees the picker always. `
+                + (owners.length
+                    ? `These players should ALSO see it: ${owners.join(', ')}. Their click relays to the GM — watch the GM console.`
+                    : `No non-GM player owns ${token.name}, so no player should see the buttons.`)
+            );
+        }
+    },
+    {
+        tab: 'rolls',
+        label: '🧑‍🤝‍🧑 Who counts as "the party"? (type + on-canvas filter)',
+        run: () => {
+            const assigned = game.users.filter((u) => !u.isGM && u.character).map((u) => u.character);
+            const raw = assigned.length ? assigned : game.actors.filter((a) => a.hasPlayerOwner);
+            const seen = new Map();
+            for (const a of raw) if (a) seen.set(a.id, a);
+            const all = [...seen.values()];
+            const wrongType = all.filter((a) => a.type !== 'character');
+            const chars = all.filter((a) => a.type === 'character');
+            const present = chars.filter((a) => (a.getActiveTokens?.() ?? []).length > 0);
+            const absent = chars.filter((a) => !(a.getActiveTokens?.() ?? []).length);
+            const report = [
+                `source: ${assigned.length ? 'assigned player characters' : 'player-owned actors (nobody assigned)'}`,
+                `excluded by TYPE: ${wrongType.map((a) => `${a.name} (${a.type})`).join(', ') || 'none'}`,
+                `on this scene:    ${present.map((a) => a.name).join(', ') || 'NOBODY'}`,
+                `off this scene:   ${absent.map((a) => a.name).join(', ') || 'none'}`,
+                `-> pickers offer: ${(present.length ? present : chars).map((a) => a.name).join(', ') || '(none — card falls back to select-a-token)'}`
+                    + (present.length ? '' : '   [FALLBACK: nobody placed, so the whole party is offered]')
+            ];
+            console.log('BIBLIOSOPH PARTY RESOLUTION\n  ' + report.join('\n  '));
+            ui.notifications.info(
+                `${(present.length ? present : chars).length} in crit/fumble pickers`
+                + (wrongType.length ? ` · ${wrongType.length} excluded by type (${wrongType.map((a) => a.type).join(', ')})` : '')
+                + `. Full breakdown in console (F12).`
+            );
+        }
+    },
+    {
+        tab: 'rolls',
         label: '🎉 Demo the PARTY apply (one button, everyone)',
         run: async () => {
             await rollOutcomeCard('crit', { title: 'Play Date' });
@@ -553,11 +621,15 @@ const SCENARIOS = [
                 }
                 const buckets = {}; const targets = {};
                 let mech = 0, mods = 0;
+                const multi = [];
                 for (const r of recs) {
                     buckets[r.journal] = (buckets[r.journal] ?? 0) + 1;
                     targets[r.appliesto] = (targets[r.appliesto] ?? 0) + 1;
                     if (r.statuseffect !== 'none' || r.damage || r.modifiers?.length) mech++;
                     if (r.modifiers?.length) mods++;
+                    // Flags both authored multi-picks and the broken combination
+                    // (picks > 1 without the ally picker, where it does nothing).
+                    if (Number(r.picks) > 1) multi.push(`${r.title} ×${r.picks}${r.appliesto === 'ally' ? '' : ` [IGNORED — lands on ${r.appliesto}]`}`);
                 }
                 const total = recs.reduce((s, r) => s + (Number(r.odds) || 1), 0);
                 const top = [...recs].sort((a, b) => (b.odds || 1) - (a.odds || 1))[0];
@@ -565,6 +637,7 @@ const SCENARIOS = [
                 out.push(`  buckets: ${Object.entries(buckets).map(([k, v]) => `${k} ${v}`).join(' · ')}`);
                 out.push(`  lands on: ${Object.entries(targets).map(([k, v]) => `${k} ${v}`).join(' · ')}`);
                 out.push(`  with mechanics: ${mech}/${recs.length} · with modifiers: ${mods}`);
+                out.push(`  multi-pick: ${multi.length ? multi.join(' · ') : 'none'}`);
                 out.push(`  most likely: ${top?.title} (${Math.round(100 * (top?.odds || 1) / total)}%)`);
             }
             console.log('BIBLIOSOPH OUTCOME POOL\n  ' + out.join('\n  '));

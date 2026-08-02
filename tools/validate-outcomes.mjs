@@ -13,7 +13,7 @@ import { fileURLToPath } from 'node:url';
 import {
     KINDS, SEVERITIES, TARGETS, CONDITIONS, MAJOR_ONLY_CONDITIONS, MODERATE_PLUS_CONDITIONS,
     MODIFIER_STATS, DAMAGE_BANDS, DURATION_BANDS, ODDS_BANDS,
-    REQUIRED_FIELDS, OPTIONAL_FIELDS, secondsToRounds
+    REQUIRED_FIELDS, OPTIONAL_FIELDS, PICKS_MAX, secondsToRounds
 } from '../scripts/data/outcome-schema.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -78,6 +78,15 @@ records.forEach((rec, i) => {
         warn(rec, i, `duration ${rec.duration}s is not a whole number of 6-second rounds`);
     }
     if (isInt(rec?.odds) && (rec.odds < 1 || rec.odds > 100)) err(rec, i, `odds ${rec.odds} must be 1-100`);
+
+    // `picks` only means anything where a picker is drawn, which is `ally`.
+    if (rec?.picks !== undefined) {
+        if (!isInt(rec.picks) || rec.picks < 1 || rec.picks > PICKS_MAX) {
+            err(rec, i, `picks ${JSON.stringify(rec.picks)} must be an integer 1-${PICKS_MAX}`);
+        } else if (rec.picks > 1 && rec.appliesto !== 'ally') {
+            err(rec, i, `picks ${rec.picks} needs appliesto "ally" — no other target draws a picker`);
+        }
+    }
 
     const status = String(rec?.statuseffect ?? '');
     if (!CONDITIONS.includes(status)) {

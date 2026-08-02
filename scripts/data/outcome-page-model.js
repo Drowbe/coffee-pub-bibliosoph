@@ -8,7 +8,7 @@
 
 import { MODULE } from '../const.js';
 import {
-    KINDS, SEVERITIES, TARGETS, CONDITIONS, MODIFIER_STATS, DAMAGE_BANDS,
+    KINDS, SEVERITIES, TARGETS, CONDITIONS, MODIFIER_STATS, DAMAGE_BANDS, PICKS_MAX,
     kindLabel, titleCase, severityLabel, targetLabel, describeModifier, modifiersToChanges, secondsToRounds
 } from './outcome-schema.js';
 
@@ -29,6 +29,11 @@ export class OutcomePageModel extends foundry.abstract.TypeDataModel {
             // Who it lands on: the creature that was hit, or the roller.
             appliesto: new fields.StringField({
                 required: true, blank: false, initial: 'target', choices: choicesFrom(TARGETS)
+            }),
+            // How many party members to choose. Only meaningful with
+            // `appliesto: ally`, the one target that renders a picker.
+            picks: new fields.NumberField({
+                required: false, integer: true, min: 1, max: PICKS_MAX, initial: 1, nullable: false
             }),
             image: new fields.StringField({ required: false, blank: true, initial: '' }),
             imagetitle: new fields.StringField({ required: false, blank: true, initial: '' }),
@@ -112,6 +117,7 @@ export class OutcomePageModel extends foundry.abstract.TypeDataModel {
             duration: this.duration,
             statuseffect: this.statuseffect,
             odds: this.odds,
+            ...(this.picks > 1 ? { picks: this.picks } : {}),
             ...(this.modifiers?.length ? { modifiers: this.modifiers.map((m) => ({ ...m })) } : {}),
             ...(this.dealscard ? { dealscard: true } : {}),
             ...(this.gmnotes ? { gmnotes: this.gmnotes } : {})
@@ -126,6 +132,9 @@ export class OutcomePageModel extends foundry.abstract.TypeDataModel {
             out.push(`Damage ${this.damage} is outside the ${this.severity} range ${band[0]}–${band[1]}.`);
         }
         if (!this.image) out.push('No image set — the card and token effect will have no art.');
+        if (this.picks > 1 && this.appliesto !== 'ally') {
+            out.push(`Picks is ${this.picks} but "Lands On" is not "A party member" — only that target shows a picker, so the extra picks are ignored.`);
+        }
         if (this.duration === 0 && (this.statuseffect !== 'none' || this.modifiers?.length)) {
             out.push('Duration is Instant but this carries a condition or modifier, so it will linger until removed by hand.');
         }

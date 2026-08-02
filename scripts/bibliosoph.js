@@ -10,7 +10,7 @@ import { InjuryPageModel, INJURY_PAGE_TYPE } from './data/injury-page-model.js';
 import { InjuryPageSheet } from './sheets/injury-page-sheet.js';
 import { OutcomePageModel, OUTCOME_PAGE_TYPE } from './data/outcome-page-model.js';
 import { OutcomePageSheet } from './sheets/outcome-page-sheet.js';
-import { describeModifier, modifiersToChanges, secondsToRounds, severityLabel, targetLabel, TARGET_HINTS } from './data/outcome-schema.js';
+import { describeModifier, modifiersToChanges, secondsToRounds, severityLabel, targetLabel, targetHint, picksFor, TARGET_HINTS } from './data/outcome-schema.js';
 import { InspirationPageModel, INSPIRATION_PAGE_TYPE } from './data/inspiration-page-model.js';
 import { InspirationPageSheet } from './sheets/inspiration-page-sheet.js';
 import * as INSPIRATION_ACTIONS from './data/inspiration-schema.js';
@@ -197,6 +197,14 @@ Hooks.once('ready', async () => {
             logBib('Failed to register treat-stamp socket', error?.message, false, false);
         }
 
+        // OUTCOME APPLIES: the player who owns the roller may make the
+        // card's choice, but only the GM can carry it out — same relay.
+        try {
+            await registerOutcomeApplySocket();
+        } catch (error) {
+            logBib('Failed to register outcome-apply socket', error?.message, false, false);
+        }
+
         // TREATMENT ROLLS: player Medicine checks resolve on the active GM
         try {
             await registerTreatRollSocket();
@@ -318,7 +326,7 @@ function triggerFumbleRoll() {
 // Roll the configured crit/fumble table and post the chat card. Used by
 // the toolbar buttons above and by manager-roll-toasts.js for the
 // Automation click/auto modes.
-export async function rollOutcomeCard(type, { title = null, rollerActorId = null, rollerTokenId = null, hitActorId = null } = {}) {
+export async function rollOutcomeCard(type, { title = null, rollerActorId = null, rollerTokenId = null, hitActorId = null, overrides = null } = {}) {
     // Typed compendium first — it carries real mechanics (conditions,
     // durations, roll modifiers). Roll tables remain fully supported for
     // anyone using their own crit/fumble tables.
@@ -329,7 +337,7 @@ export async function rollOutcomeCard(type, { title = null, rollerActorId = null
     // "the roller" and "the creature hit".
     const compendium = getSettingSafe(type === 'crit' ? 'critCompendium' : 'fumbleCompendium', 'none');
     if (compendium && compendium !== 'none') {
-        const html = await createChatCardOutcome(type, { title, rollerActorId, rollerTokenId, hitActorId });
+        const html = await createChatCardOutcome(type, { title, rollerActorId, rollerTokenId, hitActorId, overrides });
         if (html) {
             await ChatMessage.create({ user: game.user.id, content: html, speaker: ChatMessage.getSpeaker() });
             return;
@@ -348,6 +356,17 @@ export async function rollOutcomeCard(type, { title = null, rollerActorId = null
 }
 
 // Read an outcome record off a typed page (system data is authoritative).
+// Decode a card button's data-effect payload (JSON+URI, with a fallback
+// for cards posted before the encoding switch). Module scope, not the
+// click listener's: the apply-outcome handler lives outside that closure.
+function decodeEffectPayload(raw) {
+    try {
+        return JSON.parse(decodeURIComponent(raw));
+    } catch (_) {
+        return BlacksmithUtils.stringToObject(raw);
+    }
+}
+
 function readOutcomeRecord(page) {
     const system = page?.system;
     if (!system?.kind) return null;
@@ -360,7 +379,7 @@ function readOutcomeRecord(page) {
  * by odds, then render with its mechanics spelled out and an Apply button
  * that carries the whole record rather than just a name and some prose.
  */
-async function createChatCardOutcome(type, { title = null, rollerActorId = null, rollerTokenId = null, hitActorId = null } = {}) {
+async function createChatCardOutcome(type, { title = null, rollerActorId = null, rollerTokenId = null, hitActorId = null, overrides = null } = {}) {
     const compendiumName = getSettingSafe(type === 'crit' ? 'critCompendium' : 'fumbleCompendium', 'none');
     const pack = game.packs.get(compendiumName);
     if (!pack) return '';
@@ -375,11 +394,16 @@ async function createChatCardOutcome(type, { title = null, rollerActorId = null,
         .filter((rec) => rec && rec.kind === type);
     if (!candidates.length) return '';
 
-    const rec = title
+    const picked = title
         ? candidates.find((c) => c.title === title)
         : weightedPick(candidates, (c) => c.odds);
-    if (!rec) { logBib(`No outcome titled "${title}"`, '', false, false); return ''; }
-    logBib(`Outcome picked: "${rec.title}" (odds ${rec.odds} of ${candidates.length} ${type}s)`, '', true, false);
+    if (!picked) { logBib(`No outcome titled "${title}"`, '', false, false); return ''; }
+    logBib(`Outcome picked: "${picked.title}" (odds ${picked.odds} of ${candidates.length} ${type}s)`, '', true, false);
+
+    // Test-harness seam, like `title` above: demo a field combination no
+    // shipped outcome carries yet — a two-pick ally card, say — without
+    // editing the compendium. Never set on a real roll.
+    const rec = overrides ? { ...picked, ...overrides } : picked;
 
     const isCrit = type === 'crit';
     const modifierLines = (rec.modifiers ?? []).map(describeModifier).filter(Boolean);
@@ -401,6 +425,12 @@ async function createChatCardOutcome(type, { title = null, rollerActorId = null,
         sourceUuid: rec.sourceUuid ?? null
     };
 
+    // Baked into the card so every client can answer "may I click this?"
+    // without the GM having to render a second, different card. Ownership
+    // of this actor is the whole gate (see the render hook).
+    const cast = resolveOutcomeCast({ rollerActorId, rollerTokenId, hitActorId });
+    const rollerId = cast.roller?.id ?? rollerActorId ?? '';
+
     const template = await getCardTemplate();
     const html = template({
         userName: game.user.name,
@@ -419,7 +449,8 @@ async function createChatCardOutcome(type, { title = null, rollerActorId = null,
         imageBackground: 'themecolor',
         // Mechanics, spelled out on the card
         outcomemechanics: buildOutcomeMechanics(rec, modifierLines, rounds),
-        ...buildOutcomeApplyButtons(rec, APPLYDATA, resolveOutcomeCast({ rollerActorId, rollerTokenId, hitActorId })),
+        rollerActorId: rollerId,
+        ...buildOutcomeApplyButtons(rec, APPLYDATA, cast),
         applyoutcomeicon: isCrit ? 'fa-burst' : 'fa-heart-crack',
         hasSectionContent: true
     });
@@ -442,7 +473,9 @@ async function createChatCardOutcome(type, { title = null, rollerActorId = null,
 async function dealOutcomeCard(data) {
     let actor = game.actors.get(data?.targetActorId ?? '') ?? null;
     if (data?.randomAlly) {
-        const party = getPartyActors();
+        // A card goes to a sheet, not to a square — being off-scene is no
+        // reason to be skipped when the deck is handing something out.
+        const party = getPartyActors({ requireToken: false });
         if (party.length) actor = party[Math.floor(Math.random() * party.length)];
     }
     actor ??= Array.from(game.user.targets ?? [])[0]?.actor
@@ -462,13 +495,40 @@ async function dealOutcomeCard(data) {
  * The party, best-effort: characters assigned to non-GM users first,
  * since that is who is actually sitting at the table, falling back to
  * player-owned character actors for worlds that do not assign.
+ *
+ * Two filters matter here:
+ *
+ *   TYPE — only real `character` actors. Foundry's own Party actor (dnd5e
+ *   type `group`) is a container, not a person: it has no HP to lose and
+ *   putting it in a picker offers a choice that cannot be applied. The
+ *   fallback branch always filtered on type; the assigned branch did not,
+ *   so a user with the Party sheet assigned dragged it into every picker.
+ *
+ *   PRESENCE — someone with no token on the active scene is not in the
+ *   fight, so they are not a legal "party member" for a crit to land on.
+ *   This is a PREFERENCE, not a hard rule: if nobody is placed (a GM on a
+ *   prep scene, theatre-of-mind play, the test harness) the whole party
+ *   comes back rather than an empty picker, which would silently downgrade
+ *   the card to its select-a-token fallback.
  */
-function getPartyActors() {
+function getPartyActors({ requireToken = true } = {}) {
     const assigned = game.users
         .filter((u) => !u.isGM && u.character)
         .map((u) => u.character);
-    if (assigned.length) return assigned;
-    return game.actors.filter((a) => a.type === 'character' && a.hasPlayerOwner);
+    const raw = assigned.length
+        ? assigned
+        : game.actors.filter((a) => a.hasPlayerOwner);
+
+    // Two users sharing a character would otherwise get two buttons.
+    const pool = [...new Map(
+        raw.filter((a) => a?.type === 'character').map((a) => [a.id, a])
+    ).values()];
+
+    if (!requireToken) return pool;
+    const present = pool.filter((a) => (a.getActiveTokens?.() ?? []).length > 0);
+    if (present.length) return present;
+    logBib('No party tokens on this scene — offering the whole party instead', '', true, false);
+    return pool;
 }
 
 /**
@@ -526,6 +586,7 @@ function buildOutcomeApplyButtons(rec, applyData, cast = {}) {
                         payload: deal({ targetActorId: actor.id })
                     })),
                     applyoutcomeicon: 'fa-lightbulb',
+                    applyoutcomepicks: 1,
                     applyoutcomehint: 'Pick who draws a card, or let the dice decide.'
                 };
             }
@@ -534,6 +595,9 @@ function buildOutcomeApplyButtons(rec, applyData, cast = {}) {
         return {
             applyoutcome: deal({ targetActorId: named?.id ?? null }),
             applyoutcomelabel: named ? `Deal a Card to ${named.name}` : 'Deal an Inspiration Card',
+            // Unbound: resolved from whoever the clicker has selected, which
+            // makes it the GM's to press — see the render gate.
+            applyoutcomeneedsselection: !named,
             applyoutcomehint: named ? '' : 'Select who draws, or the card goes to your own character.'
         };
     }
@@ -550,17 +614,24 @@ function buildOutcomeApplyButtons(rec, applyData, cast = {}) {
     if (rec.appliesto === 'ally') {
         const party = getPartyActors();
         if (party.length) {
+            // "Two party members each lose 1 HP" is one card, not two: the
+            // picker stays open until `picks` choices have been made.
+            const picks = picksFor(rec);
             return {
                 // Some entries say "you pick", others say "GM chooses with a
                 // dice roll" — offer both rather than encoding which is which.
                 applyoutcomerandom: encode({ ...applyData, randomAlly: true }),
                 applyoutcomepicker: party.map((actor) => ({
+                    id: actor.id,
                     name: actor.name,
                     img: actor.img || 'icons/svg/mystery-man.svg',
                     payload: encode({ ...applyData, targetActorId: actor.id })
                 })),
                 applyoutcomeicon: applyData.kind === 'crit' ? 'fa-burst' : 'fa-heart-crack',
-                applyoutcomehint: 'Pick who it lands on, or let the dice decide.'
+                applyoutcomepicks: picks,
+                applyoutcomehint: picks > 1
+                    ? targetHint('ally', picks)
+                    : 'Pick who it lands on, or let the dice decide.'
             };
         }
     }
@@ -578,9 +649,13 @@ function buildOutcomeApplyButtons(rec, applyData, cast = {}) {
         };
     }
 
+    // Nothing to bind to, so this one applies to whatever the clicker has
+    // selected on the canvas. That makes it the GM's button by nature: a
+    // relayed player click would silently use the GM's selection instead.
     return {
         applyoutcome: encode(applyData),
         applyoutcomelabel: `Apply to ${targetLabel(rec.appliesto).replace(/^The /, '')}`,
+        applyoutcomeneedsselection: true,
         applyoutcomehint: TARGET_HINTS[rec.appliesto] ?? ''
     };
 }
@@ -1086,7 +1161,9 @@ function buildInspirationPlayButtons(card, holder, itemUuid) {
         itemUuid
     };
     const encode = (extra) => encodeURIComponent(JSON.stringify({ ...base, ...extra }));
-    const party = getPartyActors();
+    // Inspiration is played at the table, not on the battle map: a party
+    // member with no token on this scene is still a legal target.
+    const party = getPartyActors({ requireToken: false });
     const targeted = Array.from(game.user?.targets ?? []).map((t) => t.actor).filter(Boolean);
 
     // No aiming to do: one button, and the point is the whole mechanic.
@@ -1299,7 +1376,7 @@ function resolveInspirationTargets(data, holder) {
     let chosenId = data?.targetActorId ?? null;
 
     if (data?.randomAlly) {
-        const pool = getPartyActors().filter((a) => a.id !== holder?.id);
+        const pool = getPartyActors({ requireToken: false }).filter((a) => a.id !== holder?.id);
         if (!pool.length) return null;
         chosenId = pool[Math.floor(Math.random() * pool.length)].id;
     }
@@ -1668,16 +1745,6 @@ Hooks.on("ready", async () => {
     var blnInspirationEnabled = getSetting('inspirationEnabled', false);
     // NOTE: investigation settings are re-fetched inside bindInvestigation() for fresh values
 
-    // Decode a card button's data-effect payload (JSON+URI, with a fallback
-    // for cards posted before the encoding switch)
-    const decodeEffectPayload = (raw) => {
-        try {
-            return JSON.parse(decodeURIComponent(raw));
-        } catch (_) {
-            return BlacksmithUtils.stringToObject(raw);
-        }
-    };
-
     // BUTTON PRESSES IN CHAT (closest() so clicks on inner icons land too)
     document.addEventListener('click', async function(event) {
         // CHECK FOR INJURY BUTTON
@@ -1726,9 +1793,7 @@ Hooks.on("ready", async () => {
         // CHECK FOR APPLY CRITICAL / FUMBLE BUTTON
         const applyOutcomeButton = event.target.closest?.('.coffee-pub-bibliosoph-button-apply-outcome');
         if (applyOutcomeButton) {
-            const data = decodeEffectPayload(applyOutcomeButton.getAttribute('data-effect'));
-            const applied = await applyOutcomeStatus(data);
-            await markCardButtonApplied(applyOutcomeButton, '.coffee-pub-bibliosoph-button-apply-outcome', applied);
+            await handleApplyOutcomeClick(applyOutcomeButton);
         }
 
         // CHECK FOR USE-INSPIRATION BUTTON
@@ -1875,7 +1940,24 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
     // would roll (kit/self advantage state) — computed at render time since
     // it depends on the viewer, never baked into the shared HTML.
     if (!game.user.isGM) {
-        nativeHtml?.querySelectorAll?.('.coffee-pub-bibliosoph-button-injury, .coffee-pub-bibliosoph-button-apply-outcome')?.forEach((btn) => btn.remove());
+        nativeHtml?.querySelectorAll?.('.coffee-pub-bibliosoph-button-injury')?.forEach((btn) => btn.remove());
+        // Crit/fumble choices — who it lands on — belong to the player whose
+        // character rolled, so their client keeps the buttons and everyone
+        // else loses them. Cosmetic only: the GM re-checks ownership before
+        // applying anything relayed to them.
+        nativeHtml?.querySelectorAll?.('.coffee-pub-bibliosoph-button-apply-outcome')?.forEach((btn) => {
+            // Buttons that resolve against the clicker's canvas selection
+            // stay GM-only: relayed, they would read the GM's selection, not
+            // the player's, and quietly land on the wrong token.
+            if (btn.dataset.needsSelection === '1') return btn.remove();
+            const roller = game.actors.get(btn.dataset.rollerActor ?? '');
+            if (!roller?.isOwner) btn.remove();
+        });
+        // A picker with every button stripped is an empty box holding an
+        // instruction nobody can act on.
+        nativeHtml?.querySelectorAll?.('.bibliosoph-outcome-picker')?.forEach((box) => {
+            if (!box.querySelector('.coffee-pub-bibliosoph-button-apply-outcome')) box.remove();
+        });
     } else {
         appendGmNotesToTooltips(nativeHtml);
     }
@@ -4081,6 +4163,199 @@ async function sweepTreatStamps(message) {
         if (changed) await message.update({ content: doc.body.innerHTML });
     } catch (error) {
         logBib('Could not mark treatment done', error?.message, false, false);
+    }
+}
+
+// ==================================================================
+// ===== APPLYING AN OUTCOME ========================================
+// ==================================================================
+// Two things make this more than "click button, apply effect":
+//
+//   PICKS — "each of two party members loses 1 HP" is one card asking
+//   for two decisions. The remaining count lives in the stored message
+//   HTML (data-picks-remaining on the picker), never in a client's
+//   memory, so a refresh or a second client sees the same state.
+//
+//   WHO MAY CLICK — the player whose character rolled gets to make the
+//   card's choice. Their client cannot create effects on actors they do
+//   not own, nor edit the GM's chat message, so the click is relayed and
+//   the GM performs it. The client-side button pruning is presentation;
+//   the ownership check on the GM side is the one that decides.
+// ==================================================================
+
+/** Does this user own the actor whose roll produced the card? */
+function userOwnsRoller(rollerActorId, userId) {
+    const user = game.users.get(userId ?? '');
+    const actor = game.actors.get(rollerActorId ?? '');
+    if (!user || !actor) return false;
+    return user.isGM || actor.testUserPermission(user, 'OWNER');
+}
+
+/** Actor ids already chosen on this card, read back off the stored HTML. */
+function pickedActorIds(message) {
+    try {
+        const doc = new DOMParser().parseFromString(message?.content ?? '', 'text/html');
+        const picker = doc.querySelector('.bibliosoph-outcome-picker');
+        return (picker?.dataset?.picksActors ?? '').split('|').filter(Boolean);
+    } catch (_) {
+        return [];
+    }
+}
+
+/**
+ * Turn "a random party member" into a named one BEFORE anything is
+ * applied. Two reasons: the card can then retire that person's button, and
+ * a second random pick on a two-pick card cannot land on someone already
+ * chosen — which it otherwise would, since the applier treats a repeat as
+ * successfully applied rather than as a no-op.
+ */
+function resolveOutcomePick(message, data) {
+    if (!data?.randomAlly) return { data, actorId: data?.targetActorId ?? null };
+    const taken = new Set(pickedActorIds(message));
+    const party = getPartyActors();
+    const pool = party.filter((a) => !taken.has(a.id));
+    const from = pool.length ? pool : party;
+    if (!from.length) return { data, actorId: null };
+    const chosen = from[Math.floor(Math.random() * from.length)];
+    const { randomAlly, ...rest } = data;
+    return { data: { ...rest, targetActorId: chosen.id }, actorId: chosen.id };
+}
+
+/**
+ * Record one applied pick against the stored card. Returns true if the
+ * message was updated. Callers must hold update rights — a player's click
+ * arrives here only after being relayed to the GM.
+ */
+async function stampOutcomeApplied(message, effectAttr, appliedNames, appliedActorId = null) {
+    if (!message || !appliedNames?.length) return false;
+    if (!message.canUserModify(game.user, 'update')) return false;
+    try {
+        const doc = new DOMParser().parseFromString(message.content, 'text/html');
+        const buttons = Array.from(doc.querySelectorAll('.coffee-pub-bibliosoph-button-apply-outcome'));
+        if (!buttons.length) return false;
+
+        // Match the exact button that was clicked by its payload — with a
+        // picker there is one per party member and they are not interchangeable.
+        const clicked = buttons.find((b) => b.getAttribute('data-effect') === effectAttr) ?? buttons[0];
+        const picker = clicked.closest('.bibliosoph-outcome-picker');
+        const total = Math.max(1, Number(picker?.dataset?.picksTotal) || 1);
+        const before = Number(picker?.dataset?.picksRemaining);
+        const remaining = Math.max(0, (Number.isFinite(before) && before > 0 ? before : total) - 1);
+
+        // Names accumulate across clicks so the closing stamp names everyone.
+        const previous = (picker?.dataset?.picksApplied ?? '').split('|').filter(Boolean);
+        const names = [...previous, ...appliedNames];
+
+        const takenIds = (picker?.dataset?.picksActors ?? '').split('|').filter(Boolean);
+        if (appliedActorId) takenIds.push(appliedActorId);
+
+        if (picker && remaining > 0) {
+            // Retire the button just used AND the button of whoever actually
+            // received it — those differ when the dice made the choice — so
+            // the same party member cannot be picked twice.
+            clicked.remove();
+            if (appliedActorId) {
+                picker.querySelector(`.coffee-pub-bibliosoph-button-apply-outcome[data-pick-actor="${appliedActorId}"]`)?.remove();
+            }
+            picker.dataset.picksRemaining = String(remaining);
+            picker.dataset.picksApplied = names.join('|');
+            picker.dataset.picksActors = takenIds.join('|');
+            const hint = picker.querySelector('.bibliosoph-apply-hint');
+            if (hint) hint.textContent = targetHint('ally', total, remaining);
+            let progress = picker.querySelector('.bibliosoph-picks-progress');
+            if (!progress) {
+                progress = doc.createElement('p');
+                progress.className = 'bibliosoph-picks-progress';
+                progress.style.cssText = 'margin:2px 0 4px 0; font-size:0.9em; font-weight:bold; opacity:0.8;';
+                picker.insertBefore(progress, picker.firstChild);
+            }
+            progress.textContent = `✓ So far: ${names.join(', ')}`;
+            await message.update({ content: doc.body.innerHTML });
+            return true;
+        }
+
+        // Every pick spent: one stamp replaces the whole picker (or the
+        // lone button), and the instruction goes with it.
+        const stamp = doc.createElement('div');
+        stamp.style.cssText = 'width:100%; text-align:center; font-weight:bold; padding:5px 0;';
+        stamp.textContent = `✓ Applied to ${names.join(', ')}`;
+        (picker ?? clicked).replaceWith(stamp);
+        for (const extra of buttons) if (extra.isConnected) extra.remove();
+        for (const hint of doc.querySelectorAll('.bibliosoph-apply-hint')) hint.remove();
+        await message.update({ content: doc.body.innerHTML });
+        return true;
+    } catch (error) {
+        logBib('Could not record the applied outcome', error?.message, false, false);
+        return false;
+    }
+}
+
+const SOCKET_OUTCOME_APPLY = `${MODULE.ID}.outcomeApply`;
+
+/** GM side: resolve apply-outcome clicks made by players. */
+async function registerOutcomeApplySocket() {
+    const sockets = game.modules.get('coffee-pub-blacksmith')?.api?.sockets;
+    if (!sockets) return;
+    await sockets.waitForReady();
+    await sockets.register(SOCKET_OUTCOME_APPLY, async (payload) => {
+        if (game.users.activeGM?.id !== game.user.id) return;
+        const message = game.messages.get(payload?.messageId ?? '');
+        if (!message) return;
+        // The relay is a request, not a fact. Re-check both halves against
+        // live state: the button must still be live in the stored card (else
+        // this is a stale or double click), and the requester must really own
+        // the roller (else the client gate was bypassed).
+        const doc = new DOMParser().parseFromString(message.content, 'text/html');
+        const button = Array.from(doc.querySelectorAll('.coffee-pub-bibliosoph-button-apply-outcome'))
+            .find((b) => b.getAttribute('data-effect') === payload?.effectAttr);
+        if (!button) {
+            logBib('Ignoring relayed outcome apply — that choice is already spent', '', true, false);
+            return;
+        }
+        if (button.getAttribute('data-needs-selection') === '1') {
+            logBib('Refused relayed outcome apply — that button resolves against the clicker\'s selection and is GM-only', '', false, false);
+            return;
+        }
+        if (!userOwnsRoller(button.getAttribute('data-roller-actor'), payload?.userId)) {
+            logBib(`Refused relayed outcome apply from ${game.users.get(payload?.userId ?? '')?.name ?? 'unknown user'} — they do not own the roller`, '', false, false);
+            return;
+        }
+        const pick = resolveOutcomePick(message, payload?.data ?? {});
+        const applied = await applyOutcomeStatus(pick.data);
+        await stampOutcomeApplied(message, payload?.effectAttr, applied, pick.actorId);
+    });
+}
+
+/**
+ * One apply-outcome click, from whichever side of the table. The GM does
+ * it directly; anyone else asks the GM to, because applying effects and
+ * editing the card both need rights a player does not have.
+ */
+async function handleApplyOutcomeClick(buttonEl) {
+    const effectAttr = buttonEl.getAttribute('data-effect');
+    const data = decodeEffectPayload(effectAttr);
+    if (!data) return;
+    const messageId = buttonEl.closest('[data-message-id]')?.dataset?.messageId ?? '';
+
+    if (game.user.isGM) {
+        const message = game.messages.get(messageId);
+        const pick = resolveOutcomePick(message, data);
+        const applied = await applyOutcomeStatus(pick.data);
+        await stampOutcomeApplied(message, effectAttr, applied, pick.actorId);
+        return;
+    }
+
+    const sockets = game.modules.get('coffee-pub-blacksmith')?.api?.sockets;
+    if (!sockets || !game.users.activeGM) {
+        showBibToast('Nothing Applied', 'No GM is connected to resolve that choice.', 'fa-solid fa-triangle-exclamation');
+        return;
+    }
+    try {
+        await sockets.waitForReady();
+        await sockets.emit(SOCKET_OUTCOME_APPLY, { messageId, effectAttr, data, userId: game.user.id });
+    } catch (error) {
+        logBib('Outcome apply relay failed', error?.message, false, false);
+        showBibToast('Nothing Applied', 'That choice could not be sent to the GM.', 'fa-solid fa-triangle-exclamation');
     }
 }
 
