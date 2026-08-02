@@ -1088,6 +1088,13 @@
 #coffee-pub-bibliosoph-quick-encounter .window-encounter-result-card:hover {
     border: 2px solid rgba(255, 100, 0, 0.6);
     background: rgba(255, 100, 0, 0.1);
+    /* The card is both clickable (select for deploy) and draggable (place one
+       on the canvas); grab on hover is what advertises the second one. */
+    cursor: grab;
+}
+
+#coffee-pub-bibliosoph-quick-encounter .window-encounter-result-card:active {
+    cursor: grabbing;
 }
 
 

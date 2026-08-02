@@ -226,7 +226,7 @@
                     {{else if hasRecommendations}}
                         <div class="window-encounter-results-grid">
                             {{#each recommendations}}
-                            <div class="window-encounter-result-card {{#if selected}}selected{{/if}}{{#if count}} window-encounter-result-row-built{{/if}}{{#if override}} window-encounter-result-card-override{{/if}}" data-encounter-role="result-card" data-actor-id="{{id}}" data-count="{{count}}" title="{{#if override}}Included by name (ignores filters){{else}}{{#if count}}Part of built encounter — deploy below{{else}}Click to select for deploy{{/if}}{{/if}}">
+                            <div class="window-encounter-result-card {{#if selected}}selected{{/if}}{{#if count}} window-encounter-result-row-built{{/if}}{{#if override}} window-encounter-result-card-override{{/if}}" draggable="true" data-encounter-role="result-card" data-actor-id="{{id}}" data-count="{{count}}" title="{{#if override}}Included by name (ignores filters){{else}}{{#if count}}Part of built encounter — deploy below{{else}}Click to select for deploy{{/if}}{{/if}} · Drag onto the canvas to place one here">
                                 <button type="button" class="window-encounter-result-open-sheet" data-encounter-action="open-sheet" data-actor-id="{{id}}" aria-label="Open {{name}} sheet" title="Open sheet"><i class="fa-solid fa-feather-pointed"></i></button>
                                 {{#if selected}}
                                 <span class="window-encounter-result-count-wrap" data-actor-id="{{id}}">
@@ -235,7 +235,10 @@
                                     <button type="button" class="window-encounter-result-count-btn window-encounter-result-count-plus" data-encounter-action="count-plus" data-actor-id="{{id}}" aria-label="Increase count">+</button>
                                 </span>
                                 {{/if}}
-                                <img class="window-encounter-result-img" src="{{img}}" alt="{{name}}" />
+                                <!-- draggable=false so the browser drags the whole
+                                     card as one unit rather than starting its own
+                                     native image drag, which carries no actor data. -->
+                                <img class="window-encounter-result-img" src="{{img}}" alt="{{name}}" draggable="false" />
                                 <div class="window-encounter-result-cr">CR {{cr}}</div>
                                 <div class="window-encounter-result-name">{{name}}</div>
                             </div>

@@ -670,6 +670,38 @@ export class WindowEncounter extends Base {
             }
         });
 
+        // DRAG A RESULT CARD ONTO THE CANVAS
+        // We hand Foundry the very payload its own Actors sidebar emits —
+        // {type:'Actor', uuid} on text/plain — and its canvas drop handler
+        // does the rest: permission check, compendium import into the world
+        // Actors directory, prototype-token build, grid snapping. Writing our
+        // own placement here would be reimplementing all of that worse.
+        //
+        // This complements Deploy rather than replacing it: Deploy places the
+        // whole selected group by pattern, this puts ONE monster exactly where
+        // you point. Selection counts are deliberately ignored — a drag is a
+        // single, aimed placement.
+        document.addEventListener('dragstart', function _encounterDragStart(e) {
+            const w = _currentEncounterWindowRef;
+            if (!w) return;
+            const root = w._getEncounterRoot();
+            if (!root || !root.contains(e.target)) return;
+            const card = e.target?.closest?.('[data-encounter-role="result-card"]');
+            if (!card) return;
+            const uuid = card.getAttribute?.('data-actor-id') ?? card.dataset?.actorId;
+            if (!uuid || !e.dataTransfer) return;
+            e.dataTransfer.setData('text/plain', JSON.stringify({ type: 'Actor', uuid }));
+            e.dataTransfer.effectAllowed = 'copy';
+            // Drag the portrait rather than the whole card, so what follows the
+            // cursor looks like the token that is about to land.
+            const img = card.querySelector('.window-encounter-result-img');
+            if (img?.complete && e.dataTransfer.setDragImage) {
+                e.dataTransfer.setDragImage(img, img.width / 2, img.height / 2);
+            }
+            const name = card.querySelector('.window-encounter-result-name')?.textContent?.trim() ?? uuid;
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: dragging monster to canvas', name, true, false);
+        });
+
         document.addEventListener('click', function _encounterDelegation(e) {
             const w = _currentEncounterWindowRef;
             if (!w) return;
