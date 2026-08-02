@@ -593,7 +593,10 @@ function buildOutcomeMechanics(rec, modifierLines, rounds) {
         lines.push({ icon: 'fa-sparkles', text: rounds ? `${label} for ${rounds} round${rounds === 1 ? '' : 's'}` : label });
     }
     for (const text of modifierLines) lines.push({ icon: 'fa-dice-d20', text });
-    if (!lines.length) lines.push({ icon: 'fa-circle-info', text: 'No lasting effect — the damage is the story.' });
+    // No damage, no status, no modifiers: the outcome is pure flavour, so the
+    // card shows nothing here rather than a callout holding one apologetic
+    // line. An empty array is falsy to the template's {{#if}}, so the whole
+    // mechanics strip drops out and the description carries the card.
     return lines;
 }
 
@@ -644,7 +647,7 @@ export async function rollInjuryCard(category, target = null) {
                 });
                 if (applied.length) {
                     const stamp = doc.createElement('div');
-                    stamp.style.cssText = 'width:100%; text-align:center; font-style:italic; opacity:0.85; padding:4px 0;';
+                    stamp.style.cssText = 'width:100%; text-align:center; font-weight:bold; padding:5px 0;';
                     stamp.textContent = `✓ Applied to ${applied.join(', ')}`;
                     button.replaceWith(stamp);
                     compiledHtml = doc.body.innerHTML;
@@ -4095,7 +4098,7 @@ async function markCardButtonApplied(buttonEl, buttonSelector, appliedNames) {
         const buttons = Array.from(doc.querySelectorAll(buttonSelector));
         if (!buttons.length) return;
         const stamp = doc.createElement('div');
-        stamp.style.cssText = 'width:100%; text-align:center; font-style:italic; opacity:0.85; padding:4px 0;';
+        stamp.style.cssText = 'width:100%; text-align:center; font-weight:bold; padding:5px 0;';
         stamp.textContent = `✓ Applied to ${appliedNames.join(', ')}`;
         // A pick-one card renders a button per party member; choosing one
         // resolves the whole decision, so every option is replaced by the

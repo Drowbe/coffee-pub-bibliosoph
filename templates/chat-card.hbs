@@ -323,7 +323,7 @@
 
             <!-- INSPIRATION: pick-who-it-lands-on -->
             {{#if inspirationpicker}}
-                {{#if inspirationusehint}}<p style="margin: 4px 0 2px 0; font-size: 0.85em; font-style: italic; opacity: 0.75;">{{inspirationusehint}}</p>{{/if}}
+                {{#if inspirationusehint}}<p style="margin: 4px 0 2px 0; font-size: 0.9em; font-weight: bold;">{{inspirationusehint}}</p>{{/if}}
                 {{#if inspirationrandom}}
                     <button id="cards-button-cardsdark" title="Let the dice choose a party member" class="coffee-pub-bibliosoph-button-inspiration" data-inspiration="{{inspirationrandom}}" style="width: 100%; display: flex; align-items: center; gap: 8px; text-align: left; margin: 3px 0;">
                         <i class="fa-solid fa-dice-d20" style="width: 24px; text-align: center; margin: 0;"></i>
@@ -343,12 +343,12 @@
             <!-- INSPIRATION: single-button cards (self, or nothing to aim) -->
             {{#if inspirationuse}}
                 <button id="cards-button-cardsdark" title="Spend the inspiration point and resolve this card" class="coffee-pub-bibliosoph-button-inspiration" data-inspiration="{{inspirationuse}}" style="width: 100%;"><i class="fa-solid fa-lightbulb"></i>{{inspirationuselabel}}</button>
-                {{#if inspirationusehint}}<p style="margin: 2px 0 0 0; text-align: center; font-size: 0.85em; font-style: italic; opacity: 0.75;">{{inspirationusehint}}</p>{{/if}}
+                {{#if inspirationusehint}}<p style="margin: 3px 0 0 0; text-align: center; font-size: 0.9em; font-weight: bold;">{{inspirationusehint}}</p>{{/if}}
             {{/if}}
 
             <!-- APPLY CRITICAL / FUMBLE: pick-a-party-member -->
             {{#if applyoutcomepicker}}
-                {{#if applyoutcomehint}}<p style="margin: 4px 0 2px 0; font-size: 0.85em; font-style: italic; opacity: 0.75;">{{applyoutcomehint}}</p>{{/if}}
+                {{#if applyoutcomehint}}<p style="margin: 4px 0 2px 0; font-size: 0.9em; font-weight: bold;">{{applyoutcomehint}}</p>{{/if}}
                 {{#if applyoutcomerandom}}
                     <button id="cards-button-cardsdark" title="Let the dice choose a party member" class="coffee-pub-bibliosoph-button-apply-outcome" data-effect="{{applyoutcomerandom}}" style="width: 100%; display: flex; align-items: center; gap: 8px; text-align: left; margin: 3px 0;">
                         <i class="fa-solid fa-dice-d20" style="width: 24px; text-align: center; margin: 0;"></i>
@@ -368,7 +368,7 @@
             <!-- APPLY CRITICAL / FUMBLE BUTTON -->
             {{#if applyoutcome}}
                 <button id="cards-button-cardsdark" title="{{#if applyoutcomehint}}{{applyoutcomehint}}{{else}}{{applyoutcomelabel}} — no need to select anything{{/if}}" class="coffee-pub-bibliosoph-button-apply-outcome" data-effect="{{applyoutcome}}" style="width: 100%;"><i class="fa-solid {{applyoutcomeicon}}"></i>{{applyoutcomelabel}}</button>
-                {{#if applyoutcomehint}}<p style="margin: 2px 0 0 0; text-align: center; font-size: 0.85em; font-style: italic; opacity: 0.75;">{{applyoutcomehint}}</p>{{/if}}
+                {{#if applyoutcomehint}}<p style="margin: 3px 0 0 0; text-align: center; font-size: 0.9em; font-weight: bold;">{{applyoutcomehint}}</p>{{/if}}
             {{/if}}
 
             <!-- CHECK-UP: ZONED TREATMENT ROWS -->
