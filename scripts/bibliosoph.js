@@ -650,6 +650,7 @@ export async function rollInjuryCard(category, target = null) {
                     stamp.style.cssText = 'width:100%; text-align:center; font-weight:bold; padding:5px 0;';
                     stamp.textContent = `✓ Applied to ${applied.join(', ')}`;
                     button.replaceWith(stamp);
+                    for (const hint of doc.querySelectorAll('.bibliosoph-apply-hint')) hint.remove();
                     compiledHtml = doc.body.innerHTML;
                 }
             }
@@ -4105,6 +4106,9 @@ async function markCardButtonApplied(buttonEl, buttonSelector, appliedNames) {
         // single stamp rather than leaving the rest live.
         buttons[0].replaceWith(stamp);
         for (const extra of buttons.slice(1)) extra.remove();
+        // "Select the creature that was hit" is an instruction for a decision
+        // that has now been made — once the stamp is down it is just noise.
+        for (const hint of doc.querySelectorAll('.bibliosoph-apply-hint')) hint.remove();
         await message.update({ content: doc.body.innerHTML });
     } catch (error) {
         logBib('Could not mark card button applied', error?.message, false, false);
