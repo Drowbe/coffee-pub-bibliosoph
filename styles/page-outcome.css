@@ -162,8 +162,25 @@
 }
 
 .bibliosoph-outcome-mechanics p {
-    margin: 2px 0;
+    margin: 0;
     font-weight: bold;
+    line-height: 1.35;
+}
+
+/* Space only BETWEEN lines, so a one-line block hugs its padding instead of
+   sitting above a gap. The :first-child/:last-child pair also out-specifies
+   the system's generic `.chat-message ... p { margin-bottom }`, which is what
+   put the phantom empty line under a single mechanic. */
+.bibliosoph-outcome-mechanics p + p {
+    margin-top: 4px;
+}
+
+.bibliosoph-outcome-mechanics p:first-child {
+    margin-top: 0;
+}
+
+.bibliosoph-outcome-mechanics p:last-child {
+    margin-bottom: 0;
 }
 
 /* ================================================================= */
