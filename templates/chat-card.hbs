@@ -352,7 +352,7 @@
                      asks for two party members has to survive a refresh and be
                      identical on every client. The counts live in the stored
                      message HTML, not in any one client's memory. -->
-                <div class="bibliosoph-outcome-picker" data-picks-total="{{applyoutcomepicks}}" data-picks-remaining="{{applyoutcomepicks}}" data-picks-applied="">
+                <div class="bibliosoph-outcome-apply bibliosoph-outcome-picker" data-picks-total="{{applyoutcomepicks}}" data-picks-remaining="{{applyoutcomepicks}}" data-picks-applied="">
                     {{#if applyoutcomehint}}<p class="bibliosoph-apply-hint" style="margin: 4px 0 2px 0; font-size: 0.9em; font-weight: bold;">{{applyoutcomehint}}</p>{{/if}}
                     {{#if applyoutcomerandom}}
                         <button id="cards-button-cardsdark" title="Let the dice choose a party member" class="coffee-pub-bibliosoph-button-apply-outcome" data-effect="{{applyoutcomerandom}}" data-roller-actor="{{rollerActorId}}" style="width: 100%; display: flex; align-items: center; gap: 8px; text-align: left; margin: 3px 0;">
@@ -373,8 +373,15 @@
 
             <!-- APPLY CRITICAL / FUMBLE BUTTON -->
             {{#if applyoutcome}}
-                {{#if applyoutcomehint}}<p class="bibliosoph-apply-hint" style="margin: 4px 0 2px 0; text-align: center; font-size: 0.9em; font-weight: bold;">{{applyoutcomehint}}</p>{{/if}}
-                <button id="cards-button-cardsdark" title="{{#if applyoutcomehint}}{{applyoutcomehint}}{{else}}{{applyoutcomelabel}} — no need to select anything{{/if}}" class="coffee-pub-bibliosoph-button-apply-outcome" data-effect="{{applyoutcome}}" data-roller-actor="{{rollerActorId}}"{{#if applyoutcomeneedsselection}} data-needs-selection="1"{{/if}} style="width: 100%;"><i class="fa-solid {{applyoutcomeicon}}"></i>{{applyoutcomelabel}}</button>
+                <!-- Wrapped for the same reason the picker is: the instruction
+                     and the button are one unit. Pruning the button on a client
+                     that may not press it must take the "select X first" line
+                     with it, or the card tells the reader to do something they
+                     have no control for. -->
+                <div class="bibliosoph-outcome-apply">
+                    {{#if applyoutcomehint}}<p class="bibliosoph-apply-hint" style="margin: 4px 0 2px 0; text-align: center; font-size: 0.9em; font-weight: bold;">{{applyoutcomehint}}</p>{{/if}}
+                    <button id="cards-button-cardsdark" title="{{#if applyoutcomehint}}{{applyoutcomehint}}{{else}}{{applyoutcomelabel}} — no need to select anything{{/if}}" class="coffee-pub-bibliosoph-button-apply-outcome" data-effect="{{applyoutcome}}" data-roller-actor="{{rollerActorId}}"{{#if applyoutcomeneedsselection}} data-needs-selection="1"{{/if}} style="width: 100%;"><i class="fa-solid {{applyoutcomeicon}}"></i>{{applyoutcomelabel}}</button>
+                </div>
             {{/if}}
 
             <!-- CHECK-UP: ZONED TREATMENT ROWS -->

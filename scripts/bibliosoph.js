@@ -1953,10 +1953,20 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
             const roller = game.actors.get(btn.dataset.rollerActor ?? '');
             if (!roller?.isOwner) btn.remove();
         });
-        // A picker with every button stripped is an empty box holding an
-        // instruction nobody can act on.
-        nativeHtml?.querySelectorAll?.('.bibliosoph-outcome-picker')?.forEach((box) => {
+        // Never leave the instruction behind. "Select everyone in range."
+        // above nothing is a direction to someone with no way to follow it,
+        // so the hint and its button live or die together.
+        nativeHtml?.querySelectorAll?.('.bibliosoph-outcome-apply')?.forEach((box) => {
             if (!box.querySelector('.coffee-pub-bibliosoph-button-apply-outcome')) box.remove();
+        });
+        // Cards posted before that wrapper existed keep the hint as a bare
+        // sibling, so sweep any that no longer sit beside something to press.
+        nativeHtml?.querySelectorAll?.('.bibliosoph-apply-hint')?.forEach((hint) => {
+            if (hint.closest('.bibliosoph-outcome-apply')) return;
+            const actionable = hint.parentElement?.querySelector(
+                '.coffee-pub-bibliosoph-button-apply-outcome, .coffee-pub-bibliosoph-button-inspiration'
+            );
+            if (!actionable) hint.remove();
         });
     } else {
         appendGmNotesToTooltips(nativeHtml);
@@ -4237,7 +4247,11 @@ async function stampOutcomeApplied(message, effectAttr, appliedNames, appliedAct
         // Match the exact button that was clicked by its payload — with a
         // picker there is one per party member and they are not interchangeable.
         const clicked = buttons.find((b) => b.getAttribute('data-effect') === effectAttr) ?? buttons[0];
-        const picker = clicked.closest('.bibliosoph-outcome-picker');
+        // Both the picker and the single-button block are wrapped, so the
+        // closing stamp replaces the instruction along with the control.
+        // A single-button block carries no pick counts, which reads as
+        // "one pick, now spent" — exactly the old behaviour.
+        const picker = clicked.closest('.bibliosoph-outcome-apply');
         const total = Math.max(1, Number(picker?.dataset?.picksTotal) || 1);
         const before = Number(picker?.dataset?.picksRemaining);
         const remaining = Math.max(0, (Number.isFinite(before) && before > 0 ? before : total) - 1);
