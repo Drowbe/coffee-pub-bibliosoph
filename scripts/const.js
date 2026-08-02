@@ -89,9 +89,9 @@ export const BIBLIOSOPH = {
     CARDTYPEENCOUNTER: false,
     CARDTYPEINJURY: false,
     CARDTYPEINVESTIGATION: false,
-    CARDTYPECRIT: false,
-    CARDTYPEFUMBLE: false,
-    CARDTYPEINSPIRATION: false,
+    // No CRIT / FUMBLE / INSPIRATION flags: those three build their cards
+    // directly from their typed compendiums and never route through
+    // publishChatCard, which is what these flags selected between.
     MACRO_ID: "",
     CHAT_TYPE_OTHER: "OTHER",
 }

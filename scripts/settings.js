@@ -484,17 +484,22 @@ export const registerSettings = () => {
 			default: 'theme-default',
 			choices: themeChoices
 		});
-		// -- Critical Table --
-		game.settings.register(MODULE.ID,'criticalTable', {
-			name: MODULE.ID + '.criticalTable-Label',
-			hint: MODULE.ID + '.criticalTable-Hint',
+		// -- Critical Compendium (typed pages with real mechanics) --
+		// Sits directly above the roll table it falls back to, because its
+		// "None" option says "use the roll table below" and has to mean THIS
+		// feature's table.
+		game.settings.register(MODULE.ID, 'critCompendium', {
+			name: MODULE.ID + '.critCompendium-Label',
+			hint: MODULE.ID + '.critCompendium-Hint',
 			scope: "world",
 			config: true,
 			requiresReload: false,
-			default: '-- Choose a Roll Table --',
-			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
+			default: 'coffee-pub-bibliosoph.criticals',
+			choices: Object.assign(
+				{ none: 'None — this feature posts no cards' },
+				getBlacksmithChoices('arrCompendiumChoices', 'No compendiums found. Try reloading Foundry after all modules are enabled.')
+			)
 		});
-
 		// ---------- SUBHEADING: Toast Design ----------
 		game.settings.register(MODULE.ID, "headingH3CriticalToastDesign", {
 			name: MODULE.ID + '.headingH3CriticalToastDesign-Label',
@@ -643,19 +648,7 @@ export const registerSettings = () => {
 			default: 'theme-default',
 			choices: themeChoices
 		});
-		// -- Critical / Fumble Compendiums (typed pages with real mechanics) --
-		game.settings.register(MODULE.ID, 'critCompendium', {
-			name: MODULE.ID + '.critCompendium-Label',
-			hint: MODULE.ID + '.critCompendium-Hint',
-			scope: "world",
-			config: true,
-			requiresReload: false,
-			default: 'coffee-pub-bibliosoph.criticals',
-			choices: Object.assign(
-				{ none: 'None — use the roll table below' },
-				getBlacksmithChoices('arrCompendiumChoices', 'No compendiums found. Try reloading Foundry after all modules are enabled.')
-			)
-		});
+		// -- Fumble Compendium (typed pages with real mechanics) --
 		game.settings.register(MODULE.ID, 'fumbleCompendium', {
 			name: MODULE.ID + '.fumbleCompendium-Label',
 			hint: MODULE.ID + '.fumbleCompendium-Hint',
@@ -664,19 +657,7 @@ export const registerSettings = () => {
 			requiresReload: false,
 			default: 'coffee-pub-bibliosoph.fumbles',
 			choices: Object.assign(
-				{ none: 'None — use the roll table below' },
-				getBlacksmithChoices('arrCompendiumChoices', 'No compendiums found. Try reloading Foundry after all modules are enabled.')
-			)
-		});
-		game.settings.register(MODULE.ID, 'inspirationCompendium', {
-			name: MODULE.ID + '.inspirationCompendium-Label',
-			hint: MODULE.ID + '.inspirationCompendium-Hint',
-			scope: "world",
-			config: true,
-			requiresReload: false,
-			default: 'coffee-pub-bibliosoph.inspiration',
-			choices: Object.assign(
-				{ none: 'None — use the roll table below' },
+				{ none: 'None — this feature posts no cards' },
 				getBlacksmithChoices('arrCompendiumChoices', 'No compendiums found. Try reloading Foundry after all modules are enabled.')
 			)
 		});
@@ -689,17 +670,6 @@ export const registerSettings = () => {
 			scope: 'world',
 			default: true,
 		});
-		// -- Fumble Table --
-		game.settings.register(MODULE.ID,'fumbleTable', {
-			name: MODULE.ID + '.fumbleTable-Label',
-			hint: MODULE.ID + '.fumbleTable-Hint',
-			scope: "world",
-			config: true,
-			requiresReload: false,
-			default: '-- Choose a Roll Table --',
-			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
-		});
-
 		// ---------- SUBHEADING: Toast Design ----------
 		game.settings.register(MODULE.ID, "headingH3FumbleToastDesign", {
 			name: MODULE.ID + '.headingH3FumbleToastDesign-Label',
@@ -1703,15 +1673,20 @@ export const registerSettings = () => {
 			default: 'theme-default',
 			choices: themeChoices
 		});
-		// -- Inspiration Table --
-		game.settings.register(MODULE.ID,'inspirationTable', {
-			name: MODULE.ID + '.inspirationTable-Label',
-			hint: MODULE.ID + '.inspirationTable-Hint',
+		// -- Inspiration Deck (typed pages: the card deck) --
+		// The deck is the modern source; the roll table below is the legacy
+		// fallback, reached only when this is set to None.
+		game.settings.register(MODULE.ID, 'inspirationCompendium', {
+			name: MODULE.ID + '.inspirationCompendium-Label',
+			hint: MODULE.ID + '.inspirationCompendium-Hint',
 			scope: "world",
 			config: true,
 			requiresReload: false,
-			default: '-- Choose a Roll Table --',
-			choices: getBlacksmithChoices('arrTableChoices', 'No tables found. Try reloading Foundry after all modules are enabled.')
+			default: 'coffee-pub-bibliosoph.inspiration',
+			choices: Object.assign(
+				{ none: 'None — this feature posts no cards' },
+				getBlacksmithChoices('arrCompendiumChoices', 'No compendiums found. Try reloading Foundry after all modules are enabled.')
+			)
 		});
 		// -- Inspiration Macro --
 		game.settings.register(MODULE.ID,'inspirationMacro', {

@@ -323,36 +323,36 @@ function triggerFumbleRoll() {
     rollOutcomeCard('fumble');
 }
 
-// Roll the configured crit/fumble table and post the chat card. Used by
-// the toolbar buttons above and by manager-roll-toasts.js for the
+// Roll a crit/fumble from its typed compendium and post the chat card.
+// Used by the toolbar buttons above and by manager-roll-toasts.js for the
 // Automation click/auto modes.
+//
+// The compendium is the ONLY source. Roll tables used to sit behind this as
+// a fallback, but a table cannot carry what the card is now built around —
+// conditions, durations, roll modifiers, targeting — so a card built from
+// one was a strictly lesser thing wearing the same face. When there is no
+// deck, we say so rather than quietly posting the lesser card.
+//
+// `title` forces a specific outcome instead of a weighted draw — the test
+// harness uses it to demo a particular card on demand.
+// The actor ids are who rolled and who they hit, when the triggering roll
+// told us — they let the card name people instead of saying "the roller"
+// and "the creature hit".
 export async function rollOutcomeCard(type, { title = null, rollerActorId = null, rollerTokenId = null, hitActorId = null, overrides = null } = {}) {
-    // Typed compendium first — it carries real mechanics (conditions,
-    // durations, roll modifiers). Roll tables remain fully supported for
-    // anyone using their own crit/fumble tables.
-    // `title` forces a specific outcome instead of a weighted draw — the
-    // test harness uses it to demo a particular card on demand.
-    // The actor ids are who rolled and who they hit, when the triggering
-    // roll told us — they let the card name people instead of saying
-    // "the roller" and "the creature hit".
+    const kindLabel = type === 'crit' ? 'Criticals' : 'Fumbles';
     const compendium = getSettingSafe(type === 'crit' ? 'critCompendium' : 'fumbleCompendium', 'none');
-    if (compendium && compendium !== 'none') {
-        const html = await createChatCardOutcome(type, { title, rollerActorId, rollerTokenId, hitActorId, overrides });
-        if (html) {
-            await ChatMessage.create({ user: game.user.id, content: html, speaker: ChatMessage.getSpeaker() });
-            return;
-        }
-        logBib(`No outcome found in "${compendium}" — falling back to the roll table`, '', false, false);
+    if (!compendium || compendium === 'none') {
+        logBib(`No ${kindLabel} compendium set — nothing to post`, '', false, false);
+        showBibToast(`No ${kindLabel} Deck`, `Choose a ${kindLabel} compendium in Bibliosoph settings.`, 'fa-solid fa-book-open');
+        return;
     }
-    resetBibliosophVars();
-    if (type === 'crit') {
-        BIBLIOSOPH.CARDTYPECRIT = true;
-        BIBLIOSOPH.CARDTYPE = "Critical";
-    } else {
-        BIBLIOSOPH.CARDTYPEFUMBLE = true;
-        BIBLIOSOPH.CARDTYPE = "Fumble";
+    const html = await createChatCardOutcome(type, { title, rollerActorId, rollerTokenId, hitActorId, overrides });
+    if (!html) {
+        logBib(`No outcome found in "${compendium}"`, '', false, false);
+        showBibToast(`No ${kindLabel} Found`, `"${compendium}" has no matching entries.`, 'fa-solid fa-book-open');
+        return;
     }
-    await publishChatCard();
+    await ChatMessage.create({ user: game.user.id, content: html, speaker: ChatMessage.getSpeaker() });
 }
 
 // Read an outcome record off a typed page (system data is authoritative).
@@ -1432,25 +1432,17 @@ function triggerInspirationMacro() {
     // dealing — usually a chosen card, "you get Smite for that" — so they
     // get the picker. A player is drawing their own luck, so they get the
     // weighted draw straight away with no menu in the middle of it.
+    // The deck is the only source. There is no roll-table path any more:
+    // a table row cannot hold a card's action, odds or art, so what it
+    // produced was a look-alike with none of the mechanics behind it.
     const compendium = getSettingSafe('inspirationCompendium', 'none');
-    if (compendium && compendium !== 'none') {
-        if (game.user.isGM) openInspirationDealDialog();
-        else drawInspirationCard(game.user.character ?? null);
+    if (!compendium || compendium === 'none') {
+        logBib('No Inspiration deck set — nothing to draw from', '', false, false);
+        showBibToast('No Inspiration Deck', 'Choose an Inspiration compendium in Bibliosoph settings.', 'fa-solid fa-book-open');
         return;
     }
-    const strInspirationMacro = BlacksmithUtils.getSettingSafely(MODULE.ID, 'inspirationMacro', '') || '';
-    
-    if (!strInspirationMacro || strInspirationMacro === '-- Choose a Macro --' || strInspirationMacro === 'none') {
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Inspiration macro not configured", "", false, false);
-        return;
-    }
-
-    // Build the chat message (same as macro click handler)
-    resetBibliosophVars();
-    BIBLIOSOPH.CARDTYPEINSPIRATION = true;
-    BIBLIOSOPH.CARDTYPE = "General";
-    // Build the card
-    publishChatCard();
+    if (game.user.isGM) openInspirationDealDialog();
+    else drawInspirationCard(game.user.character ?? null);
 }
 
 // Make functions globally available for toolbar manager
@@ -1716,12 +1708,9 @@ Hooks.on("ready", async () => {
             label: "Inspiration",
             enabledKey: 'inspirationEnabled',
             macroKey: 'inspirationMacro',
-            onExecute: async () => {
-                resetBibliosophVars();
-                BIBLIOSOPH.CARDTYPEINSPIRATION = true;
-                BIBLIOSOPH.CARDTYPE = "General";
-                publishChatCard();
-            }
+            // Runs the same deck path as the toolbar button, so a macro and a
+            // button press cannot diverge into two different behaviours.
+            onExecute: async () => triggerInspirationMacro()
         });
 
     };
@@ -1863,15 +1852,7 @@ Hooks.on("ready", async () => {
         if(strInspirationMacro) {
             let InspirationMacro = getMacroByIdOrName(strInspirationMacro);
             if(InspirationMacro) {
-                InspirationMacro.execute = async () => {
-                    //BlacksmithUtils.postConsoleAndNotification("Macro Clicked: ", "Inspiration", false, true, false);
-                    // Build the chat message
-                    resetBibliosophVars();
-                    BIBLIOSOPH.CARDTYPEINSPIRATION = true;
-                    BIBLIOSOPH.CARDTYPE = "Inspiration";
-                    // Build the card
-                    publishChatCard();
-                };
+                InspirationMacro.execute = async () => triggerInspirationMacro();
             } else {
                 // User needs to know about macro configuration issues
                 BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Inspiration Macro "${strInspirationMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
@@ -2049,21 +2030,11 @@ async function publishChatCard() {
         // INVESTIGATION (new flow: narrative + slots + per-rarity tables)
         compiledHtml = await createChatCardInvestigation();
     }
-    else if (BIBLIOSOPH.CARDTYPECRIT) {
-        // CRITICAL
-        //BlacksmithUtils.postConsoleAndNotification("Card Type: ", "Crit", false, true, false);
-        strRollTableName = game.settings.get(MODULE.ID, 'criticalTable');
-        compiledHtml = await createChatCardGeneral(strRollTableName);
-    } else if (BIBLIOSOPH.CARDTYPEFUMBLE) {
-        // FUMBLE
-        //BlacksmithUtils.postConsoleAndNotification("Card Type: ", "Fumble", false, true, false);
-        strRollTableName = game.settings.get(MODULE.ID, 'fumbleTable');
-        compiledHtml = await createChatCardGeneral(strRollTableName);
-    } else if (BIBLIOSOPH.CARDTYPEINSPIRATION) {
-        // INSPIRATION
-        strRollTableName = game.settings.get(MODULE.ID, 'inspirationTable');
-        compiledHtml = await createChatCardGeneral(strRollTableName);
-    } else if (BIBLIOSOPH.CARDTYPEINJURY) {
+    // Criticals, fumbles and inspiration no longer come through here: each
+    // builds its own card straight from its typed compendium
+    // (createChatCardOutcome / the inspiration deck). This function is now
+    // only the investigation and injury path.
+    else if (BIBLIOSOPH.CARDTYPEINJURY) {
 
         // V12 CONTEXT:
         //Atropos — 03/04/2024 6:00 AM
@@ -2107,158 +2078,6 @@ async function publishChatCard() {
     // Reset everything for the next time - This is a system message
     BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "The card has been delivered, so we are clearing our variables for next time.", "", false, false);
     resetBibliosophVars();
-}
-
-// ************************************
-// ** CREATE General Chat Card
-// ************************************
-
-async function createChatCardGeneral(strRollTableName) {  
-    // User Info
-    var strUserName = "";
-    var strUserAvatar = "";
-    var strPlayerType = "";
-    var strCharacterName = "";
-    // Card defaults
-    var strSound = "";
-    var strVolume = "0.7";
-    var strTheme = "";
-    var strIconStyle = "";
-    var strCardTitle = ""
-    var strImageBackground = "themecolor";
-    // Table info
-    var strTableName = "";
-    var strTableImage = "";
-    // Card Details
-    var strTitle = "";
-    var strContent = "";
-    var strImage = "";
-    var strAction = "";
-    var strActionLabel = "";
-    // NEW or Reworked Variable as part of unification
-    var arrTable = "";
-    var arrPrivateRecipients = [];
-    var privateRecipientsCompressed = false; 
-    var strRecipients = "";
-    // ** Set Gloobal Data used by all **
-    strUserName = game.user.name;
-    strUserAvatar = game.user.avatar;
-    if (game.user.isGM){
-        strPlayerType = "Gamemaster";
-        strCharacterName = "Cocktail Craftsman and Moderator";
-    } else {
-        strPlayerType = "Player";
-        if(game.user.character) {
-            strCharacterName = game.user.character.name;
-        } else {
-            strCharacterName = "No Character Set";
-        }
-    }
-     // Set the template Specific stuff
-     switch(true) {
-        case (BIBLIOSOPH.CARDTYPECRIT):
-            // CRITICAL
-            strTheme = game.settings.get(MODULE.ID, 'cardThemeCritical');
-            strSound = "modules/coffee-pub-blacksmith/sounds/reaction-yay.mp3";
-            strIconStyle = "fa-burst";
-            strActionLabel = "";
-            break;
-        case (BIBLIOSOPH.CARDTYPEFUMBLE):
-            // FUMBLE
-            strTheme = game.settings.get(MODULE.ID, 'cardThemeFumble');
-            strSound = "modules/coffee-pub-blacksmith/sounds/sadtrombone.mp3";
-            strIconStyle = "fa-heart-crack";
-            strActionLabel = "";
-            break;
-        case (BIBLIOSOPH.CARDTYPEINSPIRATION):
-            // INSPIRATION
-            strTheme = game.settings.get(MODULE.ID, 'cardThemeInspiration');
-            strSound = "modules/coffee-pub-blacksmith/sounds/spell-magic-circle.mp3";
-            strIconStyle = "fa-sparkles";
-            strActionLabel = "";
-            break;
-        default:
-            // NOTHING
-            // POST DEBUG
-            //BlacksmithUtils.postConsoleAndNotification("Card Type: ","Not Defined", false, true, false);
-            return;
-    }  
-
-    // ROLL THE Table and set the data
-    // debug
-    if (strRollTableName){
-        //There is a roll table... get the data from it.
-        let arrRollTableResults = await getRollTable(strRollTableName);
-        if (!arrRollTableResults) return "";
-        // Show Dice So Nice (when installed) for the REAL table roll and
-        // wait for the dice to land before the card renders — same gate and
-        // call as Blacksmith's roll tools (manager-rolls.js).
-        if (game.dice3d && game.settings.get(MODULE.ID, 'showDiceRolls') && arrRollTableResults.roll) {
-            try {
-                await game.dice3d.showForRoll(arrRollTableResults.roll, game.user, true, null, false, null, null, { ghost: false, secret: false });
-            } catch (err) {
-                // Dice are cosmetic — never block the card on an animation error
-            }
-        }
-        // BlacksmithUtils.postConsoleAndNotification("BIBLIOSOPH: createChatCardGeneral arrRollTableResults", arrRollTableResults, false, true, false);
-        strTableName = arrRollTableResults.strTableName;
-        strTableImage = arrRollTableResults.strTableImage;
-        strCardTitle = arrRollTableResults.strTableName;
-        strTitle = arrRollTableResults.strTitle;
-        strContent = arrRollTableResults.strContent;
-        strAction = arrRollTableResults.strAction;
-        strImage = arrRollTableResults.strImage;
-    }
-    const template = await getCardTemplate();
-    // Apply button: crit/fumble cards carry their result so it can be
-    // applied as a status effect on a targeted token straight from the card.
-    let strApplyOutcomeData = "";
-    let strApplyOutcomeLabel = "";
-    let strApplyOutcomeIcon = "";
-    if ((BIBLIOSOPH.CARDTYPECRIT || BIBLIOSOPH.CARDTYPEFUMBLE) && (strTitle || strContent)) {
-        const blnIsCrit = BIBLIOSOPH.CARDTYPECRIT;
-        const APPLYDATA = {
-            kind: blnIsCrit ? "crit" : "fumble",
-            name: strTitle || (blnIsCrit ? "Critical Hit" : "Fumble"),
-            description: strContent || ""
-        };
-        // JSON + URI encoding: survives any prose (quotes, =, |, HTML) that
-        // would corrupt the legacy key=value|key=value format.
-        strApplyOutcomeData = encodeURIComponent(JSON.stringify(APPLYDATA));
-        strApplyOutcomeLabel = blnIsCrit ? "Apply Critical" : "Apply Fumble";
-        strApplyOutcomeIcon = blnIsCrit ? "fa-burst" : "fa-heart-crack";
-    }
-    // Pass the data to the template
-    const CARDDATA = {
-        userName: strUserName,
-        userAvatar: strUserAvatar,
-        playerType: strPlayerType,
-        characterName: strCharacterName,
-        theme: strTheme,
-        iconStyle: strIconStyle,
-        cardTitle: strCardTitle,
-        imageBackground: strImageBackground,
-        title: strTitle,
-        content: strContent,
-        action: strAction,
-        actionlabel: strActionLabel,
-        image: strImage,
-        tablename: strTableName,
-        arrPrivateRecipients,
-        privateRecipientsCompressed,
-        strRecipients, //used for the hidden input for replies
-        applyoutcome: strApplyOutcomeData,
-        applyoutcomelabel: strApplyOutcomeLabel,
-        applyoutcomeicon: strApplyOutcomeIcon,
-        hasSectionContent: !!(strAction || strApplyOutcomeData || (arrPrivateRecipients && arrPrivateRecipients.length)),
-    };
-    // Play the Sound
-    BlacksmithUtils.playSound(strSound,strVolume);
-    // POST DEBUG
-    //BlacksmithUtils.postConsoleAndNotification("CARDDATA.content" , CARDDATA.content, false, true, true);
-    // Return the template
-    return template(CARDDATA);
-
 }
 
 
@@ -2779,79 +2598,6 @@ async function createChatCardInvestigation() {
     return template(CARDDATA);
 }
 
-// ************************************
-// ** UTILITY Roll Table
-// ************************************
-
-async function getRollTable(tableName) {
-
-    // resultId: The id of the rolled table result.
-    // weight: The weight (probability) of this item being rolled.
-    // type: The type of result.
-    // text: The text that is shown when this result is rolled.
-    // img: URL to an image for the result.
-    // collection: The name of a collection from which to draw a specific Entity.
-    // result: The id of the chosen Entity from the collection.
-    // drawn: Boolean value of whether or not the result was drawn. 
-
-    var table = game.tables.getName(tableName);
-
-    // Check to see if the table is valid
-    if (!table) {
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Roll Table not Found. Did you set one in settings?", "", false, false); 
-        return;
-    }
-    
-    var strRollTableImage = "";
-    var strRollTableName = "";
-    var strContent = "";
-    var strTitle = "";
-    var strAction = "";
-    var intResultId = "";
-    var intWeighting = "";
-    var strRollType = "";
-    var strImage = "";
-    var arrCollection = "";
-    var strResultOfEntity = "";
-    var blnHasBeenDrawn = "";
-
-    // Map the results for the returned array. Dice are NOT shown here —
-    // the caller animates ROLLEDRESULT.roll (the real table roll) and
-    // awaits it, so the card lands after the dice.
-    let rollResults = await table.roll();
-    // Fix parse the text as needed
-    strContent = rollResults.results[0].text;
-    strTitle = grabTextBetweenStrings(strContent, "**", "**");
-    strContent = strContent.replace('**' + strTitle + '**','');
-    strAction = grabTextBetweenStrings(strContent, "##", "##");
-    strContent = strContent.replace('##' + strAction + '##','');   
-    strRollTableImage = table.img;
-    strRollTableName = table.name;
-    intResultId =  rollResults.results[0].resultId;
-    intWeighting =  rollResults.results[0].weight;
-    strRollType =  rollResults.results[0].type;
-    strImage =  rollResults.results[0].img;
-    arrCollection =  rollResults.results[0].collection;
-    strResultOfEntity =  rollResults.results[0].result;
-    blnHasBeenDrawn =  rollResults.results[0].drawn;
-    // map the data to the returned array
-    const ROLLEDRESULT = {
-        roll: rollResults.roll, // the actual evaluated table roll, for dice animation
-        strTableName: strRollTableName,
-        strTableImage: strRollTableImage,
-        intResultId: intResultId,
-        intWeighting: intWeighting,
-        strRollType: strRollType,
-        strTitle: strTitle,
-        strContent: strContent,
-        strAction: strAction,
-        strImage: strImage,
-        arrCollection: arrCollection, // the table data
-        strResultOfEntity: strResultOfEntity, // ???
-        blnHasBeenDrawn: blnHasBeenDrawn, 
-    };
-    return ROLLEDRESULT;
-}
 
 // (Legacy whisper player-list/recipient utilities removed — the unified
 // Messages window owns private conversations now.)
@@ -4414,9 +4160,6 @@ function resetBibliosophVars() {
     BIBLIOSOPH.CARDTYPEINJURY = false;
     BIBLIOSOPH.CARDTYPEENCOUNTER = false;
     BIBLIOSOPH.CARDTYPEINVESTIGATION = false;
-    BIBLIOSOPH.CARDTYPECRIT = false;
-    BIBLIOSOPH.CARDTYPEFUMBLE = false;
-    BIBLIOSOPH.CARDTYPEINSPIRATION = false;
     BIBLIOSOPH.MACRO_ID = "";
 }
 
