@@ -108,7 +108,11 @@ export const registerSettings = () => {
 		// Debug: Post the Blacksmith choice arrays - This is debug info, only log if really needed for troubleshooting
 		const blacksmith = game.modules.get('coffee-pub-blacksmith')?.api;
 
-		// Quick Encounter window position/size (client; not shown in config)
+		// Quick Encounter window position/size. The ONLY 'client' scope in the
+		// module, and deliberately so: window geometry is about this screen,
+		// not this person — a laptop and a desktop want different sizes, and
+		// 'client' is the only scope stored per device (localStorage) rather
+		// than on the User. Everything else that used to be 'client' is 'user'.
 		game.settings.register(MODULE.ID, 'quickEncounterWindowBounds', {
 			scope: 'client',
 			config: false,
@@ -124,7 +128,7 @@ export const registerSettings = () => {
 		});
 		// Quick Encounter: post chat card when deploying (client; used by encounter window only)
 		game.settings.register(MODULE.ID, 'quickEncounterPostChatCard', {
-			scope: 'client',
+			scope: 'user',
 			config: false,
 			type: Boolean,
 			default: true,
@@ -134,7 +138,7 @@ export const registerSettings = () => {
 		game.settings.register(MODULE.ID, "headingH1Bibliosoph", {
 			name: MODULE.ID + '.headingH1Bibliosoph-Label',
 			hint: MODULE.ID + '.headingH1Bibliosoph-Hint',
-			scope: "world",
+			scope: 'user',
 			config: true,
 			default: "",
 			type: String,
@@ -154,7 +158,7 @@ export const registerSettings = () => {
 		game.settings.register(MODULE.ID, "headingH2General", {
 			name: MODULE.ID + '.headingH2General-Label',
 			hint: MODULE.ID + '.headingH2General-Hint',
-			scope: "world",
+			scope: 'user',
 			config: true,
 			default: "",
 			type: String,
@@ -180,7 +184,7 @@ export const registerSettings = () => {
 		game.settings.register(MODULE.ID, "headingH2Messaging", {
 			name: MODULE.ID + '.headingH2Messaging-Label',
 			hint: MODULE.ID + '.headingH2Messaging-Hint',
-			scope: "world",
+			scope: 'user',
 			config: true,
 			default: "",
 			type: String,
@@ -287,7 +291,11 @@ export const registerSettings = () => {
 			scope: 'user',
 			default: true,
 		});
-		// -- Message sounds (all local; mute toggle lives in the Messages window) --
+		// -- Message sounds --
+		// World-scoped like every other sound in the module: the GM owns the
+		// table's soundscape, so one person picks and everyone hears the same
+		// thing. Silencing them individually is what the mute toggle in the
+		// Messages window is for — that stays per-user.
 		const messageSounds = [
 			{ key: 'messageSoundAlert', def: 'modules/coffee-pub-blacksmith/sounds/interface-notification-03.mp3' },
 			{ key: 'messageSoundReceive', def: 'modules/coffee-pub-blacksmith/sounds/interface-pop-01.mp3' },
@@ -299,7 +307,7 @@ export const registerSettings = () => {
 			game.settings.register(MODULE.ID, key, {
 				name: MODULE.ID + '.' + key + '-Label',
 				hint: MODULE.ID + '.' + key + '-Hint',
-				scope: 'user',
+				scope: 'world',
 				config: true,
 				requiresReload: false,
 				default: def,
@@ -339,7 +347,7 @@ export const registerSettings = () => {
 		game.settings.register(MODULE.ID, "headingH3RandomToasts", {
 			name: MODULE.ID + '.headingH3RandomToasts-Label',
 			hint: MODULE.ID + '.headingH3RandomToasts-Hint',
-			scope: "client",
+			scope: 'world',
 			config: true,
 			default: "",
 			type: String,
@@ -433,7 +441,7 @@ export const registerSettings = () => {
 		game.settings.register(MODULE.ID, "headingH3CriticalConfiguration", {
 			name: MODULE.ID + '.headingH3CriticalConfiguration-Label',
 			hint: MODULE.ID + '.headingH3CriticalConfiguration-Hint',
-			scope: "client",
+			scope: 'world',
 			config: true,
 			default: "",
 			type: String,
@@ -469,7 +477,7 @@ export const registerSettings = () => {
 		game.settings.register(MODULE.ID, "headingH3CriticalChatCard", {
 			name: MODULE.ID + '.headingH3CriticalChatCard-Label',
 			hint: MODULE.ID + '.headingH3CriticalChatCard-Hint',
-			scope: "client",
+			scope: 'world',
 			config: true,
 			default: "",
 			type: String,
@@ -504,7 +512,7 @@ export const registerSettings = () => {
 		game.settings.register(MODULE.ID, "headingH3CriticalToastDesign", {
 			name: MODULE.ID + '.headingH3CriticalToastDesign-Label',
 			hint: MODULE.ID + '.headingH3CriticalToastDesign-Hint',
-			scope: "client",
+			scope: 'world',
 			config: true,
 			default: "",
 			type: String,
@@ -612,7 +620,7 @@ export const registerSettings = () => {
 		game.settings.register(MODULE.ID, "headingH3FumbleConfiguration", {
 			name: MODULE.ID + '.headingH3FumbleConfiguration-Label',
 			hint: MODULE.ID + '.headingH3FumbleConfiguration-Hint',
-			scope: "client",
+			scope: 'world',
 			config: true,
 			default: "",
 			type: String,
@@ -632,7 +640,7 @@ export const registerSettings = () => {
 		game.settings.register(MODULE.ID, "headingH3FumbleChatCard", {
 			name: MODULE.ID + '.headingH3FumbleChatCard-Label',
 			hint: MODULE.ID + '.headingH3FumbleChatCard-Hint',
-			scope: "client",
+			scope: 'world',
 			config: true,
 			default: "",
 			type: String,
@@ -674,7 +682,7 @@ export const registerSettings = () => {
 		game.settings.register(MODULE.ID, "headingH3FumbleToastDesign", {
 			name: MODULE.ID + '.headingH3FumbleToastDesign-Label',
 			hint: MODULE.ID + '.headingH3FumbleToastDesign-Hint',
-			scope: "client",
+			scope: 'world',
 			config: true,
 			default: "",
 			type: String,
@@ -784,7 +792,7 @@ export const registerSettings = () => {
 		game.settings.register(MODULE.ID, "headingH3InjuriesConfiguration", {
 			name: MODULE.ID + '.headingH3InjuriesConfiguration-Label',
 			hint: MODULE.ID + '.headingH3InjuriesConfiguration-Hint',
-			scope: "client",
+			scope: 'world',
 			config: true,
 			default: "",
 			type: String,
@@ -860,7 +868,7 @@ export const registerSettings = () => {
 		game.settings.register(MODULE.ID, "headingH3InjuriesChatCard", {
 			name: MODULE.ID + '.headingH3InjuriesChatCard-Label',
 			hint: MODULE.ID + '.headingH3InjuriesChatCard-Hint',
-			scope: "client",
+			scope: 'world',
 			config: true,
 			default: "",
 			type: String,
@@ -924,7 +932,7 @@ export const registerSettings = () => {
 		game.settings.register(MODULE.ID, "headingH3InjuriesToastDesign", {
 			name: MODULE.ID + '.headingH3InjuriesToastDesign-Label',
 			hint: MODULE.ID + '.headingH3InjuriesToastDesign-Hint',
-			scope: "client",
+			scope: 'world',
 			config: true,
 			default: "",
 			type: String,
@@ -1019,7 +1027,7 @@ export const registerSettings = () => {
 		game.settings.register(MODULE.ID, "headingH3InjuriesTreatment", {
 			name: MODULE.ID + '.headingH3InjuriesTreatment-Label',
 			hint: MODULE.ID + '.headingH3InjuriesTreatment-Hint',
-			scope: "client",
+			scope: 'world',
 			config: true,
 			default: "",
 			type: String,
@@ -1143,73 +1151,73 @@ export const registerSettings = () => {
 			default: true,
 		});
 		game.settings.register(MODULE.ID, 'quickEncounterHabitat', {
-			scope: 'client',
+			scope: 'user',
 			config: false,
 			type: String,
 			default: 'Any',
 		});
 		game.settings.register(MODULE.ID, 'quickEncounterMinCR', {
-			scope: 'client',
+			scope: 'user',
 			config: false,
 			type: Number,
 			default: 0,
 		});
 		game.settings.register(MODULE.ID, 'quickEncounterMaxCR', {
-			scope: 'client',
+			scope: 'user',
 			config: false,
 			type: Number,
 			default: 30,
 		});
 		game.settings.register(MODULE.ID, 'quickEncounterMaxRecommendations', {
-			scope: 'client',
+			scope: 'user',
 			config: false,
 			type: Number,
 			default: 10,
 		});
 		game.settings.register(MODULE.ID, 'quickEncounterVariability', {
-			scope: 'client',
+			scope: 'user',
 			config: false,
 			type: Number,
 			default: 3,
 		});
 		game.settings.register(MODULE.ID, 'quickEncounterDetection', {
-			scope: 'client',
+			scope: 'user',
 			config: false,
 			type: Number,
 			default: 3,
 		});
 		game.settings.register(MODULE.ID, 'quickEncounterRecentIncludeNames', {
-			scope: 'client',
+			scope: 'user',
 			config: false,
 			type: Object,
 			default: [],
 		});
 		game.settings.register(MODULE.ID, 'quickEncounterRecentExcludeNames', {
-			scope: 'client',
+			scope: 'user',
 			config: false,
 			type: Object,
 			default: [],
 		});
 		game.settings.register(MODULE.ID, 'quickEncounterRememberInclude', {
-			scope: 'client',
+			scope: 'user',
 			config: false,
 			type: Boolean,
 			default: false,
 		});
 		game.settings.register(MODULE.ID, 'quickEncounterRememberedIncludeText', {
-			scope: 'client',
+			scope: 'user',
 			config: false,
 			type: String,
 			default: '',
 		});
 		game.settings.register(MODULE.ID, 'quickEncounterRememberExclude', {
-			scope: 'client',
+			scope: 'user',
 			config: false,
 			type: Boolean,
 			default: false,
 		});
 		game.settings.register(MODULE.ID, 'quickEncounterRememberedExcludeText', {
-			scope: 'client',
+			scope: 'user',
 			config: false,
 			type: String,
 			default: '',
@@ -1304,7 +1312,7 @@ export const registerSettings = () => {
 		game.settings.register(MODULE.ID, "headingH2Investigations", {
 			name: MODULE.ID + '.headingH2Investigations-Label',
 			hint: MODULE.ID + '.headingH2Investigations-Hint',
-			scope: "world",
+			scope: 'user',
 			config: true,
 			default: "",
 			type: String,
@@ -1379,7 +1387,7 @@ export const registerSettings = () => {
 		game.settings.register(MODULE.ID, "headingH3Currency", {
 			name: MODULE.ID + '.headingH3Currency-Label',
 			hint: MODULE.ID + '.headingH3Currency-Hint',
-			scope: "client",
+			scope: 'world',
 			config: true,
 			default: "",
 			type: String,
@@ -1459,7 +1467,7 @@ export const registerSettings = () => {
 		game.settings.register(MODULE.ID, "headingH3Items", {
 			name: MODULE.ID + '.headingH3Items-Label',
 			hint: MODULE.ID + '.headingH3Items-Hint',
-			scope: "client",
+			scope: 'world',
 			config: true,
 			default: "",
 			type: String,
@@ -1628,7 +1636,7 @@ export const registerSettings = () => {
 		game.settings.register(MODULE.ID, "headingH2Inspiration", {
 			name: MODULE.ID + '.headingH2Inspiration-Label',
 			hint: MODULE.ID + '.headingH2Inspiration-Hint',
-			scope: "world",
+			scope: 'user',
 			config: true,
 			default: "",
 			type: String,

@@ -2362,7 +2362,15 @@ async function createChatCardInjury(category, target = null) {
 // ** CREATE Investigation Card (new flow: narrative + slots + per-rarity tables)
 // ************************************
 async function createChatCardInvestigation() {
-    BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, game.i18n.localize("coffee-pub-bibliosoph.investigationNotificationStart"), '', false, true);
+    // Adaptive toast, not a Foundry notification — every user-facing notice
+    // in this module goes through the Blacksmith toast so they all look and
+    // behave the same.
+    showBibToast(
+        game.i18n.localize("coffee-pub-bibliosoph.investigationNotificationStart"),
+        '',
+        'fa-solid fa-eye'
+    );
+    logBib('Investigation check started', '', true, false);
     const strTheme = game.settings.get(MODULE.ID, 'cardThemeInvestigation');
     const strIconStyle = "fa-eye";
     const strUserName = game.user.name;
@@ -2375,8 +2383,10 @@ async function createChatCardInvestigation() {
     try {
         narrativeJson = await getInvestigationNarrative();
     } catch (e) {
-        console.warn(MODULE.ID + " | Could not load investigation narrative:", e);
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Could not load investigation narrative. Check resources/investigation-narrative.json.", e?.message ?? String(e), false, false);
+        // This one aborts the whole card, so the table would otherwise see
+        // nothing happen at all — say so out loud, not just in the console.
+        logBib('Could not load investigation narrative. Check resources/investigation-narrative.json.', e?.message ?? String(e), false, false);
+        showBibToast('Investigation Failed', 'Could not load the investigation narrative file.', 'fa-solid fa-triangle-exclamation');
         return "";
     }
 
@@ -2425,7 +2435,8 @@ async function createChatCardInvestigation() {
                     });
                     coinsSummaryLine = game.i18n.format("coffee-pub-bibliosoph.investigationCoinsSummary", { coins: coinParts.join(", "), character: actor.name });
                 } catch (err) {
-                    console.warn(MODULE.ID + " | Could not add coins to actor:", err);
+                    logBib(`Could not add coins to ${actor?.name ?? 'the actor'}`, err?.message ?? String(err), false, false);
+                    showBibToast('Coins Not Added', `The coins could not be written to ${actor?.name ?? 'the character'} — add them by hand.`, 'fa-solid fa-coins');
                     coinsSummaryLine = game.i18n.format("coffee-pub-bibliosoph.investigationCoinsSummaryNoActor", {});
                 }
             } else {
@@ -2535,7 +2546,10 @@ async function createChatCardInvestigation() {
                 if (hasQty) foundry.utils.setProperty(baseData, "system.quantity", 1);
                 await actor.createEmbeddedDocuments("Item", [baseData]);
             } catch (err) {
-                console.warn(MODULE.ID + " | Could not add investigation item to inventory:", err);
+                // The card still lists the item, so silence here would leave
+                // the sheet and the card disagreeing with nobody the wiser.
+                logBib(`Could not add "${name}" to ${actor?.name ?? 'the actor'}'s inventory`, err?.message ?? String(err), false, false);
+                showBibToast('Item Not Added', `"${name}" could not be added to ${actor?.name ?? 'the character'} — add it by hand.`, 'fa-solid fa-sack-xmark');
             }
         }
         foundItems.push({ name, img, link, rarity });

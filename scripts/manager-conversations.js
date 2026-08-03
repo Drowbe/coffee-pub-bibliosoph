@@ -156,7 +156,12 @@ export class ConversationManager {
     // ===== UI SOUNDS ==============================================
     // ==============================================================
 
-    /** Setting key per sound kind (all user-scoped, Blacksmith sound paths). */
+    /**
+     * Setting key per sound kind. World-scoped: the GM picks the sounds for
+     * the table. Players still hear them — a world setting is readable by
+     * every client, it is only hidden from their settings UI — and can still
+     * silence them locally with the mute toggle above.
+     */
     static SOUND_SETTINGS = {
         alert: 'messageSoundAlert',
         receive: 'messageSoundReceive',
