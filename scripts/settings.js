@@ -61,6 +61,36 @@ export const registerSettings = () => {
 			return { "none": fallbackMessage };
 		};
 
+		/**
+		 * Every installed JOURNAL compendium, for the four settings where we ask
+		 * the GM to point us at our own content (criticals, fumbles, inspiration,
+		 * injuries).
+		 *
+		 * These must NOT use Blacksmith's search mapping. That list answers
+		 * "which compendiums did the GM nominate for resolving names against",
+		 * and it is filtered twice: by the enabled-source checkboxes, and by
+		 * content heuristics that decide whether a journal pack looks like a
+		 * "primary" one. Both filters are right for a search mapping and wrong
+		 * here — a GM often keeps their injuries or quotations pack OUT of the
+		 * mapping precisely so @UUID lookups don't resolve against it, which
+		 * made exactly the pack they wanted to choose the one they could not see.
+		 *
+		 * api.compendiums.getAllChoices() matches on document class and stops.
+		 * Asking for 'JournalEntry' also drops the Actor and Item packs the old
+		 * unfiltered array offered, which could never have worked here anyway.
+		 *
+		 * `none: false` because each caller supplies its own "None" wording.
+		 * Falls back to the old array on Blacksmith builds without the API.
+		 */
+		const getJournalCompendiumChoices = (fallbackMessage = 'No journal compendiums found. Try reloading Foundry after all modules are enabled.') => {
+			const compendiums = getBlacksmith()?.compendiums;
+			if (compendiums?.getAllChoices) {
+				const choices = compendiums.getAllChoices('JournalEntry', { none: false });
+				if (choices && Object.keys(choices).length > 0) return choices;
+			}
+			return getBlacksmithChoices('arrCompendiumChoices', fallbackMessage);
+		};
+
 		// Helper function to get Blacksmith default values
 		const getBlacksmithDefault = (defaultType, fallbackValue = "default") => {
 			const blacksmith = getBlacksmith();
@@ -505,7 +535,7 @@ export const registerSettings = () => {
 			default: 'coffee-pub-bibliosoph.criticals',
 			choices: Object.assign(
 				{ none: 'None — this feature posts no cards' },
-				getBlacksmithChoices('arrCompendiumChoices', 'No compendiums found. Try reloading Foundry after all modules are enabled.')
+				getJournalCompendiumChoices()
 			)
 		});
 		// ---------- SUBHEADING: Toast Design ----------
@@ -666,7 +696,7 @@ export const registerSettings = () => {
 			default: 'coffee-pub-bibliosoph.fumbles',
 			choices: Object.assign(
 				{ none: 'None — this feature posts no cards' },
-				getBlacksmithChoices('arrCompendiumChoices', 'No compendiums found. Try reloading Foundry after all modules are enabled.')
+				getJournalCompendiumChoices()
 			)
 		});
 		game.settings.register(MODULE.ID, 'outcomeImageEnabled', {
@@ -881,7 +911,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			default: 'coffee-pub-bibliosoph.injuries',
-			choices: getBlacksmithChoices('arrCompendiumChoices', 'No compendiums found. Try reloading Foundry after all modules are enabled.')
+			choices: getJournalCompendiumChoices()
 		});
 		// -- Injury Theme --
 		game.settings.register(MODULE.ID, 'cardThemeInjury', {
@@ -1693,7 +1723,7 @@ export const registerSettings = () => {
 			default: 'coffee-pub-bibliosoph.inspiration',
 			choices: Object.assign(
 				{ none: 'None — this feature posts no cards' },
-				getBlacksmithChoices('arrCompendiumChoices', 'No compendiums found. Try reloading Foundry after all modules are enabled.')
+				getJournalCompendiumChoices()
 			)
 		});
 		// -- Inspiration Macro --
