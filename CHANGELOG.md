@@ -8,7 +8,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [13.4.4]
 
+### Added
 
+- **The settings screen says what the module is.** Getting Started explains the shape of the thing — every feature switches off independently, and players see only the handful of settings that are genuinely theirs — and the Introduction below it covers what Bibliosoph actually does: injuries that linger and have to be treated, criticals and fumbles with real mechanics rather than a line of prose, inspiration cards a player holds and spends, encounters weighed against the party, investigation, and private messages that stay out of the chat log. The old copy described sending messages, rolling special tables and generating encounters — it predated the injury system, the outcome compendiums and the card deck, and named roll tables, which 13.4.3 removed.
+
+### Fixed
+
+- **The one place that says what the module is was invisible to players.** `registerHeader()` hardcoded `scope: "world"`, so every heading registered through it was GM-only regardless of what sat under it — including the Introduction, which is nothing *but* the description. It sat inside the player-visible Getting Started section, so a player opening the settings found the section title and no explanation under it. The helper now takes a scope argument; it still defaults to `world`, so no other heading moved.
+
+### Changed
+
+- **`tools/validate-settings.mjs` sees headings registered through the wrapper.** It matched only direct `game.settings.register(MODULE.ID, 'literal', …)` calls, which is precisely why the hardcoded scope above survived the 13.4.3 audit — a heading created by a helper was invisible to the checker that exists to catch this. Wrapper calls are now parsed and merged back into source order, since the heading tree is built by reading the file top to bottom and a heading appended at the end would adopt the wrong children.
+- **An informational heading no longer has to justify itself with children.** The rule was "a heading is player-visible exactly when a player-visible setting sits under it", which the Introduction correctly failed the moment the checker could see it — it has no settings under it and never will, because the prose *is* the content. Headings carrying hint text are now exempt from the empty-section half of the rule. The other half still applies without exception: hiding prose from players is a choice, but hiding the context above their own settings is a bug.
 
 
 ## [13.4.3]
