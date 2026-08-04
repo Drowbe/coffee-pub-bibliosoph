@@ -29,12 +29,17 @@ const WORKFLOW_GROUPS = {
  * @param {string} hintKey - Localization key for the hint
  * @param {string} level - Header level (H1, H2, H3, H4)
  * @param {string} group - Workflow group for collapsible sections
+ * @param {string} scope - 'world' hides the heading from players, 'user' shows it.
+ *   A heading must be visible to exactly the people who can see something under
+ *   it: hidden above player-visible settings leaves them a contextless list, and
+ *   visible above nothing leaves them an empty section title. Run
+ *   `node tools/validate-settings.mjs` after changing this.
  */
-function registerHeader(id, labelKey, hintKey, level = 'H2', group = null) {
+function registerHeader(id, labelKey, hintKey, level = 'H2', group = null, scope = 'world') {
     game.settings.register(MODULE.ID, `heading${level}${id}`, {
         name: MODULE.ID + `.${labelKey}`,
         hint: MODULE.ID + `.${hintKey}`,
-        scope: "world",
+        scope,
         config: true,
         default: "",
         type: String,
@@ -179,7 +184,10 @@ export const registerSettings = () => {
 		// --------------------------------------
 		// -- H4: INTRODUCTION
 		// --------------------------------------
-		registerHeader('Introduction', 'headingH4Introduction-Label', 'headingH4Introduction-Hint', 'H4', WORKFLOW_GROUPS.GETTING_STARTED);
+		// 'user' so players see it too — it sits under the Getting Started
+		// heading, which is player-visible, and it is the one place that says
+		// what the module actually is.
+		registerHeader('Introduction', 'headingH4Introduction-Label', 'headingH4Introduction-Hint', 'H4', WORKFLOW_GROUPS.GETTING_STARTED, 'user');
 
 
 

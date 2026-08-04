@@ -36,7 +36,17 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SOURCE = path.join(ROOT, 'scripts', 'settings.js');
+const LANG = path.join(ROOT, 'lang', 'en.json');
 const QUIET = process.argv.includes('--quiet');
+
+// A heading with hint text is CONTENT, not just a label for what follows: the
+// Getting Started introduction has no settings under it and never will, because
+// the prose is the whole point. Such a heading earns its place on a player's
+// screen on its own, so the empty-section rule does not apply to it. The other
+// direction still does — hiding prose from players is a choice, hiding the
+// context above their settings is a bug.
+const langStrings = JSON.parse(fs.readFileSync(LANG, 'utf8'))['coffee-pub-bibliosoph'] ?? {};
+const isInformational = (headingKey) => Boolean(String(langStrings[`${headingKey}-Hint`] ?? '').trim());
 
 // 'client' is Foundry's older alias for 'user'; both mean per-user, and a
 // setting with no scope at all defaults to per-user. Only 'world' is GM-only.
@@ -44,6 +54,29 @@ const PLAYER_SCOPES = new Set(['user', 'client']);
 const isPlayerVisible = (scope) => PLAYER_SCOPES.has(scope);
 
 const src = fs.readFileSync(SOURCE, 'utf8');
+
+/**
+ * Headings registered through the registerHeader() wrapper rather than a direct
+ * call. The wrapper composes its key as `heading${level}${id}` and takes scope
+ * as its 6th argument, defaulting to 'world' — which is exactly how a heading
+ * ends up hidden from players without anyone noticing, since a plain search for
+ * `register(MODULE.ID, 'heading…'` never sees it.
+ */
+function parseWrappedHeaders(text) {
+    const out = [];
+    const re = /registerHeader\(\s*'([A-Za-z0-9_]+)'\s*,[^)]*?'(H\d)'(?:\s*,\s*[^,)]+)?(?:\s*,\s*'(\w+)')?\s*\)/g;
+    let m;
+    while ((m = re.exec(text)) !== null) {
+        out.push({
+            key: `heading${m[2]}${m[1]}`,
+            scope: m[3] ?? 'world',      // the wrapper's own default
+            config: true,                 // registerHeader always sets config: true
+            line: text.slice(0, m.index).split('\n').length,
+            index: m.index
+        });
+    }
+    return out;
+}
 
 /** Every game.settings.register call, in source order (= display order). */
 function parseRegistrations(text) {
@@ -69,7 +102,8 @@ function parseRegistrations(text) {
             key: m[1],
             scope,
             config,
-            line: text.slice(0, m.index).split('\n').length
+            line: text.slice(0, m.index).split('\n').length,
+            index: m.index
         });
     }
     return out;
@@ -81,7 +115,11 @@ const headingLevel = (key) => {
     return m ? Number(m[1]) : null;
 };
 
-const registrations = parseRegistrations(src);
+// Merged back into source order, because the heading tree is built by reading
+// the file top to bottom — a wrapped heading dropped at the end would adopt the
+// wrong children.
+const registrations = [...parseRegistrations(src), ...parseWrappedHeaders(src)]
+    .sort((a, b) => a.index - b.index);
 const scopeOf = new Map(registrations.map((r) => [r.key, r.scope]));
 const lineOf = new Map(registrations.map((r) => [r.key, r.line]));
 
@@ -115,10 +153,11 @@ for (const [heading, kids] of playerKidsOf) {
             + `${kids.length} player-visible setting(s) sit under it — they would appear with no section title. `
             + `Needs scope 'user'. [${kids.slice(0, 4).join(', ')}${kids.length > 4 ? ', …' : ''}]`
         );
-    } else if (!shouldBeVisible && isVisible) {
+    } else if (!shouldBeVisible && isVisible && !isInformational(heading)) {
         errors.push(
             `${heading} (line ${lineOf.get(heading)}): scope '${scope}' shows it to players, but nothing `
-            + `under it is player-visible — they would see an empty section title. Needs scope 'world'.`
+            + `under it is player-visible and it has no hint text of its own — they would see an empty `
+            + `section title. Give it a hint, or set scope 'world'.`
         );
     }
 }

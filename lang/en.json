@@ -2,10 +2,10 @@
 	"coffee-pub-bibliosoph": {
 
 		"headingH1Bibliosoph-Label": "Getting Started",
-		"headingH1Bibliosoph-Hint": "",
+		"headingH1Bibliosoph-Hint": "Every feature below can be switched off independently, so you can take only the parts you want. Players see the handful of settings that are genuinely theirs — toolbar buttons, message splashes, dice animations; everything else is the GM's.",
 
 		"headingH4Introduction-Label": "Introduction",
-		"headingH4Introduction-Hint": "With Bibliosoph, you  can send messages, roll special tables, and generate encounters, all through the simple push of a macro button. Forget the hassle of complex operations, Bibliosoph delivers all results and communication in engaging, thematic cards. This module not only simplifies in-game processes, but also enhances your overall storytelling, bringing your world to life in a visually appealing way. Make your gaming experience more immersive and streamlined with the robust functionalities of the Bibliosoph module.",
+		"headingH4Introduction-Hint": "Bibliosoph gives the table a memory. When a blow lands hard it becomes a named injury that lingers and has to be treated; a natural 20 or a 1 draws a real critical or fumble with mechanics behind it, not just a line of prose. Great moments at the table earn inspiration cards a player holds in their inventory and spends when it counts. It also rolls encounters against your party's strength, handles searching a room, and carries private messages between players without cluttering the chat log. Everything arrives as a themed card, and anything with teeth applies itself to the token with one click. The content ships as journal compendiums you can copy and rewrite — the injuries, criticals, fumbles and cards are all yours to edit.",
 
 		"headingH2General-Label": "General",
 		"headingH2General-Hint": "",
