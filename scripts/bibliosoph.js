@@ -17,30 +17,6 @@ import * as INSPIRATION_ACTIONS from './data/inspiration-schema.js';
 import { SEVERITY_DCS as INJURY_SEVERITY_DCS, damageFor } from './data/injury-schema.js';
 import { remainingLabel, registerInjuryTickHooks } from './manager-injury-ticks.js';
 
-// Resolve a macro reference (UUID, id, or name) to a Macro document
-const getMacroByIdOrName = (macroKey) => {
-    if (!macroKey) return null;
-
-    // 1) Direct id from world collection
-    let macro = game.macros.get(macroKey);
-    if (macro) return macro;
-
-    // 2) UUID (e.g., "Macro.abc123" or compendium UUID)
-    if (typeof macroKey === "string" && macroKey.includes(".")) {
-        if (typeof fromUuidSync === "function") {
-            macro = fromUuidSync(macroKey);
-            if (macro) return macro;
-        }
-        // If only async resolver exists, skip because we need sync assignment here.
-    }
-
-    // 3) Fallback to name lookup (legacy behavior)
-    return game.macros.getName(macroKey);
-};
-
-// Lightweight logger to trace macro bindings/execution
-const logMacroFix = (msg) => console.log(`MACRO FIX ${msg}`);
-
 // Log through Blacksmith's console tool wherever possible; raw console is
 // reserved for bootstrap failures where Blacksmith itself is unavailable.
 function logBib(message, data = '', debug = true, notify = false) {
@@ -296,17 +272,8 @@ Hooks.once('ready', async () => {
 // Party/private message dialogs removed — replaced by the unified Messages
 // window (window-messages.js + manager-conversations.js).
 
-// Trigger investigation macro (for toolbar integration)
-function triggerInvestigationMacro() {
-    // Run the same code that fires when the investigation macro is clicked
-    const strInvestigationMacro = BlacksmithUtils.getSettingSafely(MODULE.ID, 'investigationMacro', '') || '';
-    
-    if (!strInvestigationMacro || strInvestigationMacro === '-- Choose a Macro --' || strInvestigationMacro === 'none') {
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Investigation macro not configured", "", false, false);
-        return;
-    }
-
-    // Build the chat message (same as macro click handler)
+// Post the Investigation card (toolbar button)
+function triggerInvestigation() {
     resetBibliosophVars();
     BIBLIOSOPH.CARDTYPEINVESTIGATION = true;
     BIBLIOSOPH.CARDTYPE = "Investigation";
@@ -1423,11 +1390,8 @@ async function useInspirationCard(buttonEl, data) {
     );
 }
 
-// Trigger inspiration macro (for toolbar integration)
-function triggerInspirationMacro() {
-    // Typed card deck first; the roll-table path remains for anyone who
-    // sets the compendium to None.
-    //
+// Deal or draw an Inspiration card (toolbar button)
+function triggerInspiration() {
     // Same button, different job depending on who pressed it. The GM is
     // dealing — usually a chosen card, "you get Smite for that" — so they
     // get the picker. A player is drawing their own luck, so they get the
@@ -1446,62 +1410,19 @@ function triggerInspirationMacro() {
 }
 
 // Make functions globally available for toolbar manager
-window.triggerInvestigationMacro = triggerInvestigationMacro;
+window.triggerInvestigation = triggerInvestigation;
 window.triggerCriticalRoll = triggerCriticalRoll;
 window.triggerFumbleRoll = triggerFumbleRoll;
 window.triggerInjuriesRoll = triggerInjuriesRoll;
 window.triggerTreatmentCard = triggerTreatmentCard;
-window.triggerInspirationMacro = triggerInspirationMacro;
+window.triggerInspiration = triggerInspiration;
 
 
 
-// Function to validate all mandatory settings and provide consolidated feedback
-function validateMandatorySettings() {
-    const missingSettings = [];
-    const invalidMacros = [];
-    
-    // Check all mandatory macro settings
-    const macroChecks = [
-        { name: 'Investigations', setting: game.settings.get(MODULE.ID, 'investigationMacro'), required: true },
-        { name: 'Inspiration', setting: game.settings.get(MODULE.ID, 'inspirationMacro'), required: true }
-    ];
-    
-    macroChecks.forEach(check => {
-        if (check.required && (!check.setting || check.setting === '-- Choose a Macro --' || check.setting === 'none')) {
-            missingSettings.push(check.name);
-        } else if (check.setting && check.setting !== '-- Choose a Macro --' && check.setting !== 'none') {
-            // Check if the macro actually exists
-            const macro = getMacroByIdOrName(check.setting);
-            if (!macro) {
-                invalidMacros.push(`${check.name}: "${check.setting}"`);
-            }
-        }
-    });
-    
-    // If there are issues, show consolidated notification and console details
-    if (missingSettings.length > 0 || invalidMacros.length > 0) {
-        // Single user notification
-        BlacksmithUtils.postConsoleAndNotification(
-            MODULE.NAME, 
-            "Bibliosoph setup is not complete: Please set the required information in settings.", 
-            "See console for more details.", 
-            false, 
-            true
-        );
-        
-        // Detailed console logging
-        if (missingSettings.length > 0) {
-            logBib('Missing mandatory macro settings', missingSettings, false, false);
-        }
-        if (invalidMacros.length > 0) {
-            logBib('Invalid macro names in settings', invalidMacros, false, false);
-        }
-        
-        return false; // Setup incomplete
-    }
-    
-    return true; // Setup complete
-}
+// Nothing left to validate at startup: the only mandatory settings were the
+// two macro names, and the toolbar buttons that replaced them cannot be
+// misconfigured. Feature-level problems (no compendium chosen) are reported
+// where they bite, by the feature itself.
 
 // *** END: BLACKSMITH API INTEGRATION ***
 
@@ -1591,8 +1512,6 @@ Hooks.once('disableModule', (moduleId) => {
 
 Hooks.on("ready", async () => {
 
-    logMacroFix("ready hook start");
-
     if (game.modules.get('coffee-pub-blacksmith')?.active && typeof BlacksmithAPI.waitForReady === 'function') {
         await BlacksmithAPI.waitForReady();
     }
@@ -1610,12 +1529,6 @@ Hooks.on("ready", async () => {
     
     if (game.modules.get("coffee-pub-blacksmith")?.active) {
         BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Coffee Pub Blacksmith is installed and connected.", "", false, false);
-        
-        // Validate all mandatory settings and provide consolidated feedback
-        // Add a small delay to ensure UI is stable before showing notifications
-        setTimeout(() => {
-            validateMandatorySettings();
-        }, 1000);
     } else {
         // This is an error that breaks functionality - use console.error
         console.error("BIBLIOSOPH | Coffee Pub Blacksmith does not seem to be enabled. It is required for Coffee Pub Bibliosoph to function. Please enable it in your options.");
@@ -1659,80 +1572,6 @@ Hooks.on("ready", async () => {
             }
         }
     };
-
-    // --- Macro binding helpers -------------------------------------------------
-    const macroBindings = [];
-
-    const bindSimpleMacro = ({ label, enabledKey, macroKey, onExecute }) => {
-        const enabled = getSetting(enabledKey, false);
-        const macroName = getSetting(macroKey, '');
-
-        logMacroFix(`bind attempt: ${label} enabled=${enabled}, macro="${macroName}"`);
-
-        if (!enabled) return;
-        if (!macroName || macroName === '-- Choose a Macro --' || macroName === 'none') {
-            logMacroFix(`binding skipped: ${label} macro setting empty`);
-            return;
-        }
-
-        const macro = getMacroByIdOrName(macroName);
-        if (!macro) {
-            logMacroFix(`binding failed: no macro found for "${macroName}"`);
-            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `${label} Macro "${macroName}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
-            return;
-        }
-
-        macro.execute = async () => {
-            logMacroFix(`execute: ${label} macro handler reached`);
-            await onExecute();
-        };
-
-        logMacroFix(`bound ${label} macro (${macroName})`);
-    };
-
-    const bindAllMacros = () => {
-        // Item / message macros
-        bindSimpleMacro({
-            label: "Investigation",
-            enabledKey: 'investigationEnabled',
-            macroKey: 'investigationMacro',
-            onExecute: async () => {
-                resetBibliosophVars();
-                BIBLIOSOPH.CARDTYPEINVESTIGATION = true;
-                BIBLIOSOPH.CARDTYPE = "Investigation";
-                publishChatCard();
-            }
-        });
-
-        bindSimpleMacro({
-            label: "Inspiration",
-            enabledKey: 'inspirationEnabled',
-            macroKey: 'inspirationMacro',
-            // Runs the same deck path as the toolbar button, so a macro and a
-            // button press cannot diverge into two different behaviours.
-            onExecute: async () => triggerInspirationMacro()
-        });
-
-    };
-
-    // initial + delayed binds to catch late settings load
-    bindAllMacros();
-    setTimeout(bindAllMacros, 500);
-    setTimeout(bindAllMacros, 2000);
-
-    // Rebind when our settings change
-    Hooks.on("updateSetting", (setting) => {
-        if (setting?.namespace !== MODULE.ID) return;
-        bindAllMacros();
-    });
-
-    // Resolve a macro value (name or id) to a Macro document
-    // SET VARIABLES using Blacksmith's safe settings access
-    var strInvestigationMacro = getSetting('investigationMacro', '');
-    var strInspirationMacro = getSetting('inspirationMacro', '');
-
-    var blnInspirationEnabled = getSetting('inspirationEnabled', false);
-    // NOTE: investigation settings are re-fetched inside bindInvestigation() for fresh values
 
     // BUTTON PRESSES IN CHAT (closest() so clicks on inner icons land too)
     document.addEventListener('click', async function(event) {
@@ -1803,65 +1642,11 @@ Hooks.on("ready", async () => {
 
     });
 
-    //************* ITEM ROLLS *************
-    // *** INVESTIGATION ***
-    // Bind Investigation macro (fetch settings fresh each time)
-    const bindInvestigation = () => {
-        const enabled = getSetting('investigationEnabled', false);
-        const macroKey = getSetting('investigationMacro', '');
-        logMacroFix(`bind attempt: investigationEnabled=${enabled}, macro="${macroKey}"`);
-
-        if (!enabled) return;
-        if (!macroKey || macroKey === '-- Choose a Macro --' || macroKey === 'none') {
-            logMacroFix("binding skipped: investigation macro setting empty");
-            return;
-        }
-
-        const InvestigationMacro = getMacroByIdOrName(macroKey);
-        if (InvestigationMacro) {
-            logMacroFix(`bound Investigation macro (${macroKey})`);
-            InvestigationMacro.execute = async () => {
-                logMacroFix('execute: Investigation macro handler reached');
-                resetBibliosophVars();
-                BIBLIOSOPH.CARDTYPEINVESTIGATION = true;
-                BIBLIOSOPH.CARDTYPE = "Investigation";
-                publishChatCard();
-            };
-        } else {
-            logMacroFix(`binding failed: no macro found for "${macroKey}"`);
-            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Investigation Macro "${macroKey}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
-        }
-    };
-
-    // Initial and delayed bind attempts to catch late-loaded settings/choices
-    bindInvestigation();
-    setTimeout(bindInvestigation, 500);
-    setTimeout(bindInvestigation, 2000);
-
-    // Rebind when settings change
-    Hooks.on("updateSetting", (setting) => {
-        if (setting?.key === 'investigationEnabled' || setting?.key === 'investigationMacro') {
-            if (setting?.namespace === MODULE.ID) {
-                bindInvestigation();
-            }
-        }
-    });
-    // ************* CARD ROLLS *************
-    // *** INSPIRATION ***
-    if (blnInspirationEnabled) {
-        if(strInspirationMacro) {
-            let InspirationMacro = getMacroByIdOrName(strInspirationMacro);
-            if(InspirationMacro) {
-                InspirationMacro.execute = async () => triggerInspirationMacro();
-            } else {
-                // User needs to know about macro configuration issues
-                BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Inspiration Macro "${strInspirationMacro}" is not a valid macro name. Make sure there is a macro matching the name you entered in Bibliosoph settings.`, "", false, false);
-            }
-        } else {
-            // They haven't set this macro
-            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `Macro for Inspiration not set.`, "", false, false);
-        }
-    }
+    // Investigation and Inspiration used to bind a user-chosen macro whose
+    // execute() this module overwrote. Both are toolbar buttons now
+    // (window.triggerInvestigation / window.triggerInspiration), so there is
+    // nothing to bind, nothing to rebind on settings change, and no macro
+    // name to get wrong.
 
 });
 

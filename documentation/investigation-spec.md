@@ -27,10 +27,8 @@ All investigation-related settings (as registered in `settings.js`). Keys are `M
 | Setting key | Type | Scope | Purpose |
 |-------------|------|--------|---------|
 | `investigationEnabled` | Boolean | world | Master on/off for investigation. |
-| `toolbarCoffeePubInvestigationEnabled` | Boolean | user | Show Investigation on Coffee Pub toolbar. |
-| `toolbarFoundryInvestigationEnabled` | Boolean | user | Show Investigation on Foundry toolbar. |
+| `toolbarInvestigation` | Choice | user | Which toolbar carries the button: `coffeepub`, `foundry`, or `both` (default). |
 | `cardThemeInvestigation` | Choice | world | Chat card theme (e.g. `theme-default`). |
-| `investigationMacro` | Choice (macros) | world | Macro used as the Investigation button (toolbar / hotbar). |
 
 ### 2.2 Find Something and Slots
 

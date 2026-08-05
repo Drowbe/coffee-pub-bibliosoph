@@ -21,6 +21,18 @@ function getSetting(key, defaultValue) {
     }
 }
 
+// Where a feature's button appears, from its 'coffeepub' | 'foundry' |
+// 'both' placement setting. Tools with no setting of their own pass no
+// key and land in both toolbars — the crit/fumble/injury/treat buttons
+// are gated by their Automation mode instead, which is the real switch.
+function placement(settingKey) {
+    const value = settingKey ? getSetting(settingKey, 'both') : 'both';
+    return {
+        onCoffeePub: value === 'coffeepub' || value === 'both',
+        onFoundry: value === 'foundry' || value === 'both'
+    };
+}
+
 // Toolbar tool configuration
 const TOOLBAR_TOOLS = {
     'bibliosoph-messages': {
@@ -31,8 +43,7 @@ const TOOLBAR_TOOLS = {
         order: 1,
         moduleId: "coffee-pub-bibliosoph",
         enabled: () => getSetting('messagesEnabled', true),
-        onCoffeePub: () => getSetting('toolbarCoffeePubMessagesEnabled', true),
-        onFoundry: () => getSetting('toolbarFoundryMessagesEnabled', true),
+        placementKey: 'toolbarMessages',
         onClick: async () => {
             // Prefer the Blacksmith window registry; fall back to a direct open
             const blacksmith = game.modules.get('coffee-pub-blacksmith')?.api;
@@ -51,12 +62,11 @@ const TOOLBAR_TOOLS = {
         order: 1,
         moduleId: "coffee-pub-bibliosoph",
         enabled: () => getSetting('investigationEnabled', false),
-        onCoffeePub: () => getSetting('toolbarCoffeePubInvestigationEnabled', true),
-        onFoundry: () => getSetting('toolbarFoundryInvestigationEnabled', false),
+        placementKey: 'toolbarInvestigation',
         onClick: () => {
             // Call the global function that handles investigation
-            if (typeof window.triggerInvestigationMacro === 'function') {
-                window.triggerInvestigationMacro();
+            if (typeof window.triggerInvestigation === 'function') {
+                window.triggerInvestigation();
             } else {
                 BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Investigation function not available", "", false, false);
             }
@@ -70,8 +80,6 @@ const TOOLBAR_TOOLS = {
         order: 2,
         moduleId: "coffee-pub-bibliosoph",
         enabled: () => getSetting('critAutomation', 'click') !== 'off',
-        onCoffeePub: () => true,
-        onFoundry: () => true,
         onClick: () => {
             // Manual roll of the critical table (same path as click-to-roll)
             if (typeof window.triggerCriticalRoll === 'function') {
@@ -89,8 +97,6 @@ const TOOLBAR_TOOLS = {
         order: 3,
         moduleId: "coffee-pub-bibliosoph",
         enabled: () => getSetting('fumbleAutomation', 'click') !== 'off',
-        onCoffeePub: () => true,
-        onFoundry: () => true,
         onClick: () => {
             // Manual roll of the fumble table (same path as click-to-roll)
             if (typeof window.triggerFumbleRoll === 'function') {
@@ -109,8 +115,6 @@ const TOOLBAR_TOOLS = {
         moduleId: "coffee-pub-bibliosoph",
         gmOnly: true,  // Only GMs can see this tool
         enabled: () => getSetting('injuryAutomation', 'click') !== 'off',
-        onCoffeePub: () => true,
-        onFoundry: () => true,
         onClick: () => {
             // Manual injury selector (same card flow as always)
             if (typeof window.triggerInjuriesRoll === 'function') {
@@ -129,8 +133,6 @@ const TOOLBAR_TOOLS = {
         moduleId: "coffee-pub-bibliosoph",
         gmOnly: true,
         enabled: () => getSetting('injuryAutomation', 'click') !== 'off',
-        onCoffeePub: () => true,
-        onFoundry: () => true,
         onClick: () => {
             // Post the afflictions card for the targeted/selected token
             if (typeof window.triggerTreatmentCard === 'function') {
@@ -148,11 +150,10 @@ const TOOLBAR_TOOLS = {
         order: 7,
         moduleId: "coffee-pub-bibliosoph",
         enabled: () => getSetting('inspirationEnabled', false),
-        onCoffeePub: () => getSetting('toolbarCoffeePubInspirationEnabled', true),
-        onFoundry: () => getSetting('toolbarFoundryInspirationEnabled', false),
+        placementKey: 'toolbarInspiration',
         onClick: () => {
-            if (typeof window.triggerInspirationMacro === 'function') {
-                window.triggerInspirationMacro();
+            if (typeof window.triggerInspiration === 'function') {
+                window.triggerInspiration();
             } else {
                 BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Inspiration function not available", "", false, false);
             }
@@ -167,8 +168,7 @@ const TOOLBAR_TOOLS = {
         moduleId: "coffee-pub-bibliosoph",
         gmOnly: true,
         enabled: () => getSetting('quickEncounterEnabled', true),
-        onCoffeePub: () => getSetting('toolbarCoffeePubQuickEncounterEnabled', true),
-        onFoundry: () => getSetting('toolbarFoundryQuickEncounterEnabled', false),
+        placementKey: 'toolbarQuickEncounter',
         onClick: () => openEncounterWindow()
     }
 };
@@ -229,9 +229,8 @@ function registerToolbarTools() {
 
         BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `TOOLBAR | Registering tool ${toolId}`, `Zone: ${toolConfig.zone}, Order: ${toolConfig.order}`, true, false);
 
-        // Get the specific toolbar settings for this tool from the configuration
-        const onCoffeePub = toolConfig.onCoffeePub ? toolConfig.onCoffeePub() : true;
-        const onFoundry = toolConfig.onFoundry ? toolConfig.onFoundry() : false;
+        // Which toolbar(s) this tool appears in, from its placement setting
+        const { onCoffeePub, onFoundry } = placement(toolConfig.placementKey);
 
         // Register the tool
         const success = blacksmith.registerToolbarTool(toolId, {

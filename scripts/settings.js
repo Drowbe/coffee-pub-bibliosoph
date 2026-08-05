@@ -137,6 +137,17 @@ export const registerSettings = () => {
 
 		const themeChoices = await getCardThemeChoices();
 
+		// Where a feature's toolbar button appears. One choice replaces the
+		// pair of "show in Coffee Pub" / "show in Foundry" checkboxes each
+		// feature used to carry: two booleans have a fourth state — both off —
+		// which reads as a broken button rather than a decision, and the
+		// feature's own enable setting is already the way to turn it off.
+		const toolbarChoices = {
+			coffeepub: 'Show In Coffee Pub Toolbar',
+			foundry: 'Show In Foundry Toolbar',
+			both: 'Show In Both Toolbars'
+		};
+
 		// Register settings...
 		// This is a system message - user should know settings are being registered
 		getBlacksmith()?.utils?.postConsoleAndNotification(MODULE.NAME, "Registering Settings...", "", false, false);
@@ -238,25 +249,16 @@ export const registerSettings = () => {
 			scope: 'world',
 			default: true,
 		});
-		// -- Messages Coffee Pub Toolbar --
-		game.settings.register(MODULE.ID, 'toolbarCoffeePubMessagesEnabled', {
-			name: MODULE.ID + '.toolbarCoffeePubMessagesEnabled-Label',
-			hint: MODULE.ID + '.toolbarCoffeePubMessagesEnabled-Hint',
-			type: Boolean,
+		// -- Messages Toolbar Placement --
+		game.settings.register(MODULE.ID, 'toolbarMessages', {
+			name: MODULE.ID + '.toolbarMessages-Label',
+			hint: MODULE.ID + '.toolbarMessages-Hint',
+			type: String,
 			config: true,
 			requiresReload: true,
 			scope: 'user',
-			default: true,
-		});
-		// -- Messages Foundry Toolbar --
-		game.settings.register(MODULE.ID, 'toolbarFoundryMessagesEnabled', {
-			name: MODULE.ID + '.toolbarFoundryMessagesEnabled-Label',
-			hint: MODULE.ID + '.toolbarFoundryMessagesEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'user',
-			default: true,
+			default: 'both',
+			choices: toolbarChoices
 		});
 		// -- GM sees all conversations --
 		game.settings.register(MODULE.ID, 'gmSeesAllConversations', {
@@ -1260,23 +1262,15 @@ export const registerSettings = () => {
 			type: String,
 			default: '',
 		});
-		game.settings.register(MODULE.ID, 'toolbarCoffeePubQuickEncounterEnabled', {
-			name: MODULE.ID + '.toolbarCoffeePubQuickEncounterEnabled-Label',
-			hint: MODULE.ID + '.toolbarCoffeePubQuickEncounterEnabled-Hint',
-			type: Boolean,
+		game.settings.register(MODULE.ID, 'toolbarQuickEncounter', {
+			name: MODULE.ID + '.toolbarQuickEncounter-Label',
+			hint: MODULE.ID + '.toolbarQuickEncounter-Hint',
+			type: String,
 			config: true,
 			requiresReload: true,
 			scope: 'world',
-			default: true,
-		});
-		game.settings.register(MODULE.ID, 'toolbarFoundryQuickEncounterEnabled', {
-			name: MODULE.ID + '.toolbarFoundryQuickEncounterEnabled-Label',
-			hint: MODULE.ID + '.toolbarFoundryQuickEncounterEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'world',
-			default: false,
+			default: 'both',
+			choices: toolbarChoices
 		});
 
 		// -- Card Style --
@@ -1379,25 +1373,16 @@ export const registerSettings = () => {
 		});
 
 
-		// -- Investigation Coffee Pub Toolbar --
-		game.settings.register(MODULE.ID, 'toolbarCoffeePubInvestigationEnabled', {
-			name: MODULE.ID + '.toolbarCoffeePubInvestigationEnabled-Label',
-			hint: MODULE.ID + '.toolbarCoffeePubInvestigationEnabled-Hint',
-			type: Boolean,
+		// -- Investigation Toolbar Placement --
+		game.settings.register(MODULE.ID, 'toolbarInvestigation', {
+			name: MODULE.ID + '.toolbarInvestigation-Label',
+			hint: MODULE.ID + '.toolbarInvestigation-Hint',
+			type: String,
 			config: true,
 			requiresReload: true,
 			scope: 'user',
-			default: true,
-		});
-		// -- Investigation Foundry Toolbar --
-		game.settings.register(MODULE.ID, 'toolbarFoundryInvestigationEnabled', {
-			name: MODULE.ID + '.toolbarFoundryInvestigationEnabled-Label',
-			hint: MODULE.ID + '.toolbarFoundryInvestigationEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'user',
-			default: true,
+			default: 'both',
+			choices: toolbarChoices
 		});
 		// -- Investigation Theme --
 		game.settings.register(MODULE.ID, 'cardThemeInvestigation', {
@@ -1408,17 +1393,6 @@ export const registerSettings = () => {
 			requiresReload: false,
 			default: 'theme-default',
 			choices: themeChoices
-		});
-
-		// -- Investigation Macro --
-		game.settings.register(MODULE.ID,'investigationMacro', {
-			name: MODULE.ID + '.investigationMacro-Label',
-			hint: MODULE.ID + '.investigationMacro-Hint',
-			scope: "world",
-			config: true,
-			requiresReload: true,
-			default: '-- Choose a Macro --',
-			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
 		});
 
 		// ---------- SUBHEADING: Currency ----------
@@ -1689,25 +1663,16 @@ export const registerSettings = () => {
 			scope: 'world',
 			default: false,
 		});
-		// -- Inspiration Coffee Pub Toolbar --
-		game.settings.register(MODULE.ID, 'toolbarCoffeePubInspirationEnabled', {
-			name: MODULE.ID + '.toolbarCoffeePubInspirationEnabled-Label',
-			hint: MODULE.ID + '.toolbarCoffeePubInspirationEnabled-Hint',
-			type: Boolean,
+		// -- Inspiration Toolbar Placement --
+		game.settings.register(MODULE.ID, 'toolbarInspiration', {
+			name: MODULE.ID + '.toolbarInspiration-Label',
+			hint: MODULE.ID + '.toolbarInspiration-Hint',
+			type: String,
 			config: true,
 			requiresReload: true,
 			scope: 'user',
-			default: true,
-		});
-		// -- Inspiration Foundry Toolbar --
-		game.settings.register(MODULE.ID, 'toolbarFoundryInspirationEnabled', {
-			name: MODULE.ID + '.toolbarFoundryInspirationEnabled-Label',
-			hint: MODULE.ID + '.toolbarFoundryInspirationEnabled-Hint',
-			type: Boolean,
-			config: true,
-			requiresReload: true,
-			scope: 'user',
-			default: false,
+			default: 'both',
+			choices: toolbarChoices
 		});
 		// -- Inspiration Theme --
 		game.settings.register(MODULE.ID, 'cardThemeInspiration', {
@@ -1733,16 +1698,6 @@ export const registerSettings = () => {
 				{ none: 'None — this feature posts no cards' },
 				getJournalCompendiumChoices()
 			)
-		});
-		// -- Inspiration Macro --
-		game.settings.register(MODULE.ID,'inspirationMacro', {
-			name: MODULE.ID + '.inspirationMacro-Label',
-			hint: MODULE.ID + '.inspirationMacro-Hint',
-			scope: "world",
-			config: true,
-			requiresReload: true,
-			default: '-- Choose a Macro --',
-			choices: getBlacksmithChoices('arrMacroChoices', 'No macros found. Try reloading Foundry after all modules are enabled.')
 		});
 
 

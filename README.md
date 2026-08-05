@@ -96,12 +96,13 @@ Each module can run on its own except for the Blacksmith requirement; together t
 
 1. Install and enable Coffee Pub Blacksmith and Coffee Pub Bibliosoph.
 2. Configure module settings for the encounter types and features you want.
-3. Set up the corresponding macros for each enabled feature.
+
+Each feature you enable adds its own toolbar button — there is nothing to wire up by hand.
 
 ### Key Settings
 
 - Features (encounters, investigation, messages, etc.) can be enabled or disabled individually.
-- Macro names are set in module settings; the same macro can be used from the toolbar or the hotbar.
+- Every feature with a button chooses where it appears: the Coffee Pub toolbar, the Foundry toolbar, or both (the default). To remove a button, switch its feature off rather than hiding it from both bars.
 - Investigation: configure Odds of Success, Upper Limit of Items, coin odds and max amounts, and per-rarity roll tables and weightings (0–1000 scale). Optionally enable "Use Player Skill Bonus" so the find-items roll becomes 1d100 + Intelligence modifier + Proficiency (dnd5e).
 - Active effects for injuries can be configured with custom durations and effects.
 

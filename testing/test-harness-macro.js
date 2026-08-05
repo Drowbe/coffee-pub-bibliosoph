@@ -874,6 +874,37 @@ const SCENARIOS = [
     },
     {
         tab: 'tools',
+        label: '🧰 Report toolbar placement (which bar has which button)',
+        run: () => {
+            // Four features choose their bar; the rest ride their Automation
+            // mode and always appear in both.
+            const CHOSEN = [
+                ['Messages', 'messagesEnabled', true, 'toolbarMessages'],
+                ['Quick Encounter', 'quickEncounterEnabled', true, 'toolbarQuickEncounter'],
+                ['Investigation', 'investigationEnabled', false, 'toolbarInvestigation'],
+                ['Inspiration', 'inspirationEnabled', false, 'toolbarInspiration']
+            ];
+            const WHERE = { coffeepub: 'Coffee Pub only', foundry: 'Foundry only', both: 'both toolbars' };
+            const rows = CHOSEN.map(([label, enabledKey, enabledDefault, placementKey]) => {
+                const on = setting(enabledKey, enabledDefault);
+                const place = setting(placementKey, 'both');
+                return `${label.padEnd(16)} ${on ? (WHERE[place] ?? `UNKNOWN ("${place}")`) : 'hidden (feature is off)'}`;
+            });
+            const automation = [
+                ['Critical Hit', 'critAutomation'],
+                ['Fumble', 'fumbleAutomation'],
+                ['Injuries', 'injuryAutomation'],
+                ['Check-Up', 'injuryAutomation']
+            ].map(([label, key]) => {
+                const mode = setting(key, 'click');
+                return `${label.padEnd(16)} ${mode === 'off' ? 'hidden (Automation = off)' : `both toolbars (Automation = ${mode})`}`;
+            });
+            console.log('BIBLIOSOPH TOOLBAR PLACEMENT\n  ' + [...rows, '', ...automation].join('\n  '));
+            ui.notifications.info('Toolbar placement reported — per-button breakdown in console (F12). Placement changes need a reload.');
+        }
+    },
+    {
+        tab: 'tools',
         label: '📡 Audit toast channels (will the camera see crits?)',
         run: () => {
             if (!channelsSupported()) {
