@@ -169,7 +169,9 @@ export class InjuryTriggerManager {
         const title = interpolate(getSetting('injuryToastTitle', ''));
         if (!title) return null;
 
-        const payload = { title, moduleId: MODULE.ID };
+        // See manager-roll-toasts.js _buildPayload — channel lets a GM let
+        // toast-excluded users through for injury announcements.
+        const payload = { title, moduleId: MODULE.ID, channel: 'injury' };
 
         const subtitle = interpolate(getSetting('injuryToastMessage', ''));
         if (subtitle) payload.subtitle = subtitle;

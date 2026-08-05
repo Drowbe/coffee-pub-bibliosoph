@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [Unreleased]
+
+### Added
+
+- **A camera account can see the crit without seeing everything.** Blacksmith's Toast Excluded Users setting is all-or-nothing: a stream or camera account listed there renders no toast at all, which is right for party chatter and exactly backwards for "CRITICAL!" — those are the moments a broadcast exists to capture. Bibliosoph now labels each broadcast toast with a channel (`crit`, `fumble`, `injury`, `social`), and Blacksmith's new Channels Excluded Users Still See setting lets the GM allow any subset through. The names are per-outcome rather than one blanket `announcements`, so the allowance can be partial — dice moments on camera, injuries and table gags off it. Blacksmith only compares two strings, so what counts as a critical stays entirely in Bibliosoph. Requires a Blacksmith newer than 13.15.0; on older builds the field is ignored and behaviour is unchanged. Channel names are documented in the README and in the Toast Design hints, because a mismatch is silent and Blacksmith deliberately has no list of valid names to offer.
+- **The test harness can answer "will the camera see this?".** Two scenarios under Tools: an audit that reads Blacksmith's live exclusion and channel lists, cross-references them against the four names Bibliosoph sends, and flags both the typo cases — an excluded-user name matching no actual user, and an allowed channel Bibliosoph never sends; and a fire-one-toast-per-channel button that bypasses automation, thresholds and source filters so the channel field itself can be verified against a real excluded client.
+
+
 ## [13.4.4]
 
 ### Added

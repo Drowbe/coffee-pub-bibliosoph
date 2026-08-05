@@ -27,7 +27,7 @@
 		"retentionMaxMessages-Label": "Message History Limit",
 		"retentionMaxMessages-Hint": "Maximum messages kept per conversation. Older messages are trimmed automatically as new ones arrive.",
 		"messagesExcludedUsers-Label": "Excluded Users",
-		"messagesExcludedUsers-Hint": "Comma-separated user names to leave out of Messages (no 1:1 row, not selectable for groups, not added to the party conversation). Case-insensitive; matches the exact name or the start of it (e.g. 'developer' matches 'DeveloperXXX').",
+		"messagesExcludedUsers-Hint": "Comma-separated user names to leave out of Messages (no 1:1 row, not selectable for groups, not added to the party conversation). Case-insensitive; matches the exact name or the start of it (e.g. 'developer' matches 'DeveloperXXX'). This is only about Messages — it does not hide toasts. Toast visibility lives in Blacksmith under Toast Excluded Users, and which announcements reach those users anyway is set there too (see Toast Channels below).",
 		"hideMessagesJournal-Label": "Hide Messages Journal Folder",
 		"hideMessagesJournal-Hint": "Hides the conversations journal folder from the journal sidebar for everyone.",
 		"messageAutoOpen-Label": "Auto Open Messages",
@@ -53,7 +53,7 @@
 
 
 		"headingH3RandomToasts-Label": "Random Toasts",
-		"headingH3RandomToasts-Hint": "Buttons in the Messages window header that roll a table and toast the result to everyone. Choosing None disables the button.",
+		"headingH3RandomToasts-Hint": "Buttons in the Messages window header that roll a table and toast the result to everyone. Choosing None disables the button. These toasts use the channel name 'social' — add it to Blacksmith's Channels Excluded Users Still See to let a camera or stream account see them.",
 		"beverageTable-Label": "Beverage Table",
 		"beverageTable-Hint": "",
 		"bioTable-Label": "Bio Table",
@@ -139,7 +139,7 @@
 		"headingH3CriticalChatCard-Label": "Chat Card",
 		"headingH3CriticalChatCard-Hint": "",
 		"headingH3CriticalToastDesign-Label": "Toast Design",
-		"headingH3CriticalToastDesign-Hint": "Codes for the title and message: {name} who rolled, {target} who they hit, {weapon} what they attacked with, {d20} the die face, {total} the attack total.",
+		"headingH3CriticalToastDesign-Hint": "Codes for the title and message: {name} who rolled, {target} who they hit, {weapon} what they attacked with, {d20} the die face, {total} the attack total. This toast uses the channel name 'crit' — add it to Blacksmith's Channels Excluded Users Still See to let a camera or stream account see criticals despite being toast-excluded.",
 		"cardThemeCritical-Label": "Chat Card Style",
 		"cardThemeCritical-Hint": "",
 
@@ -150,7 +150,7 @@
 		"headingH3FumbleChatCard-Label": "Chat Card",
 		"headingH3FumbleChatCard-Hint": "",
 		"headingH3FumbleToastDesign-Label": "Toast Design",
-		"headingH3FumbleToastDesign-Hint": "Codes for the title and message: {name} who rolled, {target} who they attacked, {weapon} what they attacked with, {d20} the die face, {total} the attack total.",
+		"headingH3FumbleToastDesign-Hint": "Codes for the title and message: {name} who rolled, {target} who they attacked, {weapon} what they attacked with, {d20} the die face, {total} the attack total. This toast uses the channel name 'fumble' — add it to Blacksmith's Channels Excluded Users Still See to let a camera or stream account see fumbles despite being toast-excluded.",
 		"cardThemeFumble-Label": "Chat Card Style",
 		"cardThemeFumble-Hint": "",
 
@@ -269,7 +269,7 @@
 		"injurySoundVolume-Label": "Sound Volume",
 		"injurySoundVolume-Hint": "",
 		"headingH3InjuriesToastDesign-Label": "Toast Design",
-		"headingH3InjuriesToastDesign-Hint": "Codes for the title and message: {name} who was injured, {type} the damage type, {damage} the damage taken, {percent} the percent of max HP.",
+		"headingH3InjuriesToastDesign-Hint": "Codes for the title and message: {name} who was injured, {type} the damage type, {damage} the damage taken, {percent} the percent of max HP. This toast uses the channel name 'injury' — add it to Blacksmith's Channels Excluded Users Still See to let a camera or stream account see injuries despite being toast-excluded.",
 		"injuryToastTitle-Label": "Injury Title",
 		"injuryToastTitle-Hint": "",
 		"injuryToastMessage-Label": "Injury Message",

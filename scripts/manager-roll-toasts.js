@@ -238,7 +238,12 @@ export class RollToastManager {
         const title = interpolate(getSetting(`${type}ToastTitle`, ''));
         if (!title) return null;
 
-        const payload = { title, moduleId: MODULE.ID };
+        // Channel: lets a GM let toast-excluded users (camera/stream
+        // accounts) through for THESE toasts via Blacksmith's
+        // toastBypassChannels. Per-outcome name ('crit'/'fumble') so the
+        // allowance can be granted one outcome at a time. Ignored by
+        // Blacksmith builds at or below 13.15.0.
+        const payload = { title, moduleId: MODULE.ID, channel: type };
 
         const subtitle = interpolate(getSetting(`${type}ToastMessage`, ''));
         if (subtitle) payload.subtitle = subtitle;

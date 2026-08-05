@@ -88,6 +88,25 @@ function setting(key, dflt) {
 }
 const threshold = () => Number(setting('injuryThreshold', 50)) || 50;
 
+// --- toast channels -----------------------------------------------
+// Every channel name Bibliosoph stamps on a toast. A GM lists these in
+// Blacksmith's "Channels Excluded Users Still See" (toastBypassChannels)
+// to let a camera/stream account see them despite being in
+// toastExcludedUsers. Blacksmith only string-matches, so a typo fails
+// silently — hence the audit scenario in the Tools tab.
+const TOAST_CHANNELS = ['crit', 'fumble', 'injury', 'social'];
+
+/** null when this Blacksmith build predates channels (setting unregistered). */
+function blacksmithSetting(key) {
+    try { return game.settings.get('coffee-pub-blacksmith', key) ?? ''; }
+    catch (_) { return null; }
+}
+
+/** Blacksmith's own parsing: comma list, trimmed, lowercased. */
+function commaList(raw) {
+    return String(raw ?? '').split(',').map((s) => s.trim().toLowerCase()).filter(Boolean);
+}
+
 // --- settings-aware expectations ---------------------------------
 // The handlers gate on Automation and Triggered By; predict the outcome
 // from the LIVE settings so a no-op reads as "correct" instead of broken.
@@ -853,6 +872,70 @@ const SCENARIOS = [
     },
     {
         tab: 'tools',
+        label: '📡 Audit toast channels (will the camera see crits?)',
+        run: () => {
+            const allowedRaw = blacksmithSetting('toastBypassChannels');
+            if (allowedRaw === null) {
+                return ui.notifications.warn(
+                    'This Blacksmith build has no toastBypassChannels setting (needs the release after 13.15.0). '
+                    + 'Bibliosoph still stamps channels; they are ignored, so excluded users see nothing — same as before.'
+                );
+            }
+            const allowed = commaList(allowedRaw);
+            const excludedNames = commaList(blacksmithSetting('toastExcludedUsers'));
+            const byName = new Map(game.users.map((u) => [u.name.toLowerCase(), u]));
+            const excludedUsers = excludedNames.map((n) => byName.get(n)).filter(Boolean);
+            // Exclusion matches the user NAME exactly (case-insensitive), so a
+            // renamed or misspelled account silently excludes nobody.
+            const ghosts = excludedNames.filter((n) => !byName.has(n));
+            // Allowed names Bibliosoph never sends: another module's channel,
+            // or the typo that makes this whole feature look broken.
+            const foreign = allowed.filter((c) => !TOAST_CHANNELS.includes(c));
+
+            const rows = TOAST_CHANNELS.map((c) =>
+                `${c.padEnd(8)} ${allowed.includes(c) ? 'ALLOWED — excluded users DO see it' : 'blocked — excluded users see nothing'}`);
+            const report = [
+                `excluded users : ${excludedUsers.map((u) => `${u.name}${u.active ? '' : ' (offline)'}`).join(', ') || '(none — exclusion is off, everyone sees everything)'}`,
+                ...(ghosts.length ? [`  NO SUCH USER : ${ghosts.join(', ')} — excludes nobody; check spelling against the user list`] : []),
+                `allowed channels: ${allowed.join(', ') || '(none)'}`,
+                ...(foreign.length ? [`  not Bibliosoph's: ${foreign.join(', ')} — another module's channel, or a typo of ${TOAST_CHANNELS.join('/')}`] : []),
+                '',
+                ...rows
+            ];
+            console.log('BIBLIOSOPH TOAST CHANNELS\n  ' + report.join('\n  '));
+            ui.notifications.info(
+                excludedUsers.length
+                    ? `${excludedUsers.length} excluded user(s) · allowed: ${allowed.filter((c) => TOAST_CHANNELS.includes(c)).join(', ') || 'nothing from Bibliosoph'}`
+                      + `${ghosts.length ? ` · ${ghosts.length} name(s) match no user!` : ''}. Full table in console (F12).`
+                    : 'Nobody is toast-excluded in Blacksmith — channels have no effect until someone is. Details in console (F12).'
+            );
+        }
+    },
+    {
+        tab: 'tools',
+        label: '📢 Fire one toast per channel (watch the excluded client)',
+        run: async () => {
+            // Bypasses automation, thresholds, and source filters — the point
+            // is the channel field, not the detection that normally sets it.
+            for (const channel of TOAST_CHANNELS) {
+                RollToastManager.deliver({
+                    title: `Channel test: ${channel}`,
+                    subtitle: `If you are toast-excluded, you see this only when "${channel}" is in Blacksmith's allowed channels.`,
+                    icon: 'fa-solid fa-satellite-dish',
+                    size: 'small',
+                    duration: 5,
+                    channel,
+                    moduleId: 'coffee-pub-bibliosoph'
+                });
+            }
+            ui.notifications.info(
+                `Broadcast ${TOAST_CHANNELS.length} toasts, one per channel. Normal clients see all ${TOAST_CHANNELS.length}. `
+                + 'An excluded client should see only the allowed ones — run the channel audit to see which those are.'
+            );
+        }
+    },
+    {
+        tab: 'tools',
         label: '🧪 Apply mechanics: synthetic effect → subject',
         run: async () => {
             const token = getSubjectToken();
@@ -1038,7 +1121,12 @@ const TAB_SETTINGS = {
          target and discard the card. Nothing is spent until a button is clicked.</em>`
     ),
     tools: settingsBox(
-        `Injury Compendium: <strong>${setting('injuryCompendium', 'coffee-pub-bibliosoph.injuries')}</strong>`
+        `Injury Compendium: <strong>${setting('injuryCompendium', 'coffee-pub-bibliosoph.injuries')}</strong><br>
+         Toast-excluded users: <strong>${blacksmithSetting('toastExcludedUsers') || 'none'}</strong> ·
+         Channels they still see: <strong>${blacksmithSetting('toastBypassChannels') === null
+            ? '(unsupported — this Blacksmith predates channels)'
+            : (blacksmithSetting('toastBypassChannels') || 'none')}</strong>
+         <em>(Bibliosoph sends: ${TOAST_CHANNELS.join(', ')})</em>`
     )
 };
 

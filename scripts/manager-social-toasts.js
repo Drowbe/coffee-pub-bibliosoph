@@ -126,13 +126,17 @@ export async function triggerSocialToast(kind) {
     }
     const text = stripHtml(chosen.description ?? chosen.text ?? chosen.name);
 
+    // One 'social' channel for all four gags rather than one per kind:
+    // a GM allowing table humour through to a camera account wants the
+    // set, not a per-gag whitelist. See manager-roll-toasts.js.
     const payload = {
         title: config.title,
         subtitle: text,
         image: config.image,
         sound: config.sound,
         ...TOAST_STYLE,
-        moduleId: MODULE.ID
+        moduleId: MODULE.ID,
+        channel: 'social'
     };
 
     // Relay to every other client; emit never delivers to the sender,

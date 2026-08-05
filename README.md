@@ -105,6 +105,28 @@ Each module can run on its own except for the Blacksmith requirement; together t
 - Investigation: configure Odds of Success, Upper Limit of Items, coin odds and max amounts, and per-rarity roll tables and weightings (0–1000 scale). Optionally enable "Use Player Skill Bonus" so the find-items roll becomes 1d100 + Intelligence modifier + Proficiency (dnd5e).
 - Active effects for injuries can be configured with custom durations and effects.
 
+### Toast Channels (streaming and camera accounts)
+
+Blacksmith's **Toast Excluded Users** setting stops a user's client from rendering toasts at all — the right behaviour for a camera or stream account that cannot click a toast closed. But some announcements are exactly what a broadcast exists to capture, so Bibliosoph labels each broadcast toast with a **channel**. Listing a channel in Blacksmith's **Channels Excluded Users Still See** lets it through to excluded users; everything else stays suppressed.
+
+Bibliosoph sends four channel names:
+
+| Channel | Toasts |
+|---|---|
+| `crit` | Critical hit announcements |
+| `fumble` | Fumble announcements |
+| `injury` | Injury-threshold announcements |
+| `social` | Beverage Break, Bio Break, Insult, Praise |
+
+They are separate so the allowance can be partial — `crit,fumble` puts the dice moments on camera while injuries and table gags stay off it. Toasts not listed here (local confirmations, warnings) carry no channel and are always suppressed for excluded users.
+
+Two things to know:
+
+- **Names must match exactly** (case and spelling; whitespace is trimmed). A mismatch fails silently — the toast just doesn't appear. Blacksmith's `globalDebugMode` logs which case it hit. The test harness in [testing/test-harness-macro.js](testing/test-harness-macro.js) has an **Audit toast channels** scenario under Tools that reports the live lists, flags typos, and shows per channel whether excluded users will see it, plus a **Fire one toast per channel** scenario to verify against a real excluded client.
+- **Channel names are global, not namespaced.** If another module also sends `crit`, allowing it allows both.
+
+Requires a Blacksmith build newer than 13.15.0. On older builds the channel is ignored and excluded users see nothing, exactly as before.
+
 ## License
 
 This module is licensed under the [MIT License](LICENSE).
