@@ -122,7 +122,7 @@ They are separate so the allowance can be partial — `crit,fumble` puts the dic
 
 Two things to know:
 
-- **Names must match exactly** (case and spelling; whitespace is trimmed). A mismatch fails silently — the toast just doesn't appear. Blacksmith's `globalDebugMode` logs which case it hit. The test harness in [testing/test-harness-macro.js](testing/test-harness-macro.js) has an **Audit toast channels** scenario under Tools that reports the live lists, flags typos, and shows per channel whether excluded users will see it, plus a **Fire one toast per channel** scenario to verify against a real excluded client.
+- **Names must match exactly** (case and spelling; whitespace is trimmed). A mismatch fails silently — the toast just doesn't appear. Two ways to check: switch on Blacksmith's Debug Mode and play for a minute, and it names each channel as it first sees one, giving you the live list of what is actually being sent; or run the test harness in [testing/test-harness-macro.js](testing/test-harness-macro.js), whose **Audit toast channels** scenario under Tools reports who is excluded and which of our four channels reach them, and whose **Fire one toast per channel** scenario broadcasts one of each so you can watch a real excluded client.
 - **Channel names are global, not namespaced.** If another module also sends `crit`, allowing it allows both.
 
 Requires a Blacksmith build newer than 13.15.0. On older builds the channel is ignored and excluded users see nothing, exactly as before.

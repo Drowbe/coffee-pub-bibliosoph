@@ -90,22 +90,24 @@ const threshold = () => Number(setting('injuryThreshold', 50)) || 50;
 
 // --- toast channels -----------------------------------------------
 // Every channel name Bibliosoph stamps on a toast. A GM lists these in
-// Blacksmith's "Channels Excluded Users Still See" (toastBypassChannels)
-// to let a camera/stream account see them despite being in
-// toastExcludedUsers. Blacksmith only string-matches, so a typo fails
-// silently — hence the audit scenario in the Tools tab.
+// Blacksmith's "Channels Excluded Users Still See" to let a camera/stream
+// account see them despite being toast-excluded. Blacksmith only
+// string-matches, so a mismatch fails silently — hence the audit below.
 const TOAST_CHANNELS = ['crit', 'fumble', 'injury', 'social'];
 
-/** null when this Blacksmith build predates channels (setting unregistered). */
-function blacksmithSetting(key) {
-    try { return game.settings.get('coffee-pub-blacksmith', key) ?? ''; }
-    catch (_) { return null; }
+/** Blacksmith's toast API, or null if the module is absent. */
+function toastApi() {
+    return game.modules.get('coffee-pub-blacksmith')?.api?.toast ?? null;
 }
 
-/** Blacksmith's own parsing: comma list, trimmed, lowercased. */
-function commaList(raw) {
-    return String(raw ?? '').split(',').map((s) => s.trim().toLowerCase()).filter(Boolean);
-}
+// Both answers come from Blacksmith's read-only introspection rather than
+// from reading its world settings and re-implementing the comma/trim/case
+// parsing. isExcludedUser takes a User, so this reports the users that
+// ACTUALLY exist and are excluded — a listed name matching no user simply
+// never appears, which is the right answer to "who won't see this?".
+const channelsSupported = () => typeof toastApi()?.isBypassChannel === 'function';
+const excludedUsers = () => (channelsSupported() ? game.users.filter((u) => toastApi().isExcludedUser(u)) : []);
+const allowedChannels = () => (channelsSupported() ? TOAST_CHANNELS.filter((c) => toastApi().isBypassChannel(c)) : []);
 
 // --- settings-aware expectations ---------------------------------
 // The handlers gate on Automation and Triggered By; predict the outcome
@@ -874,39 +876,34 @@ const SCENARIOS = [
         tab: 'tools',
         label: '📡 Audit toast channels (will the camera see crits?)',
         run: () => {
-            const allowedRaw = blacksmithSetting('toastBypassChannels');
-            if (allowedRaw === null) {
+            if (!channelsSupported()) {
                 return ui.notifications.warn(
-                    'This Blacksmith build has no toastBypassChannels setting (needs the release after 13.15.0). '
-                    + 'Bibliosoph still stamps channels; they are ignored, so excluded users see nothing — same as before.'
+                    'This Blacksmith build predates toast channels (needs newer than 13.15.0). Bibliosoph still stamps '
+                    + 'them; they are ignored, so excluded users see nothing — same as before.'
                 );
             }
-            const allowed = commaList(allowedRaw);
-            const excludedNames = commaList(blacksmithSetting('toastExcludedUsers'));
-            const byName = new Map(game.users.map((u) => [u.name.toLowerCase(), u]));
-            const excludedUsers = excludedNames.map((n) => byName.get(n)).filter(Boolean);
-            // Exclusion matches the user NAME exactly (case-insensitive), so a
-            // renamed or misspelled account silently excludes nobody.
-            const ghosts = excludedNames.filter((n) => !byName.has(n));
-            // Allowed names Bibliosoph never sends: another module's channel,
-            // or the typo that makes this whole feature look broken.
-            const foreign = allowed.filter((c) => !TOAST_CHANNELS.includes(c));
-
+            const excluded = excludedUsers();
+            const allowed = allowedChannels();
             const rows = TOAST_CHANNELS.map((c) =>
                 `${c.padEnd(8)} ${allowed.includes(c) ? 'ALLOWED — excluded users DO see it' : 'blocked — excluded users see nothing'}`);
+            // No typo hunting here: Blacksmith cannot distinguish a misspelling
+            // from another module's channel and neither can we. What we CAN say
+            // is when the allow-list does nothing for us, which is what a typo
+            // looks like from this side. Blacksmith's debug mode names every
+            // channel it actually sees, which is the real way to find the name.
+            const deadEnd = excluded.length && !allowed.length;
             const report = [
-                `excluded users : ${excludedUsers.map((u) => `${u.name}${u.active ? '' : ' (offline)'}`).join(', ') || '(none — exclusion is off, everyone sees everything)'}`,
-                ...(ghosts.length ? [`  NO SUCH USER : ${ghosts.join(', ')} — excludes nobody; check spelling against the user list`] : []),
-                `allowed channels: ${allowed.join(', ') || '(none)'}`,
-                ...(foreign.length ? [`  not Bibliosoph's: ${foreign.join(', ')} — another module's channel, or a typo of ${TOAST_CHANNELS.join('/')}`] : []),
+                `excluded users  : ${excluded.map((u) => `${u.name}${u.active ? '' : ' (offline)'}`).join(', ') || '(none — exclusion is off, everyone sees everything)'}`,
+                `allowed to them : ${allowed.join(', ') || 'nothing from Bibliosoph'}`,
+                ...(deadEnd ? ['  ^ if you meant to allow some, check the spelling — a mismatch is silent. '
+                    + `Blacksmith's Debug Mode logs each channel as it is first seen; ours are ${TOAST_CHANNELS.join(', ')}.`] : []),
                 '',
                 ...rows
             ];
             console.log('BIBLIOSOPH TOAST CHANNELS\n  ' + report.join('\n  '));
             ui.notifications.info(
-                excludedUsers.length
-                    ? `${excludedUsers.length} excluded user(s) · allowed: ${allowed.filter((c) => TOAST_CHANNELS.includes(c)).join(', ') || 'nothing from Bibliosoph'}`
-                      + `${ghosts.length ? ` · ${ghosts.length} name(s) match no user!` : ''}. Full table in console (F12).`
+                excluded.length
+                    ? `${excluded.length} excluded user(s) · they still see: ${allowed.join(', ') || 'NOTHING from Bibliosoph'}. Full table in console (F12).`
                     : 'Nobody is toast-excluded in Blacksmith — channels have no effect until someone is. Details in console (F12).'
             );
         }
@@ -1122,11 +1119,11 @@ const TAB_SETTINGS = {
     ),
     tools: settingsBox(
         `Injury Compendium: <strong>${setting('injuryCompendium', 'coffee-pub-bibliosoph.injuries')}</strong><br>
-         Toast-excluded users: <strong>${blacksmithSetting('toastExcludedUsers') || 'none'}</strong> ·
-         Channels they still see: <strong>${blacksmithSetting('toastBypassChannels') === null
-            ? '(unsupported — this Blacksmith predates channels)'
-            : (blacksmithSetting('toastBypassChannels') || 'none')}</strong>
-         <em>(Bibliosoph sends: ${TOAST_CHANNELS.join(', ')})</em>`
+         ${channelsSupported()
+            ? `Toast-excluded users: <strong>${excludedUsers().map((u) => u.name).join(', ') || 'none'}</strong> ·
+               Channels they still see: <strong>${allowedChannels().join(', ') || 'none'}</strong>
+               <em>(Bibliosoph sends: ${TOAST_CHANNELS.join(', ')})</em>`
+            : '<strong>Toast channels: unsupported</strong> — this Blacksmith predates them; excluded users see no toasts at all.'}`
     )
 };
 
