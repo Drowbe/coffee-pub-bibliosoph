@@ -29,17 +29,16 @@ Also pending:
 
 - **Blacksmith — GM Notes for journals** — `documentation/note-blacksmith-gmnotes-journals.md`: adopt-not-reinvent, plus the four journal-specific problems (sync `get()` cannot resolve compendium docs; `set()` silently fails on a locked pack; module-owned page sheets mean Blacksmith should offer a *component* rather than inject into sheets; re-import must preserve notes as user data).
 
-- **Blacksmith requests** — the five below, in order, using the `documentation/request-blacksmith-damage-api.md` format (it worked).
+- **Blacksmith requests** — the four below, in order, using the `documentation/request-blacksmith-damage-api.md` format (it worked).
 - **Squire dev** — `documentation/note-squire-status-effects.md`: correct apply/remove code, enumerating conditions from the system (incl. pseudo-conditions), the `@Embed` description workaround, categorizing our injuries/crits/fumbles via the `outcomeBurst` flag, the show/remove-anything filter + condition unwind, and assorted gotchas.
 - **Crier dev** — `documentation/note-crier-turn-effects.md`: a display-only version of the Check-Up rows (icon tiles, two-line rows, "via" attribution, durations, enriched hover tooltips) as an optional turn-card block, with the filter/enrichment code to lift.
 
 ## Blacksmith Requests
 
-1. **Cut a release (13.11.4+).** Everything this cycle — rolls API, `damageResolved`, toast `callToAction`, the request-roll API, request-side advantage (#5), and `api.compendiums.getAllChoices()` — exists only on master. Bibliosoph cannot ship to anyone on published 13.11.3 until Blacksmith tags a release; pin the version dependency when both ship. Each adoption degrades gracefully on older builds, so this gates the *release*, not development.
-2. **Public cross-client toast delivery** — e.g. `toast.publish(config, { recipients })`. Bibliosoph rolls its own socket relay (`coffee-pub-bibliosoph.rollToast`) for crit/fumble/injury/social toasts; every Coffee Pub module that toasts cross-client will rebuild the same plumbing. Receipt-side click-arming stays per-module (functions can't cross sockets) — only the delivery belongs in Blacksmith.
-3. **Stats API surface for the phase 3 announcer** — a query API (`stats.getRecord('damage-dealt')`) or, better, events (`blacksmith.stats.recordBroken`) so "biggest hit / broken record" announcements are subscribers like everything else. Request BEFORE designing phase 3 so it lands event-shaped, same playbook as `damageResolved`.
-4. **MIDI attacker/item attribution on `damageResolved`** — already on Blacksmith's own TODO; nudge it along (unlocks the `{attacker}`/`{weapon}` injury toast codes above).
-5. **Two developer-experience footguns (flag, not formal requests):** `rollCoffeePubDice()` fabricates a decorative 2d20 when passed nothing (caused the fake-dice bug — warn-and-skip would be safer), and `objectToString`/`stringToObject` corrupt prose containing `=` or `|` (ate the Apply-button description — deprecate in favor of JSON helpers).
+1. **Public cross-client toast delivery** — e.g. `toast.publish(config, { recipients })`. Bibliosoph rolls its own socket relay (`coffee-pub-bibliosoph.rollToast`) for crit/fumble/injury/social toasts; every Coffee Pub module that toasts cross-client will rebuild the same plumbing. Receipt-side click-arming stays per-module (functions can't cross sockets) — only the delivery belongs in Blacksmith. Still absent as of 13.15.1: `ToastAPI` exposes `show`/`remove`/`clearByModule`/`getActive`/`isExcludedUser`/`isBypassChannel`/`registerChannel`/`getChannels`, and `broadcastToast`/`sendToastToUsers` remain module-internal.
+2. **Stats API surface for the phase 3 announcer** — a query API (`stats.getRecord('damage-dealt')`) or, better, events (`blacksmith.stats.recordBroken`) so "biggest hit / broken record" announcements are subscribers like everything else. Request BEFORE designing phase 3 so it lands event-shaped, same playbook as `damageResolved`. (`api.stats` exists; the query/event surface we need does not.)
+3. **MIDI attacker/item attribution on `damageResolved`** — already on Blacksmith's own TODO; nudge it along (unlocks the `{attacker}`/`{weapon}` injury toast codes above). Confirmed still open: `manager-roll-outcomes.js` emits `attackerTokenId: null, itemUuid: null` with "MIDI enrichment is future work".
+4. **Two developer-experience footguns (flag, not formal requests):** `rollCoffeePubDice()` fabricates a decorative 2d20 when passed nothing (caused the fake-dice bug — warn-and-skip would be safer), and `objectToString`/`stringToObject` corrupt prose containing `=` or `|` (ate the Apply-button description — deprecate in favor of JSON helpers).
 
 ## Crits & Fumbles
 
@@ -70,7 +69,7 @@ Also pending:
 
 ## Chat Cards
 
-- Clean up how chat cards look when sent to the Foundry chat — they are pretty rough, especially the Insults and Praise tools. Those still render through the legacy `chat-card.hbs`/CARDDATA path; consider migrating them (and the other roll-table cards) to the Blacksmith chat card structure (`.blacksmith-card` + `card-header`/`section-content` + Chat Cards API themes), like the Messages send-to-chat escalation card already uses. When Blacksmith ships its full chat-card creation API, both paths could move onto it together.
+- Clean up how chat cards look when sent to the Foundry chat — they are pretty rough. Two features still render through the legacy `chat-card.hbs`/CARDDATA path: **Investigation** (`bibliosoph.js`) and **Quick Encounter** (`manager-encounters.js`). Consider migrating them to the Blacksmith chat card structure (`.blacksmith-card` + `card-header`/`section-content` + Chat Cards API themes), like the Messages send-to-chat escalation card already uses. When Blacksmith ships its full chat-card creation API, both paths could move onto it together. *(Insults and Praise are no longer part of this — they became toasts and post no chat card at all.)*
 
 # Coffee Pub Journals
 
