@@ -141,6 +141,17 @@ Hooks.once('ready', async () => {
             logBib('Failed to initialize Messages system', error?.message, false, false);
         }
 
+        // TOAST CHANNELS: declare our channel names so a GM can tick them in
+        // Blacksmith rather than guess them. Separate from the managers below
+        // because social toasts have channels too and do not depend on the
+        // rolls API being available.
+        try {
+            const { registerToastChannels } = await import('./manager-roll-toasts.js');
+            registerToastChannels();
+        } catch (error) {
+            logBib('Failed to declare toast channels', error?.message, false, false);
+        }
+
         // ROLL TOASTS: crit/fumble announcements via the Blacksmith rolls API
         try {
             const { RollToastManager } = await import('./manager-roll-toasts.js');

@@ -108,23 +108,23 @@ Each feature you enable adds its own toolbar button — there is nothing to wire
 
 ### Toast Channels (streaming and camera accounts)
 
-Blacksmith's **Toast Excluded Users** setting stops a user's client from rendering toasts at all — the right behaviour for a camera or stream account that cannot click a toast closed. But some announcements are exactly what a broadcast exists to capture, so Bibliosoph labels each broadcast toast with a **channel**. Listing a channel in Blacksmith's **Channels Excluded Users Still See** lets it through to excluded users; everything else stays suppressed.
+Blacksmith's **Toast Excluded Users** setting stops a user's client from rendering toasts at all — the right behaviour for a camera or stream account that cannot click a toast closed. But some announcements are exactly what a broadcast exists to capture, so Bibliosoph labels each broadcast toast with a **channel** and declares those channels to Blacksmith at startup.
 
-Bibliosoph sends four channel names:
+**This needs no setup.** A declared channel reaches excluded users by default, so a camera account sees criticals, fumbles, injuries and table breaks out of the box. Bibliosoph declares four:
 
-| Channel | Toasts |
-|---|---|
-| `crit` | Critical hit announcements |
-| `fumble` | Fumble announcements |
-| `injury` | Injury-threshold announcements |
-| `social` | Beverage Break, Bio Break, Insult, Praise |
+| Channel | Appears as | Toasts |
+|---|---|---|
+| `crit` | Critical Hits | Natural 20 announcements |
+| `fumble` | Fumbles | Natural 1 announcements |
+| `injury` | Injuries | Injury-threshold announcements |
+| `social` | Table Breaks | Beverage Break, Bio Break, Insult, Praise |
 
-They are separate so the allowance can be partial — `crit,fumble` puts the dice moments on camera while injuries and table gags stay off it. Toasts not listed here (local confirmations, warnings) carry no channel and are always suppressed for excluded users.
+To send *less* to a camera account, tick a narrower set in Blacksmith's **Channels Excluded Users Still See** — they appear there as labelled rows, one per declared channel. Ticking only Critical Hits and Fumbles puts the dice moments on camera while injuries and table gags stay off it. Toasts with no channel at all (local confirmations, warnings) are always suppressed for excluded users.
 
 Two things to know:
 
-- **Names must match exactly** (case and spelling; whitespace is trimmed). A mismatch fails silently — the toast just doesn't appear. Two ways to check: switch on Blacksmith's Debug Mode and play for a minute, and it names each channel as it first sees one, giving you the live list of what is actually being sent; or run the test harness in [testing/test-harness-macro.js](testing/test-harness-macro.js), whose **Audit toast channels** scenario under Tools reports who is excluded and which of our four channels reach them, and whose **Fire one toast per channel** scenario broadcasts one of each so you can watch a real excluded client.
-- **Channel names are global, not namespaced.** If another module also sends `crit`, allowing it allows both.
+- **Channel names are global, not namespaced.** If another module also declares `crit`, allowing it allows both. The checklist shows which module declared each row.
+- **To check what a camera account will actually see**, run the test harness in [testing/test-harness-macro.js](testing/test-harness-macro.js): **Audit toast channels** under Tools reports who is excluded, what we declared, and which channels reach them; **Fire one toast per channel** broadcasts one of each so you can watch a real excluded client. Blacksmith's Debug Mode also logs each channel as it first sees one, which is the quicker way to confirm a suspected mismatch involving another module.
 
 Requires a Blacksmith build newer than 13.15.0. On older builds the channel is ignored and excluded users see nothing, exactly as before.
 

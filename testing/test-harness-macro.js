@@ -89,10 +89,10 @@ function setting(key, dflt) {
 const threshold = () => Number(setting('injuryThreshold', 50)) || 50;
 
 // --- toast channels -----------------------------------------------
-// Every channel name Bibliosoph stamps on a toast. A GM lists these in
-// Blacksmith's "Channels Excluded Users Still See" to let a camera/stream
-// account see them despite being toast-excluded. Blacksmith only
-// string-matches, so a mismatch fails silently — hence the audit below.
+// Every channel name Bibliosoph stamps on a toast. We declare these to
+// Blacksmith at startup (registerToastChannels), so they appear as tickable
+// rows in "Channels Excluded Users Still See" and a declared channel
+// reaches excluded users unless the GM narrows the list.
 const TOAST_CHANNELS = ['crit', 'fumble', 'injury', 'social'];
 
 /** Blacksmith's toast API, or null if the module is absent. */
@@ -915,19 +915,23 @@ const SCENARIOS = [
             }
             const excluded = excludedUsers();
             const allowed = allowedChannels();
+            const declared = typeof toastApi().getChannels === 'function'
+                ? toastApi().getChannels().filter((c) => c.moduleId === 'coffee-pub-bibliosoph').map((c) => c.name)
+                : [];
             const rows = TOAST_CHANNELS.map((c) =>
-                `${c.padEnd(8)} ${allowed.includes(c) ? 'ALLOWED — excluded users DO see it' : 'blocked — excluded users see nothing'}`);
-            // No typo hunting here: Blacksmith cannot distinguish a misspelling
-            // from another module's channel and neither can we. What we CAN say
-            // is when the allow-list does nothing for us, which is what a typo
-            // looks like from this side. Blacksmith's debug mode names every
-            // channel it actually sees, which is the real way to find the name.
-            const deadEnd = excluded.length && !allowed.length;
+                `${c.padEnd(8)} ${allowed.includes(c) ? 'ALLOWED — excluded users DO see it' : 'blocked — excluded users see nothing'}`
+                + (declared.length && !declared.includes(c) ? '   [NOT DECLARED — registerToastChannels() did not run?]' : ''));
+            // A declared channel is allowed unless the GM has narrowed the
+            // list, so nothing reaching us means someone ticked a narrower
+            // set — not a typo. The names are on a checklist now; the
+            // Debug Mode log is for confirming a suspected mismatch.
+            const narrowed = excluded.length && !allowed.length;
             const report = [
                 `excluded users  : ${excluded.map((u) => `${u.name}${u.active ? '' : ' (offline)'}`).join(', ') || '(none — exclusion is off, everyone sees everything)'}`,
+                `declared to BS  : ${declared.join(', ') || '(none — this build has no getChannels, or registration failed)'}`,
                 `allowed to them : ${allowed.join(', ') || 'nothing from Bibliosoph'}`,
-                ...(deadEnd ? ['  ^ if you meant to allow some, check the spelling — a mismatch is silent. '
-                    + `Blacksmith's Debug Mode logs each channel as it is first seen; ours are ${TOAST_CHANNELS.join(', ')}.`] : []),
+                ...(narrowed ? ['  ^ every declared channel is allowed by default, so this means the GM has narrowed '
+                    + "Blacksmith's Channels Excluded Users Still See to a set that excludes all four of ours."] : []),
                 '',
                 ...rows
             ];
@@ -948,7 +952,7 @@ const SCENARIOS = [
             for (const channel of TOAST_CHANNELS) {
                 RollToastManager.deliver({
                     title: `Channel test: ${channel}`,
-                    subtitle: `If you are toast-excluded, you see this only when "${channel}" is in Blacksmith's allowed channels.`,
+                    subtitle: `If you are toast-excluded, you see this unless the GM has narrowed Blacksmith's allowed channels to exclude "${channel}".`,
                     icon: 'fa-solid fa-satellite-dish',
                     size: 'small',
                     duration: 5,

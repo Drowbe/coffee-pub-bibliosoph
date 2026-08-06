@@ -46,6 +46,42 @@ function log(message, data = '', debug = true, notify = false) {
     }
 }
 
+/**
+ * Every channel Bibliosoph stamps on a toast, declared to Blacksmith so the
+ * GM ticks a labelled box instead of typing a name nothing told them about.
+ * Declared here for all three senders (crits/fumbles, injuries, social) —
+ * one list beats three, since the whole point is that a GM can see them
+ * together.
+ *
+ * Blacksmith stores the string and renders the label; it still never learns
+ * what a critical is. An empty allow-list now permits every DECLARED
+ * channel, so these work with no GM configuration at all — the setting is
+ * how a GM narrows the set, not how they switch it on.
+ */
+const TOAST_CHANNELS = [
+    { name: 'crit', label: 'Critical Hits', description: 'Natural 20 announcements' },
+    { name: 'fumble', label: 'Fumbles', description: 'Natural 1 announcements' },
+    { name: 'injury', label: 'Injuries', description: 'Announcements when a hit crosses the injury threshold' },
+    { name: 'social', label: 'Table Breaks', description: 'Beverage Break, Bio Break, Insult and Praise' }
+];
+
+/**
+ * Declare the channels above. Safe to call before Blacksmith has them:
+ * builds at or below 13.15.0 have no registerChannel, and there the toasts
+ * behave exactly as they did — excluded users see nothing.
+ */
+export function registerToastChannels() {
+    const toast = getBlacksmith()?.toast;
+    if (typeof toast?.registerChannel !== 'function') {
+        log('Blacksmith build predates toast channels; nothing to declare', '', true, false);
+        return;
+    }
+    for (const { name, label, description } of TOAST_CHANNELS) {
+        toast.registerChannel(name, { moduleId: MODULE.ID, label, description });
+    }
+    log(`Declared ${TOAST_CHANNELS.length} toast channels to Blacksmith`, TOAST_CHANNELS.map((c) => c.name).join(', '), true, false);
+}
+
 export class RollToastManager {
     static _initialized = false;
 
