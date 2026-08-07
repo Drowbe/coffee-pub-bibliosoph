@@ -21,7 +21,8 @@
 // ==================================================================
 
 import { MODULE } from './const.js';
-import { damageFor } from './data/injury-schema.js';
+import { damageFor, tickDamageFor } from './data/injury-schema.js';
+import { severityLabel, titleCase } from './data/outcome-schema.js';
 
 function log(message, data = '', debug = true, notify = false) {
     if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils?.postConsoleAndNotification) {
@@ -216,4 +217,134 @@ export async function applyStatusToTokens({
         }
     }
     return applied;
+}
+
+// ==================================================================
+// ===== EFFECTS CLASSIFIER =========================================
+// ==================================================================
+// Teaches Blacksmith what our effects ARE, so any surface that renders
+// an actor's effects — their combat bar, a status window, Crier's turn
+// card — shows "Injury · Moderate · Deafened · bleeding 3 HP/turn"
+// instead of a bare row, without any of them importing from us.
+//
+// We supply meaning only. Blacksmith keeps the display, the filtering
+// and the duration; it never learns what an injury is, and nothing here
+// mutates an effect. Removal is deliberately NOT handled through this
+// registry — the deleteActiveEffect unwind hook already covers every
+// route, including callers who never opted in.
+//
+// Blacksmith ships a low-priority compatibility classifier for our flag
+// (`coffee-pub-blacksmith.bibliosoph-outcome`, priority -100). Ours wins
+// on priority and reads the fields theirs cannot know about; theirs stays
+// registered as the fallback for worlds running an older Bibliosoph.
+// ==================================================================
+
+/** Our stamp on an effect, tolerant of a raw object with no getFlag. */
+function readBurst(effect) {
+    try {
+        return effect?.getFlag?.(MODULE.ID, 'outcomeBurst') ?? effect?.flags?.[MODULE.ID]?.outcomeBurst ?? null;
+    } catch {
+        return effect?.flags?.[MODULE.ID]?.outcomeBurst ?? null;
+    }
+}
+
+/** flag.kind -> the display type Blacksmith renders. */
+const TYPE_BY_KIND = {
+    injury:   { type: 'injury',   label: 'Injury',   severityKind: null },
+    crit:     { type: 'critical', label: 'Critical', severityKind: 'crit' },
+    critical: { type: 'critical', label: 'Critical', severityKind: 'crit' },
+    fumble:   { type: 'fumble',   label: 'Fumble',   severityKind: 'fumble' }
+};
+
+/**
+ * Describe one of our effects for Blacksmith's normalization layer.
+ *
+ * @param {ActiveEffect} effect
+ * @param {object} ctx                  supplied by Blacksmith
+ * @param {Actor} [ctx.actor]           whose sheet this is — needed to turn a
+ *                                      percent tick into real hit points
+ * @param {string[]} [ctx.conditionIds] conditions Blacksmith already found
+ * @param {object} [ctx.api]            EffectsAPI, for condition labels
+ * @returns {object|null} classification, or null if the effect is not ours
+ */
+function classifyAffliction(effect, { actor = null, conditionIds = [], api = null } = {}) {
+    const burst = readBurst(effect);
+    if (!burst) return null;
+
+    const kind = String(burst.kind ?? '').toLowerCase();
+    const mapped = TYPE_BY_KIND[kind];
+
+    // 'treated' is a cosmetic stamp applied to somebody else's effect on the
+    // way out so the recovery burst plays. It is not an affliction of ours.
+    if (!mapped) {
+        return {
+            type: 'effect',
+            typeLabel: 'Effect',
+            name: String(effect?.name ?? '').trim(),
+            conditionIds: []
+        };
+    }
+
+    // Everything Blacksmith already found, plus the condition we toggled
+    // separately — that one exists only in our flag, so nothing else can see it.
+    const ids = new Set((conditionIds ?? []).map(String).filter(Boolean));
+    if (burst.condition) ids.add(String(burst.condition));
+
+    const parts = [];
+
+    // Crits and fumbles carry the bucket name the table actually says
+    // ("Carnage"); nobody calls a wound "a Carnage injury", so injuries
+    // report their severity plainly.
+    if (burst.severity) {
+        parts.push(mapped.severityKind
+            ? severityLabel(mapped.severityKind, burst.severity)
+            : titleCase(burst.severity));
+    }
+
+    for (const id of ids) parts.push(api?.getConditionLabel?.(id) ?? id);
+
+    // A live bleed, stated in hit points rather than the authored percent —
+    // "3 HP/turn" is a thing a player can act on; "2%" is not. Deliberately
+    // unlabelled: a wound conveying Bleeding would otherwise read
+    // "Bleeding · bleeding 3 HP/turn".
+    const tick = Number(burst.tick) || 0;
+    if (tick > 0) {
+        const perTurn = tickDamageFor(tick, actor?.system?.attributes?.hp);
+        if (perTurn > 0) parts.push(`${perTurn} HP/turn`);
+    } else if (burst.lingering) {
+        // Lingering clears the duration, so without this the row would go
+        // silent exactly when it most needs somebody to notice it.
+        parts.push('needs treating');
+    }
+
+    return {
+        type: mapped.type,
+        typeLabel: mapped.label,
+        name: String(effect?.name ?? '').replace(/^(Critical|Fumble)\s*:\s*/i, '').trim(),
+        // undefined (not '') so Blacksmith falls back to its own condition
+        // list when we have nothing better to say.
+        context: parts.length ? parts.join(' · ') : undefined,
+        conditionIds: [...ids]
+    };
+}
+
+/**
+ * Register the classifier. Safe on builds without the registry: older
+ * Blacksmith has no registerClassifier and the built-in compatibility
+ * classifier keeps rendering our effects, just with less detail.
+ */
+export function registerAfflictionClassifier() {
+    const effects = game.modules.get('coffee-pub-blacksmith')?.api?.effects;
+    if (typeof effects?.registerClassifier !== 'function') {
+        log('Blacksmith build predates the effects classifier registry; skipping', '', true, false);
+        return;
+    }
+    effects.registerClassifier({
+        id: `${MODULE.ID}.afflictions`,
+        priority: 100,             // beats Blacksmith's -100 compatibility classifier
+        replace: true,             // idempotent across a module reload
+        qualifies: (effect) => Boolean(readBurst(effect)),
+        classify: classifyAffliction
+    });
+    log('Registered affliction classifier with Blacksmith', '', true, false);
 }

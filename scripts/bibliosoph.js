@@ -176,6 +176,16 @@ Hooks.once('ready', async () => {
             logBib('Failed to initialize Injury Effects', error?.message, false, false);
         }
 
+        // EFFECTS CLASSIFIER: tell Blacksmith what our effects ARE, so every
+        // surface that lists an actor's effects — their combat bar, a status
+        // window, a turn card — can describe ours without importing from us.
+        try {
+            const { registerAfflictionClassifier } = await import('./manager-status-effects.js');
+            registerAfflictionClassifier();
+        } catch (error) {
+            logBib('Failed to register the affliction classifier', error?.message, false, false);
+        }
+
         // TREAT STAMPS: players can't edit GM-owned chat messages, so a
         // player's treat click relays a stamp-sweep intent to the active GM
         try {
@@ -343,6 +353,53 @@ function decodeEffectPayload(raw) {
     } catch (_) {
         return BlacksmithUtils.stringToObject(raw);
     }
+}
+
+/**
+ * Build the applyStatusToTokens config for an injury from a decoded
+ * data-effect payload.
+ *
+ * There are two ways an injury lands — the player clicks Apply on the card,
+ * or `injuryAutoApply` applies it the moment the card is posted — and both
+ * read the SAME button payload. They were built separately and drifted:
+ * auto-apply passed the authored percentage as FLAT damage (bypassing the
+ * floor that stops an injury killing anyone), and dropped modifiers, tick
+ * and expiry entirely, so an automated wound did the wrong damage, cost no
+ * roll penalties, never bled and never lingered.
+ *
+ * One builder, so a field added here reaches both paths or neither.
+ *
+ * @param {object} data                 decoded data-effect payload
+ * @param {Actor[]|null} explicitActors known recipients, or null to target at click time
+ * @returns {object} config for applyStatusToTokens
+ */
+function buildInjuryApplyConfig(data, explicitActors = null) {
+    return {
+        name: data.name,
+        img: data.icon,
+        description: data.description || '',
+        durationSeconds: Number(data.duration) || null,
+        // Injury damage is a PERCENTAGE of max HP, floored so an injury
+        // maims and never kills.
+        damagePercent: Number(data.damage) || null,
+        statusEffect: data.statuseffect || null,
+        // Roll penalties ride along as real ActiveEffect changes, so a
+        // mangled hand costs the attack roll and not just prose.
+        changes: modifiersToChanges(data.modifiers ?? []),
+        kindLabel: 'injury',
+        explicitActors,
+        burst: {
+            kind: 'injury',
+            category: data.category || 'General',
+            severity: data.severity || null,
+            dc: data.treatmentDC ?? null,
+            // Recurring damage and end-of-clock behaviour ride the flag so
+            // the round ticker can read them off the effect.
+            tick: Number(data.tick) || 0,
+            expiry: data.expiry || 'heal',
+            sourceUuid: data.sourceUuid ?? null
+        }
+    };
 }
 
 function readOutcomeRecord(page) {
@@ -686,18 +743,10 @@ export async function rollInjuryCard(category, target = null) {
             const targetActor = canvas?.tokens?.get(target.tokenId ?? '')?.actor
                 ?? game.actors.get(target.actorId ?? '');
             if (button && targetActor) {
-                const data = JSON.parse(decodeURIComponent(button.getAttribute('data-effect')));
-                const applied = await applyStatusToTokens({
-                    name: data.name,
-                    img: data.icon,
-                    description: data.description || '',
-                    durationSeconds: Number(data.duration) || null,
-                    damage: Number(data.damage) || null,
-                    statusEffect: data.statuseffect || null,
-                    kindLabel: 'injury',
-                    explicitActors: [targetActor],
-                    burst: { kind: 'injury', category: data.category || 'General', severity: data.severity || null, dc: data.treatmentDC ?? null, sourceUuid: data.sourceUuid ?? null }
-                });
+                // decodeEffectPayload, not a bare JSON.parse: cards posted
+                // before the encoding switch need the fallback too.
+                const data = decodeEffectPayload(button.getAttribute('data-effect'));
+                const applied = await applyStatusToTokens(buildInjuryApplyConfig(data, [targetActor]));
                 if (applied.length) {
                     const stamp = doc.createElement('div');
                     stamp.style.cssText = 'width:100%; text-align:center; font-weight:bold; padding:5px 0;';
@@ -1600,32 +1649,7 @@ Hooks.on("ready", async () => {
                 if (targetActor) explicitActors = [targetActor];
             }
 
-            const applied = await applyStatusToTokens({
-                name: arrEffectData.name,
-                img: arrEffectData.icon,
-                description: arrEffectData.description || '',
-                durationSeconds: Number(arrEffectData.duration) || null,
-                // Injury damage is a PERCENTAGE of max HP, floored so an
-                // injury maims and never kills.
-                damagePercent: Number(arrEffectData.damage) || null,
-                statusEffect: arrEffectData.statuseffect || null,
-                // Roll penalties ride along as real ActiveEffect changes, so
-                // a mangled hand costs the attack roll and not just prose.
-                changes: modifiersToChanges(arrEffectData.modifiers ?? []),
-                kindLabel: 'injury',
-                explicitActors,
-                burst: {
-                    kind: 'injury',
-                    category: arrEffectData.category || 'General',
-                    severity: arrEffectData.severity || null,
-                    dc: arrEffectData.treatmentDC ?? null,
-                    // Recurring damage and end-of-clock behaviour ride the
-                    // flag so the round ticker can read them off the effect.
-                    tick: Number(arrEffectData.tick) || 0,
-                    expiry: arrEffectData.expiry || 'heal',
-                    sourceUuid: arrEffectData.sourceUuid ?? null
-                }
-            });
+            const applied = await applyStatusToTokens(buildInjuryApplyConfig(arrEffectData, explicitActors));
             await markCardButtonApplied(injuryButton, '.coffee-pub-bibliosoph-button-injury', applied);
         }
 
