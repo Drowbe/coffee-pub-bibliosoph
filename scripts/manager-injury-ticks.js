@@ -175,16 +175,33 @@ export function registerInjuryTickHooks() {
     Hooks.on('updateWorldTime', async () => {
         try {
             if (!isActiveGm()) return;
+            // Combatants retire on their OWN turn, where the table is already
+            // looking and resolveTurnFor announces it. Advancing a round also
+            // moves the world clock, so without this guard the sweep deleted
+            // the effect first and the turn announcement never happened —
+            // the wound simply vanished with no explanation.
+            const inCombat = game.combat?.started
+                ? new Set(game.combat.combatants.map((c) => c.actor?.id).filter(Boolean))
+                : null;
             for (const actor of game.actors) {
                 if (!actor.effects?.size) continue;
+                if (inCombat?.has(actor.id)) continue;
+                const retired = [];
                 for (const { effect, flag } of afflictionsOf(actor)) {
                     if (!hasExpired(effect)) continue;
                     if (flag.expiry === 'linger') continue;   // handled on its next turn
+                    const name = effect.name;
                     try {
                         await effect.delete();
-                        log(`"${effect.name}" expired off ${actor.name} with the clock`, '', true, false);
+                        retired.push(name);
                     } catch (_) { /* another client may have got there first */ }
                 }
+                if (!retired.length) continue;
+                // Say it out loud here too. Silence was the bug: the burst
+                // plays on every client, so the table saw something happen
+                // and were never told what.
+                log(`${actor.name}: ${retired.join('; ')} expired with the clock`, '', true, false);
+                toast(`${actor.name} Recovered`, retired.join(' · '), 'fa-solid fa-heart-pulse');
             }
         } catch (error) {
             log('World-time expiry sweep failed', error?.message, false, false);

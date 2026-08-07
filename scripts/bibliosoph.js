@@ -5,7 +5,7 @@
 // Grab the module data
 import { MODULE, BIBLIOSOPH } from './const.js';
 import { registerToolbarTools, unregisterToolbarTools } from './manager-toolbar.js';
-import { applyStatusToTokens } from './manager-status-effects.js';
+import { applyStatusToTokens, buildInjuryApplyConfig } from './manager-status-effects.js';
 import { InjuryPageModel, INJURY_PAGE_TYPE } from './data/injury-page-model.js';
 import { InjuryPageSheet } from './sheets/injury-page-sheet.js';
 import { OutcomePageModel, OUTCOME_PAGE_TYPE } from './data/outcome-page-model.js';
@@ -353,53 +353,6 @@ function decodeEffectPayload(raw) {
     } catch (_) {
         return BlacksmithUtils.stringToObject(raw);
     }
-}
-
-/**
- * Build the applyStatusToTokens config for an injury from a decoded
- * data-effect payload.
- *
- * There are two ways an injury lands — the player clicks Apply on the card,
- * or `injuryAutoApply` applies it the moment the card is posted — and both
- * read the SAME button payload. They were built separately and drifted:
- * auto-apply passed the authored percentage as FLAT damage (bypassing the
- * floor that stops an injury killing anyone), and dropped modifiers, tick
- * and expiry entirely, so an automated wound did the wrong damage, cost no
- * roll penalties, never bled and never lingered.
- *
- * One builder, so a field added here reaches both paths or neither.
- *
- * @param {object} data                 decoded data-effect payload
- * @param {Actor[]|null} explicitActors known recipients, or null to target at click time
- * @returns {object} config for applyStatusToTokens
- */
-function buildInjuryApplyConfig(data, explicitActors = null) {
-    return {
-        name: data.name,
-        img: data.icon,
-        description: data.description || '',
-        durationSeconds: Number(data.duration) || null,
-        // Injury damage is a PERCENTAGE of max HP, floored so an injury
-        // maims and never kills.
-        damagePercent: Number(data.damage) || null,
-        statusEffect: data.statuseffect || null,
-        // Roll penalties ride along as real ActiveEffect changes, so a
-        // mangled hand costs the attack roll and not just prose.
-        changes: modifiersToChanges(data.modifiers ?? []),
-        kindLabel: 'injury',
-        explicitActors,
-        burst: {
-            kind: 'injury',
-            category: data.category || 'General',
-            severity: data.severity || null,
-            dc: data.treatmentDC ?? null,
-            // Recurring damage and end-of-clock behaviour ride the flag so
-            // the round ticker can read them off the effect.
-            tick: Number(data.tick) || 0,
-            expiry: data.expiry || 'heal',
-            sourceUuid: data.sourceUuid ?? null
-        }
-    };
 }
 
 function readOutcomeRecord(page) {
