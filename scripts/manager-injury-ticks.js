@@ -50,12 +50,26 @@ function afflictionsOf(actor) {
 
 /**
  * How many combat rounds an effect has left, or null when it does not
- * work in rounds. Foundry stores seconds; six seconds is a round.
+ * work in rounds.
+ *
+ * Foundry reports `duration.remaining` IN THE UNIT THE DOCUMENT CARRIES:
+ * seconds for a seconds-based duration, but rounds (as a decimal) for a
+ * turns-based one. This used to divide both by six, which understated
+ * every rounds-based wound by a factor of six — a five-round effect
+ * reported "1 round remains".
+ *
+ * Documents arrive turns-based for reasons outside our control: dnd5e maps
+ * a source item's round/turn units that way, the sheet's Temporary section
+ * defaults `duration.rounds` to 1, and Times Up rewrites short durations.
+ * So both units have to be handled, not just the one we author.
  */
 export function roundsRemaining(effect) {
     const duration = effect?.duration;
     if (!duration) return null;
     const remaining = Number(duration.remaining);
+    if (duration.type === 'turns') {
+        return Number.isFinite(remaining) && remaining > 0 ? Math.ceil(remaining) : null;
+    }
     if (Number.isFinite(remaining) && remaining > 0) return Math.ceil(remaining / 6);
     const seconds = Number(duration.seconds);
     if (Number.isFinite(seconds) && seconds > 0) return Math.ceil(seconds / 6);
@@ -76,11 +90,25 @@ export function remainingLabel(effect) {
  */
 function hasExpired(effect) {
     const duration = effect?.duration;
-    const seconds = Number(duration?.seconds);
-    if (!Number.isFinite(seconds) || seconds <= 0) return false;   // permanent
-    const remaining = Number(duration?.remaining);
+    if (!duration || duration.type === 'none') return false;   // permanent
+
+    // `remaining` is authoritative and unit-agnostic: core counts down in
+    // rounds for a turns-based duration and seconds for a seconds-based one,
+    // and zero means over either way.
+    //
+    // This used to gate on `duration.seconds` being positive FIRST, which
+    // made every turns-based affliction look permanent — including any our
+    // own seconds duration had been rewritten into, since that rewrite nulls
+    // `seconds`. Our expiry silently opted out of exactly the effects most
+    // likely to expire during a fight.
+    const remaining = Number(duration.remaining);
     if (Number.isFinite(remaining)) return remaining <= 0;
-    const started = Number(duration?.startTime ?? 0);
+
+    // No `remaining` to read: out of combat a turns-based duration cannot be
+    // resolved at all, so only the world clock can answer.
+    const seconds = Number(duration.seconds);
+    if (!Number.isFinite(seconds) || seconds <= 0) return false;
+    const started = Number(duration.startTime ?? 0);
     return (game.time.worldTime - started) >= seconds;
 }
 

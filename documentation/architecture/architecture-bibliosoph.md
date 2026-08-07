@@ -20,7 +20,7 @@ See [architecture-ownership](../../../coffee-pub-blacksmith/documentation/archit
 | `scripts/manager-encounters.js` | 804 | Quick Encounter orchestration |
 | `scripts/manager-inspiration.js` | 482 | Inspiration draw/use lifecycle |
 | `scripts/manager-injury-effects.js` | 462 | Canvas bursts and sounds |
-| `scripts/manager-roll-toasts.js` | 413 | Crit/fumble toasts, socket relay, channel declaration |
+| `scripts/manager-roll-toasts.js` | 375 | Crit/fumble toasts, socket relay, channel declaration |
 | `scripts/manager-toolbar.js` | 288 | Toolbar tool definitions |
 | `scripts/manager-status-effects.js` | 219 | The single effect-application path |
 | `scripts/manager-injury-triggers.js` | 206 | Damage-threshold injury automation |
@@ -116,7 +116,6 @@ Socket events, all GM-authoritative:
 | Constant | Purpose |
 |---|---|
 | `bibliosoph.rollToast` | GM tells clients to render a roll-outcome toast |
-| `bibliosoph.rollClaimed` | an armed client rolled; everyone else stands down |
 | `bibliosoph.treatRoll` | treatment roll request |
 | `bibliosoph.treatStamp` | mark a treat button resolved |
 | `bibliosoph.outcomeApply` | apply an outcome to targets |

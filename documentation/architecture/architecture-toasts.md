@@ -40,9 +40,12 @@ Two socket events:
 | Event | Meaning |
 |---|---|
 | `bibliosoph.rollToast` | GM tells clients to render a roll-outcome toast |
-| `bibliosoph.rollClaimed` | an armed client rolled — everyone else stands down |
 
-`rollClaimed` exists because a toast can be *armed*: clicking it performs the follow-up roll. Once one client claims it, the rest must disarm or the same outcome resolves several times.
+A toast can be *armed*: it is persistent (`duration: 0`) and clicking it performs the follow-up roll and posts the card.
+
+**Exactly one client ever arms** — the designated roller, from `rollUserId`. That field falls back to the current user and the lane runs GM-side, so NPC crits, unowned actors and hidden rolls all resolve to the GM without needing a special case.
+
+The GM used to arm for *every* crit as a backup in case the roller walked away. That produced two live toasts for one event and required a stand-down protocol to reconcile them — a second socket event, a generated roll id, and a map of armed toasts per client, all to undo a duplicate the code chose to create. Removed in favour of not creating the duplicate: the GM is armed for what the GM rolls.
 
 Injury automation reuses this manager for both delivery and receipt-side click-arming — one socket, not three.
 

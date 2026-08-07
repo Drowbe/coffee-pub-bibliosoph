@@ -60,14 +60,9 @@ const PUBLISH = [
 //   plan-chatcard-migration.md               — internal plan, partially adopted (see TODO.md)
 //   note-crier-turn-effects.md               — cross-module request, not a consumer doc (see TODO.md)
 //   note-blacksmith-effects-and-tooling.md   — cross-module request, not a consumer doc (see TODO.md)
+//   note-blacksmith-effects-reply.md         — cross-module request, not a consumer doc (see TODO.md)
 
 const HOME_SRC = 'architecture/README.md';
-
-// Sibling Coffee Pub modules whose documentation/ links should resolve to their public wiki.
-const SIBLING_WIKIS = {
-  'coffee-pub-blacksmith': 'https://github.com/Drowbe/coffee-pub-blacksmith/wiki',
-  'coffee-pub-squire': 'https://github.com/Drowbe/coffee-pub-squire/wiki',
-};
 
 const pageName = (p) => path.basename(p, '.md');
 const publishedPages = new Set([...PUBLISH.map(pageName), 'Home']);
@@ -80,18 +75,40 @@ function label(rel) {
   return spaced.charAt(0).toUpperCase() + spaced.slice(1);
 }
 
+// ---- Cross-module links: ONE PREDICATE ENFORCES ALL THREE DIRECTIONS ----
+//
+// Suite rule (Blacksmith TODO-GLOBAL Ground Rule 2), stated as directions:
+//   satellite -> Blacksmith   ALLOWED. Blacksmith is a required dependency of every satellite, so the
+//                             coupling already exists and is mandatory; the link only makes it legible.
+//   Blacksmith -> satellite   REFUSED. Couples the hub to something optional that may not be installed.
+//   satellite -> satellite    REFUSED. Two optional things, neither guaranteed present.
+//
+// Kept identical to the hub's copy so the rule reads the same wherever you find it. The predicate is the
+// whole of it: rewrite only when the TARGET is the hub and WE are not the hub. An earlier version here
+// carried a map of sibling wikis, which would have permitted satellite -> satellite; testing the target
+// against HUB rather than against a list refuses that for free.
+//
+// FRAGILITY WORTH KNOWING: an inbound link targets a page NAME from the hub's PUBLISH list. A doc that
+// leaves that list, or is renamed, silently 404s every inbound link in the suite. The hub's PUBLISH is
+// therefore a contract with us. Pages we currently depend on: architecture-ownership, guide-dnd5e-conditions.
+const HUB = 'coffee-pub-blacksmith';
+const THIS_MODULE = 'coffee-pub-bibliosoph';
+const HUB_WIKI = 'https://github.com/Drowbe/coffee-pub-blacksmith/wiki';
+const SIBLING_DOC = /coffee-pub-([a-z]+)[\\/]documentation[\\/](?:[^)]*[\\/])?([^/\\)]+)\.md(#.+)?$/i;
+
+function siblingWikiUrl(target) {
+  const m = target.match(SIBLING_DOC);
+  if (!m) return null;
+  const targetModule = `coffee-pub-${m[1].toLowerCase()}`;
+  if (targetModule !== HUB) return null;      // -> satellite: refused, whoever is asking
+  if (THIS_MODULE === HUB) return null;       // hub -> anywhere: refused
+  return `${HUB_WIKI}/${m[2]}${m[3] || ''}`;
+}
+
 // ---- Fence-aware link rewriting ----
 const LINK = /\[([^\]]+)\]\(([^)]+)\)/g;
 const CODE_LINK = /\.(js|mjs|css|hbs|json|txt|webp|png)(#.*)?$/i;
 const CODE_PATH = /(scripts|styles|templates|resources|packs)\//;
-
-/** A link into a sibling module's documentation/ -> that module's wiki page URL, else null. */
-function siblingWikiUrl(target) {
-  const m = target.match(/coffee-pub-([a-z]+)\/documentation\/(?:[^)]*\/)?([^/)]+)\.md(#.+)?$/i);
-  if (!m) return null;
-  const base = SIBLING_WIKIS[`coffee-pub-${m[1].toLowerCase()}`];
-  return base ? `${base}/${m[2]}${m[3] || ''}` : null;
-}
 
 function rewriteLinks(md, srcRel) {
   const lines = md.split(/\r?\n/);
