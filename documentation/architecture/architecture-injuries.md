@@ -17,7 +17,7 @@ Content lives in journal pages of subtype `coffee-pub-bibliosoph.injury`. Users 
 | `category` | damage type (`acid`, `bludgeoning`, `cold`, `fire`, `force`, `lightning`, `necrotic`, `piercing`, `poison`, `psychic`, `radiant`, `slashing`, `thunder`) or `general` |
 | `severity` | `minor` / `moderate` / `major` |
 | `damage` | one-time damage as a **percent of max HP** |
-| `duration` | seconds; `0`/absent means until removed |
+| `duration` | seconds. For a `heal` injury this is its lifetime. For a `linger` injury it is the **bleed phase** — see below |
 | `statuseffect` | core condition id to convey, or `none` |
 | `tick` | recurring damage per turn, percent of max HP |
 | `expiry` | `heal` or `linger` |
@@ -68,7 +68,7 @@ Conditions are toggled through **core Foundry**, not through a third-party depen
 The created effect carries `flags['coffee-pub-bibliosoph'].outcomeBurst`:
 
 ```
-{ kind, category, name, condition, tick, expiry, severity, dc, sourceUuid }
+{ kind, category, name, condition, tick, expiry, bleedSeconds, bleedStart, severity, dc, sourceUuid }
 ```
 
 This single flag is load-bearing for four different systems: the canvas burst, the tick ticker, the condition unwind, and the treatment card. `condition` records **which core condition this affliction toggled**, which is what makes clean removal possible.
@@ -80,7 +80,15 @@ This single flag is load-bearing for four different systems: the canvas burst, t
 `manager-injury-ticks.js`, **active GM only**:
 
 - **TICK** — recurring damage at the start of the victim's turn, as a percent of max HP.
-- **EXPIRY** — when the duration runs out, `heal` deletes the injury (and the unwind hook clears its condition); `linger` stops the ticking and the penalties but leaves the injury on the sheet for someone to treat.
+- **EXPIRY** — a `heal` injury's duration is its lifetime, and **Blacksmith owns removing it**. `EffectsAPI.sweepExpired()` decides when the clock has run out and either deletes the effect or yields that to Times Up, so exactly one actor deletes in every configuration. Bibliosoph subscribes to `effects.onExpired` purely to announce it, and never deletes on expiry.
+
+### Why a lingering wound has no Foundry duration
+
+Foundry's `duration` means *how long the effect exists*. For a lingering wound the authored duration means *how long it bleeds* — the wound itself stays until somebody treats it. Writing a phase timer into the lifetime field told every correct consumer the wrong thing: Times Up converted it and deleted it at combat end, and Blacksmith's expiry sweep deleted it the moment the clock ran out. Both were reading the field exactly as specified.
+
+So a `linger` injury is applied as **permanent**, which is what it is, and the bleed phase rides `bleedSeconds` / `bleedStart` on our own flag where nothing can mistake it for a lifetime. When the phase ends the ticker clears `changes`, zeroes `tick`, and sets `lingering: true` — the penalties lift, the wound stays.
+
+One consequence worth knowing: during the bleed phase such an effect has no `durationLabel`, so displays show `2 HP/turn` but no countdown. Rendering the phase would mean re-deriving Blacksmith's duration wording locally, which is the duplication that produced two shipped bugs already; it waits on a public formatter instead.
 
 Ticks are tied to **combat turns**, not the world clock. A wound that bleeds every six seconds of wall time while the party shops is bookkeeping; a wound that bleeds on your turn is a thing you feel. Both `updateCombat` and `updateWorldTime` are watched, and the active-GM guard exists because those hooks fire on every client — HP applied five times because five people are logged in is the classic version of this bug.
 

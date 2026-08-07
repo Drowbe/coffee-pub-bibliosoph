@@ -7,6 +7,16 @@
 import { MODULE, BIBLIOSOPH, getDetectionLevelInfo } from './const.js';
 import { WindowEncounter, WINDOW_ENCOUNTER_APP_ID, WINDOW_ENCOUNTER_HEIGHT_COLLAPSED } from './window-encounter.js';
 
+// Every user-facing notice in this module rides Blacksmith's adaptive toast
+// (3s, icon), falling back to a Foundry notification only when the API is
+// absent. These four were the last `notify: true` calls left in the module.
+function toast(title, subtitle = '', icon = 'fa-solid fa-dragon') {
+    const api = game.modules.get('coffee-pub-blacksmith')?.api?.toast;
+    if (api?.show) api.show({ title, subtitle, icon, duration: 3, moduleId: MODULE.ID });
+    else ui.notifications.warn(subtitle ? `${title} — ${subtitle}` : title);
+}
+
+
 let _encounterWindow = null;
 
 /** Max monster types returned by Recommend (random pick; no budget). */
@@ -408,7 +418,8 @@ export async function encounterRecommend(habitat, difficulty, targetCR, minCR = 
     if (minCRNum > 0) candidates = candidates.filter((c) => c.cr >= minCRNum);
     if (maxCRNum < 30) candidates = candidates.filter((c) => c.cr <= maxCRNum);
     if (candidates.length === 0) {
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: No monster compendiums or no matching actors', '', true, true);
+        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: No monster compendiums or no matching actors', '', true, false);
+        toast('No Monsters Found', 'No monster compendiums are configured, or none match this habitat.', 'fa-solid fa-ghost');
         return [];
     }
 

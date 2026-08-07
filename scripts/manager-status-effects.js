@@ -45,11 +45,27 @@ import { modifiersToChanges, severityLabel, titleCase } from './data/outcome-sch
  * @returns {object} config for applyStatusToTokens
  */
 export function buildInjuryApplyConfig(data, explicitActors = null) {
+    // LINGER DOES NOT USE FOUNDRY'S DURATION, AND NEVER SHOULD HAVE.
+    //
+    // `duration` in Foundry means how long the effect EXISTS. For a lingering
+    // wound the authored duration means how long it BLEEDS — the wound itself
+    // stays until somebody treats it. Writing a phase timer into the lifetime
+    // field told every correct consumer the wrong thing: Times Up converted it
+    // and deleted it at combat end, and Blacksmith's expiry sweep deletes it
+    // the moment the clock runs out. Both were reading the field as specified.
+    //
+    // So a lingering injury is applied as PERMANENT, which is what it is, and
+    // the bleed phase rides our own flag where it cannot be mistaken for a
+    // lifetime. Heal injuries are unchanged: their duration really is their
+    // lifetime, and Blacksmith owns expiring them.
+    const lingers = (data.expiry || 'heal') === 'linger';
+    const authoredSeconds = Number(data.duration) || 0;
+
     return {
         name: data.name,
         img: data.icon,
         description: data.description || '',
-        durationSeconds: Number(data.duration) || null,
+        durationSeconds: lingers ? null : (authoredSeconds || null),
         // Injury damage is a PERCENTAGE of max HP, floored so an injury
         // maims and never kills.
         damagePercent: Number(data.damage) || null,
@@ -67,7 +83,11 @@ export function buildInjuryApplyConfig(data, explicitActors = null) {
             // Recurring damage and end-of-clock behaviour ride the flag so
             // the round ticker can read them off the effect.
             tick: Number(data.tick) || 0,
-            expiry: data.expiry || 'heal',
+            expiry: lingers ? 'linger' : 'heal',
+            // How long the bleeding lasts, for lingering wounds only. Zero on
+            // a heal injury, whose phase and lifetime are the same thing and
+            // are tracked by the duration.
+            bleedSeconds: lingers ? authoredSeconds : 0,
             sourceUuid: data.sourceUuid ?? null
         }
     };
@@ -256,6 +276,14 @@ export async function applyStatusToTokens({
                 // happens when the clock runs out. The round ticker reads
                 // both off this flag; 0/absent means neither applies.
                 tick: Number(burst.tick) > 0 ? Number(burst.tick) : 0,
+                // The bleed phase of a lingering wound, stamped against the
+                // world clock here because this is where "now" actually is.
+                // Absent on everything else, which is how the ticker tells a
+                // phase timer from a lifetime.
+                ...(Number(burst.bleedSeconds) > 0 ? {
+                    bleedSeconds: Number(burst.bleedSeconds),
+                    bleedStart: game.time.worldTime
+                } : {}),
                 expiry: burst.expiry === 'linger' ? 'linger' : 'heal',
                 // Treatment-roll DC: an authored `dc` wins, else the severity
                 // ladder (minor 10 / moderate 15 / major 20), else a flat 15.

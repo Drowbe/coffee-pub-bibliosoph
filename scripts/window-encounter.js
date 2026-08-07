@@ -6,6 +6,16 @@
 
 import { MODULE, getDetectionLevelInfo, getDetectionLevelFromAverageRoll } from './const.js';
 
+// Every user-facing notice in this module rides Blacksmith's adaptive toast
+// (3s, icon), falling back to a Foundry notification only when the API is
+// absent. These four were the last `notify: true` calls left in the module.
+function toast(title, subtitle = '', icon = 'fa-solid fa-dragon') {
+    const api = game.modules.get('coffee-pub-blacksmith')?.api?.toast;
+    if (api?.show) api.show({ title, subtitle, icon, duration: 3, moduleId: MODULE.ID });
+    else ui.notifications.warn(subtitle ? `${title} — ${subtitle}` : title);
+}
+
+
 /** Template path for the encounter window. */
 export const WINDOW_ENCOUNTER_TEMPLATE = `modules/${MODULE.ID}/templates/window-encounter.hbs`;
 
@@ -1182,7 +1192,8 @@ export class WindowEncounter extends Base {
     async _onRollForEncounter() {
         BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: Roll for Encounter clicked', `habitat=${this._selectedHabitat}`, true, false);
         if (typeof window.bibliosophRollForEncounter !== 'function') {
-            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: roll', 'bibliosophRollForEncounter not available', true, true);
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: roll', 'bibliosophRollForEncounter not available', true, false);
+            toast('Cannot Roll', 'The encounter roller is unavailable — try reloading.', 'fa-solid fa-dice-d20');
             return;
         }
         this._persistRememberedIncludeExclude();
@@ -1464,7 +1475,8 @@ export class WindowEncounter extends Base {
                     const tokens = await bridge.BlacksmithAPI.deployMonsters(metadata, options);
                     BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: deploy', `Placed ${tokens?.length ?? 0} token(s) via bridge`, true, false);
                 } else {
-                    BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: deploy', 'Blacksmith deployMonsters not available', true, true);
+                    BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: deploy', 'Blacksmith deployMonsters not available', true, false);
+                    toast('Cannot Deploy', 'Blacksmith monster deployment is unavailable.', 'fa-solid fa-map-location-dot');
                     return;
                 }
             }
@@ -1473,7 +1485,8 @@ export class WindowEncounter extends Base {
             this.render();
         } catch (e) {
             console.error(MODULE.NAME, 'Quick Encounter: deploy failed', e);
-            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: deploy', String(e?.message ?? e), true, true);
+            BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, 'Quick Encounter: deploy', String(e?.message ?? e), true, false);
+            toast('Deploy Failed', String(e?.message ?? e), 'fa-solid fa-triangle-exclamation');
         }
     }
 }

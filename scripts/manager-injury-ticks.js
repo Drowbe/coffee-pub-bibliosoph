@@ -21,7 +21,6 @@
 
 import { MODULE } from './const.js';
 import { damageFor } from './data/injury-schema.js';
-import { deleteEffectSafely } from './manager-status-effects.js';
 
 function log(message, data = '', debug = true, notify = false) {
     if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils?.postConsoleAndNotification) {
@@ -50,66 +49,19 @@ function afflictionsOf(actor) {
 }
 
 /**
- * How many combat rounds an effect has left, or null when it does not
- * work in rounds.
+ * Has a lingering wound finished bleeding?
  *
- * Foundry reports `duration.remaining` IN THE UNIT THE DOCUMENT CARRIES:
- * seconds for a seconds-based duration, but rounds (as a decimal) for a
- * turns-based one. This used to divide both by six, which understated
- * every rounds-based wound by a factor of six — a five-round effect
- * reported "1 round remains".
- *
- * Documents arrive turns-based for reasons outside our control: dnd5e maps
- * a source item's round/turn units that way, the sheet's Temporary section
- * defaults `duration.rounds` to 1, and Times Up rewrites short durations.
- * So both units have to be handled, not just the one we author.
+ * This is a PHASE timer, not a lifetime. It reads our own stamp rather than
+ * the effect's duration, because a lingering wound has no Foundry duration —
+ * it is permanent until treated, and the bleeding is a spell inside that.
+ * Effect lifetimes are Blacksmith's: it owns expiry and deletion, and a
+ * consumer that also deletes is racing it (architecture-ownership.md).
  */
-export function roundsRemaining(effect) {
-    const duration = effect?.duration;
-    if (!duration) return null;
-    const remaining = Number(duration.remaining);
-    if (duration.type === 'turns') {
-        return Number.isFinite(remaining) && remaining > 0 ? Math.ceil(remaining) : null;
-    }
-    if (Number.isFinite(remaining) && remaining > 0) return Math.ceil(remaining / 6);
-    const seconds = Number(duration.seconds);
-    if (Number.isFinite(seconds) && seconds > 0) return Math.ceil(seconds / 6);
-    return null;
-}
-
-/** "2 rounds remain" / "1 round remains" / "" when it is permanent. */
-export function remainingLabel(effect) {
-    const rounds = roundsRemaining(effect);
-    if (!rounds) return '';
-    return rounds === 1 ? '1 round remains' : `${rounds} rounds remain`;
-}
-
-/**
- * Has this effect's duration run out? Foundry's own `duration.remaining`
- * is authoritative when it is populated; the fallback compares the world
- * clock against when the effect started.
- */
-function hasExpired(effect) {
-    const duration = effect?.duration;
-    if (!duration || duration.type === 'none') return false;   // permanent
-
-    // `remaining` is authoritative and unit-agnostic: core counts down in
-    // rounds for a turns-based duration and seconds for a seconds-based one,
-    // and zero means over either way.
-    //
-    // This used to gate on `duration.seconds` being positive FIRST, which
-    // made every turns-based affliction look permanent — including any our
-    // own seconds duration had been rewritten into, since that rewrite nulls
-    // `seconds`. Our expiry silently opted out of exactly the effects most
-    // likely to expire during a fight.
-    const remaining = Number(duration.remaining);
-    if (Number.isFinite(remaining)) return remaining <= 0;
-
-    // No `remaining` to read: out of combat a turns-based duration cannot be
-    // resolved at all, so only the world clock can answer.
-    const seconds = Number(duration.seconds);
-    if (!Number.isFinite(seconds) || seconds <= 0) return false;
-    const started = Number(duration.startTime ?? 0);
+function bleedPhaseOver(flag) {
+    const seconds = Number(flag?.bleedSeconds) || 0;
+    if (seconds <= 0) return false;                 // not a bleeding wound, or already settled
+    const started = Number(flag?.bleedStart);
+    if (!Number.isFinite(started)) return false;
     return (game.time.worldTime - started) >= seconds;
 }
 
@@ -121,37 +73,25 @@ function hasExpired(effect) {
 async function resolveTurnFor(actor) {
     const notes = [];
     for (const { effect, flag } of afflictionsOf(actor)) {
-        // EXPIRY first: an injury that ran out this turn should not also
-        // get one last tick out of the deal.
-        if (hasExpired(effect)) {
-            if (flag.expiry === 'linger') {
-                // Stop the bleeding and drop the roll penalties, but leave
-                // the wound. Clearing `changes` is what actually lifts the
-                // modifiers; the effect stays so it can still be treated.
-                if (flag.tick || effect.changes?.length) {
-                    try {
-                        await effect.update({
-                            changes: [],
-                            'duration.seconds': null,
-                            [`flags.${MODULE.ID}.outcomeBurst.tick`]: 0,
-                            [`flags.${MODULE.ID}.outcomeBurst.lingering`]: true
-                        });
-                        notes.push(`${effect.name} has stopped worsening, but it still needs treating`);
-                    } catch (error) {
-                        log(`Could not settle "${effect.name}" into lingering`, error?.message, false, false);
-                    }
-                }
-                continue;
+        // SETTLE first: a wound that stopped bleeding this turn should not
+        // also get one last tick out of the deal.
+        //
+        // Nothing here deletes. A heal injury's lifetime runs out on its own
+        // duration and Blacksmith removes it; we only hear about it, through
+        // onExpired. This branch is the other case — the bleeding stops and
+        // the wound stays, which is not an expiry at all.
+        if (bleedPhaseOver(flag)) {
+            try {
+                await effect.update({
+                    changes: [],
+                    [`flags.${MODULE.ID}.outcomeBurst.tick`]: 0,
+                    [`flags.${MODULE.ID}.outcomeBurst.bleedSeconds`]: 0,
+                    [`flags.${MODULE.ID}.outcomeBurst.lingering`]: true
+                });
+                notes.push(`${effect.name} has stopped worsening, but it still needs treating`);
+            } catch (error) {
+                log(`Could not settle "${effect.name}" into lingering`, error?.message, false, false);
             }
-            // 'heal': delete it. The deleteActiveEffect hook unwinds the
-            // condition and plays the recovery burst, so this is one call.
-            //
-            // Announce only if WE removed it. Another module expiring effects
-            // on its own schedule can beat us to the same document; when it
-            // does, the unwind hook still fires for it and claiming the heal
-            // here would be a second announcement of one event.
-            const healedName = effect.name;
-            if (await deleteEffectSafely(effect)) notes.push(`${healedName} has healed`);
             continue;
         }
 
@@ -199,41 +139,67 @@ export function registerInjuryTickHooks() {
         }
     });
 
-    // Out of combat the world clock still moves — a long rest advances
-    // hours — so durations must be able to run out there too. No ticking
-    // here: recurring damage is a combat beat, not a shopping one.
+    // Out of combat the world clock still moves — a long rest advances hours —
+    // so a bleed phase must be able to run out there too. No ticking here:
+    // recurring damage is a combat beat, not a shopping one, and this only
+    // lifts the penalties once the bleeding is over.
     Hooks.on('updateWorldTime', async () => {
         try {
             if (!isActiveGm()) return;
-            // Combatants retire on their OWN turn, where the table is already
-            // looking and resolveTurnFor announces it. Advancing a round also
-            // moves the world clock, so without this guard the sweep deleted
-            // the effect first and the turn announcement never happened —
-            // the wound simply vanished with no explanation.
-            const inCombat = game.combat?.started
-                ? new Set(game.combat.combatants.map((c) => c.actor?.id).filter(Boolean))
-                : null;
             for (const actor of game.actors) {
                 if (!actor.effects?.size) continue;
-                if (inCombat?.has(actor.id)) continue;
-                const retired = [];
+                const settled = [];
                 for (const { effect, flag } of afflictionsOf(actor)) {
-                    if (!hasExpired(effect)) continue;
-                    if (flag.expiry === 'linger') continue;   // handled on its next turn
+                    if (!bleedPhaseOver(flag)) continue;
                     const name = effect.name;
-                    if (await deleteEffectSafely(effect)) retired.push(name);
+                    try {
+                        await effect.update({
+                            changes: [],
+                            [`flags.${MODULE.ID}.outcomeBurst.tick`]: 0,
+                            [`flags.${MODULE.ID}.outcomeBurst.bleedSeconds`]: 0,
+                            [`flags.${MODULE.ID}.outcomeBurst.lingering`]: true
+                        });
+                        settled.push(name);
+                    } catch (error) {
+                        log(`Could not settle "${name}" into lingering`, error?.message, false, false);
+                    }
                 }
-                if (!retired.length) continue;
-                // Say it out loud here too. Silence was the bug: the burst
-                // plays on every client, so the table saw something happen
-                // and were never told what.
-                log(`${actor.name}: ${retired.join('; ')} expired with the clock`, '', true, false);
-                toast(`${actor.name} Recovered`, retired.join(' · '), 'fa-solid fa-heart-pulse');
+                if (!settled.length) continue;
+                log(`${actor.name}: ${settled.join('; ')} stopped bleeding with the clock`, '', true, false);
+                toast(`${actor.name} Stabilised`, `${settled.join(' · ')} — still needs treating`, 'fa-solid fa-bandage');
             }
         } catch (error) {
-            log('World-time expiry sweep failed', error?.message, false, false);
+            log('World-time bleed sweep failed', error?.message, false, false);
         }
     });
 
-    log('Watching turns for injury ticks and expiry', '', true, false);
+    // EXPIRY IS BLACKSMITH'S. Their sweep decides when a lifetime has run out
+    // and either deletes the effect or yields that to Times Up, so exactly one
+    // actor deletes in every configuration. We used to do this ourselves and
+    // raced them; the loser cannot even suppress the error, because Foundry
+    // notifies from inside the socket response handler before the promise
+    // rejects. All we want is to say it happened.
+    //
+    // Their event fires on the GM client only, which matches this whole lane.
+    const effectsApi = game.modules.get('coffee-pub-blacksmith')?.api?.effects;
+    if (typeof effectsApi?.onExpired === 'function') {
+        effectsApi.onExpired(({ effect, actor } = {}) => {
+            try {
+                const flag = effect?.getFlag?.(MODULE.ID, 'outcomeBurst');
+                if (!flag || !actor) return;
+                // A lingering wound has no duration, so it can never reach
+                // here — if one somehow does, it is not ours to announce as
+                // healed.
+                if (flag.expiry === 'linger') return;
+                toast(`${actor.name} Recovered`, `${effect.name} has healed`, 'fa-solid fa-heart-pulse');
+                log(`${actor.name}: "${effect.name}" expired — Blacksmith owns the removal`, '', true, false);
+            } catch (error) {
+                log('Expiry announcement failed', error?.message, false, false);
+            }
+        });
+    } else {
+        log('Blacksmith build has no effects.onExpired; healed wounds will not be announced', '', false, false);
+    }
+
+    log('Watching turns for injury ticks and bleed phases', '', true, false);
 }

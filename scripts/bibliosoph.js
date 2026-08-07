@@ -15,7 +15,7 @@ import { InspirationPageModel, INSPIRATION_PAGE_TYPE } from './data/inspiration-
 import { InspirationPageSheet } from './sheets/inspiration-page-sheet.js';
 import * as INSPIRATION_ACTIONS from './data/inspiration-schema.js';
 import { SEVERITY_DCS as INJURY_SEVERITY_DCS, damageFor } from './data/injury-schema.js';
-import { remainingLabel, registerInjuryTickHooks } from './manager-injury-ticks.js';
+import { registerInjuryTickHooks } from './manager-injury-ticks.js';
 
 // Log through Blacksmith's console tool wherever possible; raw console is
 // reserved for bootstrap failures where Blacksmith itself is unavailable.
@@ -809,6 +809,35 @@ async function createChatCardTreatment(token) {
         return null;
     };
 
+    // Remaining time comes from Blacksmith, keyed by effect id.
+    //
+    // We used to convert to rounds ourselves, unconditionally, which read
+    // "100 rounds remain" on a ten-minute wound sitting out of combat —
+    // right instinct, wrong place. The rule is rounds only when rounds are
+    // being counted, and `getDisplayEffects` already implements it: rounds
+    // for a short remainder mid-combat, minutes/hours/days otherwise. The
+    // raw-seconds problem that made us roll our own is long fixed.
+    //
+    // Deliberately permissive filters: this map is a lookup, not the row
+    // list, and a missing entry only costs the duration on that one row.
+    const durationLabels = new Map();
+    try {
+        const effectsApi = game.modules.get('coffee-pub-blacksmith')?.api?.effects;
+        if (effectsApi?.getDisplayEffects) {
+            const rows = await effectsApi.getDisplayEffects(actor, {
+                qualifyingOnly: false,
+                includeDisabled: true,
+                includeSuppressed: true,
+                includeDescriptions: 'never'
+            });
+            for (const row of rows ?? []) {
+                if (row?.id) durationLabels.set(row.id, row.durationLabel || '');
+            }
+        }
+    } catch (error) {
+        logBib('Could not read Blacksmith duration labels', error?.message, false, false);
+    }
+
     const treatmentrows = await Promise.all(afflictions.map(async (effect) => {
         const flag = effect.getFlag(MODULE.ID, 'outcomeBurst');
         const kind = ['injury', 'crit', 'fumble'].includes(flag?.kind) ? flag.kind : 'other';
@@ -823,13 +852,7 @@ async function createChatCardTreatment(token) {
         // The row's second line: flagged afflictions list what they convey;
         // loose conditions credit their source; any row with a duration
         // gets the remaining time appended.
-        // Rounds beat Foundry's own duration label here: "2 rounds remain"
-        // is what a table in combat is actually counting, and it is the
-        // same unit the ticking and the modifiers work in.
-        const duration = effect.duration;
-        const roundsLeft = remainingLabel(effect);
-        const durationLabel = roundsLeft
-            || ((duration?.type && duration.type !== 'none' && duration.label) ? duration.label : '');
+        const durationLabel = durationLabels.get(effect.id) ?? '';
         let detail = conditions;
         if (kind === 'other') {
             const source = conveyedBy(effect);
