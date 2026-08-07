@@ -83,6 +83,20 @@ function log(message, data = '', debug = true, notify = false) {
 
 // Info notices ride Blacksmith's adaptive toast (3s), falling back to a
 // Foundry notification when the toast API is absent.
+/**
+ * A condition's display name. Blacksmith's index resolves and localizes both
+ * registries; the fallback matters because `CONFIG.statusEffects[n].name` is a
+ * LOCALIZATION KEY, so printing it raw shows the key to the table.
+ */
+function conditionLabel(id) {
+    const api = game.modules.get('coffee-pub-blacksmith')?.api?.effects;
+    const fromApi = api?.getConditionLabel?.(id);
+    if (fromApi && fromApi !== id) return fromApi;
+    const entry = CONFIG.statusEffects?.find((s) => s.id === id);
+    const raw = entry?.name ?? id;
+    return game.i18n?.has?.(raw) ? game.i18n.localize(raw) : raw;
+}
+
 function showStatusToast(title, subtitle = '', icon = 'fa-solid fa-burst') {
     const toast = game.modules.get('coffee-pub-blacksmith')?.api?.toast;
     if (toast?.show) {
@@ -223,8 +237,14 @@ export async function applyStatusToTokens({
         };
         await actor.createEmbeddedDocuments('ActiveEffect', [effectData]);
         if (pseudoId) log(`"${name}" conveys ${pseudoId} (dnd5e pseudo-condition) on ${displayName}`, '', false, false);
-        showStatusToast('Applied', `"${name}" now afflicts ${displayName}.`, 'fa-solid fa-burst');
         applied.push(displayName);
+
+        // What actually landed, collected as we go and announced ONCE at the
+        // end of this recipient. The toast used to fire here, before any of
+        // the mechanics ran, so it could only ever say "X now afflicts Y" —
+        // HP came off silently and the condition arrived unannounced. The
+        // table saw the number move with nothing telling them why.
+        const landed = [];
 
         // One-time HP damage, dealt on apply as a direct update. This
         // deliberately bypasses the damage pipeline (Actor#applyDamage) so
@@ -247,6 +267,7 @@ export async function applyStatusToTokens({
                     ? `${flat} HP (${damagePercent}% of ${hp.max})`
                     : `${flat} HP`;
                 log(`Dealt ${how} to ${displayName} from "${name}"`, '', false, false);
+                landed.push(`−${flat} HP`);
             }
         }
 
@@ -260,10 +281,23 @@ export async function applyStatusToTokens({
                     await actor.toggleStatusEffect(toggleId, { active: true });
                     log(`Toggled condition ${toggleId} (core) on ${displayName}`, '', false, false);
                 }
+                landed.push(conditionLabel(toggleId));
             } catch (error) {
                 log(`Could not toggle condition ${toggleId}`, error?.message, false, false);
             }
         }
+        // A pseudo-condition is conveyed by the effect itself rather than
+        // toggled, so it never passes through the branch above — but it is
+        // just as real to the person reading the toast.
+        if (pseudoId) landed.push(conditionLabel(pseudoId));
+
+        showStatusToast(
+            'Applied',
+            landed.length
+                ? `"${name}" afflicts ${displayName} — ${landed.join(' · ')}.`
+                : `"${name}" now afflicts ${displayName}.`,
+            'fa-solid fa-burst'
+        );
     }
     return applied;
 }
