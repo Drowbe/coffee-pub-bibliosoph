@@ -298,16 +298,25 @@ const SCENARIOS = [
                 name: 'Test: Open Wound',
                 img: 'icons/skills/wounds/blood-spurt-spray-red.webp',
                 description: 'Harness bleed. Ticks 2% of max HP at the start of each turn for 3 rounds, then LINGERS — the bleeding stops but the wound stays until treated.',
-                durationSeconds: 18,
+                // NO Foundry duration. A lingering wound is permanent until
+                // treated; `bleedSeconds` is the phase timer, matching what
+                // buildInjuryApplyConfig now produces. Setting a duration here
+                // would hand the effect to Blacksmith's expiry sweep, which
+                // would delete the very wound this case exists to keep.
+                durationSeconds: null,
                 damagePercent: 5,
                 statusEffect: 'prone',
                 kindLabel: 'injury',
                 explicitActors: [token.actor],
-                burst: { kind: 'injury', category: 'Slashing', severity: 'moderate', tick: 2, expiry: 'linger' }
+                burst: {
+                    kind: 'injury', category: 'Slashing', severity: 'moderate',
+                    tick: 2, expiry: 'linger', bleedSeconds: 18
+                }
             });
             ui.notifications.info(
                 `Applied to [${applied.join(', ') || 'nobody'}]. Start combat and advance ${token.name}'s turn 3 times: `
-                + `expect 2%/turn damage and a toast each turn, then "stopped worsening" — the effect stays, its penalties clear.`
+                + `expect 2%/turn damage and a toast each turn, then "stopped worsening" — the effect STAYS with its `
+                + `penalties cleared. It has no duration on purpose: Blacksmith owns expiry, and a lingering wound never expires.`
             );
         }
     },

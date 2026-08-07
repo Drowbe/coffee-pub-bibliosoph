@@ -3040,13 +3040,33 @@ export function showBibToast(title, subtitle = '', icon = 'fa-solid fa-bandage')
  * else on the actor still conveys it. Shared so that every removal path
  * behaves the same, whichever one the effect actually left by.
  */
-export async function unwindConveyedCondition(actor, condition) {
+export async function unwindConveyedCondition(actor, condition, exceptEffectId = null) {
     if (!actor || !condition) return false;
+    // EXCLUDE THE EFFECT THAT IS LEAVING. This runs from `deleteActiveEffect`,
+    // and whether the deleted document is still in `actor.effects` when the
+    // hook fires is not something a consumer should have to know — it varies
+    // with who did the deleting and how. If it is still there it answers "yes,
+    // something still conveys prone", meaning the wound that just left blocks
+    // the unwind of its own condition, and Prone is stranded on the sheet.
+    // Naming the departing effect makes the question the one we meant to ask.
     const stillConveyed = actor.effects.some(
-        (e) => e.getFlag(MODULE.ID, 'outcomeBurst')?.condition === condition
-            || (e.statuses?.has?.(condition) && e.getFlag(MODULE.ID, 'outcomeBurst'))
+        (e) => e.id !== exceptEffectId
+            && (e.getFlag(MODULE.ID, 'outcomeBurst')?.condition === condition
+                || (e.statuses?.has?.(condition) && e.getFlag(MODULE.ID, 'outcomeBurst')))
     );
-    if (stillConveyed || !actor.statuses?.has(condition)) return false;
+    // Say WHY when declining. A stranded condition is invisible in the logs
+    // otherwise, and the two reasons want completely different fixes.
+    if (stillConveyed) {
+        const holders = actor.effects
+            .filter((e) => e.id !== exceptEffectId && e.getFlag(MODULE.ID, 'outcomeBurst'))
+            .map((e) => e.name);
+        logBib(`Left ${condition} on ${actor.name} — still conveyed by: ${holders.join(', ') || '(unknown)'}`, '', true, false);
+        return false;
+    }
+    if (!actor.statuses?.has(condition)) {
+        logBib(`Nothing to unwind: ${actor.name} does not carry ${condition}`, '', true, false);
+        return false;
+    }
     try {
         await actor.toggleStatusEffect(condition, { active: false });
         logBib(`Unwound ${condition} from ${actor.name} — nothing conveys it any more`, '', true, false);
@@ -3107,7 +3127,7 @@ function registerConditionUnwindHook() {
             for (const id of effect.statuses ?? []) conditions.add(id);
 
             for (const condition of conditions) {
-                await unwindConveyedCondition(actor, condition);
+                await unwindConveyedCondition(actor, condition, effect.id);
             }
         } catch (error) {
             logBib('Condition unwind hook failed', error?.message, false, false);
