@@ -21,6 +21,7 @@
 
 import { MODULE } from './const.js';
 import { damageFor } from './data/injury-schema.js';
+import { deleteEffectSafely } from './manager-status-effects.js';
 
 function log(message, data = '', debug = true, notify = false) {
     if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils?.postConsoleAndNotification) {
@@ -144,12 +145,13 @@ async function resolveTurnFor(actor) {
             }
             // 'heal': delete it. The deleteActiveEffect hook unwinds the
             // condition and plays the recovery burst, so this is one call.
-            try {
-                await effect.delete();
-                notes.push(`${effect.name} has healed`);
-            } catch (error) {
-                log(`Could not expire "${effect.name}"`, error?.message, false, false);
-            }
+            //
+            // Announce only if WE removed it. Another module expiring effects
+            // on its own schedule can beat us to the same document; when it
+            // does, the unwind hook still fires for it and claiming the heal
+            // here would be a second announcement of one event.
+            const healedName = effect.name;
+            if (await deleteEffectSafely(effect)) notes.push(`${healedName} has healed`);
             continue;
         }
 
@@ -219,10 +221,7 @@ export function registerInjuryTickHooks() {
                     if (!hasExpired(effect)) continue;
                     if (flag.expiry === 'linger') continue;   // handled on its next turn
                     const name = effect.name;
-                    try {
-                        await effect.delete();
-                        retired.push(name);
-                    } catch (_) { /* another client may have got there first */ }
+                    if (await deleteEffectSafely(effect)) retired.push(name);
                 }
                 if (!retired.length) continue;
                 // Say it out loud here too. Silence was the bug: the burst

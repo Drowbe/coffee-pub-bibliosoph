@@ -84,6 +84,38 @@ function log(message, data = '', debug = true, notify = false) {
 // Info notices ride Blacksmith's adaptive toast (3s), falling back to a
 // Foundry notification when the toast API is absent.
 /**
+ * Delete an effect, tolerating the case where something else got there first.
+ *
+ * Two things legitimately remove an effect out from under a handler that is
+ * already in flight: a GM deleting it by hand, and any other module that
+ * expires effects on its own schedule. Neither is detectable, and neither
+ * should be — a satellite does not branch on what else is installed.
+ *
+ * The existence re-check narrows the window rather than closing it; the catch
+ * is what actually holds. Between them a lost race becomes a no-op instead of
+ * an unhandled rejection, and the caller learns whether it was the one that
+ * did the deleting — which is what decides who gets to announce it.
+ *
+ * @param {ActiveEffect} effect
+ * @returns {Promise<boolean>} true when THIS call removed it
+ */
+export async function deleteEffectSafely(effect) {
+    if (!effect?.id) return false;
+    const parent = effect.parent;
+    if (parent?.effects && !parent.effects.get(effect.id)) {
+        log(`"${effect.name}" was already gone before we could remove it`, '', true, false);
+        return false;
+    }
+    try {
+        await effect.delete();
+        return true;
+    } catch (error) {
+        log(`"${effect.name}" was removed by something else mid-flight`, error?.message, true, false);
+        return false;
+    }
+}
+
+/**
  * A condition's display name. Blacksmith's index resolves and localizes both
  * registries; the fallback matters because `CONFIG.statusEffects[n].name` is a
  * LOCALIZATION KEY, so printing it raw shows the key to the table.

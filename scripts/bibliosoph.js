@@ -5,7 +5,7 @@
 // Grab the module data
 import { MODULE, BIBLIOSOPH } from './const.js';
 import { registerToolbarTools, unregisterToolbarTools } from './manager-toolbar.js';
-import { applyStatusToTokens, buildInjuryApplyConfig } from './manager-status-effects.js';
+import { applyStatusToTokens, buildInjuryApplyConfig, deleteEffectSafely } from './manager-status-effects.js';
 import { InjuryPageModel, INJURY_PAGE_TYPE } from './data/injury-page-model.js';
 import { InjuryPageSheet } from './sheets/injury-page-sheet.js';
 import { OutcomePageModel, OUTCOME_PAGE_TYPE } from './data/outcome-page-model.js';
@@ -3050,7 +3050,12 @@ async function removeAffliction(actor, effect) {
     // The unwind itself now happens in the deleteActiveEffect hook, so it
     // is identical however the effect leaves — this button, the actor
     // sheet, the token HUD, or a duration running out.
-    await effect.delete();
+    //
+    // Guarded: a GM can remove the same effect from the sheet while this
+    // click is in flight, and anything else that expires effects on its own
+    // schedule can beat us to it. Either way the desired end state is
+    // reached, so a lost race is a no-op rather than an unhandled rejection.
+    await deleteEffectSafely(effect);
 }
 
 /**

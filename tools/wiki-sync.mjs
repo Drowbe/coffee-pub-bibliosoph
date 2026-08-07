@@ -58,9 +58,9 @@ const PUBLISH = [
 // Held out of the publish set (documented so intent is explicit; move into PUBLISH when ready):
 //   investigation-spec.md                    — spec for unbuilt work, not a consumer doc
 //   plan-chatcard-migration.md               — internal plan, partially adopted (see TODO.md)
-//   note-crier-turn-effects.md               — cross-module request, not a consumer doc (see TODO.md)
-//   note-blacksmith-effects-and-tooling.md   — cross-module request, not a consumer doc (see TODO.md)
-//   note-blacksmith-effects-reply.md         — cross-module request, not a consumer doc (see TODO.md)
+//
+// Cross-module notes are no longer kept as files at all (suite rule, 2026-08-07): decisions and rules
+// live in the doc that owns them, and anything needing a reply is sent as a message. Nothing to hold.
 
 const HOME_SRC = 'architecture/README.md';
 
