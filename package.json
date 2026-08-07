@@ -12,7 +12,9 @@
     "outcomes:validate": "node tools/validate-outcomes.mjs",
     "outcomes:generate": "node tools/validate-outcomes.mjs --quiet && node tools/build-outcome-journals.mjs",
     "inspiration:generate": "node tools/build-inspiration-journals.mjs",
-    "content:build": "npm run injuries:generate && npm run outcomes:generate && npm run inspiration:generate && npm run packs:build && node tools/verify-injury-pack.mjs && node tools/verify-outcome-pack.mjs"
+    "content:build": "npm run injuries:generate && npm run outcomes:generate && npm run inspiration:generate && npm run packs:build && node tools/verify-injury-pack.mjs && node tools/verify-outcome-pack.mjs",
+    "wiki:build": "node tools/wiki-sync.mjs build",
+    "wiki:publish": "node tools/wiki-sync.mjs publish"
   },
   "devDependencies": {
     "@foundryvtt/foundryvtt-cli": "^3.0.4"

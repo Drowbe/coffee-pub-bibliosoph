@@ -16,9 +16,9 @@ State-of-now documentation, written from the source rather than from plans. If a
 
 These are not architecture notes — they are the authoring contracts that the generator, validator, and page sheets all read from. Keep them current.
 
-- `../spec-injury-schema.md`
-- `../spec-outcome-schema.md`
-- `../spec-inspiration-schema.md`
+- [spec-injury-schema](../spec-injury-schema.md)
+- [spec-outcome-schema](../spec-outcome-schema.md)
+- [spec-inspiration-schema](../spec-inspiration-schema.md)
 
 ## Elsewhere
 
