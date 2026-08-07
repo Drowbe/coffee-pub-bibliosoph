@@ -56,9 +56,10 @@ const PUBLISH = [
 ];
 
 // Held out of the publish set (documented so intent is explicit; move into PUBLISH when ready):
-//   investigation-spec.md        — spec for unbuilt work, not a consumer doc
-//   plan-chatcard-migration.md   — internal plan, partially adopted (see TODO.md)
-//   note-crier-turn-effects.md   — cross-module request, not a consumer doc (see TODO.md)
+//   investigation-spec.md                    — spec for unbuilt work, not a consumer doc
+//   plan-chatcard-migration.md               — internal plan, partially adopted (see TODO.md)
+//   note-crier-turn-effects.md               — cross-module request, not a consumer doc (see TODO.md)
+//   note-blacksmith-effects-and-tooling.md   — cross-module request, not a consumer doc (see TODO.md)
 
 const HOME_SRC = 'architecture/README.md';
 
