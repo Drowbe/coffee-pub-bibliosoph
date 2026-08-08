@@ -152,9 +152,40 @@ export class InjuryPickerWindow extends (BlacksmithToolWindowBaseV2 ?? Object) {
         // working if more than one picker is ever open.
         toggleCategory: (event, target, app) => app._toggleCategory(target?.dataset?.category),
         rollCategory: (event, target, app) => app._deal(target?.dataset?.category, null),
+        requestRoll: (event, target, app) => app._requestRoll(target?.dataset?.category),
         dealInjury: (event, target, app) => app._deal(target?.dataset?.category, target?.dataset?.title),
         openJournal: (event, target, app) => app._openJournal(target?.dataset?.uuid)
     };
+
+    /**
+     * Hand the roll to the target's player instead of rolling it here. The
+     * same armed toast the damage threshold sends, so from the player's side
+     * a GM-initiated injury is indistinguishable from an automatic one.
+     *
+     * Category only, never a named injury: choosing the wound and then asking
+     * somebody else to roll for it are contradictory acts.
+     */
+    async _requestRoll(category) {
+        if (!category) return;
+        const actor = this.#target?.actorId ? game.actors.get(this.#target.actorId) : null;
+        if (!actor) {
+            const toast = getBlacksmith()?.toast;
+            const message = 'Target or select a token first — somebody has to be asked.';
+            if (toast?.show) toast.show({ title: 'No Target', subtitle: message, icon: 'fa-solid fa-crosshairs', duration: 3, moduleId: MODULE.ID });
+            else ui.notifications.warn(message);
+            return;
+        }
+        try {
+            const { InjuryTriggerManager } = await import('./manager-injury-triggers.js');
+            const reachedPlayer = InjuryTriggerManager.requestRoll(actor, category, this.#target);
+            log(reachedPlayer
+                ? `Asked ${this.#target.name}'s player to roll a ${category} injury`
+                : `Nobody owns ${this.#target.name} — the ${category} prompt came back to you`, '', true, false);
+        } catch (error) {
+            log('Could not request the roll', error?.message, false, true);
+        }
+        this.close();
+    }
 
     /**
      * Show the authored page behind a row. Deliberately does NOT close the

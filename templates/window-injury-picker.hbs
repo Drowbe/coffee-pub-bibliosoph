@@ -25,11 +25,17 @@
                             <span class="bibliosoph-picker__name">{{this.name}}</span>
                             <span class="bibliosoph-picker__muted">{{this.count}}</span>
                         </button>
-                        {{!-- The old chat card's only behaviour, kept as one click. --}}
+                        {{!-- Two ways to leave it to chance: roll it here, or
+                             ask the target's player to roll it themselves. --}}
                         <button type="button" class="bibliosoph-picker__roll"
                                 data-action="rollCategory" data-category="{{this.name}}"
-                                data-tooltip="Roll a random {{this.name}} injury, weighted by odds">
+                                data-tooltip="Roll a random {{this.name}} injury yourself">
                             <i class="fa-solid fa-dice-d20"></i>
+                        </button>
+                        <button type="button" class="bibliosoph-picker__roll bibliosoph-picker__roll--ask"
+                                data-action="requestRoll" data-category="{{this.name}}"
+                                data-tooltip="Ask the target's player to roll for a {{this.name}} injury">
+                            <i class="fa-solid fa-hand-point-up"></i>
                         </button>
                     </header>
 

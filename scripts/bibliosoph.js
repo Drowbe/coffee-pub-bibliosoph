@@ -384,7 +384,7 @@ async function createChatCardOutcome(type, { title = null, rollerActorId = null,
 
     const picked = title
         ? candidates.find((c) => c.title === title)
-        : weightedPick(candidates, (c) => c.odds);
+        : await weightedPickRolled(candidates, (c) => c.odds);
     if (!picked) { logBib(`No outcome titled "${title}"`, '', false, false); return ''; }
     logBib(`Outcome picked: "${picked.title}" (odds ${picked.odds} of ${candidates.length} ${type}s)`, '', true, false);
 
@@ -1034,7 +1034,7 @@ export async function drawInspirationCard(actor = null, { title = null } = {}) {
     const cards = await loadInspirationDeck();
     if (!cards) return;
 
-    const card = title ? cards.find((c) => c.title === title) : weightedPick(cards, (c) => c.odds);
+    const card = title ? cards.find((c) => c.title === title) : await weightedPickRolled(cards, (c) => c.odds);
     if (!card) {
         showBibToast('No Such Card', `Nothing titled "${title}" in the deck.`, 'fa-solid fa-lightbulb');
         return;
@@ -2517,16 +2517,45 @@ function removeHTMLTags(str) {
 // Pick one item weighted by its `odds` (1-100, higher = more common).
 // Records with a missing or unusable value fall back to weight 1 rather
 // than dropping out of the pool entirely.
-function weightedPick(items, weightOf) {
+/**
+ * Weighted pick DECIDED BY A REAL DIE, so Dice So Nice can show the roll that
+ * actually chose. Honours the `showDiceRolls` setting; with it off, or with
+ * no 3D dice installed, this is just a weighted pick with extra steps and
+ * costs nothing visible.
+ *
+ * The die is `1d{total weight}` and the result walks the same weights the
+ * silent version uses, so odds are identical either way — a rarer injury does
+ * not become likelier because somebody turned dice on.
+ *
+ * Deliberately not a decorative roll. Blacksmith's own notes flag
+ * `rollCoffeePubDice()` fabricating a 2d20 when handed nothing as a bug; dice
+ * that do not decide anything are the same lie wherever they are thrown.
+ */
+async function weightedPickRolled(items, weightOf) {
     const weights = items.map((item) => {
         const w = Number(weightOf(item));
         return Number.isFinite(w) && w > 0 ? w : 1;
     });
     const total = weights.reduce((sum, w) => sum + w, 0);
-    let roll = Math.random() * total;
+    if (total <= 0) return items[items.length - 1];
+
+    let value;
+    try {
+        const roll = await new Roll(`1d${total}`).evaluate();
+        value = roll.total;
+        if (getSettingSafe('showDiceRolls', false) && typeof BlacksmithUtils?.rollCoffeePubDice === 'function') {
+            BlacksmithUtils.rollCoffeePubDice(roll);
+        }
+    } catch (error) {
+        // A roll should never cost somebody their injury card.
+        logBib('Dice roll failed; picking silently', error?.message, false, false);
+        value = Math.ceil(Math.random() * total);
+    }
+
+    let remaining = value;
     for (let i = 0; i < items.length; i++) {
-        roll -= weights[i];
-        if (roll <= 0) return items[i];
+        remaining -= weights[i];
+        if (remaining <= 0) return items[i];
     }
     return items[items.length - 1];
 }
@@ -2617,7 +2646,7 @@ async function getJournalCategoryPageData(compendiumName, category, title = null
         }
         logBib(`No injury named "${title}" in ${category} — rolling instead`, '', false, false);
     }
-    const picked = weightedPick(arrCandidates, (c) => c.record.odds);
+    const picked = await weightedPickRolled(arrCandidates, (c) => c.record.odds);
     logBib(`Injury picked: "${picked.record.title}" (odds ${picked.record.odds ?? 'n/a'} of ${arrCandidates.length} in ${category})`, '', true, false);
     return picked.record;
 }

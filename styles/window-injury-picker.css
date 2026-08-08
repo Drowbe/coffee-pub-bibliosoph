@@ -98,11 +98,23 @@
 }
 
 .application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker__roll {
-    flex: 0 0 auto;
+    /* Same fixed width as the row icons, so the category actions form the
+       same two columns and the whole list reads on a grid. */
+    flex: 0 0 34px;
+    width: 34px;
     justify-content: center;
-    width: auto;
-    padding: 6px 10px;
+    padding: 6px 0;
     border-left: 1px solid var(--blacksmith-tool-divider);
+    color: var(--blacksmith-tool-accent);
+}
+
+/* Asking a player is the quieter of the two: muted until hovered, so the
+   GM's own roll stays the obvious default. */
+.application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker__roll--ask {
+    color: var(--blacksmith-tool-text-muted);
+}
+
+.application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker__roll--ask:hover {
     color: var(--blacksmith-tool-accent);
 }
 

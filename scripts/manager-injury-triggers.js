@@ -144,6 +144,71 @@ export class InjuryTriggerManager {
      * Who owns the click: the injured actor's player. Prefer the active
      * user whose assigned character this is, then any active non-GM owner.
      */
+    /**
+     * The LOOK of an injury toast, from settings. Shared so a manual request
+     * from the picker is visually identical to one the damage threshold fired
+     * — a player should not be able to tell which of the two reached them,
+     * because from their side it is the same question.
+     */
+    static _applyToastStyle(payload, actor, token = null) {
+        // Injured portrait as the avatar; fixed fallback icon.
+        const portrait = actor.img || token?.document?.texture?.src || null;
+        if (portrait) {
+            payload.image = portrait;
+        } else {
+            payload.icon = 'fa-solid fa-bandage';
+        }
+
+        const size = getSetting('injuryToastSize', 'large');
+        if (size && size !== 'adapt') payload.size = size;
+
+        const animation = getSetting('injuryToastAnimation', 'none');
+        if (animation && animation !== 'none') payload.animation = animation;
+
+        const sound = getSetting('injuryToastSound', 'none');
+        if (sound && sound !== 'none') payload.sound = sound;
+
+        const HEX_COLOR = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i;
+        const color = String(getSetting('injuryToastBorderColor', '') ?? '').trim();
+        if (HEX_COLOR.test(color)) payload.color = color;
+        const backgroundColor = String(getSetting('injuryToastBackgroundColor', '') ?? '').trim();
+        if (HEX_COLOR.test(backgroundColor)) payload.backgroundColor = backgroundColor;
+        const backgroundImage = String(getSetting('injuryToastBackgroundImage', '') ?? '').trim();
+        if (backgroundImage) payload.backgroundImage = backgroundImage;
+
+    }
+
+    /**
+     * Ask the target's player to roll the injury themselves, instead of the
+     * GM rolling it in the picker. Same armed toast the damage threshold
+     * sends: it lands on the owner's client, and clicking it posts the card
+     * from there.
+     *
+     * Falls back to the GM when nobody owns the actor or the owner is offline
+     * — an unanswerable prompt is worse than rolling it yourself.
+     */
+    static requestRoll(actor, category, target = null) {
+        if (!actor || !category) return false;
+        const token = actor.token?.object ?? actor.getActiveTokens?.()[0] ?? null;
+        const name = token?.name || actor.name || 'Someone';
+        const ownerId = this._ownerUserId(actor);
+
+        const payload = {
+            title: 'Roll for Injury',
+            subtitle: category === 'General' ? name : `${name} — ${category}`,
+            moduleId: MODULE.ID,
+            channel: 'injury',
+            duration: 3,
+            rollAction: 'injury',
+            rollCategory: category,
+            rollTarget: target ?? { actorId: actor.id, tokenId: token?.id ?? null },
+            rollUserId: ownerId ?? game.user.id
+        };
+        this._applyToastStyle(payload, actor, token);
+        RollToastManager.deliver(payload);
+        return Boolean(ownerId);
+    }
+
     static _ownerUserId(actor) {
         const assigned = game.users.find((u) => !u.isGM && u.active && u.character?.id === actor.id);
         if (assigned) return assigned.id;
@@ -176,31 +241,7 @@ export class InjuryTriggerManager {
         const subtitle = interpolate(getSetting('injuryToastMessage', ''));
         if (subtitle) payload.subtitle = subtitle;
 
-        // Injured portrait as the avatar; fixed fallback icon.
-        const portrait = actor.img || token?.document?.texture?.src || null;
-        if (portrait) {
-            payload.image = portrait;
-        } else {
-            payload.icon = 'fa-solid fa-bandage';
-        }
-
-        const size = getSetting('injuryToastSize', 'large');
-        if (size && size !== 'adapt') payload.size = size;
-
-        const animation = getSetting('injuryToastAnimation', 'none');
-        if (animation && animation !== 'none') payload.animation = animation;
-
-        const sound = getSetting('injuryToastSound', 'none');
-        if (sound && sound !== 'none') payload.sound = sound;
-
-        const HEX_COLOR = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i;
-        const color = String(getSetting('injuryToastBorderColor', '') ?? '').trim();
-        if (HEX_COLOR.test(color)) payload.color = color;
-        const backgroundColor = String(getSetting('injuryToastBackgroundColor', '') ?? '').trim();
-        if (HEX_COLOR.test(backgroundColor)) payload.backgroundColor = backgroundColor;
-        const backgroundImage = String(getSetting('injuryToastBackgroundImage', '') ?? '').trim();
-        if (backgroundImage) payload.backgroundImage = backgroundImage;
-
+        this._applyToastStyle(payload, actor, token);
         return payload;
     }
 }
