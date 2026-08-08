@@ -1,6 +1,6 @@
 # Architecture: Toasts
 
-**Status:** describes the code as of 13.4.6. Written from source, not from plans.
+**Status:** describes the code as of 13.5.0. Written from source, not from plans.
 
 Every user-facing notice in Bibliosoph is a Blacksmith adaptive toast. `ui.notifications` appears only as a fallback when the toast API is absent.
 
@@ -35,7 +35,7 @@ Blacksmith classifies the roll and fires `attackResolved` on the GM client. The 
 
 Requires a Blacksmith build newer than 13.11.3 (`module.api.rolls`). On older builds `isAvailable()` is absent and the manager stays dormant; relayed toasts still render if another client sends them.
 
-Two socket events:
+One socket event:
 
 | Event | Meaning |
 |---|---|
@@ -48,6 +48,8 @@ A toast can be *armed*: it is persistent (`duration: 0`) and clicking it perform
 The GM used to arm for *every* crit as a backup in case the roller walked away. That produced two live toasts for one event and required a stand-down protocol to reconcile them — a second socket event, a generated roll id, and a map of armed toasts per client, all to undo a duplicate the code chose to create. Removed in favour of not creating the duplicate: the GM is armed for what the GM rolls.
 
 Injury automation reuses this manager for both delivery and receipt-side click-arming — one socket, not three.
+
+`InjuryTriggerManager.requestRoll(actor, category, target)` sends the same armed toast from the picker, so a GM asking a player to roll produces a prompt identical to one the damage threshold fired. The styling half of the payload is shared (`_applyToastStyle`) precisely so a player cannot tell which of the two reached them.
 
 ---
 

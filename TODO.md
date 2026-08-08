@@ -6,9 +6,9 @@
 
 **Notes are no longer files.** Suite rule, agreed with Blacksmith 2026-08-07: decisions, rules and asks live in the doc that owns them — plan, architecture, API — and anything needing a reply is sent as a message. File-notes went stale and got missed. The three `note-*.md` files were retired on that basis; what was still live in them is below.
 
-- **Crier turn-card effects — send as a message.** Still open: Crier does not consume `effects.getDisplayEffects`, so turn cards say nothing about what is afflicting the combatant, and the table forgets they are prone or bleeding until two rounds too late. The retired note told Crier to lift our filtering and enrichment code wholesale, which is now exactly the duplication `api.effects` exists to prevent — send the ask, not the code: *call `getDisplayEffects(actor)` and render the rows display-only, no buttons.* Our data is ready (rounds remaining, modifiers, ticks) and our classifier already types the rows.
-- **Resolve `documentation/plan-chatcard-migration.md`.** Partially adopted: Bibliosoph consumes `blacksmith.chatCards` for card theme choices in settings, but §7 "Migration Status" implies more of the plan remains outstanding. Audit what is actually done against the two remaining legacy `chat-card.hbs` paths (see **Chat Cards** below), then either finish it or fold the residue into that section and delete the plan.
-- **If Blacksmith takes ask 2, we stop deleting on expiry.** Their stated contract: the effects layer either yields deletion to Times Up or performs it, firing one expiry event either way, so exactly one actor deletes in every configuration. That would remove the delete from `resolveTurnFor` and the world-time sweep entirely, leaving us to decide only what an expiry *means* (heal vs linger). Do not build toward it until they decide — but do not add anything that would make it harder to adopt.
+- ~~Crier turn-card effects.~~ **Sent 2026-08-07.** The ask was one call — `getDisplayEffects(actor)`, render display-only — plus two cautions: descriptions are permission-aware and a turn card is public, and a lingering wound legitimately has no `durationLabel` while it bleeds. Explicitly asked them *not* to lift our filtering code, which the retired note had offered; everything in that note now sits behind the API, and a copy would have broken on all of today's changes.
+- ~~Resolve `documentation/plan-chatcard-migration.md`.~~ **Deleted 2026-08-07, live.** Phases 1, 2 and 4 shipped — theme choices come from the Chat Cards API, `chat-card.hbs` uses `blacksmith-card` / `.card-header` / `.section-content`, and all rendering goes through `foundry.applications.handlebars.renderTemplate()`. Phase 3 was optional polish and is now the residue under **Chat Cards** below.
+- ~~If Blacksmith takes ask 2, we stop deleting on expiry.~~ **They took it and we adopted it, 2026-08-07.** `resolveTurnFor` and the world-time sweep no longer delete; `onExpired` is subscribed to announce. `deleteEffectSafely` survives only in `removeAffliction`, because treating a wound is a deliberate player action rather than an expiry.
 
 ## Injuries
 
@@ -22,7 +22,7 @@ Compendium rebuilt and verified 2026-07-28: 14 journals / 144 pages, every page 
 
 Remaining on the data model:
 
-- **Crier turn-card penalty report.** The data is all there now (rounds remaining, modifiers, ticks); nothing publishes it to Crier yet. See the ask under **Documentation** above.
+- ~~Crier turn-card penalty report.~~ **Covered by the ask sent 2026-08-07** — rounds remaining, modifiers and ticks all reach Crier through `getDisplayEffects` and our classifier, with nothing for them to import from us.
 - **Escalating ticks.** A tick is a flat percentage for the whole duration. A wound that gets *worse* the longer it goes untreated is the natural extension: the bleed grows each turn (or each round past some grace period), so ignoring it costs more than treating it. Needs a growth field (flat step vs multiplier), a ceiling so it stays survivable against the 1 HP floor, and a decision on whether a failed treatment attempt accelerates it — which would pair with the existing `injuryTreatmentDcEscalation`.
 - ~~Register an authoritative effects classifier.~~ **Done 2026-08-07** — `registerAfflictionClassifier()` in `manager-status-effects.js`, priority 100, beating Blacksmith's `-100` compatibility classifier. Rows now read `Injury · Moderate · Deafened` and name a live bleed in real hit points. Removal is deliberately *not* routed through the registry; the `deleteActiveEffect` unwind hook already covers every route.
 - **Use `gmNotes.PRESERVE_ON_REIMPORT`** in our importer profile when the Importer API lands.
@@ -76,7 +76,8 @@ The `damageResolved` request was **delivered** — injury automation now rides `
 
 ## Chat Cards
 
-- Clean up how chat cards look when sent to the Foundry chat — they are pretty rough. Two features still render through the legacy `chat-card.hbs`/CARDDATA path: **Investigation** (`bibliosoph.js`) and **Quick Encounter** (`manager-encounters.js`). Consider migrating them to the Blacksmith chat card structure (`.blacksmith-card` + `card-header`/`section-content` + Chat Cards API themes), like the Messages send-to-chat escalation card already uses. When Blacksmith ships its full chat-card creation API, both paths could move onto it together. *(Insults and Praise are no longer part of this — they became toasts and post no chat card at all.)*
+- **Two features still render through the legacy `chat-card.hbs` path:** Investigation (`bibliosoph.js`) and Quick Encounter (`manager-encounters.js`). Everything else builds from its typed compendium. Migrating both to the Blacksmith chat card structure is the last of the chat-card work; when Blacksmith ships its full card-creation API they could move together.
+- **Deferred phase-3 polish from the retired migration plan:** `.section-header` is used for subtitles and injury blocks carry semantic classes, but the full `.section-table` conversion for label/value pairs (injury duration, damage, statuseffect; rarity kind/value/details) was never done. Cosmetic, not blocking.
 
 # Coffee Pub Journals
 

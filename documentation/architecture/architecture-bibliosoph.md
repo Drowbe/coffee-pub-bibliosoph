@@ -1,6 +1,6 @@
 # Architecture: Bibliosoph Core
 
-**Status:** describes the code as of 13.4.6. Written from source, not from plans.
+**Status:** describes the code as of 13.5.0. Written from source, not from plans.
 
 Bibliosoph is the Coffee Pub **outcomes and announcements** module. It owns authored content that fires at the table — injuries, criticals, fumbles, inspiration — plus encounters and the Messages system. It does not own character UI, and it does not own any registry: every shared service it uses belongs to Blacksmith.
 
@@ -12,7 +12,7 @@ See [architecture-ownership](../../../coffee-pub-blacksmith/documentation/archit
 
 | File | Lines | Role |
 |---|---|---|
-| `scripts/bibliosoph.js` | 3,975 | Entry point, hooks, chat cards, treatment rolls, outcome application |
+| `scripts/bibliosoph.js` | 3,856 | Entry point, hooks, chat cards, treatment rolls, outcome application |
 | `scripts/settings.js` | 1,706 | Settings registration and section headings |
 | `scripts/window-encounter.js` | 1,479 | Quick Encounter window |
 | `scripts/manager-conversations.js` | 1,367 | Journal-backed conversations |
@@ -21,8 +21,9 @@ See [architecture-ownership](../../../coffee-pub-blacksmith/documentation/archit
 | `scripts/manager-inspiration.js` | 482 | Inspiration draw/use lifecycle |
 | `scripts/manager-injury-effects.js` | 462 | Canvas bursts and sounds |
 | `scripts/manager-roll-toasts.js` | 375 | Crit/fumble toasts, socket relay, channel declaration |
+| `scripts/window-injury-picker.js` | ~215 | Injury picker (Blacksmith Tool window) |
 | `scripts/manager-toolbar.js` | 288 | Toolbar tool definitions |
-| `scripts/manager-status-effects.js` | 219 | The single effect-application path |
+| `scripts/manager-status-effects.js` | ~390 | The single effect-application path, the effects classifier, the guarded delete |
 | `scripts/manager-injury-triggers.js` | 206 | Damage-threshold injury automation |
 | `scripts/manager-injury-ticks.js` | 195 | Recurring tick damage and expiry |
 | `scripts/manager-social-toasts.js` | 155 | Beverage/Bio/Insult/Praise |
@@ -109,7 +110,7 @@ The page-model structure deliberately mirrors Squire's CODEX page model so the c
 
 ## Chat cards and sockets
 
-Cards are built from `templates/chat-card.hbs` via `publishChatCard()`, selected by the `BIBLIOSOPH.CARDTYPE*` flags. Criticals, fumbles, and inspiration bypass this — they build cards directly from their typed compendiums, which is why they have no flags in that set.
+`publishChatCard()` is the **investigation path only**. Criticals, fumbles, inspiration and injuries each build their card directly from their typed compendium, which is why none of them has a `BIBLIOSOPH.CARDTYPE*` flag. That function once dispatched five card types; four have moved out, and the last one is worth watching — a dispatcher with a single consumer is a function waiting to be inlined.
 
 Socket events, all GM-authoritative:
 

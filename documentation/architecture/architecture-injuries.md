@@ -1,6 +1,6 @@
 # Architecture: Injuries
 
-**Status:** describes the code as of 13.4.6. Written from source, not from plans.
+**Status:** describes the code as of 13.5.0. Written from source, not from plans.
 
 Injuries are authored wounds that attach to an actor as a real ActiveEffect, optionally convey a core condition, optionally bleed each turn, and end either by healing themselves or by a player passing a Medicine check.
 
@@ -39,7 +39,16 @@ Treatment DC falls back through: authored `treatmentdc` → `SEVERITY_DCS` (mino
 
 ### Manual
 
-Toolbar → **Injuries** → a selector card of categories → click a category → `weightedPick()` draws from that category's pages by `odds`. Built in `createChatCardInjury()`.
+Toolbar → **Injuries** opens the picker (`window-injury-picker.js`), a Blacksmith Tool window. Three ways out of it:
+
+| Control | Result |
+|---|---|
+| an injury row, or its droplet | deals that exact wound — no roll |
+| `d20` on a category | `weightedPickRolled()` draws by `odds`, showing real dice when `showDiceRolls` is on |
+| hand icon on a category | asks the target's player to roll, via the same armed toast the damage threshold sends |
+| feather on a row | opens the authored journal page; the picker stays open |
+
+The selector chat card this replaced is gone, along with `createChatCardInjurySelector`, `getCategoryButtons` and `getCompendiumJournalList`. Only the resulting injury card reaches chat.
 
 ### Automatic
 

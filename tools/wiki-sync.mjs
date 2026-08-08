@@ -57,7 +57,6 @@ const PUBLISH = [
 
 // Held out of the publish set (documented so intent is explicit; move into PUBLISH when ready):
 //   investigation-spec.md                    — spec for unbuilt work, not a consumer doc
-//   plan-chatcard-migration.md               — internal plan, partially adopted (see TODO.md)
 //
 // Cross-module notes are no longer kept as files at all (suite rule, 2026-08-07): decisions and rules
 // live in the doc that owns them, and anything needing a reply is sent as a message. Nothing to hold.
