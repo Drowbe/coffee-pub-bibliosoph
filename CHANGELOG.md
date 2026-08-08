@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [13.5.0]
 
 ### NOTE: Coordinated with Blacksmith, Crier on API changes.
+- Any wound authored expiry: linger has been getting deleted rather than lingering — at combat end with Times Up installed, or the instant its clock ran out otherwise. Seven of the shipped injuries were affected, and they'll now behave as written for the first time.
 
 ### Added
 
