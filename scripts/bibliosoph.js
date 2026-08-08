@@ -680,7 +680,6 @@ async function triggerInjuriesRoll() {
 // who took the damage — the card's Apply button binds to them.
 export async function rollInjuryCard(category, target = null, { title = null } = {}) {
     resetBibliosophVars();
-    BIBLIOSOPH.CARDTYPEINJURY = true;
     BIBLIOSOPH.CARDTYPE = "General";
     // `title` names a specific injury; without it the category rolls at
     // random, weighted by odds — the behaviour the old selector card had.
@@ -1831,33 +1830,10 @@ async function publishChatCard() {
         // INVESTIGATION (new flow: narrative + slots + per-rarity tables)
         compiledHtml = await createChatCardInvestigation();
     }
-    // Criticals, fumbles and inspiration no longer come through here: each
-    // builds its own card straight from its typed compendium
-    // (createChatCardOutcome / the inspiration deck). This function is now
-    // only the investigation and injury path.
-    else if (BIBLIOSOPH.CARDTYPEINJURY) {
-
-        // V12 CONTEXT:
-        //Atropos — 03/04/2024 6:00 AM
-        // Existing chat messages are migrated so that if their style was previously the integer 4, it is now 0 so matching on the CONST.CHAT_MESSAGE_STYLES.WHISPER const will still match.
-        // Atropos — 03/04/2024 6:00 AM
-        // @cs96and the important reason for this change is so that users who are creating new chat messages using style: CONST.CHAT_MESSAGE_STYLES.WHISPER will obtain the correct behavior. There is no specific whisper type or style anymore - only whehter or not a message has whisper recipients.
-        
-        // INJURY CARD
-
-
-        var compendiumName = game.settings.get(MODULE.ID, 'injuryCompendium');
-        let content = await createChatCardInjurySelector(compendiumName);
-
-        let chatData = {
-            user: game.user._id,
-            content: content
-        };
-        
-        // Store the created chat message
-        let chatMessage = await ChatMessage.create(chatData);
-        
-    }
+    // Criticals, fumbles, inspiration and INJURIES no longer come through
+    // here: each builds its own card straight from its typed compendium
+    // (createChatCardOutcome, the inspiration deck, createChatCardInjury).
+    // This function is now the investigation path only.
     else
     {   
         // NOTHING
@@ -2537,171 +2513,6 @@ function removeHTMLTags(str) {
     // Replacing the identified HTML tag with a null string.
     return str.replace(/(<([^>]+)>)/ig, '');
 }
-
-// ************************************
-// ** UTILITY Create Injury Selector
-// ************************************
-
-async function createChatCardInjurySelector(compendiumName) {
-    
-    const pack = game.packs.get(compendiumName);
-    var strTheme = game.settings.get(MODULE.ID, 'cardThemeInjury');
-    var strIconStyle = "fa-skull";
-    var strCardTitle = "Select Injury";
-    var strTitle = "";
-    var strContent = "";
-    // var strButtonIcon = "";
-    var strSound = "modules/coffee-pub-blacksmith/sounds/notification.mp3";
-    //var strBanner = "modules/coffee-pub-blacksmith/images/banners/banners-damage-oops-10.webp";
-    var strBanner = "modules/coffee-pub-blacksmith/images/banners/banners-damage-oops-10.webp";
-    var strVolume = "0.7"
-    let arrInjuryButtons = [];
-    var arrCategories = [];
-    // get the categories
-    arrCategories = await getCompendiumJournalList(compendiumName, "category", true);
-   //BlacksmithUtils.postConsoleAndNotification("createChatCardInjurySelector arrCategories" , arrCategories, false, true, false); 
-    // build the buttons
-    arrInjuryButtons = await getCategoryButtons(arrCategories);
-    
-    const template = await getCardTemplate();
-    // Pass the data to the template
-    const CARDDATA = {
-        theme: strTheme,
-        cardTitle: strCardTitle,
-        iconStyle: strIconStyle,
-        banner: strBanner,
-        title: strTitle,
-        content: strContent,
-        injurybutton: arrInjuryButtons,
-        hasSectionContent: !!(arrInjuryButtons && arrInjuryButtons.length),
-    }; 
-    // Play the sound
-    BlacksmithUtils.playSound(strSound,strVolume);
-    // Return the template
-    return template(CARDDATA);
-} 
-
-// ************************************
-// ** UTILITY Get Category Buttons
-// ************************************
-// Input: Array of cateogry names
-// Output: Array of icon + text for buttons.
-async function getCategoryButtons(categories){
-
-    var strButtonIcon = "";
-    var arrCategories = categories;
-    var strTheme = game.settings.get(MODULE.ID, 'cardThemeInjury');
-    var arrInjuryButtons = [];
-    // Set the appripriate icon based on the array.
-    if (arrCategories) {
-        for (let category of arrCategories) {
-            // get the icon
-            switch(category.toLowerCase()) {
-                case "acid":
-                    strButtonIcon = "fa-droplet";
-                     break;
-                case "bludgeoning":
-                    strButtonIcon = "fa-axe-battle";
-                     break;
-                case "cold":
-                    strButtonIcon = "fa-snowflake";
-                     break;
-                case "fire":
-                    strButtonIcon = "fa-fire";
-                     break;
-                case "force":
-                    strButtonIcon = "fa-wind";
-                     break;
-                case "lightning":
-                    strButtonIcon = "fa-bolt-lightning";
-                     break;
-                case "necrotic":
-                    strButtonIcon = "fa-scythe";
-                     break;
-                case "piercing":
-                    strButtonIcon = "fa-bow-arrow";
-                     break;
-                case "poison":
-                    strButtonIcon = "fa-flask-round-poison";
-                     break;
-                case "psychic":
-                    strButtonIcon = "fa-brain";
-                     break;
-                case "radiant":
-                    strButtonIcon = "fa-bullseye";
-                     break;
-                case "slashing":
-                    strButtonIcon = "fa-knife-kitchen";
-                     break;
-                case "thunder":
-                    strButtonIcon = "fa-cloud-bolt";
-                     break;
-                default:
-                    strButtonIcon = "fa-skull";
-           }
-            // building the object for handlebars
-            let buttonObject = {
-                theme: strTheme,
-                category: category,
-                buttonicon: strButtonIcon
-            };
-            // pushing the object into an array
-            arrInjuryButtons.push(buttonObject);
-        }
-    } else {
-        //BlacksmithUtils.postConsoleAndNotification("In createChatCardInjurySelector, arrCategories comes back null or undefined." , "", false, true, false); 
-        return;
-    }
-    return arrInjuryButtons;
-}
-
-// ************************************
-// ** UTILITY Get Compenium Pages [USING and WORKS]
-// ************************************
-// USEAGE: This returns all journals in a compendium and returns an array of their names.
-
-async function getCompendiumJournalList(compendiumName) {
-    // set vars
-    const strCompendiumName = compendiumName;
-    if (!strCompendiumName) {
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Compendium not supplied: " + strCompendiumName, "", false, false); 
-        return;
-    }
-    // grab data
-    const pack = game.packs.get(strCompendiumName);
-    if (!pack) {
-        BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Compendium not found: " + strCompendiumName, "", false, false); 
-        return;
-    }
-    // Get all entries from the compendium 
-    const entries = await pack.getDocuments();
-    // Collect all available categories and add them to the buttons
-    let arrValues = [];
-    for (let entry of entries) {
-        let strValue = entry.name;
-        if (strValue && !arrValues.includes(strValue)) {
-            arrValues.push(strValue);
-        }
-    }
-    // Sort arrpages in alphabetical order
-    arrValues.sort();
-    //BlacksmithUtils.postConsoleAndNotification("getCompendiumPageContent" , arrValues, false, false, false);
-    // If no arrpages, return null or handle however you prefer
-    if (arrValues.length === 0) {
-        return null;
-    }
-    // Return the Array
-    var arrTEMP = [];
-    arrTEMP = arrValues
-    //BlacksmithUtils.postConsoleAndNotification("createChatCardInjurySelector arrTEMP" , arrTEMP, false, true, false); 
-    return arrValues;
-}
-
-
-// ************************************
-// ** UTILITY Get Pages for a specific journal 
-// ************************************
-
 
 // Pick one item weighted by its `odds` (1-100, higher = more common).
 // Records with a missing or unusable value fall back to weight 1 rather
@@ -4009,7 +3820,6 @@ async function markCardButtonApplied(buttonEl, buttonSelector, appliedNames) {
 
 function resetBibliosophVars() {
     BIBLIOSOPH.CARDTYPE = "";
-    BIBLIOSOPH.CARDTYPEINJURY = false;
     BIBLIOSOPH.CARDTYPEENCOUNTER = false;
     BIBLIOSOPH.CARDTYPEINVESTIGATION = false;
     BIBLIOSOPH.MACRO_ID = "";

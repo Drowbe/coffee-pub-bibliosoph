@@ -87,9 +87,8 @@ export const BIBLIOSOPH = {
     PORTRAIT_NOIMAGE:`modules/${MODULE.ID}/images/portrait-noimage.webp`,
     CARDTYPE: "",
     CARDTYPEENCOUNTER: false,
-    CARDTYPEINJURY: false,
     CARDTYPEINVESTIGATION: false,
-    // No CRIT / FUMBLE / INSPIRATION flags: those three build their cards
+    // No CRIT / FUMBLE / INSPIRATION / INJURY flags: those all build their cards
     // directly from their typed compendiums and never route through
     // publishChatCard, which is what these flags selected between.
     MACRO_ID: "",
