@@ -1,0 +1,82 @@
+{{!--
+    Injury picker body. No colour literals anywhere: every surface comes from
+    the --blacksmith-tool-* family, so this follows Light, Dark and Glass with
+    no theme-aware rules of its own. See Blacksmith's api-window doc.
+--}}
+<div class="bibliosoph-picker">
+
+    <p class="bibliosoph-picker__target">
+        {{#if targetName}}
+            Dealing to <strong>{{targetName}}</strong>.
+        {{else}}
+            <span class="bibliosoph-picker__muted">No target — select or target a token to apply automatically.</span>
+        {{/if}}
+    </p>
+
+    {{#if anyInjuries}}
+        <div class="bibliosoph-picker__list">
+            {{#each categories}}
+                <section class="bibliosoph-picker__category">
+                    <header class="bibliosoph-picker__header">
+                        <button type="button" class="bibliosoph-picker__expand"
+                                data-action="toggleCategory" data-category="{{this.name}}"
+                                aria-expanded="{{#if this.open}}true{{else}}false{{/if}}">
+                            <i class="fa-solid {{#if this.open}}fa-chevron-down{{else}}fa-chevron-right{{/if}}"></i>
+                            <span class="bibliosoph-picker__name">{{this.name}}</span>
+                            <span class="bibliosoph-picker__muted">{{this.count}}</span>
+                        </button>
+                        {{!-- The old chat card's only behaviour, kept as one click. --}}
+                        <button type="button" class="bibliosoph-picker__roll"
+                                data-action="rollCategory" data-category="{{this.name}}"
+                                data-tooltip="Roll a random {{this.name}} injury, weighted by odds">
+                            <i class="fa-solid fa-dice-d20"></i>
+                        </button>
+                    </header>
+
+                    {{#if this.open}}
+                        <div class="bibliosoph-picker__injuries">
+                            {{!--
+                                Three elements per row, and the two icons are
+                                their own fixed-width buttons so they line up
+                                as columns down the list. The droplet repeats
+                                what clicking the row does — redundant on
+                                purpose: it makes "apply" the visible default
+                                rather than something you have to discover.
+                            --}}
+                            {{#each this.injuries}}
+                                <div class="bibliosoph-picker__row">
+                                    <button type="button" class="bibliosoph-picker__injury"
+                                            data-action="dealInjury"
+                                            data-category="{{../name}}" data-title="{{this.title}}"
+                                            data-tooltip="Deal {{this.title}}">
+                                        {{#if this.image}}<img src="{{this.image}}" alt="" />{{/if}}
+                                        <span class="bibliosoph-picker__text">
+                                            <span class="bibliosoph-picker__title">{{this.title}}</span>
+                                            <span class="bibliosoph-picker__muted">{{this.detail}} · {{this.chance}}%</span>
+                                        </span>
+                                    </button>
+                                    <button type="button" class="bibliosoph-picker__icon"
+                                            data-action="dealInjury"
+                                            data-category="{{../name}}" data-title="{{this.title}}"
+                                            data-tooltip="Deal {{this.title}}">
+                                        <i class="fa-solid fa-droplet" aria-hidden="true"></i>
+                                    </button>
+                                    <button type="button" class="bibliosoph-picker__icon bibliosoph-picker__icon--read"
+                                            data-action="openJournal" data-uuid="{{this.uuid}}"
+                                            data-tooltip="Read the {{this.title}} page">
+                                        <i class="fa-solid fa-feather" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            {{/each}}
+                        </div>
+                    {{/if}}
+                </section>
+            {{/each}}
+        </div>
+    {{else}}
+        <p class="bibliosoph-picker__muted">
+            No injuries found. Check the <strong>Injury Compendium</strong> setting, and that its pages
+            are typed injury pages.
+        </p>
+    {{/if}}
+</div>

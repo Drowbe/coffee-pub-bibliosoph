@@ -1,0 +1,199 @@
+/* ==================================================================
+   INJURY PICKER — Tool window body
+   ==================================================================
+   NOT ONE COLOUR LITERAL IN THIS FILE, deliberately. Every surface, tone
+   and border comes from the --blacksmith-tool-* family, which is tuned
+   per theme. A literal is correct in one theme and wrong in the other
+   two, which is how a Tool window ends up right in Light and broken in
+   Glass. Blacksmith's window-compendium-search.css is the reference.
+
+   EVERY RULE IS SCOPED TO THE APPLICATION CLASS. Not for tidiness: a
+   bare `.bibliosoph-picker__injury` is one class, which loses to
+   Foundry's own `.application button` rules — the buttons then fall back
+   to inline-flex, shrink-wrap to their content, and centre-align, which
+   renders the list as a diagonal cascade with the text overlapping the
+   icons. Scoping is also what api-window.md asks consumers to do.
+
+   Two traps this file respects:
+     - `text-muted` rather than `opacity`. Opacity fades borders and
+       backgrounds too, and compounds when nested.
+     - The category headers use `surface-raised`, not `scrim`. Scrim
+       under Glass is near-opaque and reads as a hole punched through
+       the frost.
+   ================================================================== */
+
+.application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker__target {
+    margin: 0 0 2px 0;
+    font-size: 0.92em;
+}
+
+.application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker__muted {
+    color: var(--blacksmith-tool-text-muted);
+    font-size: 0.85em;
+}
+
+/* The body scrolls; the Tool base clamps overall height for us. */
+.application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker__list {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    max-height: 52vh;
+    overflow-y: auto;
+}
+
+.application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker__category {
+    border: 1px solid var(--blacksmith-tool-divider);
+    border-radius: var(--blacksmith-radius-md, 4px);
+    overflow: hidden;
+}
+
+.application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker__header {
+    display: flex;
+    align-items: stretch;
+    background: var(--blacksmith-tool-surface-raised);
+}
+
+/* Width and display stated explicitly on every button: Foundry's defaults
+   size a button to its content, which is what produced the cascade. */
+.application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker__expand,
+.application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker__roll,
+.application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker__injury {
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    color: var(--blacksmith-tool-text);
+    font-family: inherit;
+    font-size: inherit;
+    line-height: 1.2;
+    text-align: left;
+    cursor: pointer;
+    margin: 0;
+    min-height: 0;
+    height: auto;
+}
+
+.application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker__expand {
+    flex: 1 1 auto;
+    gap: 8px;
+    padding: 6px 8px;
+    min-width: 0;
+    width: auto;
+}
+
+.application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker__name {
+    flex: 1 1 auto;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker__roll {
+    flex: 0 0 auto;
+    justify-content: center;
+    width: auto;
+    padding: 6px 10px;
+    border-left: 1px solid var(--blacksmith-tool-divider);
+    color: var(--blacksmith-tool-accent);
+}
+
+.application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker__expand:hover,
+.application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker__roll:hover {
+    background: var(--blacksmith-tool-surface-hover);
+}
+
+/* Right-justified action columns. Both icons are FIXED WIDTH rather than
+   padded-to-content: a padded icon is as wide as its glyph, and a droplet
+   and a feather are not the same width, so the columns went ragged down
+   the list. One width, stated once, and they line up. */
+.application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 34px;
+    width: 34px;
+    padding: 0;
+    margin: 0;
+    background: none;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    line-height: 1.2;
+    cursor: pointer;
+    color: var(--blacksmith-tool-text-muted);
+}
+
+.application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker__icon--read {
+    border-left: 1px solid var(--blacksmith-tool-divider);
+}
+
+.application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker__icon:hover {
+    background: var(--blacksmith-tool-surface-hover);
+    color: var(--blacksmith-tool-accent);
+}
+
+/* Hovering the row's text half also lights its droplet, so the two read as
+   one action even though they are two controls. */
+.application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker__injury:hover ~ .bibliosoph-picker__icon:not(.bibliosoph-picker__icon--read) {
+    color: var(--blacksmith-tool-accent);
+}
+
+.application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker__injuries {
+    display: flex;
+    flex-direction: column;
+    background: var(--blacksmith-tool-surface-sunken);
+    border-top: 1px solid var(--blacksmith-tool-divider);
+}
+
+.application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker__row {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+}
+
+.application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker__row:hover {
+    background: var(--blacksmith-tool-surface-hover);
+}
+
+.application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker__injury {
+    /* Grows to fill the row so the droplet can sit hard right and the
+       feather stays pinned to the edge. */
+    flex: 1 1 auto;
+    width: auto;
+    gap: 8px;
+    padding: 4px 8px 4px 22px;
+    min-width: 0;
+}
+
+.application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker__injury img {
+    flex: 0 0 32px;
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+    border: none;
+    border-radius: var(--blacksmith-radius-sm, 3px);
+}
+
+.application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker__text {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker__title,
+.application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker__text .bibliosoph-picker__muted {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

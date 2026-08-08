@@ -664,22 +664,27 @@ function buildOutcomeMechanics(rec, modifierLines, rounds) {
 }
 
 // Trigger the injuries selector card (toolbar button) — macro-free
-function triggerInjuriesRoll() {
-    resetBibliosophVars();
-    BIBLIOSOPH.CARDTYPEINJURY = true;
-    BIBLIOSOPH.CARDTYPE = "General";
-    publishChatCard();
+async function triggerInjuriesRoll() {
+    // The selector CARD is gone. It put a permanent message in the log for
+    // what is really a GM control, and it could only roll at random — there
+    // was no way to choose a specific wound, which is the moment a GM most
+    // wants to. The picker does both and leaves the log alone; only the
+    // resulting injury card is posted.
+    const { openInjuryPicker } = await import('./window-injury-picker.js');
+    await openInjuryPicker();
 }
 
 // Roll an injury for a specific damage category and post the card directly
 // (skipping the selector). Used by manager-roll-toasts.js for the injury
 // Automation click/auto modes. `target` ({actorId, tokenId}) is the actor
 // who took the damage — the card's Apply button binds to them.
-export async function rollInjuryCard(category, target = null) {
+export async function rollInjuryCard(category, target = null, { title = null } = {}) {
     resetBibliosophVars();
     BIBLIOSOPH.CARDTYPEINJURY = true;
     BIBLIOSOPH.CARDTYPE = "General";
-    let compiledHtml = await createChatCardInjury(category, target);
+    // `title` names a specific injury; without it the category rolls at
+    // random, weighted by odds — the behaviour the old selector card had.
+    let compiledHtml = await createChatCardInjury(category, target, { title });
     resetBibliosophVars();
     if (!compiledHtml) return;
 
@@ -1881,7 +1886,7 @@ async function publishChatCard() {
 // ** CREATE Injury Card
 // ************************************
 
-async function createChatCardInjury(category, target = null) {
+async function createChatCardInjury(category, target = null, { title = null } = {}) {
 
     // Set the defaults
     var compendiumName = game.settings.get(MODULE.ID, 'injuryCompendium');
@@ -1914,7 +1919,7 @@ async function createChatCardInjury(category, target = null) {
     var strStatusEffect = "";
 
     // get the journal data
-    let objInjuryData = await getJournalCategoryPageData(compendiumName,strCategory) ;
+    let objInjuryData = await getJournalCategoryPageData(compendiumName, strCategory, title);
     if (!objInjuryData) {
         BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "objInjuryData is null or undefined", "", true, false);
     } else {
@@ -2742,7 +2747,7 @@ function readInjuryRecord(page) {
     return parsed ? { ...parsed, sourceUuid } : null;
 }
 
-async function getJournalCategoryPageData(compendiumName,category) {
+async function getJournalCategoryPageData(compendiumName, category, title = null) {
 
 
     const pack = game.packs.get(compendiumName);
@@ -2788,6 +2793,18 @@ async function getJournalCategoryPageData(compendiumName,category) {
     if (!arrCandidates.length) {
         logBib(`No readable injuries in category "${category}"`, '', false, false);
         return null;
+    }
+    // A named injury skips the draw entirely — that is the whole point of
+    // the picker, and it falls back to a weighted roll if the name no longer
+    // matches anything (a renamed page, a repointed compendium).
+    if (title) {
+        const wanted = String(title).trim().toLowerCase();
+        const exact = arrCandidates.find((c) => String(c.record.title ?? '').trim().toLowerCase() === wanted);
+        if (exact) {
+            logBib(`Injury chosen: "${exact.record.title}" (named, no roll)`, '', true, false);
+            return exact.record;
+        }
+        logBib(`No injury named "${title}" in ${category} — rolling instead`, '', false, false);
     }
     const picked = weightedPick(arrCandidates, (c) => c.record.odds);
     logBib(`Injury picked: "${picked.record.title}" (odds ${picked.record.odds ?? 'n/a'} of ${arrCandidates.length} in ${category})`, '', true, false);
