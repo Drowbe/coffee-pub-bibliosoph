@@ -18,14 +18,14 @@ See [architecture-ownership](../../../coffee-pub-blacksmith/documentation/archit
 | `scripts/manager-conversations.js` | 1,367 | Journal-backed conversations |
 | `scripts/window-messages.js` | 1,347 | Unified Messages window |
 | `scripts/manager-encounters.js` | 804 | Quick Encounter orchestration |
+| `scripts/manager-status-effects.js` | 493 | The single effect-application path, the effects classifier, the guarded delete |
 | `scripts/manager-inspiration.js` | 482 | Inspiration draw/use lifecycle |
 | `scripts/manager-injury-effects.js` | 462 | Canvas bursts and sounds |
 | `scripts/manager-roll-toasts.js` | 375 | Crit/fumble toasts, socket relay, channel declaration |
-| `scripts/window-injury-picker.js` | ~215 | Injury picker (Blacksmith Tool window) |
 | `scripts/manager-toolbar.js` | 288 | Toolbar tool definitions |
-| `scripts/manager-status-effects.js` | ~390 | The single effect-application path, the effects classifier, the guarded delete |
-| `scripts/manager-injury-triggers.js` | 206 | Damage-threshold injury automation |
-| `scripts/manager-injury-ticks.js` | 195 | Recurring tick damage and expiry |
+| `scripts/manager-injury-triggers.js` | 247 | Damage-threshold injury automation |
+| `scripts/window-injury-picker.js` | 245 | Injury picker (Blacksmith Tool window) |
+| `scripts/manager-injury-ticks.js` | 205 | Recurring tick damage and expiry |
 | `scripts/manager-social-toasts.js` | 155 | Beverage/Bio/Insult/Praise |
 | `scripts/data/*` | ~900 | Typed page models and schemas |
 | `scripts/sheets/*` | ~370 | Page sheets for the three typed subtypes |

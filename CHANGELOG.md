@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [13.5.0]
 
+### NOTE: Coordinated with Blacksmith, Crier on API changes.
+
 ### Added
 
 - **Injuries are chosen from a window now, not a card in the chat log.** The old flow posted a selector card listing damage types, you clicked one, and a random injury from that type was rolled. It put a permanent message in the log for what is really a GM control, and it could only ever roll — there was no way to say "the villain takes the eye", which is the moment a GM most wants to choose. The **Injuries** toolbar button now opens a Tool window (`BlacksmithToolWindowBaseV2`) listing every category and, expanded, every injury in it with its severity, conveyed condition, whether it bleeds, and its odds as a percentage. A row deals that exact wound. Only the resulting injury card reaches chat; the selection leaves nothing behind.
