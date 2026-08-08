@@ -290,7 +290,7 @@ const SCENARIOS = [
     },
     {
         tab: 'injuries',
-        label: '🩸 Apply a BLEEDING injury (2%/turn, 3 rounds, lingers)',
+        label: '🩸 Apply a BLEEDING injury (bleeds 3 rounds, then stays until treated)',
         run: async () => {
             const token = getSubjectToken();
             if (!token) return;
