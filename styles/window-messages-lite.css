@@ -13,6 +13,26 @@
    two windows can never bleed into one another.
    ================================================================== */
 
+/* ------------------------------------------------------------------
+   MESSAGE CARD SURFACES — the two knobs worth tuning
+
+   `--bibliosoph-msg-card-bg`  other people's messages
+   `--bibliosoph-msg-own-bg`   your own
+
+   These deliberately do NOT come from --blacksmith-tool-surface-raised /
+   -selected. Those two tokens are built for list rows on the shell, and as
+   message cards they fail in opposite directions per theme: `raised` is
+   #313030 under Dark (all but invisible against the #222 window) and
+   rgba(12,10,8,.55) under Glass (a dark hole punched in the frost), while
+   `selected` is only an 18–28% tint that, replacing rather than layering on
+   the card surface, left your own messages *less* substantial than everyone
+   else's.
+
+   So each theme states both surfaces outright, with one rule holding
+   throughout: own always reads lighter than other, and both always lift off
+   the window behind them.
+   ------------------------------------------------------------------ */
+
 #coffee-pub-bibliosoph-messages-lite-wrapper {
     /* The message palette, expressed entirely in tool-shell terms. */
     --bibliosoph-msg-radius: 4px;
@@ -20,7 +40,12 @@
     --bibliosoph-msg-accent: var(--blacksmith-tool-accent);
     --bibliosoph-msg-text: var(--blacksmith-tool-text);
     --bibliosoph-msg-muted: var(--blacksmith-tool-text-muted);
-    --bibliosoph-msg-card-bg: var(--blacksmith-tool-surface-raised);
+
+    /* LIGHT (the base theme). The other-message card was already reading
+       well, so it keeps the parchment value; own lifts toward white with
+       only a whisper of warmth rather than the old orange wash. */
+    --bibliosoph-msg-card-bg: #f0e5d1;
+    --bibliosoph-msg-own-bg: #fcf5e7;
 
     /* Accent washes. color-mix keeps these legible on a light surface,
        where the full window's fixed rgba() overlays wash out entirely. */
@@ -35,6 +60,22 @@
     width: 100%;
     overflow: hidden;
     color: var(--bibliosoph-msg-text);
+}
+
+/* DARK. Both surfaces are white veils rather than fixed greys, so they lift
+   off the #222→#181818 window by a stated amount instead of landing on top
+   of it. Own carries the warmth. */
+.blacksmith-window-tool-theme-dark #coffee-pub-bibliosoph-messages-lite-wrapper {
+    --bibliosoph-msg-card-bg: rgba(255, 255, 255, 0.11);
+    --bibliosoph-msg-own-bg: rgba(255, 240, 214, 0.20);
+}
+
+/* GLASS. The frost sits over live canvas, so these stay scrims rather than
+   veils — white text needs something behind it — but far lighter than the
+   .55 black that was reading as a hole. Own is the warmer, lighter scrim. */
+.blacksmith-window-tool-theme-glass #coffee-pub-bibliosoph-messages-lite-wrapper {
+    --bibliosoph-msg-card-bg: rgba(24, 21, 17, 0.34);
+    --bibliosoph-msg-own-bg: rgba(126, 110, 84, 0.42);
 }
 
 /* The tool body is a plain scroll container by default; this window wants
@@ -132,7 +173,7 @@
 }
 
 #coffee-pub-bibliosoph-messages-lite-wrapper .bibliosoph-message-own {
-    background: var(--blacksmith-tool-surface-selected);
+    background: var(--bibliosoph-msg-own-bg);
 }
 
 #coffee-pub-bibliosoph-messages-lite-wrapper .bibliosoph-message-header {
@@ -295,10 +336,17 @@
 }
 
 /* No send button and no action bar: ENTER is the only way out of this box,
-   so it gets the full width. */
+   so it gets the full width.
+
+   Height is stated rather than left to `rows`, which the browser rounds off
+   its own font metrics and which was landing just shy of three lines. Two
+   lines exactly: 2 x line-height, plus the vertical padding and borders that
+   border-box folds into the declared height. */
 #coffee-pub-bibliosoph-messages-lite-wrapper .bibliosoph-messages-input {
     width: 100%;
     min-width: 0;
+    box-sizing: border-box;
+    height: calc((1.35em * 2) + 10px + 2px);
     resize: none;
     background: var(--blacksmith-tool-field-background);
     border: 1px solid var(--blacksmith-tool-field-border);
