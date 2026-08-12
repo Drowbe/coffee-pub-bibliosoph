@@ -51,6 +51,15 @@ A static class, initialized from the `ready` block in `bibliosoph.js` when `mess
 **Creation**
 `createConversation({members, name, icon, tint})` → `_createConversationEntry({members, name, createdBy, kind, icon, tint})`. Conversations are either `group` or direct. `_sanitizeTint()` validates colour input.
 
+**Favorites**
+`FAVORITES_KEY`, `getFavorites()`, `setFavorites(ids)`, `isFavorite(id)`, `toggleFavorite(id)`, `getFavoriteConversations()`, and the two helpers that make them correct: `_canonicalFavoriteId(id)` and `_favoriteMatches(stored, target)`.
+
+A per-client shortlist held in `localStorage`, matching how mute, ENTER-sends and tray-collapse are already stored — no permissions, no document write per toggle, at the cost of not following the user to another browser.
+
+An entry is either a conversation id or a `virtual:<userId>` row for a 1:1 that does not exist yet. Those two forms name the same thing once the conversation is created, which is why comparisons canonicalise rather than string-match: storage is only rewritten when `getFavoriteConversations()` prunes, so a `virtual:` entry outlives the moment its real conversation appeared. Without `_favoriteMatches`, favouriting a player and then messaging them left a favorite that could be neither recognised nor removed.
+
+`getFavoriteConversations()` resolves the list for display — name, icon, unread count, virtual flag — drops anything no longer visible to this user, sorts by most recent activity, and prunes storage only when something actually went away.
+
 **Notification**
 `notifyUnread()` and `clearUnreadNotification()` drive a Blacksmith notification, tracked by id so it can be replaced rather than stacked.
 
@@ -68,6 +77,8 @@ Registered two ways:
 - as a Blacksmith window under the id `bibliosoph-messages`
 - as a menubar tool in the left zone (`group: general`, `groupOrder: 999`, `order: 203`), placed next to Squire's Quick Note
 
+The menubar tool also supplies `contextMenuItems` as a **function**, which Blacksmith evaluates on each right-click — so the favorites menu is rebuilt from current state every time rather than captured at registration. Each entry opens its conversation as a popout. With no favorites yet, the menu shows a single disabled row explaining where to make one, because returning an empty array would suppress the menu entirely after the default context menu had already been prevented.
+
 The header also hosts the four social toast buttons — Beverage Break, Bio Break, Insult, Praise — whose images double as the toast images. See [architecture-toasts](architecture-toasts.md).
 
 ---
@@ -80,13 +91,21 @@ A second window shows one conversation and nothing else: `window-messages-lite.j
 
 Reached by the popout icon revealed on hover over a tray row, and registered as a Blacksmith window under `bibliosoph-messages-lite` so it can also be opened directly with a conversation id.
 
-**Exactly one messages surface is live at a time.** Popping out closes the full window; closing the popout reopens the full window on the same conversation; opening the full window by any route (menubar, toolbar, notification click, splash click, Auto Open) closes the popout. This is a load-bearing constraint, not a preference — it is what lets both windows share `ConversationManager`'s single-window live-update path with **no change to the manager at all**. While the popout is open it claims `MessagesWindow.current`, so `_getOpenWindow()` finds it, and renders, typing indicators and mark-read all flow to it unmodified.
+**Popouts stack, and coexist with the full window.** One popout per conversation; opening a conversation that already has one focuses it rather than building a second. Each instance takes a distinct application id (`<module>-messages-lite-<slugged conversation id>`), which both satisfies ApplicationV2's unique-id requirement and gives every conversation its own remembered position and tool theme. `MessagesLiteWindow.instances` is a `Set` rather than a Map keyed by conversation, because a popout pinned to a virtual 1:1 rewrites its own conversation id the moment that conversation is created — a key would go stale underneath it. `findFor()` matches on the canonical id so the popout is still found afterwards.
+
+Nothing closes anything else: popping out leaves the workspace open (the tray is the only place to launch a popout from, so closing it on every pop-out would mean reopening it between each), and closing a popout closes only that popout.
+
+**The open-window registry.** `ConversationManager` keeps a `Set` of every live surface — `registerWindow`, `unregisterWindow`, `getOpenWindows`, `getWindowsViewing(conversationId)`. This replaced a single `MessagesWindow.current` lookup; that pointer still exists, because the full window genuinely is a singleton and `openMessagesWindow` uses it to focus rather than duplicate, but it is no longer how live updates find a window.
+
+Windows register in `_onRender`, not in their constructor: `getOpenWindows()` sweeps anything that is not `rendered`, so a window added at construction time would be purged before it ever drew.
+
+Incoming messages repaint every open surface — whoever shows the conversation needs the message, everyone else needs their unread badges to move — and a notification is raised only when *no* window is showing it. Auto Open fires only when nothing at all is open. Unread returns to the menubar only when the last surface closes.
 
 A popout is pinned to its conversation for life. `_activeConversationId` is an accessor whose setter refuses to be steered elsewhere — notably by the `createJournalEntry` hook, which writes that field straight onto the open window. The one legitimate change is a virtual 1:1 being promoted to a real journal entry on first send.
 
-**What it drops:** the conversation tray, the member picker, the tone bar, and reaction chips (`SUPPORTS_REACTIONS = false`, which also removes the React submenu from the context menu).
+**What it drops:** the conversation tray, the member picker, the tone bar, the send button, and reaction chips (`SUPPORTS_REACTIONS = false`, which also removes the React submenu from the context menu). With no send button and no action bar to host a toggle, the popout overrides `_enterSends` to always return true — honouring a disabled preference would strand a message with no way to send it.
 
-**What it keeps:** markdown, day separators, avatars, speaker colours, mentions, UUID links, inline images, the right-click menu (reply / edit / delete / send to Foundry chat), document drops, image paste and upload, the typing indicator, and ENTER-sends.
+**What it keeps:** markdown, day separators, avatars, speaker colours, mentions, UUID links, inline images, the right-click menu (reply / edit / delete / send to Foundry chat), document drops, image paste and upload, the typing indicator, and ENTER-sends (SHIFT+ENTER for a newline). It adds one control of its own: a favorite star in the compact title bar, via `getToolHeaderActions()`.
 
 ---
 

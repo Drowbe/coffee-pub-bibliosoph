@@ -19,6 +19,7 @@
             <a class="bibliosoph-messages-tray-item {{#if this.active}}active{{/if}}" data-action="msg-select-conversation" data-id="{{this.id}}" title="{{this.name}}{{#if this.memberNames}} &mdash; {{this.memberNames}}{{/if}}" {{#if this.tint}}style="--bibliosoph-conv-tint: {{this.tint}};"{{/if}}>
                 <i class="{{this.icon}}"></i>
                 <span class="bibliosoph-messages-tray-item-name">{{this.name}}</span>
+                {{#if this.favorite}}<i class="fa-solid fa-heart bibliosoph-messages-tray-heart" title="Favorite — right-click Messages on the menubar to reach it"></i>{{/if}}
                 {{#if this.unread}}<span class="bibliosoph-messages-tray-item-badge">{{this.unread}}</span>{{/if}}
                 <span class="bibliosoph-messages-tray-popout" data-action="msg-popout" data-id="{{this.id}}" title="Pop out this conversation into a lightweight window"><i class="fa-solid fa-up-right-from-square"></i></span>
             </a>
@@ -29,6 +30,7 @@
             <a class="bibliosoph-messages-tray-item {{#if this.active}}active{{/if}}" data-action="msg-select-conversation" data-id="{{this.id}}" title="{{this.name}}{{#if this.memberNames}} &mdash; {{this.memberNames}}{{/if}}" {{#if this.tint}}style="--bibliosoph-conv-tint: {{this.tint}};"{{/if}}>
                 {{#if this.avatar}}<img class="bibliosoph-messages-tray-avatar" src="{{this.avatar}}" alt="{{this.name}}" width="28" height="28">{{else}}<i class="{{this.icon}}"></i>{{/if}}
                 <span class="bibliosoph-messages-tray-item-name">{{this.name}}</span>
+                {{#if this.favorite}}<i class="fa-solid fa-heart bibliosoph-messages-tray-heart" title="Favorite — right-click Messages on the menubar to reach it"></i>{{/if}}
                 {{#if this.unread}}<span class="bibliosoph-messages-tray-item-badge">{{this.unread}}</span>{{/if}}
                 <span class="bibliosoph-messages-tray-popout" data-action="msg-popout" data-id="{{this.id}}" title="Pop out this conversation into a lightweight window"><i class="fa-solid fa-up-right-from-square"></i></span>
             </a>

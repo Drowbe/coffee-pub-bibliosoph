@@ -294,14 +294,10 @@
     font-style: italic;
 }
 
-#coffee-pub-bibliosoph-messages-lite-wrapper .bibliosoph-messages-composerow {
-    display: flex;
-    align-items: stretch;
-    gap: 6px;
-}
-
+/* No send button and no action bar: ENTER is the only way out of this box,
+   so it gets the full width. */
 #coffee-pub-bibliosoph-messages-lite-wrapper .bibliosoph-messages-input {
-    flex: 1;
+    width: 100%;
     min-width: 0;
     resize: none;
     background: var(--blacksmith-tool-field-background);
@@ -322,28 +318,6 @@
     outline: none;
     border-color: var(--blacksmith-tool-field-focus-border);
     box-shadow: 0 0 0 2px var(--blacksmith-tool-field-focus-ring);
-}
-
-#coffee-pub-bibliosoph-messages-lite-wrapper .bibliosoph-messages-lite-send {
-    flex: 0 0 auto;
-    width: 34px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--blacksmith-tool-surface-raised);
-    border: 1px solid var(--blacksmith-tool-border);
-    border-radius: var(--bibliosoph-msg-radius);
-    color: var(--bibliosoph-msg-text);
-    cursor: pointer;
-    padding: 0;
-    line-height: 1;
-}
-
-#coffee-pub-bibliosoph-messages-lite-wrapper .bibliosoph-messages-lite-send:hover {
-    background: var(--bibliosoph-msg-accent-soft);
-    border-color: var(--bibliosoph-msg-accent);
-    color: var(--bibliosoph-msg-accent);
-    box-shadow: none;
 }
 
 /* ----- DROP TARGET ------------------------------------------------ */

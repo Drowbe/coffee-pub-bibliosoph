@@ -9,11 +9,13 @@
 // when you are simply in one, mid-session, with a map to run.
 //
 // So: hover a conversation in the tray, click the popout icon, and the
-// thread moves into a Tool window (BlacksmithToolWindowBaseV2) that
-// follows the user's Light/Dark/Glass choice and sits over the canvas.
-// The full window closes behind it — exactly one messages surface is
-// ever live, which is what lets both share ConversationManager's
-// single-window live-update path untouched.
+// thread opens in a Tool window (BlacksmithToolWindowBaseV2) that follows
+// the user's Light/Dark/Glass choice and sits over the canvas.
+//
+// Popouts stack — one per conversation, each with its own remembered
+// position and theme — and coexist with the full window. Every open
+// surface registers with ConversationManager, which is how live updates
+// reach all of them.
 //
 // Everything the thread can DO — send, drop a document, paste an image,
 // right-click a message, edit, reply, escalate to Foundry chat — comes
@@ -22,7 +24,6 @@
 
 import { MODULE } from './const.js';
 import { ConversationManager } from './manager-conversations.js';
-import { MessagesWindow } from './window-messages.js';
 import { ThreadBehavior, toast } from './mixin-messages-thread.js';
 
 const APP_ID = `${MODULE.ID}-messages-lite`;
@@ -51,9 +52,22 @@ if (!BlacksmithToolWindowBaseV2) {
 }
 
 /**
+ * A conversation id turned into something safe to use as an element id.
+ * Foundry ids are alphanumeric, but a `virtual:<userId>` row carries a colon,
+ * which breaks any unescaped `querySelector` built from it.
+ */
+function appIdFor(conversationId) {
+    const slug = String(conversationId ?? 'none').replace(/[^a-zA-Z0-9]+/g, '-');
+    return `${APP_ID}-${slug}`;
+}
+
+/**
  * Open (or focus) the lite popout for one conversation.
- * Asking for a different conversation replaces the current popout rather
- * than stacking a second one.
+ *
+ * Popouts stack: one per conversation, each its own window. Asking for a
+ * conversation that already has a popout brings that one forward rather than
+ * building a second. Because each gets a distinct application id, each also
+ * remembers its own position and tool theme.
  */
 export async function openMessagesLite(options = {}) {
     if (!BlacksmithToolWindowBaseV2) {
@@ -61,34 +75,50 @@ export async function openMessagesLite(options = {}) {
         return null;
     }
 
-    const existing = MessagesLiteWindow.current;
-    if (existing?.rendered) {
-        const sameConversation = !options.conversationId
-            || options.conversationId === existing._activeConversationId;
-        if (sameConversation) return existing.render(true);
-        // Different conversation: retire the old popout without reopening the
-        // full window behind it, then fall through and build the new one.
-        existing._restoreFullOnClose = false;
-        await existing.close();
+    const conversationId = options.conversationId ?? null;
+    if (!conversationId) {
+        toast('No conversation', 'A popout needs a conversation to show.', 'fa-solid fa-comment-slash');
+        return null;
     }
 
-    // Exactly one messages surface at a time. Reaching the popout directly
-    // (registered window id, a macro) must retire the full window the same
-    // way the tray's popout icon does.
-    const full = MessagesWindow.current;
-    if (full?.rendered && !(full instanceof MessagesLiteWindow)) {
-        full._poppingOut = true;   // a hand-off: no close sound, no unread toast
-        await full.close();
-    }
+    const existing = MessagesLiteWindow.findFor(conversationId);
+    if (existing?.rendered) return existing.render(true);
 
-    const win = new MessagesLiteWindow(options);
+    const win = new MessagesLiteWindow({ ...options, id: appIdFor(conversationId) });
     return win.render(true);
+}
+
+/** Close every open popout. Used when the module is torn down. */
+export async function closeAllMessagesLite() {
+    for (const win of [...MessagesLiteWindow.instances]) {
+        if (win?.rendered) await win.close();
+    }
 }
 
 export class MessagesLiteWindow extends ThreadBehavior(BlacksmithToolWindowBaseV2 ?? Object) {
 
-    /** Singleton instance — only one popout exists at a time. */
-    static current = null;
+    /**
+     * Every live popout. A Set rather than a Map keyed by conversation, because
+     * a popout pinned to a virtual 1:1 changes its own conversation id the
+     * moment that conversation is created — a key would go stale underneath it.
+     */
+    static instances = new Set();
+
+    /**
+     * The open popout for a conversation, if there is one. Matches on the
+     * canonical id so a popout opened as `virtual:<userId>` is still found by
+     * the real conversation id once its first message created it.
+     */
+    static findFor(conversationId) {
+        const canonical = ConversationManager._canonicalFavoriteId(conversationId);
+        for (const win of this.instances) {
+            if (!win?.rendered) continue;
+            const id = win._activeConversationId;
+            if (id === conversationId) return win;
+            if (ConversationManager._canonicalFavoriteId(id) === canonical) return win;
+        }
+        return null;
+    }
 
     /** The popout is a reading-and-writing surface, not a reacting one. */
     static SUPPORTS_REACTIONS = false;
@@ -111,14 +141,20 @@ export class MessagesLiteWindow extends ThreadBehavior(BlacksmithToolWindowBaseV
         body: { template: 'modules/coffee-pub-blacksmith/templates/window-tool-template.hbs' }
     };
 
-    // Prefixed (msglite-*) so delegation never collides with the full window.
-    static ACTION_HANDLERS = {
-        'msglite-send': (_e, _btn, app) => app?._send()
-    };
+    /**
+     * ENTER always sends here, regardless of the shared ENTER-sends preference
+     * the full window writes. The popout has no send button and no action bar
+     * to put a toggle on, so honouring a disabled preference would leave a
+     * window you can type into but never send from.
+     */
+    get _enterSends() {
+        return true;
+    }
+
+    set _enterSends(_value) { /* not configurable from the popout */ }
 
     constructor(options = {}) {
         super(options);
-        MessagesLiteWindow.current = this;
         /**
          * The pinned conversation. Deliberately a plain field rather than a
          * `#private` one: the `title` getter below reads it, and Foundry may
@@ -129,12 +165,7 @@ export class MessagesLiteWindow extends ThreadBehavior(BlacksmithToolWindowBaseV
         this._tone = 'message';
         this._draft = '';
         this._editing = null;
-        this._restoreFullOnClose = true;
-        // ConversationManager reaches the open messages surface through
-        // MessagesWindow.current. While the popout is up, it IS that surface,
-        // which is what keeps live updates flowing with no change to the
-        // manager. Cleared again in close().
-        MessagesWindow.current = this;
+        MessagesLiteWindow.instances.add(this);
     }
 
     /**
@@ -167,6 +198,27 @@ export class MessagesLiteWindow extends ThreadBehavior(BlacksmithToolWindowBaseV
         if (entry) return this._conversationDisplayName(entry);
         const virtualUser = this._virtualUserId ? game.users.get(this._virtualUserId) : null;
         return virtualUser?.name ?? 'Messages';
+    }
+
+    /**
+     * A star in the compact title bar. Favouriting from here matters more than
+     * it does in the tray: the popout is exactly where you notice you are
+     * living in a conversation, and it is the surface a favorite reopens.
+     */
+    getToolHeaderActions() {
+        const id = this._activeConversationId;
+        if (!id) return [];
+        const isFavorite = ConversationManager.isFavorite(id);
+        return [{
+            id: 'favorite',
+            icon: isFavorite ? 'fa-solid fa-heart' : 'fa-regular fa-heart',
+            label: isFavorite ? 'Remove from favorites' : 'Add to favorites',
+            active: isFavorite,
+            onClick: () => {
+                ConversationManager.toggleFavorite(id);
+                return this.render(false);
+            }
+        }];
     }
 
     // ==============================================================
@@ -203,6 +255,9 @@ export class MessagesLiteWindow extends ThreadBehavior(BlacksmithToolWindowBaseV
 
     async _onRender(context, options) {
         await super._onRender?.(context, options);
+        // See the note in window-messages.js: the registry only keeps rendered
+        // windows, so registration belongs here rather than the constructor.
+        ConversationManager.registerWindow(this);
         this._attachThreadContextMenu();
         const root = this._getRoot();
         if (!root) return;
@@ -212,25 +267,18 @@ export class MessagesLiteWindow extends ThreadBehavior(BlacksmithToolWindowBaseV
     }
 
     async close(options) {
-        if (MessagesLiteWindow.current === this) MessagesLiteWindow.current = null;
-        if (MessagesWindow.current === this) MessagesWindow.current = null;
+        MessagesLiteWindow.instances.delete(this);
+        ConversationManager.unregisterWindow(this);
         this._clearTypingIndicators();
 
-        const restore = this._restoreFullOnClose !== false;
-        const conversationId = this._activeConversationId;
-        const result = await super.close(options);
-
-        // Closing the popout is how you get back to the full view. When the
-        // full window is what closed US (see openMessagesWindow), it is
-        // already on its way in and must not be reopened here.
-        if (restore) {
-            try {
-                const { openMessagesWindow } = await import('./window-messages.js');
-                await openMessagesWindow({ conversationId });
-            } catch (error) {
-                log('Could not restore the full Messages window', error, false, false);
-            }
+        // Closing a popout closes only that popout — nothing is summoned back.
+        // Unread only returns to the menubar once no messages surface is left,
+        // otherwise closing one of three popouts would badge you about a
+        // conversation you can still see.
+        if (!ConversationManager.getOpenWindows().length) {
+            ConversationManager.playUiSound('close');
+            ConversationManager.notifyUnread();
         }
-        return result;
+        return super.close(options);
     }
 }

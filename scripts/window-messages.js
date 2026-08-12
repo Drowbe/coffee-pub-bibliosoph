@@ -38,29 +38,16 @@ function resolveBase() {
     return Base;
 }
 
-/** Open (or focus) the singleton Messages window. */
+/**
+ * Open (or focus) the Messages window. Still a singleton — there is one
+ * workspace — but it now runs alongside any open popouts rather than
+ * dismissing them.
+ */
 export async function openMessagesWindow(options = {}) {
-    // Exactly one messages surface exists at a time: opening the full view
-    // dismisses a lite popout rather than running alongside it.
-    await closeMessagesLite({ restoreFull: false });
     const win = MessagesWindow.current ?? new MessagesWindow(options);
     if (options.conversationId) win._activeConversationId = options.conversationId;
     ConversationManager.clearUnreadNotification();
     return win.render(true);
-}
-
-/** Close the lite popout if one is open. Imported lazily to avoid a cycle. */
-async function closeMessagesLite({ restoreFull = true } = {}) {
-    try {
-        const { MessagesLiteWindow } = await import('./window-messages-lite.js');
-        const lite = MessagesLiteWindow.current;
-        if (!lite?.rendered) return false;
-        lite._restoreFullOnClose = restoreFull;
-        await lite.close();
-        return true;
-    } catch (_) {
-        return false;
-    }
 }
 
 export class MessagesWindow extends ThreadBehavior(resolveBase()) {
@@ -342,6 +329,7 @@ export class MessagesWindow extends ThreadBehavior(resolveBase()) {
                 tint: info.tint ?? '',
                 active: entry.id === this._activeConversationId,
                 unread: ConversationManager.getUnreadCount(entry),
+                favorite: ConversationManager.isFavorite(entry.id),
                 memberNames: (info.members ?? [])
                     .map((id) => game.users.get(id)?.name)
                     .filter(Boolean)
@@ -384,6 +372,7 @@ export class MessagesWindow extends ThreadBehavior(resolveBase()) {
                     tint: '',
                     active: `virtual:${user.id}` === this._activeConversationId,
                     unread: 0,
+                    favorite: ConversationManager.isFavorite(`virtual:${user.id}`),
                     memberNames: `Direct message with ${user.name}`
                 }),
             // GM see-all: 1:1s between other people ("Alice & Bob")
@@ -398,6 +387,10 @@ export class MessagesWindow extends ThreadBehavior(resolveBase()) {
 
     async _onRender(context, options) {
         await super._onRender?.(context, options);
+        // Registered on render rather than in the constructor: the registry
+        // sweeps anything not yet rendered, so a window added at construction
+        // time would be purged before it ever drew.
+        ConversationManager.registerWindow(this);
         this._attachThreadContextMenu();
         const root = this._getRoot();
         if (!root) return;
@@ -430,43 +423,38 @@ export class MessagesWindow extends ThreadBehavior(resolveBase()) {
 
     async close(options) {
         if (MessagesWindow.current === this) MessagesWindow.current = null;
-        // Popping out is a hand-off, not a departure: the lite window is about
-        // to take this conversation over, so neither the close sound nor the
-        // unread notification should fire.
-        if (!this._poppingOut) {
+        ConversationManager.unregisterWindow(this);
+        // Unread only returns to the menubar once nothing is left showing it:
+        // closing the workspace while popouts are still floating is not the
+        // moment to badge someone about a conversation they can still see.
+        if (!ConversationManager.getOpenWindows().length) {
             ConversationManager.playUiSound('close');
-            // Anything still unread goes back on the menubar
             ConversationManager.notifyUnread();
         }
         return super.close(options);
     }
 
     /**
-     * Hand a conversation to the lite popout and step aside. The popout is a
-     * dedicated single-conversation view, so the full window closes behind it
-     * and exactly one messages surface stays live.
+     * Float a conversation out into its own popout.
+     *
+     * The workspace deliberately stays open behind it. Popouts stack, and the
+     * tray is the only place to launch one from — closing the workspace on
+     * every pop-out would mean reopening it between each, which fights the
+     * whole point of being able to watch two conversations at once. Close it
+     * yourself when you want the screen back.
      */
     async _popOut(conversationId) {
         const id = conversationId ?? this._activeConversationId;
         if (!id) return;
-        let closed = false;
         try {
             const { openMessagesLite } = await import('./window-messages-lite.js');
-            this._poppingOut = true;
-            await this.close();
-            closed = true;
             await openMessagesLite({ conversationId: id });
         } catch (error) {
-            this._poppingOut = false;
             if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils?.postConsoleAndNotification) {
                 BlacksmithUtils.postConsoleAndNotification(
                     MODULE.NAME, 'MESSAGES | Popping out failed', error, false, false);
             }
-            toast('Could not pop out', 'Keeping the full window instead.', 'fa-solid fa-triangle-exclamation');
-            // Never strand the user with no messages window at all: if we had
-            // already stepped aside for a popout that then failed to appear,
-            // come back.
-            if (closed) await openMessagesWindow({ conversationId: id });
+            toast('Could not pop out', 'See the console for details.', 'fa-solid fa-triangle-exclamation');
         }
     }
 
@@ -730,18 +718,33 @@ ${rows}
 
     _showConversationContextMenu(event, conversationId) {
         const menu = this._getContextMenuApi();
-        const entry = game.journal.get(conversationId);
-        if (!menu || !entry) return;
-        const info = ConversationManager.getInfo(entry);
-        const canEdit = ConversationManager.canEdit(entry);
-        // 1:1s regenerate as virtual rows, so deleting one just clears history — GM only
-        const canDelete = info.kind !== 'party'
-            && (game.user.isGM || (info.kind !== 'direct' && info.createdBy === game.user.id));
-        if (!canEdit && !canDelete) return;
+        if (!menu || !conversationId) return;
 
-        const items = [];
+        // A virtual 1:1 row has no journal entry behind it yet. It can still be
+        // favorited — wanting quick access to someone you have not messaged
+        // yet is reasonable — so only the entry-backed actions are gated.
+        const entry = game.journal.get(conversationId) ?? null;
+        const info = entry ? ConversationManager.getInfo(entry) : {};
+        const canEdit = entry ? ConversationManager.canEdit(entry) : false;
+        // 1:1s regenerate as virtual rows, so deleting one just clears history — GM only
+        const canDelete = entry && info.kind !== 'party'
+            && (game.user.isGM || (info.kind !== 'direct' && info.createdBy === game.user.id));
+
+        // Favouriting is a personal shortcut rather than a permission, so it is
+        // always offered and the menu opens even where nothing else is allowed.
+        const isFavorite = ConversationManager.isFavorite(conversationId);
+        const items = [{
+            name: isFavorite ? 'Remove Favorite' : 'Add Favorite',
+            icon: isFavorite ? 'fa-solid fa-heart-crack' : 'fa-solid fa-heart',
+            description: isFavorite
+                ? 'Take it off the Messages menubar right-click menu.'
+                : 'Reach it from the Messages menubar with a right-click.',
+            callback: () => this._toggleFavorite(conversationId)
+        }];
+
+        const entryActions = [];
         if (canEdit) {
-            items.push({
+            entryActions.push({
                 name: 'Edit Conversation',
                 icon: 'fa-solid fa-pen-to-square',
                 description: info.kind === 'party'
@@ -751,14 +754,14 @@ ${rows}
             });
         }
         if (canDelete) {
-            if (items.length) items.push({ separator: true });
-            items.push({
+            entryActions.push({
                 name: 'Delete Conversation',
                 icon: 'fa-solid fa-trash',
                 description: 'Removes the conversation and its history for everyone.',
                 callback: () => ConversationManager.deleteConversation(entry)
             });
         }
+        if (entryActions.length) items.push({ separator: true }, ...entryActions);
 
         menu.show({
             id: 'bibliosoph-messages-context',
@@ -766,5 +769,18 @@ ${rows}
             y: event.clientY,
             zones: items
         });
+    }
+
+    /** Star or unstar a conversation, then repaint so the tray star follows. */
+    _toggleFavorite(conversationId) {
+        const nowFavorite = ConversationManager.toggleFavorite(conversationId);
+        const entry = game.journal.get(ConversationManager._canonicalFavoriteId(conversationId));
+        const name = entry ? ConversationManager.displayName(entry) : 'Conversation';
+        toast(
+            nowFavorite ? 'Added to favorites' : 'Removed from favorites',
+            nowFavorite ? `${name} — right-click Messages on the menubar to jump back` : name,
+            nowFavorite ? 'fa-solid fa-heart' : 'fa-solid fa-heart-crack'
+        );
+        this.render(false);
     }
 }

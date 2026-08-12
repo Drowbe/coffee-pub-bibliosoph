@@ -132,6 +132,32 @@ Hooks.once('ready', async () => {
                             const { openMessagesWindow } = await import('./window-messages.js');
                             return openMessagesWindow();
                         },
+                        // Right-click: jump straight into a favorited conversation
+                        // as a popout, without opening the full window first.
+                        // Evaluated on each right-click (Blacksmith supports a
+                        // function here), so the list is always current.
+                        contextMenuItems: () => {
+                            const favorites = ConversationManager.getFavoriteConversations();
+                            if (!favorites.length) {
+                                return [{
+                                    name: 'No favorites yet',
+                                    icon: 'fa-regular fa-heart',
+                                    description: 'Right-click a conversation in the Messages tray to add one.',
+                                    disabled: true
+                                }];
+                            }
+                            return favorites.map((fav) => ({
+                                name: fav.unread ? `${fav.name} (${fav.unread})` : fav.name,
+                                icon: fav.icon,
+                                description: fav.virtual
+                                    ? 'Start a direct message'
+                                    : (fav.unread ? `${fav.unread} unread` : 'Open as a popout'),
+                                onClick: async () => {
+                                    const { openMessagesLite } = await import('./window-messages-lite.js');
+                                    return openMessagesLite({ conversationId: fav.id });
+                                }
+                            }));
+                        },
                         zone: "left",
                         group: "general",
                         groupOrder: 999,
@@ -1552,6 +1578,10 @@ Hooks.once('disableModule', (moduleId) => {
         const blacksmith = game.modules.get('coffee-pub-blacksmith')?.api;
         blacksmith?.unregisterWindow?.('bibliosoph-messages');
         blacksmith?.unregisterWindow?.('bibliosoph-messages-lite');
+        // Popouts float free of the main window, so nothing else closes them.
+        import('./window-messages-lite.js')
+            .then((m) => m.closeAllMessagesLite?.())
+            .catch(() => { /* module never loaded — nothing to close */ });
         blacksmith?.unregisterMenubarTool?.('bibliosoph-messages');
     }
 });

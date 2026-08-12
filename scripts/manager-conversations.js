@@ -185,6 +185,160 @@ export class ConversationManager {
         } catch (_) { /* no-op */ }
     }
 
+    // ==============================================================
+    // ===== FAVORITES ==============================================
+    // ==============================================================
+    //
+    // A per-client shortlist of conversations, surfaced as a right-click
+    // menu on the Messages menubar tool so a chat you are living in is one
+    // gesture away without opening the full window first.
+    //
+    // Stored in localStorage alongside the other personal Messages
+    // preferences (mute, ENTER-sends, tray collapsed) rather than on the
+    // User document: same convention, no permissions, no document write per
+    // toggle. The trade is that favorites stay on this browser.
+    //
+    // An entry is either a conversation id or a `virtual:<userId>` row for a
+    // 1:1 that has not been created yet — favouriting someone you have never
+    // messaged is a reasonable thing to want.
+
+    static FAVORITES_KEY = 'bibliosoph-messages-favorites';
+
+    /** Raw favorite ids, in the order the user added them. */
+    static getFavorites() {
+        try {
+            const raw = JSON.parse(localStorage.getItem(this.FAVORITES_KEY) ?? '[]');
+            return Array.isArray(raw) ? raw.filter((id) => typeof id === 'string') : [];
+        } catch (_) {
+            return [];
+        }
+    }
+
+    static setFavorites(ids) {
+        try {
+            localStorage.setItem(this.FAVORITES_KEY, JSON.stringify([...new Set(ids)]));
+        } catch (_) { /* no-op */ }
+    }
+
+    static isFavorite(id) {
+        if (!id) return false;
+        const target = this._canonicalFavoriteId(id);
+        return this.getFavorites().some((stored) => this._favoriteMatches(stored, target));
+    }
+
+    /**
+     * Add or remove a favorite. Returns the new state.
+     * @returns {boolean} whether the conversation is a favorite afterwards
+     */
+    static toggleFavorite(id) {
+        if (!id) return false;
+        const target = this._canonicalFavoriteId(id);
+        const current = this.getFavorites();
+        const index = current.findIndex((stored) => this._favoriteMatches(stored, target));
+        if (index === -1) {
+            this.setFavorites([...current, target]);
+            return true;
+        }
+        current.splice(index, 1);
+        this.setFavorites(current);
+        return false;
+    }
+
+    /**
+     * Does a stored favorite refer to the same conversation as `target`
+     * (which is already canonical)?
+     *
+     * Storage is only rewritten when `getFavoriteConversations()` prunes, so a
+     * `virtual:<userId>` entry can outlive the moment its real conversation was
+     * created. Comparing raw ids alone would then miss the match — favouriting
+     * someone before messaging them and then messaging them would leave a
+     * favorite that could neither be recognised nor removed. The virtual
+     * branch is checked second so the common case stays a string compare.
+     */
+    static _favoriteMatches(stored, target) {
+        if (stored === target) return true;
+        return stored.startsWith('virtual:') && this._canonicalFavoriteId(stored) === target;
+    }
+
+    /**
+     * A virtual 1:1 becomes a real conversation the moment its first message
+     * is sent. Favouriting either form should mean the same thing, so both
+     * collapse onto the real entry once one exists.
+     */
+    static _canonicalFavoriteId(id) {
+        if (typeof id !== 'string' || !id.startsWith('virtual:')) return id;
+        const userId = id.slice('virtual:'.length);
+        return this.getDirectConversation(userId)?.id ?? id;
+    }
+
+    /**
+     * Favorites resolved for display, newest activity first, with anything
+     * that no longer resolves (deleted, or no longer visible to this user)
+     * pruned from storage as a side effect.
+     *
+     * @returns {Array<{id, name, icon, unread, virtual}>}
+     */
+    static getFavoriteConversations() {
+        const stored = this.getFavorites();
+        if (!stored.length) return [];
+
+        const gmSeesAll = game.user.isGM && getSetting('gmSeesAllConversations', true);
+        const resolved = [];
+        const surviving = [];
+
+        for (const id of stored) {
+            // A virtual row that has since become real follows the real entry.
+            const canonical = this._canonicalFavoriteId(id);
+
+            if (canonical.startsWith('virtual:')) {
+                const user = game.users.get(canonical.slice('virtual:'.length));
+                if (!user || user.id === game.user.id) continue;   // gone, or yourself
+                surviving.push(canonical);
+                resolved.push({
+                    id: canonical,
+                    name: user.name,
+                    icon: 'fa-solid fa-user',
+                    unread: 0,
+                    virtual: true,
+                    activity: 0
+                });
+                continue;
+            }
+
+            const entry = game.journal.get(canonical);
+            if (!this.isConversation(entry)) continue;
+            if (!this.isMember(entry) && !gmSeesAll) continue;     // no longer yours to see
+            surviving.push(canonical);
+            resolved.push({
+                id: canonical,
+                name: this.displayName(entry),
+                icon: this.getInfo(entry).icon ?? 'fa-solid fa-user-group',
+                unread: this.getUnreadCount(entry),
+                virtual: false,
+                activity: this.getLastActivity(entry)
+            });
+        }
+
+        // Prune only when something actually went away, so the common path
+        // does not write to storage on every right-click.
+        if (surviving.length !== stored.length || surviving.some((id, i) => id !== stored[i])) {
+            this.setFavorites(surviving);
+        }
+
+        resolved.sort((a, b) => b.activity - a.activity);
+        return resolved;
+    }
+
+    /** Viewer-facing name: a 1:1 shows the other person's name. */
+    static displayName(entry) {
+        const info = this.getInfo(entry);
+        if (info.kind === 'direct' && (info.members ?? []).includes(game.user.id)) {
+            const otherId = (info.members ?? []).find((id) => id !== game.user.id);
+            return game.users.get(otherId)?.name ?? info.name ?? entry?.name;
+        }
+        return info.name ?? entry?.name;
+    }
+
     /** Play one of the Messages UI sounds locally, honoring the mute toggle. */
     static playUiSound(kind) {
         if (this.soundsMuted()) return;
@@ -1063,9 +1217,9 @@ export class ConversationManager {
             if (!typerId || typerId === game.user.id) return;
             const entry = game.journal.get(conversationId);
             if (!this.isConversation(entry) || !this.isMember(entry)) return;
-            const win = await this._getOpenWindow();
-            if (!win || win.activeConversationId !== conversationId) return;
-            win.showTypingIndicator?.(typerId);
+            for (const win of this.getWindowsViewing(conversationId)) {
+                win.showTypingIndicator?.(typerId);
+            }
         });
         await sockets.register(SOCKET_UPDATE_CONVERSATION, async (data, senderUserId) => {
             if (!game.user.isGM || game.users.activeGM?.id !== game.user.id) return;
@@ -1123,12 +1277,14 @@ export class ConversationManager {
         // New conversation appears: if this user asked for it (GM relay), focus it
         Hooks.on('createJournalEntry', async (entry) => {
             if (!this.isConversation(entry)) return;
-            const win = await this._getOpenWindow();
-            if (!win) return;
-            if (this.getInfo(entry).createdBy === game.user.id) {
-                win._activeConversationId = entry.id;
+            const windows = this.getOpenWindows();
+            if (!windows.length) return;
+            const mine = this.getInfo(entry).createdBy === game.user.id;
+            for (const win of windows) {
+                // Popouts refuse the switch (they are pinned); the full window takes it.
+                if (mine) win._activeConversationId = entry.id;
+                win.render(false);
             }
-            win.render(false);
         });
 
         // Message edited (reactions) — silent refresh, no unread/notification
@@ -1154,11 +1310,15 @@ export class ConversationManager {
         const gmSeesAll = game.user.isGM && getSetting('gmSeesAllConversations', true);
         if (!this.isMember(entry) && !gmSeesAll) return;
 
-        const win = await this._getOpenWindow();
-        const viewingThis = win && win.activeConversationId === entry.id;
+        const windows = this.getOpenWindows();
+        const viewing = windows.filter((win) => win.activeConversationId === entry.id);
 
-        if (viewingThis) {
-            win.render(false);
+        // Everything open repaints either way: whoever is showing this
+        // conversation needs the new message, and everyone else needs their
+        // unread badges to move.
+        for (const win of windows) win.render(false);
+
+        if (viewing.length) {
             if (!isOwn) {
                 this.markRead(entry);
                 this.playUiSound('receive');
@@ -1166,8 +1326,7 @@ export class ConversationManager {
             return;
         }
 
-        // Window closed or focused elsewhere: refresh list and signal
-        this._refreshWindow();
+        // Nothing is showing this conversation: signal it
         if (isOwn) return;
 
         const senderUser = game.users.get(flags.sender);
@@ -1183,7 +1342,7 @@ export class ConversationManager {
         this.playUiSound('alert');
 
         // Auto Open: pop the window straight onto the conversation when closed
-        if (!win && getSetting('messageAutoOpen', false)) {
+        if (!windows.length && getSetting('messageAutoOpen', false)) {
             try {
                 const { openMessagesWindow } = await import('./window-messages.js');
                 openMessagesWindow({ conversationId: entry.id });
@@ -1301,20 +1460,51 @@ export class ConversationManager {
         dismissTimer = setTimeout(dismiss, 8000);
     }
 
-    /** Re-render the Messages window if it is open (list + thread). */
-    static async _refreshWindow() {
-        const win = await this._getOpenWindow();
-        win?.render(false);
+    // ==============================================================
+    // ===== OPEN WINDOW REGISTRY ===================================
+    // ==============================================================
+    //
+    // Several messages surfaces can be live at once: the full window plus any
+    // number of lite popouts, each pinned to its own conversation. They all
+    // register here so live updates reach every one of them.
+    //
+    // This replaced a single `MessagesWindow.current` lookup. That pointer
+    // still exists — the full window is genuinely a singleton and
+    // `openMessagesWindow` uses it to focus rather than duplicate — but it is
+    // no longer how incoming messages find their way to a window.
+
+    static _openWindows = new Set();
+
+    /** Called by a messages window as it opens. */
+    static registerWindow(win) {
+        if (win) this._openWindows.add(win);
     }
 
-    static async _getOpenWindow() {
-        try {
-            const { MessagesWindow } = await import('./window-messages.js');
-            const win = MessagesWindow.current;
-            return win?.rendered ? win : null;
-        } catch (_) {
-            return null;
+    /** Called by a messages window as it closes. */
+    static unregisterWindow(win) {
+        this._openWindows.delete(win);
+    }
+
+    /**
+     * Every live messages surface. Closed windows are swept lazily rather than
+     * trusted to always unregister — a window that failed to close cleanly
+     * should not keep receiving renders forever.
+     */
+    static getOpenWindows() {
+        for (const win of this._openWindows) {
+            if (!win?.rendered) this._openWindows.delete(win);
         }
+        return [...this._openWindows];
+    }
+
+    /** Windows currently showing a given conversation (may be more than one). */
+    static getWindowsViewing(conversationId) {
+        return this.getOpenWindows().filter((win) => win.activeConversationId === conversationId);
+    }
+
+    /** Re-render every open messages surface (list + thread). */
+    static _refreshWindow() {
+        for (const win of this.getOpenWindows()) win.render(false);
     }
 
     // ==============================================================

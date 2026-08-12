@@ -50,12 +50,7 @@
         {{#if editing}}
         <div class="bibliosoph-messages-editing"><i class="fa-solid fa-pen"></i> Editing &mdash; ESC to cancel</div>
         {{/if}}
-        <div class="bibliosoph-messages-composerow">
-            <textarea rows="2" class="bibliosoph-messages-input" placeholder="Write a message…">{{draft}}</textarea>
-            <button type="button" class="bibliosoph-messages-lite-send" data-action="msglite-send" title="Send message">
-                <i class="fa-solid {{#if editing}}fa-pen{{else}}fa-paper-plane{{/if}}"></i>
-            </button>
-        </div>
+        <textarea rows="2" class="bibliosoph-messages-input" placeholder="Write a message…">{{draft}}</textarea>
     </div>
     {{/if}}
 

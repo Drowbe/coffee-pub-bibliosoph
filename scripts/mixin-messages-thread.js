@@ -132,14 +132,13 @@ export function ThreadBehavior(Base) {
             return typeof id === 'string' && id.startsWith('virtual:') ? id.slice('virtual:'.length) : null;
         }
 
-        /** Viewer-facing name: a 1:1 shows the other person's name. */
+        /**
+         * Viewer-facing name: a 1:1 shows the other person's name. The rule
+         * lives on ConversationManager because the favorites menu needs it
+         * with no window open.
+         */
         _conversationDisplayName(entry) {
-            const info = ConversationManager.getInfo(entry);
-            if (info.kind === 'direct' && (info.members ?? []).includes(game.user.id)) {
-                const otherId = (info.members ?? []).find((id) => id !== game.user.id);
-                return game.users.get(otherId)?.name ?? info.name ?? entry.name;
-            }
-            return info.name ?? entry.name;
+            return ConversationManager.displayName(entry);
         }
 
         // ==========================================================
