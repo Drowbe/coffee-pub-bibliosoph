@@ -1,7 +1,7 @@
 {
   "id": "coffee-pub-bibliosoph",
   "title": "Coffee Pub Bibliosoph",
-  "description": "Rolltable and Announcement goodness.",
+  "description": "In-game player messaging with journal-backed conversations, plus authored injuries, quick encounter building, inspiration, and critical hit announcements. Requires Coffee Pub Blacksmith.",
   "version": "13.6.0",
 
   "manifest": "https://github.com/Drowbe/coffee-pub-bibliosoph/releases/latest/download/module.json",
