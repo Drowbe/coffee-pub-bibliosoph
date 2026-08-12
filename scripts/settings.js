@@ -321,6 +321,16 @@ export const registerSettings = () => {
 			scope: 'user',
 			default: true,
 		});
+		// -- Which window a message alert opens when clicked --
+		game.settings.register(MODULE.ID, 'messageAlertOpensPopout', {
+			name: MODULE.ID + '.messageAlertOpensPopout-Label',
+			hint: MODULE.ID + '.messageAlertOpensPopout-Hint',
+			type: Boolean,
+			config: true,
+			requiresReload: false,
+			scope: 'user',
+			default: true,
+		});
 		// -- On-screen splash for incoming party/group messages --
 		game.settings.register(MODULE.ID, 'messageSplashGroupEnabled', {
 			name: MODULE.ID + '.messageSplashGroupEnabled-Label',

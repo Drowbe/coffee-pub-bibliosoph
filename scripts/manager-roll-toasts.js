@@ -60,7 +60,14 @@ const TOAST_CHANNELS = [
     { name: 'crit', label: 'Critical Hits', description: 'Natural 20 announcements' },
     { name: 'fumble', label: 'Fumbles', description: 'Natural 1 announcements' },
     { name: 'injury', label: 'Injuries', description: 'Announcements when a hit crosses the injury threshold' },
-    { name: 'social', label: 'Table Breaks', description: 'Beverage Break, Bio Break, Insult and Praise' }
+    { name: 'social', label: 'Table Breaks', description: 'Beverage Break, Bio Break, Insult and Praise' },
+    // Group traffic only. A channel's ONLY effect is that a user listed in
+    // Blacksmith's toastExcludedUsers -- a camera account, a shared table
+    // display -- sees the toast anyway unless the GM unticks it. That is a
+    // reasonable offer for the party channel and an unreasonable one for a
+    // private message, so direct-message alerts deliberately carry NO
+    // channel and can never reach a shared screen.
+    { name: 'messages-group', label: 'Group Messages', description: 'Alerts for party and group conversation messages (never direct messages)' }
 ];
 
 /**

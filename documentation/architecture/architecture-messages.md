@@ -61,7 +61,15 @@ An entry is either a conversation id or a `virtual:<userId>` row for a 1:1 that 
 `getFavoriteConversations()` resolves the list for display — name, icon, unread count, virtual flag — drops anything no longer visible to this user, sorts by most recent activity, and prunes storage only when something actually went away.
 
 **Notification**
-`notifyUnread()` and `clearUnreadNotification()` drive a Blacksmith notification, tracked by id so it can be replaced rather than stacked.
+`notifyUnread()` and `clearUnreadNotification()` drive a Blacksmith menubar notification, tracked by id so it can be replaced rather than stacked. `_notifyIncoming()` adds a per-conversation menubar notification with its own burst coalescing (that API has no replace-in-place, so the counter is kept by hand).
+
+`_showSplash()` is the on-screen alert, and despite the name it is a Blacksmith **toast** — it was a hand-built DOM overlay until 13.6.0. Sender portrait as the image with an icon fallback, `stackKey` per conversation so a burst replaces rather than stacks, and eight seconds.
+
+Three signals therefore exist for one arriving message, deliberately: the transient toast, the per-conversation menubar notification, and the ambient unread counter.
+
+**Toast channels.** A channel's only effect is on exclusion — a user in `toastExcludedUsers` sees a channelled toast unless the GM unticks that channel, and a toast with no channel never reaches them at all. So group and party alerts carry `messages-group` (a GM may reasonably want them on a table display) and **direct messages carry no channel by design**. Channels are declared in `TOAST_CHANNELS` in `manager-roll-toasts.js`, which is the module-wide registry despite the file name.
+
+`_openConversationFromAlert(conversationId)` is where every "take me to this conversation" affordance lands — the toast and the menubar notification both — honoring the `messageAlertOpensPopout` user setting (default on) to choose between the popout and the full window.
 
 **Sound**
 `SOUND_SETTINGS`, `soundsMuted()`, `setSoundsMuted(muted)`, `playUiSound(kind)`. Mute state is a user setting; `updateSetting` is watched so a change applies live.

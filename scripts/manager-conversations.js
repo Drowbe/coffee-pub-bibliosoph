@@ -1397,13 +1397,9 @@ export class ConversationManager {
             MODULE.ID,
             {
                 pulse: mentioned,
-                onClick: async () => {
-                    ConversationManager._incomingNotifications.delete(conversationId);
-                    try {
-                        const { openMessagesWindow } = await import('./window-messages.js');
-                        openMessagesWindow({ conversationId });
-                    } catch (_) { /* no-op */ }
-                },
+                // Same destination as a clicked alert: both mean "take me to
+                // this conversation", so both honour the same user setting.
+                onClick: () => ConversationManager._openConversationFromAlert(conversationId),
                 onDismiss: () => {
                     ConversationManager._incomingNotifications.delete(conversationId);
                 }
@@ -1413,51 +1409,66 @@ export class ConversationManager {
     }
 
     /** On-screen splash for an incoming direct message; click opens the conversation. */
+    /**
+     * On-screen alert for an incoming message; clicking it opens the
+     * conversation.
+     *
+     * This was 46 lines of hand-built DOM plus 60 lines of CSS — an avatar, a
+     * title, a subtitle, a fade class and a manual 8s timer — reimplementing
+     * what Blacksmith's toast already does. Riding the toast instead brings
+     * stacking, the shared look (which follows the user's theme, as the
+     * hardcoded splash never could), the excluded-user rules, and burst
+     * handling via stackKey: a second message from the same conversation
+     * replaces the first alert in place rather than piling up.
+     */
     static _showSplash(entry, senderUser, mentioned = false) {
-        const splashId = 'bibliosoph-message-splash';
-        document.getElementById(splashId)?.remove();
+        const toast = getBlacksmith()?.toast;
+        if (typeof toast?.show !== 'function') return;
 
-        const splash = document.createElement('div');
-        splash.id = splashId;
-
-        const avatar = document.createElement('img');
-        avatar.src = senderUser?.avatar || 'icons/svg/mystery-man.svg';
-        avatar.alt = '';
-        splash.appendChild(avatar);
-
-        const textBlock = document.createElement('div');
-        textBlock.className = 'bibliosoph-splash-text';
-        const title = document.createElement('div');
-        title.className = 'bibliosoph-splash-title';
-        title.textContent = mentioned
-            ? `${senderUser?.name ?? 'Someone'} mentioned you`
-            : `Message from ${senderUser?.name ?? 'Someone'}`;
-        const sub = document.createElement('div');
-        sub.className = 'bibliosoph-splash-sub';
         const info = this.getInfo(entry);
-        sub.textContent = info.kind === 'direct'
-            ? 'Click to open the conversation'
-            : `in ${info.name ?? entry.name} — click to open`;
-        textBlock.append(title, sub);
-        splash.appendChild(textBlock);
+        const isDirect = info.kind === 'direct';
+        const senderName = senderUser?.name ?? 'Someone';
 
-        let dismissTimer = null;
-        const dismiss = () => {
-            clearTimeout(dismissTimer);
-            splash.classList.remove('visible');
-            setTimeout(() => splash.remove(), 400);
+        const payload = {
+            title: mentioned ? `${senderName} mentioned you` : `Message from ${senderName}`,
+            subtitle: isDirect
+                ? 'Click to open the conversation'
+                : `in ${info.name ?? entry.name} — click to open`,
+            duration: 8,
+            moduleId: MODULE.ID,
+            // One alert per conversation: a burst replaces rather than stacks.
+            stackKey: `${MODULE.ID}-message-${entry.id}`,
+            onClick: () => this._openConversationFromAlert(entry.id)
         };
-        splash.addEventListener('click', async () => {
-            dismiss();
-            try {
-                const { openMessagesWindow } = await import('./window-messages.js');
-                openMessagesWindow({ conversationId: entry.id });
-            } catch (_) { /* no-op */ }
-        });
 
-        document.body.appendChild(splash);
-        requestAnimationFrame(() => splash.classList.add('visible'));
-        dismissTimer = setTimeout(dismiss, 8000);
+        // The sender's portrait, with an icon fallback (image wins over icon).
+        if (senderUser?.avatar) payload.image = senderUser.avatar;
+        else payload.icon = mentioned ? 'fa-solid fa-at' : 'fa-solid fa-envelope';
+
+        // Only group traffic is channelled — see TOAST_CHANNELS in
+        // manager-roll-toasts.js for why a direct message never is.
+        if (!isDirect) payload.channel = 'messages-group';
+
+        toast.show(payload);
+    }
+
+    /**
+     * Where a clicked alert lands. The popout is the default because an alert
+     * is an invitation to glance at one conversation, not to open a workspace
+     * — but the full window is a user setting away.
+     */
+    static async _openConversationFromAlert(conversationId) {
+        this._incomingNotifications.delete(conversationId);
+        try {
+            if (getSetting('messageAlertOpensPopout', true)) {
+                const { openMessagesLite } = await import('./window-messages-lite.js');
+                return openMessagesLite({ conversationId });
+            }
+            const { openMessagesWindow } = await import('./window-messages.js');
+            return openMessagesWindow({ conversationId });
+        } catch (_) {
+            /* window module unavailable — the alert simply goes away */
+        }
     }
 
     // ==============================================================

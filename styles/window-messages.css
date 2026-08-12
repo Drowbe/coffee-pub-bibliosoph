@@ -826,54 +826,6 @@
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
 }
 
-/* ----- DIRECT MESSAGE SPLASH (document-level overlay) -------------- */
-
-#bibliosoph-message-splash {
-    position: fixed;
-    top: 18%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-12px);
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 18px;
-    background: rgba(20, 20, 20, 0.95);
-    border: 1px solid #ac9f81;
-    border-radius: 6px;
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6);
-    cursor: pointer;
-    opacity: 0;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    pointer-events: auto;
-}
-
-#bibliosoph-message-splash.visible {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-}
-
-#bibliosoph-message-splash img {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    border: 1px solid #ac9f81;
-    object-fit: cover;
-    object-position: top;
-}
-
-#bibliosoph-message-splash .bibliosoph-splash-title {
-    color: #ac9f81;
-    font-family: "Signika", sans-serif;
-    font-size: 1.15em;
-    font-weight: bold;
-}
-
-#bibliosoph-message-splash .bibliosoph-splash-sub {
-    color: rgba(224, 224, 224, 0.6);
-    font-size: 0.85em;
-}
-
 /* ----- ACTION BAR TWEAKS ------------------------------------------ */
 
 /* Blacksmith's primary button is 300px wide by default — size to content here */
