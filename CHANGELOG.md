@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [13.6.0]
 
+### NOTE: Requires Blacksmith 13.17.0 or newer.
+- The popout needs `BlacksmithToolWindowBaseV2` (13.12.0) and the per-instance `ACTION_HANDLERS` argument (13.12.3), toast channels need `registerChannel` (13.15.1), and the favorites menu needs right-click `contextMenuItems` on a menubar tool (13.17.0). The declared floor was 13.12.3, under which favorites would have silently done nothing on right-click; it is now 13.17.0.
+
 ### Added
 
 - **A conversation can be popped out into a lightweight window.** The Messages window is a workspace — a tray of every conversation, a member picker, tone stamps, reactions, export, purge. That is the right shape when you are *managing* conversations and the wrong shape when you are simply *in* one, mid-session, with a map to run. Hovering a conversation in the tray now reveals a popout icon on its right edge; clicking it opens that single thread in a Tool window (`BlacksmithToolWindowBaseV2`) that floats over the canvas and follows the user's Light / Dark / Glass choice. Popouts **stack** — one per conversation, so you can watch the party channel and a 1:1 side by side — and they coexist with the full window rather than replacing it. Each remembers its own position and theme. Closing one closes only that one; nothing is ever summoned back at you.
@@ -15,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Conversations can be favorited, and favorites live on the menubar.** Right-click a conversation in the Messages tray — or click the star in a popout's title bar — and it joins a shortlist. Right-clicking the **Messages** menubar tool then lists that shortlist, and picking one opens it straight as a popout without going through the full window first. Favorited rows carry a star in the tray. Unread counts ride along in the menu (`Alicia (3)`), and the list is rebuilt on every right-click, so it is never stale.
 - **Several conversations can be open at once.** The messages layer no longer assumes a single window. `ConversationManager` keeps a registry of every live surface — the full window plus any number of popouts — and incoming messages, typing indicators, renames and deletions reach all of them. Unread only returns to the menubar once the last one closes, so shutting one popout does not badge you about a conversation still visible in another.
+- **Favorites follow the player, not the browser.** They are held in a `scope: 'user'` setting rather than `localStorage`, so a player who plays from a second machine keeps their list. Anything already saved locally is migrated once at startup and the old key cleared. The other personal Messages preferences (mute, ENTER-sends, tray collapsed) stay client-scoped, because those describe a screen rather than a person.
 - **A favorite survives the conversation being created.** You can favorite a player you have never messaged — the tray shows a row for them before any conversation exists — and the favorite follows that row when it becomes a real conversation on first send. Favorites that stop resolving (deleted, or a conversation you were removed from) are dropped from the list as it is built. Favorites are stored per browser, alongside the other personal Messages preferences (mute, ENTER-sends, tray collapsed).
 
 ### Changed

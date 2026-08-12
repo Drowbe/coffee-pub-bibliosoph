@@ -130,9 +130,9 @@ export class MessagesLiteWindow extends ThreadBehavior(BlacksmithToolWindowBaseV
             classes: ['bibliosoph-messages-lite'],
             position: { width: 380, height: 520 },
             window: { title: 'Messages', resizable: true, minimizable: true },
-            // Popping out of a dark window into a light one is jarring, so the
-            // popout starts dark. The user's own choice is remembered after that.
-            toolTheme: 'dark',
+            // Light is the Tool window house default; the user's own choice is
+            // remembered per conversation after the first change.
+            toolTheme: 'light',
             windowSizeConstraints: { minWidth: 280, minHeight: 260 }
         }
     );
@@ -214,8 +214,8 @@ export class MessagesLiteWindow extends ThreadBehavior(BlacksmithToolWindowBaseV
             icon: isFavorite ? 'fa-solid fa-heart' : 'fa-regular fa-heart',
             label: isFavorite ? 'Remove from favorites' : 'Add to favorites',
             active: isFavorite,
-            onClick: () => {
-                ConversationManager.toggleFavorite(id);
+            onClick: async () => {
+                await ConversationManager.toggleFavorite(id);
                 return this.render(false);
             }
         }];

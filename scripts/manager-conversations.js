@@ -82,6 +82,7 @@ export class ConversationManager {
         this._registerDocumentHooks();
         this._registerSidebarHiding();
         this._applySidebarHidingStyle();
+        this._migrateLegacyFavorites();
         // Before any awaited setup: socket waits can stall and must never
         // delay or swallow the login unread notification.
         this.notifyUnread();
@@ -189,34 +190,70 @@ export class ConversationManager {
     // ===== FAVORITES ==============================================
     // ==============================================================
     //
-    // A per-client shortlist of conversations, surfaced as a right-click
+    // A per-user shortlist of conversations, surfaced as a right-click
     // menu on the Messages menubar tool so a chat you are living in is one
     // gesture away without opening the full window first.
     //
-    // Stored in localStorage alongside the other personal Messages
-    // preferences (mute, ENTER-sends, tray collapsed) rather than on the
-    // User document: same convention, no permissions, no document write per
-    // toggle. The trade is that favorites stay on this browser.
+    // Held in a `scope: 'user'` setting rather than localStorage: a favorite
+    // is something a player chose, and it should follow them to another
+    // browser or machine. The other personal Messages preferences (mute,
+    // ENTER-sends, tray collapsed) stay client-scoped because they describe
+    // this screen rather than this person.
     //
     // An entry is either a conversation id or a `virtual:<userId>` row for a
-    // 1:1 that has not been created yet — favouriting someone you have never
+    // 1:1 that has not been created yet — favoriting someone you have never
     // messaged is a reasonable thing to want.
 
-    static FAVORITES_KEY = 'bibliosoph-messages-favorites';
+    /** localStorage key the list used to live under, kept only for migration. */
+    static FAVORITES_LEGACY_KEY = 'bibliosoph-messages-favorites';
 
-    /** Raw favorite ids, in the order the user added them. */
+    /** Raw favorite ids, in the order the user added them. Read is synchronous. */
     static getFavorites() {
         try {
-            const raw = JSON.parse(localStorage.getItem(this.FAVORITES_KEY) ?? '[]');
+            const raw = game.settings.get(MODULE.ID, 'messageFavorites');
             return Array.isArray(raw) ? raw.filter((id) => typeof id === 'string') : [];
         } catch (_) {
             return [];
         }
     }
 
-    static setFavorites(ids) {
+    /**
+     * Writes go to the server, so this is async — unlike the read. Callers
+     * that only need the list updated eventually (the prune inside
+     * `getFavoriteConversations`, which runs from a synchronous menu builder)
+     * may safely leave the promise unawaited.
+     */
+    static async setFavorites(ids) {
+        const unique = [...new Set(ids)];
         try {
-            localStorage.setItem(this.FAVORITES_KEY, JSON.stringify([...new Set(ids)]));
+            if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils?.setSettingSafely) {
+                await BlacksmithUtils.setSettingSafely(MODULE.ID, 'messageFavorites', unique);
+            } else {
+                await game.settings.set(MODULE.ID, 'messageFavorites', unique);
+            }
+        } catch (_) { /* setting unavailable — leave as-is */ }
+    }
+
+    /**
+     * One-time move of any favorites left in localStorage by the build that
+     * stored them there. Runs at initialize; clears the old key so it can
+     * never fight the setting afterwards.
+     */
+    static async _migrateLegacyFavorites() {
+        let legacy = [];
+        try {
+            const raw = localStorage.getItem(this.FAVORITES_LEGACY_KEY);
+            if (!raw) return;
+            legacy = JSON.parse(raw);
+        } catch (_) {
+            return;
+        }
+        if (!Array.isArray(legacy) || !legacy.length) return;
+        // Anything already in the setting wins; the legacy list only fills gaps.
+        const merged = [...new Set([...this.getFavorites(), ...legacy.filter((id) => typeof id === 'string')])];
+        await this.setFavorites(merged);
+        try {
+            localStorage.removeItem(this.FAVORITES_LEGACY_KEY);
         } catch (_) { /* no-op */ }
     }
 
@@ -230,17 +267,17 @@ export class ConversationManager {
      * Add or remove a favorite. Returns the new state.
      * @returns {boolean} whether the conversation is a favorite afterwards
      */
-    static toggleFavorite(id) {
+    static async toggleFavorite(id) {
         if (!id) return false;
         const target = this._canonicalFavoriteId(id);
         const current = this.getFavorites();
         const index = current.findIndex((stored) => this._favoriteMatches(stored, target));
         if (index === -1) {
-            this.setFavorites([...current, target]);
+            await this.setFavorites([...current, target]);
             return true;
         }
         current.splice(index, 1);
-        this.setFavorites(current);
+        await this.setFavorites(current);
         return false;
     }
 
@@ -250,7 +287,7 @@ export class ConversationManager {
      *
      * Storage is only rewritten when `getFavoriteConversations()` prunes, so a
      * `virtual:<userId>` entry can outlive the moment its real conversation was
-     * created. Comparing raw ids alone would then miss the match — favouriting
+     * created. Comparing raw ids alone would then miss the match — favoriting
      * someone before messaging them and then messaging them would leave a
      * favorite that could neither be recognised nor removed. The virtual
      * branch is checked second so the common case stays a string compare.
@@ -320,7 +357,9 @@ export class ConversationManager {
         }
 
         // Prune only when something actually went away, so the common path
-        // does not write to storage on every right-click.
+        // does not write on every right-click. Deliberately not awaited: this
+        // runs from the menubar's synchronous menu builder, and the list it
+        // returns is already correct whether or not the write has landed.
         if (surviving.length !== stored.length || surviving.some((id, i) => id !== stored[i])) {
             this.setFavorites(surviving);
         }
@@ -1346,16 +1385,18 @@ export class ConversationManager {
             try {
                 const { openMessagesWindow } = await import('./window-messages.js');
                 openMessagesWindow({ conversationId: entry.id });
-                return; // window is opening on it — no splash needed
-            } catch (_) { /* fall through to splash */ }
+                return; // window is opening on it — no alert needed
+            } catch (_) { /* fall through to the alert */ }
         }
 
-        // On-screen splash so messages can't be missed (per-kind user settings;
-        // being @mentioned always splashes — it's addressed to you personally)
+        // On-screen alert so messages can't be missed (per-kind user settings;
+        // being @mentioned always alerts — it's addressed to you personally)
         const kind = this.getInfo(entry).kind;
-        const splashSetting = kind === 'direct' ? 'messageSplashEnabled' : 'messageSplashGroupEnabled';
-        if (isMentioned || getSetting(splashSetting, true)) {
-            this._showSplash(entry, senderUser, isMentioned);
+        // NB: the setting KEYS still say 'splash'. Renaming them would silently
+        // reset every player's preference, so only the labels were updated.
+        const alertSetting = kind === 'direct' ? 'messageSplashEnabled' : 'messageSplashGroupEnabled';
+        if (isMentioned || getSetting(alertSetting, true)) {
+            this._showMessageAlert(entry, senderUser, isMentioned);
         }
     }
 
@@ -1408,7 +1449,6 @@ export class ConversationManager {
         if (id) this._incomingNotifications.set(conversationId, { id, count: 1, mentioned });
     }
 
-    /** On-screen splash for an incoming direct message; click opens the conversation. */
     /**
      * On-screen alert for an incoming message; clicking it opens the
      * conversation.
@@ -1417,11 +1457,11 @@ export class ConversationManager {
      * title, a subtitle, a fade class and a manual 8s timer — reimplementing
      * what Blacksmith's toast already does. Riding the toast instead brings
      * stacking, the shared look (which follows the user's theme, as the
-     * hardcoded splash never could), the excluded-user rules, and burst
+     * hardcoded overlay never could), the excluded-user rules, and burst
      * handling via stackKey: a second message from the same conversation
      * replaces the first alert in place rather than piling up.
      */
-    static _showSplash(entry, senderUser, mentioned = false) {
+    static _showMessageAlert(entry, senderUser, mentioned = false) {
         const toast = getBlacksmith()?.toast;
         if (typeof toast?.show !== 'function') return;
 

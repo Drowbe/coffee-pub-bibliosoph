@@ -34,7 +34,7 @@ Sockets are used for **one thing only**: relaying a create or update request to 
 
 These are dispatch-targeted. **Payloads are not private** — privacy comes from document permissions on the journal entry, not from the socket.
 
-Requires Blacksmith 13.8.5 or newer for targeted socket emit.
+Requires Blacksmith 13.8.5 or newer for targeted socket emit; the module as a whole now requires **13.17.0**, which is the release that added right-click `contextMenuItems` on a menubar tool — without it the favorites menu silently does nothing.
 
 ---
 
@@ -54,16 +54,16 @@ A static class, initialized from the `ready` block in `bibliosoph.js` when `mess
 **Favorites**
 `FAVORITES_KEY`, `getFavorites()`, `setFavorites(ids)`, `isFavorite(id)`, `toggleFavorite(id)`, `getFavoriteConversations()`, and the two helpers that make them correct: `_canonicalFavoriteId(id)` and `_favoriteMatches(stored, target)`.
 
-A per-client shortlist held in `localStorage`, matching how mute, ENTER-sends and tray-collapse are already stored — no permissions, no document write per toggle, at the cost of not following the user to another browser.
+A per-user shortlist held in a `scope: 'user'` setting, so it follows the player to another browser or machine. Reads are synchronous (`game.settings.get`); **writes are not**, so `toggleFavorite` is async and callers await it. `getFavoriteConversations()` is the exception: it runs from the menubar's synchronous menu builder and deliberately leaves its prune write unawaited, since the list it returns is already correct either way. `_migrateLegacyFavorites()` moves anything left behind by the build that stored favorites in `localStorage` and clears the old key.
 
-An entry is either a conversation id or a `virtual:<userId>` row for a 1:1 that does not exist yet. Those two forms name the same thing once the conversation is created, which is why comparisons canonicalise rather than string-match: storage is only rewritten when `getFavoriteConversations()` prunes, so a `virtual:` entry outlives the moment its real conversation appeared. Without `_favoriteMatches`, favouriting a player and then messaging them left a favorite that could be neither recognised nor removed.
+An entry is either a conversation id or a `virtual:<userId>` row for a 1:1 that does not exist yet. Those two forms name the same thing once the conversation is created, which is why comparisons canonicalise rather than string-match: storage is only rewritten when `getFavoriteConversations()` prunes, so a `virtual:` entry outlives the moment its real conversation appeared. Without `_favoriteMatches`, favoriting a player and then messaging them left a favorite that could be neither recognised nor removed.
 
 `getFavoriteConversations()` resolves the list for display — name, icon, unread count, virtual flag — drops anything no longer visible to this user, sorts by most recent activity, and prunes storage only when something actually went away.
 
 **Notification**
 `notifyUnread()` and `clearUnreadNotification()` drive a Blacksmith menubar notification, tracked by id so it can be replaced rather than stacked. `_notifyIncoming()` adds a per-conversation menubar notification with its own burst coalescing (that API has no replace-in-place, so the counter is kept by hand).
 
-`_showSplash()` is the on-screen alert, and despite the name it is a Blacksmith **toast** — it was a hand-built DOM overlay until 13.6.0. Sender portrait as the image with an icon fallback, `stackKey` per conversation so a burst replaces rather than stacks, and eight seconds.
+`_showMessageAlert()` is the on-screen alert, a Blacksmith **toast** — it was a hand-built DOM overlay until 13.6.0. Sender portrait as the image with an icon fallback, `stackKey` per conversation so a burst replaces rather than stacks, and eight seconds.
 
 Three signals therefore exist for one arriving message, deliberately: the transient toast, the per-conversation menubar notification, and the ambient unread counter.
 
@@ -99,7 +99,7 @@ A second window shows one conversation and nothing else: `window-messages-lite.j
 
 Reached by the popout icon revealed on hover over a tray row, and registered as a Blacksmith window under `bibliosoph-messages-lite` so it can also be opened directly with a conversation id.
 
-**Popouts stack, and coexist with the full window.** One popout per conversation; opening a conversation that already has one focuses it rather than building a second. Each instance takes a distinct application id (`<module>-messages-lite-<slugged conversation id>`), which both satisfies ApplicationV2's unique-id requirement and gives every conversation its own remembered position and tool theme. `MessagesLiteWindow.instances` is a `Set` rather than a Map keyed by conversation, because a popout pinned to a virtual 1:1 rewrites its own conversation id the moment that conversation is created — a key would go stale underneath it. `findFor()` matches on the canonical id so the popout is still found afterwards.
+**Popouts stack, and coexist with the full window.** One popout per conversation; opening a conversation that already has one focuses it rather than building a second. Each instance takes a distinct application id (`<module>-messages-lite-<slugged conversation id>`), which both satisfies ApplicationV2's unique-id requirement and gives every conversation its own remembered position and tool theme. It opens Light, the Tool window house default, and remembers whatever the user picks after that. `MessagesLiteWindow.instances` is a `Set` rather than a Map keyed by conversation, because a popout pinned to a virtual 1:1 rewrites its own conversation id the moment that conversation is created — a key would go stale underneath it. `findFor()` matches on the canonical id so the popout is still found afterwards.
 
 Nothing closes anything else: popping out leaves the workspace open (the tray is the only place to launch a popout from, so closing it on every pop-out would mean reopening it between each), and closing a popout closes only that popout.
 

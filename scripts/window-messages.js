@@ -771,9 +771,9 @@ ${rows}
         });
     }
 
-    /** Star or unstar a conversation, then repaint so the tray star follows. */
-    _toggleFavorite(conversationId) {
-        const nowFavorite = ConversationManager.toggleFavorite(conversationId);
+    /** Heart or unheart a conversation, then repaint so the tray follows. */
+    async _toggleFavorite(conversationId) {
+        const nowFavorite = await ConversationManager.toggleFavorite(conversationId);
         const entry = game.journal.get(ConversationManager._canonicalFavoriteId(conversationId));
         const name = entry ? ConversationManager.displayName(entry) : 'Conversation';
         toast(

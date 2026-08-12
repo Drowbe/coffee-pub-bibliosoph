@@ -311,7 +311,7 @@ export const registerSettings = () => {
 			scope: 'user',
 			default: false,
 		});
-		// -- On-screen splash for incoming direct messages --
+		// -- On-screen alert for incoming direct messages (key kept for continuity) --
 		game.settings.register(MODULE.ID, 'messageSplashEnabled', {
 			name: MODULE.ID + '.messageSplashEnabled-Label',
 			hint: MODULE.ID + '.messageSplashEnabled-Hint',
@@ -320,6 +320,18 @@ export const registerSettings = () => {
 			requiresReload: false,
 			scope: 'user',
 			default: true,
+		});
+		// -- Favorited conversations (no UI; written by the heart toggles) --
+		// User-scoped rather than client-scoped so a player's favorites follow
+		// them to another browser or machine, which a localStorage list did not.
+		game.settings.register(MODULE.ID, 'messageFavorites', {
+			name: 'Favorite Conversations',
+			hint: 'Conversations you have favorited. Managed from the Messages window.',
+			type: Array,
+			config: false,
+			requiresReload: false,
+			scope: 'user',
+			default: [],
 		});
 		// -- Which window a message alert opens when clicked --
 		game.settings.register(MODULE.ID, 'messageAlertOpensPopout', {
@@ -331,7 +343,7 @@ export const registerSettings = () => {
 			scope: 'user',
 			default: true,
 		});
-		// -- On-screen splash for incoming party/group messages --
+		// -- On-screen alert for incoming party/group messages (key kept for continuity) --
 		game.settings.register(MODULE.ID, 'messageSplashGroupEnabled', {
 			name: MODULE.ID + '.messageSplashGroupEnabled-Label',
 			hint: MODULE.ID + '.messageSplashGroupEnabled-Hint',
