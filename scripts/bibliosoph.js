@@ -106,6 +106,17 @@ Hooks.once('ready', async () => {
                         title: 'Messages',
                         moduleId: MODULE.ID
                     });
+                    // The lightweight single-conversation popout. Normally
+                    // reached by the popout icon on a tray row, but registered
+                    // so it can be opened directly with a conversation id.
+                    api.registerWindow('bibliosoph-messages-lite', {
+                        open: async (options = {}) => {
+                            const { openMessagesLite } = await import('./window-messages-lite.js');
+                            return openMessagesLite(options);
+                        },
+                        title: 'Messages Popout',
+                        moduleId: MODULE.ID
+                    });
                 }
                 // Menubar: left zone, right next to Squire's Quick Note (general/999/202)
                 if (api?.registerMenubarTool) {
@@ -1540,6 +1551,7 @@ Hooks.once('disableModule', (moduleId) => {
         unregisterToolbarTools();
         const blacksmith = game.modules.get('coffee-pub-blacksmith')?.api;
         blacksmith?.unregisterWindow?.('bibliosoph-messages');
+        blacksmith?.unregisterWindow?.('bibliosoph-messages-lite');
         blacksmith?.unregisterMenubarTool?.('bibliosoph-messages');
     }
 });

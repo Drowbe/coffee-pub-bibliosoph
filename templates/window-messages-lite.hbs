@@ -1,0 +1,62 @@
+{{!-- Body content for the lite Messages popout (injected into the
+      Blacksmith tool template's body). One conversation: the thread and
+      the message box, nothing else. No tray, no tone bar, no reactions.
+
+      Class names deliberately match the full window's thread so the
+      shared thread mixin's selectors (.bibliosoph-messages-thread,
+      .bibliosoph-messages-input, .bibliosoph-message-wrapper) work here
+      unchanged. Styling is independent — see window-messages-lite.css,
+      which maps the message tokens onto the --blacksmith-tool-* family
+      so Light, Dark and Glass all read correctly. --}}
+<div id="coffee-pub-bibliosoph-messages-lite-wrapper">
+
+    <div class="bibliosoph-messages-thread">
+        {{#if messages.length}}
+            {{#each messages}}
+            {{#if this.dayLabel}}
+            <div class="bibliosoph-messages-day"><span>{{this.dayLabel}}</span></div>
+            {{/if}}
+            <div class="bibliosoph-message-wrapper {{#if this.isOwn}}bibliosoph-message-own{{/if}} {{#if this.deleted}}bibliosoph-message-removed{{/if}}" data-message-id="{{this.id}}" style="border-left-color: {{this.color}};">
+                <div class="bibliosoph-message-header">
+                    <img class="bibliosoph-message-avatar" src="{{this.avatar}}" alt="{{this.senderName}}" width="24" height="24">
+                    <span class="bibliosoph-message-speaker" style="color: {{this.color}};">{{this.senderName}}</span>
+                    {{#unless this.deleted}}
+                    {{#if this.showTone}}<i class="{{this.toneIcon}} bibliosoph-message-tone" title="{{this.toneLabel}}"></i>{{/if}}
+                    {{#if this.edited}}<span class="bibliosoph-message-editedtag">(edited)</span>{{/if}}
+                    {{/unless}}
+                    <span class="bibliosoph-message-time">{{this.timeDisplay}}</span>
+                </div>
+                {{#if this.deleted}}
+                <div class="bibliosoph-message-deleted"><i class="fa-solid fa-ban"></i> Message deleted</div>
+                {{else}}
+                <div class="bibliosoph-message-content">{{{this.html}}}</div>
+                {{/if}}
+            </div>
+            {{/each}}
+        {{else}}
+            <div class="bibliosoph-messages-empty">
+                {{#if hasConversation}}
+                <i class="fa-solid fa-feather"></i> No messages yet — say hello!
+                {{else}}
+                <i class="fa-solid fa-comment-slash"></i> This conversation is no longer available.
+                {{/if}}
+            </div>
+        {{/if}}
+    </div>
+
+    {{#if hasConversation}}
+    <div class="bibliosoph-messages-compose">
+        <div class="bibliosoph-messages-typing" aria-live="polite"></div>
+        {{#if editing}}
+        <div class="bibliosoph-messages-editing"><i class="fa-solid fa-pen"></i> Editing &mdash; ESC to cancel</div>
+        {{/if}}
+        <div class="bibliosoph-messages-composerow">
+            <textarea rows="2" class="bibliosoph-messages-input" placeholder="Write a message…">{{draft}}</textarea>
+            <button type="button" class="bibliosoph-messages-lite-send" data-action="msglite-send" title="Send message">
+                <i class="fa-solid {{#if editing}}fa-pen{{else}}fa-paper-plane{{/if}}"></i>
+            </button>
+        </div>
+    </div>
+    {{/if}}
+
+</div>

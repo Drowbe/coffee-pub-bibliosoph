@@ -14,37 +14,22 @@
 import { MODULE } from './const.js';
 import { ConversationManager } from './manager-conversations.js';
 import { SOCIAL_TOASTS, isSocialToastEnabled, triggerSocialToast } from './manager-social-toasts.js';
+import {
+    ThreadBehavior,
+    MESSAGE_TONES,
+    MESSAGE_REACTIONS,
+    CONVERSATION_ICONS,
+    getSetting,
+    escapeHtml,
+    toast
+} from './mixin-messages-thread.js';
+
+// Re-exported so the constants keep their historical import path.
+export { MESSAGE_TONES, MESSAGE_REACTIONS, CONVERSATION_ICONS };
 
 const APP_ID = 'coffee-pub-bibliosoph-messages';
 const BLACKSMITH_TEMPLATE = 'modules/coffee-pub-blacksmith/templates/window-template.hbs';
 const BODY_TEMPLATE = `modules/${MODULE.ID}/templates/window-messages.hbs`;
-
-/** Tone stamps for individual messages (the old six message types). */
-export const MESSAGE_TONES = [
-    { key: 'message', icon: 'fa-solid fa-envelope', label: 'Message' },
-    { key: 'plan', icon: 'fa-solid fa-chess', label: 'Party Plan' },
-    { key: 'agree', icon: 'fa-solid fa-thumbs-up', label: 'Agree' },
-    { key: 'disagree', icon: 'fa-solid fa-thumbs-down', label: 'Disagree' },
-    { key: 'praise', icon: 'fa-solid fa-heart', label: 'Praise' },
-    { key: 'insult', icon: 'fa-solid fa-face-angry', label: 'Insult' }
-];
-
-/** Reactions users can put on other people's messages (context menu). */
-export const MESSAGE_REACTIONS = [
-    { key: 'like', icon: 'fa-solid fa-thumbs-up', label: 'Like' },
-    { key: 'dislike', icon: 'fa-solid fa-thumbs-down', label: 'Dislike' },
-    { key: 'love', icon: 'fa-solid fa-heart', label: 'Love' },
-    { key: 'laugh', icon: 'fa-solid fa-face-laugh', label: 'Laugh' },
-    { key: 'huh', icon: 'fa-solid fa-circle-question', label: 'Huh?' }
-];
-
-/** Icons a user can pick when creating a conversation. */
-export const CONVERSATION_ICONS = [
-    'fa-solid fa-user-group', 'fa-solid fa-users', 'fa-solid fa-comments', 'fa-solid fa-scroll',
-    'fa-solid fa-map', 'fa-solid fa-dice-d20', 'fa-solid fa-shield-halved', 'fa-solid fa-crown',
-    'fa-solid fa-skull', 'fa-solid fa-dragon', 'fa-solid fa-hat-wizard', 'fa-solid fa-flask',
-    'fa-solid fa-eye', 'fa-solid fa-moon', 'fa-solid fa-paw', 'fa-solid fa-gem'
-];
 
 function resolveBase() {
     const api = game.modules.get('coffee-pub-blacksmith')?.api;
@@ -53,37 +38,32 @@ function resolveBase() {
     return Base;
 }
 
-function getSetting(key, defaultValue) {
-    if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils?.getSettingSafely) {
-        return BlacksmithUtils.getSettingSafely(MODULE.ID, key, defaultValue);
-    }
-    try {
-        return game.settings.get(MODULE.ID, key) ?? defaultValue;
-    } catch (_) {
-        return defaultValue;
-    }
-}
-
-const escapeHtml = (s) => Handlebars.escapeExpression(s ?? '');
-
-function formatTimestamp(ts) {
-    if (!ts) return '';
-    const date = new Date(ts);
-    const now = new Date();
-    const sameDay = date.toDateString() === now.toDateString();
-    const time = date.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
-    return sameDay ? time : `${date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })} ${time}`;
-}
-
 /** Open (or focus) the singleton Messages window. */
-export function openMessagesWindow(options = {}) {
+export async function openMessagesWindow(options = {}) {
+    // Exactly one messages surface exists at a time: opening the full view
+    // dismisses a lite popout rather than running alongside it.
+    await closeMessagesLite({ restoreFull: false });
     const win = MessagesWindow.current ?? new MessagesWindow(options);
     if (options.conversationId) win._activeConversationId = options.conversationId;
     ConversationManager.clearUnreadNotification();
     return win.render(true);
 }
 
-export class MessagesWindow extends resolveBase() {
+/** Close the lite popout if one is open. Imported lazily to avoid a cycle. */
+async function closeMessagesLite({ restoreFull = true } = {}) {
+    try {
+        const { MessagesLiteWindow } = await import('./window-messages-lite.js');
+        const lite = MessagesLiteWindow.current;
+        if (!lite?.rendered) return false;
+        lite._restoreFullOnClose = restoreFull;
+        await lite.close();
+        return true;
+    } catch (_) {
+        return false;
+    }
+}
+
+export class MessagesWindow extends ThreadBehavior(resolveBase()) {
     /** Singleton instance (also used by ConversationManager for live updates). */
     static current = null;
 
@@ -106,22 +86,26 @@ export class MessagesWindow extends resolveBase() {
 
     // Prefixed (msg-*) so delegation never collides with other Blacksmith windows.
     static ACTION_HANDLERS = {
-        'msg-select-conversation': (_e, btn) => MessagesWindow.current?._selectConversation(btn.dataset.id),
-        'msg-new-conversation': () => MessagesWindow.current?._openPicker(),
-        'msg-cancel-picker': () => MessagesWindow.current?._closePicker(),
-        'msg-toggle-member': (_e, btn) => MessagesWindow.current?._toggleMember(btn.dataset.id),
-        'msg-pick-icon': (_e, btn) => MessagesWindow.current?._pickIcon(btn.dataset.icon),
-        'msg-create-conversation': () => MessagesWindow.current?._createConversation(),
-        'msg-tone': (_e, btn) => MessagesWindow.current?._setTone(btn.dataset.tone),
-        'msg-send': () => MessagesWindow.current?._send(),
-        'msg-send-to-chat': (_e, btn) => MessagesWindow.current?._sendToChat(btn.dataset.messageId),
-        'msg-react': (_e, btn) => MessagesWindow.current?._toggleReaction(btn.dataset.messageId, btn.dataset.reaction),
-        'msg-toggle-mute': () => MessagesWindow.current?._toggleMute(),
-        'msg-toggle-tray': () => MessagesWindow.current?._toggleTray(),
-        'msg-toggle-autoopen': () => MessagesWindow.current?._toggleAutoOpen(),
-        'msg-purge-messages': () => MessagesWindow.current?._purgeMessages(),
-        'msg-export-messages': () => MessagesWindow.current?._exportMessages(),
-        'msg-clean-images': () => MessagesWindow.current?._cleanImages(),
+        'msg-select-conversation': (_e, btn, app) => app?._selectConversation(btn.dataset.id),
+        'msg-new-conversation': (_e, _btn, app) => app?._openPicker(),
+        'msg-cancel-picker': (_e, _btn, app) => app?._closePicker(),
+        'msg-toggle-member': (_e, btn, app) => app?._toggleMember(btn.dataset.id),
+        'msg-pick-icon': (_e, btn, app) => app?._pickIcon(btn.dataset.icon),
+        'msg-create-conversation': (_e, _btn, app) => app?._createConversation(),
+        'msg-tone': (_e, btn, app) => app?._setTone(btn.dataset.tone),
+        'msg-send': (_e, _btn, app) => app?._send(),
+        'msg-send-to-chat': (_e, btn, app) => app?._sendToChat(btn.dataset.messageId),
+        'msg-react': (_e, btn, app) => app?._toggleReaction(btn.dataset.messageId, btn.dataset.reaction),
+        'msg-toggle-mute': (_e, _btn, app) => app?._toggleMute(),
+        'msg-toggle-tray': (_e, _btn, app) => app?._toggleTray(),
+        'msg-toggle-autoopen': (_e, _btn, app) => app?._toggleAutoOpen(),
+        'msg-purge-messages': (_e, _btn, app) => app?._purgeMessages(),
+        'msg-export-messages': (_e, _btn, app) => app?._exportMessages(),
+        'msg-clean-images': (_e, _btn, app) => app?._cleanImages(),
+        'msg-popout': (event, btn, app) => {
+            event.stopPropagation();   // do not also select the row
+            app?._popOut(btn.dataset.id);
+        },
         'msg-social-toast': (_e, btn) => triggerSocialToast(btn.dataset.social)
     };
 
@@ -146,12 +130,6 @@ export class MessagesWindow extends resolveBase() {
     // ===== DATA ===================================================
     // ==============================================================
 
-    /** The other user's id when a virtual (not-yet-created) 1:1 row is selected. */
-    get _virtualUserId() {
-        const id = this._activeConversationId;
-        return typeof id === 'string' && id.startsWith('virtual:') ? id.slice('virtual:'.length) : null;
-    }
-
     _resolveActiveConversation(conversations) {
         const virtualUserId = this._virtualUserId;
         if (virtualUserId) {
@@ -170,16 +148,6 @@ export class MessagesWindow extends resolveBase() {
             this._activeConversationId = active?.id ?? null;
         }
         return active;
-    }
-
-    /** Viewer-facing name: a 1:1 shows the other person's name. */
-    _conversationDisplayName(entry) {
-        const info = ConversationManager.getInfo(entry);
-        if (info.kind === 'direct' && (info.members ?? []).includes(game.user.id)) {
-            const otherId = (info.members ?? []).find((id) => id !== game.user.id);
-            return game.users.get(otherId)?.name ?? info.name ?? entry.name;
-        }
-        return info.name ?? entry.name;
     }
 
     async getData() {
@@ -270,21 +238,6 @@ export class MessagesWindow extends resolveBase() {
         return buttons ? `<div class="bibliosoph-messages-social-buttons">${buttons}</div>` : '';
     }
 
-    /** Whether ENTER sends the message (persisted locally, like Regent). */
-    get _enterSends() {
-        try {
-            return localStorage.getItem('bibliosoph-messages-enter-sends') !== 'false';
-        } catch (_) {
-            return true;
-        }
-    }
-
-    set _enterSends(value) {
-        try {
-            localStorage.setItem('bibliosoph-messages-enter-sends', value ? 'true' : 'false');
-        } catch (_) { /* no-op */ }
-    }
-
     /** Per-client: conversation tray collapsed to an icon rail. */
     get _trayCollapsed() {
         try {
@@ -307,8 +260,6 @@ export class MessagesWindow extends resolveBase() {
 
     _buildBodyContext(active, conversations = []) {
         const { trayGroups, trayPlayers } = this._buildTrayItems(conversations);
-        // A selected virtual 1:1 row is a conversation too — just an empty one
-        const virtualUser = this._virtualUserId ? game.users.get(this._virtualUserId) : null;
         if (this._picker) {
             const isEdit = this._picker.mode === 'edit';
             return {
@@ -344,35 +295,16 @@ export class MessagesWindow extends resolveBase() {
             };
         }
 
-        const toneMap = Object.fromEntries(MESSAGE_TONES.map((t) => [t.key, t]));
-        const reactionMap = Object.fromEntries(MESSAGE_REACTIONS.map((r) => [r.key, r]));
-        let lastDayLabel = '';
-        const messages = active ? ConversationManager.getMessages(active).map((m) => {
-            const dayLabel = this._dayLabelFor(m.timestamp);
-            const showDay = dayLabel !== lastDayLabel;
-            lastDayLabel = dayLabel;
-            return {
-                ...m,
-                timeDisplay: formatTimestamp(m.timestamp),
-                dayLabel: showDay ? dayLabel : null,
-                toneIcon: toneMap[m.tone]?.icon ?? toneMap.message.icon,
-                toneLabel: toneMap[m.tone]?.label ?? 'Message',
-                showTone: m.tone !== 'message',
-                reactionsDisplay: this._buildReactionsDisplay(m.reactions, reactionMap)
-            };
-        }) : [];
-
+        // The message list and compose state come from the shared mixin —
+        // the tray and tone bar are this window's own.
         return {
             trayGroups,
             trayPlayers,
             showTrayDivider: trayGroups.length > 0 && trayPlayers.length > 0,
             trayCollapsed: this._trayCollapsed,
             picker: null,
-            hasConversation: !!active || !!virtualUser,
-            editing: !!this._editing,
-            messages,
             tones: MESSAGE_TONES.map((t) => ({ ...t, active: t.key === this._tone })),
-            draft: this._draft
+            ...this._buildThreadContext(active)
         };
     }
 
@@ -460,69 +392,13 @@ export class MessagesWindow extends resolveBase() {
         return { trayGroups, trayPlayers };
     }
 
-    /** Day-separator label for a timestamp: Today, Yesterday, or the date. */
-    _dayLabelFor(timestamp) {
-        if (!timestamp) return '';
-        const date = new Date(timestamp);
-        const now = new Date();
-        const startOfDay = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
-        const diffDays = Math.round((startOfDay(now) - startOfDay(date)) / 86400000);
-        if (diffDays === 0) return 'Today';
-        if (diffDays === 1) return 'Yesterday';
-        const options = { month: 'long', day: 'numeric' };
-        if (date.getFullYear() !== now.getFullYear()) options.year = 'numeric';
-        return date.toLocaleDateString(undefined, options);
-    }
-
-    /** Group raw {userId: reactionKey} into chips: icon, count, names, mine. */
-    _buildReactionsDisplay(reactions = {}, reactionMap) {
-        const groups = new Map();
-        for (const [userId, key] of Object.entries(reactions)) {
-            const def = reactionMap[key];
-            if (!def) continue;
-            if (!groups.has(key)) groups.set(key, { ...def, count: 0, users: [], mine: false });
-            const group = groups.get(key);
-            group.count++;
-            group.users.push(game.users.get(userId)?.name ?? 'Unknown');
-            if (userId === game.user.id) group.mine = true;
-        }
-        return [...groups.values()].map((g) => ({ ...g, userNames: g.users.join(', ') }));
-    }
-
     // ==============================================================
     // ===== RENDER LIFECYCLE =======================================
     // ==============================================================
 
-    async render(force = false) {
-        const root = this._getRoot?.();
-
-        // Preserve an in-progress draft across live re-renders — unless this
-        // render was triggered by code that deliberately set the draft itself
-        // (start/cancel editing, conversation switch)
-        if (this._skipDraftCapture) {
-            this._skipDraftCapture = false;
-        } else {
-            const textarea = root?.querySelector?.('.bibliosoph-messages-input');
-            if (textarea) this._draft = textarea.value;
-        }
-
-        // Preserve the thread scroll position so a re-render doesn't reset to
-        // the top; remember whether the user was pinned near the bottom
-        const thread = root?.querySelector?.('.bibliosoph-messages-thread');
-        if (thread) {
-            this._threadScrollSaved = thread.scrollTop;
-            this._threadWasPinned = thread.scrollTop + thread.clientHeight >= thread.scrollHeight - 80;
-        } else {
-            this._threadScrollSaved = null;
-            this._threadWasPinned = true;
-        }
-
-        return super.render(force);
-    }
-
     async _onRender(context, options) {
         await super._onRender?.(context, options);
-        this._attachContextMenuOnce();
+        this._attachThreadContextMenu();
         const root = this._getRoot();
         if (!root) return;
 
@@ -538,34 +414,6 @@ export class MessagesWindow extends resolveBase() {
             }
         }
 
-        // ENTER sends (when enabled), SHIFT+ENTER inserts a newline
-        const textarea = root.querySelector('.bibliosoph-messages-input');
-        if (textarea && !textarea.dataset.bibliosophBound) {
-            textarea.dataset.bibliosophBound = '1';
-            textarea.addEventListener('keydown', (event) => {
-                if (event.key === 'Enter' && !event.shiftKey && this._enterSends) {
-                    event.preventDefault();
-                    this._send();
-                } else if (event.key === 'Escape' && this._editing) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    this._cancelEditing();
-                }
-            });
-            // Paste a screenshot / image from the clipboard → upload + insert
-            textarea.addEventListener('paste', (event) => {
-                const files = [...(event.clipboardData?.files ?? [])].filter((f) => f.type?.startsWith('image/'));
-                if (!files.length) return; // plain text pastes proceed normally
-                event.preventDefault();
-                this._insertUploadedImages(files);
-            });
-            // Let conversation members know we're typing (throttled, ephemeral)
-            textarea.addEventListener('input', () => {
-                const entry = game.journal.get(this._activeConversationId);
-                if (entry) ConversationManager.emitTyping(entry);
-            });
-        }
-
         // ENTER Sends toggle (action bar)
         const enterToggle = root.querySelector('.bibliosoph-messages-enter-sends');
         if (enterToggle && !enterToggle.dataset.bibliosophBound) {
@@ -575,69 +423,51 @@ export class MessagesWindow extends resolveBase() {
             });
         }
 
-        // Drag & drop documents (item, actor, journal, …) → insert a UUID link
-        const main = root.querySelector('.bibliosoph-messages-main');
-        if (main && !main.dataset.bibliosophDropBound) {
-            main.dataset.bibliosophDropBound = '1';
-            main.addEventListener('dragover', (event) => {
-                event.preventDefault();
-                main.classList.add('bibliosoph-messages-dragover');
-            });
-            main.addEventListener('dragleave', (event) => {
-                if (!main.contains(event.relatedTarget)) main.classList.remove('bibliosoph-messages-dragover');
-            });
-            main.addEventListener('drop', (event) => {
-                main.classList.remove('bibliosoph-messages-dragover');
-                this._onDropDocument(event);
-            });
-        }
-
-        // Thread scrolling: jump straight to the bottom on load / conversation
-        // switch. On same-conversation re-renders, restore the saved position
-        // first (the rebuilt DOM starts at the top), then — only if the user
-        // was already near the bottom — glide the short distance to the
-        // newest message. Readers scrolled up into history stay put.
-        const thread = root.querySelector('.bibliosoph-messages-thread');
-        if (thread) {
-            const conversationChanged = this._lastScrolledConversation !== this._activeConversationId;
-            this._lastScrolledConversation = this._activeConversationId;
-            if (conversationChanged) {
-                this._pinThreadToBottom(thread, true);
-            } else {
-                if (typeof this._threadScrollSaved === 'number') thread.scrollTop = this._threadScrollSaved;
-                if (this._threadWasPinned !== false) this._pinThreadToBottom(thread, false);
-            }
-
-            // Click an image in a message → full-size popout
-            if (!thread.dataset.bibliosophImgBound) {
-                thread.dataset.bibliosophImgBound = '1';
-                thread.addEventListener('click', (event) => {
-                    const img = event.target.closest?.('.bibliosoph-message-content img');
-                    if (img?.src) this._openImagePopout(img.src);
-                });
-            }
-        }
-
-        // Viewing a conversation marks it read
-        const active = game.journal.get(this._activeConversationId);
-        if (active && ConversationManager.getUnreadCount(active) > 0) {
-            ConversationManager.markRead(active);
-        }
-
-        // After sending/saving your own message, put the cursor back in the
-        // compose box (one-shot — never steals focus on incoming messages)
-        if (this._refocusCompose) {
-            this._refocusCompose = false;
-            root.querySelector('.bibliosoph-messages-input')?.focus();
-        }
+        // Thread wiring (compose box, drops, scrolling, mark-read) is shared
+        // with the lite popout and lives in the thread mixin.
+        this._bindThreadListeners(root);
     }
 
     async close(options) {
         if (MessagesWindow.current === this) MessagesWindow.current = null;
-        ConversationManager.playUiSound('close');
-        // Anything still unread goes back on the menubar
-        ConversationManager.notifyUnread();
+        // Popping out is a hand-off, not a departure: the lite window is about
+        // to take this conversation over, so neither the close sound nor the
+        // unread notification should fire.
+        if (!this._poppingOut) {
+            ConversationManager.playUiSound('close');
+            // Anything still unread goes back on the menubar
+            ConversationManager.notifyUnread();
+        }
         return super.close(options);
+    }
+
+    /**
+     * Hand a conversation to the lite popout and step aside. The popout is a
+     * dedicated single-conversation view, so the full window closes behind it
+     * and exactly one messages surface stays live.
+     */
+    async _popOut(conversationId) {
+        const id = conversationId ?? this._activeConversationId;
+        if (!id) return;
+        let closed = false;
+        try {
+            const { openMessagesLite } = await import('./window-messages-lite.js');
+            this._poppingOut = true;
+            await this.close();
+            closed = true;
+            await openMessagesLite({ conversationId: id });
+        } catch (error) {
+            this._poppingOut = false;
+            if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils?.postConsoleAndNotification) {
+                BlacksmithUtils.postConsoleAndNotification(
+                    MODULE.NAME, 'MESSAGES | Popping out failed', error, false, false);
+            }
+            toast('Could not pop out', 'Keeping the full window instead.', 'fa-solid fa-triangle-exclamation');
+            // Never strand the user with no messages window at all: if we had
+            // already stepped aside for a popout that then failed to appear,
+            // come back.
+            if (closed) await openMessagesWindow({ conversationId: id });
+        }
     }
 
     // ==============================================================
@@ -661,41 +491,6 @@ export class MessagesWindow extends resolveBase() {
     _toggleMute() {
         ConversationManager.setSoundsMuted(!ConversationManager.soundsMuted());
         this.render(false);
-    }
-
-    // ==============================================================
-    // ===== TYPING INDICATOR (incoming) ============================
-    // ==============================================================
-
-    /** Show "X is typing…" for ~4s; updates the DOM directly (no re-render). */
-    showTypingIndicator(userId) {
-        this._typing ??= new Map();
-        clearTimeout(this._typing.get(userId));
-        this._typing.set(userId, setTimeout(() => {
-            this._typing.delete(userId);
-            this._renderTypingLine();
-        }, 4000));
-        this._renderTypingLine();
-    }
-
-    _clearTypingIndicators() {
-        for (const timer of this._typing?.values() ?? []) clearTimeout(timer);
-        this._typing?.clear();
-        this._renderTypingLine();
-    }
-
-    _renderTypingLine() {
-        const el = this._getRoot()?.querySelector('.bibliosoph-messages-typing');
-        if (!el) return;
-        const names = [...(this._typing?.keys() ?? [])]
-            .map((id) => game.users.get(id)?.name)
-            .filter(Boolean);
-        el.textContent = names.length === 0
-            ? ''
-            : names.length === 1
-                ? `${names[0]} is typing…`
-                : `${names.join(' and ')} are typing…`;
-        el.classList.toggle('visible', names.length > 0);
     }
 
     /** Flip the messageAutoOpen user setting from the window's action bar. */
@@ -921,344 +716,16 @@ ${rows}
         this.render(false);
     }
 
-    async _send() {
-        const root = this._getRoot();
-        const textarea = root?.querySelector('.bibliosoph-messages-input');
-        const text = (textarea?.value ?? '').trim();
-        if (!text) return;
-
-        let entry = game.journal.get(this._activeConversationId);
-        // First message in a virtual 1:1: create the conversation lazily
-        const virtualUserId = this._virtualUserId;
-        if (!entry && virtualUserId) {
-            entry = await ConversationManager.ensureDirectConversation(virtualUserId);
-            if (entry) this._activeConversationId = entry.id;
-        }
-        if (!entry) {
-            if (!virtualUserId) ui.notifications.warn('Select a conversation first.');
-            return; // keep the draft — nothing was sent
-        }
-
-        this._draft = '';
-        if (textarea) textarea.value = '';
-        // The hook-triggered re-render should hand focus back to the compose box
-        this._refocusCompose = true;
-
-        // Edit mode: update the existing message instead of posting a new one
-        if (this._editing) {
-            const messageId = this._editing;
-            this._editing = null;
-            await ConversationManager.editMessage(entry, messageId, text);
-            ConversationManager.playUiSound('send');
-            return; // updateJournalEntryPage hook re-renders the window
-        }
-
-        await ConversationManager.postMessage(entry, { markdown: text, tone: this._tone });
-        this._tone = 'message';
-        ConversationManager.playUiSound('send');
-        // Our own createJournalEntryPage hook re-renders the window
-    }
-
-    // ==============================================================
-    // ===== DRAG & DROP (documents → UUID links) ===================
-    // ==============================================================
-
-    /**
-     * Pin the thread scroll to the bottom, resiliently: once now, once on the
-     * next frame (after layout settles), and again whenever an avatar or
-     * message image finishes loading and grows the thread.
-     */
-    _pinThreadToBottom(thread, instant = false) {
-        const scroll = (behavior) => {
-            try {
-                thread.scrollTo({ top: thread.scrollHeight, behavior });
-            } catch (_) {
-                thread.scrollTop = thread.scrollHeight;
-            }
-        };
-        scroll(instant ? 'auto' : 'smooth');
-        requestAnimationFrame(() => scroll(instant ? 'auto' : 'smooth'));
-        for (const img of thread.querySelectorAll('img')) {
-            if (!img.complete) img.addEventListener('load', () => scroll('auto'), { once: true });
-        }
-    }
-
-    /** Open Foundry's image popout (handles both the V2 and legacy signatures). */
-    _openImagePopout(src) {
-        const Popout = foundry.applications?.apps?.ImagePopout ?? globalThis.ImagePopout;
-        if (!Popout) return;
-        try {
-            new Popout({ src, window: { title: 'Image' } }).render(true);
-        } catch (_) {
-            try {
-                new Popout(src, { title: 'Image' }).render(true);
-            } catch (_) { /* give up quietly */ }
-        }
-    }
-
-    /** Does this path/URL look like an image file? */
-    _isImagePath(path) {
-        return /\.(png|jpe?g|webp|gif|avif|svg)(\?.*)?$/i.test(path ?? '');
-    }
-
-    /**
-     * Upload a pasted/dropped image File to the world's storage
-     * (worlds/<world>/bibliosoph-messages/) and return its path.
-     * Requires the core "Upload New Files" permission.
-     */
-    async _uploadImageFile(file) {
-        if (!file?.type?.startsWith('image/')) return null;
-        if (!game.user.can('FILES_UPLOAD')) {
-            ui.notifications.warn('You need the "Upload New Files" permission to paste or drop image files. You can still link images by path or URL.');
-            return null;
-        }
-        const FP = foundry.applications?.apps?.FilePicker?.implementation ?? globalThis.FilePicker;
-        if (!FP?.upload) {
-            ui.notifications.error('File upload is unavailable in this Foundry version.');
-            return null;
-        }
-
-        const dir = `worlds/${game.world.id}/bibliosoph-messages`;
-        try {
-            await FP.createDirectory('data', dir);
-        } catch (_) { /* directory already exists */ }
-
-        const ext = ((file.name?.split('.').pop() || file.type.split('/')[1] || 'png')
-            .toLowerCase().replace(/[^a-z0-9]/g, '')) || 'png';
-        const base = ((file.name ? file.name.replace(/\.[^.]*$/, '') : 'paste')
-            .replace(/[^a-zA-Z0-9_-]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40)) || 'image';
-        const filename = `${base}-${Date.now()}.${ext}`;
-
-        try {
-            const upload = new File([file], filename, { type: file.type });
-            const result = await FP.upload('data', dir, upload, {}, { notify: false });
-            return result?.path ?? `${dir}/${filename}`;
-        } catch (error) {
-            console.error(`${MODULE.ID} | Image upload failed:`, error);
-            ui.notifications.error('Image upload failed — see the console for details.');
-            return null;
-        }
-    }
-
-    /** Upload each image file and insert markdown image syntax for it. */
-    async _insertUploadedImages(files) {
-        for (const file of files) {
-            const path = await this._uploadImageFile(file);
-            if (path) this._insertAtCursor(`![image](${path})`);
-        }
-    }
-
-    /** Insert text at the compose textarea's cursor and refocus. */
-    _insertAtCursor(text) {
-        const textarea = this._getRoot()?.querySelector('.bibliosoph-messages-input');
-        if (!textarea) return;
-        const start = textarea.selectionStart ?? textarea.value.length;
-        const end = textarea.selectionEnd ?? textarea.value.length;
-        const before = textarea.value.slice(0, start);
-        const after = textarea.value.slice(end);
-        const spacer = before && !before.endsWith(' ') && !before.endsWith('\n') ? ' ' : '';
-        textarea.value = `${before}${spacer}${text} ${after}`;
-        const caret = (before + spacer + text + ' ').length;
-        textarea.setSelectionRange(caret, caret);
-        textarea.focus();
-        this._draft = textarea.value;
-    }
-
-    /**
-     * Drop into the window:
-     * - documents (item, actor/token, journal, roll table, …) → @UUID link via
-     *   Blacksmith's UUID builder (api.compendiums.formatLink)
-     * - images (Foundry file paths or web URLs) → markdown image syntax
-     */
-    async _onDropDocument(event) {
-        // OS file drop (e.g. an image from the desktop): upload, then insert
-        const droppedFiles = [...(event.dataTransfer?.files ?? [])].filter((f) => f.type?.startsWith('image/'));
-        if (droppedFiles.length) {
-            event.preventDefault();
-            await this._insertUploadedImages(droppedFiles);
-            return;
-        }
-
-        const raw = event.dataTransfer.getData('text/plain');
-        let data = null;
-        try {
-            data = JSON.parse(raw);
-        } catch (_) { /* not JSON — maybe a plain URL/path */ }
-
-        if (!data) {
-            // Plain text drop (e.g. an image URL from a browser or a file path)
-            const uri = (event.dataTransfer.getData('text/uri-list') || raw || '').split('\n')[0]?.trim();
-            if (uri && this._isImagePath(uri)) {
-                event.preventDefault();
-                this._insertAtCursor(`![image](${uri})`);
-            }
-            return;
-        }
-        event.preventDefault();
-
-        // Image drops from Foundry UIs (file picker, tiles) carry a src/path
-        const imagePath = data.texture?.src ?? data.src ?? data.path ?? null;
-        if (!data.uuid && imagePath && this._isImagePath(imagePath)) {
-            this._insertAtCursor(`![image](${imagePath})`);
-            return;
-        }
-
-        // Foundry drag data carries a uuid for documents; tokens carry their actor
-        let uuid = data.uuid ?? (data.type && data.id ? `${data.type}.${data.id}` : null);
-        if (!uuid) return;
-
-        let doc = null;
-        try {
-            doc = await fromUuid(uuid);
-        } catch (_) { /* leave doc null */ }
-        // Dropped token: link the actor rather than the token document
-        if (doc?.documentName === 'Token' && doc.actor) {
-            doc = doc.actor;
-            uuid = doc.uuid;
-        }
-        const label = doc?.name ?? data.name ?? 'Link';
-
-        const compendiums = game.modules.get('coffee-pub-blacksmith')?.api?.compendiums;
-        const link = compendiums?.formatLink
-            ? compendiums.formatLink(uuid, label)
-            : `@UUID[${uuid}]{${label}}`;
-        this._insertAtCursor(link);
-    }
-
-    // ==============================================================
-    // ===== REACTIONS ==============================================
-    // ==============================================================
-
-    async _toggleReaction(messageId, reactionKey) {
-        const entry = game.journal.get(this._activeConversationId);
-        if (!entry || !messageId || !reactionKey) return;
-        await ConversationManager.toggleReaction(entry, messageId, reactionKey);
-        // updateJournalEntryPage hook refreshes the window
-    }
-
-    /** Load one of your own messages into the compose box for editing. */
-    async _startEditing(messageId) {
-        const entry = game.journal.get(this._activeConversationId);
-        const message = entry ? ConversationManager.getMessages(entry).find((m) => m.id === messageId) : null;
-        if (!message?.isOwn || message.deleted) return;
-        this._editing = messageId;
-        this._draft = message.markdown || '';
-        this._skipDraftCapture = true;
-        await this.render(false);
-        const textarea = this._getRoot()?.querySelector('.bibliosoph-messages-input');
-        if (textarea) {
-            textarea.focus();
-            textarea.setSelectionRange(textarea.value.length, textarea.value.length);
-        }
-    }
-
-    _cancelEditing() {
-        if (!this._editing) return;
-        this._editing = null;
-        this._draft = '';
-        this._skipDraftCapture = true;
-        this.render(false);
-    }
-
-    /** Quote a message into the compose box as a markdown blockquote. */
-    _replyTo(messageId) {
-        const entry = game.journal.get(this._activeConversationId);
-        const message = entry ? ConversationManager.getMessages(entry).find((m) => m.id === messageId) : null;
-        if (!message) return;
-        const source = (message.markdown || message.html.replace(/<[^>]+>/g, '')).trim();
-        const quoted = source.split('\n').map((line) => `> ${line}`).join('\n');
-        const prefix = `> **${message.senderName}** wrote:\n${quoted}\n\n`;
-
-        const textarea = this._getRoot()?.querySelector('.bibliosoph-messages-input');
-        if (!textarea) return;
-        textarea.value = prefix + textarea.value;
-        this._draft = textarea.value;
-        const caret = textarea.value.length;
-        textarea.setSelectionRange(caret, caret);
-        textarea.focus();
-    }
-
     // ==============================================================
     // ===== CONTEXT MENUS (Blacksmith uiContextMenu) ===============
     // ==============================================================
 
-    /** One document-level contextmenu listener for the app (like base click delegation). */
-    static _contextMenuAttached = false;
-
-    _attachContextMenuOnce() {
-        if (MessagesWindow._contextMenuAttached) return;
-        MessagesWindow._contextMenuAttached = true;
-        document.addEventListener('contextmenu', (event) => {
-            const win = MessagesWindow.current;
-            if (!win?.rendered) return;
-            const root = win._getRoot();
-            if (!root?.contains?.(event.target)) return;
-
-            const messageEl = event.target.closest('.bibliosoph-message-wrapper[data-message-id]');
-            if (messageEl) {
-                event.preventDefault();
-                win._showMessageContextMenu(event, messageEl.dataset.messageId);
-                return;
-            }
-            const trayEl = event.target.closest('.bibliosoph-messages-tray-item[data-id]');
-            if (trayEl) {
-                event.preventDefault();
-                win._showConversationContextMenu(event, trayEl.dataset.id);
-            }
-        });
-    }
-
-    _getContextMenuApi() {
-        return game.modules.get('coffee-pub-blacksmith')?.api?.uiContextMenu ?? null;
-    }
-
-    _showMessageContextMenu(event, messageId) {
-        const menu = this._getContextMenuApi();
-        const entry = game.journal.get(this._activeConversationId);
-        if (!menu || !entry) return;
-        const message = ConversationManager.getMessages(entry).find((m) => m.id === messageId);
-        if (!message || message.deleted) return; // placeholders have no actions
-
-        const items = [
-            {
-                name: 'Reply',
-                icon: 'fa-solid fa-reply',
-                callback: () => this._replyTo(messageId)
-            }
-        ];
-        if (message.isOwn) {
-            items.push({
-                name: 'Edit Message',
-                icon: 'fa-solid fa-pen',
-                callback: () => this._startEditing(messageId)
-            });
-        }
-        items.push(
-            {
-                name: 'React',
-                icon: 'fa-solid fa-face-smile',
-                submenu: MESSAGE_REACTIONS.map((r) => ({
-                    name: r.label,
-                    icon: r.icon,
-                    callback: () => this._toggleReaction(messageId, r.key)
-                }))
-            },
-            {
-                name: 'Send to Foundry Chat',
-                icon: 'fa-solid fa-share-from-square',
-                callback: () => this._sendToChat(messageId)
-            }
-        );
-        if (message.isOwn || game.user.isGM) {
-            items.push({ separator: true });
-            items.push({
-                name: 'Delete Message',
-                icon: 'fa-solid fa-trash',
-                callback: () => ConversationManager.deleteMessage(entry, messageId)
-            });
-        }
-
-        menu.show({ id: 'bibliosoph-messages-context', x: event.clientX, y: event.clientY, zones: items });
+    /** The conversation tray is the full window's own right-click surface. */
+    _onExtraContextMenu(event) {
+        const trayEl = event.target.closest?.('.bibliosoph-messages-tray-item[data-id]');
+        if (!trayEl) return false;
+        this._showConversationContextMenu(event, trayEl.dataset.id);
+        return true;
     }
 
     _showConversationContextMenu(event, conversationId) {
@@ -1299,49 +766,5 @@ ${rows}
             y: event.clientY,
             zones: items
         });
-    }
-
-    // ==============================================================
-    // ===== SEND TO FOUNDRY CHAT (escalation, Regent-style) ========
-    // ==============================================================
-
-    async _sendToChat(messageId) {
-        const entry = game.journal.get(this._activeConversationId);
-        if (!entry || !messageId) return;
-        const message = ConversationManager.getMessages(entry).find((m) => m.id === messageId);
-        if (!message) return;
-
-        const info = ConversationManager.getInfo(entry);
-        const isParty = info.kind === 'party';
-        // Settings store Blacksmith Chat Cards API class names (see settings.js)
-        const cardTheme = isParty
-            ? getSetting('cardThemePartyMessage', 'theme-default')
-            : getSetting('cardThemePrivateMessage', 'theme-default');
-
-        let content;
-        try {
-            const renderTemplateFn = foundry.applications?.handlebars?.renderTemplate ?? renderTemplate;
-            content = await renderTemplateFn(`modules/${MODULE.ID}/templates/chat-card-message.hbs`, {
-                cardTheme,
-                icon: info.icon ?? 'fa-solid fa-comments',
-                title: this._conversationDisplayName(entry),
-                senderName: message.senderName,
-                timeDisplay: formatTimestamp(message.timestamp),
-                content: message.html
-            });
-        } catch (_) {
-            content = `<div class="blacksmith-card ${cardTheme}"><div class="section-content"><strong>${escapeHtml(message.senderName)}:</strong> ${message.html}</div></div>`;
-        }
-
-        const chatData = {
-            content,
-            speaker: ChatMessage.getSpeaker()
-        };
-        if (!isParty) {
-            const recipients = (info.members ?? []).filter((id) => game.users.get(id));
-            if (recipients.length) chatData.whisper = recipients;
-        }
-        await ChatMessage.create(chatData);
-        ui.notifications.info('Message sent to Foundry chat.');
     }
 }

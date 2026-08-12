@@ -132,6 +132,34 @@
     cursor: pointer;
 }
 
+/* Pop-out affordance: right-justified, revealed on hover. Kept out of the
+   layout entirely until then (width 0) so it cannot squeeze a long
+   conversation name, and hidden outright on the collapsed icon rail where
+   there is no room for it. */
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tray-popout {
+    flex: 0 0 auto;
+    width: 0;
+    overflow: hidden;
+    opacity: 0;
+    color: var(--bibliosoph-msg-muted);
+    font-size: 0.85em;
+    text-align: center;
+    transition: opacity 0.12s ease, width 0.12s ease;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tray-item:hover .bibliosoph-messages-tray-popout {
+    width: 16px;
+    opacity: 1;
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tray-popout:hover {
+    color: var(--bibliosoph-msg-accent);
+}
+
+#coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tray.collapsed .bibliosoph-messages-tray-popout {
+    display: none;
+}
+
 #coffee-pub-bibliosoph-messages-wrapper .bibliosoph-messages-tray-item:hover {
     background: rgba(255, 255, 255, 0.06);
     border-color: var(--bibliosoph-msg-border);

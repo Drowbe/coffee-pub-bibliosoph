@@ -4,6 +4,7 @@
 /* @import must come before any rules below */
 
 @import "window-messages.css";
+@import "window-messages-lite.css";
 @import "window-injury-picker.css";
 @import "page-injury.css";
 @import "page-outcome.css";

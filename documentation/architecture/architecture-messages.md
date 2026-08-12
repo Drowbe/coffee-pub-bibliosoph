@@ -1,10 +1,10 @@
 # Architecture: Messages & Conversations
 
-**Status:** describes the code as of 13.4.6. Written from source, not from plans.
+**Status:** describes the code as of 13.6.0. Written from source, not from plans.
 
 A unified conversation window covering the party channel and private/group messages. It replaced the older party/private message dialogs.
 
-Two files: `manager-conversations.js` (storage and delivery, 1,367 lines) and `window-messages.js` (the window, 1,347 lines).
+Four files: `manager-conversations.js` (storage and delivery), `mixin-messages-thread.js` (thread behaviour shared by both windows), `window-messages.js` (the full window) and `window-messages-lite.js` (the popout).
 
 ---
 
@@ -72,6 +72,36 @@ The header also hosts the four social toast buttons — Beverage Break, Bio Brea
 
 ---
 
+---
+
+## The lite popout
+
+A second window shows one conversation and nothing else: `window-messages-lite.js`, built on **`BlacksmithToolWindowBaseV2`** rather than the standard window base, so it floats over the canvas and follows the user's Light / Dark / Glass tool theme.
+
+Reached by the popout icon revealed on hover over a tray row, and registered as a Blacksmith window under `bibliosoph-messages-lite` so it can also be opened directly with a conversation id.
+
+**Exactly one messages surface is live at a time.** Popping out closes the full window; closing the popout reopens the full window on the same conversation; opening the full window by any route (menubar, toolbar, notification click, splash click, Auto Open) closes the popout. This is a load-bearing constraint, not a preference — it is what lets both windows share `ConversationManager`'s single-window live-update path with **no change to the manager at all**. While the popout is open it claims `MessagesWindow.current`, so `_getOpenWindow()` finds it, and renders, typing indicators and mark-read all flow to it unmodified.
+
+A popout is pinned to its conversation for life. `_activeConversationId` is an accessor whose setter refuses to be steered elsewhere — notably by the `createJournalEntry` hook, which writes that field straight onto the open window. The one legitimate change is a virtual 1:1 being promoted to a real journal entry on first send.
+
+**What it drops:** the conversation tray, the member picker, the tone bar, and reaction chips (`SUPPORTS_REACTIONS = false`, which also removes the React submenu from the context menu).
+
+**What it keeps:** markdown, day separators, avatars, speaker colours, mentions, UUID links, inline images, the right-click menu (reply / edit / delete / send to Foundry chat), document drops, image paste and upload, the typing indicator, and ENTER-sends.
+
+---
+
+## The thread mixin
+
+`mixin-messages-thread.js` holds everything a thread can *do*, independent of the chrome around it.
+
+The two windows descend from sibling Blacksmith bases, so shared behaviour cannot live in a common parent class. `ThreadBehavior(Base)` returns a subclass of whichever base it is given, and both windows wrap their own base in it.
+
+Owned by the mixin: `MESSAGE_TONES`, `MESSAGE_REACTIONS`, `CONVERSATION_ICONS`, `getSetting`, `escapeHtml`, `formatTimestamp`, `toast`; the draft/scroll-preserving `render()`; `_bindThreadListeners`; `_send`; image upload, paste and popout; `_onDropDocument`; reactions; edit / cancel / reply; the message context menu; the typing indicator; `_sendToChat`; and `_buildThreadContext`, which produces the message list and compose state both templates consume.
+
+Supplied by each window: its template, its styling, and the chrome around the thread. Two hooks exist for the difference — `_getDropTarget(root)` (the full window scopes drops to its main column; the popout accepts them anywhere) and `_onExtraContextMenu(event)` (the full window handles right-clicks on tray rows).
+
+Styling is **not** shared. `window-messages.css` defines nine `--bibliosoph-msg-*` tokens as fixed dark values; `window-messages-lite.css` redefines the same tokens against the `--blacksmith-tool-*` family so the thread repaints with the tool theme, and uses `color-mix()` for accent washes where the full window's fixed `rgba()` overlays would wash out on a light surface.
+
 ## Boundaries
 
-Bibliosoph owns conversations. Blacksmith supplies the window base, the window registry, the menubar slot, the socket transport, and the notification primitive. Foundry supplies replication and permissions.
+Bibliosoph owns conversations. Blacksmith supplies both window bases (standard and tool), the window registry, the menubar slot, the socket transport, the context menu, and the notification and toast primitives. Foundry supplies replication and permissions.

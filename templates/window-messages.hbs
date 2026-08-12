@@ -20,6 +20,7 @@
                 <i class="{{this.icon}}"></i>
                 <span class="bibliosoph-messages-tray-item-name">{{this.name}}</span>
                 {{#if this.unread}}<span class="bibliosoph-messages-tray-item-badge">{{this.unread}}</span>{{/if}}
+                <span class="bibliosoph-messages-tray-popout" data-action="msg-popout" data-id="{{this.id}}" title="Pop out this conversation into a lightweight window"><i class="fa-solid fa-up-right-from-square"></i></span>
             </a>
             {{/each}}
             {{#if showTrayDivider}}<div class="bibliosoph-messages-tray-divider"></div>{{/if}}
@@ -29,6 +30,7 @@
                 {{#if this.avatar}}<img class="bibliosoph-messages-tray-avatar" src="{{this.avatar}}" alt="{{this.name}}" width="28" height="28">{{else}}<i class="{{this.icon}}"></i>{{/if}}
                 <span class="bibliosoph-messages-tray-item-name">{{this.name}}</span>
                 {{#if this.unread}}<span class="bibliosoph-messages-tray-item-badge">{{this.unread}}</span>{{/if}}
+                <span class="bibliosoph-messages-tray-popout" data-action="msg-popout" data-id="{{this.id}}" title="Pop out this conversation into a lightweight window"><i class="fa-solid fa-up-right-from-square"></i></span>
             </a>
             {{/each}}
         </div>

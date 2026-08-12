@@ -6,6 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [13.6.0]
+
+### Added
+
+- **A conversation can be popped out into a lightweight window.** The Messages window is a workspace — a tray of every conversation, a member picker, tone stamps, reactions, export, purge. That is the right shape when you are *managing* conversations and the wrong shape when you are simply *in* one, mid-session, with a map to run. Hovering a conversation in the tray now reveals a popout icon on its right edge; clicking it moves that single thread into a Tool window (`BlacksmithToolWindowBaseV2`) that floats over the canvas and follows the user's Light / Dark / Glass choice. The full window closes behind it. Closing the popout brings the full window back, on the conversation you were in.
+- **The popout is the same thread, not a copy of it.** Markdown, day separators, avatars, speaker colours, `@mentions`, `@UUID` links and inline images all render exactly as they do in the full window. Right-click still opens reply, edit, delete and send-to-Foundry-chat. Documents still drop in as links, screenshots still paste in as uploads. ENTER still sends (SHIFT+ENTER for a newline), honouring the same ENTER-sends preference the full window writes. What it deliberately drops is the chrome: no tray, no tone bar, no reaction chips, no picker.
+
+### Changed
+
+- **Thread behaviour is written once and worn by two windows.** The full window is built on `BlacksmithWindowBaseV2` and the popout on `BlacksmithToolWindowBaseV2` — siblings, not ancestors, so shared behaviour could not live in a common parent. It lives in `mixin-messages-thread.js` instead, as `ThreadBehavior(Base)`, which returns a subclass of whichever base it is handed. Sending, dropping, pasting, uploading, editing, replying, the context menu, the typing indicator and the message half of the render context moved there intact — 535 lines out of `window-messages.js`, which is now the tray, the picker and the action bar and little else. A fix to how a message behaves lands in both windows by construction.
+- **Message actions resolve the window from the click, not from a static.** Every `ACTION_HANDLERS` entry read `MessagesWindow.current` — a class-level singleton — to find its instance, and the context menu ran off one document-level listener dispatched through that same pointer. Neither can serve two window classes. Handlers now take the instance the Blacksmith base already passes them, and the context menu binds per instance on the window's own element, the way the base binds click delegation.
+- **Notices from the thread ride the Blacksmith toast.** The five `ui.notifications` calls carried along in the moved code — upload permission, upload unavailable, upload failed, nothing-selected, sent-to-chat — now go through `toast.show` like every other user-facing notice in the module.
+
+### Fixed
+
+- **Popping out no longer announces itself as a departure.** Closing the full Messages window plays a close sound and pushes any unread count back onto the menubar. Doing that while handing the conversation to the popout would sound and badge every popout, so a hand-off is now distinguished from a real close and stays silent.
+
 ## [13.5.0]
 
 ### NOTE: Coordinated with Blacksmith, Crier on API changes.
