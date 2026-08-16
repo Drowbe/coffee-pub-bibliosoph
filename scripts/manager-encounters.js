@@ -5,6 +5,7 @@
 // CR/compendium (Blacksmith), search (Recommend), roll for encounter, and deploy.
 
 import { MODULE, BIBLIOSOPH, getDetectionLevelInfo } from './const.js';
+import { postCard, iconClass } from './manager-cards.js';
 import { WindowEncounter, WINDOW_ENCOUNTER_APP_ID, WINDOW_ENCOUNTER_HEIGHT_COLLAPSED } from './window-encounter.js';
 
 // Every user-facing notice in this module rides Blacksmith's adaptive toast
@@ -618,99 +619,100 @@ function pickRandomEncounterIntroEntry(narrativeJson, habitat) {
 }
 
 /**
- * Build encounter card data for chat-card.hbs (isEncounterCard branch).
+ * The encounter card as a composition of Blacksmith parts.
+ *
  * @param {Object} entry - { title, icon, image?, description }
- * @param {string} theme - card theme (e.g. from cardThemeEncounter)
  * @param {string} [cardTitle] - e.g. "Encounter" or "No Encounter"
- * @param {Array<{name: string, count?: number, cr: string, img?: string}>} [encounterMonsters] - optional list to show on card
- * @returns {Object} CARDDATA for template
+ * @param {Array<{name: string, count?: number, cr: string, img?: string}>} [encounterMonsters]
+ * @returns {Array<object>} parts, in render order
  */
-function buildEncounterCardData(entry, theme, cardTitle = 'Encounter', encounterMonsters = null) {
-    let strUserName = '';
-    let strUserAvatar = '';
-    let strCharacterName = '';
+function composeEncounterCard(entry, cardTitle = 'Encounter', encounterMonsters = null) {
+    // Who the card speaks for: the selected token's character if there is
+    // one, otherwise whoever pressed the button.
+    let name = '';
+    let img = '';
     const controlled = canvas?.tokens?.controlled ?? [];
-    if (controlled.length > 0) {
-        const token = controlled[0];
-        const actor = token?.actor ?? token?.document?.actor;
-        if (actor) {
-            strUserAvatar = actor.img ?? actor.portrait ?? token?.document?.texture?.src ?? '';
-            strUserName = actor.name ?? '';
-            const owners = game.users?.filter((u) => !u.isGM && actor.testUserPermission?.(u, 'OWNER')) ?? [];
-            const owner = owners.find((u) => u.active) ?? owners[0];
-            if (owner?.name) strCharacterName = owner.name;
-        }
+    const actor = controlled[0]?.actor ?? controlled[0]?.document?.actor ?? null;
+    if (actor) {
+        name = actor.name ?? '';
+        img = actor.img ?? actor.portrait ?? controlled[0]?.document?.texture?.src ?? '';
     }
-    if (!strUserAvatar || !strUserName) {
-        strUserName = game.user?.name ?? '';
-        strUserAvatar = game.user?.avatar ?? '';
-        strCharacterName = game.user?.character?.name ?? '';
+    if (!name || !img) {
+        name = game.user?.name ?? '';
+        img = game.user?.avatar ?? '';
     }
-    const data = {
-        isEncounterCard: true,
-        isGM: game.user?.isGM ?? false,
-        userName: strUserName,
-        userAvatar: strUserAvatar,
-        characterName: strCharacterName,
-        theme: theme ?? 'theme-default',
-        iconStyle: 'fa-swords',
-        cardTitle,
-        narrativeTitle: entry?.title ?? cardTitle,
-        narrativeDescription: entry?.description ?? '',
-        narrativeIcon: entry?.icon ?? '<i class="fa-solid fa-dice"></i>',
-        narrativeImage: entry?.image ?? null
-    };
-    if (Array.isArray(encounterMonsters) && encounterMonsters.length > 0) {
-        const detectionLevel = Math.max(1, Math.min(5, Number(game.settings.get(MODULE.ID, 'quickEncounterDetection')) ?? 3));
-        const detectionInfo = getDetectionLevelInfo(detectionLevel);
-        data.detectionLevelHeader = detectionInfo.label;
-        data.detectionNarrativeText = detectionInfo.narrative;
-        data.encounterDetectionLevel = detectionLevel;
-        data.encounterShowUnknownAdversaries = detectionLevel <= 2;
-        const noImagePortrait = 'modules/coffee-pub-blacksmith/images/portraits/portrait-noimage.webp';
-        data.encounterUnknownAdversariesImage = noImagePortrait;
 
-        data.encounterMonsters = encounterMonsters.map((m) => {
-            const name = m.name ?? 'Unknown';
-            const count = typeof m.count === 'number' && m.count >= 1 ? m.count : 1;
-            const uuid = m.id || m.uuid || m.actorUuid || m.actorUUID;
-            const displayName = count > 1 ? `${count} × ${name}` : name;
-            const displayNameLink = uuid ? `@UUID[${uuid}]{${displayName}}` : displayName;
-            const img = m.img ?? m.portrait ?? m.tokenImg ?? noImagePortrait;
-            return {
-                name,
-                count,
-                displayName,
-                displayNameLink,
-                cr: m.cr ?? '—',
-                img
-            };
-        });
-        data.encounterMonstersPlain = encounterMonsters.map((m) => {
-            const name = m.name ?? 'Unknown';
-            const count = typeof m.count === 'number' && m.count >= 1 ? m.count : 1;
-            const displayName = count > 1 ? `${count} × ${name}` : name;
-            const img = m.img ?? m.portrait ?? m.tokenImg ?? noImagePortrait;
-            return { displayName, img };
-        });
+    const parts = [
+        { part: 'header', icon: 'fa-solid fa-swords', title: cardTitle },
+        { part: 'identity', img, name }
+    ];
+    if (entry?.image) parts.push({ part: 'image', src: entry.image, alt: entry.title ?? cardTitle });
+    parts.push({ part: 'section', icon: iconClass(entry?.icon), label: entry?.title ?? cardTitle });
+    if (entry?.description) {
+        parts.push({ part: 'prose', blocks: [{ type: 'paragraph', text: entry.description }] });
     }
-    return data;
+
+    if (!Array.isArray(encounterMonsters) || !encounterMonsters.length) return parts;
+
+    const detectionLevel = Math.max(1, Math.min(5, Number(game.settings.get(MODULE.ID, 'quickEncounterDetection')) ?? 3));
+    const detection = getDetectionLevelInfo(detectionLevel);
+    const noImagePortrait = 'modules/coffee-pub-blacksmith/images/portraits/portrait-noimage.webp';
+
+    parts.push({ part: 'section', icon: 'fa-solid fa-dragon', label: 'Adversaries' });
+    if (detection?.narrative) {
+        parts.push({ part: 'prose', blocks: [{ type: 'paragraph', text: `**${detection.label}**: ${detection.narrative}` }] });
+    }
+
+    const describe = (m) => {
+        const monsterName = m.name ?? 'Unknown';
+        const count = typeof m.count === 'number' && m.count >= 1 ? m.count : 1;
+        return {
+            label: count > 1 ? `${count} × ${monsterName}` : monsterName,
+            img: m.img ?? m.portrait ?? m.tokenImg ?? noImagePortrait,
+            uuid: m.id || m.uuid || m.actorUuid || m.actorUUID || null,
+            cr: m.cr ?? '—'
+        };
+    };
+    const described = encounterMonsters.map(describe);
+
+    // Two lists, and exactly one renders for any given reader.
+    //
+    // `readableBy: 'gm'` covers the GM's half. There is no 'not a GM', so the
+    // players' half names them: an array of user ids is a supported form, and
+    // the non-GM users ARE the complement at the moment the card is posted.
+    // Anyone who becomes a GM afterwards reads this card as a player, which is
+    // the right answer for a card describing a moment that has passed.
+    const playerIds = (game.users?.filter((u) => !u.isGM) ?? []).map((u) => u.id);
+
+    parts.push({
+        part: 'rows',
+        readableBy: 'gm',
+        items: described.map((m) => ({ img: m.img, uuid: m.uuid, label: m.label, trailing: `CR ${m.cr}` }))
+    });
+
+    // Detection 1-2 is the party being caught out: they know something is
+    // there, not what it is.
+    parts.push({
+        part: 'rows',
+        readableBy: playerIds,
+        items: detectionLevel <= 2
+            ? [{ img: noImagePortrait, label: 'Unknown Adversaries' }]
+            : described.map((m) => ({ img: m.img, label: m.label }))
+    });
+
+    return parts;
 }
 
 /**
- * Render encounter card HTML and post to chat.
- * @param {Object} cardData - from buildEncounterCardData
+ * Render and post an encounter card.
+ * @param {Array<object>} parts - from composeEncounterCard
  * @returns {Promise<void>}
  */
-async function postEncounterCardToChat(cardData) {
-    const response = await fetch(BIBLIOSOPH.MESSAGE_TEMPLATE_CARD);
-    const templateText = await response.text();
-    const template = Handlebars.compile(templateText);
-    const compiledHtml = template(cardData);
-    await ChatMessage.create({
-        user: game.user.id,
-        content: compiledHtml,
-        speaker: ChatMessage.getSpeaker()
+async function postEncounterCardToChat(parts) {
+    await postCard({
+        type: 'encounter',
+        theme: game.settings.get(MODULE.ID, 'cardThemeEncounter') ?? 'default',
+        parts
     });
 }
 
@@ -747,12 +749,10 @@ export async function rollForEncounter(habitat, difficulty, targetCR, minCR = 0,
     }
     const hasEncounter = roll.total <= encounterOdds;
 
-    const theme = game.settings.get(MODULE.ID, 'cardThemeEncounter') ?? 'theme-default';
 
     if (!hasEncounter) {
         const entry = pickEntry(encounterFalseEntries);
-        const cardData = buildEncounterCardData(entry, theme, 'No Encounter');
-        await postEncounterCardToChat(cardData);
+        await postEncounterCardToChat(composeEncounterCard(entry, 'No Encounter'));
         const encounterFalseSound = game.settings.get(MODULE.ID, 'encounterFalseSound');
         const encounterSoundVolume = game.settings.get(MODULE.ID, 'encounterSoundVolume') ?? 0.7;
         if (typeof BlacksmithUtils?.playSound === 'function' && encounterFalseSound && encounterFalseSound !== 'none') {
@@ -779,7 +779,6 @@ export async function rollForEncounter(habitat, difficulty, targetCR, minCR = 0,
  * @param {string} [habitat] - e.g. "Mountain"; card title becomes "{habitat} Encounter" when set (omitted when "Any"); also used to pick narrative when introEntry is null
  */
 export async function postEncounterDeployCardToChat(introEntry, selectedMonsters = null, habitat = '') {
-    const theme = game.settings.get(MODULE.ID, 'cardThemeEncounter') ?? 'theme-default';
     let entry;
     const fallbackEntry = { title: 'Encounter Deployed', icon: '<i class="fa-solid fa-map-location-dot"></i>', description: '' };
     if (introEntry) {
@@ -795,8 +794,7 @@ export async function postEncounterDeployCardToChat(introEntry, selectedMonsters
     }
     const habitatStr = habitat ? String(habitat).trim() : '';
     const cardTitle = (habitatStr && habitatStr.toLowerCase() !== 'any') ? `${habitatStr} Encounter` : 'Encounter';
-    const cardData = buildEncounterCardData(entry, theme, cardTitle, selectedMonsters);
-    await postEncounterCardToChat(cardData);
+    await postEncounterCardToChat(composeEncounterCard(entry, cardTitle, selectedMonsters));
     const encounterTrueSound = game.settings.get(MODULE.ID, 'encounterTrueSound');
     const encounterSoundVolume = game.settings.get(MODULE.ID, 'encounterSoundVolume') ?? 0.7;
     if (typeof BlacksmithUtils?.playSound === 'function' && encounterTrueSound && encounterTrueSound !== 'none') {

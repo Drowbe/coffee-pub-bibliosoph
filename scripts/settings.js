@@ -103,25 +103,25 @@ export const registerSettings = () => {
 		};
 
 		/**
-		 * Get Blacksmith theme choices for chat cards using Chat Cards API.
-		 * Returns card themes with CSS class names as keys.
+		 * Blacksmith card theme choices, keyed by theme ID.
+		 *
+		 * IDs, not class names: `chatCards.post()` takes an id, and the four
+		 * cards still building their own markup resolve one to a class through
+		 * manager-cards.js. A world updated from an earlier Bibliosoph holds a
+		 * class name here ('theme-red'), which is no longer a valid choice —
+		 * those cards fall back to the world default until the GM picks again.
 		 */
 		async function getCardThemeChoices() {
 			try {
 				const blacksmith = await BlacksmithAPI.get();
 				const chatCardsAPI = blacksmith?.chatCards;
 
-				if (!chatCardsAPI) {
+				if (typeof chatCardsAPI?.getThemeChoices !== "function") {
 					console.warn(MODULE.ID + ': Blacksmith Chat Cards API not available, using fallback');
 					return getCardThemeChoicesFallback();
 				}
 
-				if (typeof chatCardsAPI.getCardThemeChoicesWithClassNames !== "function") {
-					console.warn(MODULE.ID + ': getCardThemeChoicesWithClassNames not available, using fallback');
-					return getCardThemeChoicesFallback();
-				}
-
-				return chatCardsAPI.getCardThemeChoicesWithClassNames();
+				return chatCardsAPI.getThemeChoices('card');
 			} catch (error) {
 				console.error(MODULE.ID + ': Error getting card theme choices from API:', error);
 				return getCardThemeChoicesFallback();
@@ -131,7 +131,7 @@ export const registerSettings = () => {
 		/** Fallback theme choices if Chat Cards API is unavailable. */
 		function getCardThemeChoicesFallback() {
 			return {
-				"theme-default": "Default"
+				"default": "Tan"
 			};
 		}
 
@@ -383,7 +383,7 @@ export const registerSettings = () => {
 			scope: 'world',
 			config: true,
 			requiresReload: false,
-			default: 'theme-default',
+			default: 'default',
 			choices: themeChoices
 		});
 		game.settings.register(MODULE.ID, 'cardThemePrivateMessage', {
@@ -392,7 +392,7 @@ export const registerSettings = () => {
 			scope: 'world',
 			config: true,
 			requiresReload: false,
-			default: 'theme-default',
+			default: 'default',
 			choices: themeChoices
 		});
 
@@ -551,7 +551,7 @@ export const registerSettings = () => {
 			scope: 'world',
 			config: true,
 			requiresReload: false,
-			default: 'theme-default',
+			default: 'default',
 			choices: themeChoices
 		});
 		// -- Critical Compendium (typed pages with real mechanics) --
@@ -715,7 +715,7 @@ export const registerSettings = () => {
 			config: true,
 			requiresReload: false,
 			type: String,
-			default: 'theme-default',
+			default: 'default',
 			choices: themeChoices
 		});
 		// -- Fumble Compendium (typed pages with real mechanics) --
@@ -952,7 +952,7 @@ export const registerSettings = () => {
 			scope: 'world',
 			config: true,
 			requiresReload: false,
-			default: 'theme-default',
+			default: 'default',
 			choices: themeChoices
 		});
 		// -- Injury Image --
@@ -1302,7 +1302,7 @@ export const registerSettings = () => {
 			scope: 'world',
 			config: true,
 			requiresReload: false,
-			default: 'theme-default',
+			default: 'default',
 			choices: themeChoices
 		});
 		// -- Odds of Encounter --
@@ -1413,7 +1413,7 @@ export const registerSettings = () => {
 			scope: 'world',
 			config: true,
 			requiresReload: false,
-			default: 'theme-default',
+			default: 'default',
 			choices: themeChoices
 		});
 
@@ -1703,7 +1703,7 @@ export const registerSettings = () => {
 			scope: 'world',
 			config: true,
 			requiresReload: false,
-			default: 'theme-default',
+			default: 'default',
 			choices: themeChoices
 		});
 		// -- Inspiration Deck (typed pages: the card deck) --

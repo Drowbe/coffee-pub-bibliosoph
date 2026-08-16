@@ -16,6 +16,7 @@ import { InspirationPageSheet } from './sheets/inspiration-page-sheet.js';
 import * as INSPIRATION_ACTIONS from './data/inspiration-schema.js';
 import { SEVERITY_DCS as INJURY_SEVERITY_DCS, damageFor } from './data/injury-schema.js';
 import { registerInjuryTickHooks } from './manager-injury-ticks.js';
+import { postCard, getChatCardsAPI, getCard, updateCard, stampCardActions, iconClass } from './manager-cards.js';
 
 // Log through Blacksmith's console tool wherever possible; raw console is
 // reserved for bootstrap failures where Blacksmith itself is unavailable.
@@ -25,17 +26,6 @@ function logBib(message, data = '', debug = true, notify = false) {
     } else {
         console.log(`${MODULE.ID} | ${message}`, data);
     }
-}
-
-// Cached compiled chat-card template — fetched and compiled once per
-// session instead of on every card.
-let _compiledCardTemplate = null;
-async function getCardTemplate() {
-    if (!_compiledCardTemplate) {
-        const response = await fetch(BIBLIOSOPH.MESSAGE_TEMPLATE_CARD);
-        _compiledCardTemplate = Handlebars.compile(await response.text());
-    }
-    return _compiledCardTemplate;
 }
 
 // Cached investigation narrative JSON (static resource)
@@ -223,6 +213,17 @@ Hooks.once('ready', async () => {
             logBib('Failed to register the affliction classifier', error?.message, false, false);
         }
 
+        // CARD BUTTONS: every client registers every handler, GM and player
+        // alike. A chat message is data on each client, so a callback cannot
+        // ride the card — each browser resolves the handler from its own
+        // registry when the card renders, which is also why buttons still
+        // work after a reload.
+        try {
+            registerCardActions();
+        } catch (error) {
+            logBib('Failed to register card actions', error?.message, false, false);
+        }
+
         // TREAT STAMPS: players can't edit GM-owned chat messages, so a
         // player's treat click relays a stamp-sweep intent to the active GM
         try {
@@ -371,27 +372,21 @@ export async function rollOutcomeCard(type, { title = null, rollerActorId = null
         showBibToast(`No ${kindLabel} Deck`, `Choose a ${kindLabel} compendium in Bibliosoph settings.`, 'fa-solid fa-book-open');
         return;
     }
-    const html = await createChatCardOutcome(type, { title, rollerActorId, rollerTokenId, hitActorId, overrides });
-    if (!html) {
+    const built = await createChatCardOutcome(type, { title, rollerActorId, rollerTokenId, hitActorId, overrides });
+    if (!built) {
         logBib(`No outcome found in "${compendium}"`, '', false, false);
         showBibToast(`No ${kindLabel} Found`, `"${compendium}" has no matching entries.`, 'fa-solid fa-book-open');
         return;
     }
-    await ChatMessage.create({ user: game.user.id, content: html, speaker: ChatMessage.getSpeaker() });
+    await postCard({
+        type: type === 'crit' ? 'critical' : 'fumble',
+        theme: getSettingSafe(type === 'crit' ? 'cardThemeCritical' : 'cardThemeFumble', 'default'),
+        parts: built.parts,
+        flags: { outcome: built.state }
+    });
 }
 
 // Read an outcome record off a typed page (system data is authoritative).
-// Decode a card button's data-effect payload (JSON+URI, with a fallback
-// for cards posted before the encoding switch). Module scope, not the
-// click listener's: the apply-outcome handler lives outside that closure.
-function decodeEffectPayload(raw) {
-    try {
-        return JSON.parse(decodeURIComponent(raw));
-    } catch (_) {
-        return BlacksmithUtils.stringToObject(raw);
-    }
-}
-
 function readOutcomeRecord(page) {
     const system = page?.system;
     if (!system?.kind) return null;
@@ -407,7 +402,7 @@ function readOutcomeRecord(page) {
 async function createChatCardOutcome(type, { title = null, rollerActorId = null, rollerTokenId = null, hitActorId = null, overrides = null } = {}) {
     const compendiumName = getSettingSafe(type === 'crit' ? 'critCompendium' : 'fumbleCompendium', 'none');
     const pack = game.packs.get(compendiumName);
-    if (!pack) return '';
+    if (!pack) return null;
 
     // Scan EVERY journal in the pack. The bucket journals (Butchery,
     // Carnage, Slaughter…) are organisational; each page states its own
@@ -417,12 +412,12 @@ async function createChatCardOutcome(type, { title = null, rollerActorId = null,
         .flatMap((journal) => Array.from(journal.pages ?? []))
         .map((page) => readOutcomeRecord(page))
         .filter((rec) => rec && rec.kind === type);
-    if (!candidates.length) return '';
+    if (!candidates.length) return null;
 
     const picked = title
         ? candidates.find((c) => c.title === title)
         : await weightedPickRolled(candidates, (c) => c.odds);
-    if (!picked) { logBib(`No outcome titled "${title}"`, '', false, false); return ''; }
+    if (!picked) { logBib(`No outcome titled "${title}"`, '', false, false); return null; }
     logBib(`Outcome picked: "${picked.title}" (odds ${picked.odds} of ${candidates.length} ${type}s)`, '', true, false);
 
     // Test-harness seam, like `title` above: demo a field combination no
@@ -456,36 +451,141 @@ async function createChatCardOutcome(type, { title = null, rollerActorId = null,
     const cast = resolveOutcomeCast({ rollerActorId, rollerTokenId, hitActorId });
     const rollerId = cast.roller?.id ?? rollerActorId ?? '';
 
-    const template = await getCardTemplate();
-    const html = template({
-        userName: game.user.name,
-        userAvatar: game.user.avatar,
-        playerType: game.user.isGM ? 'Gamemaster' : 'Player',
-        characterName: game.user.isGM ? 'Cocktail Craftsman and Moderator' : (game.user.character?.name ?? 'No Character Set'),
-        theme: getSettingSafe(isCrit ? 'cardThemeCritical' : 'cardThemeFumble', 'cardsdefault'),
-        iconStyle: isCrit ? 'fa-burst' : 'fa-heart-crack',
-        cardTitle: isCrit ? 'Critical Hit' : 'Fumble',
-        title: rec.title,
-        cardSubTitle: severityLabel(type, rec.severity),
-        iconSubStyle: isCrit ? 'fa-burst' : 'fa-heart-crack',
-        content: rec.description,
-        image: getSettingSafe('outcomeImageEnabled', true) ? (rec.image || '') : '',
-        imagecaption: rec.imagetitle || '',
-        imageBackground: 'themecolor',
-        // Mechanics, spelled out on the card
-        outcomemechanics: buildOutcomeMechanics(rec, modifierLines, rounds),
-        rollerActorId: rollerId,
-        ...buildOutcomeApplyButtons(rec, APPLYDATA, cast),
-        applyoutcomeicon: isCrit ? 'fa-burst' : 'fa-heart-crack',
-        hasSectionContent: true
-    });
-
     BlacksmithUtils.playSound(
         isCrit ? 'modules/coffee-pub-blacksmith/sounds/reaction-yay.mp3'
             : 'modules/coffee-pub-blacksmith/sounds/sadtrombone.mp3',
         '0.7'
     );
-    return html;
+
+    // Everything the card needs to answer a click, on the message rather
+    // than in the buttons: the record to apply, who may press, and how
+    // many picks are left. It is also the pick STATE — one card asking for
+    // two party members has to survive a refresh and read the same on
+    // every client, which a client's memory cannot do.
+    const state = {
+        apply: APPLYDATA,
+        kind: type,
+        icon: isCrit ? 'fa-solid fa-burst' : 'fa-solid fa-heart-crack',
+        rollerActorId: rollerId,
+        ...buildOutcomeTargets(rec, cast)
+    };
+    state.picksRemaining = state.picksTotal;
+    state.picked = [];
+    state.appliedNames = [];
+
+    return {
+        parts: composeOutcomeCard({
+            title: rec.title,
+            icon: isCrit ? 'fa-solid fa-burst' : 'fa-solid fa-heart-crack',
+            cardTitle: isCrit ? 'Critical Hit' : 'Fumble',
+            severity: severityLabel(type, rec.severity),
+            tone: isCrit ? 'positive' : 'negative',
+            roller: cast.roller,
+            image: getSettingSafe('outcomeImageEnabled', true) ? (rec.image || '') : '',
+            imageCaption: rec.imagetitle || '',
+            description: rec.description,
+            mechanics: buildOutcomeMechanics(rec, modifierLines, rounds)
+        }, state),
+        state
+    };
+}
+
+/**
+ * The outcome card as a composition.
+ *
+ * `state` supplies the tail — the controls, or the stamp that replaces
+ * them — so the same function rebuilds the card after every pick.
+ *
+ * @returns {Array<object>} parts, in render order
+ */
+function composeOutcomeCard(outcome, state) {
+    const parts = [{ part: 'header', icon: outcome.icon, title: outcome.cardTitle }];
+    if (outcome.roller) {
+        parts.push({ part: 'identity', img: outcome.roller.img || '', name: outcome.roller.name });
+    }
+    if (outcome.severity) {
+        parts.push({ part: 'band', text: outcome.severity, tone: outcome.tone });
+    }
+    parts.push({ part: 'section', icon: 'fa-solid fa-dice', label: outcome.title });
+    if (outcome.image) {
+        parts.push({ part: 'image', src: outcome.image, alt: outcome.title, caption: outcome.imageCaption });
+    }
+    if (outcome.description) {
+        parts.push({ part: 'prose', blocks: [{ type: 'paragraph', text: outcome.description }] });
+    }
+    if (outcome.mechanics?.length) {
+        parts.push({
+            part: 'notes',
+            items: outcome.mechanics.map((line) => ({ icon: `fa-solid ${line.icon}`, text: line.text }))
+        });
+    }
+    parts.push(composeOutcomeActions(state));
+    return parts;
+}
+
+/**
+ * The card's tail: the controls while picks remain, the stamp once they
+ * are spent.
+ *
+ * WHO MAY PRESS. The choice belongs to the player whose character rolled,
+ * so the part is readable by that actor's owner — and a GM owns every
+ * actor, which is what puts it in front of them too. A button that
+ * resolves against the clicker's canvas selection stays GM-only: relayed,
+ * it would read the GM's selection rather than the player's and quietly
+ * land on the wrong token.
+ *
+ * This decides what RENDERS. The handler checks again before applying.
+ */
+function composeOutcomeActions(state) {
+    if (state.picksRemaining <= 0) {
+        return {
+            part: 'band',
+            text: `Applied to ${state.appliedNames.join(', ')}`,
+            icon: 'fa-solid fa-check',
+            tone: 'positive'
+        };
+    }
+
+    const buttons = [];
+    const remaining = (state.candidates ?? []).filter((c) => !state.picked.includes(c.id));
+    if (state.randomAllowed && remaining.length > 1) {
+        buttons.push({
+            moduleId: MODULE.ID, action: OUTCOME_APPLY_ACTION, value: 'random',
+            label: 'Random Party Member', icon: 'fa-solid fa-dice-d20'
+        });
+    }
+    for (const candidate of remaining) {
+        buttons.push({
+            moduleId: MODULE.ID, action: OUTCOME_APPLY_ACTION, value: candidate.id,
+            label: candidate.name, icon: state.icon
+        });
+    }
+    if (!buttons.length) {
+        buttons.push({
+            moduleId: MODULE.ID, action: OUTCOME_APPLY_ACTION, value: '',
+            label: state.singleLabel || 'Apply', icon: state.icon, variant: 'primary'
+        });
+    }
+
+    const part = {
+        part: 'actions',
+        layout: buttons.length > 1 ? 'stacked' : 'inline',
+        buttons
+    };
+    // Progress belongs above the buttons on a multi-pick card: once the
+    // prose has scrolled past, the card is the only place the count lives.
+    const hint = state.picksTotal > 1
+        ? targetHint('ally', state.picksTotal, state.picksRemaining)
+        : state.hint;
+    const done = state.appliedNames.length ? `So far: ${state.appliedNames.join(', ')}. ` : '';
+    if (done || hint) part.instruction = `${done}${hint ?? ''}`.trim();
+
+    if (state.needsSelection) part.readableBy = 'gm';
+    else if (state.rollerActorId) {
+        part.readableBy = 'owner';
+        part.actorId = state.rollerActorId;
+    }
+    return part;
 }
 
 /**
@@ -585,103 +685,84 @@ function resolveOutcomeCast({ rollerActorId = null, rollerTokenId = null, hitAct
 }
 
 /**
- * The apply controls, which differ by who the outcome lands on:
- *   party — one button that just does it, to everyone, no selecting
- *   ally  — one button PER party member, because "you pick who gets
- *           this" is a decision the table makes out loud
- *   self  — the roller, named when we know who that is
- *   else  — the usual single button against the selected token
+ * WHO an outcome can land on, as card state rather than as markup.
+ *
+ * Which controls appear comes from the record's target mode, so "who does
+ * this land on?" is answered by clicking a name rather than by
+ * remembering to select the right token first.
+ *
+ *   party  — one button, the whole party at once
+ *   ally   — one per party member, plus let-the-dice-decide; `picks` of them
+ *   self   — the roller, named
+ *   target — the creature hit, named
+ *   other  — whatever the clicker has selected (GM only, by nature)
+ *
+ * @returns {object} the targeting half of the card's state
  */
-function buildOutcomeApplyButtons(rec, applyData, cast = {}) {
-    const encode = (data) => encodeURIComponent(JSON.stringify(data));
+function buildOutcomeTargets(rec, cast = {}) {
+    const party = getPartyActors();
+    const asCandidate = (actor) => ({ id: actor.id, name: actor.name, img: actor.img || 'icons/svg/mystery-man.svg' });
 
     // Card-dealing outcomes hand someone a card from the inspiration deck
     // instead of applying a status. `appliesto` still decides WHO, so this
-    // reuses the same picker rather than inventing a second targeting idea.
+    // reuses the same targeting rather than inventing a second idea.
     if (rec.dealscard) {
-        const deal = (extra) => encode({ dealscard: true, name: rec.title, ...extra });
-        if (rec.appliesto === 'ally' || rec.appliesto === 'party') {
-            const party = getPartyActors();
-            if (party.length) {
-                return {
-                    applyoutcomerandom: deal({ randomAlly: true }),
-                    applyoutcomepicker: party.map((actor) => ({
-                        name: actor.name,
-                        img: actor.img || 'icons/svg/mystery-man.svg',
-                        payload: deal({ targetActorId: actor.id })
-                    })),
-                    applyoutcomeicon: 'fa-lightbulb',
-                    applyoutcomepicks: 1,
-                    applyoutcomehint: 'Pick who draws a card, or let the dice decide.'
-                };
-            }
+        if ((rec.appliesto === 'ally' || rec.appliesto === 'party') && party.length) {
+            return {
+                dealscard: true, picksTotal: 1, randomAllowed: true,
+                candidates: party.map(asCandidate),
+                hint: 'Pick who draws a card, or let the dice decide.'
+            };
         }
         const named = rec.appliesto === 'self' ? cast.roller : (cast.hit ?? cast.roller);
         return {
-            applyoutcome: deal({ targetActorId: named?.id ?? null }),
-            applyoutcomelabel: named ? `Deal a Card to ${named.name}` : 'Deal an Inspiration Card',
-            // Unbound: resolved from whoever the clicker has selected, which
-            // makes it the GM's to press — see the render gate.
-            applyoutcomeneedsselection: !named,
-            applyoutcomehint: named ? '' : 'Select who draws, or the card goes to your own character.'
+            dealscard: true, picksTotal: 1, candidates: [],
+            targetActorId: named?.id ?? null,
+            singleLabel: named ? `Deal a Card to ${named.name}` : 'Deal an Inspiration Card',
+            needsSelection: !named,
+            hint: named ? '' : 'Select who draws, or the card goes to your own character.'
         };
     }
 
     if (rec.appliesto === 'party') {
-        const party = getPartyActors();
         return {
-            applyoutcome: encode({ ...applyData, partyMode: true }),
-            applyoutcomelabel: party.length ? `Apply to the Whole Party (${party.length})` : 'Apply to the Whole Party',
-            applyoutcomehint: party.length ? '' : 'No party members found — select tokens instead.'
+            partyMode: true, picksTotal: 1, candidates: [],
+            singleLabel: party.length ? `Apply to the Whole Party (${party.length})` : 'Apply to the Whole Party',
+            hint: party.length ? '' : 'No party members found — select tokens instead.'
         };
     }
 
-    if (rec.appliesto === 'ally') {
-        const party = getPartyActors();
-        if (party.length) {
-            // "Two party members each lose 1 HP" is one card, not two: the
-            // picker stays open until `picks` choices have been made.
-            const picks = picksFor(rec);
-            return {
-                // Some entries say "you pick", others say "GM chooses with a
-                // dice roll" — offer both rather than encoding which is which.
-                applyoutcomerandom: encode({ ...applyData, randomAlly: true }),
-                applyoutcomepicker: party.map((actor) => ({
-                    id: actor.id,
-                    name: actor.name,
-                    img: actor.img || 'icons/svg/mystery-man.svg',
-                    payload: encode({ ...applyData, targetActorId: actor.id })
-                })),
-                applyoutcomeicon: applyData.kind === 'crit' ? 'fa-burst' : 'fa-heart-crack',
-                applyoutcomepicks: picks,
-                applyoutcomehint: picks > 1
-                    ? targetHint('ally', picks)
-                    : 'Pick who it lands on, or let the dice decide.'
-            };
-        }
+    // "Two party members each lose 1 HP" is one card, not two: the picker
+    // stays open until `picks` choices have been made.
+    if (rec.appliesto === 'ally' && party.length) {
+        const picks = picksFor(rec);
+        return {
+            picksTotal: picks,
+            // Some entries say "you pick", others say "GM chooses with a
+            // dice roll" — offer both rather than encoding which is which.
+            randomAllowed: true,
+            candidates: party.map(asCandidate),
+            hint: picks > 1 ? targetHint('ally', picks) : 'Pick who it lands on, or let the dice decide.'
+        };
     }
 
-    // Name the person when we can, and bind the button to them: the card
-    // records a specific moment, so it should not quietly re-aim at
-    // whatever happens to be selected when someone gets around to clicking.
+    // Name the person when we can and bind to them: the card records a
+    // specific moment, so it should not quietly re-aim at whatever happens
+    // to be selected when someone gets around to clicking.
     const named = rec.appliesto === 'self' ? cast.roller
         : (rec.appliesto === 'target' ? (cast.hit ?? null) : null);
     if (named) {
         return {
-            applyoutcome: encode({ ...applyData, targetActorId: named.id }),
-            applyoutcomelabel: `Apply to ${named.name}`,
-            applyoutcomehint: ''
+            picksTotal: 1, candidates: [], targetActorId: named.id,
+            singleLabel: `Apply to ${named.name}`, hint: ''
         };
     }
 
-    // Nothing to bind to, so this one applies to whatever the clicker has
-    // selected on the canvas. That makes it the GM's button by nature: a
-    // relayed player click would silently use the GM's selection instead.
     return {
-        applyoutcome: encode(applyData),
-        applyoutcomelabel: `Apply to ${targetLabel(rec.appliesto).replace(/^The /, '')}`,
-        applyoutcomeneedsselection: true,
-        applyoutcomehint: TARGET_HINTS[rec.appliesto] ?? ''
+        picksTotal: 1, candidates: [],
+        singleLabel: `Apply to ${targetLabel(rec.appliesto).replace(/^The /, '')}`,
+        needsSelection: true,
+        hint: TARGET_HINTS[rec.appliesto] ?? ''
     };
 }
 
@@ -720,45 +801,47 @@ export async function rollInjuryCard(category, target = null, { title = null } =
     BIBLIOSOPH.CARDTYPE = "General";
     // `title` names a specific injury; without it the category rolls at
     // random, weighted by odds — the behaviour the old selector card had.
-    let compiledHtml = await createChatCardInjury(category, target, { title });
+    const built = await createChatCardInjury(category, target, { title });
     resetBibliosophVars();
-    if (!compiledHtml) return;
+    if (!built) return;
 
     // Automatically Apply Injury: with a known target, apply BEFORE posting
-    // and swap the card's Apply button for the applied stamp. Runs on the
-    // rolling client (the injured player in click mode, the GM in auto),
+    // and compose the card with the stamp in place of the button. Runs on
+    // the rolling client (the injured player in click mode, the GM in auto),
     // both of whom own the target actor. Any failure falls back to posting
-    // the normal button.
+    // the normal button — hence composing only once we know it worked.
+    let parts = built.parts;
     const autoApply = BlacksmithUtils.getSettingSafely(MODULE.ID, 'injuryAutoApply', false);
     if (autoApply && (target?.actorId || target?.tokenId)) {
         try {
-            const doc = new DOMParser().parseFromString(compiledHtml, 'text/html');
-            const button = doc.querySelector('.coffee-pub-bibliosoph-button-injury');
             const targetActor = canvas?.tokens?.get(target.tokenId ?? '')?.actor
                 ?? game.actors.get(target.actorId ?? '');
-            if (button && targetActor) {
-                // decodeEffectPayload, not a bare JSON.parse: cards posted
-                // before the encoding switch need the fallback too.
-                const data = decodeEffectPayload(button.getAttribute('data-effect'));
-                const applied = await applyStatusToTokens(buildInjuryApplyConfig(data, [targetActor]));
-                if (applied.length) {
-                    const stamp = doc.createElement('div');
-                    stamp.style.cssText = 'width:100%; text-align:center; font-weight:bold; padding:5px 0;';
-                    stamp.textContent = `✓ Applied to ${applied.join(', ')}`;
-                    button.replaceWith(stamp);
-                    for (const hint of doc.querySelectorAll('.bibliosoph-apply-hint')) hint.remove();
-                    compiledHtml = doc.body.innerHTML;
-                }
+            if (targetActor) {
+                const applied = await applyStatusToTokens(buildInjuryApplyConfig(built.effect, [targetActor]));
+                if (applied.length) parts = built.compose({ appliedTo: applied.join(', ') });
             }
         } catch (error) {
             logBib('Auto-apply injury failed; posting card with the button', error?.message, false, false);
         }
     }
 
-    await ChatMessage.create({
-        user: game.user.id,
-        content: compiledHtml,
-        speaker: ChatMessage.getSpeaker()
+    await postInjuryCard(parts, built.effect);
+}
+
+/**
+ * Post an injury card, with everything the Apply button will need stored
+ * on the message rather than stuffed into the button.
+ *
+ * A button carries a `value`, and the applier needs the whole record —
+ * modifiers, duration, source. Flags are where that belongs: the handler
+ * reads them back off the message it was clicked on.
+ */
+async function postInjuryCard(parts, effect) {
+    return postCard({
+        type: 'injury',
+        theme: getSettingSafe('cardThemeInjury', 'default'),
+        parts,
+        flags: { injury: effect }
     });
 }
 
@@ -771,12 +854,13 @@ async function triggerTreatmentCard() {
         showBibToast('No Patient', 'Target or select a token to treat.', 'fa-solid fa-crosshairs');
         return;
     }
-    const compiledHtml = await createChatCardTreatment(token);
-    if (!compiledHtml) return;
-    await ChatMessage.create({
-        user: game.user.id,
-        content: compiledHtml,
-        speaker: ChatMessage.getSpeaker()
+    const built = await createChatCardTreatment(token);
+    if (!built) return;
+    await postCard({
+        type: 'check-up',
+        theme: getSettingSafe('cardThemeInjury', 'default'),
+        parts: built.parts,
+        flags: { checkup: built.state }
     });
 }
 
@@ -946,30 +1030,26 @@ async function createChatCardTreatment(token) {
             // the card; a GM's own client fetches the notes at render time,
             // so the text never reaches a player's browser.
             sourceUuid: flag?.sourceUuid ?? '',
-            buttonIcon: kind === 'injury' ? 'fa-bandage'
-                : (kind === 'crit' || kind === 'fumble') ? 'fa-burst'
-                : 'fa-sparkles',
-            payload: encodeURIComponent(JSON.stringify({
-                actorId: actor.id,
-                tokenId: token.id,
-                effectId: effect.id,
-                kind,
-                name: rowName,
-                dc
-            }))
+            buttonIcon: kind === 'injury' ? 'fa-solid fa-bandage'
+                : (kind === 'crit' || kind === 'fumble') ? 'fa-solid fa-burst'
+                : 'fa-solid fa-sparkles',
+            // Keyed by effect id, because that is what a button carries as
+            // its value and what a treated-row sweep looks rows up by.
+            effectId: effect.id,
+            dc
         };
     }));
 
     // Four zones, fixed order: injuries (bundles), then the d20 outcomes,
     // then loose effects & conditions. Empty zones are omitted.
     const GROUP_ORDER = [
-        { key: 'injury', label: 'Injuries' },
-        { key: 'crit', label: 'Criticals' },
-        { key: 'fumble', label: 'Fumbles' },
-        { key: 'other', label: 'Effects & Conditions' }
+        { key: 'injury', label: 'Injuries', icon: 'fa-solid fa-bandage' },
+        { key: 'crit', label: 'Criticals', icon: 'fa-solid fa-burst' },
+        { key: 'fumble', label: 'Fumbles', icon: 'fa-solid fa-heart-crack' },
+        { key: 'other', label: 'Effects & Conditions', icon: 'fa-solid fa-sparkles' }
     ];
     const treatmentgroups = GROUP_ORDER
-        .map((g) => ({ label: g.label, rows: treatmentrows.filter((r) => r.kind === g.key) }))
+        .map((g) => ({ label: g.label, icon: g.icon, rows: treatmentrows.filter((r) => r.kind === g.key) }))
         .filter((g) => g.rows.length);
 
     // Diagnosis narrative from the actor's state
@@ -995,35 +1075,93 @@ async function createChatCardTreatment(token) {
         const bloodValue = Number(hp.value) <= 0 ? 101 : bloodStep;
         if (bloodValue > 0) portraitBlood = `modules/coffee-pub-blacksmith/images/portraits/blood/blood-${bloodValue}.webp`;
     }
-    // Health bar — Crier's turn-card bands and colors
+    // Health bar. The colour is NOT ours to pass: on a meter the tint is
+    // emphasis rather than data, so the theme derives it from the
+    // proportion. Only the reading is ours.
     const hpBar = pctHp === null ? null : {
-        percent: Math.max(0, Math.min(100, pctHp)),
-        label: `${hp.value}/${hp.max} HP`,
-        color: Number(hp.value) <= 0 ? 'rgba(66, 66, 66, 0.9)'
-            : pctHp >= 75 ? 'rgba(98, 150, 2, 0.9)'
-            : pctHp >= 50 ? 'rgba(223, 134, 1, 0.9)'
-            : pctHp >= 25 ? 'rgba(119, 40, 16, 0.9)'
-            : 'rgba(119, 20, 16, 0.9)'
+        value: Number(hp.value),
+        max: Number(hp.max),
+        label: `${hp.value}/${hp.max} HP`
     };
 
-    const template = await getCardTemplate();
-    const CARDDATA = {
-        theme: game.settings.get(MODULE.ID, 'cardThemeInjury'),
-        iconStyle: 'fa-stethoscope',
-        cardTitle: 'Check-Up',
-        imageBackground: 'cobblestone',
-        userName: token.name,
-        userAvatar: actor.img || token.document?.texture?.src || '',
-        portraitBlood,
-        hpBar,
-        playerType: 'Patient',
-        characterName: healthDesc.charAt(0).toUpperCase() + healthDesc.slice(1),
-        content: diagnosis,
-        treatmentgroups,
-        hasSectionContent: treatmentgroups.length > 0,
-    };
     BlacksmithUtils.playSound("modules/coffee-pub-blacksmith/sounds/notification.mp3", "0.7");
-    return template(CARDDATA);
+
+    // What a treat click needs, on the message rather than in the buttons:
+    // a button carries one value, and resolving a treatment needs the
+    // patient, the effect, its kind and its DC.
+    const state = {
+        actorId: actor.id,
+        tokenId: token.id,
+        rows: Object.fromEntries(treatmentrows.map((row) => [row.effectId, {
+            kind: row.kind, name: row.name, dc: row.dc, sourceUuid: row.sourceUuid
+        }]))
+    };
+
+    return {
+        parts: composeCheckUpCard({
+            name: token.name,
+            portrait: actor.img || token.document?.texture?.src || '',
+            portraitBlood,
+            healthDesc: healthDesc.charAt(0).toUpperCase() + healthDesc.slice(1),
+            hpBar,
+            diagnosis,
+            groups: treatmentgroups
+        }),
+        state
+    };
+}
+
+/**
+ * The Check-Up card as a composition.
+ *
+ * @returns {Array<object>} parts, in render order
+ */
+function composeCheckUpCard(checkup) {
+    const parts = [{ part: 'header', icon: 'fa-solid fa-stethoscope', title: 'Check-Up' }];
+
+    // The patient as one plain row rather than a `subject`: a subject
+    // carries its bar but not an overlay, and the blood over the portrait
+    // is the thing this card is least willing to lose. The bar follows as
+    // its own part.
+    const patient = {
+        img: checkup.portrait,
+        cover: true,
+        label: checkup.name,
+        sublabel: checkup.healthDesc
+    };
+    if (checkup.portraitBlood) patient.overlays = [checkup.portraitBlood];
+    parts.push({ part: 'rows', plain: true, items: [patient] });
+
+    if (checkup.hpBar) {
+        parts.push({
+            part: 'meter',
+            value: checkup.hpBar.value,
+            max: checkup.hpBar.max,
+            tooltip: checkup.hpBar.label
+        });
+    }
+    parts.push({ part: 'prose', blocks: [{ type: 'paragraph', text: checkup.diagnosis }] });
+
+    // One zone per group, each row carrying its own Treat button. Which
+    // buttons a reader actually gets is decided in their own browser — see
+    // the treat-affordance render pass.
+    for (const group of checkup.groups) {
+        parts.push({ part: 'section', icon: group.icon, label: group.label });
+        parts.push({
+            part: 'rows',
+            items: group.rows.map((row) => ({
+                img: row.img,
+                label: row.name,
+                sublabel: row.detail,
+                tooltip: row.tooltip,
+                moduleId: MODULE.ID,
+                action: TREAT_ACTION,
+                value: row.effectId,
+                actionIcon: row.buttonIcon
+            }))
+        });
+    }
+    return parts;
 }
 
 /**
@@ -1090,45 +1228,39 @@ export async function drawInspirationCard(actor = null, { title = null } = {}) {
         cardItem = await grantInspirationItem(holder, card);
     }
 
-    const template = await getCardTemplate();
-    const html = template({
-        theme: getSettingSafe('cardThemeInspiration', 'cardsdefault'),
-        iconStyle: 'fa-lightbulb',
-        cardTitle: 'Inspiration',
-        // No subtitle: the holder's name belongs in the recipient row
-        // below, next to their portrait, not floating above the art.
+    // With the card in their inventory, the ITEM is how it gets used — a
+    // button here would just be a way to play the card without it leaving
+    // their sheet. It survives only as the fallback for a draw that
+    // reached nobody.
+    const state = cardItem ? null : {
+        card: {
+            title: card.title,
+            action: card.action ?? 'none',
+            actionamount: card.actionamount ?? null,
+            actionformula: card.actionformula ?? '',
+            holderActorId: holder?.id ?? null,
+            sourceUuid: card.sourceUuid ?? null
+        },
+        label: card.action && card.action !== 'none'
+            ? `Use — ${actionButtonFor(card.action)}`
+            : 'Use This Card',
+        hint: card.action && card.action !== 'none' ? actionHintFor(card.action) : '',
+        holderActorId: holder?.id ?? null
+    };
+
+    const parts = composeInspirationCard({
         title: card.title,
-        content: card.description,
+        description: card.description,
         image: card.image || '',
-        imagecaption: card.imagetitle || '',
-        imageBackground: 'themecolor',
+        imageCaption: card.imagetitle || '',
         // Same describer the item uses, so the draw card and the card in
         // their inventory say the same thing about what it does.
-        outcomemechanics: INSPIRATION_ACTIONS.describeInspirationCard(card),
-        ...buildInspirationRecipient(card, holder, cardItem),
-        // With the card in their inventory, the ITEM is how it gets used —
-        // a second button here would just be a way to play the card
-        // without it leaving their sheet. The button survives only as the
-        // fallback for a draw that reached nobody.
-        ...(cardItem ? {} : {
-            inspirationuse: encodeURIComponent(JSON.stringify({
-                title: card.title,
-                action: card.action ?? 'none',
-                actionamount: card.actionamount ?? null,
-                actionformula: card.actionformula ?? '',
-                holderActorId: holder?.id ?? null,
-                sourceUuid: card.sourceUuid ?? null
-            })),
-            inspirationuselabel: card.action && card.action !== 'none'
-                ? `Use — ${actionButtonFor(card.action)}`
-                : 'Use This Card',
-            inspirationusehint: card.action && card.action !== 'none' ? actionHintFor(card.action) : ''
-        }),
-        hasSectionContent: true
-    });
+        mechanics: INSPIRATION_ACTIONS.describeInspirationCard(card),
+        recipient: buildInspirationRecipient(card, holder, cardItem)
+    }, state);
 
     BlacksmithUtils.playSound('modules/coffee-pub-blacksmith/sounds/spell-magic-circle.mp3', '0.7');
-    await ChatMessage.create({ user: game.user.id, content: html, speaker: ChatMessage.getSpeaker() });
+    await postInspirationCard(parts, state);
 
     // Say what happened. Dealing from the picker is a click that produces a
     // chat card somewhere off to the side and an item on a sheet you may
@@ -1150,42 +1282,128 @@ export async function drawInspirationCard(actor = null, { title = null } = {}) {
  * Nothing has been spent at this point. The buttons do the spending.
  */
 export async function postInspirationPlayCard({ card, holder = null, itemUuid = null }) {
-    const template = await getCardTemplate();
-    const html = template({
-        theme: getSettingSafe('cardThemeInspiration', 'cardsdefault'),
-        iconStyle: 'fa-lightbulb',
-        cardTitle: 'Inspiration',
+    const state = buildInspirationPlayState(card, holder, itemUuid);
+    const parts = composeInspirationCard({
         title: card.title,
-        content: card.description,
+        description: card.description,
         image: card.image || '',
-        imagecaption: card.imagetitle || '',
-        imageBackground: 'themecolor',
-        outcomemechanics: INSPIRATION_ACTIONS.describeInspirationCard(card, { context: 'play' }),
+        imageCaption: card.imagetitle || '',
+        mechanics: INSPIRATION_ACTIONS.describeInspirationCard(card, { context: 'play' }),
         // Same portrait row as the draw card, so "whose card is this" reads
         // identically whether it was just dealt or is being cashed in.
-        // No note line here — the mechanics block above already states that
+        // No note line here — the mechanics block already states that
         // playing it discards the card, and saying it twice on one card
         // reads like the card is not sure.
-        ...(holder ? {
-            inspirationnotelabel: 'Played by',
-            inspirationholder: holder.name,
-            inspirationportrait: holder.img || 'icons/svg/mystery-man.svg'
-        } : {}),
-        ...buildInspirationPlayButtons(card, holder, itemUuid),
-        hasSectionContent: true
-    });
+        recipient: holder ? { label: 'Played by', name: holder.name, img: holder.img || 'icons/svg/mystery-man.svg' } : null
+    }, state);
+
     BlacksmithUtils.playSound('modules/coffee-pub-blacksmith/sounds/spell-magic-circle.mp3', '0.7');
-    await ChatMessage.create({
-        user: game.user.id,
-        content: html,
-        speaker: holder ? ChatMessage.getSpeaker({ actor: holder }) : ChatMessage.getSpeaker()
+    await postInspirationCard(parts, state, holder);
+}
+
+/**
+ * The inspiration card as a composition. One shape for both the draw and
+ * the play, because they are the same card at two moments.
+ *
+ * @param {object} inspiration - already-resolved display values
+ * @param {object|null} state - the resolve controls, or null for a card
+ *        whose only control is the item now sitting on a sheet
+ * @returns {Array<object>} parts, in render order
+ */
+function composeInspirationCard(inspiration, state) {
+    const parts = [{ part: 'header', icon: 'fa-solid fa-lightbulb', title: 'Inspiration' }];
+    parts.push({ part: 'section', icon: 'fa-solid fa-sparkles', label: inspiration.title });
+    if (inspiration.image) {
+        parts.push({ part: 'image', src: inspiration.image, alt: inspiration.title, caption: inspiration.imageCaption });
+    }
+    if (inspiration.description) {
+        parts.push({ part: 'prose', blocks: [{ type: 'paragraph', text: inspiration.description }] });
+    }
+    if (inspiration.mechanics?.length) {
+        parts.push({
+            part: 'notes',
+            items: inspiration.mechanics.map((line) => ({ icon: `fa-solid ${line.icon}`, text: line.text }))
+        });
+    }
+
+    // WHOSE CARD THIS IS. On the draw card this is the point of the whole
+    // thing — a draw with no button is otherwise the only thing saying
+    // where the card went.
+    const recipient = inspiration.recipient;
+    if (recipient?.name) {
+        parts.push({
+            part: 'rows',
+            items: [{
+                img: recipient.img,
+                cover: true,
+                label: recipient.name,
+                sublabel: [recipient.label, recipient.note].filter(Boolean).join(' — ')
+            }]
+        });
+    } else if (recipient?.note) {
+        parts.push({ part: 'notes', items: [{ icon: 'fa-solid fa-triangle-exclamation', text: recipient.note }] });
+    }
+
+    if (state) parts.push(composeInspirationActions(state));
+    return parts;
+}
+
+/** The card's tail: who it can land on, or the stamp once it has. */
+function composeInspirationActions(state) {
+    if (state.spent) {
+        return { part: 'band', text: state.spent, icon: 'fa-solid fa-check', tone: 'positive' };
+    }
+    const buttons = [];
+    if (state.randomAllowed && (state.candidates ?? []).length > 1) {
+        buttons.push({
+            moduleId: MODULE.ID, action: INSPIRATION_USE_ACTION, value: 'random',
+            label: 'Random Party Member', icon: 'fa-solid fa-dice-d20'
+        });
+    }
+    for (const candidate of state.candidates ?? []) {
+        buttons.push({
+            moduleId: MODULE.ID, action: INSPIRATION_USE_ACTION, value: candidate.id,
+            label: candidate.name, icon: 'fa-solid fa-lightbulb'
+        });
+    }
+    if (!buttons.length) {
+        buttons.push({
+            moduleId: MODULE.ID, action: INSPIRATION_USE_ACTION, value: '',
+            label: state.label || 'Use This Card', icon: 'fa-solid fa-lightbulb', variant: 'primary'
+        });
+    }
+    const part = {
+        part: 'actions',
+        layout: buttons.length > 1 ? 'stacked' : 'inline',
+        buttons
+    };
+    if (state.hint) part.instruction = state.hint;
+    // The holder's card to spend. A GM owns every actor, so this reads as
+    // "the holder and the GM" — and the handler checks again.
+    if (state.holderActorId) {
+        part.readableBy = 'owner';
+        part.actorId = state.holderActorId;
+    }
+    return part;
+}
+
+/** Post an inspiration card, with its resolve state on the message. */
+async function postInspirationCard(parts, state, holder = null) {
+    return postCard({
+        type: 'inspiration',
+        theme: getSettingSafe('cardThemeInspiration', 'default'),
+        speaker: holder ? ChatMessage.getSpeaker({ actor: holder }) : undefined,
+        parts,
+        flags: state ? { inspiration: state } : {}
     });
 }
 
 /**
- * The resolve controls. Which buttons appear comes from the card's target
- * mode, so the question "who does this land on?" is answered by clicking
- * a name rather than by remembering to select the right token first.
+ * WHO a played card can land on, as card state rather than as markup.
+ *
+ * Which controls appear comes from the card's target mode, so the
+ * question "who does this land on?" is answered by clicking a name rather
+ * than by remembering to select the right token first.
  *
  *   none   — one button; the table resolves the rest
  *   self   — one button, naming the holder
@@ -1193,48 +1411,51 @@ export async function postInspirationPlayCard({ card, holder = null, itemUuid = 
  *   target — one per creature they currently have targeted
  *   any    — the holder, the party, and anything targeted
  */
-function buildInspirationPlayButtons(card, holder, itemUuid) {
+function buildInspirationPlayState(card, holder, itemUuid) {
     const mode = INSPIRATION_ACTIONS.targetModeFor(card);
     const base = {
-        title: card.title,
-        action: card.action ?? 'none',
-        actionamount: card.actionamount ?? null,
-        actionformula: card.actionformula ?? '',
+        card: {
+            title: card.title,
+            action: card.action ?? 'none',
+            actionamount: card.actionamount ?? null,
+            actionformula: card.actionformula ?? '',
+            holderActorId: holder?.id ?? null,
+            sourceUuid: card.sourceUuid ?? null,
+            itemUuid
+        },
         holderActorId: holder?.id ?? null,
-        sourceUuid: card.sourceUuid ?? null,
-        itemUuid
+        candidates: []
     };
-    const encode = (extra) => encodeURIComponent(JSON.stringify({ ...base, ...extra }));
+
+    // No aiming to do: one button, and the point is the whole mechanic.
+    // The mechanics block above already states the cost, so the hint stays
+    // out of the way rather than repeating it.
+    if (mode === 'none') return { ...base, label: 'Play This Card', hint: '' };
+
+    if (mode === 'self') {
+        return {
+            ...base,
+            targetActorId: holder?.id ?? null,
+            label: holder ? `Use on ${holder.name}` : (actionButtonFor(card.action) || 'Use This Card'),
+            hint: ''
+        };
+    }
+
     // Inspiration is played at the table, not on the battle map: a party
     // member with no token on this scene is still a legal target.
     const party = getPartyActors({ requireToken: false });
     const targeted = Array.from(game.user?.targets ?? []).map((t) => t.actor).filter(Boolean);
 
-    // No aiming to do: one button, and the point is the whole mechanic.
-    // The mechanics block above it already states the cost, so the hint
-    // stays out of the way rather than repeating it.
-    if (mode === 'none') {
-        return {
-            inspirationuse: encode({}),
-            inspirationuselabel: 'Play This Card',
-            inspirationusehint: ''
-        };
-    }
-
-    if (mode === 'self') {
-        return {
-            inspirationuse: encode({ targetActorId: holder?.id ?? null }),
-            inspirationuselabel: holder ? `Use on ${holder.name}` : (actionButtonFor(card.action) || 'Use This Card'),
-            inspirationusehint: ''
-        };
-    }
-
-    // Candidate list, deduped, in the order the player is likeliest to
-    // want: themselves first for "any", then the party, then their target.
+    // Candidates, deduped, in the order the player is likeliest to want:
+    // themselves first for "any", then the party, then their target.
     const candidates = [];
     const add = (actor, note = '') => {
-        if (!actor || candidates.some((c) => c.actor.id === actor.id)) return;
-        candidates.push({ actor, note });
+        if (!actor || candidates.some((c) => c.id === actor.id)) return;
+        candidates.push({
+            id: actor.id,
+            name: note ? `${actor.name} (${note})` : actor.name,
+            img: actor.img || 'icons/svg/mystery-man.svg'
+        });
     };
     if (mode === 'any') add(holder, 'yourself');
     if (mode === 'ally' || mode === 'any') {
@@ -1250,28 +1471,21 @@ function buildInspirationPlayButtons(card, holder, itemUuid) {
     // CLICKED, so they can aim now and click without redrawing the card.
     if (!candidates.length) {
         return {
-            inspirationuse: encode({}),
-            inspirationuselabel: actionButtonFor(card.action) || 'Use This Card',
-            inspirationusehint: mode === 'target'
+            ...base,
+            label: actionButtonFor(card.action) || 'Use This Card',
+            hint: mode === 'target'
                 ? 'Target a creature on the canvas, then click.'
                 : actionHintFor(card.action)
         };
     }
 
     return {
+        ...base,
+        candidates,
         // Life Swap-style "call out their name" cards get a dice option
         // too, for the tables that would rather let fate pick.
-        ...(mode === 'ally' && candidates.length > 1
-            ? { inspirationrandom: encode({ randomAlly: true }) }
-            : {}),
-        inspirationpicker: candidates.map(({ actor, note }) => ({
-            name: note ? `${actor.name} (${note})` : actor.name,
-            img: actor.img || 'icons/svg/mystery-man.svg',
-            payload: encode({ targetActorId: actor.id })
-        })),
-        inspirationusehint: mode === 'target'
-            ? 'Pick the creature it hits.'
-            : 'Pick who it lands on.'
+        randomAllowed: mode === 'ally',
+        hint: mode === 'target' ? 'Pick the creature it hits.' : 'Pick who it lands on.'
     };
 }
 
@@ -1378,21 +1592,17 @@ function buildInspirationRecipient(card, holder, cardItem) {
         // A GM can fix this by selecting a token; a player cannot, so tell
         // each of them the thing they can actually act on.
         return {
-            inspirationnote: game.user.isGM
+            note: game.user.isGM
                 ? 'Nobody was selected, so this card went to no one. Select a token and deal again.'
                 : 'You have no assigned character, so this card went nowhere. Ask the GM to deal it to you.'
         };
     }
     return {
-        inspirationnotelabel: '',
-        inspirationholder: holder.name,
-        inspirationportrait: holder.img || 'icons/svg/mystery-man.svg',
-        // Name kept separate from the sentence so the template can bold it
-        // without anything having to hand-write HTML into a message string.
-        inspirationcardname: card.title,
-        inspirationnote: cardItem
-            ? 'has been added to their inventory.'
-            : 'could not be added. Add it manually.'
+        name: holder.name,
+        img: holder.img || 'icons/svg/mystery-man.svg',
+        note: cardItem
+            ? `**${card.title}** has been added to their inventory.`
+            : `**${card.title}** could not be added. Add it manually.`
     };
 }
 
@@ -1433,19 +1643,26 @@ function resolveInspirationTargets(data, holder) {
 }
 
 /**
- * Resolve a played card. Reached from the card's buttons — the one the
- * item raises, and the draw card's fallback button. Narrative cards still
- * spend the point; the table resolves the rest out loud.
+ * Spend one inspiration card.
+ *
+ * `value` is the button that was pressed: an actor id, 'random', or empty
+ * for a card with nothing to aim. Everything else is on the message.
  */
-async function useInspirationCard(buttonEl, data) {
+async function useInspirationCard(message, state, value) {
     const { applyInspirationCard, resolveTargets } = await import('./manager-inspiration.js');
-    const holder = game.actors.get(data?.holderActorId ?? '');
+    const data = state.card ?? {};
+    const holder = game.actors.get(state.holderActorId ?? '');
 
     // The button carries the decision. Life Swap needs the holder in the
-    // list too, since swapping is between two people; everything else
-    // acts on the single actor whose name got clicked. Token selection is
-    // only the fallback for cards posted without a picker.
-    const targetActorIds = resolveInspirationTargets(data, holder)
+    // list too, since swapping is between two people; everything else acts
+    // on the single actor whose name got clicked. Token selection is only
+    // the fallback for a card posted without a picker.
+    const pick = { ...data };
+    if (value === 'random') pick.randomAlly = true;
+    else if (value) pick.targetActorId = value;
+    else if (state.targetActorId) pick.targetActorId = state.targetActorId;
+
+    const targetActorIds = resolveInspirationTargets(pick, holder)
         ?? resolveTargets().map((a) => a.id);
 
     const result = await applyInspirationCard({
@@ -1460,11 +1677,16 @@ async function useInspirationCard(buttonEl, data) {
     }
 
     showBibToast('Inspiration Used', result.summary || data?.title || '', 'fa-solid fa-lightbulb');
-    await markCardButtonApplied(
-        buttonEl,
-        '.coffee-pub-bibliosoph-button-inspiration',
-        [result.summary || (holder?.name ?? 'the party')]
-    );
+    // Spending resolves the WHOLE card, however many names were offered:
+    // one stamp replaces the lot rather than leaving the rest live.
+    const spent = result.summary || (holder?.name ?? 'the party');
+    const card = getCard(message);
+    const at = card?.parts?.findIndex((part) => part.part === 'actions') ?? -1;
+    if (at === -1) return;
+    const next = { ...state, spent };
+    card.parts[at] = composeInspirationActions(next);
+    await updateCard(message, card.parts);
+    await message.setFlag(MODULE.ID, 'inspiration', next);
 }
 
 // Deal or draw an Inspiration card (toolbar button)
@@ -1655,50 +1877,6 @@ Hooks.on("ready", async () => {
         }
     };
 
-    // BUTTON PRESSES IN CHAT (closest() so clicks on inner icons land too)
-    document.addEventListener('click', async function(event) {
-        // CHECK FOR INJURY BUTTON
-        const injuryButton = event.target.closest?.('.coffee-pub-bibliosoph-button-injury');
-        if (injuryButton) {
-            const arrEffectData = decodeEffectPayload(injuryButton.getAttribute('data-effect'));
-
-            // Automation cards know exactly who took the damage; manual
-            // selector cards fall back to click-time targeting.
-            let explicitActors = null;
-            if (arrEffectData.targetActorId || arrEffectData.targetTokenId) {
-                const targetActor = canvas?.tokens?.get(arrEffectData.targetTokenId ?? '')?.actor
-                    ?? game.actors.get(arrEffectData.targetActorId ?? '');
-                if (targetActor) explicitActors = [targetActor];
-            }
-
-            const applied = await applyStatusToTokens(buildInjuryApplyConfig(arrEffectData, explicitActors));
-            await markCardButtonApplied(injuryButton, '.coffee-pub-bibliosoph-button-injury', applied);
-        }
-
-        // CHECK FOR APPLY CRITICAL / FUMBLE BUTTON
-        const applyOutcomeButton = event.target.closest?.('.coffee-pub-bibliosoph-button-apply-outcome');
-        if (applyOutcomeButton) {
-            await handleApplyOutcomeClick(applyOutcomeButton);
-        }
-
-        // CHECK FOR USE-INSPIRATION BUTTON
-        const inspirationButton = event.target.closest?.('.coffee-pub-bibliosoph-button-inspiration');
-        if (inspirationButton) {
-            const data = decodeEffectPayload(inspirationButton.getAttribute('data-inspiration'));
-            if (data) await useInspirationCard(inspirationButton, data);
-        }
-
-        // CHECK FOR APPLY TREATMENT BUTTON
-        const treatButton = event.target.closest?.('.coffee-pub-bibliosoph-button-treat');
-        if (treatButton) {
-            const raw = treatButton.getAttribute('data-treat');
-            let data = null;
-            try { data = JSON.parse(decodeURIComponent(raw)); } catch (_) { /* malformed row */ }
-            if (data) await treatAffliction(treatButton, data);
-        }
-
-    });
-
     // Investigation and Inspiration used to bind a user-chosen macro whose
     // execute() this module overwrote. Both are toolbar buttons now
     // (window.triggerInvestigation / window.triggerInspiration), so there is
@@ -1729,125 +1907,149 @@ Hooks.on('blacksmithUpdated', (newBlacksmith) => {
     }
 });
 
-// ************************************
-// ** HOOK TEST INJURY CHAT BUTTON
-// ************************************
+// Card decoration that depends on WHO IS LOOKING lives in a registered
+// render pass, not here — see registerCardActions(). A parts card
+// re-renders from its stored composition a tick after Foundry paints it,
+// and the swap throws away whatever a renderChatMessageHTML hook did.
 
-Hooks.on("renderChatMessageHTML", (message, html) => {
-    // renderChatMessageHTML delivers a native HTMLElement; keep the jQuery
-    // normalization as a belt-and-suspenders for any shimmed callers.
-    let nativeHtml = html;
-    if (html && (html.jquery || typeof html.find === 'function')) {
-        nativeHtml = html[0] || html.get?.(0) || html;
-    }
-    // Encounter card: GM sees linked monsters; non-GM sees plain text or "Unknown Adversaries" (detection 1-2)
-    const encounterAdversaries = nativeHtml?.querySelectorAll?.('.bibliosoph-encounter-adversaries') ?? [];
-    encounterAdversaries.forEach((el) => {
-        const gmView = el.querySelector('.encounter-adversaries-gm-view');
-        const playerView = el.querySelector('.encounter-adversaries-player-view');
-        if (!gmView || !playerView) return;
-        if (game.user?.isGM) {
-            gmView.style.display = '';
-            playerView.style.display = 'none';
-        } else {
-            gmView.style.display = 'none';
-            playerView.style.display = '';
+// ==================================================================
+// ===== CARD BUTTONS ===============================================
+// ==================================================================
+//
+// Registered once per client at startup. Nothing here may assume the
+// clicker is a GM: hiding a control is presentation, and any client can
+// fire an action whatever its copy of the card looks like. Every handler
+// re-checks what it is about to do.
+
+const INJURY_APPLY_ACTION = 'apply-injury';
+const OUTCOME_APPLY_ACTION = 'apply-outcome';
+const TREAT_ACTION = 'treat-affliction';
+const INSPIRATION_USE_ACTION = 'use-inspiration';
+
+function registerCardActions() {
+    const chatCards = getChatCardsAPI();
+    if (!chatCards) return;
+
+    // APPLY AN INJURY. The record lives in the message's own flags rather
+    // than in the button's value: the applier needs modifiers, duration and
+    // source, which is more than belongs in an attribute.
+    chatCards.registerAction(MODULE.ID, INJURY_APPLY_ACTION, async ({ message }) => {
+        if (!game.user.isGM) {
+            showBibToast('Not Yours to Apply', 'Only the GM can apply an injury.', 'fa-solid fa-user-shield');
+            return;
+        }
+        const effect = message?.getFlag?.(MODULE.ID, 'injury');
+        if (!effect) return logBib('Injury card carried no effect data', '', false, false);
+
+        // Automation cards know exactly who took the damage; a card rolled
+        // from the picker falls back to click-time targeting.
+        let explicitActors = null;
+        if (effect.targetActorId || effect.targetTokenId) {
+            const targetActor = canvas?.tokens?.get(effect.targetTokenId ?? '')?.actor
+                ?? game.actors.get(effect.targetActorId ?? '');
+            if (targetActor) explicitActors = [targetActor];
+        }
+
+        const applied = await applyStatusToTokens(buildInjuryApplyConfig(effect, explicitActors));
+        if (!applied.length) return;
+        await stampCardActions(message, `Applied to ${applied.join(', ')}`);
+    });
+
+    // APPLY A CRITICAL OR FUMBLE. The GM does it directly; anyone else asks
+    // the GM to, because applying effects and rewriting the card both need
+    // rights a player does not have.
+    chatCards.registerAction(MODULE.ID, OUTCOME_APPLY_ACTION, async ({ message, value }) => {
+        const state = message?.getFlag?.(MODULE.ID, 'outcome');
+        if (!state) return logBib('Outcome card carried no state', '', false, false);
+        if (state.picksRemaining <= 0) return;
+
+        if (game.user.isGM) {
+            await applyOutcomePick(message, state, value ?? '');
+            return;
+        }
+
+        const sockets = game.modules.get('coffee-pub-blacksmith')?.api?.sockets;
+        if (!sockets || !game.users.activeGM) {
+            showBibToast('Nothing Applied', 'No GM is connected to resolve that choice.', 'fa-solid fa-triangle-exclamation');
+            return;
+        }
+        try {
+            await sockets.waitForReady();
+            await sockets.emit(SOCKET_OUTCOME_APPLY, { messageId: message.id, value: value ?? '', userId: game.user.id });
+        } catch (error) {
+            logBib('Outcome apply relay failed', error?.message, false, false);
+            showBibToast('Nothing Applied', 'That choice could not be sent to the GM.', 'fa-solid fa-triangle-exclamation');
         }
     });
 
-    // GM-only buttons, pruned on player clients (the card HTML is identical
-    // for every viewer): applying crits/fumbles/injuries is the GM's call,
-    // and on the Check-Up only injury rows are player-treatable (Medicine
-    // roll) — crit/fumble/condition rows are GM dismiss-only. Surviving
-    // treat buttons get a per-viewer tooltip saying exactly how THIS user
-    // would roll (kit/self advantage state) — computed at render time since
-    // it depends on the viewer, never baked into the shared HTML.
-    if (!game.user.isGM) {
-        nativeHtml?.querySelectorAll?.('.coffee-pub-bibliosoph-button-injury')?.forEach((btn) => btn.remove());
-        // Crit/fumble choices — who it lands on — belong to the player whose
-        // character rolled, so their client keeps the buttons and everyone
-        // else loses them. Cosmetic only: the GM re-checks ownership before
-        // applying anything relayed to them.
-        nativeHtml?.querySelectorAll?.('.coffee-pub-bibliosoph-button-apply-outcome')?.forEach((btn) => {
-            // Buttons that resolve against the clicker's canvas selection
-            // stay GM-only: relayed, they would read the GM's selection, not
-            // the player's, and quietly land on the wrong token.
-            if (btn.dataset.needsSelection === '1') return btn.remove();
-            const roller = game.actors.get(btn.dataset.rollerActor ?? '');
-            if (!roller?.isOwner) btn.remove();
-        });
-        // Never leave the instruction behind. "Select everyone in range."
-        // above nothing is a direction to someone with no way to follow it,
-        // so the hint and its button live or die together.
-        nativeHtml?.querySelectorAll?.('.bibliosoph-outcome-apply')?.forEach((box) => {
-            if (!box.querySelector('.coffee-pub-bibliosoph-button-apply-outcome')) box.remove();
-        });
-        // Cards posted before that wrapper existed keep the hint as a bare
-        // sibling, so sweep any that no longer sit beside something to press.
-        nativeHtml?.querySelectorAll?.('.bibliosoph-apply-hint')?.forEach((hint) => {
-            if (hint.closest('.bibliosoph-outcome-apply')) return;
-            const actionable = hint.parentElement?.querySelector(
-                '.coffee-pub-bibliosoph-button-apply-outcome, .coffee-pub-bibliosoph-button-inspiration'
-            );
-            if (!actionable) hint.remove();
-        });
-    } else {
-        appendGmNotesToTooltips(nativeHtml);
-    }
-    nativeHtml?.querySelectorAll?.('.coffee-pub-bibliosoph-button-treat[data-kind]')?.forEach((btn) => {
-        const kind = btn.dataset.kind;
-        if (!game.user.isGM && kind !== 'injury') return btn.remove();
-        btn.removeAttribute('title');
-        btn.dataset.tooltip = game.user.isGM
-            ? (kind === 'injury' ? `Treat instantly — GM discretion, no roll.${gmDcNote(btn)}`
-                : kind === 'crit' ? 'Dismiss this critical (GM only).'
-                : kind === 'fumble' ? 'Dismiss this fumble (GM only).'
-                : 'Remove this effect and unwind its condition (GM only).')
-            : buildTreatTooltip(btn);
-        btn.dataset.tooltipDirection = 'UP';
+    // SPEND AN INSPIRATION CARD. Playing it is the holder's call, and
+    // applying it only ever touches actors — no chat message to rewrite
+    // beyond this card, which its own author owns.
+    chatCards.registerAction(MODULE.ID, INSPIRATION_USE_ACTION, async ({ message, value }) => {
+        const state = message?.getFlag?.(MODULE.ID, 'inspiration');
+        if (!state) return logBib('Inspiration card carried no state', '', false, false);
+        if (state.spent) return;
+        await useInspirationCard(message, state, value ?? '');
     });
 
-    const buttons = nativeHtml.querySelectorAll(".category-button");
-    buttons.forEach(button => {
-        // Guard against double-binding on re-renders of the same message
-        if (button.dataset.bibliosophBound) return;
-        button.dataset.bibliosophBound = "1";
-        button.addEventListener('click', async (event) => {
-        event.preventDefault();
-        
-        // Removed unnecessary debug logging - button clicks don't need console spam
-
-        // Retrieve the category from button value
-        let strInjuryCategory = event.currentTarget.value;
-        
-        // Create the card
-        let compiledHtml = await createChatCardInjury(strInjuryCategory);
-        
-        let chatData = {
-            user: game.user.id,
-            content: compiledHtml,
-            speaker: ChatMessage.getSpeaker()
-        };
-
-        // Delete the original chat message before creating a new one
-        await message.delete();
-
-        // Send the message to the chat window
-        ChatMessage.create(chatData);
-        });
+    // TREAT ONE AFFLICTION. The button carries the effect id; everything
+    // else about that row is on the message.
+    chatCards.registerAction(MODULE.ID, TREAT_ACTION, async ({ message, value }) => {
+        const row = checkUpRow(message, value);
+        if (!row) return logBib('Treat button carried no row state', String(value), false, false);
+        // Only injuries are player-treatable, and only by rolling. The
+        // affordance pass hides the rest; this is the check that decides.
+        if (!game.user.isGM && row.kind !== 'injury') {
+            showBibToast('Not Yours to Clear', 'Only the GM can dismiss that.', 'fa-solid fa-user-shield');
+            return;
+        }
+        await treatAffliction(message, row);
     });
-});
 
+    // WHO MAY TREAT WHAT, and how it would go for them. Both depend on the
+    // reader, so both are decided in the reader's own browser: a
+    // composition is written once and read by everybody.
+    //
+    // A render pass rather than a renderChatMessageHTML hook — a parts card
+    // re-renders from its stored composition a tick after Foundry paints
+    // it, and that swap discards anything a hook decorated.
+    chatCards.registerRenderPass(MODULE.ID, 'treat-affordance', ({ message, root }) => {
+        const buttons = root.querySelectorAll(`button[data-blacksmith-action="${TREAT_ACTION}"]`);
+        for (const button of buttons) {
+            const row = checkUpRow(message, button.dataset.blacksmithValue);
+            if (!row) continue;
+            // Crit, fumble and loose-condition rows are the GM's to dismiss.
+            // Removing the control is the whole signal; the row stays, so a
+            // player still sees what they are carrying.
+            if (!game.user.isGM && row.kind !== 'injury') {
+                button.remove();
+                continue;
+            }
+            button.dataset.tooltip = game.user.isGM
+                ? (row.kind === 'injury' ? `Treat instantly — GM discretion, no roll.${gmDcNote(row)}`
+                    : row.kind === 'crit' ? 'Dismiss this critical (GM only).'
+                    : row.kind === 'fumble' ? 'Dismiss this fumble (GM only).'
+                    : 'Remove this effect and unwind its condition (GM only).')
+                : buildTreatTooltip(row);
+            button.dataset.tooltipDirection = 'UP';
+        }
+        // GM notes ride the row tooltips, and only ever on a GM's client:
+        // the card carries the journal reference, never the text.
+        if (game.user.isGM) appendGmNotesToTooltips(message, root);
+    });
+}
 
-// ================================================================== 
-// ===== FUNCTIONS ==================================================
-// ================================================================== 
-
-// Create and send the card
-// 1. Create the card
-// 2. Send the card to chat.
-
-
+/**
+ * One Check-Up row's state, by effect id, with the patient folded in.
+ *
+ * @returns {object|null} { actorId, tokenId, effectId, kind, name, dc, sourceUuid }
+ */
+function checkUpRow(message, effectId) {
+    const state = message?.getFlag?.(MODULE.ID, 'checkup');
+    const row = state?.rows?.[effectId ?? ''];
+    if (!row) return null;
+    return { ...row, actorId: state.actorId, tokenId: state.tokenId, effectId };
+}
 
 // ************************************
 // ** TRIGGER Injury 
@@ -1865,33 +2067,29 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
 
 async function publishChatCard() {
     // Build the card
-    var compiledHtml = "";
-    var strInjuryCategory = "";
-    var strRollTableName = "";
+    let parts = null;
     if (BIBLIOSOPH.CARDTYPEINVESTIGATION) {
         // INVESTIGATION (new flow: narrative + slots + per-rarity tables)
-        compiledHtml = await createChatCardInvestigation();
+        parts = await createChatCardInvestigation();
     }
     // Criticals, fumbles, inspiration and INJURIES no longer come through
     // here: each builds its own card straight from its typed compendium
     // (createChatCardOutcome, the inspiration deck, createChatCardInjury).
     // This function is now the investigation path only.
     else
-    {   
+    {
         // NOTHING
         BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, "Card Type: No Card Type Set", "", true, false);
     }
-    // If there is content, send it as a normal chat message.
+    // If there is a composition, Blacksmith renders and posts it.
     // (Whisper delivery was removed with the legacy private messages — the
     // unified Messages window handles private conversations now.)
-    if (compiledHtml){
-        var chatData = {
-            user: game.user._id,
-            content: compiledHtml,
-            speaker: ChatMessage.getSpeaker()
-        };
-        // Send the msaage to the chat window.
-        ChatMessage.create(chatData, {});
+    if (parts?.length) {
+        await postCard({
+            type: 'investigation',
+            theme: getSettingSafe('cardThemeInvestigation', 'default'),
+            parts
+        });
     }
 
     // Reset everything for the next time - This is a system message
@@ -1913,11 +2111,9 @@ async function createChatCardInjury(category, target = null, { title = null } = 
     var strSound = game.settings.get(MODULE.ID, 'injurySound');
     var strVolume = game.settings.get(MODULE.ID, 'injurySoundVolume');
     var strTheme = game.settings.get(MODULE.ID, 'cardThemeInjury');
-    var strBanner = "modules/coffee-pub-blacksmith/images/banners/banners-damage-oops-6.webp";
     var strIconStyle = "fa-droplet"; // default... specific overrides happen below.
     var iconSubStyle = "";
     var strType = BIBLIOSOPH.CARDTYPE + " Injury";
-    var strImageBackground = "cobblestone";
 
     // Set the defaults
     var strInjuryCategory = "";
@@ -1966,59 +2162,45 @@ async function createChatCardInjury(category, target = null, { title = null } = 
             switch(strInjuryCategory.toLowerCase()) {
                 case "acid":
                     iconSubStyle = "fa-splotch";
-                    strBanner = "modules/coffee-pub-blacksmith/images/banners/banners-damage-acid-1.webp";
                     break;
                 case "bludgeoning":
                     iconSubStyle = "fa-axe-battle";
-                    strBanner = "modules/coffee-pub-blacksmith/images/banners/banners-damage-bludgeoning-2.webp";
                     break;
                 case "cold":
                     iconSubStyle = "fa-snowflake";
-                    strBanner = "modules/coffee-pub-blacksmith/images/banners/banners-damage-cold-4.webp";
                     break;
                 case "fire":
                     iconSubStyle = "fa-fire";
-                    strBanner = "modules/coffee-pub-blacksmith/images/banners/banners-damage-fire-6.webp";
                     break;
                 case "force":
                     iconSubStyle = "fa-wind";
-                    strBanner = "modules/coffee-pub-blacksmith/images/banners/banners-damage-force-1.webp";
                     break;
                 case "lightning":
                     iconSubStyle = "fa-bolt-lightning";
-                    strBanner = "modules/coffee-pub-blacksmith/images/banners/banners-damage-lightning-4.webp";
                     break;
                 case "necrotic":
                     iconSubStyle = "fa-scythe";
-                    strBanner = "modules/coffee-pub-blacksmith/images/banners/banners-damage-necrotic-3.webp";
                     break;
                 case "piercing":
                     iconSubStyle = "fa-bow-arrow";
-                     strBanner = "modules/coffee-pub-blacksmith/images/banners/banners-damage-piercing-1.webp";
                      break;
                 case "poison":
                     iconSubStyle = "fa-flask-round-poison";
-                    strBanner = "modules/coffee-pub-blacksmith/images/banners/banners-damage-poison-1.webp";
                     break;
                 case "psychic":
                     iconSubStyle = "fa-brain";
-                    strBanner = "modules/coffee-pub-blacksmith/images/banners/banners-damage-psychic-3.webp";
                     break;
                 case "radiant":
                     iconSubStyle = "fa-bullseye";
-                    strBanner = "modules/coffee-pub-blacksmith/images/banners/banners-damage-radiant-1.webp";
                     break;
                 case "slashing":
-                    iconSubStyle = "fa-knife-kitchen";
-                    strBanner = "modules/coffee-pub-blacksmith/images/banners/banners-damage-slashing-4.webp";                    
+                    iconSubStyle = "fa-knife-kitchen";                    
                     break;
                 case "thunder":
                     iconSubStyle = "fa-cloud-bolt";
-                    strBanner = "modules/coffee-pub-blacksmith/images/banners/banners-damage-thunder-2.webp";
                     break;
                 default:
                     iconSubStyle = "fa-droplet";
-                    strBanner = "modules/coffee-pub-blacksmith/images/banners/banners-damage-oops-6.webp";
            }
         }
         
@@ -2119,63 +2301,103 @@ async function createChatCardInjury(category, target = null, { title = null } = 
         ].filter(Boolean).join('<br><br>'),
     };
 
-    const template = await getCardTemplate();
-    // JSON + URI encoding: survives any prose that would corrupt the
-    // legacy key=value|key=value format.
-    var strStringifiedEFFECTDATA = encodeURIComponent(JSON.stringify(EFFECTDATA));
-    //BlacksmithUtils.postConsoleAndNotification("EFFECTDATA converted to STRING as strStringifiedEFFECTDATA: ",strStringifiedEFFECTDATA, false, true, false);
-    // if they have the image off in settings, hide it
-    var strCardImage = "";
-    if (!blnInjuryImageEnabled){
-        strCardImage = "";
-    } else {
-        strCardImage = strInjuryImage;
-    }
-    // Pass the data to the template
-    const CARDDATA = {
-        theme: strTheme,
-        iconStyle: strIconStyle, 
-        // cardTitle: strInjuryCategory, // simplifying this for now
-        cardTitle: strInjuryTitle,
-        iconSubStyle: iconSubStyle,
-        // cardSubTitle: strInjuryTitle, // simplifying this for now
-        cardSubTitle: "",
-        imageBackground: strImageBackground,
-        imagecaption: strCardImage ? (strInjuryImageTitle || "") : "",
-        title: "",
-        content: strInjuryDescription,
-        injurycategory: strInjuryCategory, // added for new injury category
-        injurycategoryicon: iconSubStyle, // added for new injury category
-        treatment: strInjuryTreatment,
-        // banner: strBanner, // simplifying this for now
-        banner: "",
-        image: strCardImage,
-        duration: strInjuryDuration,
-        damage: strInjuryDamage,
-        buttontext: strTargetName ? `Apply to ${strTargetName}` : strInjuryAction,
-        // A real condition wins; otherwise fall back to flavour text for
-        // the injuries whose "condition" was never a dnd5e one.
-        statuseffect: (strStatusEffect !== 'none' ? strStatusEffect : (objInjuryData?.flavor || 'none')).toUpperCase(),
-        // Roll penalties, spelled out the same way the crit/fumble cards
-        // spell theirs out.
-        outcomemechanics: (objInjuryData?.modifiers ?? []).map((m) => ({
-            icon: 'fa-dice-d20', text: describeModifier(m)
-        })).filter((line) => line.text),
-        arreffect: strStringifiedEFFECTDATA, // Stringify the EFFECTDATA array
-        hasSectionContent: !!strStringifiedEFFECTDATA,
-    };
-    // Play the Sound
-    BlacksmithUtils.playSound(strSound,strVolume);
-    // Return the template
+    // The image can be turned off in settings; the caption goes with it.
+    const cardImage = blnInjuryImageEnabled ? strInjuryImage : "";
 
-    //BlacksmithUtils.postConsoleAndNotification("*** LINE 1682 CARDDATA",  CARDDATA, false, true, false);
+    // What the card SAYS about the condition. A real dnd5e condition wins;
+    // otherwise the flavour text stands in for the injuries whose
+    // "condition" was never one.
+    const conditionLine = (strStatusEffect !== 'none' ? strStatusEffect : (objInjuryData?.flavor || 'none')).toUpperCase();
 
-    const compiledHtml = template(CARDDATA);
-    return compiledHtml;
+    BlacksmithUtils.playSound(strSound, strVolume);
+
+    // `compose` rather than a finished parts array alone: the auto-apply
+    // path needs the same card built a second way — stamp instead of
+    // button — and rebuilding it from the same inputs is what stops the
+    // two versions drifting.
+    const compose = (options) => composeInjuryCard({
+            title: strInjuryTitle,
+            icon: `fa-solid ${strIconStyle}`,
+            category: strInjuryCategory,
+            categoryIcon: `fa-solid ${iconSubStyle}`,
+            image: cardImage,
+            imageCaption: cardImage ? (strInjuryImageTitle || "") : "",
+            description: strInjuryDescription,
+            modifiers: (objInjuryData?.modifiers ?? []).map(describeModifier).filter(Boolean),
+            treatment: strInjuryTreatment,
+            duration: strInjuryDuration,
+            damage: strInjuryDamage,
+            condition: conditionLine,
+            buttonLabel: strTargetName ? `Apply to ${strTargetName}` : strInjuryAction,
+            buttonIcon: `fa-solid ${strIconStyle}`
+        }, options);
+
+    return { parts: compose(), compose, effect: EFFECTDATA };
 }
 
+/**
+ * The injury card as a composition.
+ *
+ * @param {object} injury - already-resolved display strings
+ * @param {object} [options]
+ * @param {string} [options.appliedTo] - names to stamp instead of the
+ *        Apply button, for a card that was applied before it was posted
+ * @returns {Array<object>} parts, in render order
+ */
+function composeInjuryCard(injury, { appliedTo = '' } = {}) {
+    const parts = [{ part: 'header', icon: injury.icon, title: injury.title }];
+    if (injury.category) {
+        parts.push({ part: 'section', icon: injury.categoryIcon, label: injury.category });
+    }
+    if (injury.image) {
+        parts.push({ part: 'image', src: injury.image, alt: injury.title, caption: injury.imageCaption });
+    }
+    if (injury.description) {
+        parts.push({ part: 'prose', blocks: [{ type: 'paragraph', text: injury.description }] });
+    }
+    // Roll penalties, spelled out the same way the crit/fumble cards do.
+    if (injury.modifiers?.length) {
+        parts.push({ part: 'notes', items: injury.modifiers.map((text) => ({ icon: 'fa-solid fa-dice-d20', text })) });
+    }
 
+    // Treatment leads the panel and the rest of the injury's mechanics
+    // follow it as statements — a panel row is a line of prose with an
+    // icon, not a label in one column and a value in another.
+    const rows = [];
+    if (injury.duration) rows.push({ icon: 'fa-solid fa-hourglass-half', label: injury.duration });
+    if (injury.damage) rows.push({ icon: 'fa-solid fa-heart-crack', label: injury.damage });
+    if (injury.condition && injury.condition !== 'NONE') {
+        rows.push({ icon: 'fa-solid fa-sparkles', label: injury.condition });
+    }
+    if (injury.treatment || rows.length) {
+        parts.push({
+            part: 'panel',
+            icon: 'fa-solid fa-heart-pulse',
+            label: 'Treatment',
+            intro: injury.treatment,
+            rows
+        });
+    }
 
+    // Applying is the GM's call, so the controls are theirs. `readableBy`
+    // decides what RENDERS — the handler checks permission again, because
+    // any client can fire an action whatever its copy of the card shows.
+    parts.push(appliedTo
+        ? { part: 'band', text: `Applied to ${appliedTo}`, icon: 'fa-solid fa-check', tone: 'positive' }
+        : {
+            part: 'actions',
+            readableBy: 'gm',
+            buttons: [{
+                moduleId: MODULE.ID,
+                action: INJURY_APPLY_ACTION,
+                label: injury.buttonLabel,
+                icon: injury.buttonIcon,
+                variant: 'primary'
+            }]
+        });
+
+    return parts;
+}
 
 // ************************************
 // ** CREATE Investigation Card (new flow: narrative + slots + per-rarity tables)
@@ -2190,11 +2412,6 @@ async function createChatCardInvestigation() {
         'fa-solid fa-eye'
     );
     logBib('Investigation check started', '', true, false);
-    const strTheme = game.settings.get(MODULE.ID, 'cardThemeInvestigation');
-    const strIconStyle = "fa-eye";
-    const strUserName = game.user.name;
-    const strUserAvatar = game.user.avatar;
-    const strCharacterName = game.user.character?.name ?? "No Character Set";
     const investigationOdds = Number(game.settings.get(MODULE.ID, 'investigationOdds')) || 20;
     const maxSlots = Math.max(1, Math.min(20, Number(game.settings.get(MODULE.ID, 'investigationDice')) || 3));
 
@@ -2206,7 +2423,7 @@ async function createChatCardInvestigation() {
         // nothing happen at all — say so out loud, not just in the console.
         logBib('Could not load investigation narrative. Check resources/investigation-narrative.json.', e?.message ?? String(e), false, false);
         showBibToast('Investigation Failed', 'Could not load the investigation narrative file.', 'fa-solid fa-triangle-exclamation');
-        return "";
+        return null;
     }
 
     const foundNothingEntries = narrativeJson.foundNothing ?? [];
@@ -2215,9 +2432,15 @@ async function createChatCardInvestigation() {
 
     const actor = game.user.character ?? canvas.tokens?.controlled?.[0]?.actor;
 
+    // The card names the CHARACTER who searched, not the person holding
+    // the mouse — it is a thing that happened in the fiction. The user is
+    // the fallback only when there is no character to name at all.
+    const searcher = actor
+        ? { img: actor.img || '', name: actor.name }
+        : { img: game.user.avatar, name: game.user.name };
+
     // Roll: find coins or not (independent of items)
     let coinsFound = null;
-    let coinsDisplayLine = "";
     let coinsSummaryLine = "";
     const coinsOdds = Math.max(0, Math.min(100, Number(game.settings.get(MODULE.ID, 'investigationCoinsOdds')) ?? 20));
     const rollCoins = await new Roll("1d100").evaluate();
@@ -2241,7 +2464,6 @@ async function createChatCardInvestigation() {
             if (ep) coinParts.push(`${ep} ep`);
             if (sp) coinParts.push(`${sp} sp`);
             if (cp) coinParts.push(`${cp} cp`);
-            coinsDisplayLine = coinParts.join(" · ");
             if (actor?.system?.currency) {
                 try {
                     const cur = actor.system.currency;
@@ -2280,26 +2502,16 @@ async function createChatCardInvestigation() {
         // No items this time; use "found something" narrative if they found coins, else "found nothing"
         const foundAnything = !!coinsFound;
         const entry = pickEntry(foundAnything ? foundSomethingEntries : foundNothingEntries);
-        const CARDDATA = {
-            isInvestigationCard: true,
-            userName: strUserName,
-            userAvatar: strUserAvatar,
-            characterName: strCharacterName,
-            theme: strTheme,
-            iconStyle: strIconStyle,
-            cardTitle: "Investigation",
-            narrativeTitle: entry.title || (foundAnything ? "Search Results" : "Nothing Found"),
-            narrativeDescription: entry.description || "",
-            narrativeIcon: entry.icon || "<i class=\"fa-solid fa-dice\"></i>",
-            itemsByRarity: [],
-            inventorySummaryLine: "",
-            coinsFound,
-            coinsDisplayLine,
-            coinsSummaryLine,
-        };
-        const template = await getCardTemplate();
         BlacksmithUtils.playSound(foundAnything ? "modules/coffee-pub-blacksmith/sounds/chest-treasure.mp3" : "modules/coffee-pub-blacksmith/sounds/chest-open.mp3", "0.7");
-        return template(CARDDATA);
+        return composeInvestigationCard({
+            searcher,
+            entry,
+            fallbackTitle: foundAnything ? "Search Results" : "Nothing Found",
+            itemsByRarity: [],
+            coinsFound,
+            coinsSummaryLine,
+            inventorySummaryLine: ""
+        });
     }
 
     // Roll number of slots
@@ -2354,7 +2566,6 @@ async function createChatCardInvestigation() {
         if (!(itemDoc instanceof Item)) continue;
         const name = itemDoc.name || result?.name || result?.text || "Item";
         const img = result?.img ?? itemDoc.img ?? "";
-        const link = `@UUID[${documentUuid}]{${name}}`;
         const rarity = itemDoc.system?.rarity?.value ?? rarityLabel;
 
         if (actor) {
@@ -2371,7 +2582,7 @@ async function createChatCardInvestigation() {
                 showBibToast('Item Not Added', `"${name}" could not be added to ${actor?.name ?? 'the character'} — add it by hand.`, 'fa-solid fa-sack-xmark');
             }
         }
-        foundItems.push({ name, img, link, rarity });
+        foundItems.push({ name, img, uuid: documentUuid, rarity });
     }
 
     const entry = pickEntry(foundSomethingEntries);
@@ -2409,26 +2620,68 @@ async function createChatCardInvestigation() {
         items: byRarity[rarity],
     }));
 
-    const CARDDATA = {
-        isInvestigationCard: true,
-        userName: strUserName,
-        userAvatar: strUserAvatar,
-        characterName: strCharacterName,
-        theme: strTheme,
-        iconStyle: strIconStyle,
-        cardTitle: "Investigation",
-        narrativeTitle: entry.title || "Search Results",
-        narrativeDescription: entry.description || "",
-        narrativeIcon: entry.icon || "<i class=\"fa-solid fa-dice\"></i>",
-        itemsByRarity,
-        inventorySummaryLine,
-        coinsFound,
-        coinsDisplayLine,
-        coinsSummaryLine,
-    };
-    const template = await getCardTemplate();
     BlacksmithUtils.playSound("modules/coffee-pub-blacksmith/sounds/chest-treasure.mp3", "0.7");
-    return template(CARDDATA);
+    return composeInvestigationCard({
+        searcher,
+        entry,
+        fallbackTitle: "Search Results",
+        itemsByRarity,
+        coinsFound,
+        coinsSummaryLine,
+        inventorySummaryLine
+    });
+}
+
+/**
+ * The investigation card as a composition of Blacksmith parts.
+ *
+ * Both outcomes come through here — a search that turned up nothing is
+ * the same card with no findings — so the two cannot drift apart.
+ *
+ * @returns {Array<object>} parts, in render order
+ */
+function composeInvestigationCard({ searcher, entry, fallbackTitle, itemsByRarity = [],
+                                    coinsFound = null, coinsSummaryLine = '', inventorySummaryLine = '' }) {
+    const parts = [
+        { part: 'header', icon: 'fa-solid fa-eye', title: 'Investigation' },
+        { part: 'identity', img: searcher.img, name: searcher.name },
+        { part: 'section', icon: iconClass(entry?.icon), label: entry?.title || fallbackTitle }
+    ];
+    if (entry?.description) {
+        parts.push({ part: 'prose', blocks: [{ type: 'paragraph', text: entry.description }] });
+    }
+
+    // Coins as tiles rather than a run of prose: a denomination over a
+    // count is exactly the caption-over-value shape, and it stays
+    // readable whether they found one kind or all five.
+    if (coinsFound) {
+        const COIN_LABELS = { pp: 'Platinum', gp: 'Gold', ep: 'Electrum', sp: 'Silver', cp: 'Copper' };
+        const items = Object.entries(COIN_LABELS)
+            .filter(([key]) => Number(coinsFound[key]) > 0)
+            .map(([key, label]) => ({ label, value: String(coinsFound[key]) }));
+        if (items.length) {
+            parts.push({ part: 'section', icon: 'fa-solid fa-coins', label: 'Coins' });
+            parts.push({ part: 'tiles', items });
+        }
+    }
+
+    // One section and one row list per rarity. `uuid` makes each label a
+    // real document link, so the card no longer builds @UUID syntax by
+    // hand and a renamed item still resolves.
+    for (const group of itemsByRarity) {
+        parts.push({ part: 'section', icon: `fa-solid ${group.icon}`, label: group.rarity });
+        parts.push({
+            part: 'rows',
+            items: group.items.map((item) => ({ img: item.img, uuid: item.uuid, label: item.name }))
+        });
+    }
+
+    const notes = [];
+    if (inventorySummaryLine) notes.push({ icon: 'fa-solid fa-bag-shopping', text: inventorySummaryLine });
+    if (coinsSummaryLine) notes.push({ icon: 'fa-solid fa-coins', text: coinsSummaryLine });
+    if (notes.length) parts.push({ part: 'notes', items: notes });
+
+    return parts;
 }
 
 
@@ -2897,10 +3150,10 @@ async function applyOutcomeStatus(data) {
 // treats instantly, ownership-gated. With rolls on, a player clicking an
 // INJURY row triggers a Medicine check against the injury's DC instead —
 // see requestTreatmentRoll. Non-injury rows are GM-only (pruned at render).
-async function treatAffliction(buttonEl, data) {
+async function treatAffliction(message, data) {
     const rollsOn = getSettingSafe('injuryTreatmentRolls', true);
     if (!game.user.isGM && rollsOn && data.kind === 'injury') {
-        return requestTreatmentRoll(buttonEl, data);
+        return requestTreatmentRoll(message, data);
     }
     const actor = canvas?.tokens?.get(data.tokenId ?? '')?.actor
         ?? game.actors.get(data.actorId ?? '');
@@ -2910,13 +3163,13 @@ async function treatAffliction(buttonEl, data) {
     const effect = actor.effects.get(data.effectId);
     if (!effect) {
         showBibToast('Already Gone', 'That affliction is no longer on the patient.', 'fa-solid fa-sparkles');
-        await markTreatButtonDone(buttonEl);
+        await sweepTreatStamps(message);
         return;
     }
     const effectName = effect.name;
     await removeAffliction(actor, effect);
     showBibToast('Treated', `"${effectName}" removed from ${actor.name}.`, 'fa-solid fa-bandage');
-    await markTreatButtonDone(buttonEl);
+    await markTreatButtonDone(message);
 }
 
 function getSettingSafe(key, fallback) {
@@ -3056,16 +3309,24 @@ const pendingTreatRolls = new Map();
 // uuid; each GM's own client fetches the text and rewrites its local
 // tooltip. That also keeps the notes live: editing the journal updates
 // what the hover shows, with no need to repost the card.
-async function appendGmNotesToTooltips(root) {
-    const icons = root?.querySelectorAll?.('.coffee-pub-bibliosoph-affliction-icon[data-source]') ?? [];
-    for (const icon of icons) {
-        const uuid = icon.dataset.source;
-        if (!uuid || icon.dataset.gmNotesChecked) continue;
-        icon.dataset.gmNotesChecked = '1';
+async function appendGmNotesToTooltips(message, root) {
+    const buttons = root?.querySelectorAll?.(`button[data-blacksmith-action="${TREAT_ACTION}"]`) ?? [];
+    for (const button of buttons) {
+        // The row is what carries the tooltip; the button is only how we
+        // find it, because that is what holds the effect id.
+        const row = button.closest('.blacksmith-part-row');
+        const uuid = checkUpRow(message, button.dataset.blacksmithValue)?.sourceUuid;
+        // Idempotent: a pass runs again on every re-render, and appending
+        // the note a second time is exactly what the guard prevents.
+        if (!row || !uuid || row.dataset.gmNotesChecked) continue;
+        row.dataset.gmNotesChecked = '1';
+        // Stamped so a later note edit can find this row again without
+        // needing the message it came from.
+        row.dataset.gmNoteUuid = uuid;
         // Stash the note-free tooltip so a later refresh can rebuild
         // rather than appending the note a second time.
-        icon.dataset.tooltipBase = icon.dataset.tooltip ?? '';
-        await paintGmNoteTooltip(icon, uuid);
+        row.dataset.tooltipBase = row.dataset.tooltip ?? '';
+        await paintGmNoteTooltip(row, uuid);
     }
 }
 
@@ -3097,8 +3358,8 @@ async function paintGmNoteTooltip(icon, uuid) {
 // (parentUuid/parentName/breadcrumb); we key on uuid alone.
 Hooks.on('blacksmith.gmNotesChanged', ({ uuid } = {}) => {
     if (!game.user.isGM || !uuid) return;
-    document.querySelectorAll(`.coffee-pub-bibliosoph-affliction-icon[data-source="${uuid}"]`)
-        .forEach((icon) => paintGmNoteTooltip(icon, uuid));
+    document.querySelectorAll(`[data-gm-note-uuid="${uuid}"]`)
+        .forEach((row) => paintGmNoteTooltip(row, uuid));
 });
 
 // Per-viewer hover text for an injury Treat button: a PREVIEW of what
@@ -3142,12 +3403,10 @@ export function treatmentRollPlan(roller, patientActorId, baseDc = 15) {
     return { self, kit, useKit, kitNote, mode, dc, baseDc: Number(baseDc), explanation };
 }
 
-function buildTreatTooltip(btn) {
+function buildTreatTooltip(data) {
     if (!getSettingSafe('injuryTreatmentRolls', true)) {
         return 'Click to remove this affliction (you must own this character).';
     }
-    let data = null;
-    try { data = JSON.parse(decodeURIComponent(btn.getAttribute('data-treat') ?? '')); } catch (_) { /* legacy card */ }
     const roller = game.user.character;
     if (!roller) return 'Clicking will roll a Medicine check to treat this injury — assign a character to your user first.';
 
@@ -3170,9 +3429,8 @@ function buildTreatTooltip(btn) {
  * Reads the live effect so escalation from failed attempts is included:
  * the number shown is the number that will actually be rolled against.
  */
-function gmDcNote(buttonEl) {
+function gmDcNote(data) {
     try {
-        const data = JSON.parse(decodeURIComponent(buttonEl.getAttribute('data-treat') ?? ''));
         const actor = canvas?.tokens?.get(data.tokenId ?? '')?.actor ?? game.actors.get(data.actorId ?? '');
         const effect = actor?.effects?.get(data.effectId ?? '') ?? null;
         const base = Number(data.dc) || 15;
@@ -3227,7 +3485,7 @@ function findHealersKit(actor) {
 // Player side: build the roll context, post a silent Medicine request via
 // Blacksmith, and relay the treatment context to the active GM, who owns
 // all resolution (validation, effect removal, HP changes, kit uses).
-async function requestTreatmentRoll(buttonEl, data) {
+async function requestTreatmentRoll(message, data) {
     const api = game.modules.get('coffee-pub-blacksmith')?.api;
     if (!api?.openRequestRollDialog) {
         return showBibToast('Blacksmith Needed', 'Treatment rolls need a newer Blacksmith build — ask your GM to treat instead.', 'fa-solid fa-triangle-exclamation');
@@ -3278,7 +3536,7 @@ async function requestTreatmentRoll(buttonEl, data) {
 
     const context = {
         rollMessageId: messageId,
-        cardMessageId: buttonEl.closest('[data-message-id]')?.dataset?.messageId ?? null,
+        cardMessageId: message?.id ?? null,
         patientTokenId: data.tokenId ?? null,
         patientActorId: data.actorId ?? null,
         effectId: data.effectId,
@@ -3507,23 +3765,36 @@ async function adjustPatientHp(actor, delta) {
     }
 }
 
-// Treatment outcomes post as proper Blacksmith-styled cards: a centered
-// [healer portrait] [bandaid] [patient portrait] strip, then the narrative
-// (crit/fumble bonus as its own emphasized line). Accepts a plain string
-// for the odd informational case (affliction already gone). Copy uses
-// names and "their" — the module can't know a character's pronouns.
+// Treatment outcomes post as a composition: who treated whom, a stamp
+// saying how it went, then the narrative. Accepts a plain string for the
+// odd informational case (affliction already gone). Copy uses names and
+// "their" — the module can't know a character's pronouns.
 export async function postTreatmentOutcome(data) {
     try {
-        const template = await getCardTemplate();
-        let content = data;
-        let treatoutcome = null;
-        if (typeof data !== 'string') {
+        const parts = [{ part: 'header', icon: 'fa-solid fa-bandage', title: 'Treatment' }];
+
+        if (typeof data === 'string') {
+            parts.push({ part: 'prose', blocks: [{ type: 'paragraph', text: data }] });
+        } else {
             const { healer, patient, effectName, effectImg, outcome } = data;
             const healerName = healer?.name ?? 'Someone';
             const patientName = patient?.name ?? 'the patient';
             const self = !!healer && !!patient && healer.id === patient.id;
-            const strong = (s) => `<strong>${s}</strong>`;
-            const injury = `<strong>"${effectName}"</strong>`;
+            // Marks, not markup: a part escapes what it is given, so emphasis
+            // is written the way prose text takes it.
+            const strong = (s) => `**${s}**`;
+            const injury = `**"${effectName}"**`;
+
+            // Verdict first, because it decides the tone every other part
+            // carries. `fail` is negative rather than a tone of its own —
+            // the fixed four are read as outcomes, not as severities.
+            const VERDICTS = {
+                crit:   { label: 'Critical Success', icon: 'fa-solid fa-star',         tone: 'positive' },
+                fumble: { label: 'Fumble',           icon: 'fa-solid fa-burst',        tone: 'negative' },
+                fail:   { label: 'No Effect',        icon: 'fa-solid fa-heart-crack',  tone: 'negative' }
+            };
+            const verdict = VERDICTS[outcome] ?? { label: 'Treated', icon: 'fa-solid fa-bandage', tone: 'positive' };
+
             let narrative;
             let bonus = '';
             switch (outcome) {
@@ -3549,32 +3820,41 @@ export async function postTreatmentOutcome(data) {
                         ? `${strong(healerName)} successfully treats their own case of ${injury}.`
                         : `${strong(healerName)} treats ${strong(patientName)}, curing their case of ${injury}.`;
             }
-            content = bonus ? `${narrative}<br><br>${strong(bonus)}` : narrative;
-            // Self-treatment keeps the same symmetric layout — the patient's
-            // portrait simply appears on both sides.
-            treatoutcome = {
-                healerImg: healer?.img || 'icons/svg/mystery-man.svg',
-                healerName,
-                patientImg: patient?.img || 'icons/svg/mystery-man.svg',
-                patientName,
-                afflictionImg: effectImg || null,
-                afflictionName: effectName,
-                icon: outcome === 'fumble' ? 'fa-burst'
-                    : outcome === 'fail' ? 'fa-heart-crack'
-                    : 'fa-bandage'
+
+            // The affliction rides the patient's portrait as an overlay, which
+            // is what the old card's corner badge was. Self-treatment is ONE
+            // row: the symmetric strip existed because a centred icon needed
+            // something either side of it, and listing the same person twice
+            // in a row list would just read as a bug.
+            const patientRow = {
+                img: patient?.img || 'icons/svg/mystery-man.svg',
+                cover: true,
+                label: patientName,
+                sublabel: effectName,
+                tone: verdict.tone
             };
+            if (effectImg) patientRow.overlays = [effectImg];
+
+            parts.push({
+                part: 'rows',
+                items: self ? [patientRow] : [
+                    { img: healer?.img || 'icons/svg/mystery-man.svg', cover: true,
+                      label: healerName, sublabel: 'Treating' },
+                    patientRow
+                ]
+            });
+            parts.push({ part: 'band', text: verdict.label, icon: verdict.icon, tone: verdict.tone });
+
+            const blocks = [{ type: 'paragraph', text: narrative }];
+            if (bonus) blocks.push({ type: 'paragraph', text: strong(bonus) });
+            parts.push({ part: 'prose', blocks });
         }
-        const html = template({
-            theme: getSettingSafe('cardThemeInjury', 'cardsdefault'),
-            iconStyle: 'fa-bandage',
-            cardTitle: 'Treatment',
-            treatoutcome,
-            content
-        });
-        await ChatMessage.create({
-            user: game.user.id,
-            content: html,
-            speaker: { alias: 'Treatment' }
+
+        await postCard({
+            type: 'treatment-outcome',
+            theme: getSettingSafe('cardThemeInjury', 'default'),
+            speaker: { alias: 'Treatment' },
+            parts
         });
     } catch (error) {
         logBib('Could not post treatment outcome', error?.message, false, false);
@@ -3607,9 +3887,7 @@ async function registerTreatStampSocket() {
     });
 }
 
-async function markTreatButtonDone(buttonEl) {
-    const messageId = buttonEl.closest('[data-message-id]')?.dataset?.messageId;
-    const message = game.messages.get(messageId ?? '');
+async function markTreatButtonDone(message) {
     if (!message) return;
     if (message.canUserModify(game.user, 'update')) {
         await sweepTreatStamps(message);
@@ -3626,31 +3904,40 @@ async function markTreatButtonDone(buttonEl) {
 }
 
 // Sweep every treatment row in the message: any row whose effect is no
-// longer on its actor gets its button replaced with the bandaid stamp —
+// longer on its actor loses its Treat button and gains a bandaid mark —
 // the clicked row, the condition rows a bundled injury took with it, and
 // rows that went stale any other way.
+//
+// The row is rewritten in the stored composition rather than in the
+// rendered HTML, so every client re-renders to the same card.
 async function sweepTreatStamps(message) {
     try {
         if (!message.canUserModify(game.user, 'update')) return;
-        const doc = new DOMParser().parseFromString(message.content, 'text/html');
+        const state = message.getFlag(MODULE.ID, 'checkup');
+        if (!state?.rows) return;
+        const actor = canvas?.tokens?.get(state.tokenId ?? '')?.actor
+            ?? game.actors.get(state.actorId ?? '');
+        if (!actor) return;
+
+        const card = getCard(message);
+        if (!card?.parts) return;
+
         let changed = false;
-        for (const button of Array.from(doc.querySelectorAll('.coffee-pub-bibliosoph-button-treat'))) {
-            let gone = false;
-            try {
-                const data = JSON.parse(decodeURIComponent(button.getAttribute('data-treat') ?? ''));
-                const actor = canvas?.tokens?.get(data.tokenId ?? '')?.actor
-                    ?? game.actors.get(data.actorId ?? '');
-                gone = !!actor && !actor.effects.get(data.effectId ?? '');
-            } catch (_) { /* unreadable payload — leave the button alone */ }
-            if (!gone) continue;
-            const stamp = doc.createElement('div');
-            stamp.style.cssText = 'flex:0 0 auto; width:40px; height:40px; display:flex; align-items:center; justify-content:center; opacity:0.6; font-size:1.1em;';
-            stamp.title = 'Treated';
-            stamp.innerHTML = '<i class="fa-solid fa-bandage" style="margin:0;"></i>';
-            button.replaceWith(stamp);
-            changed = true;
+        for (const part of card.parts) {
+            if (part.part !== 'rows') continue;
+            for (const row of part.items ?? []) {
+                if (!row.action || actor.effects.get(row.value ?? '')) continue;
+                // Treated: the control goes, and a mark takes its place so
+                // the row still says what happened to it.
+                delete row.action;
+                delete row.actionIcon;
+                delete row.moduleId;
+                row.trailingIcon = 'fa-solid fa-bandage';
+                row.tone = 'positive';
+                changed = true;
+            }
         }
-        if (changed) await message.update({ content: doc.body.innerHTML });
+        if (changed) await updateCard(message, card.parts);
     } catch (error) {
         logBib('Could not mark treatment done', error?.message, false, false);
     }
@@ -3662,15 +3949,15 @@ async function sweepTreatStamps(message) {
 // Two things make this more than "click button, apply effect":
 //
 //   PICKS — "each of two party members loses 1 HP" is one card asking
-//   for two decisions. The remaining count lives in the stored message
-//   HTML (data-picks-remaining on the picker), never in a client's
-//   memory, so a refresh or a second client sees the same state.
+//   for two decisions. The remaining count lives in the card's own
+//   flags, never in a client's memory, so a refresh or a second client
+//   sees the same state.
 //
 //   WHO MAY CLICK — the player whose character rolled gets to make the
 //   card's choice. Their client cannot create effects on actors they do
-//   not own, nor edit the GM's chat message, so the click is relayed and
-//   the GM performs it. The client-side button pruning is presentation;
-//   the ownership check on the GM side is the one that decides.
+//   not own, nor rewrite the GM's chat message, so the click is relayed
+//   and the GM performs it. `readableBy` on the actions part is
+//   presentation; the ownership check here is the one that decides.
 // ==================================================================
 
 /** Does this user own the actor whose roll produced the card? */
@@ -3681,107 +3968,54 @@ function userOwnsRoller(rollerActorId, userId) {
     return user.isGM || actor.testUserPermission(user, 'OWNER');
 }
 
-/** Actor ids already chosen on this card, read back off the stored HTML. */
-function pickedActorIds(message) {
-    try {
-        const doc = new DOMParser().parseFromString(message?.content ?? '', 'text/html');
-        const picker = doc.querySelector('.bibliosoph-outcome-picker');
-        return (picker?.dataset?.picksActors ?? '').split('|').filter(Boolean);
-    } catch (_) {
-        return [];
-    }
+/**
+ * Turn one button press into the actor it lands on.
+ *
+ * "Random" is resolved BEFORE anything is applied, for two reasons: the
+ * card can then retire that person's button, and a second random pick on
+ * a two-pick card cannot land on someone already chosen — which it
+ * otherwise would, since the applier treats a repeat as successfully
+ * applied rather than as a no-op.
+ *
+ * @returns {{actorId: string|null}} null when the outcome is unbound and
+ *          resolves against the clicker's selection instead
+ */
+function resolveOutcomePick(state, value) {
+    if (value && value !== 'random') return { actorId: value };
+    if (value !== 'random') return { actorId: state.targetActorId ?? null };
+
+    const taken = new Set(state.picked ?? []);
+    const pool = (state.candidates ?? []).filter((c) => !taken.has(c.id));
+    const from = pool.length ? pool : (state.candidates ?? []);
+    if (!from.length) return { actorId: null };
+    return { actorId: from[Math.floor(Math.random() * from.length)].id };
 }
 
 /**
- * Turn "a random party member" into a named one BEFORE anything is
- * applied. Two reasons: the card can then retire that person's button, and
- * a second random pick on a two-pick card cannot land on someone already
- * chosen — which it otherwise would, since the applier treats a repeat as
- * successfully applied rather than as a no-op.
+ * Record one applied pick against the stored card and rebuild its tail.
+ *
+ * Callers must hold update rights — a player's click arrives here only
+ * after being relayed to the GM.
  */
-function resolveOutcomePick(message, data) {
-    if (!data?.randomAlly) return { data, actorId: data?.targetActorId ?? null };
-    const taken = new Set(pickedActorIds(message));
-    const party = getPartyActors();
-    const pool = party.filter((a) => !taken.has(a.id));
-    const from = pool.length ? pool : party;
-    if (!from.length) return { data, actorId: null };
-    const chosen = from[Math.floor(Math.random() * from.length)];
-    const { randomAlly, ...rest } = data;
-    return { data: { ...rest, targetActorId: chosen.id }, actorId: chosen.id };
-}
+async function stampOutcomeApplied(message, state, appliedNames, appliedActorId) {
+    const card = getCard(message);
+    const at = card?.parts?.findIndex((part) => part.part === 'actions') ?? -1;
+    if (at === -1) return false;
 
-/**
- * Record one applied pick against the stored card. Returns true if the
- * message was updated. Callers must hold update rights — a player's click
- * arrives here only after being relayed to the GM.
- */
-async function stampOutcomeApplied(message, effectAttr, appliedNames, appliedActorId = null) {
-    if (!message || !appliedNames?.length) return false;
-    if (!message.canUserModify(game.user, 'update')) return false;
-    try {
-        const doc = new DOMParser().parseFromString(message.content, 'text/html');
-        const buttons = Array.from(doc.querySelectorAll('.coffee-pub-bibliosoph-button-apply-outcome'));
-        if (!buttons.length) return false;
+    // Names accumulate across clicks so the closing stamp names everyone,
+    // and the actor ids so the same party member cannot be picked twice —
+    // including by the dice, which choose from what is left.
+    const next = {
+        ...state,
+        picksRemaining: Math.max(0, (state.picksRemaining ?? 1) - 1),
+        appliedNames: [...(state.appliedNames ?? []), ...appliedNames],
+        picked: appliedActorId ? [...(state.picked ?? []), appliedActorId] : (state.picked ?? [])
+    };
 
-        // Match the exact button that was clicked by its payload — with a
-        // picker there is one per party member and they are not interchangeable.
-        const clicked = buttons.find((b) => b.getAttribute('data-effect') === effectAttr) ?? buttons[0];
-        // Both the picker and the single-button block are wrapped, so the
-        // closing stamp replaces the instruction along with the control.
-        // A single-button block carries no pick counts, which reads as
-        // "one pick, now spent" — exactly the old behaviour.
-        const picker = clicked.closest('.bibliosoph-outcome-apply');
-        const total = Math.max(1, Number(picker?.dataset?.picksTotal) || 1);
-        const before = Number(picker?.dataset?.picksRemaining);
-        const remaining = Math.max(0, (Number.isFinite(before) && before > 0 ? before : total) - 1);
-
-        // Names accumulate across clicks so the closing stamp names everyone.
-        const previous = (picker?.dataset?.picksApplied ?? '').split('|').filter(Boolean);
-        const names = [...previous, ...appliedNames];
-
-        const takenIds = (picker?.dataset?.picksActors ?? '').split('|').filter(Boolean);
-        if (appliedActorId) takenIds.push(appliedActorId);
-
-        if (picker && remaining > 0) {
-            // Retire the button just used AND the button of whoever actually
-            // received it — those differ when the dice made the choice — so
-            // the same party member cannot be picked twice.
-            clicked.remove();
-            if (appliedActorId) {
-                picker.querySelector(`.coffee-pub-bibliosoph-button-apply-outcome[data-pick-actor="${appliedActorId}"]`)?.remove();
-            }
-            picker.dataset.picksRemaining = String(remaining);
-            picker.dataset.picksApplied = names.join('|');
-            picker.dataset.picksActors = takenIds.join('|');
-            const hint = picker.querySelector('.bibliosoph-apply-hint');
-            if (hint) hint.textContent = targetHint('ally', total, remaining);
-            let progress = picker.querySelector('.bibliosoph-picks-progress');
-            if (!progress) {
-                progress = doc.createElement('p');
-                progress.className = 'bibliosoph-picks-progress';
-                progress.style.cssText = 'margin:2px 0 4px 0; font-size:0.9em; font-weight:bold; opacity:0.8;';
-                picker.insertBefore(progress, picker.firstChild);
-            }
-            progress.textContent = `✓ So far: ${names.join(', ')}`;
-            await message.update({ content: doc.body.innerHTML });
-            return true;
-        }
-
-        // Every pick spent: one stamp replaces the whole picker (or the
-        // lone button), and the instruction goes with it.
-        const stamp = doc.createElement('div');
-        stamp.style.cssText = 'width:100%; text-align:center; font-weight:bold; padding:5px 0;';
-        stamp.textContent = `✓ Applied to ${names.join(', ')}`;
-        (picker ?? clicked).replaceWith(stamp);
-        for (const extra of buttons) if (extra.isConnected) extra.remove();
-        for (const hint of doc.querySelectorAll('.bibliosoph-apply-hint')) hint.remove();
-        await message.update({ content: doc.body.innerHTML });
-        return true;
-    } catch (error) {
-        logBib('Could not record the applied outcome', error?.message, false, false);
-        return false;
-    }
+    card.parts[at] = composeOutcomeActions(next);
+    await updateCard(message, card.parts);
+    await message.setFlag(MODULE.ID, 'outcome', next);
+    return true;
 }
 
 const SOCKET_OUTCOME_APPLY = `${MODULE.ID}.outcomeApply`;
@@ -3796,92 +4030,40 @@ async function registerOutcomeApplySocket() {
         const message = game.messages.get(payload?.messageId ?? '');
         if (!message) return;
         // The relay is a request, not a fact. Re-check both halves against
-        // live state: the button must still be live in the stored card (else
-        // this is a stale or double click), and the requester must really own
-        // the roller (else the client gate was bypassed).
-        const doc = new DOMParser().parseFromString(message.content, 'text/html');
-        const button = Array.from(doc.querySelectorAll('.coffee-pub-bibliosoph-button-apply-outcome'))
-            .find((b) => b.getAttribute('data-effect') === payload?.effectAttr);
-        if (!button) {
+        // live state: the card must still have picks left (else this is a
+        // stale or double click), and the requester must really own the
+        // roller (else the client gate was bypassed).
+        const state = message.getFlag(MODULE.ID, 'outcome');
+        if (!state || state.picksRemaining <= 0) {
             logBib('Ignoring relayed outcome apply — that choice is already spent', '', true, false);
             return;
         }
-        if (button.getAttribute('data-needs-selection') === '1') {
-            logBib('Refused relayed outcome apply — that button resolves against the clicker\'s selection and is GM-only', '', false, false);
+        if (state.needsSelection) {
+            logBib("Refused relayed outcome apply — that button resolves against the clicker's selection and is GM-only", '', false, false);
             return;
         }
-        if (!userOwnsRoller(button.getAttribute('data-roller-actor'), payload?.userId)) {
+        if (!userOwnsRoller(state.rollerActorId, payload?.userId)) {
             logBib(`Refused relayed outcome apply from ${game.users.get(payload?.userId ?? '')?.name ?? 'unknown user'} — they do not own the roller`, '', false, false);
             return;
         }
-        const pick = resolveOutcomePick(message, payload?.data ?? {});
-        const applied = await applyOutcomeStatus(pick.data);
-        await stampOutcomeApplied(message, payload?.effectAttr, applied, pick.actorId);
+        await applyOutcomePick(message, state, payload?.value ?? '');
     });
 }
 
-/**
- * One apply-outcome click, from whichever side of the table. The GM does
- * it directly; anyone else asks the GM to, because applying effects and
- * editing the card both need rights a player does not have.
- */
-async function handleApplyOutcomeClick(buttonEl) {
-    const effectAttr = buttonEl.getAttribute('data-effect');
-    const data = decodeEffectPayload(effectAttr);
-    if (!data) return;
-    const messageId = buttonEl.closest('[data-message-id]')?.dataset?.messageId ?? '';
+/** Apply one pick and record it. GM side only. */
+async function applyOutcomePick(message, state, value) {
+    const pick = resolveOutcomePick(state, value);
+    // One payload for both kinds: applyOutcomeStatus routes a card-dealing
+    // outcome to the deck itself, because both arrive on the same button
+    // and carry the same targeting.
+    const data = { ...state.apply };
+    if (state.dealscard) data.dealscard = true;
+    if (state.partyMode) data.partyMode = true;
+    if (pick.actorId) data.targetActorId = pick.actorId;
 
-    if (game.user.isGM) {
-        const message = game.messages.get(messageId);
-        const pick = resolveOutcomePick(message, data);
-        const applied = await applyOutcomeStatus(pick.data);
-        await stampOutcomeApplied(message, effectAttr, applied, pick.actorId);
-        return;
-    }
-
-    const sockets = game.modules.get('coffee-pub-blacksmith')?.api?.sockets;
-    if (!sockets || !game.users.activeGM) {
-        showBibToast('Nothing Applied', 'No GM is connected to resolve that choice.', 'fa-solid fa-triangle-exclamation');
-        return;
-    }
-    try {
-        await sockets.waitForReady();
-        await sockets.emit(SOCKET_OUTCOME_APPLY, { messageId, effectAttr, data, userId: game.user.id });
-    } catch (error) {
-        logBib('Outcome apply relay failed', error?.message, false, false);
-        showBibToast('Nothing Applied', 'That choice could not be sent to the GM.', 'fa-solid fa-triangle-exclamation');
-    }
-}
-
-// After a successful apply, replace the card's button (in the stored chat
-// message) with an "Applied to …" stamp so it can't fire twice and the card
-// records who carries the effect. Skipped silently when the clicking user
-// cannot modify the message (a non-GM clicking someone else's card) — the
-// duplicate guard in the applier still protects against re-clicks.
-async function markCardButtonApplied(buttonEl, buttonSelector, appliedNames) {
-    if (!appliedNames?.length) return;
-    try {
-        const messageId = buttonEl.closest('[data-message-id]')?.dataset?.messageId;
-        const message = game.messages.get(messageId ?? '');
-        if (!message || !message.canUserModify(game.user, 'update')) return;
-        const doc = new DOMParser().parseFromString(message.content, 'text/html');
-        const buttons = Array.from(doc.querySelectorAll(buttonSelector));
-        if (!buttons.length) return;
-        const stamp = doc.createElement('div');
-        stamp.style.cssText = 'width:100%; text-align:center; font-weight:bold; padding:5px 0;';
-        stamp.textContent = `✓ Applied to ${appliedNames.join(', ')}`;
-        // A pick-one card renders a button per party member; choosing one
-        // resolves the whole decision, so every option is replaced by the
-        // single stamp rather than leaving the rest live.
-        buttons[0].replaceWith(stamp);
-        for (const extra of buttons.slice(1)) extra.remove();
-        // "Select the creature that was hit" is an instruction for a decision
-        // that has now been made — once the stamp is down it is just noise.
-        for (const hint of doc.querySelectorAll('.bibliosoph-apply-hint')) hint.remove();
-        await message.update({ content: doc.body.innerHTML });
-    } catch (error) {
-        logBib('Could not mark card button applied', error?.message, false, false);
-    }
+    const applied = await applyOutcomeStatus(data);
+    if (!applied?.length) return;
+    await stampOutcomeApplied(message, state, applied, pick.actorId);
 }
 
 

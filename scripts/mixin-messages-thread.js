@@ -22,6 +22,7 @@
 
 import { MODULE } from './const.js';
 import { ConversationManager } from './manager-conversations.js';
+import { postCard } from './manager-cards.js';
 
 // ------------------------------------------------------------------
 // Shared constants. These live here rather than in window-messages.js
@@ -97,11 +98,6 @@ function log(message, data = '', debug = true, notify = false) {
         BlacksmithUtils.postConsoleAndNotification(MODULE.NAME, `MESSAGES THREAD | ${message}`, data, debug, notify);
     }
 }
-
-const renderTemplateFn = (...args) => {
-    const fn = foundry.applications?.handlebars?.renderTemplate ?? globalThis.renderTemplate;
-    return fn(...args);
-};
 
 // ------------------------------------------------------------------
 // The mixin
@@ -763,34 +759,30 @@ export function ThreadBehavior(Base) {
 
             const info = ConversationManager.getInfo(entry);
             const isParty = info.kind === 'party';
-            // Settings store Blacksmith Chat Cards API class names (see settings.js)
-            const cardTheme = isParty
-                ? getSetting('cardThemePartyMessage', 'theme-default')
-                : getSetting('cardThemePrivateMessage', 'theme-default');
+            const theme = isParty
+                ? getSetting('cardThemePartyMessage', 'default')
+                : getSetting('cardThemePrivateMessage', 'default');
 
-            let content;
-            try {
-                content = await renderTemplateFn(`modules/${MODULE.ID}/templates/chat-card-message.hbs`, {
-                    cardTheme,
-                    icon: info.icon ?? 'fa-solid fa-comments',
-                    title: this._conversationDisplayName(entry),
-                    senderName: message.senderName,
-                    timeDisplay: formatTimestamp(message.timestamp),
-                    content: message.html
-                });
-            } catch (_) {
-                content = `<div class="blacksmith-card ${cardTheme}"><div class="section-content"><strong>${escapeHtml(message.senderName)}:</strong> ${message.html}</div></div>`;
-            }
+            // `richtext` rather than prose: the body is HTML that already
+            // exists on the journal page, authored in Foundry's editor. That
+            // is exactly what the part is for, and the only place a card
+            // takes HTML at all.
+            const parts = [
+                { part: 'header', icon: info.icon ?? 'fa-solid fa-comments', title: this._conversationDisplayName(entry) },
+                { part: 'section', icon: 'fa-solid fa-feather',
+                  label: [message.senderName, formatTimestamp(message.timestamp)].filter(Boolean).join(' — ') },
+                { part: 'richtext', html: message.html }
+            ];
 
-            const chatData = {
-                content,
-                speaker: ChatMessage.getSpeaker()
-            };
+            // A party conversation is public; a private one reaches only its
+            // members. Whispering is the message's property, not a part's —
+            // and unlike a veil it keeps the text off other clients entirely.
+            const options = { type: 'conversation-message', theme, parts };
             if (!isParty) {
                 const recipients = (info.members ?? []).filter((id) => game.users.get(id));
-                if (recipients.length) chatData.whisper = recipients;
+                if (recipients.length) options.whisper = recipients;
             }
-            await ChatMessage.create(chatData);
+            await postCard(options);
             toast('Sent to Foundry chat', '', 'fa-solid fa-share-from-square');
         }
     };

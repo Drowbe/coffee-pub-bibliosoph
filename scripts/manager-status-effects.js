@@ -26,7 +26,7 @@ import { modifiersToChanges, severityLabel, titleCase } from './data/outcome-sch
 
 /**
  * Build the applyStatusToTokens config for an injury from a decoded
- * data-effect payload.
+ * apply payload carried on the card.
  *
  * There are two ways an injury lands — the player clicks Apply on the card,
  * or `injuryAutoApply` applies it the moment the card is posted — and both
@@ -40,7 +40,7 @@ import { modifiersToChanges, severityLabel, titleCase } from './data/outcome-sch
  * beside the applier rather than in the card code so it can be exercised
  * without loading the module entry point.
  *
- * @param {object} data                 decoded data-effect payload
+ * @param {object} data                 the card's apply payload
  * @param {Actor[]|null} explicitActors known recipients, or null to target at click time
  * @returns {object} config for applyStatusToTokens
  */
