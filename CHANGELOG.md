@@ -6,6 +6,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [13.6.1]
+
+### NOTE: Card themes must be re-picked once.
+
+- The eight card-theme settings stored Blacksmith CSS class names (`theme-red`); they store theme **ids** now (`red`), because that is what `chatCards.post()` takes. Existing worlds hold a value that is no longer a valid choice, so those cards fall back to the world default until the GM picks again. One pass through the settings and it is done.
+
+### Changed
+
+- **Bibliosoph no longer writes chat card HTML.** Every card is now described as data — a composition of Blacksmith-owned parts — and Blacksmith renders it. `templates/chat-card.hbs` (413 lines), `templates/chat-card-message.hbs` and every line of card CSS in `default.css` are gone; that stylesheet is now nothing but `@import`s for the window and page sheets. The point is not the deletion: it is that improving a part improves every card in the suite at once, that Foundry's chat markup churn is now one module's problem instead of nine, and that Bibliosoph stops maintaining a drifted fork of someone else's card. All nine cards moved — investigation, encounter, treatment outcome, send-to-chat, injury, critical, fumble, Check-Up and inspiration.
+- **Parts were chosen for their shape, not for their contents.** Coins became `tiles`, a grid of caption-over-value boxes. Item and monster lists became `rows`, which take a `uuid` directly — so the card no longer hand-writes `@UUID[...]{...}` and a renamed item still resolves. The injury card's treatment block became a `panel`; roll penalties and inventory summaries became `notes`; severity and outcome verdicts became `band`s. The Check-Up's health bar is a `meter`, which cost it its custom colour ramp: a meter's tint is emphasis rather than data, so the theme derives it from the proportion and the module does not pass a colour.
+- **Buttons are registered, not bound.** A chat message is data on every client, so a handler cannot travel with the card. Four actions — apply-injury, apply-outcome, use-inspiration, treat-affliction — are registered on every client at startup and resolved from that client's own registry at render time, which is also why they keep working after a browser reload. The document-level click listener that dispatched on CSS classes is gone.
+- **Card state moved off the markup and onto the message.** The crit/fumble pick counter, the applied stamps and the Check-Up's treated rows were all held in the stored HTML and edited by re-parsing it with `DOMParser`. They live in the module's own message flags now, and a card is amended through `chatCards.getCard()` → splice → `chatCards.update()`, which rewrites the rendered snapshot and the stored composition together. The two could previously disagree; they no longer can.
+- **Who-sees-what is declared rather than pruned.** The old card was identical for every viewer and a `renderChatMessageHTML` hook deleted the parts a given reader should not have. Applying a critical is now `readableBy: 'owner'` against the roller's actor — which reads as "the player whose character rolled, and the GM" — and the encounter card's adversary lists are a `'gm'` / `'player'` pair, so the GM gets linked names with CR and players get the plain list, or "Unknown Adversaries" at detection 1–2. The hook is gone entirely. Note that this decides what RENDERS, not what travels: as before, both halves are in the message on every client. Anything that must not reach a client is whispered instead.
+- **The one thing that cannot be composed is a render pass.** Which Check-Up rows a reader may treat is a per-row, per-reader decision, and so is the tooltip that previews how *that* user's Medicine roll would go. Both run in the reader's own browser through `registerRenderPass` rather than a hook, because a parts card re-renders from its stored composition a tick after Foundry paints it and that swap discards anything a hook decorated.
+- **The investigation card names the character, not the player.** It showed the Foundry username over the character name; it shows the character alone. The encounter card had the inverse oddity — the token's name over the *owning player's* name — and now says the same thing the same way.
+
+### Fixed
+
+- **The injury selector card's leftovers.** The selector card was removed several versions ago, but its `.category-button` click handler and the `{{#if injurybutton}}` block it drove were still shipping. Nothing had set `injurybutton` since, so the handler could never fire.
+- **Dead banner artwork.** `createChatCardInjury` picked one of thirteen damage-type banner images in a switch and then passed `banner: ""` to the template. Sixteen lines of assignment feeding a field that had been hardcoded empty.
+
+
 ## [13.6.0]
 
 ### NOTE: Requires Blacksmith 13.17.0 or newer.
