@@ -17,6 +17,7 @@ import * as INSPIRATION_ACTIONS from './data/inspiration-schema.js';
 import { SEVERITY_DCS as INJURY_SEVERITY_DCS, damageFor } from './data/injury-schema.js';
 import { registerInjuryTickHooks } from './manager-injury-ticks.js';
 import { postCard, getChatCardsAPI, getCard, updateCard, stampCardActions, iconClass } from './manager-cards.js';
+import { grantFoundItems, grantCurrency } from './manager-loot.js';
 
 // Log through Blacksmith's console tool wherever possible; raw console is
 // reserved for bootstrap failures where Blacksmith itself is unavailable.
@@ -2464,22 +2465,16 @@ async function createChatCardInvestigation() {
             if (ep) coinParts.push(`${ep} ep`);
             if (sp) coinParts.push(`${sp} sp`);
             if (cp) coinParts.push(`${cp} cp`);
-            if (actor?.system?.currency) {
-                try {
-                    const cur = actor.system.currency;
-                    await actor.update({
-                        "system.currency.pp": (Number(cur.pp) || 0) + pp,
-                        "system.currency.gp": (Number(cur.gp) || 0) + gp,
-                        "system.currency.ep": (Number(cur.ep) || 0) + ep,
-                        "system.currency.sp": (Number(cur.sp) || 0) + sp,
-                        "system.currency.cp": (Number(cur.cp) || 0) + cp,
-                    });
-                    coinsSummaryLine = game.i18n.format("coffee-pub-bibliosoph.investigationCoinsSummary", { coins: coinParts.join(", "), character: actor.name });
-                } catch (err) {
-                    logBib(`Could not add coins to ${actor?.name ?? 'the actor'}`, err?.message ?? String(err), false, false);
-                    showBibToast('Coins Not Added', `The coins could not be written to ${actor?.name ?? 'the character'} — add them by hand.`, 'fa-solid fa-coins');
-                    coinsSummaryLine = game.i18n.format("coffee-pub-bibliosoph.investigationCoinsSummaryNoActor", {});
-                }
+            // Through Blacksmith rather than writing `system.currency.*`
+            // ourselves: that path is dnd5e-shaped and unlocked, and two
+            // finds landing at once would each read the same balance and
+            // one would win. grantCurrency takes the lock and applies a
+            // delta. Zero denominations are dropped for us.
+            if (actor) {
+                const granted = await grantCurrency(actor, { pp, gp, ep, sp, cp });
+                coinsSummaryLine = granted
+                    ? game.i18n.format("coffee-pub-bibliosoph.investigationCoinsSummary", { coins: coinParts.join(", "), character: actor.name })
+                    : game.i18n.format("coffee-pub-bibliosoph.investigationCoinsSummaryNoActor", {});
             } else {
                 coinsSummaryLine = game.i18n.format("coffee-pub-bibliosoph.investigationCoinsSummaryNoActor", {});
             }
@@ -2568,31 +2563,50 @@ async function createChatCardInvestigation() {
         const img = result?.img ?? itemDoc.img ?? "";
         const rarity = itemDoc.system?.rarity?.value ?? rarityLabel;
 
-        if (actor) {
-            try {
-                const baseData = itemDoc.toObject();
-                delete baseData._id;
-                const hasQty = foundry.utils.getProperty(baseData, "system.quantity") !== undefined;
-                if (hasQty) foundry.utils.setProperty(baseData, "system.quantity", 1);
-                await actor.createEmbeddedDocuments("Item", [baseData]);
-            } catch (err) {
-                // The card still lists the item, so silence here would leave
-                // the sheet and the card disagreeing with nobody the wiser.
-                logBib(`Could not add "${name}" to ${actor?.name ?? 'the actor'}'s inventory`, err?.message ?? String(err), false, false);
-                showBibToast('Item Not Added', `"${name}" could not be added to ${actor?.name ?? 'the character'} — add it by hand.`, 'fa-solid fa-sack-xmark');
-            }
-        }
+        // Collected, not written: the whole find goes to the actor in one
+        // grant below. A search that turns up three arrows is three arrows,
+        // and adding them one at a time is three writes to one Actor that
+        // land as three rows of one.
         foundItems.push({ name, img, uuid: documentUuid, rarity });
+    }
+
+    // Into the inventory in a single, merging grant.
+    //
+    // Blacksmith owns this because merging is harder than it looks: the row
+    // a payload BECOMES is not the payload — creation fills schema defaults
+    // and normalises properties — so comparing the two never matches. We
+    // used to build item data by hand and create it directly, which is
+    // exactly the shape that fails.
+    let inventoryFailures = [];
+    if (actor && foundItems.length) {
+        inventoryFailures = await grantFoundItems(actor, foundItems);
+        if (inventoryFailures.length) {
+            const names = [...new Set(inventoryFailures)].join(', ');
+            logBib(`Could not add ${names} to ${actor.name}'s inventory`, '', false, false);
+            showBibToast('Items Not Added', `${names} could not be added to ${actor.name} — add by hand.`, 'fa-solid fa-sack-xmark');
+        }
     }
 
     const entry = pickEntry(foundSomethingEntries);
     let inventorySummaryLine = "";
     if (foundItems.length && actor) {
-        const names = foundItems.map((f) => f.name);
-        const counts = {};
-        names.forEach((n) => { counts[n] = (counts[n] || 0) + 1; });
-        const parts = Object.entries(counts).map(([n, c]) => (c > 1 ? `${c} ${n}` : n));
-        inventorySummaryLine = game.i18n.format("coffee-pub-bibliosoph.investigationInventorySummary", { items: parts.join(", "), character: actor.name });
+        // Count what actually LANDED, not what was found. The card still
+        // lists everything — the search turned it up either way — but the
+        // line claiming it reached the sheet has to be true, or the sheet
+        // and the card disagree with nobody the wiser.
+        const failed = [...inventoryFailures];
+        const landed = foundItems.filter((item) => {
+            const at = failed.indexOf(item.name);
+            if (at === -1) return true;
+            failed.splice(at, 1);       // one failure retires one copy
+            return false;
+        });
+        if (landed.length) {
+            const counts = {};
+            landed.forEach((f) => { counts[f.name] = (counts[f.name] || 0) + 1; });
+            const parts = Object.entries(counts).map(([n, c]) => (c > 1 ? `${c} ${n}` : n));
+            inventorySummaryLine = game.i18n.format("coffee-pub-bibliosoph.investigationInventorySummary", { items: parts.join(", "), character: actor.name });
+        }
     } else if (foundItems.length && !actor) {
         inventorySummaryLine = game.i18n.format("coffee-pub-bibliosoph.investigationInventorySummaryNoActor", {});
     }
