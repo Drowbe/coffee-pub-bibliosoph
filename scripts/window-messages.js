@@ -12,6 +12,11 @@
 // ==================================================================
 
 import { MODULE } from './const.js';
+// The base class comes from Blacksmith's bridge, which is a real ES module
+// and so resolves at evaluation time. Reading it off `game.modules` here
+// cannot work: `extends` runs when this module is evaluated, and a failed
+// evaluation is cached, so the throw would disable us for the session.
+import { BlacksmithWindowBaseV2 } from '/modules/coffee-pub-blacksmith/api/blacksmith-api.js';
 import { ConversationManager } from './manager-conversations.js';
 import { SOCIAL_TOASTS, isSocialToastEnabled, triggerSocialToast } from './manager-social-toasts.js';
 import {
@@ -31,13 +36,6 @@ const APP_ID = 'coffee-pub-bibliosoph-messages';
 const BLACKSMITH_TEMPLATE = 'modules/coffee-pub-blacksmith/templates/window-template.hbs';
 const BODY_TEMPLATE = `modules/${MODULE.ID}/templates/window-messages.hbs`;
 
-function resolveBase() {
-    const api = game.modules.get('coffee-pub-blacksmith')?.api;
-    const Base = api?.BlacksmithWindowBaseV2 ?? api?.getWindowBaseV2?.();
-    if (!Base) throw new Error(`${MODULE.ID} | Blacksmith window base (BlacksmithWindowBaseV2) is not available`);
-    return Base;
-}
-
 /**
  * Open (or focus) the Messages window. Still a singleton — there is one
  * workspace — but it now runs alongside any open popouts rather than
@@ -50,7 +48,7 @@ export async function openMessagesWindow(options = {}) {
     return win.render(true);
 }
 
-export class MessagesWindow extends ThreadBehavior(resolveBase()) {
+export class MessagesWindow extends ThreadBehavior(BlacksmithWindowBaseV2) {
     /** Singleton instance (also used by ConversationManager for live updates). */
     static current = null;
 

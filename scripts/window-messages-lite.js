@@ -23,18 +23,14 @@
 // ==================================================================
 
 import { MODULE } from './const.js';
+// From Blacksmith's bridge rather than `game.modules`: `extends` is
+// evaluated when this module is, and there is no `game` at that point.
+import { BlacksmithToolWindowBaseV2 } from '/modules/coffee-pub-blacksmith/api/blacksmith-api.js';
 import { ConversationManager } from './manager-conversations.js';
 import { ThreadBehavior, toast } from './mixin-messages-thread.js';
 
 const APP_ID = `${MODULE.ID}-messages-lite`;
 const BODY_TEMPLATE = `modules/${MODULE.ID}/templates/window-messages-lite.hbs`;
-
-function getBlacksmith() {
-    return game.modules.get('coffee-pub-blacksmith')?.api ?? null;
-}
-
-const BlacksmithToolWindowBaseV2 = getBlacksmith()?.BlacksmithToolWindowBaseV2
-    || getBlacksmith()?.getToolWindowBaseV2?.();
 
 function log(message, data = '', debug = true, notify = false) {
     if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils?.postConsoleAndNotification) {
@@ -46,10 +42,6 @@ const renderTemplateFn = (...args) => {
     const fn = foundry.applications?.handlebars?.renderTemplate ?? globalThis.renderTemplate;
     return fn(...args);
 };
-
-if (!BlacksmithToolWindowBaseV2) {
-    log('BlacksmithToolWindowBaseV2 unavailable — the messages popout cannot open', '', false, false);
-}
 
 /**
  * A conversation id turned into something safe to use as an element id.
@@ -70,11 +62,6 @@ function appIdFor(conversationId) {
  * remembers its own position and tool theme.
  */
 export async function openMessagesLite(options = {}) {
-    if (!BlacksmithToolWindowBaseV2) {
-        toast('Popout unavailable', 'Blacksmith’s tool window base did not load.', 'fa-solid fa-triangle-exclamation');
-        return null;
-    }
-
     const conversationId = options.conversationId ?? null;
     if (!conversationId) {
         toast('No conversation', 'A popout needs a conversation to show.', 'fa-solid fa-comment-slash');
@@ -95,7 +82,7 @@ export async function closeAllMessagesLite() {
     }
 }
 
-export class MessagesLiteWindow extends ThreadBehavior(BlacksmithToolWindowBaseV2 ?? Object) {
+export class MessagesLiteWindow extends ThreadBehavior(BlacksmithToolWindowBaseV2) {
 
     /**
      * Every live popout. A Set rather than a Map keyed by conversation, because

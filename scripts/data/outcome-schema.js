@@ -193,9 +193,25 @@ export const OPTIONAL_FIELDS = ['imagetitle', 'modifiers', 'gmnotes', 'dealscard
  */
 export const DEALS_CARD_FIELD = 'dealscard';
 
-/** Rounds -> seconds, the unit outcomes are actually authored in. */
-export const roundsToSeconds = (rounds) => Math.max(0, Math.round(Number(rounds) || 0) * 6);
-export const secondsToRounds = (seconds) => Math.max(0, Math.round((Number(seconds) || 0) / 6));
+/**
+ * Rounds <-> seconds, the unit outcomes are actually authored in.
+ *
+ * The round length comes from the system rather than from a 6 written
+ * here. Blacksmith reads `CONFIG.time.roundTime` when it labels a
+ * duration, so hardcoding our own would let a system with a different
+ * round make our card text and its effect label disagree — the card
+ * saying "2 rounds" beside a tooltip saying three.
+ *
+ * Falls back to 6 for the same reason Blacksmith's does: at module
+ * evaluation there is no CONFIG yet, and every caller here runs later.
+ */
+const roundSeconds = () => {
+    const value = Number(globalThis.CONFIG?.time?.roundTime);
+    return Number.isFinite(value) && value > 0 ? value : 6;
+};
+
+export const roundsToSeconds = (rounds) => Math.max(0, Math.round(Number(rounds) || 0) * roundSeconds());
+export const secondsToRounds = (seconds) => Math.max(0, Math.round((Number(seconds) || 0) / roundSeconds()));
 
 /** "crit" -> "Critical", for display. */
 export const kindLabel = (kind) => (kind === 'crit' ? 'Critical' : 'Fumble');

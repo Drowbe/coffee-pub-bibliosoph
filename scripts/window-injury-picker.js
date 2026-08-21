@@ -18,14 +18,14 @@
 // ==================================================================
 
 import { MODULE } from './const.js';
+// From Blacksmith's bridge rather than `game.modules`: `extends` is
+// evaluated when this module is, and there is no `game` at that point.
+import { BlacksmithToolWindowBaseV2 } from '/modules/coffee-pub-blacksmith/api/blacksmith-api.js';
 import { CATEGORIES, displayCategory } from './data/injury-schema.js';
 
 function getBlacksmith() {
     return game.modules.get('coffee-pub-blacksmith')?.api ?? null;
 }
-
-const BlacksmithToolWindowBaseV2 = getBlacksmith()?.BlacksmithToolWindowBaseV2
-    || getBlacksmith()?.getToolWindowBaseV2?.();
 
 function log(message, data = '', debug = true, notify = false) {
     if (typeof BlacksmithUtils !== 'undefined' && BlacksmithUtils?.postConsoleAndNotification) {
@@ -71,11 +71,7 @@ async function loadInjuriesByCategory() {
     return byCategory;
 }
 
-if (!BlacksmithToolWindowBaseV2) {
-    log('BlacksmithToolWindowBaseV2 unavailable — the injury picker cannot open', '', false, false);
-}
-
-export class InjuryPickerWindow extends (BlacksmithToolWindowBaseV2 ?? Object) {
+export class InjuryPickerWindow extends BlacksmithToolWindowBaseV2 {
 
     static DEFAULT_OPTIONS = foundry.utils.mergeObject(
         foundry.utils.mergeObject({}, super.DEFAULT_OPTIONS ?? {}),
@@ -232,13 +228,6 @@ export class InjuryPickerWindow extends (BlacksmithToolWindowBaseV2 ?? Object) {
 
 /** Open the picker. Ephemeral by design — no registration, no singleton. */
 export async function openInjuryPicker() {
-    if (!BlacksmithToolWindowBaseV2) {
-        const toast = getBlacksmith()?.toast;
-        const message = 'This Blacksmith build has no Tool window base — update Blacksmith to use the injury picker.';
-        if (toast?.show) toast.show({ title: 'Unavailable', subtitle: message, icon: 'fa-solid fa-triangle-exclamation', duration: 5, moduleId: MODULE.ID });
-        else ui.notifications.warn(message);
-        return null;
-    }
     const window = new InjuryPickerWindow();
     await window.render({ force: true });
     return window;
