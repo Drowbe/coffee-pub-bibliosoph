@@ -6,6 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [13.6.2]
+
+### NOTE: Needs a Blacksmith newer than 13.19.0.
+
+- The window base classes are imported from Blacksmith's public bridge, and that export is not in a released Blacksmith yet. Until it is, these changes must not ship — a missing named export is a link-time failure, so the Messages window and the injury picker would fail to load rather than degrade.
+
+### Changed
+
+- **Window base classes come from Blacksmith's bridge instead of `game.modules`.** Three of our windows read the base class off `module.api` at module top level and each guarded it differently — `window-messages.js` with a `resolveBase()` factory that threw, `window-messages-lite.js` and `window-injury-picker.js` with `extends (Base ?? Object)` plus a startup log and an unreachable runtime guard. That pattern cannot work in general: `extends` is evaluated when the module is evaluated, `game` does not exist then, and ES modules cache a failed evaluation, so the throw disables the module for the session rather than being retried. It never bit us only because all three modules are exclusively dynamic-imported, always after `ready` — the deferred import *was* the workaround, and it held by luck of call-site rather than by design. A single future static import would have reproduced the failure. They now `import { BlacksmithWindowBaseV2 } from '/modules/coffee-pub-blacksmith/api/blacksmith-api.js'`, which is a real ES module and resolves at evaluation time. The three guards, two `?? Object` fallbacks and one now-unused helper went with it.
+- **Found items and coins go through Blacksmith's inventory API.** Investigation added each found item with its own `createEmbeddedDocuments` call and wrote `system.currency.*` by hand. Both are now `grantItems({ stack: 'merge' })` and `grantCurrency`, in `scripts/manager-loot.js`. This fixes a disagreement the card itself exposed: the summary line counted duplicates and said "3 Arrows" while the sheet received three separate rows of one, because a hand-built payload can never match the row it becomes — creation fills schema defaults, writes `system.identifier` from the name, and normalises properties. The coin write was also unlocked, so two finds resolving together would each read the same balance and one would be lost; `grantCurrency` takes the per-actor lock and applies a delta.
+- **The round length comes from the system rather than from a `6`.** `secondsToRounds` and `roundsToSeconds` read `CONFIG.time.roundTime`, matching how Blacksmith labels a duration. Hardcoding our own let a system with a different round make our card text and Blacksmith's effect label disagree — a card saying "2 rounds" beside a tooltip saying three.
+
+### Fixed
+
+- **The investigation summary claimed items that never arrived.** Each failed add toasted on its own, but the "added to your inventory" line was built from everything *found*. It now counts only what actually landed; the card still lists the whole find, because the search turned it up either way.
+
+
 ## [13.6.1]
 
 ### NOTE: Card themes must be re-picked once.
