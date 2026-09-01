@@ -1,6 +1,6 @@
 # Architecture: Toasts
 
-**Status:** describes the code as of 13.5.0. Written from source, not from plans.
+**Audience:** someone changing how Bibliosoph notifies players and GMs.
 
 Every user-facing notice in Bibliosoph is a Blacksmith adaptive toast. `ui.notifications` appears only as a fallback when the toast API is absent.
 
@@ -10,7 +10,7 @@ There are two senders — roll toasts and social toasts — and one shared socke
 
 ## Channels
 
-Bibliosoph declares four channels to Blacksmith at startup, from a single list in `manager-roll-toasts.js`:
+Bibliosoph declares five channels to Blacksmith at startup, from a single list in `manager-roll-toasts.js`:
 
 | Channel | Label | Covers |
 |---|---|---|
@@ -18,12 +18,15 @@ Bibliosoph declares four channels to Blacksmith at startup, from a single list i
 | `fumble` | Fumbles | natural 1 announcements |
 | `injury` | Injuries | a hit crossing the injury threshold |
 | `social` | Table Breaks | Beverage, Bio, Insult, Praise |
+| `messages-group` | Group Messages | party and group conversation alerts |
+
+**Direct messages carry no channel at all, deliberately.** A channel's only effect is that a user excluded from toasts -- a camera account, a shared table display -- sees the toast anyway unless the GM unticks it. That is a reasonable offer for the party channel and an unreasonable one for a private message, so a direct-message alert can never reach a shared screen.
 
 Declaring them means a GM ticks a labelled box in settings instead of typing a channel name that nothing told them about. **Blacksmith stores the string and renders the label; it never learns what a critical is.**
 
 Declaration is version-safe: builds at or below Blacksmith 13.15.0 have no `registerChannel`, and there the call is skipped and toasts still send.
 
-An empty allow-list permits every *declared* channel, so the feature works with no GM configuration at all. The setting is how a GM narrows the set, not how they switch it on. This is what lets a camera account (Herald) see crits, fumbles, injuries, and social announcements without extra setup.
+An empty allow-list permits every *declared* channel, so the feature works with no GM configuration at all. The setting is how a GM narrows the set, not how they switch it on. This is what lets a camera account see crits, fumbles, injuries, and social announcements without extra setup.
 
 ---
 

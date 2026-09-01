@@ -1,7 +1,8 @@
 // ==================================================================
 // ===== INJURY SCHEMA (scripts/data/injury-schema.js) ===============
 // ==================================================================
-// The single machine-readable copy of documentation/spec-injury-schema.md.
+// The single machine-readable definition of the injury record.
+// Described in documentation/architecture/architecture-injuries.md.
 //
 // Deliberately dependency-free so BOTH sides can import it: the Foundry
 // runtime (data model, sheet, card) and the Node build tools

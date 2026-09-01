@@ -6,82 +6,47 @@
 ![GitHub all releases](https://img.shields.io/github/downloads/Drowbe/coffee-pub-bibliosoph/total)
 ![MIT License](https://img.shields.io/badge/license-MIT-blue)
 
-In-game player messaging with journal-backed conversations, plus authored injuries, quick encounter building, inspiration, and critical hit announcements.
+Your players talk to each other in character, and the dice leave marks. Bibliosoph adds journal-backed messaging to your table, and turns critical hits, fumbles and lasting injuries into authored cards that apply real mechanics instead of prose somebody has to adjudicate.
 
-## Features
+## What it does
 
-### Messages
+- **Messages.** A conversation window with party, group and private threads, kept in journals so they survive a chat wipe. Mentions, reactions, markdown, images, typing indicators, and floating popouts you can watch side by side.
+- **Injuries that linger.** A hard hit leaves a wound that takes hit points, applies a condition, imposes real roll penalties, and may bleed each turn until somebody treats it with a Medicine check.
+- **Criticals and fumbles with teeth.** Drawn from decks of authored cards rather than roll tables, so each one carries its own damage, condition, penalties and duration, and the Apply button does what the text describes.
+- **Inspiration you can hold.** Cards are dealt into a character's inventory as real one-use items, so a player can sit on one for six sessions and cash it in at the right moment.
+- **Search a room.** One click rolls for coins and for items across five rarity tables, adds what turned up to the character sheet, and posts a narrated card.
+- **Build a fight at the table.** Pick a habitat and a difficulty, get a monster list scored against the party, roll for who noticed whom, and deploy straight to the canvas.
+- **Write your own content.** Injuries, criticals, fumbles and inspiration cards are journal pages with an editing sheet. Nothing about them is hardcoded, so your table's wounds can be yours.
 
-- Unified Messages window with party, group, and 1:1 conversations. Journal-backed, so they survive a chat log wipe
-- **Popouts.** Hover a conversation in the tray and click the popout icon to float it in a lightweight window that follows your Light, Dark, or Glass theme. Popouts stack (one per conversation), each remembering its own position, so you can watch the party channel and a private thread side by side while you play
-- **Favorites.** Heart a conversation and it joins a shortlist on the Messages menubar tool. Right-click that tool to jump straight into any of them as a popout, without opening the full window first
-- @Mentions by user or character name, with partial matching and highlighted names. Mentioned players get a pulsing alert
-- On-screen alerts for incoming messages, carrying the sender's portrait. Click one to open the conversation, and choose in settings whether that means the popout or the full window
-- Markdown formatting, image paste and drop, document links, reactions, typing indicators, and a collapsible conversation tray
+## Requirements
 
-**Party Message**
+- Foundry VTT v13 or newer
+- The D&D 5e system, 5.5 or newer
+- **[Coffee Pub Blacksmith](https://github.com/Drowbe/coffee-pub-blacksmith) 13.17.0 or newer.** Bibliosoph will not run without it.
 
-![Party Message](product/bibliosoph-partymessage.webp)
+Nothing else in the suite is required.
 
-**Private Message**
+## Install
 
-![Private Message](product/bibliosoph-privatemessage.webp)
-
-### Encounter Management
-
-The Quick Encounter tool builds a fight at the table rather than in prep. Set the party's CR and a target difficulty, let it recommend monsters from your configured compendiums or roll one for you, then deploy the result straight to the canvas. Difficulty is reported against the party's actual CR as you adjust it.
-
-![Encounters](product/bibliosoph-encounters.webp)
-
-### Investigation System
-
-When enabled, Investigation runs a full search flow with narrative, optional coins, and items by rarity.
-
-- **Narrative:** Titles and descriptions come from `resources/investigation-narrative.json`. You can add many entries to `foundNothing` and `foundSomething`; one is chosen at random each time.
-- **Coins:** Optional separate roll (Odds of Finding Coins). If successful, amounts are rolled from 0 up to each configured max (Platinum, Gold, Silver, Electrum, Copper) and added to the character's purse (D&D 5e currency).
-- **Items:** One 1d100 roll (or 1d100 + INT + Proficiency when "Use Player Skill Bonus" is on for dnd5e) vs Odds of Success. If successful, a number of slots (1dN, N = Upper Limit of Items) are rolled. For each slot, rarity is chosen by weighted bands (Common through Legendary) using 0–1000 weightings, then one item is rolled on that rarity's table and added to inventory.
-- **Card:** Shows narrative title and description, coins found (if any), items grouped by rarity with icons, and a summary of what was added to the character.
-
-![Investigation](product/bibliosoph-investigation.webp)
-
-### Table Breaks
-
-Four buttons in the Messages window header, each rolling its own configured table and announcing the result as a toast on every client: Beverage Break, Bio Break, Insult, and Praise. Any player can fire them.
-
-### Criticals and Fumbles
-
-Natural 20s and natural 1s draw from typed journal compendiums rather than roll tables, so an outcome carries real mechanics: severity, damage, duration, conditions, and roll modifiers that apply as genuine active effects. The roller also gets an announcement toast, configurable per outcome.
-
-### Injuries
-
-An authored injury deck (144 injuries across 14 categories) with damage as a percentage of max HP, a floor that stops an injury dropping anyone below 1 HP, roll penalties applied as active effects, bleed ticks, and conditions that unwind on every removal path. A GM picker deals a specific wound, rolls a random one weighted by odds, or asks the target's own player to roll for it.
-
-### Inspiration
-
-A deck of authored cards dealt into a character's inventory as real one-use consumables. Using the item raises a play card whose buttons pick the target, run the effect, and discard. The card is the currency, so there are no inspiration points to track.
-
-## Installation
-
-Install via the manifest URL in Foundry VTT:
+Paste this manifest URL into Foundry's **Install Module** dialog:
 
 ```
 https://github.com/Drowbe/coffee-pub-bibliosoph/releases/latest/download/module.json
 ```
 
-### Requirements
+## Where to read more
 
-Bibliosoph **requires [Coffee Pub Blacksmith](https://github.com/Drowbe/coffee-pub-blacksmith) 13.17.0 or newer**. Blacksmith is the core module the whole suite builds on, and Bibliosoph will not run without it. 13.17.0 specifically is what the favorites menu needs; below it, right-clicking the Messages menubar tool does nothing.
+Everything is on [the wiki](https://github.com/Drowbe/coffee-pub-bibliosoph/wiki).
 
-Nothing else in the suite is needed. Everything listed below is independent, and you can install as much or as little of it as you want.
-
-### System Requirements
-
-- Foundry VTT v13 or newer
-- D&D 5e 5.5+ for full feature set (e.g. investigation coins and player skill bonus use dnd5e data)
+- [Getting started](https://github.com/Drowbe/coffee-pub-bibliosoph/wiki/userguide-getting-started) -- the first five minutes: what each toolbar button does and who may press it
+- [Writing your own injuries](https://github.com/Drowbe/coffee-pub-bibliosoph/wiki/userguide-authoring-injuries) -- every field on the injury sheet, and a prompt for drafting one
+- [The bursts API](https://github.com/Drowbe/coffee-pub-bibliosoph/wiki/api-bursts) -- for macro authors
+- [Architecture](https://github.com/Drowbe/coffee-pub-bibliosoph/wiki/architecture-bibliosoph) -- for anyone changing the module
+- [Known issues](https://github.com/Drowbe/coffee-pub-bibliosoph/wiki/known-issues)
 
 ## The Coffee Pub Suite
 
-Bibliosoph is one module in a larger suite. Blacksmith is the core every other module builds on and the only one Bibliosoph actually requires; the rest stand alone, and you can run any combination of them.
+Bibliosoph is one module in a larger suite. Blacksmith is the core every other module builds on and the only one Bibliosoph requires; the rest stand alone, and you can run any combination of them.
 
 | Module | What it does |
 |---|---|
@@ -100,51 +65,22 @@ Bibliosoph is one module in a larger suite. Blacksmith is the core every other m
 | [Squire](https://github.com/Drowbe/coffee-pub-squire) | A customizable character tray, with party tools and item transfer |
 | [Vault](https://github.com/Drowbe/coffee-pub-vault) | Optional assets for the suite |
 
-## Usage Guide
+<!-- global:ai-assistance -->
+## AI Assistance and the Illusion of Good Code
 
-### Initial Setup
+I started writing Foundry modules for use at my own table back in 2020. There were already a ton of amazing modules out there, but they either didn't quite do what I wanted or didn't deliver the kind of user experience I was looking for.
 
-1. Install and enable Coffee Pub Blacksmith and Coffee Pub Bibliosoph.
-2. Configure module settings for the encounter types and features you want.
+I've been a design leader for more than 20 years, but I spent the first half of my career as a developer, so building my own modules seemed like a fun way to kill some time. I'm a pretty good designer. I'm a decent developer. But, over time, my hand-written code and hacks got a little messy (and memory-leaky, and a little buggy. Feels good to say it out loud.).
 
-Each feature you enable adds its own toolbar button, so there is nothing to wire up by hand.
+Today, the Coffee Pub suite of modules is developed with AI assistance, primarily Claude and Cursor, for documentation, refactoring, debugging, and other development work. Every change is reviewed and committed by me, and nothing reaches a release that I haven't crawled and run at my own table. I can't seem to give up my IDE. The UX design, architecture, and ideas still come from my own fever dreams and chronic lack of sleep.
 
-### Key Settings
+Testing and verifying a change means running it in Foundry so I can watch the console, break things, fix them, and hone the experience. The repositories carry a set of tools for testing the things that are difficult to catch through review and manual testing alone. They help ensure styles don't conflict, shared coding and documentation standards stay consistent, and the suite of modules continues to work well as a system without silently breaking.
 
-- Features (encounters, investigation, messages, etc.) can be enabled or disabled individually.
-- Every feature with a button chooses where it appears: the Coffee Pub toolbar, the Foundry toolbar, or both (the default). To remove a button, switch its feature off rather than hiding it from both bars.
-- Investigation: configure Odds of Success, Upper Limit of Items, coin odds and max amounts, and per-rarity roll tables and weightings (0–1000 scale). Optionally enable "Use Player Skill Bonus" so the find-items roll becomes 1d100 + Intelligence modifier + Proficiency (dnd5e).
-- Active effects for injuries can be configured with custom durations and effects.
+Those checks are there because AI-assisted development can move very quickly, and without oversight, engagement, and planning, it can also go confidently off the rails and deliver the illusion of good code. The AI helps me build faster. It doesn't decide what gets built, its architecture, or how it should work. You can blame this human for that.
 
-### Toast Channels (streaming and camera accounts)
+If the idea of AI-assisted development keeps you up at night or just isn't your jam, no worries at all. I get it. You do you.
+<!-- /global:ai-assistance -->
 
-Blacksmith's **Toast Excluded Users** setting stops a user's client from rendering toasts at all, which is the right behaviour for a camera or stream account that cannot click a toast closed. But some announcements are exactly what a broadcast exists to capture, so Bibliosoph labels each broadcast toast with a **channel** and declares those channels to Blacksmith at startup.
+## License and credits
 
-**This needs no setup.** A declared channel reaches excluded users by default, so a camera account sees criticals, fumbles, injuries and table breaks out of the box. Bibliosoph declares five:
-
-| Channel | Appears as | Toasts |
-|---|---|---|
-| `crit` | Critical Hits | Natural 20 announcements |
-| `fumble` | Fumbles | Natural 1 announcements |
-| `injury` | Injuries | Injury-threshold announcements |
-| `social` | Table Breaks | Beverage Break, Bio Break, Insult, Praise |
-| `messages-group` | Group Messages | Party and group conversation alerts |
-
-**Direct messages carry no channel at all, deliberately.** A channel is an offer to put something on a shared screen, which is reasonable for the party channel and unreasonable for a private message, so a direct-message alert can never reach an excluded account.
-
-To send *less* to a camera account, tick a narrower set in Blacksmith's **Channels Excluded Users Still See**. They appear there as labelled rows, one per declared channel. Ticking only Critical Hits and Fumbles puts the dice moments on camera while injuries and table gags stay off it. Toasts with no channel at all (local confirmations, warnings) are always suppressed for excluded users.
-
-Two things to know:
-
-- **Channel names are global, not namespaced.** If another module also declares `crit`, allowing it allows both. The checklist shows which module declared each row.
-- **To check what a camera account will actually see**, run the test harness in [testing/test-harness-macro.js](testing/test-harness-macro.js): **Audit toast channels** under Tools reports who is excluded, what we declared, and which channels reach them; **Fire one toast per channel** broadcasts one of each so you can watch a real excluded client. Blacksmith's Debug Mode also logs each channel as it first sees one, which is the quicker way to confirm a suspected mismatch involving another module.
-
-Channels need Blacksmith 13.15.1 or newer. On older builds the channel is ignored and excluded users see nothing, exactly as before.
-
-## License
-
-This module is licensed under the [MIT License](LICENSE).
-
-## Contributing
-
-Issues and enhancement requests are welcome.
+Licensed under the [MIT License](LICENSE). Built by Coffee Pub. Issues and enhancement requests are welcome.

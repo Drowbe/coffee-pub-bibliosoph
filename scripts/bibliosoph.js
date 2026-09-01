@@ -2873,7 +2873,7 @@ async function weightedPickRolled(items, weightOf) {
 //   1. system  — typed page subtype, validated by Foundry (current)
 //   2. flag    — the interim format the generator stamped
 //   3. HTML    — the original metadata block
-// Older packs keep working; see documentation/spec-injury-schema.md.
+// Older packs keep working; see documentation/architecture/architecture-injuries.md.
 function readInjuryRecord(page) {
     // `sourceUuid` lets the applied effect point back at its journal page,
     // so GM notes stay live (and are never copied into chat HTML, where a

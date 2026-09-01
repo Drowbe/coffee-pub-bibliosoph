@@ -1,6 +1,6 @@
 # Architecture: Bibliosoph Core
 
-**Status:** describes the code as of 13.5.0. Written from source, not from plans.
+**Audience:** someone changing Bibliosoph, and the rest of the suite.
 
 Bibliosoph is the Coffee Pub **outcomes and announcements** module. It owns authored content that fires at the table — injuries, criticals, fumbles, inspiration — plus encounters and the Messages system. It does not own character UI, and it does not own any registry: every shared service it uses belongs to Blacksmith.
 

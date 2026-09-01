@@ -4,7 +4,7 @@
 // Structure mirrors Squire's CODEX page model (scripts/data/
 // codex-page-model.js) deliberately — same approach, different schema —
 // so the two can later be diffed and their common scaffolding extracted
-// into a shared Coffee Pub toolkit. See documentation/spec-injury-schema.md.
+// into a shared Coffee Pub toolkit. See documentation/architecture/architecture-injuries.md.
 // ==================================================================
 
 import { MODULE } from '../const.js';

@@ -3,7 +3,7 @@
 // ===== (tools/build-injury-journals.mjs) ==========================
 // ==================================================================
 // Generates packs/_source/injuries/*.json from resources/injuries.json
-// per documentation/spec-injury-schema.md Part 4.
+// per the page layout in documentation/architecture/architecture-injuries.md.
 //
 //   node tools/build-injury-journals.mjs
 //   npm run injuries:build      (validate + generate)

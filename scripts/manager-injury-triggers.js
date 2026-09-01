@@ -15,8 +15,7 @@
 // RollToastManager (same socket).
 //
 // The manual flow (toolbar button -> selector card -> category click) is
-// untouched. See documentation/plan-injuries-automation.md and
-// documentation/request-blacksmith-damage-api.md.
+// untouched. See documentation/architecture/architecture-injuries.md.
 // ==================================================================
 
 import { MODULE } from './const.js';

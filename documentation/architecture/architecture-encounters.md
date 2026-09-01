@@ -1,6 +1,6 @@
 # Architecture: Quick Encounter
 
-**Status:** describes the code as of 13.4.6. Written from source, not from plans.
+**Audience:** someone changing Bibliosoph's Quick Encounter builder.
 
 A CR-aware, compendium-based encounter builder: pick a habitat and a difficulty, get a monster list, roll a detection level, post a narrative card, deploy to canvas.
 

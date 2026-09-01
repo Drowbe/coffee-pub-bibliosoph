@@ -2,7 +2,7 @@
 // ===== ONE-TIME NORMALIZER (tools/normalize-injuries.mjs) ==========
 // ==================================================================
 // Brings resources/injuries.json onto the schema in
-// documentation/spec-injury-schema.md:
+// documentation/architecture/architecture-injuries.md:
 //
 //   - drops journaltype / foldername / action (constants or derivable)
 //   - damage, duration, odds become real integers

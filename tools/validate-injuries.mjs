@@ -2,7 +2,7 @@
 // ===== INJURY VALIDATOR (tools/validate-injuries.mjs) ==============
 // ==================================================================
 // Gate for resources/injuries.json — the authoring source of truth.
-// Enforces documentation/spec-injury-schema.md Part 6.
+// Enforces the validation rules in documentation/architecture/architecture-injuries.md.
 //
 //   node tools/validate-injuries.mjs            validate
 //   node tools/validate-injuries.mjs --quiet    errors only, no warnings

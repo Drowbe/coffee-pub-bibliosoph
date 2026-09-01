@@ -1,6 +1,6 @@
 # Architecture: Messages & Conversations
 
-**Status:** describes the code as of 13.6.0. Written from source, not from plans.
+**Audience:** someone changing Bibliosoph's messaging and conversation system.
 
 A unified conversation window covering the party channel and private/group messages. It replaced the older party/private message dialogs.
 
