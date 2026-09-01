@@ -12,9 +12,16 @@ This page routes. Each section points at the document that answers the question 
 
 ## Playing with Bibliosoph
 
-[Getting started](userguides/userguide-getting-started.md) covers the first five minutes: what appears on screen, what each toolbar button does, and who is allowed to press it -- sending a message, searching a room, applying a critical, treating an injury, playing an inspiration card, and building an encounter.
+[Getting started](userguides/userguide-getting-started.md) is the first five minutes: what appears on screen, what each toolbar button does, and who is allowed to press it. Then one guide per feature:
 
-[Writing your own injuries](userguides/userguide-authoring-injuries.md) is for a GM who wants wounds written for their own table: what every field on the injury sheet means, and a prompt you can paste into an AI to draft one.
+- [Sending messages](userguides/userguide-messages.md) -- conversations, popouts, favourites, mentions, and how loudly the module tells you something arrived
+- [Injuries at the table](userguides/userguide-injuries.md) -- what a wound does to a character, how one is dealt, and how to treat it
+- [Writing your own injuries](userguides/userguide-authoring-injuries.md) -- every field on the injury sheet, and a prompt you can paste into an AI to draft one
+- [Criticals and fumbles](userguides/userguide-outcomes.md) -- what happens on a natural 20 or a natural 1, and who may apply it
+- [Inspiration cards](userguides/userguide-inspiration.md) -- drawing, holding and playing a card, and why there is no point to track
+- [Searching a room](userguides/userguide-investigation.md) -- what a search finds, and how a GM stocks it
+- [Building an encounter](userguides/userguide-encounters.md) -- habitats, difficulty, detection, and deploying to the canvas
+- [Settings](userguides/userguide-settings.md) -- every setting by its on-screen name, including toasts and camera accounts
 
 ## Building against Bibliosoph
 

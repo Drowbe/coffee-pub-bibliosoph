@@ -39,7 +39,14 @@ https://github.com/Drowbe/coffee-pub-bibliosoph/releases/latest/download/module.
 Everything is on [the wiki](https://github.com/Drowbe/coffee-pub-bibliosoph/wiki).
 
 - [Getting started](https://github.com/Drowbe/coffee-pub-bibliosoph/wiki/userguide-getting-started) -- the first five minutes: what each toolbar button does and who may press it
-- [Writing your own injuries](https://github.com/Drowbe/coffee-pub-bibliosoph/wiki/userguide-authoring-injuries) -- every field on the injury sheet, and a prompt for drafting one
+- [Sending messages](https://github.com/Drowbe/coffee-pub-bibliosoph/wiki/userguide-messages) -- conversations, popouts, favourites and alerts
+- [Injuries at the table](https://github.com/Drowbe/coffee-pub-bibliosoph/wiki/userguide-injuries) -- what a wound does, and how to treat it
+- [Writing your own injuries](https://github.com/Drowbe/coffee-pub-bibliosoph/wiki/userguide-authoring-injuries) -- the injury sheet, and a prompt for drafting one
+- [Criticals and fumbles](https://github.com/Drowbe/coffee-pub-bibliosoph/wiki/userguide-outcomes) -- natural 20s, natural 1s, and who applies them
+- [Inspiration cards](https://github.com/Drowbe/coffee-pub-bibliosoph/wiki/userguide-inspiration) -- drawing, holding and playing a card
+- [Searching a room](https://github.com/Drowbe/coffee-pub-bibliosoph/wiki/userguide-investigation) -- what a search finds, and how to stock it
+- [Building an encounter](https://github.com/Drowbe/coffee-pub-bibliosoph/wiki/userguide-encounters) -- habitat, difficulty, detection, deploy
+- [Settings](https://github.com/Drowbe/coffee-pub-bibliosoph/wiki/userguide-settings) -- every setting by its on-screen name
 - [The bursts API](https://github.com/Drowbe/coffee-pub-bibliosoph/wiki/api-bursts) -- for macro authors
 - [Architecture](https://github.com/Drowbe/coffee-pub-bibliosoph/wiki/architecture-bibliosoph) -- for anyone changing the module
 - [Known issues](https://github.com/Drowbe/coffee-pub-bibliosoph/wiki/known-issues)
