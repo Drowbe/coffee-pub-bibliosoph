@@ -16,7 +16,11 @@ With **Automation** set to detect them, you do not have to click anything: a nat
 
 ## Read the card
 
-Under the artwork and the prose is a mechanics line saying exactly what the card does, in plain terms -- something like "8 damage, Stunned for 1 round, -2 to attack rolls for 2 rounds".
+![A critical hit card: the roller, the severity bucket, the title, artwork, the prose, the mechanics line, the instruction, and the apply button](../assets/bibliosoph-criticals.webp)
+
+The card names who rolled it, the severity bucket it came from, and the result. Under the artwork and the prose is a mechanics line saying exactly what the card does, in plain terms -- something like "Prone for 1 round", or "8 damage, Stunned for 1 round, -2 to attack rolls for 2 rounds".
+
+Above the buttons is a line telling you what to do next: whether to select a creature first, or pick who it lands on.
 
 Below that are the apply controls, and what they look like depends on who the card is meant for:
 
@@ -27,6 +31,8 @@ Below that are the apply controls, and what they look like depends on who the ca
 | An ally | One button per party member, plus **Random Party Member** |
 | The whole party | A single button that applies to everyone, with nothing to choose |
 | Anyone nearby | One button, and the GM selects who is in range |
+
+![A fumble card that lands on an ally: a Random Party Member button followed by one button per party member](../assets/bibliosoph-fumbles.webp)
 
 A button that names somebody is bound to that character. A card records a moment, so it will not quietly re-aim at whoever happens to be selected later.
 

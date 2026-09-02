@@ -10,6 +10,12 @@ Click **Investigation** on the toolbar. Any player can.
 
 Your character searches, and a card is posted saying what turned up: a piece of narration, any coins, and any items. **Anything found is added to your character sheet automatically** -- items into your inventory, coins into your purse.
 
+![An Investigation card: the searcher, the narration, a Coins row showing gold, silver and copper, the items found under their rarity, and two lines confirming what was added](../assets/bibliosoph-investigation.webp)
+
+The card names the character who searched, then the narration. Coins appear as one tile per denomination, and only the denominations actually found are shown. Items are listed under a heading for their rarity, each one a link you can click to open it.
+
+The last two lines are the receipt: which items went into the inventory, and how much money went into the purse.
+
 Two separate rolls happen, one for coins and one for items, so a search can turn up money and nothing else, or items and no money, or neither.
 
 If a card lists an item but says nothing about adding it, that item could not be written to your sheet and the GM is told to add it by hand. The card lists what the search found; the line about your inventory only claims what actually landed.

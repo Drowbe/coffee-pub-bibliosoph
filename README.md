@@ -8,6 +8,8 @@
 
 Your players talk to each other in character, and the dice leave marks. Bibliosoph adds journal-backed messaging to your table, and turns critical hits, fumbles and lasting injuries into authored cards that apply real mechanics instead of prose somebody has to adjudicate.
 
+![Bibliosoph in play: the Quick Encounter builder, the Messages window, the injury picker, and cards for investigation and encounters](documentation/assets/bibliosoph-product.webp)
+
 ## What it does
 
 - **Messages.** A conversation window with party, group and private threads, kept in journals so they survive a chat wipe. Mentions, reactions, markdown, images, typing indicators, and floating popouts you can watch side by side.

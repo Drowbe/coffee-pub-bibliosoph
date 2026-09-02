@@ -8,6 +8,8 @@ Bibliosoph is part of the Coffee Pub suite and requires [Coffee Pub Blacksmith](
 
 What sets it apart is that its content is authored rather than hardcoded. Injuries, criticals, fumbles and inspiration cards are journal pages with real mechanics in validated fields -- damage, a condition, roll penalties, a duration -- so applying one puts the numbers on the token instead of leaving the GM to adjudicate a line of prose. And because they are just journal pages, you can write your own.
 
+![Bibliosoph in play: the Quick Encounter builder, the Messages window, the injury picker, and cards for investigation and encounters](assets/bibliosoph-product.webp)
+
 This page routes. Each section points at the document that answers the question rather than answering it here.
 
 ## Playing with Bibliosoph

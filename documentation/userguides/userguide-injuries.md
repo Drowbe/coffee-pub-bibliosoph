@@ -10,31 +10,39 @@ An injury is what remains after a hit lands hard. It takes hit points once, may 
 
 When one lands you get a card in chat naming the wound, its artwork, what it does, and how it might be treated. Applying it puts a real effect on the token, and a burst plays on the canvas so the whole table sees it happen.
 
-From then on the character carries:
+![An injury card: artwork and caption, the description, the penalties it imposes, the treatment text, its duration, the damage in hit points and as a percentage, the condition it conveys, and the stamp naming who it was applied to](../assets/bibliosoph-injury.webp)
 
-- **Damage, once.** A percentage of their maximum hit points, so the same wound hurts a level 1 character and a level 15 one comparably.
-- **A condition, sometimes.** Blinded, prone, poisoned and so on -- a real condition, applied the way Foundry applies any other, so it shows on the token and in every module that reads conditions.
+The card states its mechanics plainly, so nobody has to interpret prose:
+
+- **Damage, once.** Shown both ways -- as hit points and as the percentage of maximum hit points it came from -- because the percentage is what was authored and the hit points are what you lost. The same wound therefore hurts a level 1 character and a level 15 one comparably.
+- **A condition, sometimes.** Blinded, prone, frightened and so on -- a real condition, applied the way Foundry applies any other, so it shows on the token and in every module that reads conditions.
 - **Penalties, sometimes.** A minus to attacks, damage, AC, checks or saves, applied as a genuine effect rather than a note somebody has to remember.
+- **A duration**, given in minutes and in rounds.
 - **A bleed, rarely.** A small amount of damage at the start of your turn, for wounds that are an ongoing physical process.
 
 **An injury will never drop you below 1 hit point.** Not the initial damage, not the bleed. Injuries maim; dying is what death saves are for.
+
+Once it has been applied the card says so and names who carries it, so it cannot be applied twice.
 
 Most injuries heal on their own when their duration runs out. Some are written to stop bleeding but stay until somebody tends them, and some are permanent until treated.
 
 ## Deal an injury by hand
 
-GM only. Click **Injuries** on the toolbar to open the picker, which lists the damage types down one side and the injuries in each.
+GM only. Target or select a token and click **Injuries** on the toolbar. The picker opens, naming who you are dealing to.
 
-| What you click | What happens |
+![The Deal an Injury window, listing the fourteen damage types with the number of injuries in each and controls to roll one or ask the player to roll](../assets/bibliosoph-injury-deal.webp)
+
+Each row is a damage type, with the number of injuries written for it and two controls:
+
+| Control | What it does |
 |---|---|
-| An injury, or the droplet beside it | Deals that exact wound, with no roll |
-| The die on a damage type | Rolls a random injury of that type, weighted so nasty ones are rare |
-| The hand on a damage type | Asks the target's own player to roll for it |
-| The feather on an injury | Opens its journal page so you can read it. The picker stays open |
+| The die | Rolls a random injury of that type, weighted so the nasty ones are rare |
+| The hand | Asks the target's own player to roll it themselves |
+| The arrow at the left | Expands the type, listing its injuries so you can deal one exactly, or open its page to read it |
 
 The wound lands on the token you have targeted, falling back to the one you have selected. You must own the target's actor, and a token never gets the same injury twice.
 
-The hand icon is worth knowing about: it sends the injured player a prompt they click to roll their own wound, which is the same prompt automation sends. Some tables prefer the player to be the one who turns the card over.
+The hand is worth knowing about: it sends the injured player a prompt they click to roll their own wound, which is the same prompt automation sends. Some tables prefer the player to be the one who turns the card over.
 
 ## Let injuries happen on their own
 
@@ -57,7 +65,11 @@ This needs a recent Blacksmith. On an older build nothing fires and nothing comp
 
 GM only to start. Target or select a character and click **Check-Up**.
 
-You get a card describing how the patient is doing and listing everything currently afflicting them, grouped: injuries, criticals, fumbles, and then everything else -- plain conditions, other modules' effects, anything stale. Each row has a treat control, and hovering a row shows what the injury actually says.
+![A Check-Up card: the patient's portrait, condition and hit points, a sentence describing how they are doing, then their afflictions grouped under Injuries, Fumbles, and Effects and Conditions](../assets/bibliosoph-checkup.webp)
+
+You get the patient's portrait, how badly hurt they are, their hit points, and a sentence summing it up, then everything currently afflicting them grouped into zones -- Injuries, Criticals, Fumbles, and Effects and Conditions for everything Bibliosoph did not stamp: plain conditions, other modules' effects, anything stale. An empty zone is left out.
+
+Each row carries a treat control at its end, and hovering shows the full text. A condition that arrived with an injury says so on its own row, so you can tell what put it there.
 
 **Who can press treat:** the GM, always, on anyone. A player, on a character they own.
 

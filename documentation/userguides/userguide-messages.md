@@ -10,13 +10,17 @@ Conversations are kept in journals rather than in the chat log, so they survive 
 
 Click **Messages** on the toolbar, or the Messages tool on the menubar. Either opens the full window: a tray of your conversations down one side, and the conversation you are reading beside it.
 
-The tray shows three kinds of row. The party conversation, which everyone is in. Group conversations, which are private to the people in them. And one row per other player, for a one-to-one.
+![The Messages window with a conversation open, a Beverage Break announcement, and a conversation popped out over the map](../assets/bibliosoph-communications.webp)
+
+The tray lists group conversations first, then one row per other player for a one-to-one. A conversation with unread messages carries a count. The header above the thread names whoever you are talking to.
+
+At the foot of the tray is **New Conversation**. At the foot of the thread are the message box, a **Send Message** button, and an **Enter Sends** tick box.
 
 ## Say something to the party
 
 Pick the party conversation and type in the box at the bottom.
 
-**ENTER sends. SHIFT+ENTER starts a new line.** In the full window there is a send button as well, and a toggle if you would rather ENTER made a new line instead.
+**ENTER sends. SHIFT+ENTER starts a new line.** Untick **Enter Sends** if you would rather ENTER made a new line and the button did the sending.
 
 ## Start a private conversation
 
@@ -35,7 +39,7 @@ You can also:
 - **Paste or drop an image** straight into the box, and it uploads and appears inline.
 - **Drop a document** -- an actor, item, journal or scene -- to post a link to it that anyone can click.
 - **Mention someone** by typing their user or character name. Partial names match. The person you mention gets a highlighted name and an alert.
-- **Pick a tone** from the tone bar, in the full window, if you want the message to carry one.
+- **Pick a tone** from the row of icons just above the message box, in the full window, if you want the message to carry one.
 
 ## React, reply, edit, delete
 
@@ -75,7 +79,7 @@ If you would rather have silence, mute the message sounds. That is your own sett
 
 ## Take a break
 
-The Messages window header carries four buttons -- **Beverage Break**, **Bio Break**, **Insult** and **Praise**. Each rolls a table the GM configured and announces the result to everyone as an on-screen toast. Any player can press them.
+The Messages window header carries four picture buttons -- **Beverage Break**, **Bio Break**, **Insult** and **Praise**. Hover one to see which is which. Each rolls a table the GM configured and announces the result to everyone as an on-screen announcement. Any player can press them.
 
 If the GM sets one of those tables to None, its button does nothing.
 
