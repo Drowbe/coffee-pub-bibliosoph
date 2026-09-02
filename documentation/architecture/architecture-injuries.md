@@ -250,7 +250,7 @@ During the bleed phase such an effect has no `durationLabel`, so displays show `
 
 ### The unwind hook
 
-`registerConditionUnwindHook()` at [bibliosoph.js:3089](../../scripts/bibliosoph.js#L3089) listens on `deleteActiveEffect`, GM-authoritative. When a flagged affliction is deleted by any route, it collects `flag.condition` plus anything in `effect.statuses` and unwinds each -- unless another untreated affliction still conveys it, so two injuries that both cause Prone do not fight over it.
+`registerConditionUnwindHook()` at [bibliosoph.js:3315](../../scripts/bibliosoph.js#L3315) listens on `deleteActiveEffect`, GM-authoritative. When a flagged affliction is deleted by any route, it collects `flag.condition` plus anything in `effect.statuses` and unwinds each -- unless another untreated affliction still conveys it, so two injuries that both cause Prone do not fight over it.
 
 This is deliberately a hook rather than a callback other modules must invoke. The condition is cleaned up whether the injury was removed from the Check-Up card, Squire's status window, the actor sheet, the token HUD, or by its duration expiring. **No other module has to know Bibliosoph exists.**
 

@@ -36,7 +36,7 @@ See [architecture-ownership](../../../coffee-pub-blacksmith/documentation/archit
 
 `const.js` fetches `module.json` at import time and derives `MODULE.ID/NAME/TITLE/VERSION` from it. There is no hardcoded module id anywhere; the code name (`BIBLIOSOPH`) is the last dash-segment of the id, uppercased.
 
-Registration with Blacksmith happens in a `Hooks.once('ready')` block at [bibliosoph.js:62](../../scripts/bibliosoph.js#L62):
+Registration with Blacksmith happens in a `Hooks.once('ready')` block at [bibliosoph.js:88](../../scripts/bibliosoph.js#L88):
 
 1. Bail if `coffee-pub-blacksmith` is not active.
 2. `await BlacksmithAPI.waitForReady()` — globals like `BlacksmithUtils` attach after `markReadyForConsumers()`, so this keeps registration safe across build and hook orderings.
