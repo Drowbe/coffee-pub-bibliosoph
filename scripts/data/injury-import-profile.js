@@ -134,6 +134,29 @@ export const INJURY_EXTRA_FIELDS = [
         guidance: 'Identifies the profile, and must be exactly "injury".'
     },
     {
+        // WHICH FOLDER THE JOURNAL LANDS IN, and without it the answer is
+        // always root. `upsertJournalEntry` matches on name AND folder
+        // (`registry-json-import-journals.js:1412` passes
+        // `{ folderName: journalData.foldername }`), so a payload that
+        // cannot say which folder it means can only ever match a root
+        // journal -- and a GM who keeps injuries in a folder gets a SECOND
+        // `Fire` at root competing with the one they already have.
+        //
+        // Not derivable, and not document data: the folder is where the
+        // containing entry goes, not a value on the page. `role: 'input'`
+        // like Blacksmith's own three journal profiles declare it.
+        //
+        // Default is root, matching those profiles. Our shipped compendium
+        // journals carry `folder: null`, so any `Injuries` folder in a world
+        // is the GM's own organisation rather than something we create.
+        name: 'foldername',
+        role: 'input',
+        type: 'string',
+        default: '',
+        example: 'Injuries',
+        guidance: 'The Journal folder to file this injury under, created if it does not exist, and root if omitted.'
+    },
+    {
         name: 'title',
         path: 'name',
         type: 'string',

@@ -1,6 +1,7 @@
 [
   {
     "journaltype": "injury",
+    "foldername": "Injury Import Test",
     "title": "Import Test — Blistered Grip",
     "category": "fire",
     "severity": "minor",

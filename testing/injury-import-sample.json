@@ -1,6 +1,7 @@
 [
   {
     "journaltype": "injury",
+    "foldername": "Injury Import Test",
     "title": "Import Test — Scorched Sight",
     "category": "fire",
     "severity": "moderate",
