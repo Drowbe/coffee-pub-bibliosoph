@@ -128,6 +128,60 @@ Warnings cover the guidance bands, oversized or over-numerous modifiers, and dur
 
 ---
 
+## Importing
+
+A GM can import injuries as JSON through Blacksmith's **Import JSON -> Journal** tool. Bibliosoph ships no importer of its own: it registers a *declaration* describing an injury, and Blacksmith builds, validates and lands the pages. Foundry namespaces the declaration of a page subtype, not its creation, so the registered data model validates whoever calls create.
+
+`scripts/data/injury-import-profile.js` registers on `ready` (`scripts/bibliosoph.js`), after `BlacksmithAPI.waitForReady()`. A registration failure is reported loudly rather than at debug level: with no legacy import path left, a silent skip presents to a GM as an import tool that simply does not offer injuries, which is indistinguishable from the feature not existing.
+
+The declaration is derived, not written:
+
+```
+api.importer.declarationFromModel(InjuryPageModel.defineSchema(), { guidance, examples, extraFields })
+```
+
+The walk lifts `choices` to legal values, `integer` to the type, `min`/`max` to bounds, `nullable`, and `initial` to the default, recursing through nested fields. Because it runs against `defineSchema()` on every build, the machine shape of the declaration **cannot** drift from the model -- add a condition to `CONDITIONS` and the declaration has it. That is the whole reason not to transcribe a schema by hand.
+
+### The model is the validator; the declaration only describes it
+
+Foundry runs `InjuryPageModel` on create, so it is the senior schema. The declaration is a description of it, and a description that omits something does not fail loudly: the page lands and every undescribed field silently takes the model's `initial`. For injuries that would mean a page with no `system.severity`, which the picker skips -- the import reports success and the data is invisible.
+
+What the derived walk leaves exposed is everything it cannot derive. `npm run injuries:profile` is what checks those, in three passes:
+
+| Pass | Proves |
+|---|---|
+| `declarationFromModel` | it is built from the model rather than transcribed |
+| `validateDeclaration` | Blacksmith's registry will accept it -- its own function, imported from `api/validate-declaration.mjs`, never a local copy of its rules |
+| `checkDeclarationMirrorsModel` | the human layer is complete, the document block is right, and the container names match the shipped compendium |
+
+The middle pass exists because the other two can both pass while registration throws in a live world: a declaration can mirror its model perfectly and still violate the declaration *format*. Two schemas, one senior, nothing comparing them -- the same shape as the invariant above, one level up.
+
+### What the walk cannot derive
+
+**The human layer is the one that matters most**, and it is the only one that fails by simple absence. Guidance is one sentence per field, keyed by dotted path (`modifiers.value` reaches a nested field), feeding the template comment, the authoring guide and the generation prompt alike. A field with none reaches an author as a bare name with nothing attached, and nothing is broken anywhere.
+
+Because the machine shape is now free, this is the gate's main job: a field added to `InjuryPageModel` appears in the declaration automatically and fails the build for having no guidance. It went from silently absent to loudly undocumented.
+
+Three envelope fields have no model counterpart and are supplied as `extraFields`. Each registers cleanly and then fails quietly:
+
+- **`journaltype`** (`role: 'selector'`, value `injury`) -- how a payload reaches this profile at all. Without it the profile registers and is unreachable, and the author sees an error about a field they never heard of.
+- **`foldername`** (`role: 'input'`) -- without it every import lands at the root of the journal directory. Defaulting it to the root is *correct*: the shipped compendium journals carry `folder: null`, so an `Injuries` folder in a world is the GM's own organisation. Defaulting it to `Injuries` instead would make an import append into the GM's real journals, because destination matching is on name and folder together.
+- **`title`** -> the page's `name`. The injury's title is the page name and is never stored twice in `system`.
+
+And the `document` block, which nothing derives either: `documentName: 'JournalEntryPage'` (declaring `JournalEntry` produces an entry named after the injury, carrying a stray `system` object and no pages at all, which imports "successfully"), `type`, `containerNameFrom: 'category'` and `containerNameTransform`.
+
+### Destination
+
+Blacksmith matches an existing journal on name **and** folder, updates a page of the same name in place, and appends a new one. Name alone collides across folders: two campaigns each with a `Fire` journal are one journal by that test.
+
+Import creates in the **world**. The GM then exports to a compendium, because the picker reads the compendium named by the `injuryCompendium` setting rather than the world.
+
+### The two vocabularies
+
+`journaltype` is REQUIRED in an import payload -- it is how Blacksmith resolves the profile -- and FORBIDDEN in `resources/injuries.json`, where `tools/validate-injuries.mjs` rejects it by name as a dropped field. The authoring source and the import payload are different representations of the same record, and neither is precedent for the other.
+
+---
+
 ## How an injury starts
 
 ### Manual

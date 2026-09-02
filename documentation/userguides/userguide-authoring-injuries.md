@@ -133,6 +133,45 @@ Paste this into an AI, fill in the two lines at the bottom, and paste the result
 
 The prompt deliberately leaves out recurring damage, expiry, flavour and modifiers. Those are judgement calls about how the wound behaves over time, and they are quicker to set on the sheet than to describe in a prompt.
 
+## Importing several at once
+
+Typing injuries into the sheet one at a time is fine for a few. For a batch -- a whole damage type, or a set you had an AI draft -- import them as JSON instead.
+
+**Import puts journals in your world, not in your compendium.** That is the step GMs miss: Bibliosoph draws injuries from the compendium named in **Injury Compendium**, so an injury that imported perfectly and has not been moved across does not appear in the picker, and that looks exactly like a failed import. Import, check the journals look right, then move them into your own injuries compendium.
+
+Open **Import JSON** from the Blacksmith toolbar and pick **Journal**. Three tabs:
+
+- **JSON Template** gives you a blank injury record with every field and a note on what each expects.
+- **Prompt Template** gives you a prompt to hand an AI, already carrying the rules about severity bands and legal conditions.
+- **Import JSON** is where you paste the finished payload.
+
+Every injury in the payload needs two fields that are not on the sheet:
+
+- **`journaltype`** must be exactly `injury`. It is how the tool knows what it is importing. Leave it out and the import fails without naming your injury.
+- **`foldername`** is the journal folder to import into -- your `Injuries` folder, if that is where you keep them. Leave it out and the journals land loose at the top of the journal directory.
+
+```json
+[
+  {
+    "journaltype": "injury",
+    "foldername": "Injuries",
+    "title": "Blistered Grip",
+    "category": "fire",
+    "severity": "minor",
+    "damage": 3,
+    "duration": 600,
+    "statuseffect": "none",
+    "odds": 40
+  }
+]
+```
+
+Injuries are filed into one journal per damage type, named for the category: `fire` becomes a journal called **Fire**. If that journal already exists in that folder, the injuries are added to it. A page whose name already exists is updated rather than duplicated, so re-importing a corrected injury does the obvious thing rather than leaving you with two.
+
+Matching is on the journal's name **and** its folder together. If you already keep a `Fire` journal in a folder and import without naming that folder, you get a second `Fire` at the top level rather than additions to yours. The tool warns you when this happens, but it is easier to name the folder.
+
+One difference worth knowing if you also edit the module's own `resources/injuries.json`: `journaltype` belongs in an import payload and must **not** appear in that file, where the build rejects it. Same injury, two different shapes for two different jobs.
+
 ## Checking your work
 
 Deal the injury to a token from the picker and look at the card. The mechanics you set should read back as plain English, the artwork and caption should look right at card size, and the condition should appear on the token. Then open **Check-Up** on that character and treat it, to confirm the wound and its condition both clear.
