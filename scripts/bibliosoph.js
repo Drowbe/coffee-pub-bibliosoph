@@ -49,6 +49,41 @@ async function getInvestigationNarrative() {
 // ===== BEGIN: REGISTER BLACKSMITH API =============================
 // ================================================================== 
 import { BlacksmithAPI } from '/modules/coffee-pub-blacksmith/api/blacksmith-api.js';
+
+// ==================================================================
+// ===== INJURIES: THE JSON IMPORT PROFILE ==========================
+// ==================================================================
+// Blacksmith builds the page and stamps the subtype; we own the schema,
+// so the declaration must mirror InjuryPageModel -- an under-describing
+// one lands pages with fields silently defaulted, and a page without
+// `system.severity` is invisible to the picker. Gated at build time by
+// tools/verify-injury-profile.mjs, which also runs the registry's own
+// `validateDeclaration` so a format failure is caught before a world.
+//
+// ITS OWN HOOK, deliberately. This was inside the module-registration
+// hook below, after `registerFn`, which meant an exception anywhere
+// earlier in that handler -- `waitForReady`, `registerModule` -- was
+// caught by its outer `catch` and the profile silently never registered.
+// Blacksmith has now deleted its legacy injury path, so this is the ONLY
+// way an injury imports: it should not depend on unrelated steps
+// succeeding first. Separate hook, own guard, own failure message.
+// ==================================================================
+Hooks.once('ready', async () => {
+    try {
+        if (!game.modules.get('coffee-pub-blacksmith')?.active) return;
+        if (typeof BlacksmithAPI.waitForReady === 'function') {
+            await BlacksmithAPI.waitForReady();
+        }
+        const { registerInjuryImportProfile } = await import('./data/injury-import-profile.js');
+        registerInjuryImportProfile();
+    } catch (error) {
+        // Loud rather than debug: with the legacy path gone, a failure here
+        // means nothing imports an injury at all, and the GM's symptom is an
+        // import tool that simply does not offer injuries.
+        logBib('Injury import profile could not be registered; injury import is unavailable', error, false, true);
+    }
+});
+
 // Register your module with Blacksmith and then register toolbar tools
 Hooks.once('ready', async () => {
     try {
@@ -79,7 +114,7 @@ Hooks.once('ready', async () => {
             });
             logBib('✅ Module registered with Blacksmith successfully', '', false, false);
         }
-        
+
         // MESSAGES: conversation system + window registry
         try {
             const messagesEnabled = BlacksmithUtils?.getSettingSafely

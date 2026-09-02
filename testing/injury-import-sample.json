@@ -1,0 +1,25 @@
+[
+  {
+    "journaltype": "injury",
+    "title": "Import Test — Scorched Sight",
+    "category": "fire",
+    "severity": "moderate",
+    "image": "icons/svg/blind.svg",
+    "imagetitle": "The world goes white",
+    "description": "The flames caught your face and the world has gone to smeared white shapes. You cannot see well enough to trust what you are swinging at.",
+    "treatment": "A successful Medicine check, or any magical healing that restores sight.",
+    "damage": 8,
+    "duration": 3600,
+    "statuseffect": "blinded",
+    "odds": 20,
+    "treatmentdc": null,
+    "modifiers": [
+      { "stat": "attack", "value": -2, "rounds": 0 },
+      { "stat": "checks", "value": -1, "rounds": 0 }
+    ],
+    "tick": 2,
+    "expiry": "linger",
+    "flavor": "",
+    "gmnotes": "Import verification fixture. Exercises the fields a flat payload cannot: a nested modifiers array (the path bug), a null treatmentdc, a lowercase category that must land in a title-cased journal, and a real condition."
+  }
+]

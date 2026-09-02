@@ -1,0 +1,24 @@
+[
+  {
+    "journaltype": "injury",
+    "title": "Import Test — Blistered Grip",
+    "category": "fire",
+    "severity": "minor",
+    "image": "icons/svg/fire.svg",
+    "imagetitle": "Your palm will not close",
+    "description": "The heat took the skin of your hand. Closing your fingers around anything is a decision you have to make on purpose.",
+    "treatment": "Any healing that closes a burn, or an hour and a bandage.",
+    "damage": 3,
+    "duration": 600,
+    "statuseffect": "none",
+    "odds": 40,
+    "treatmentdc": null,
+    "modifiers": [
+      { "stat": "attack", "value": -1, "rounds": 0 }
+    ],
+    "tick": 0,
+    "expiry": "heal",
+    "flavor": "Clumsy Fingers",
+    "gmnotes": "Sibling fixture. Its only job is to be the SECOND page in the Fire journal, so a re-import of Scorched Sight can be checked for leaving it alone. Deliberately a different severity, a single modifier, statuseffect none and a flavor string, so it is unmistakable on the sheet and exercises the flavour path that Scorched Sight does not."
+  }
+]
