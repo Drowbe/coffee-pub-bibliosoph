@@ -28,7 +28,7 @@ Most injuries heal on their own when their duration runs out. Some are written t
 
 ## Deal an injury by hand
 
-GM only. Target or select a token and click **Injuries** on the toolbar. The picker opens, naming who you are dealing to.
+GM only. Target or select a token and click **Injuries** on the toolbar. The picker opens with your target's portrait and name at the top, and that header stays put while you scroll. The window is resizable, so open it as tall as you like.
 
 ![The Deal an Injury window, listing the fourteen damage types with the number of injuries in each and controls to roll one or ask the player to roll](../assets/bibliosoph-injury-deal.webp)
 

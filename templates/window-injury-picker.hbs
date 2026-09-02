@@ -5,13 +5,30 @@
 --}}
 <div class="bibliosoph-picker">
 
-    <p class="bibliosoph-picker__target">
+    {{!--
+        Sticky, so the answer to "who is this landing on" stays on screen
+        while a long category is scrolled. It carries its own raised surface
+        plus a blur rather than scrim: under Glass, scrim reads as a hole
+        punched through the frost, and the window background is deliberately
+        near-transparent, so content would otherwise scroll through it.
+    --}}
+    <header class="bibliosoph-picker__target">
         {{#if targetName}}
-            Dealing to <strong>{{targetName}}</strong>.
+            {{#if targetImg}}
+                <img class="bibliosoph-picker__portrait" src="{{targetImg}}" alt="" />
+            {{/if}}
+            <span class="bibliosoph-picker__target-text">
+                <span class="bibliosoph-picker__muted">Dealing an injury to</span>
+                <strong class="bibliosoph-picker__target-name">{{targetName}}</strong>
+            </span>
         {{else}}
-            <span class="bibliosoph-picker__muted">No target — select or target a token to apply automatically.</span>
+            <i class="fa-solid fa-crosshairs bibliosoph-picker__target-icon" aria-hidden="true"></i>
+            <span class="bibliosoph-picker__target-text">
+                <strong class="bibliosoph-picker__target-name">No target</strong>
+                <span class="bibliosoph-picker__muted">Select or target a token to apply automatically.</span>
+            </span>
         {{/if}}
-    </p>
+    </header>
 
     {{#if anyInjuries}}
         <div class="bibliosoph-picker__list">

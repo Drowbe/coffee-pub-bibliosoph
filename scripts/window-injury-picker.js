@@ -78,8 +78,18 @@ export class InjuryPickerWindow extends BlacksmithToolWindowBaseV2 {
         {
             id: `${MODULE.ID}-injury-picker`,
             classes: ['bibliosoph-injury-picker'],
-            position: { width: 480, height: 'auto' },
-            window: { title: 'Deal an Injury', resizable: false }
+            // A REAL HEIGHT, not `auto`. The Tool default is `auto` with
+            // `resizable: false`, which suits a fixed palette and not this:
+            // fourteen categories that each expand into a list. With `auto`
+            // the window grew to fit the collapsed list, and an expanded
+            // category then had nowhere to go — the body clipped it mid-row
+            // and the only way through was a second scrollbar inside the
+            // list, scrolling independently of the window it sat in.
+            // A definite height gives the shell's body zone something to
+            // scroll, and resizable lets a GM open it as tall as they like.
+            position: { width: 480, height: 640 },
+            window: { title: 'Deal an Injury', resizable: true },
+            windowSizeConstraints: { minWidth: 360, minHeight: 240 }
         }
     );
 
@@ -104,7 +114,16 @@ export class InjuryPickerWindow extends BlacksmithToolWindowBaseV2 {
 
         const token = Array.from(game.user.targets ?? [])[0] ?? canvas?.tokens?.controlled?.[0] ?? null;
         this.#target = token?.actor
-            ? { actorId: token.actor.id, tokenId: token.id, name: token.name }
+            ? {
+                actorId: token.actor.id,
+                tokenId: token.id,
+                name: token.name,
+                // The ACTOR's portrait first, the token art second. A token is
+                // often a top-down marker or a shared mook image, and the header
+                // is answering "who is this happening to" — a face does that and
+                // a bird's-eye circle does not.
+                img: token.actor.img || token.document?.texture?.src || ''
+            }
             : null;
 
         // Categories in schema order rather than pack order, so the list reads
@@ -138,6 +157,7 @@ export class InjuryPickerWindow extends BlacksmithToolWindowBaseV2 {
         // tool-theme flags, so there is nothing to merge into here.
         return {
             targetName: this.#target?.name ?? null,
+            targetImg: this.#target?.img || null,
             categories,
             anyInjuries: categories.some((c) => c.count > 0)
         };

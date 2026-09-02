@@ -28,9 +28,73 @@
     gap: 6px;
 }
 
+/* STICKY, and it owns its own surface. The shell's body zone is the scroll
+   container, so this rides at the top of it while categories scroll beneath.
+   `raised` plus a blur rather than `scrim`: scrim under Glass is near-opaque
+   and reads as a hole punched through the frost, where a blur only smears
+   what passes underneath, which is all a heading needs. Under Light and Dark
+   `raised` is already opaque, so the blur costs nothing. */
 .application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker__target {
-    margin: 0 0 2px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 6px 8px;
+    border: 1px solid var(--blacksmith-tool-divider);
+    border-radius: var(--blacksmith-radius-md, 4px);
+    background: var(--blacksmith-tool-surface-raised);
+    backdrop-filter: blur(6px);
     font-size: 0.92em;
+}
+
+/* Glass makes --blacksmith-tool-background near-transparent, so a sticky
+   element painted from the window's own surface lets scrolled rows read
+   straight through it. Give it something solid to sit on. */
+.application.blacksmith-window-tool.blacksmith-window-tool-theme-glass.bibliosoph-injury-picker .bibliosoph-picker__target {
+    background: var(--blacksmith-tool-scrim);
+}
+
+.application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker__portrait {
+    flex: 0 0 36px;
+    width: 36px;
+    height: 36px;
+    object-fit: cover;
+    object-position: top center;
+    border: 1px solid var(--blacksmith-tool-divider);
+    border-radius: var(--blacksmith-radius-sm, 3px);
+}
+
+.application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker__target-icon {
+    flex: 0 0 36px;
+    width: 36px;
+    text-align: center;
+    font-size: 1.1em;
+    color: var(--blacksmith-tool-text-muted);
+}
+
+/* Two stacked lines, both clipped rather than wrapped: a long actor name
+   should not push the header to two rows and shove the list down. */
+.application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker__target-text {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-width: 0;
+    line-height: 1.25;
+}
+
+.application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker__target-name,
+.application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker__target-text .bibliosoph-picker__muted {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker__target-name {
+    font-size: 1.05em;
 }
 
 .application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker__muted {
@@ -38,13 +102,17 @@
     font-size: 0.85em;
 }
 
-/* The body scrolls; the Tool base clamps overall height for us. */
+/* NO SCROLLER AND NO HEIGHT CAP HERE, deliberately. The Tool shell's body
+   zone already scrolls (`.blacksmith-window-tool-body` is `flex: 1 1 auto`
+   with `overflow: auto`), so a second scroll container nested inside it gave
+   the window two independent scrollbars — and because this one was capped at
+   52vh while the window sized itself to `height: auto`, an expanded category
+   was clipped mid-row with its remainder reachable only through the inner
+   bar. One scroll container, owned by the shell. */
 .application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker__list {
     display: flex;
     flex-direction: column;
     gap: 3px;
-    max-height: 52vh;
-    overflow-y: auto;
 }
 
 .application.blacksmith-window-tool.bibliosoph-injury-picker .bibliosoph-picker__category {
