@@ -14,8 +14,8 @@ Bibliosoph declares five channels to Blacksmith at startup, from a single list i
 
 | Channel | Label | Covers |
 |---|---|---|
-| `crit` | Critical Hits | natural 20 announcements |
-| `fumble` | Fumbles | natural 1 announcements |
+| `crit` | Critical Hits | critical-hit announcements (Blacksmith's verdict, not a nat-20 test) |
+| `fumble` | Fumbles | fumble announcements (Blacksmith's verdict, not a nat-1 test) |
 | `injury` | Injuries | a hit crossing the injury threshold |
 | `social` | Table Breaks | Beverage, Bio, Insult, Praise |
 | `messages-group` | Group Messages | party and group conversation alerts |

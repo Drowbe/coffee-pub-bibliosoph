@@ -6,6 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [Unreleased]
+
+### Changed
+
+- **Crit and fumble toasts are no longer described as "natural 20" announcements, because they are not.** Blacksmith's `classifyCritFumble` now reads the crit threshold the ROLL declared -- dnd5e stamps `criticalSuccess` onto the die from the activity -- and falls back to a literal natural 20 only when the roll declared none. So a Champion fighter, who crits on 19 and 20, now fires a Bibliosoph crit card on a 19 where the old nat-20 test reported an ordinary hit. No code change was needed on our side: `manager-roll-toasts.js:127` reads `outcome.isCritical`/`isFumble` verbatim and does no die inspection, which is the standing rule -- take Blacksmith's verdict, never re-derive it, never read midi-qol ourselves. What was wrong was the wording. `architecture-toasts.md`, `userguide-outcomes.md` and `lang/en.json` all promised announcements on a natural 20, which is now false for any character whose range is wider, and the `{d20}` substitution code would have rendered the real 19 beside copy insisting it was a 20. The user guide names the Champion case explicitly rather than hedging, since a GM whose fighter suddenly gets more crit cards deserves to find the reason in the guide rather than assume a bug.
+
+  **`lang/en.json:224` was deliberately left saying "natural 20".** That is `injuryTreatmentCritFumble-Hint`, describing the injury Treatment Roll, which genuinely is a literal nat-20 rule and stays one. A find-and-replace over that file would have rewritten the one line still true.
+
+- **The injury Treatment Roll's `d20 === 20` is now documented as deliberate.** `bibliosoph.js:3719` classifies a natural 20 and a natural 1 itself rather than taking Blacksmith's verdict, which reads like the duplication the suite rule forbids and is not: a treatment succeeding on a natural 20 is a different question from whether an attack critted. It is a house rule about treating a wound, behind its own `injuryTreatmentCritFumble` setting. Agreed with Blacksmith, whose argument is stronger than the one we started with: dnd5e stamps `criticalSuccess` from the ACTIVITY, so attack rolls carry a threshold and plain ability checks do not -- Blacksmith's own answer for a Medicine check is already nat-20, identical to ours. Adopting its verdict would therefore be a no-op today while adding a cross-module coupling and a silent widening of this rule the day anything gives ability checks a crit range. The comment says so, so nobody later "fixes" it into false consistency.
+
+### Fixed
+
+- **The test harness could not produce the case the classifier change introduced.** `attackOutcome()` hardcoded `d20: isCritical ? 20 : ...`, pairing every crit with a natural 20, so `{ isCritical: true, d20: 19 }` -- the entire behaviour change -- was unreachable off-table. It now accepts `d20` and `critMode` overrides, and a new harness button sends a Champion's 19 as a declared crit. The old callers are untouched and still get 20 and 1. Without this the only way to exercise a widened crit range was to build a Champion in a live world and roll until a 19 came up.
+
 ## [13.7.0]
 
 ### Added

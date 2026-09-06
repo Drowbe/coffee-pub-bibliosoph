@@ -57,11 +57,25 @@ function injuryOutcome(token, { amount, damages, isHealing = false }) {
     };
 }
 
-function attackOutcome(token, { isCritical = false, isFumble = false }) {
+// `d20` and `critMode` are overridable because a crit is NOT a natural 20 test.
+// Blacksmith reads the threshold the roll declared, so a Champion fighter crits
+// on 19 and the payload says so: `{ isCritical: true, d20: 19, critMode:
+// 'declared' }`. Pairing d20 20 with every crit -- which this did -- made the
+// widened-range case unreachable off-table, so the one behaviour the classifier
+// change introduced was the one the harness could not produce.
+function attackOutcome(token, { isCritical = false, isFumble = false, d20, critMode } = {}) {
+    const face = Number.isFinite(d20)
+        ? d20
+        : (isCritical ? 20 : (isFumble ? 1 : 12));
     return {
         kind: 'attack',
         source: 'test-harness',
-        d20: isCritical ? 20 : (isFumble ? 1 : 12),
+        d20: face,
+        // Blacksmith reports which rule applied: 'declared' when the roll
+        // stated a threshold, 'natural' when it did not, 'workflow' from midi.
+        critMode: critMode ?? ((isCritical || isFumble) && face !== 20 && face !== 1
+            ? 'declared'
+            : 'natural'),
         total: isCritical ? 25 : (isFumble ? 4 : 15),
         isCritical,
         isFumble,
@@ -516,6 +530,20 @@ const SCENARIOS = [
             if (!token) return;
             RollToastManager._onAttackResolved(attackOutcome(token, { isCritical: true }));
             ui.notifications.info(`Sent crit for ${token.name} — ${expectAttack('crit', token)}`);
+        }
+    },
+    {
+        tab: 'rolls',
+        // A Champion fighter's 19. Blacksmith reports this as a crit because the
+        // roll declared a 19-20 threshold, so the toast must fire on a die that
+        // is not a 20 -- the case a nat-20 test would silently miss.
+        label: '💥 Crit toast on a 19 (widened crit range)',
+        run: () => {
+            const token = getSubjectToken();
+            if (!token) return;
+            RollToastManager._onAttackResolved(
+                attackOutcome(token, { isCritical: true, d20: 19, critMode: 'declared' }));
+            ui.notifications.info(`Sent 19-crit for ${token.name} — ${expectAttack('crit', token)}`);
         }
     },
     {

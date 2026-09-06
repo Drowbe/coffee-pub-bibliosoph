@@ -2,7 +2,7 @@
 
 **Audience:** a GM running critical hits and fumbles, and a player who just rolled one.
 
-What happens on a natural 20 or a natural 1, who gets to apply the result, and how to point the module at your own cards.
+What happens on a critical hit or a fumble, who gets to apply the result, and how to point the module at your own cards.
 
 Bibliosoph draws criticals and fumbles from decks of authored cards rather than roll tables. That is the whole difference: a table row can only describe "the target is blinded for a round", where a card carries the blinding, the round, and the damage as real values the Apply button puts on the token.
 
@@ -12,7 +12,7 @@ Ninety-four ship -- 47 criticals and 47 fumbles.
 
 Click **Critical Hit** or **Fumble** on the toolbar. A card is drawn from the deck, weighted so the nastier results are rarer, and posted to chat.
 
-With **Automation** set to detect them, you do not have to click anything: a natural 20 or natural 1 at the table produces the card on its own. The ladder is the same one injuries use -- Off, Manual, Automated Detection (you get a prompt with a button to roll), or Fully Automated (the card posts immediately). **Triggered By** limits detection to players, to monsters, or to everyone.
+With **Automation** set to detect them, you do not have to click anything: a critical hit or a fumble at the table produces the card on its own. Usually that is a natural 20 or a natural 1, but a character whose critical range is wider -- a Champion fighter crits on 19 and 20 -- gets the card on those too, because the verdict comes from Blacksmith reading the roll rather than from a check for a literal 20. The ladder is the same one injuries use -- Off, Manual, Automated Detection (you get a prompt with a button to roll), or Fully Automated (the card posts immediately). **Triggered By** limits detection to players, to monsters, or to everyone.
 
 ## Read the card
 
@@ -70,6 +70,6 @@ Inside a compendium, the journals are just browsing buckets, named for severity:
 
 **Show Outcome Images (Criticals and Fumbles)** turns the artwork on and off. It is one switch covering both, so turning it off for fumbles turns it off for criticals too.
 
-**Chat Card Style** sets the card's theme, separately for each kind. The **Toast Design** settings control the announcement that fires when a natural 20 or 1 is detected -- its wording, size, sound, colours and animation. The title and message accept codes: `{name}` who rolled, `{target}` who they hit, `{weapon}` what they used, `{d20}` the die face, and `{total}` the attack total.
+**Chat Card Style** sets the card's theme, separately for each kind. The **Toast Design** settings control the announcement that fires when a critical hit or fumble is detected -- its wording, size, sound, colours and animation. The title and message accept codes: `{name}` who rolled, `{target}` who they hit, `{weapon}` what they used, `{d20}` the die face, and `{total}` the attack total.
 
 GM notes shipped with a card show as a tooltip for GMs only, and are never written into the card where a player could read them.

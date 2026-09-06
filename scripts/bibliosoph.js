@@ -3716,6 +3716,18 @@ async function resolveTreatmentRoll(context, payload) {
             false, false
         );
     }
+    // DELIBERATELY A LITERAL NATURAL 20, and not a reading of the system's
+    // crit range. Blacksmith classifies criticals for the suite and we take
+    // its verdict everywhere else -- but a treatment succeeding on a natural
+    // 20 is a different question from whether an attack critted. This is a
+    // house rule about treating a wound, behind its own setting, and it is
+    // not a duplicate of Blacksmith's classifier.
+    //
+    // dnd5e stamps `criticalSuccess` onto the die from the ACTIVITY, so an
+    // attack roll carries a threshold and a plain ability check does not.
+    // A Medicine check therefore gets nat-20 from Blacksmith too: adopting
+    // its verdict here would change nothing today and would silently widen
+    // this rule the day anything gives ability checks a crit range.
     const critFumbleOn = getSettingSafe('injuryTreatmentCritFumble', true);
     const isNat20 = critFumbleOn && d20 === 20;
     const isNat1 = critFumbleOn && d20 === 1;
