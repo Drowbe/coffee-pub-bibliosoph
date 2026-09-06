@@ -20,7 +20,7 @@
         "duration": 600,
         "statuseffect": "none",
         "odds": 50,
-        "gmnotes": "No condition: rule grip instead — dropped weapons on a failed check, no climbing, no rope. Stinger: \"You close your hand and feel every one of them let go.\"",
+        "gmnotes": "No condition: rule grip instead: dropped weapons on a failed check, no climbing, no rope. Stinger: \"You close your hand and feel every one of them let go.\"",
         "modifiers": [
           {
             "stat": "attack",
@@ -76,7 +76,7 @@
         "duration": 0,
         "statuseffect": "none",
         "odds": 8,
-        "gmnotes": "Permanent until treated, and the numbness is the tell — deep burns do not hurt at the centre. Anyone with Medicine should read that as serious. Stinger: \"You press it and feel nothing. You press around it and nearly fall over.\"",
+        "gmnotes": "Permanent until treated, and the numbness is the tell. Deep burns do not hurt at the centre. Anyone with Medicine should read that as serious. Stinger: \"You press it and feel nothing. You press around it and nearly fall over.\"",
         "modifiers": [
           {
             "stat": "attack",
@@ -137,7 +137,7 @@
         "duration": 60,
         "statuseffect": "burning",
         "odds": 10,
-        "gmnotes": "Burning deals ongoing damage — real teeth for a minor, so keep the duration short and let them stamp it out. Stinger: \"Stopping does not help. Stopping is worse.\"",
+        "gmnotes": "Burning deals ongoing damage. Real teeth for a minor, so keep the duration short and let them stamp it out. Stinger: \"Stopping does not help. Stopping is worse.\"",
         "modifiers": [
           {
             "stat": "ac",
@@ -298,7 +298,7 @@
         "duration": 120,
         "statuseffect": "exhaustion",
         "odds": 5,
-        "gmnotes": "Exhaustion 1, and sitting is out of the question — good for a long ride or a formal dinner. Stinger: \"You will be standing for this conversation, thank you.\"",
+        "gmnotes": "Exhaustion 1, and sitting is out of the question. Good for a long ride or a formal dinner. Stinger: \"You will be standing for this conversation, thank you.\"",
         "modifiers": [
           {
             "stat": "checks",
@@ -410,7 +410,7 @@
         "duration": 1800,
         "statuseffect": "blinded",
         "odds": 15,
-        "gmnotes": "Blinded for half an hour is severe — consider ruling it as watering eyes with disadvantage on sight checks instead. Stinger: \"The smell of your own boots is making your eyes stream.\"",
+        "gmnotes": "Blinded for half an hour is severe. Consider ruling it as watering eyes with disadvantage on sight checks instead. Stinger: \"The smell of your own boots is making your eyes stream.\"",
         "modifiers": [
           {
             "stat": "ac",
@@ -471,7 +471,7 @@
         "duration": 2700,
         "statuseffect": "none",
         "odds": 25,
-        "gmnotes": "Verbal spellcasting and shouting are the pressure points. Ask for a check to speak a full sentence under exertion. Stinger: \"Your own voice comes back a stranger's — lower, and shorter of road.\"",
+        "gmnotes": "Verbal spellcasting and shouting are the pressure points. Ask for a check to speak a full sentence under exertion. Stinger: \"Your own voice comes back a stranger's, lower and shorter of road.\"",
         "modifiers": [
           {
             "stat": "checks",
@@ -526,7 +526,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785441390608,
+    "modifiedTime": 1788724060149,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

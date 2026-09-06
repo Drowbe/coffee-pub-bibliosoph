@@ -76,7 +76,7 @@
         "duration": 0,
         "statuseffect": "restrained",
         "odds": 2,
-        "gmnotes": "Permanent restrained until treated is dire — rule it as movement halved rather than immobile if that fits better, and say so. Stinger: \"You can hear yourself moving. From the inside.\"",
+        "gmnotes": "Permanent restrained until treated is dire. Rule it as movement halved rather than immobile if that fits better, and say so. Stinger: \"You can hear yourself moving. From the inside.\"",
         "modifiers": [
           {
             "stat": "checks",
@@ -193,7 +193,7 @@
         "duration": 420,
         "statuseffect": "stunned",
         "odds": 20,
-        "gmnotes": "Stunned once, then play the concussive noise — they mishear one instruction and act on it. Stinger: \"Somebody said go. You are fairly sure somebody said go.\"",
+        "gmnotes": "Stunned once, then play the concussive noise. They mishear one instruction and act on it. Stinger: \"Somebody said go. You are fairly sure somebody said go.\"",
         "modifiers": [
           {
             "stat": "checks",
@@ -488,7 +488,7 @@
         "duration": 300,
         "statuseffect": "none",
         "odds": 40,
-        "gmnotes": "Cosmetic and cumulative — a good one to reference in later scenes as the party's shared history. Stinger: \"You are running out of skin that is still the right colour.\"",
+        "gmnotes": "Cosmetic and cumulative. A good one to reference in later scenes as the party's shared history. Stinger: \"You are running out of skin that is still the right colour.\"",
         "modifiers": [
           {
             "stat": "checks",
@@ -544,7 +544,7 @@
         "duration": 600,
         "statuseffect": "deafened",
         "odds": 15,
-        "gmnotes": "Deafened plus balance — combine with difficult terrain or heights for real jeopardy. Stinger: \"The room tilts a little every time you turn your head.\"",
+        "gmnotes": "Deafened plus balance. Combine with difficult terrain or heights for real jeopardy. Stinger: \"The room tilts a little every time you turn your head.\"",
         "modifiers": [
           {
             "stat": "ac",
@@ -656,7 +656,7 @@
         "duration": 450,
         "statuseffect": "prone",
         "odds": 5,
-        "gmnotes": "Prone plus a walking sway — good for a chase or a rooftop, harmless on flat ground. Stinger: \"Your legs are no longer having the same conversation.\"",
+        "gmnotes": "Prone plus a walking sway. Good for a chase or a rooftop, harmless on flat ground. Stinger: \"Your legs are no longer having the same conversation.\"",
         "modifiers": [
           {
             "stat": "ac",
@@ -717,7 +717,7 @@
         "duration": 120,
         "statuseffect": "prone",
         "odds": 20,
-        "gmnotes": "Prone repeatedly — the slapstick is the point, so let them fall at the funniest available moment. Stinger: \"Up, then down. Up, then down. The floor is winning.\"",
+        "gmnotes": "Prone repeatedly. The slapstick is the point, so let them fall at the funniest available moment. Stinger: \"Up, then down. Up, then down. The floor is winning.\"",
         "modifiers": [
           {
             "stat": "checks",
@@ -828,7 +828,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785441390600,
+    "modifiedTime": 1788724060141,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

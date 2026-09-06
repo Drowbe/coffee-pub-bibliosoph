@@ -20,7 +20,7 @@
         "duration": 1800,
         "statuseffect": "poisoned",
         "odds": 60,
-        "gmnotes": "A clean hole that closes badly. Worth a complication later — infection, stiffness the next morning — rather than a combat penalty now. Stinger: \"It is a small wound. It goes a very long way in.\"",
+        "gmnotes": "A clean hole that closes badly. Worth a complication later, such as infection or stiffness the next morning, rather than a combat penalty now. Stinger: \"It is a small wound. It goes a very long way in.\"",
         "modifiers": [
           {
             "stat": "checks",
@@ -78,7 +78,7 @@
         "duration": 0,
         "statuseffect": "exhaustion",
         "odds": 12,
-        "gmnotes": "Exhaustion 1 and permanent until treated — a dragon-scale souvenir lodged in them. Removing it should cost something. Stinger: \"It is still warm. It has been days and it is still warm.\"",
+        "gmnotes": "Exhaustion 1 and permanent until treated. A dragon-scale souvenir lodged in them. Removing it should cost something. Stinger: \"It is still warm. It has been days and it is still warm.\"",
         "modifiers": [
           {
             "stat": "attack",
@@ -439,7 +439,7 @@
         "duration": 900,
         "statuseffect": "deafened",
         "odds": 50,
-        "gmnotes": "Deafened is an odd fit — play the absurdity straight and let it be the party's favourite story. Stinger: \"You are bleeding cherry syrup. It even smells right.\"",
+        "gmnotes": "Deafened is an odd fit. Play the absurdity straight and let it be the party's favourite story. Stinger: \"You are bleeding cherry syrup. It even smells right.\"",
         "modifiers": [
           {
             "stat": "checks",
@@ -668,7 +668,7 @@
         "duration": 900,
         "statuseffect": "none",
         "odds": 50,
-        "gmnotes": "Minor and naggy — perfect for a check to sleep, ride, or wear armour. Stinger: \"You have found it with your fingers three times now and it is still there.\"",
+        "gmnotes": "Minor and naggy. Perfect for a check to sleep, ride, or wear armour. Stinger: \"You have found it with your fingers three times now and it is still there.\"",
         "modifiers": [
           {
             "stat": "checks",
@@ -779,7 +779,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785441390627,
+    "modifiedTime": 1788724060169,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

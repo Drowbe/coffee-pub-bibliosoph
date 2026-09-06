@@ -32,7 +32,7 @@
         "duration": 480,
         "statuseffect": "stunned",
         "odds": 20,
-        "gmnotes": "Stunned once, then let the etched skin be the story — it does not close cleanly and anyone examining it can tell. Stinger: \"The shape of the splash is still there, and it will be tomorrow.\"",
+        "gmnotes": "Stunned once, then let the etched skin be the story. It does not close cleanly and anyone examining it can tell. Stinger: \"The shape of the splash is still there, and it will be tomorrow.\"",
         "modifiers": [
             {
                 "stat": "checks",
@@ -55,7 +55,7 @@
         "duration": 0,
         "statuseffect": "prone",
         "odds": 5,
-        "gmnotes": "Permanent prone until treated is severe — rule that they can crawl and fight from the ground, not that they are helpless. Stinger: \"Every time you get your feet under you, something pops.\"",
+        "gmnotes": "Permanent prone until treated is severe. Rule that they can crawl and fight from the ground, not that they are helpless. Stinger: \"Every time you get your feet under you, something pops.\"",
         "modifiers": [
             {
                 "stat": "ac",
@@ -95,7 +95,7 @@
         "duration": 240,
         "statuseffect": "none",
         "odds": 40,
-        "gmnotes": "Flavour only, so spend it on atmosphere — the sound follows them into quiet rooms and gives away hiding places. Stinger: \"Everyone else has stopped talking to listen to you.\"",
+        "gmnotes": "Flavour only, so spend it on atmosphere. The sound follows them into quiet rooms and gives away hiding places. Stinger: \"Everyone else has stopped talking to listen to you.\"",
         "modifiers": [
             {
                 "stat": "checks",
@@ -137,7 +137,7 @@
         "duration": 3600,
         "statuseffect": "grappled",
         "odds": 5,
-        "gmnotes": "Grappled for an hour is a movement sentence, not a combat one — let them fight, not chase. Lean into the absurdity. Stinger: \"You crunch when you walk. Everything within earshot now knows where you are.\"",
+        "gmnotes": "Grappled for an hour is a movement sentence, not a combat one. Let them fight, not chase. Lean into the absurdity. Stinger: \"You crunch when you walk. Everything within earshot now knows where you are.\"",
         "modifiers": [
             {
                 "stat": "ac",
@@ -163,7 +163,7 @@
         "duration": 300,
         "statuseffect": "none",
         "odds": 40,
-        "gmnotes": "Nothing mechanical; make it a heat problem — armour is unbearable, cold water is a temptation, sleep is poor. Stinger: \"You are the warmest thing in the room and you can feel everyone noticing.\""
+        "gmnotes": "Nothing mechanical; make it a heat problem. Armour is unbearable, cold water is a temptation, sleep is poor. Stinger: \"You are the warmest thing in the room and you can feel everyone noticing.\""
     },
     {
         "category": "acid",
@@ -219,7 +219,7 @@
         "duration": 2700,
         "statuseffect": "poisoned",
         "odds": 10,
-        "gmnotes": "Poisoned for the better part of an hour — treat it as a fever they are fighting through. Stinger: \"Your own blood feels like it is running hot enough to notice.\"",
+        "gmnotes": "Poisoned for the better part of an hour. Treat it as a fever they are fighting through. Stinger: \"Your own blood feels like it is running hot enough to notice.\"",
         "modifiers": [
             {
                 "stat": "checks",
@@ -263,7 +263,7 @@
         "duration": 0,
         "statuseffect": "restrained",
         "odds": 2,
-        "gmnotes": "Permanent restrained until treated is dire — rule it as movement halved rather than immobile if that fits better, and say so. Stinger: \"You can hear yourself moving. From the inside.\"",
+        "gmnotes": "Permanent restrained until treated is dire. Rule it as movement halved rather than immobile if that fits better, and say so. Stinger: \"You can hear yourself moving. From the inside.\"",
         "modifiers": [
             {
                 "stat": "checks",
@@ -310,7 +310,7 @@
         "duration": 420,
         "statuseffect": "stunned",
         "odds": 20,
-        "gmnotes": "Stunned once, then play the concussive noise — they mishear one instruction and act on it. Stinger: \"Somebody said go. You are fairly sure somebody said go.\"",
+        "gmnotes": "Stunned once, then play the concussive noise. They mishear one instruction and act on it. Stinger: \"Somebody said go. You are fairly sure somebody said go.\"",
         "modifiers": [
             {
                 "stat": "checks",
@@ -430,7 +430,7 @@
         "duration": 300,
         "statuseffect": "none",
         "odds": 40,
-        "gmnotes": "Cosmetic and cumulative — a good one to reference in later scenes as the party's shared history. Stinger: \"You are running out of skin that is still the right colour.\"",
+        "gmnotes": "Cosmetic and cumulative. A good one to reference in later scenes as the party's shared history. Stinger: \"You are running out of skin that is still the right colour.\"",
         "modifiers": [
             {
                 "stat": "checks",
@@ -451,7 +451,7 @@
         "duration": 600,
         "statuseffect": "deafened",
         "odds": 15,
-        "gmnotes": "Deafened plus balance — combine with difficult terrain or heights for real jeopardy. Stinger: \"The room tilts a little every time you turn your head.\"",
+        "gmnotes": "Deafened plus balance. Combine with difficult terrain or heights for real jeopardy. Stinger: \"The room tilts a little every time you turn your head.\"",
         "modifiers": [
             {
                 "stat": "ac",
@@ -493,7 +493,7 @@
         "duration": 450,
         "statuseffect": "prone",
         "odds": 5,
-        "gmnotes": "Prone plus a walking sway — good for a chase or a rooftop, harmless on flat ground. Stinger: \"Your legs are no longer having the same conversation.\"",
+        "gmnotes": "Prone plus a walking sway. Good for a chase or a rooftop, harmless on flat ground. Stinger: \"Your legs are no longer having the same conversation.\"",
         "modifiers": [
             {
                 "stat": "ac",
@@ -519,7 +519,7 @@
         "duration": 120,
         "statuseffect": "prone",
         "odds": 20,
-        "gmnotes": "Prone repeatedly — the slapstick is the point, so let them fall at the funniest available moment. Stinger: \"Up, then down. Up, then down. The floor is winning.\"",
+        "gmnotes": "Prone repeatedly. The slapstick is the point, so let them fall at the funniest available moment. Stinger: \"Up, then down. Up, then down. The floor is winning.\"",
         "modifiers": [
             {
                 "stat": "checks",
@@ -566,7 +566,7 @@
         "duration": 0,
         "statuseffect": "paralyzed",
         "odds": 10,
-        "gmnotes": "Paralyzed and permanent until treated — this removes a player from the fight entirely, so make the rescue the scene. Stinger: \"You are awake. That is the only part of you that still is.\"",
+        "gmnotes": "Paralyzed and permanent until treated. This removes a player from the fight entirely, so make the rescue the scene. Stinger: \"You are awake. That is the only part of you that still is.\"",
         "modifiers": [
             {
                 "stat": "checks",
@@ -592,7 +592,7 @@
         "duration": 240,
         "statuseffect": "none",
         "odds": 40,
-        "gmnotes": "No condition: rule fine motor work instead — lockpicking, components, knots. Stinger: \"You touch the blade and feel nothing at all. That is the frightening part.\"",
+        "gmnotes": "No condition: rule fine motor work instead: lockpicking, components, knots. Stinger: \"You touch the blade and feel nothing at all. That is the frightening part.\"",
         "modifiers": [
             {
                 "stat": "attack",
@@ -640,7 +640,7 @@
         "duration": 300,
         "statuseffect": "prone",
         "odds": 40,
-        "gmnotes": "Prone and blue fingers — the fumbling is the flavour, the falling is the cost. Stinger: \"They have gone a colour that hands should not be.\"",
+        "gmnotes": "Prone and blue fingers. The fumbling is the flavour, the falling is the cost. Stinger: \"They have gone a colour that hands should not be.\"",
         "modifiers": [
             {
                 "stat": "attack",
@@ -708,7 +708,7 @@
         "duration": 0,
         "statuseffect": "charmed",
         "odds": 10,
-        "gmnotes": "Charmed and permanent — play it as emotional flatness rather than mind control, and let allies notice. Stinger: \"Someone you love is speaking to you and you are simply waiting for them to finish.\"",
+        "gmnotes": "Charmed and permanent. Play it as emotional flatness rather than mind control, and let allies notice. Stinger: \"Someone you love is speaking to you and you are simply waiting for them to finish.\"",
         "modifiers": [
             {
                 "stat": "ac",
@@ -755,7 +755,7 @@
         "duration": 90,
         "statuseffect": "prone",
         "odds": 25,
-        "gmnotes": "Prone, briefly — perfect for ice, stairs, or a ship deck. Stinger: \"Your feet arrive somewhere your body did not agree to.\"",
+        "gmnotes": "Prone, briefly. Perfect for ice, stairs, or a ship deck. Stinger: \"Your feet arrive somewhere your body did not agree to.\"",
         "modifiers": [
             {
                 "stat": "attack",
@@ -776,7 +776,7 @@
         "duration": 600,
         "statuseffect": "none",
         "odds": 50,
-        "gmnotes": "No condition: rule grip instead — dropped weapons on a failed check, no climbing, no rope. Stinger: \"You close your hand and feel every one of them let go.\"",
+        "gmnotes": "No condition: rule grip instead: dropped weapons on a failed check, no climbing, no rope. Stinger: \"You close your hand and feel every one of them let go.\"",
         "modifiers": [
             {
                 "stat": "attack",
@@ -797,7 +797,7 @@
         "duration": 0,
         "statuseffect": "none",
         "odds": 8,
-        "gmnotes": "Permanent until treated, and the numbness is the tell — deep burns do not hurt at the centre. Anyone with Medicine should read that as serious. Stinger: \"You press it and feel nothing. You press around it and nearly fall over.\"",
+        "gmnotes": "Permanent until treated, and the numbness is the tell. Deep burns do not hurt at the centre. Anyone with Medicine should read that as serious. Stinger: \"You press it and feel nothing. You press around it and nearly fall over.\"",
         "modifiers": [
             {
                 "stat": "attack",
@@ -823,7 +823,7 @@
         "duration": 60,
         "statuseffect": "burning",
         "odds": 10,
-        "gmnotes": "Burning deals ongoing damage — real teeth for a minor, so keep the duration short and let them stamp it out. Stinger: \"Stopping does not help. Stopping is worse.\"",
+        "gmnotes": "Burning deals ongoing damage. Real teeth for a minor, so keep the duration short and let them stamp it out. Stinger: \"Stopping does not help. Stopping is worse.\"",
         "modifiers": [
             {
                 "stat": "ac",
@@ -879,7 +879,7 @@
         "duration": 120,
         "statuseffect": "exhaustion",
         "odds": 5,
-        "gmnotes": "Exhaustion 1, and sitting is out of the question — good for a long ride or a formal dinner. Stinger: \"You will be standing for this conversation, thank you.\"",
+        "gmnotes": "Exhaustion 1, and sitting is out of the question. Good for a long ride or a formal dinner. Stinger: \"You will be standing for this conversation, thank you.\"",
         "modifiers": [
             {
                 "stat": "checks",
@@ -921,7 +921,7 @@
         "duration": 1800,
         "statuseffect": "blinded",
         "odds": 15,
-        "gmnotes": "Blinded for half an hour is severe — consider ruling it as watering eyes with disadvantage on sight checks instead. Stinger: \"The smell of your own boots is making your eyes stream.\"",
+        "gmnotes": "Blinded for half an hour is severe. Consider ruling it as watering eyes with disadvantage on sight checks instead. Stinger: \"The smell of your own boots is making your eyes stream.\"",
         "modifiers": [
             {
                 "stat": "ac",
@@ -947,7 +947,7 @@
         "duration": 2700,
         "statuseffect": "none",
         "odds": 25,
-        "gmnotes": "Verbal spellcasting and shouting are the pressure points. Ask for a check to speak a full sentence under exertion. Stinger: \"Your own voice comes back a stranger's — lower, and shorter of road.\"",
+        "gmnotes": "Verbal spellcasting and shouting are the pressure points. Ask for a check to speak a full sentence under exertion. Stinger: \"Your own voice comes back a stranger's, lower and shorter of road.\"",
         "modifiers": [
             {
                 "stat": "checks",
@@ -973,7 +973,7 @@
         "duration": 90,
         "statuseffect": "deafened",
         "odds": 20,
-        "gmnotes": "Deafened is a strange fit; play the distraction — concentration checks and nothing else. Stinger: \"Something taps your nose. There is nothing there.\"",
+        "gmnotes": "Deafened is a strange fit; play the distraction. Concentration checks and nothing else. Stinger: \"Something taps your nose. There is nothing there.\"",
         "modifiers": [
             {
                 "stat": "saves",
@@ -1020,7 +1020,7 @@
         "duration": 300,
         "statuseffect": "none",
         "odds": 55,
-        "gmnotes": "Flavour only — spend it on concentration checks and missed quiet sounds. Stinger: \"Nothing touched you. Everything still rang.\"",
+        "gmnotes": "Flavour only. Spend it on concentration checks and missed quiet sounds. Stinger: \"Nothing touched you. Everything still rang.\"",
         "modifiers": [
             {
                 "stat": "checks",
@@ -1093,7 +1093,7 @@
         "duration": 2400,
         "statuseffect": "none",
         "odds": 20,
-        "gmnotes": "No condition; rule against turning quickly — flanking and rear attacks get easier on them. Stinger: \"Looking behind you is now a decision, not a reflex.\"",
+        "gmnotes": "No condition; rule against turning quickly. Flanking and rear attacks get easier on them. Stinger: \"Looking behind you is now a decision, not a reflex.\"",
         "modifiers": [
             {
                 "stat": "ac",
@@ -1140,7 +1140,7 @@
         "duration": 120,
         "statuseffect": "prone",
         "odds": 15,
-        "gmnotes": "Prone from dropped items and flailing — target anything they try to carry carefully. Stinger: \"You drop it. Nothing touched you, and you drop it.\"",
+        "gmnotes": "Prone from dropped items and flailing. Target anything they try to carry carefully. Stinger: \"You drop it. Nothing touched you, and you drop it.\"",
         "modifiers": [
             {
                 "stat": "attack",
@@ -1175,7 +1175,7 @@
         "duration": 2400,
         "statuseffect": "none",
         "odds": 40,
-        "gmnotes": "Nothing mechanical, so charge it in positioning — they favour one side, they cannot carry on that shoulder, they flinch from a shove. Stinger: \"The colour of it has gotten worse since you last looked.\"",
+        "gmnotes": "Nothing mechanical, so charge it in positioning. They favour one side, they cannot carry on that shoulder, they flinch from a shove. Stinger: \"The colour of it has gotten worse since you last looked.\"",
         "modifiers": [
             {
                 "stat": "checks",
@@ -1222,7 +1222,7 @@
         "duration": 3600,
         "statuseffect": "none",
         "odds": 35,
-        "gmnotes": "No condition, so make it situational: a check to do anything requiring a deep breath — shouting, swimming, holding a note, laughing. Stinger: \"Something in your chest clicks when you breathe in. Only when you breathe in.\"",
+        "gmnotes": "No condition, so make it situational: a check to do anything requiring a deep breath: shouting, swimming, holding a note, laughing. Stinger: \"Something in your chest clicks when you breathe in. Only when you breathe in.\"",
         "modifiers": [
             {
                 "stat": "checks",
@@ -1248,7 +1248,7 @@
         "duration": 480,
         "statuseffect": "charmed",
         "odds": 20,
-        "gmnotes": "Charmed by vertigo — play it as being unable to trust their own footing or judgement. Stinger: \"The room finishes turning a moment after you do.\"",
+        "gmnotes": "Charmed by vertigo. Play it as being unable to trust their own footing or judgement. Stinger: \"The room finishes turning a moment after you do.\"",
         "modifiers": [
             {
                 "stat": "checks",
@@ -1347,7 +1347,7 @@
         "duration": 0,
         "statuseffect": "unconscious",
         "odds": 4,
-        "gmnotes": "Unconscious and permanent until treated — this is a scene-ender, not a combat modifier. Make the table decide who stops fighting to reach them. Stinger: \"You hear your name from very far away, and then not.\"",
+        "gmnotes": "Unconscious and permanent until treated. This is a scene-ender, not a combat modifier. Make the table decide who stops fighting to reach them. Stinger: \"You hear your name from very far away, and then not.\"",
         "modifiers": [
             {
                 "stat": "ac",
@@ -1373,7 +1373,7 @@
         "duration": 300,
         "statuseffect": "exhaustion",
         "odds": 60,
-        "gmnotes": "Exhaustion 1 is disadvantage on ability checks — quietly brutal for a skill scene. Have them unable to speak and move in the same breath. Stinger: \"You have the air for running or for talking. Choose.\"",
+        "gmnotes": "Exhaustion 1 is disadvantage on ability checks. Quietly brutal for a skill scene. Have them unable to speak and move in the same breath. Stinger: \"You have the air for running or for talking. Choose.\"",
         "modifiers": [
             {
                 "stat": "attack",
@@ -1394,7 +1394,7 @@
         "duration": 480,
         "statuseffect": "prone",
         "odds": 55,
-        "gmnotes": "Prone is the whole cost — standing eats half their movement, and that is enough. Consider asking for a check if they try to sprint, jump, or take stairs at speed. Stinger: \"Your knee holds. Then it doesn't.\"",
+        "gmnotes": "Prone is the whole cost. Standing eats half their movement, and that is enough. Consider asking for a check if they try to sprint, jump, or take stairs at speed. Stinger: \"Your knee holds. Then it doesn't.\"",
         "modifiers": [
             {
                 "stat": "ac",
@@ -1462,7 +1462,7 @@
         "duration": 120,
         "statuseffect": "none",
         "odds": 5,
-        "gmnotes": "Two minutes of static — comedy, plus advantage for anyone trying to spot them. Stinger: \"You can hear yourself crackling in the quiet.\""
+        "gmnotes": "Two minutes of static. Comedy, plus advantage for anyone trying to spot them. Stinger: \"You can hear yourself crackling in the quiet.\""
     },
     {
         "category": "lightning",
@@ -1497,7 +1497,7 @@
         "duration": 0,
         "statuseffect": "stunned",
         "odds": 3,
-        "gmnotes": "Permanent and stunned — this is a curse, not a wound, and it should worry the whole party in a storm. Stinger: \"The air over you has started to feel interested.\""
+        "gmnotes": "Permanent and stunned. This is a curse, not a wound, and it should worry the whole party in a storm. Stinger: \"The air over you has started to feel interested.\""
     },
     {
         "category": "lightning",
@@ -1558,7 +1558,7 @@
         "duration": 180,
         "statuseffect": "none",
         "odds": 10,
-        "gmnotes": "No condition — rule dropped metal or fumbled components on a failed check. Stinger: \"Everything metal has opinions about you now.\"",
+        "gmnotes": "No condition. Rule dropped metal or fumbled components on a failed check. Stinger: \"Everything metal has opinions about you now.\"",
         "modifiers": [
             {
                 "stat": "attack",
@@ -1619,7 +1619,7 @@
         "duration": 180,
         "statuseffect": "diseased",
         "odds": 15,
-        "gmnotes": "Diseased and visible rot — this should frighten the party into acting. Rule the limb weak, not useless. Stinger: \"The smell arrives before you do.\"",
+        "gmnotes": "Diseased and visible rot. This should frighten the party into acting. Rule the limb weak, not useless. Stinger: \"The smell arrives before you do.\"",
         "modifiers": [
             {
                 "stat": "saves",
@@ -1647,7 +1647,7 @@
         "duration": 300,
         "statuseffect": "none",
         "odds": 50,
-        "gmnotes": "The tissue is dying, not merely cold — that is why it is necrotic. Ruling it as lost feeling in the hand is fair and scary. Stinger: \"The colour is wrong, and it is not coming back on its own.\"",
+        "gmnotes": "The tissue is dying, not merely cold. That is why it is necrotic. Ruling it as lost feeling in the hand is fair and scary. Stinger: \"The colour is wrong, and it is not coming back on its own.\"",
         "modifiers": [
             {
                 "stat": "attack",
@@ -1736,7 +1736,7 @@
         "duration": 7200,
         "statuseffect": "poisoned",
         "odds": 5,
-        "gmnotes": "Poisoned for two hours and genuinely dark — this is the one that should make the party consider retreating. Stinger: \"Something took a piece and did not eat it.\"",
+        "gmnotes": "Poisoned for two hours and genuinely dark. This is the one that should make the party consider retreating. Stinger: \"Something took a piece and did not eat it.\"",
         "modifiers": [
             {
                 "stat": "saves",
@@ -1762,7 +1762,7 @@
         "duration": 240,
         "statuseffect": "exhaustion",
         "odds": 30,
-        "gmnotes": "Exhaustion 1 — the life-drain classic. Let rest fail to fix it until treated. Stinger: \"You slept eight hours and woke up owing more.\"",
+        "gmnotes": "Exhaustion 1. The life-drain classic. Let rest fail to fix it until treated. Stinger: \"You slept eight hours and woke up owing more.\"",
         "modifiers": [
             {
                 "stat": "saves",
@@ -1783,7 +1783,7 @@
         "duration": 1800,
         "statuseffect": "poisoned",
         "odds": 60,
-        "gmnotes": "A clean hole that closes badly. Worth a complication later — infection, stiffness the next morning — rather than a combat penalty now. Stinger: \"It is a small wound. It goes a very long way in.\"",
+        "gmnotes": "A clean hole that closes badly. Worth a complication later, such as infection or stiffness the next morning, rather than a combat penalty now. Stinger: \"It is a small wound. It goes a very long way in.\"",
         "modifiers": [
             {
                 "stat": "checks",
@@ -1806,7 +1806,7 @@
         "duration": 0,
         "statuseffect": "exhaustion",
         "odds": 12,
-        "gmnotes": "Exhaustion 1 and permanent until treated — a dragon-scale souvenir lodged in them. Removing it should cost something. Stinger: \"It is still warm. It has been days and it is still warm.\"",
+        "gmnotes": "Exhaustion 1 and permanent until treated. A dragon-scale souvenir lodged in them. Removing it should cost something. Stinger: \"It is still warm. It has been days and it is still warm.\"",
         "modifiers": [
             {
                 "stat": "attack",
@@ -1957,7 +1957,7 @@
         "duration": 900,
         "statuseffect": "deafened",
         "odds": 50,
-        "gmnotes": "Deafened is an odd fit — play the absurdity straight and let it be the party's favourite story. Stinger: \"You are bleeding cherry syrup. It even smells right.\"",
+        "gmnotes": "Deafened is an odd fit. Play the absurdity straight and let it be the party's favourite story. Stinger: \"You are bleeding cherry syrup. It even smells right.\"",
         "modifiers": [
             {
                 "stat": "checks",
@@ -2046,7 +2046,7 @@
         "duration": 900,
         "statuseffect": "none",
         "odds": 50,
-        "gmnotes": "Minor and naggy — perfect for a check to sleep, ride, or wear armour. Stinger: \"You have found it with your fingers three times now and it is still there.\"",
+        "gmnotes": "Minor and naggy. Perfect for a check to sleep, ride, or wear armour. Stinger: \"You have found it with your fingers three times now and it is still there.\"",
         "modifiers": [
             {
                 "stat": "checks",
@@ -2093,7 +2093,7 @@
         "duration": 0,
         "statuseffect": "poisoned",
         "odds": 1,
-        "gmnotes": "Permanent and poisoned — the colour-shifting makes disguise and diplomacy hard until cured. Stinger: \"You have gone a shade nobody has a name for.\"",
+        "gmnotes": "Permanent and poisoned. The colour-shifting makes disguise and diplomacy hard until cured. Stinger: \"You have gone a shade nobody has a name for.\"",
         "modifiers": [
             {
                 "stat": "checks",
@@ -2119,7 +2119,7 @@
         "duration": 2400,
         "statuseffect": "none",
         "odds": 5,
-        "gmnotes": "No condition; play the itch — disadvantage on anything needing stillness. Stinger: \"They are not healing. It has been days.\"",
+        "gmnotes": "No condition; play the itch. Disadvantage on anything needing stillness. Stinger: \"They are not healing. It has been days.\"",
         "modifiers": [
             {
                 "stat": "checks",
@@ -2161,7 +2161,7 @@
         "duration": 180,
         "statuseffect": "blinded",
         "odds": 50,
-        "gmnotes": "Blinded for three minutes, triggered by sneezing — a gift for ruining stealth at the worst moment. Stinger: \"You feel it building. There is nothing you can do about it.\"",
+        "gmnotes": "Blinded for three minutes, triggered by sneezing. A gift for ruining stealth at the worst moment. Stinger: \"You feel it building. There is nothing you can do about it.\"",
         "modifiers": [
             {
                 "stat": "checks",
@@ -2203,7 +2203,7 @@
         "duration": 120,
         "statuseffect": "none",
         "odds": 40,
-        "gmnotes": "Two minutes of nonsense — spend it during a tense moment for maximum damage. Stinger: \"Your foot has started keeping time. To what, nobody knows.\"",
+        "gmnotes": "Two minutes of nonsense. Spend it during a tense moment for maximum damage. Stinger: \"Your foot has started keeping time. To what, nobody knows.\"",
         "modifiers": [
             {
                 "stat": "checks",
@@ -2245,7 +2245,7 @@
         "duration": 300,
         "statuseffect": "poisoned",
         "odds": 30,
-        "gmnotes": "Poisoned plus hallucination — describe rooms as crawling and let them doubt what they saw. Stinger: \"The wall is moving. You are almost certain the wall is not moving.\"",
+        "gmnotes": "Poisoned plus hallucination. Describe rooms as crawling and let them doubt what they saw. Stinger: \"The wall is moving. You are almost certain the wall is not moving.\"",
         "modifiers": [
             {
                 "stat": "attack",
@@ -2293,7 +2293,7 @@
         "duration": 240,
         "statuseffect": "none",
         "odds": 25,
-        "gmnotes": "No condition — memory is the cost. Have them forget something small and recent. Stinger: \"You were about to say something important. It was right there.\"",
+        "gmnotes": "No condition. Memory is the cost. Have them forget something small and recent. Stinger: \"You were about to say something important. It was right there.\"",
         "modifiers": [
             {
                 "stat": "saves",
@@ -2367,7 +2367,7 @@
         "duration": 120,
         "statuseffect": "none",
         "odds": 20,
-        "gmnotes": "Light and noise are unbearable — deny them torch-side or the front rank. Stinger: \"Someone lights a lamp and you feel it behind your eyes.\"",
+        "gmnotes": "Light and noise are unbearable. Deny them torch-side or the front rank. Stinger: \"Someone lights a lamp and you feel it behind your eyes.\"",
         "modifiers": [
             {
                 "stat": "saves",
@@ -2411,7 +2411,7 @@
         "duration": 90,
         "statuseffect": "none",
         "odds": 20,
-        "gmnotes": "Ninety seconds of distance from their own mind — good for a creepy beat, not a fight. Stinger: \"Your thoughts sound like someone else saying them in the next room.\"",
+        "gmnotes": "Ninety seconds of distance from their own mind. Good for a creepy beat, not a fight. Stinger: \"Your thoughts sound like someone else saying them in the next room.\"",
         "modifiers": [
             {
                 "stat": "saves",
@@ -2459,7 +2459,7 @@
         "duration": 0,
         "statuseffect": "stunned",
         "odds": 15,
-        "gmnotes": "Stunned and permanent until treated — the most serious psychic result. Play it as a mind that needs rebuilding. Stinger: \"The lights are on. Nobody has come to the door in a while.\"",
+        "gmnotes": "Stunned and permanent until treated. The most serious psychic result. Play it as a mind that needs rebuilding. Stinger: \"The lights are on. Nobody has come to the door in a while.\"",
         "modifiers": [
             {
                 "stat": "saves",
@@ -2485,7 +2485,7 @@
         "duration": 120,
         "statuseffect": "none",
         "odds": 50,
-        "gmnotes": "Two minutes of interference — perfect for interrupting a ritual or a telepathic ally. Stinger: \"Somewhere under your own thoughts, something else is almost audible.\"",
+        "gmnotes": "Two minutes of interference. Perfect for interrupting a ritual or a telepathic ally. Stinger: \"Somewhere under your own thoughts, something else is almost audible.\"",
         "modifiers": [
             {
                 "stat": "saves",
@@ -2506,7 +2506,7 @@
         "duration": 60,
         "statuseffect": "blinded",
         "odds": 50,
-        "gmnotes": "Blinded for a minute, and the euphoria makes them enjoy it — which is its own problem. Stinger: \"You cannot see a thing and you have never felt better about it.\"",
+        "gmnotes": "Blinded for a minute, and the euphoria makes them enjoy it. Which is its own problem. Stinger: \"You cannot see a thing and you have never felt better about it.\"",
         "modifiers": [
             {
                 "stat": "attack",
@@ -2562,7 +2562,7 @@
         "duration": 300,
         "statuseffect": "prone",
         "odds": 50,
-        "gmnotes": "Prone plus tender skin — armour becomes miserable. Stinger: \"Everything you wear is now an argument.\"",
+        "gmnotes": "Prone plus tender skin. Armour becomes miserable. Stinger: \"Everything you wear is now an argument.\"",
         "modifiers": [
             {
                 "stat": "checks",
@@ -2597,7 +2597,7 @@
         "duration": 2400,
         "statuseffect": "charmed",
         "odds": 25,
-        "gmnotes": "Charmed by the light itself — play it as reverence they cannot shake. Stinger: \"You keep turning back towards it, and you could not say why.\"",
+        "gmnotes": "Charmed by the light itself. Play it as reverence they cannot shake. Stinger: \"You keep turning back towards it, and you could not say why.\"",
         "modifiers": [
             {
                 "stat": "checks",
@@ -2665,7 +2665,7 @@
         "duration": 2700,
         "statuseffect": "poisoned",
         "odds": 20,
-        "gmnotes": "Poisoned and glowing brightly for the better part of an hour — stealth is gone and everything nearby knows where they are. Stinger: \"You are throwing light on the walls. You cannot dim it.\"",
+        "gmnotes": "Poisoned and glowing brightly for the better part of an hour. Stealth is gone and everything nearby knows where they are. Stinger: \"You are throwing light on the walls. You cannot dim it.\"",
         "modifiers": [
             {
                 "stat": "checks",
@@ -2740,7 +2740,7 @@
         "duration": 0,
         "statuseffect": "prone",
         "odds": 6,
-        "gmnotes": "Permanent until treated and unconscious-adjacent in tone: this ends someone's fight. Do not let it become a numbers discussion. Stinger: \"Hold it in. That is the whole plan right now — hold it in.\"",
+        "gmnotes": "Permanent until treated and unconscious-adjacent in tone: this ends someone's fight. Do not let it become a numbers discussion. Stinger: \"Hold it in. That is the whole plan right now. Hold it in.\"",
         "modifiers": [
             {
                 "stat": "attack",
@@ -2766,7 +2766,7 @@
         "duration": 60,
         "statuseffect": "bleeding",
         "odds": 75,
-        "gmnotes": "Bleeding does the damage; the trail does the drama — trackers and predators find them easily. Stinger: \"It keeps opening. Every time you think it has stopped, it opens.\"",
+        "gmnotes": "Bleeding does the damage; the trail does the drama. Trackers and predators find them easily. Stinger: \"It keeps opening. Every time you think it has stopped, it opens.\"",
         "modifiers": [
             {
                 "stat": "checks",
@@ -2789,7 +2789,7 @@
         "duration": 300,
         "statuseffect": "bleeding",
         "odds": 20,
-        "gmnotes": "Bleeding, and the ragged edges mean it closes badly — worth a scar and a complication later. Stinger: \"It is not a clean cut. It will not be a clean scar.\"",
+        "gmnotes": "Bleeding, and the ragged edges mean it closes badly. Worth a scar and a complication later. Stinger: \"It is not a clean cut. It will not be a clean scar.\"",
         "modifiers": [
             {
                 "stat": "checks",
@@ -2810,7 +2810,7 @@
         "duration": 230,
         "statuseffect": "exhaustion",
         "odds": 20,
-        "gmnotes": "Exhaustion 1 from blood loss — a slow, grinding cost rather than a spike. Stinger: \"You are getting tired in a way that sleep will not fix.\"",
+        "gmnotes": "Exhaustion 1 from blood loss. A slow, grinding cost rather than a spike. Stinger: \"You are getting tired in a way that sleep will not fix.\"",
         "modifiers": [
             {
                 "stat": "checks",
@@ -2859,7 +2859,7 @@
         "duration": 300,
         "statuseffect": "restrained",
         "odds": 30,
-        "gmnotes": "Restrained reads as a leg that will not answer — rule movement halved if that suits better. Stinger: \"It holds. Then it does not, and you learn which one you are getting.\"",
+        "gmnotes": "Restrained reads as a leg that will not answer. Rule movement halved if that suits better. Stinger: \"It holds. Then it does not, and you learn which one you are getting.\"",
         "modifiers": [
             {
                 "stat": "attack",
@@ -2890,7 +2890,7 @@
         "duration": 375,
         "statuseffect": "bleeding",
         "odds": 20,
-        "gmnotes": "Bleeding from something wide open — the horror is how much of it there is. Stinger: \"You can see more of yourself than anyone should.\"",
+        "gmnotes": "Bleeding from something wide open. The horror is how much of it there is. Stinger: \"You can see more of yourself than anyone should.\"",
         "modifiers": [
             {
                 "stat": "checks",
@@ -2937,7 +2937,7 @@
         "duration": 0,
         "statuseffect": "prone",
         "odds": 10,
-        "gmnotes": "Permanent, prone, and campaign-changing — pause and make sure the player wants this before it stands. Offer regeneration as a quest. Stinger: \"Somebody needs to pick that up, and nobody is moving.\"",
+        "gmnotes": "Permanent, prone, and campaign-changing. Pause and make sure the player wants this before it stands. Offer regeneration as a quest. Stinger: \"Somebody needs to pick that up, and nobody is moving.\"",
         "modifiers": [
             {
                 "stat": "attack",
@@ -2999,7 +2999,7 @@
         "duration": 0,
         "statuseffect": "blinded",
         "odds": 20,
-        "gmnotes": "Blinded is enormous — consider ruling it as one eye: disadvantage on ranged attacks and sight Perception rather than full blindness, if that suits your table. Say so out loud before the next roll. Stinger: \"Half the room is simply gone, and you keep turning your head to find it.\"",
+        "gmnotes": "Blinded is enormous. Consider ruling it as one eye: disadvantage on ranged attacks and sight Perception rather than full blindness, if that suits your table. Say so out loud before the next roll. Stinger: \"Half the room is simply gone, and you keep turning your head to find it.\"",
         "modifiers": [
             {
                 "stat": "checks",
@@ -3026,7 +3026,7 @@
         "duration": 180,
         "statuseffect": "prone",
         "odds": 75,
-        "gmnotes": "Prone from flinching — harmless, undignified, and good for a duel. Stinger: \"Something drew a line across you and you did not feel it cut.\"",
+        "gmnotes": "Prone from flinching. Harmless, undignified, and good for a duel. Stinger: \"Something drew a line across you and you did not feel it cut.\"",
         "modifiers": [
             {
                 "stat": "checks",
@@ -3068,7 +3068,7 @@
         "duration": 300,
         "statuseffect": "deafened",
         "odds": 50,
-        "gmnotes": "Deafened for five minutes — enough to miss the plan and act on the wrong one. Stinger: \"Everyone else heard it. You watch them react and guess.\"",
+        "gmnotes": "Deafened for five minutes. Enough to miss the plan and act on the wrong one. Stinger: \"Everyone else heard it. You watch them react and guess.\"",
         "modifiers": [
             {
                 "stat": "checks",
@@ -3131,7 +3131,7 @@
         "duration": 300,
         "statuseffect": "deafened",
         "odds": 25,
-        "gmnotes": "Deafened with real injury behind it — this one wants treatment, not time. Stinger: \"There is warmth running out of your ear and you know what that means.\"",
+        "gmnotes": "Deafened with real injury behind it. This one wants treatment, not time. Stinger: \"There is warmth running out of your ear and you know what that means.\"",
         "modifiers": [
             {
                 "stat": "checks",
@@ -3152,7 +3152,7 @@
         "duration": 3600,
         "statuseffect": "stunned",
         "odds": 8,
-        "gmnotes": "Stunned once, then let the muscles twitch through the next hour — no fine work, no steady aim. Stinger: \"Your hands have not stopped since. You have tried sitting on them.\"",
+        "gmnotes": "Stunned once, then let the muscles twitch through the next hour. No fine work, no steady aim. Stinger: \"Your hands have not stopped since. You have tried sitting on them.\"",
         "modifiers": [
             {
                 "stat": "attack",
@@ -3225,7 +3225,7 @@
         "duration": 240,
         "statuseffect": "none",
         "odds": 50,
-        "gmnotes": "No condition — every metal object and every handshake is a small event. Stinger: \"You reach for the door handle and think better of it.\"",
+        "gmnotes": "No condition. Every metal object and every handshake is a small event. Stinger: \"You reach for the door handle and think better of it.\"",
         "modifiers": [
             {
                 "stat": "attack",
@@ -3246,7 +3246,7 @@
         "duration": 2700,
         "statuseffect": "deafened",
         "odds": 30,
-        "gmnotes": "Deafened for three quarters of an hour, with a headache to match — no plans, no lore, no torch-side. Stinger: \"The thunder stopped outside and kept going inside.\"",
+        "gmnotes": "Deafened for three quarters of an hour, with a headache to match. No plans, no lore, no torch-side. Stinger: \"The thunder stopped outside and kept going inside.\"",
         "modifiers": [
             {
                 "stat": "checks",
@@ -3272,7 +3272,7 @@
         "duration": 600,
         "statuseffect": "none",
         "odds": 20,
-        "gmnotes": "No condition — play the ten minutes as jangled nerves and unsteady hands. Stinger: \"Your whole body is still humming with somebody else's energy.\"",
+        "gmnotes": "No condition. Play the ten minutes as jangled nerves and unsteady hands. Stinger: \"Your whole body is still humming with somebody else's energy.\"",
         "modifiers": [
             {
                 "stat": "ac",

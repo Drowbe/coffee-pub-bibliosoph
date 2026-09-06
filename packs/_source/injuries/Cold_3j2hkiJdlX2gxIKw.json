@@ -20,7 +20,7 @@
         "duration": 0,
         "statuseffect": "paralyzed",
         "odds": 10,
-        "gmnotes": "Paralyzed and permanent until treated — this removes a player from the fight entirely, so make the rescue the scene. Stinger: \"You are awake. That is the only part of you that still is.\"",
+        "gmnotes": "Paralyzed and permanent until treated. This removes a player from the fight entirely, so make the rescue the scene. Stinger: \"You are awake. That is the only part of you that still is.\"",
         "modifiers": [
           {
             "stat": "checks",
@@ -81,7 +81,7 @@
         "duration": 240,
         "statuseffect": "none",
         "odds": 40,
-        "gmnotes": "No condition: rule fine motor work instead — lockpicking, components, knots. Stinger: \"You touch the blade and feel nothing at all. That is the frightening part.\"",
+        "gmnotes": "No condition: rule fine motor work instead: lockpicking, components, knots. Stinger: \"You touch the blade and feel nothing at all. That is the frightening part.\"",
         "modifiers": [
           {
             "stat": "attack",
@@ -199,7 +199,7 @@
         "duration": 300,
         "statuseffect": "prone",
         "odds": 40,
-        "gmnotes": "Prone and blue fingers — the fumbling is the flavour, the falling is the cost. Stinger: \"They have gone a colour that hands should not be.\"",
+        "gmnotes": "Prone and blue fingers. The fumbling is the flavour, the falling is the cost. Stinger: \"They have gone a colour that hands should not be.\"",
         "modifiers": [
           {
             "stat": "attack",
@@ -372,7 +372,7 @@
         "duration": 0,
         "statuseffect": "charmed",
         "odds": 10,
-        "gmnotes": "Charmed and permanent — play it as emotional flatness rather than mind control, and let allies notice. Stinger: \"Someone you love is speaking to you and you are simply waiting for them to finish.\"",
+        "gmnotes": "Charmed and permanent. Play it as emotional flatness rather than mind control, and let allies notice. Stinger: \"Someone you love is speaking to you and you are simply waiting for them to finish.\"",
         "modifiers": [
           {
             "stat": "ac",
@@ -489,7 +489,7 @@
         "duration": 90,
         "statuseffect": "prone",
         "odds": 25,
-        "gmnotes": "Prone, briefly — perfect for ice, stairs, or a ship deck. Stinger: \"Your feet arrive somewhere your body did not agree to.\"",
+        "gmnotes": "Prone, briefly. Perfect for ice, stairs, or a ship deck. Stinger: \"Your feet arrive somewhere your body did not agree to.\"",
         "modifiers": [
           {
             "stat": "attack",
@@ -539,7 +539,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785441390604,
+    "modifiedTime": 1788724060145,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

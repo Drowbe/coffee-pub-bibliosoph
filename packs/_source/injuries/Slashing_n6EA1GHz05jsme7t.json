@@ -144,7 +144,7 @@
         "duration": 0,
         "statuseffect": "prone",
         "odds": 6,
-        "gmnotes": "Permanent until treated and unconscious-adjacent in tone: this ends someone's fight. Do not let it become a numbers discussion. Stinger: \"Hold it in. That is the whole plan right now — hold it in.\"",
+        "gmnotes": "Permanent until treated and unconscious-adjacent in tone: this ends someone's fight. Do not let it become a numbers discussion. Stinger: \"Hold it in. That is the whole plan right now. Hold it in.\"",
         "modifiers": [
           {
             "stat": "attack",
@@ -205,7 +205,7 @@
         "duration": 60,
         "statuseffect": "bleeding",
         "odds": 75,
-        "gmnotes": "Bleeding does the damage; the trail does the drama — trackers and predators find them easily. Stinger: \"It keeps opening. Every time you think it has stopped, it opens.\"",
+        "gmnotes": "Bleeding does the damage; the trail does the drama. Trackers and predators find them easily. Stinger: \"It keeps opening. Every time you think it has stopped, it opens.\"",
         "modifiers": [
           {
             "stat": "checks",
@@ -263,7 +263,7 @@
         "duration": 300,
         "statuseffect": "bleeding",
         "odds": 20,
-        "gmnotes": "Bleeding, and the ragged edges mean it closes badly — worth a scar and a complication later. Stinger: \"It is not a clean cut. It will not be a clean scar.\"",
+        "gmnotes": "Bleeding, and the ragged edges mean it closes badly. Worth a scar and a complication later. Stinger: \"It is not a clean cut. It will not be a clean scar.\"",
         "modifiers": [
           {
             "stat": "checks",
@@ -319,7 +319,7 @@
         "duration": 230,
         "statuseffect": "exhaustion",
         "odds": 20,
-        "gmnotes": "Exhaustion 1 from blood loss — a slow, grinding cost rather than a spike. Stinger: \"You are getting tired in a way that sleep will not fix.\"",
+        "gmnotes": "Exhaustion 1 from blood loss. A slow, grinding cost rather than a spike. Stinger: \"You are getting tired in a way that sleep will not fix.\"",
         "modifiers": [
           {
             "stat": "checks",
@@ -438,7 +438,7 @@
         "duration": 300,
         "statuseffect": "restrained",
         "odds": 30,
-        "gmnotes": "Restrained reads as a leg that will not answer — rule movement halved if that suits better. Stinger: \"It holds. Then it does not, and you learn which one you are getting.\"",
+        "gmnotes": "Restrained reads as a leg that will not answer. Rule movement halved if that suits better. Stinger: \"It holds. Then it does not, and you learn which one you are getting.\"",
         "modifiers": [
           {
             "stat": "attack",
@@ -504,7 +504,7 @@
         "duration": 375,
         "statuseffect": "bleeding",
         "odds": 20,
-        "gmnotes": "Bleeding from something wide open — the horror is how much of it there is. Stinger: \"You can see more of yourself than anyone should.\"",
+        "gmnotes": "Bleeding from something wide open. The horror is how much of it there is. Stinger: \"You can see more of yourself than anyone should.\"",
         "modifiers": [
           {
             "stat": "checks",
@@ -621,7 +621,7 @@
         "duration": 0,
         "statuseffect": "prone",
         "odds": 10,
-        "gmnotes": "Permanent, prone, and campaign-changing — pause and make sure the player wants this before it stands. Offer regeneration as a quest. Stinger: \"Somebody needs to pick that up, and nobody is moving.\"",
+        "gmnotes": "Permanent, prone, and campaign-changing. Pause and make sure the player wants this before it stands. Offer regeneration as a quest. Stinger: \"Somebody needs to pick that up, and nobody is moving.\"",
         "modifiers": [
           {
             "stat": "attack",
@@ -753,7 +753,7 @@
         "duration": 0,
         "statuseffect": "blinded",
         "odds": 20,
-        "gmnotes": "Blinded is enormous — consider ruling it as one eye: disadvantage on ranged attacks and sight Perception rather than full blindness, if that suits your table. Say so out loud before the next roll. Stinger: \"Half the room is simply gone, and you keep turning your head to find it.\"",
+        "gmnotes": "Blinded is enormous. Consider ruling it as one eye: disadvantage on ranged attacks and sight Perception rather than full blindness, if that suits your table. Say so out loud before the next roll. Stinger: \"Half the room is simply gone, and you keep turning your head to find it.\"",
         "modifiers": [
           {
             "stat": "checks",
@@ -815,7 +815,7 @@
         "duration": 180,
         "statuseffect": "prone",
         "odds": 75,
-        "gmnotes": "Prone from flinching — harmless, undignified, and good for a duel. Stinger: \"Something drew a line across you and you did not feel it cut.\"",
+        "gmnotes": "Prone from flinching. Harmless, undignified, and good for a duel. Stinger: \"Something drew a line across you and you did not feel it cut.\"",
         "modifiers": [
           {
             "stat": "checks",
@@ -921,7 +921,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785441390641,
+    "modifiedTime": 1788724060186,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

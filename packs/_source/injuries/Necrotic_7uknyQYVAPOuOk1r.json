@@ -81,7 +81,7 @@
         "duration": 180,
         "statuseffect": "diseased",
         "odds": 15,
-        "gmnotes": "Diseased and visible rot — this should frighten the party into acting. Rule the limb weak, not useless. Stinger: \"The smell arrives before you do.\"",
+        "gmnotes": "Diseased and visible rot. This should frighten the party into acting. Rule the limb weak, not useless. Stinger: \"The smell arrives before you do.\"",
         "modifiers": [
           {
             "stat": "saves",
@@ -144,7 +144,7 @@
         "duration": 300,
         "statuseffect": "none",
         "odds": 50,
-        "gmnotes": "The tissue is dying, not merely cold — that is why it is necrotic. Ruling it as lost feeling in the hand is fair and scary. Stinger: \"The colour is wrong, and it is not coming back on its own.\"",
+        "gmnotes": "The tissue is dying, not merely cold. That is why it is necrotic. Ruling it as lost feeling in the hand is fair and scary. Stinger: \"The colour is wrong, and it is not coming back on its own.\"",
         "modifiers": [
           {
             "stat": "attack",
@@ -373,7 +373,7 @@
         "duration": 7200,
         "statuseffect": "poisoned",
         "odds": 5,
-        "gmnotes": "Poisoned for two hours and genuinely dark — this is the one that should make the party consider retreating. Stinger: \"Something took a piece and did not eat it.\"",
+        "gmnotes": "Poisoned for two hours and genuinely dark. This is the one that should make the party consider retreating. Stinger: \"Something took a piece and did not eat it.\"",
         "modifiers": [
           {
             "stat": "saves",
@@ -434,7 +434,7 @@
         "duration": 240,
         "statuseffect": "exhaustion",
         "odds": 30,
-        "gmnotes": "Exhaustion 1 — the life-drain classic. Let rest fail to fix it until treated. Stinger: \"You slept eight hours and woke up owing more.\"",
+        "gmnotes": "Exhaustion 1. The life-drain classic. Let rest fail to fix it until treated. Stinger: \"You slept eight hours and woke up owing more.\"",
         "modifiers": [
           {
             "stat": "saves",
@@ -484,7 +484,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785441390623,
+    "modifiedTime": 1788724060165,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

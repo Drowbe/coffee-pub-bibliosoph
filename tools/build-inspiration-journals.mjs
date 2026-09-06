@@ -120,7 +120,13 @@ const doc = {
     _key: `!journal!${journalId}`
 };
 
-fs.writeFileSync(path.join(OUT_DIR, `${JOURNAL_NAME}_${journalId}.json`), JSON.stringify(doc, null, 2) + '\n', 'utf8');
+// Spaces become underscores so the generator can reproduce the filename that is
+// committed. JOURNAL_NAME is "Inspiration Cards", so writing it raw produced
+// "Inspiration Cards_<id>.json" and left the committed underscored file behind as
+// a deletion on every run. The injury builder has the same line and has never
+// shown it, because damage-type names are single words.
+const fileName = `${JOURNAL_NAME.replace(/\s+/g, "_")}_${journalId}.json`;
+fs.writeFileSync(path.join(OUT_DIR, fileName), JSON.stringify(doc, null, 2) + '\n', 'utf8');
 
 const automated = records.filter((r) => r.action && r.action !== 'none').length;
 console.log(`Generated 1 journal / ${pages.length} inspiration cards into packs/_source/inspiration`);

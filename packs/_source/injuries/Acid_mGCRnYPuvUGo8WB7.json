@@ -76,7 +76,7 @@
         "duration": 480,
         "statuseffect": "stunned",
         "odds": 20,
-        "gmnotes": "Stunned once, then let the etched skin be the story — it does not close cleanly and anyone examining it can tell. Stinger: \"The shape of the splash is still there, and it will be tomorrow.\"",
+        "gmnotes": "Stunned once, then let the etched skin be the story. It does not close cleanly and anyone examining it can tell. Stinger: \"The shape of the splash is still there, and it will be tomorrow.\"",
         "modifiers": [
           {
             "stat": "checks",
@@ -134,7 +134,7 @@
         "duration": 0,
         "statuseffect": "prone",
         "odds": 5,
-        "gmnotes": "Permanent prone until treated is severe — rule that they can crawl and fight from the ground, not that they are helpless. Stinger: \"Every time you get your feet under you, something pops.\"",
+        "gmnotes": "Permanent prone until treated is severe. Rule that they can crawl and fight from the ground, not that they are helpless. Stinger: \"Every time you get your feet under you, something pops.\"",
         "modifiers": [
           {
             "stat": "ac",
@@ -244,7 +244,7 @@
         "duration": 240,
         "statuseffect": "none",
         "odds": 40,
-        "gmnotes": "Flavour only, so spend it on atmosphere — the sound follows them into quiet rooms and gives away hiding places. Stinger: \"Everyone else has stopped talking to listen to you.\"",
+        "gmnotes": "Flavour only, so spend it on atmosphere. The sound follows them into quiet rooms and gives away hiding places. Stinger: \"Everyone else has stopped talking to listen to you.\"",
         "modifiers": [
           {
             "stat": "checks",
@@ -356,7 +356,7 @@
         "duration": 3600,
         "statuseffect": "grappled",
         "odds": 5,
-        "gmnotes": "Grappled for an hour is a movement sentence, not a combat one — let them fight, not chase. Lean into the absurdity. Stinger: \"You crunch when you walk. Everything within earshot now knows where you are.\"",
+        "gmnotes": "Grappled for an hour is a movement sentence, not a combat one. Let them fight, not chase. Lean into the absurdity. Stinger: \"You crunch when you walk. Everything within earshot now knows where you are.\"",
         "modifiers": [
           {
             "stat": "ac",
@@ -417,7 +417,7 @@
         "duration": 300,
         "statuseffect": "none",
         "odds": 40,
-        "gmnotes": "Nothing mechanical; make it a heat problem — armour is unbearable, cold water is a temptation, sleep is poor. Stinger: \"You are the warmest thing in the room and you can feel everyone noticing.\"",
+        "gmnotes": "Nothing mechanical; make it a heat problem. Armour is unbearable, cold water is a temptation, sleep is poor. Stinger: \"You are the warmest thing in the room and you can feel everyone noticing.\"",
         "treatmentdc": null
       },
       "title": {
@@ -578,7 +578,7 @@
         "duration": 2700,
         "statuseffect": "poisoned",
         "odds": 10,
-        "gmnotes": "Poisoned for the better part of an hour — treat it as a fever they are fighting through. Stinger: \"Your own blood feels like it is running hot enough to notice.\"",
+        "gmnotes": "Poisoned for the better part of an hour. Treat it as a fever they are fighting through. Stinger: \"Your own blood feels like it is running hot enough to notice.\"",
         "modifiers": [
           {
             "stat": "checks",
@@ -630,7 +630,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785441390593,
+    "modifiedTime": 1788724060136,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

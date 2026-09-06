@@ -6,7 +6,7 @@
 		"description": "The gods have smiled upon you and have gifted you a single do-over. You may rewind time and roll the dice again. Choose your moment wisely.",
 		"odds": 10,
 		"action": "none",
-		"gmnotes": "The most flexible card in the deck and the hardest to time. Let them hold it and decide later — a re-roll spent on the wrong check is its own lesson. Stinger: \"Say when.\""
+		"gmnotes": "The most flexible card in the deck and the hardest to time. Let them hold it and decide later. A re-roll spent on the wrong check is its own lesson. Stinger: \"Say when.\""
 	},
 	{
 		"title": "Life Swap",
@@ -15,7 +15,7 @@
 		"description": "You feel a tendril of life force reach out from character within sight -- call out their name. You swap health with that character. Once your health is restored you gain the additional health, if any, as temporary hit points.",
 		"odds": 10,
 		"action": "swapHp",
-		"gmnotes": "Select both characters before pressing the button — the swap needs two. Best played by someone nearly dead standing next to someone barely scratched, which is exactly the drama it is for. Stinger: \"Whose name do you call?\""
+		"gmnotes": "Select both characters before pressing the button, because the swap needs two. Best played by someone nearly dead standing next to someone barely scratched, which is exactly the drama it is for. Stinger: \"Whose name do you call?\""
 	},
 	{
 		"title": "Snake Oil",
@@ -24,7 +24,7 @@
 		"description": "You pull a mysterious vial from your pocket. You may use it to heal one creature to full health. The vial will turn to mist once used. Make it count.",
 		"odds": 10,
 		"action": "healFull",
-		"gmnotes": "Full health, any creature — including one that is not theirs. Do not rush the choice; \"make it count\" is the whole card. Stinger: \"The glass is already going cloudy.\""
+		"gmnotes": "Full health, any creature, including one that is not theirs. Do not rush the choice; \"make it count\" is the whole card. Stinger: \"The glass is already going cloudy.\""
 	},
 	{
 		"title": "Smite",
@@ -34,7 +34,7 @@
 		"odds": 10,
 		"action": "percentDamage",
 		"actionformula": "1d10*10",
-		"gmnotes": "Make them say the line. The button rolls the d10 and takes that percentage of the target's CURRENT health, so a 10 is not quite a kill — it leaves them on nothing. Stinger: \"Say it properly or it doesn't count.\""
+		"gmnotes": "Make them say the line. The button rolls the d10 and takes that percentage of the target's CURRENT health, so a 10 is not quite a kill; it leaves them on nothing. Stinger: \"Say it properly or it doesn't count.\""
 	},
 	{
 		"title": "Deep Thought",
@@ -43,7 +43,7 @@
 		"description": "Concentrate. Think deep thoughts. Just this once you can know a thing. Anything.",
 		"odds": 10,
 		"action": "none",
-		"gmnotes": "Answer honestly and completely — this card is worthless if you hedge. If the answer would derail the campaign, that is a sign the answer matters. Stinger: \"Ask.\""
+		"gmnotes": "Answer honestly and completely, because this card is worthless if you hedge. If the answer would derail the campaign, that is a sign the answer matters. Stinger: \"Ask.\""
 	},
 	{
 		"title": "De Ja Vu",
@@ -52,7 +52,7 @@
 		"description": "You get the feeling you've hit this creature before. Take an additional turn in combat, complete with movement, actions, and bonus actions.",
 		"odds": 10,
 		"action": "none",
-		"gmnotes": "A whole extra turn, taken immediately after their current one. Add a second combatant entry or simply let them go twice — do not make them wait for the turn order to come round. Stinger: \"Again. Right now.\""
+		"gmnotes": "A whole extra turn, taken immediately after their current one. Add a second combatant entry or simply let them go twice. Do not make them wait for the turn order to come round. Stinger: \"Again. Right now.\""
 	},
 	{
 		"title": "Raise the Dead",
@@ -62,7 +62,7 @@
 		"odds": 10,
 		"action": "setHp",
 		"actionamount": 5,
-		"gmnotes": "Ten minutes of concentration means it cannot be used mid-fight — that is the cost. Any dead creature, which includes ones the party killed and now need to talk to. Stinger: \"You know the words. You will not know them in a moment.\""
+		"gmnotes": "Ten minutes of concentration means it cannot be used mid-fight, which is the cost. Any dead creature, which includes ones the party killed and now need to talk to. Stinger: \"You know the words. You will not know them in a moment.\""
 	},
 	{
 		"title": "One of Us",
@@ -80,7 +80,7 @@
 		"description": "You find a mushroom growing in the damp bit of the floor. You eat it, blank for a split second, and have instantly long-rested.",
 		"odds": 10,
 		"action": "longRest",
-		"gmnotes": "A full long rest, instantly, for one character — hit dice, spell slots, the lot. Worth asking whether they look around before eating a floor mushroom. Stinger: \"It tastes exactly as bad as it looks.\""
+		"gmnotes": "A full long rest, instantly, for one character: hit dice, spell slots, the lot. Worth asking whether they look around before eating a floor mushroom. Stinger: \"It tastes exactly as bad as it looks.\""
 	},
 	{
 		"title": "Night School",
@@ -89,6 +89,6 @@
 		"description": "Distribute 5 points among your attributes, but doing so can't push them past 20.",
 		"odds": 10,
 		"action": "none",
-		"gmnotes": "Permanent ability score increases — the most powerful card here by a distance. Deliberately not automated: watch them spend it, and hold them to the cap of 20. Stinger: \"Take your time. This one is forever.\""
+		"gmnotes": "Permanent ability score increases, the most powerful card here by a distance. Deliberately not automated: watch them spend it, and hold them to the cap of 20. Stinger: \"Take your time. This one is forever.\""
 	}
 ]

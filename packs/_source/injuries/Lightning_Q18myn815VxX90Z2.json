@@ -76,7 +76,7 @@
         "duration": 120,
         "statuseffect": "none",
         "odds": 5,
-        "gmnotes": "Two minutes of static — comedy, plus advantage for anyone trying to spot them. Stinger: \"You can hear yourself crackling in the quiet.\"",
+        "gmnotes": "Two minutes of static. Comedy, plus advantage for anyone trying to spot them. Stinger: \"You can hear yourself crackling in the quiet.\"",
         "treatmentdc": null
       },
       "title": {
@@ -181,7 +181,7 @@
         "duration": 0,
         "statuseffect": "stunned",
         "odds": 3,
-        "gmnotes": "Permanent and stunned — this is a curse, not a wound, and it should worry the whole party in a storm. Stinger: \"The air over you has started to feel interested.\"",
+        "gmnotes": "Permanent and stunned. This is a curse, not a wound, and it should worry the whole party in a storm. Stinger: \"The air over you has started to feel interested.\"",
         "treatmentdc": null
       },
       "title": {
@@ -347,7 +347,7 @@
         "duration": 180,
         "statuseffect": "none",
         "odds": 10,
-        "gmnotes": "No condition — rule dropped metal or fumbled components on a failed check. Stinger: \"Everything metal has opinions about you now.\"",
+        "gmnotes": "No condition. Rule dropped metal or fumbled components on a failed check. Stinger: \"Everything metal has opinions about you now.\"",
         "modifiers": [
           {
             "stat": "attack",
@@ -446,7 +446,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785441390620,
+    "modifiedTime": 1788724060162,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

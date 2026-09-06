@@ -69,7 +69,7 @@
         "duration": 2400,
         "statuseffect": "none",
         "odds": 40,
-        "gmnotes": "Nothing mechanical, so charge it in positioning — they favour one side, they cannot carry on that shoulder, they flinch from a shove. Stinger: \"The colour of it has gotten worse since you last looked.\"",
+        "gmnotes": "Nothing mechanical, so charge it in positioning. They favour one side, they cannot carry on that shoulder, they flinch from a shove. Stinger: \"The colour of it has gotten worse since you last looked.\"",
         "modifiers": [
           {
             "stat": "checks",
@@ -186,7 +186,7 @@
         "duration": 3600,
         "statuseffect": "none",
         "odds": 35,
-        "gmnotes": "No condition, so make it situational: a check to do anything requiring a deep breath — shouting, swimming, holding a note, laughing. Stinger: \"Something in your chest clicks when you breathe in. Only when you breathe in.\"",
+        "gmnotes": "No condition, so make it situational: a check to do anything requiring a deep breath: shouting, swimming, holding a note, laughing. Stinger: \"Something in your chest clicks when you breathe in. Only when you breathe in.\"",
         "modifiers": [
           {
             "stat": "checks",
@@ -247,7 +247,7 @@
         "duration": 480,
         "statuseffect": "charmed",
         "odds": 20,
-        "gmnotes": "Charmed by vertigo — play it as being unable to trust their own footing or judgement. Stinger: \"The room finishes turning a moment after you do.\"",
+        "gmnotes": "Charmed by vertigo. Play it as being unable to trust their own footing or judgement. Stinger: \"The room finishes turning a moment after you do.\"",
         "modifiers": [
           {
             "stat": "checks",
@@ -486,7 +486,7 @@
         "duration": 0,
         "statuseffect": "unconscious",
         "odds": 4,
-        "gmnotes": "Unconscious and permanent until treated — this is a scene-ender, not a combat modifier. Make the table decide who stops fighting to reach them. Stinger: \"You hear your name from very far away, and then not.\"",
+        "gmnotes": "Unconscious and permanent until treated. This is a scene-ender, not a combat modifier. Make the table decide who stops fighting to reach them. Stinger: \"You hear your name from very far away, and then not.\"",
         "modifiers": [
           {
             "stat": "ac",
@@ -547,7 +547,7 @@
         "duration": 300,
         "statuseffect": "exhaustion",
         "odds": 60,
-        "gmnotes": "Exhaustion 1 is disadvantage on ability checks — quietly brutal for a skill scene. Have them unable to speak and move in the same breath. Stinger: \"You have the air for running or for talking. Choose.\"",
+        "gmnotes": "Exhaustion 1 is disadvantage on ability checks. Quietly brutal for a skill scene. Have them unable to speak and move in the same breath. Stinger: \"You have the air for running or for talking. Choose.\"",
         "modifiers": [
           {
             "stat": "attack",
@@ -603,7 +603,7 @@
         "duration": 480,
         "statuseffect": "prone",
         "odds": 55,
-        "gmnotes": "Prone is the whole cost — standing eats half their movement, and that is enough. Consider asking for a check if they try to sprint, jump, or take stairs at speed. Stinger: \"Your knee holds. Then it doesn't.\"",
+        "gmnotes": "Prone is the whole cost. Standing eats half their movement, and that is enough. Consider asking for a check if they try to sprint, jump, or take stairs at speed. Stinger: \"Your knee holds. Then it doesn't.\"",
         "modifiers": [
           {
             "stat": "ac",
@@ -714,7 +714,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785441390616,
+    "modifiedTime": 1788724060157,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

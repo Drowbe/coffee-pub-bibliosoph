@@ -172,16 +172,25 @@ export class RollToastManager {
      */
     static _outcomeCast(outcome) {
         let hitActorId = null;
+        let hitTokenId = null;
         try {
             const hitUuid = outcome?.hitTargets?.[0] ?? outcome?.targets?.[0]?.uuid;
             const hit = hitUuid ? fromUuidSync(hitUuid) : null;
             // hitTargets are token uuids in some paths, actor uuids in others.
+            // A TokenDocument has an `.actor`; an Actor does not, which is how
+            // we tell which we were handed without an instanceof.
+            const isToken = !!hit?.actor;
+            // KEEP THE TOKEN. It was resolved here and used to be discarded,
+            // so the card named the base actor -- the prototype's name for
+            // every member of a pasted group, since copies share it.
+            hitTokenId = isToken ? (hit.id ?? null) : null;
             hitActorId = (hit?.actor ?? hit)?.id ?? null;
         } catch (_) { /* an unresolvable target just stays generic */ }
         return {
             rollerActorId: outcome?.actorId ?? null,
             rollerTokenId: outcome?.tokenId ?? null,
-            hitActorId
+            hitActorId,
+            hitTokenId
         };
     }
 

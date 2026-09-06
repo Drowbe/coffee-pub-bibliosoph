@@ -564,7 +564,7 @@
         "kind": "crit",
         "image": "icons/skills/melee/strike-sword-blood-red.webp",
         "imagetitle": "",
-        "description": "Your hit dazzles your party... but which is the most dazzled party member? Each of them must compliment your hit — choose the best one. They were inspired by you, so they draw a card from the inspiration deck.",
+        "description": "Your hit dazzles your party... but which is the most dazzled party member? Each of them must compliment your hit, and you choose the best one. They were inspired by you, so they draw a card from the inspiration deck.",
         "severity": "moderate",
         "appliesto": "ally",
         "damage": 0,
@@ -614,7 +614,7 @@
         "kind": "crit",
         "image": "icons/skills/melee/strike-hammer-destructive-orange.webp",
         "imagetitle": "",
-        "description": "That was pretty bad-ass. Draw a card from the inspiration deck — it goes straight into your inventory, to play whenever you like.",
+        "description": "That was pretty bad-ass. Draw a card from the inspiration deck. It goes straight into your inventory, to play whenever you like.",
         "severity": "moderate",
         "appliesto": "self",
         "damage": 0,
@@ -2006,7 +2006,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785441391415,
+    "modifiedTime": 1788724061387,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

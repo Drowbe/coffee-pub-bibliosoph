@@ -77,13 +77,20 @@ export const TARGET_LABELS = {
     nearby: 'Everyone nearby'
 };
 
-/** Who the GM should have selected before clicking Apply. */
+/**
+ * Who the GM should have targeted or selected before clicking Apply.
+ *
+ * These are read when the card could not name a recipient itself, so the
+ * apply lands on the GM's targets, else their selection -- ALL of them, not
+ * one. The wording says "everyone" deliberately: a GM who reads it as naming
+ * a single creature selects one and quietly loses the rest of the effect.
+ */
 export const TARGET_HINTS = {
-    target: 'Select the creature that was hit.',
-    self: 'Select the character who rolled.',
-    ally: 'Select the affected party member.',
-    party: 'Select the party members it affects.',
-    nearby: 'Select everyone in range.'
+    target: 'Target or select the creature that was hit.',
+    self: 'Target or select the character who rolled.',
+    ally: 'Target or select the affected party member.',
+    party: 'Target or select every party member it affects -- all of them, then apply once.',
+    nearby: 'Target or select everyone in range -- all of them, then apply once.'
 };
 
 /**

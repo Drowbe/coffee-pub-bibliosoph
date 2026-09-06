@@ -20,7 +20,7 @@
         "duration": 90,
         "statuseffect": "deafened",
         "odds": 20,
-        "gmnotes": "Deafened is a strange fit; play the distraction — concentration checks and nothing else. Stinger: \"Something taps your nose. There is nothing there.\"",
+        "gmnotes": "Deafened is a strange fit; play the distraction. Concentration checks and nothing else. Stinger: \"Something taps your nose. There is nothing there.\"",
         "modifiers": [
           {
             "stat": "saves",
@@ -137,7 +137,7 @@
         "duration": 300,
         "statuseffect": "none",
         "odds": 55,
-        "gmnotes": "Flavour only — spend it on concentration checks and missed quiet sounds. Stinger: \"Nothing touched you. Everything still rang.\"",
+        "gmnotes": "Flavour only. Spend it on concentration checks and missed quiet sounds. Stinger: \"Nothing touched you. Everything still rang.\"",
         "modifiers": [
           {
             "stat": "checks",
@@ -315,7 +315,7 @@
         "duration": 2400,
         "statuseffect": "none",
         "odds": 20,
-        "gmnotes": "No condition; rule against turning quickly — flanking and rear attacks get easier on them. Stinger: \"Looking behind you is now a decision, not a reflex.\"",
+        "gmnotes": "No condition; rule against turning quickly. Flanking and rear attacks get easier on them. Stinger: \"Looking behind you is now a decision, not a reflex.\"",
         "modifiers": [
           {
             "stat": "ac",
@@ -432,7 +432,7 @@
         "duration": 120,
         "statuseffect": "prone",
         "odds": 15,
-        "gmnotes": "Prone from dropped items and flailing — target anything they try to carry carefully. Stinger: \"You drop it. Nothing touched you, and you drop it.\"",
+        "gmnotes": "Prone from dropped items and flailing. Target anything they try to carry carefully. Stinger: \"You drop it. Nothing touched you, and you drop it.\"",
         "modifiers": [
           {
             "stat": "attack",
@@ -482,7 +482,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785441390613,
+    "modifiedTime": 1788724060154,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

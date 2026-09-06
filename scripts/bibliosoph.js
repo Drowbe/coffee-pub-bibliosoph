@@ -400,7 +400,7 @@ function triggerFumbleRoll() {
 // The actor ids are who rolled and who they hit, when the triggering roll
 // told us — they let the card name people instead of saying "the roller"
 // and "the creature hit".
-export async function rollOutcomeCard(type, { title = null, rollerActorId = null, rollerTokenId = null, hitActorId = null, overrides = null } = {}) {
+export async function rollOutcomeCard(type, { title = null, rollerActorId = null, rollerTokenId = null, hitActorId = null, hitTokenId = null, overrides = null } = {}) {
     const kindLabel = type === 'crit' ? 'Criticals' : 'Fumbles';
     const compendium = getSettingSafe(type === 'crit' ? 'critCompendium' : 'fumbleCompendium', 'none');
     if (!compendium || compendium === 'none') {
@@ -408,7 +408,7 @@ export async function rollOutcomeCard(type, { title = null, rollerActorId = null
         showBibToast(`No ${kindLabel} Deck`, `Choose a ${kindLabel} compendium in Bibliosoph settings.`, 'fa-solid fa-book-open');
         return;
     }
-    const built = await createChatCardOutcome(type, { title, rollerActorId, rollerTokenId, hitActorId, overrides });
+    const built = await createChatCardOutcome(type, { title, rollerActorId, rollerTokenId, hitActorId, hitTokenId, overrides });
     if (!built) {
         logBib(`No outcome found in "${compendium}"`, '', false, false);
         showBibToast(`No ${kindLabel} Found`, `"${compendium}" has no matching entries.`, 'fa-solid fa-book-open');
@@ -435,7 +435,7 @@ function readOutcomeRecord(page) {
  * by odds, then render with its mechanics spelled out and an Apply button
  * that carries the whole record rather than just a name and some prose.
  */
-async function createChatCardOutcome(type, { title = null, rollerActorId = null, rollerTokenId = null, hitActorId = null, overrides = null } = {}) {
+async function createChatCardOutcome(type, { title = null, rollerActorId = null, rollerTokenId = null, hitActorId = null, hitTokenId = null, overrides = null } = {}) {
     const compendiumName = getSettingSafe(type === 'crit' ? 'critCompendium' : 'fumbleCompendium', 'none');
     const pack = game.packs.get(compendiumName);
     if (!pack) return null;
@@ -484,7 +484,7 @@ async function createChatCardOutcome(type, { title = null, rollerActorId = null,
     // Baked into the card so every client can answer "may I click this?"
     // without the GM having to render a second, different card. Ownership
     // of this actor is the whole gate (see the render hook).
-    const cast = resolveOutcomeCast({ rollerActorId, rollerTokenId, hitActorId });
+    const cast = resolveOutcomeCast({ rollerActorId, rollerTokenId, hitActorId, hitTokenId });
     const rollerId = cast.roller?.id ?? rollerActorId ?? '';
 
     BlacksmithUtils.playSound(
@@ -632,7 +632,12 @@ function composeOutcomeActions(state) {
  * @returns {Promise<string[]>} names dealt to, for the button stamp
  */
 async function dealOutcomeCard(data) {
-    let actor = game.actors.get(data?.targetActorId ?? '') ?? null;
+    // TOKEN FIRST. `targetActorId` on an unlinked token is the BASE actor id,
+    // so resolving it granted the card to the prototype and every copy of it
+    // showed the item -- one crit dealt a card to all three crocodiles.
+    let actor = canvas?.tokens?.get(data?.targetTokenId ?? '')?.actor
+        ?? game.actors.get(data?.targetActorId ?? '')
+        ?? null;
     if (data?.randomAlly) {
         // A card goes to a sheet, not to a square — being off-scene is no
         // reason to be skipped when the deck is handing something out.
@@ -704,24 +709,44 @@ function getPartyActors({ requireToken = true } = {}) {
  * token is the roller and a lone target is who they hit. Anything
  * ambiguous stays unnamed rather than guessed at.
  */
-function resolveOutcomeCast({ rollerActorId = null, rollerTokenId = null, hitActorId = null } = {}) {
+function resolveOutcomeCast({ rollerActorId = null, rollerTokenId = null, hitActorId = null, hitTokenId = null } = {}) {
+    // THE TOKEN IS CARRIED, NOT JUST THE ACTOR, and that is the whole point
+    // of this shape. `actor.id` on an unlinked token is the BASE actor's id,
+    // shared by every copy of a pasted token -- so a cast that returned only
+    // actors could not describe WHICH crocodile, and anything that later
+    // re-resolved that id got the prototype and wrote to all of them.
+    // Resolve by token to identify or apply; resolve by actor to aggregate.
     const lone = (tokens) => {
         const pool = Array.from(tokens ?? []);
-        return pool.length === 1 ? (pool[0].actor ?? null) : null;
+        return pool.length === 1 ? (pool[0] ?? null) : null;
     };
-    // TOKEN FIRST, for the same reason everywhere else does: `rollerActorId`
-    // is the speaker's BASE actor, shared by every copy of a pasted token, so
-    // resolving it first names the prototype rather than the creature that
-    // rolled. Resolve by token to identify or apply, by actor to aggregate.
-    const roller = canvas?.tokens?.get(rollerTokenId ?? '')?.actor
-        ?? game.actors.get(rollerActorId ?? '')
-        ?? game.user?.character
+
+    const rollerToken = canvas?.tokens?.get(rollerTokenId ?? '')
         ?? lone(canvas?.tokens?.controlled)
         ?? null;
-    const hit = game.actors.get(hitActorId ?? '')
+    const roller = rollerToken?.actor
+        ?? game.actors.get(rollerActorId ?? '')
+        ?? game.user?.character
+        ?? null;
+
+    const hitToken = canvas?.tokens?.get(hitTokenId ?? '')
         ?? lone(game.user?.targets)
         ?? null;
-    return { roller, hit };
+    const hit = hitToken?.actor
+        ?? game.actors.get(hitActorId ?? '')
+        ?? null;
+
+    // Names come off the TOKEN where there is one: a token may be renamed
+    // from its prototype, and three copies of "Crocodile" are only
+    // distinguishable by the names their tokens carry.
+    return {
+        roller,
+        hit,
+        rollerToken,
+        hitToken,
+        rollerName: rollerToken?.name || roller?.name || null,
+        hitName: hitToken?.name || hit?.name || null
+    };
 }
 
 /**
@@ -754,11 +779,18 @@ function buildOutcomeTargets(rec, cast = {}) {
                 hint: 'Pick who draws a card, or let the dice decide.'
             };
         }
-        const named = rec.appliesto === 'self' ? cast.roller : (cast.hit ?? cast.roller);
+        const self = rec.appliesto === 'self';
+        const named = self ? cast.roller : (cast.hit ?? cast.roller);
+        const namedToken = self ? cast.rollerToken : (cast.hitToken ?? cast.rollerToken);
+        const namedName = (self ? cast.rollerName : (cast.hitName ?? cast.rollerName)) || named?.name;
         return {
             dealscard: true, picksTotal: 1, candidates: [],
             targetActorId: named?.id ?? null,
-            singleLabel: named ? `Deal a Card to ${named.name}` : 'Deal an Inspiration Card',
+            // The token id is what makes this land on ONE crocodile. Without
+            // it the card carried a base actor id, and dealing re-resolved it
+            // to the prototype -- putting the item on every copy at once.
+            targetTokenId: namedToken?.id ?? null,
+            singleLabel: named ? `Deal a Card to ${namedName}` : 'Deal an Inspiration Card',
             needsSelection: !named,
             hint: named ? '' : 'Select who draws, or the card goes to your own character.'
         };
@@ -789,18 +821,31 @@ function buildOutcomeTargets(rec, cast = {}) {
     // Name the person when we can and bind to them: the card records a
     // specific moment, so it should not quietly re-aim at whatever happens
     // to be selected when someone gets around to clicking.
-    const named = rec.appliesto === 'self' ? cast.roller
+    const self = rec.appliesto === 'self';
+    const named = self ? cast.roller
         : (rec.appliesto === 'target' ? (cast.hit ?? null) : null);
+    const namedToken = self ? cast.rollerToken
+        : (rec.appliesto === 'target' ? (cast.hitToken ?? null) : null);
     if (named) {
         return {
             picksTotal: 1, candidates: [], targetActorId: named.id,
-            singleLabel: `Apply to ${named.name}`, hint: ''
+            targetTokenId: namedToken?.id ?? null,
+            singleLabel: `Apply to ${(self ? cast.rollerName : cast.hitName) || named.name}`, hint: ''
         };
     }
 
+    // THE BUTTON SAYS WHAT IT WILL DO, not what the outcome is about. This
+    // branch is reached when nothing in the cast names a recipient, so the
+    // apply resolves against the GM's targets, else their selection
+    // (manager-status-effects.js) -- it does not work out who is nearby.
+    // Labelling it "Apply to Everyone nearby" read as though it did, so a GM
+    // with one token selected got one poisoned crocodile and no hint that
+    // the other two were theirs to select. `targetLabel` still names the
+    // intended scope in the hint, where it is a description rather than a
+    // promise.
     return {
         picksTotal: 1, candidates: [],
-        singleLabel: `Apply to ${targetLabel(rec.appliesto).replace(/^The /, '')}`,
+        singleLabel: 'Apply to Targeted or Selected',
         needsSelection: true,
         hint: TARGET_HINTS[rec.appliesto] ?? ''
     };
@@ -3182,8 +3227,11 @@ async function applyOutcomeStatus(data) {
     } else if (data?.randomAlly) {
         const party = getPartyActors();
         if (party.length) explicitActors = [party[Math.floor(Math.random() * party.length)]];
-    } else if (data?.targetActorId) {
-        const actor = game.actors.get(data.targetActorId);
+    } else if (data?.targetTokenId || data?.targetActorId) {
+        // TOKEN FIRST, so a crit applies its status to the crocodile that was
+        // hit rather than to the base actor its two copies also share.
+        const actor = canvas?.tokens?.get(data.targetTokenId ?? '')?.actor
+            ?? game.actors.get(data.targetActorId ?? '');
         if (actor) explicitActors = [actor];
     }
 
@@ -4053,8 +4101,15 @@ function userOwnsRoller(rollerActorId, userId) {
  *          resolves against the clicker's selection instead
  */
 function resolveOutcomePick(state, value) {
-    if (value && value !== 'random') return { actorId: value };
-    if (value !== 'random') return { actorId: state.targetActorId ?? null };
+    // A CHOSEN candidate is an actor and nothing else -- the picker offers
+    // party members, who are linked, so there is no token to carry. The
+    // BOUND target is the one that may be an unlinked copy, and it carries
+    // its token id so applying lands on that creature rather than on the
+    // base actor every copy shares.
+    if (value && value !== 'random') return { actorId: value, tokenId: null };
+    if (value !== 'random') {
+        return { actorId: state.targetActorId ?? null, tokenId: state.targetTokenId ?? null };
+    }
 
     const taken = new Set(state.picked ?? []);
     const pool = (state.candidates ?? []).filter((c) => !taken.has(c.id));
@@ -4132,6 +4187,9 @@ async function applyOutcomePick(message, state, value) {
     if (state.dealscard) data.dealscard = true;
     if (state.partyMode) data.partyMode = true;
     if (pick.actorId) data.targetActorId = pick.actorId;
+    // Carried only for the bound target; a picked candidate has none, and a
+    // stale token id would re-aim the apply at the wrong creature.
+    if (pick.tokenId) data.targetTokenId = pick.tokenId;
 
     const applied = await applyOutcomeStatus(data);
     if (!applied?.length) return;

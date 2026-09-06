@@ -20,7 +20,7 @@
         "duration": 60,
         "statuseffect": "blinded",
         "odds": 50,
-        "gmnotes": "Blinded for a minute, and the euphoria makes them enjoy it — which is its own problem. Stinger: \"You cannot see a thing and you have never felt better about it.\"",
+        "gmnotes": "Blinded for a minute, and the euphoria makes them enjoy it. Which is its own problem. Stinger: \"You cannot see a thing and you have never felt better about it.\"",
         "modifiers": [
           {
             "stat": "attack",
@@ -181,7 +181,7 @@
         "duration": 300,
         "statuseffect": "prone",
         "odds": 50,
-        "gmnotes": "Prone plus tender skin — armour becomes miserable. Stinger: \"Everything you wear is now an argument.\"",
+        "gmnotes": "Prone plus tender skin. Armour becomes miserable. Stinger: \"Everything you wear is now an argument.\"",
         "modifiers": [
           {
             "stat": "checks",
@@ -286,7 +286,7 @@
         "duration": 2400,
         "statuseffect": "charmed",
         "odds": 25,
-        "gmnotes": "Charmed by the light itself — play it as reverence they cannot shake. Stinger: \"You keep turning back towards it, and you could not say why.\"",
+        "gmnotes": "Charmed by the light itself. Play it as reverence they cannot shake. Stinger: \"You keep turning back towards it, and you could not say why.\"",
         "modifiers": [
           {
             "stat": "checks",
@@ -459,7 +459,7 @@
         "duration": 2700,
         "statuseffect": "poisoned",
         "odds": 20,
-        "gmnotes": "Poisoned and glowing brightly for the better part of an hour — stealth is gone and everything nearby knows where they are. Stinger: \"You are throwing light on the walls. You cannot dim it.\"",
+        "gmnotes": "Poisoned and glowing brightly for the better part of an hour. Stealth is gone and everything nearby knows where they are. Stinger: \"You are throwing light on the walls. You cannot dim it.\"",
         "modifiers": [
           {
             "stat": "checks",
@@ -509,7 +509,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785441390637,
+    "modifiedTime": 1788724060182,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

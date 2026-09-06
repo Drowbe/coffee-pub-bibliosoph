@@ -20,7 +20,7 @@
         "duration": 0,
         "statuseffect": "poisoned",
         "odds": 1,
-        "gmnotes": "Permanent and poisoned — the colour-shifting makes disguise and diplomacy hard until cured. Stinger: \"You have gone a shade nobody has a name for.\"",
+        "gmnotes": "Permanent and poisoned. The colour-shifting makes disguise and diplomacy hard until cured. Stinger: \"You have gone a shade nobody has a name for.\"",
         "modifiers": [
           {
             "stat": "checks",
@@ -81,7 +81,7 @@
         "duration": 2400,
         "statuseffect": "none",
         "odds": 5,
-        "gmnotes": "No condition; play the itch — disadvantage on anything needing stillness. Stinger: \"They are not healing. It has been days.\"",
+        "gmnotes": "No condition; play the itch. Disadvantage on anything needing stillness. Stinger: \"They are not healing. It has been days.\"",
         "modifiers": [
           {
             "stat": "checks",
@@ -193,7 +193,7 @@
         "duration": 180,
         "statuseffect": "blinded",
         "odds": 50,
-        "gmnotes": "Blinded for three minutes, triggered by sneezing — a gift for ruining stealth at the worst moment. Stinger: \"You feel it building. There is nothing you can do about it.\"",
+        "gmnotes": "Blinded for three minutes, triggered by sneezing. A gift for ruining stealth at the worst moment. Stinger: \"You feel it building. There is nothing you can do about it.\"",
         "modifiers": [
           {
             "stat": "checks",
@@ -305,7 +305,7 @@
         "duration": 120,
         "statuseffect": "none",
         "odds": 40,
-        "gmnotes": "Two minutes of nonsense — spend it during a tense moment for maximum damage. Stinger: \"Your foot has started keeping time. To what, nobody knows.\"",
+        "gmnotes": "Two minutes of nonsense. Spend it during a tense moment for maximum damage. Stinger: \"Your foot has started keeping time. To what, nobody knows.\"",
         "modifiers": [
           {
             "stat": "checks",
@@ -417,7 +417,7 @@
         "duration": 300,
         "statuseffect": "poisoned",
         "odds": 30,
-        "gmnotes": "Poisoned plus hallucination — describe rooms as crawling and let them doubt what they saw. Stinger: \"The wall is moving. You are almost certain the wall is not moving.\"",
+        "gmnotes": "Poisoned plus hallucination. Describe rooms as crawling and let them doubt what they saw. Stinger: \"The wall is moving. You are almost certain the wall is not moving.\"",
         "modifiers": [
           {
             "stat": "attack",
@@ -472,7 +472,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785441390631,
+    "modifiedTime": 1788724060173,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {

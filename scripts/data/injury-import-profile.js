@@ -76,7 +76,7 @@ export const INJURY_GUIDANCE = {
     treatment: 'How the injury may be treated, written as the GM will adjudicate it.',
     damage: `One-time HP lost when the injury lands, as a PERCENTAGE of maximum HP rather than flat HP, and normally ${bandsBySeverity(DAMAGE_BANDS)}.`,
     duration: 'How long the injury lasts in seconds, where 0 means permanent until treated.',
-    statuseffect: 'The single condition the injury conveys, or `none` when it is purely narrative — the empty string is not a legal value.',
+    statuseffect: 'The single condition the injury conveys, or `none` when it is purely narrative, since the empty string is not a legal value.',
     odds: `Relative likelihood within the category when an injury is drawn at random, higher being more common, and normally ${bandsBySeverity(ODDS_BANDS)}.`,
     treatmentdc: 'Overrides the severity-derived treatment DC, and should be left null so the severity ladder applies.',
     modifiers: `Roll penalties applied as real active-effect changes, at most ${MODIFIER_LIMITS.maxCount} of them, and no larger than ${SEVERITIES.map((s) => `±${MODIFIER_LIMITS.bySeverity[s]} for ${s}`).join(', ')}.`,

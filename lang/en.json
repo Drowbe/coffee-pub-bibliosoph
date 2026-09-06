@@ -2,10 +2,10 @@
 	"coffee-pub-bibliosoph": {
 
 		"headingH1Bibliosoph-Label": "Getting Started",
-		"headingH1Bibliosoph-Hint": "Every feature below can be switched off independently, so you can take only the parts you want. Players see the handful of settings that are genuinely theirs — toolbar buttons, message splashes, dice animations; everything else is the GM's.",
+		"headingH1Bibliosoph-Hint": "Every feature below can be switched off independently, so you can take only the parts you want. Players see the handful of settings that are genuinely theirs: toolbar buttons, message splashes, dice animations. Everything else is the GM's.",
 
 		"headingH4Introduction-Label": "Introduction",
-		"headingH4Introduction-Hint": "Bibliosoph gives the table a memory. When a blow lands hard it becomes a named injury that lingers and has to be treated; a critical hit or a fumble draws a real result with mechanics behind it, not just a line of prose. Great moments at the table earn inspiration cards a player holds in their inventory and spends when it counts. It also rolls encounters against your party's strength, handles searching a room, and carries private messages between players without cluttering the chat log. Everything arrives as a themed card, and anything with teeth applies itself to the token with one click. The content ships as journal compendiums you can copy and rewrite — the injuries, criticals, fumbles and cards are all yours to edit.",
+		"headingH4Introduction-Hint": "Bibliosoph gives the table a memory. When a blow lands hard it becomes a named injury that lingers and has to be treated; a critical hit or a fumble draws a real result with mechanics behind it, not just a line of prose. Great moments at the table earn inspiration cards a player holds in their inventory and spends when it counts. It also rolls encounters against your party's strength, handles searching a room, and carries private messages between players without cluttering the chat log. Everything arrives as a themed card, and anything with teeth applies itself to the token with one click. The content ships as journal compendiums you can copy and rewrite. The injuries, criticals, fumbles and cards are all yours to edit.",
 
 		"headingH2General-Label": "General",
 		"headingH2General-Hint": "",
@@ -25,7 +25,7 @@
 		"retentionMaxMessages-Label": "Message History Limit",
 		"retentionMaxMessages-Hint": "Maximum messages kept per conversation. Older messages are trimmed automatically as new ones arrive.",
 		"messagesExcludedUsers-Label": "Excluded Users",
-		"messagesExcludedUsers-Hint": "Comma-separated user names to leave out of Messages (no 1:1 row, not selectable for groups, not added to the party conversation). Case-insensitive; matches the exact name or the start of it (e.g. 'developer' matches 'DeveloperXXX'). This is only about Messages — it does not hide toasts. Toast visibility lives in Blacksmith under Toast Excluded Users, and which announcements reach those users anyway is set there too (see Toast Channels below).",
+		"messagesExcludedUsers-Hint": "Comma-separated user names to leave out of Messages (no 1:1 row, not selectable for groups, not added to the party conversation). Case-insensitive; matches the exact name or the start of it (e.g. 'developer' matches 'DeveloperXXX'). This is only about Messages, and it does not hide toasts. Toast visibility lives in Blacksmith under Toast Excluded Users, and which announcements reach those users anyway is set there too (see Toast Channels below).",
 		"hideMessagesJournal-Label": "Hide Messages Journal Folder",
 		"hideMessagesJournal-Hint": "Hides the conversations journal folder from the journal sidebar for everyone.",
 		"messageAutoOpen-Label": "Auto Open Messages",
@@ -53,7 +53,7 @@
 
 
 		"headingH3RandomToasts-Label": "Random Toasts",
-		"headingH3RandomToasts-Hint": "Buttons in the Messages window header that roll a table and toast the result to everyone. Choosing None disables the button. These toasts use the channel name 'social' — add it to Blacksmith's Channels Excluded Users Still See to let a camera or stream account see them.",
+		"headingH3RandomToasts-Hint": "Buttons in the Messages window header that roll a table and toast the result to everyone. Choosing None disables the button. These toasts use the channel name 'social'. Add it to Blacksmith's Channels Excluded Users Still See to let a camera or stream account see them.",
 		"beverageTable-Label": "Beverage Table",
 		"beverageTable-Hint": "",
 		"bioTable-Label": "Bio Table",
@@ -135,7 +135,7 @@
 		"headingH3CriticalChatCard-Label": "Chat Card",
 		"headingH3CriticalChatCard-Hint": "",
 		"headingH3CriticalToastDesign-Label": "Toast Design",
-		"headingH3CriticalToastDesign-Hint": "Codes for the title and message: {name} who rolled, {target} who they hit, {weapon} what they attacked with, {d20} the die face, {total} the attack total. This toast uses the channel name 'crit' — add it to Blacksmith's Channels Excluded Users Still See to let a camera or stream account see criticals despite being toast-excluded.",
+		"headingH3CriticalToastDesign-Hint": "Codes for the title and message: {name} who rolled, {target} who they hit, {weapon} what they attacked with, {d20} the die face, {total} the attack total. This toast uses the channel name 'crit'. Add it to Blacksmith's Channels Excluded Users Still See to let a camera or stream account see criticals despite being toast-excluded.",
 		"cardThemeCritical-Label": "Chat Card Style",
 		"cardThemeCritical-Hint": "",
 
@@ -146,7 +146,7 @@
 		"headingH3FumbleChatCard-Label": "Chat Card",
 		"headingH3FumbleChatCard-Hint": "",
 		"headingH3FumbleToastDesign-Label": "Toast Design",
-		"headingH3FumbleToastDesign-Hint": "Codes for the title and message: {name} who rolled, {target} who they attacked, {weapon} what they attacked with, {d20} the die face, {total} the attack total. This toast uses the channel name 'fumble' — add it to Blacksmith's Channels Excluded Users Still See to let a camera or stream account see fumbles despite being toast-excluded.",
+		"headingH3FumbleToastDesign-Hint": "Codes for the title and message: {name} who rolled, {target} who they attacked, {weapon} what they attacked with, {d20} the die face, {total} the attack total. This toast uses the channel name 'fumble'. Add it to Blacksmith's Channels Excluded Users Still See to let a camera or stream account see fumbles despite being toast-excluded.",
 		"cardThemeFumble-Label": "Chat Card Style",
 		"cardThemeFumble-Hint": "",
 
@@ -198,7 +198,7 @@
 		"toolbarInspiration-Label": "Toolbar",
 		"toolbarInspiration-Hint": "Which toolbar carries the Inspiration button. To remove the button entirely, switch Inspiration off above.",
 		"headingH2Inspiration-Label": "Inspiration",
-		"headingH2Inspiration-Hint": "Reward great moments at the table. Draw from an inspiration table to hand out flavorful boons with a themed card — destined to grow into a full deck experience supporting many kinds of cards.",
+		"headingH2Inspiration-Hint": "Reward great moments at the table. Draw from an inspiration table to hand out flavorful boons with a themed card, destined to grow into a full deck experience supporting many kinds of cards.",
 		"cardThemeInspiration-Label": "Chat Card Style",
 		"cardThemeInspiration-Hint": "",
 
@@ -207,7 +207,7 @@
 
 
 		"headingH2Injuries-Label": "Injuries",
-		"headingH2Injuries-Hint": "Injuries are what happens when a hit lands so hard it may leave permanent damage. Trigger them by hand from the toolbar, or automatically when a single hit deals a chosen percentage of max HP — the injury is rolled by the damage type that caused it.",
+		"headingH2Injuries-Hint": "Injuries are what happens when a hit lands so hard it may leave permanent damage. Trigger them by hand from the toolbar, or automatically when a single hit deals a chosen percentage of max HP. The injury is rolled by the damage type that caused it.",
 		"headingH3InjuriesConfiguration-Label": "Configuration",
 		"headingH3InjuriesConfiguration-Hint": "Automation triggers when a single application of damage deals at least the threshold percent of the target's max HP. The injury is rolled from the compendium by the hit's dominant damage type.",
 		"headingH3InjuriesChatCard-Label": "Chat Card",
@@ -215,7 +215,7 @@
 		"injuryAutomation-Label": "Automation",
 		"injuryAutomation-Hint": "",
 		"injuryAutoApply-Label": "Automatically Apply Injury",
-		"injuryAutoApply-Hint": "Automation-created injury cards skip the Apply button — the injury lands on the damaged character immediately and the card shows who it was applied to.",
+		"injuryAutoApply-Hint": "Automation-created injury cards skip the Apply button. The injury lands on the damaged character immediately and the card shows who it was applied to.",
 		"headingH3InjuriesTreatment-Label": "Treatment",
 		"headingH3InjuriesTreatment-Hint": "Injuries linger until someone treats them. The Check-Up toolbar button posts a patient's afflictions with a Treat button on each; the GM always treats instantly, while players roll Medicine against the injury's difficulty.",
 		"injuryTreatmentRolls-Label": "Player Treatment Rolls",
@@ -247,7 +247,7 @@
 		"cardThemeInjury-Label": "Chat Card Style",
 		"cardThemeInjury-Hint": "",
 		"critCompendium-Label": "Criticals Source",
-		"critCompendium-Hint": "A compendium of typed critical pages — these carry real mechanics (damage, conditions, durations, and roll modifiers) that the Apply button puts straight onto the token. Journals inside it are severity buckets for browsing only; each page states its own. This is the only source of criticals; set it to None and no critical cards are posted.",
+		"critCompendium-Hint": "A compendium of typed critical pages. These carry real mechanics (damage, conditions, durations, and roll modifiers) that the Apply button puts straight onto the token. Journals inside it are severity buckets for browsing only; each page states its own. This is the only source of criticals; set it to None and no critical cards are posted.",
 		"fumbleCompendium-Label": "Fumbles Source",
 		"fumbleCompendium-Hint": "As above, for fumbles. Set it to None and no fumble cards are posted.",
 		"inspirationCompendium-Label": "Inspiration Cards Source",
@@ -261,7 +261,7 @@
 		"injurySoundVolume-Label": "Sound Volume",
 		"injurySoundVolume-Hint": "",
 		"headingH3InjuriesToastDesign-Label": "Toast Design",
-		"headingH3InjuriesToastDesign-Hint": "Codes for the title and message: {name} who was injured, {type} the damage type, {damage} the damage taken, {percent} the percent of max HP. This toast uses the channel name 'injury' — add it to Blacksmith's Channels Excluded Users Still See to let a camera or stream account see injuries despite being toast-excluded.",
+		"headingH3InjuriesToastDesign-Hint": "Codes for the title and message: {name} who was injured, {type} the damage type, {damage} the damage taken, {percent} the percent of max HP. This toast uses the channel name 'injury'. Add it to Blacksmith's Channels Excluded Users Still See to let a camera or stream account see injuries despite being toast-excluded.",
 		"injuryToastTitle-Label": "Injury Title",
 		"injuryToastTitle-Hint": "",
 		"injuryToastMessage-Label": "Injury Message",
@@ -299,7 +299,7 @@
 		"quickEncounterRefreshCache-Label": "Refresh cache",
 		"quickEncounterCacheStatus-Label": "Cache: {count} monsters",
 		"quickEncounterCacheStatusTitle-Hint": "Recommend and Roll use cached data for speed.",
-		"quickEncounterCacheNone-Label": "No cache — click Refresh to build",
+		"quickEncounterCacheNone-Label": "No cache. Click Refresh to build",
 		"quickEncounterCacheNoneTitle-Hint": "Build a cache to make Recommend and Roll much faster.",
 		"quickEncounterCacheBuilding-Label": "Building cache…",
 		"quickEncounterCacheBuildingProgress-Label": "{current}/{total} compendiums, {count} monsters",

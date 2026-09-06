@@ -17,7 +17,7 @@
         "action": "longRest",
         "actionamount": null,
         "actionformula": "",
-        "gmnotes": "A full long rest, instantly, for one character — hit dice, spell slots, the lot. Worth asking whether they look around before eating a floor mushroom. Stinger: \"It tastes exactly as bad as it looks.\""
+        "gmnotes": "A full long rest, instantly, for one character: hit dice, spell slots, the lot. Worth asking whether they look around before eating a floor mushroom. Stinger: \"It tastes exactly as bad as it looks.\""
       },
       "title": {
         "show": true,
@@ -62,7 +62,7 @@
         "action": "none",
         "actionamount": null,
         "actionformula": "",
-        "gmnotes": "A whole extra turn, taken immediately after their current one. Add a second combatant entry or simply let them go twice — do not make them wait for the turn order to come round. Stinger: \"Again. Right now.\""
+        "gmnotes": "A whole extra turn, taken immediately after their current one. Add a second combatant entry or simply let them go twice. Do not make them wait for the turn order to come round. Stinger: \"Again. Right now.\""
       },
       "title": {
         "show": true,
@@ -107,7 +107,7 @@
         "action": "none",
         "actionamount": null,
         "actionformula": "",
-        "gmnotes": "Answer honestly and completely — this card is worthless if you hedge. If the answer would derail the campaign, that is a sign the answer matters. Stinger: \"Ask.\""
+        "gmnotes": "Answer honestly and completely, because this card is worthless if you hedge. If the answer would derail the campaign, that is a sign the answer matters. Stinger: \"Ask.\""
       },
       "title": {
         "show": true,
@@ -152,7 +152,7 @@
         "action": "swapHp",
         "actionamount": null,
         "actionformula": "",
-        "gmnotes": "Select both characters before pressing the button — the swap needs two. Best played by someone nearly dead standing next to someone barely scratched, which is exactly the drama it is for. Stinger: \"Whose name do you call?\""
+        "gmnotes": "Select both characters before pressing the button, because the swap needs two. Best played by someone nearly dead standing next to someone barely scratched, which is exactly the drama it is for. Stinger: \"Whose name do you call?\""
       },
       "title": {
         "show": true,
@@ -197,7 +197,7 @@
         "action": "none",
         "actionamount": null,
         "actionformula": "",
-        "gmnotes": "Permanent ability score increases — the most powerful card here by a distance. Deliberately not automated: watch them spend it, and hold them to the cap of 20. Stinger: \"Take your time. This one is forever.\""
+        "gmnotes": "Permanent ability score increases, the most powerful card here by a distance. Deliberately not automated: watch them spend it, and hold them to the cap of 20. Stinger: \"Take your time. This one is forever.\""
       },
       "title": {
         "show": true,
@@ -287,7 +287,7 @@
         "action": "setHp",
         "actionamount": 5,
         "actionformula": "",
-        "gmnotes": "Ten minutes of concentration means it cannot be used mid-fight — that is the cost. Any dead creature, which includes ones the party killed and now need to talk to. Stinger: \"You know the words. You will not know them in a moment.\""
+        "gmnotes": "Ten minutes of concentration means it cannot be used mid-fight, which is the cost. Any dead creature, which includes ones the party killed and now need to talk to. Stinger: \"You know the words. You will not know them in a moment.\""
       },
       "title": {
         "show": true,
@@ -332,7 +332,7 @@
         "action": "none",
         "actionamount": null,
         "actionformula": "",
-        "gmnotes": "The most flexible card in the deck and the hardest to time. Let them hold it and decide later — a re-roll spent on the wrong check is its own lesson. Stinger: \"Say when.\""
+        "gmnotes": "The most flexible card in the deck and the hardest to time. Let them hold it and decide later. A re-roll spent on the wrong check is its own lesson. Stinger: \"Say when.\""
       },
       "title": {
         "show": true,
@@ -377,7 +377,7 @@
         "action": "percentDamage",
         "actionamount": null,
         "actionformula": "1d10*10",
-        "gmnotes": "Make them say the line. The button rolls the d10 and takes that percentage of the target's CURRENT health, so a 10 is not quite a kill — it leaves them on nothing. Stinger: \"Say it properly or it doesn't count.\""
+        "gmnotes": "Make them say the line. The button rolls the d10 and takes that percentage of the target's CURRENT health, so a 10 is not quite a kill; it leaves them on nothing. Stinger: \"Say it properly or it doesn't count.\""
       },
       "title": {
         "show": true,
@@ -422,7 +422,7 @@
         "action": "healFull",
         "actionamount": null,
         "actionformula": "",
-        "gmnotes": "Full health, any creature — including one that is not theirs. Do not rush the choice; \"make it count\" is the whole card. Stinger: \"The glass is already going cloudy.\""
+        "gmnotes": "Full health, any creature, including one that is not theirs. Do not rush the choice; \"make it count\" is the whole card. Stinger: \"The glass is already going cloudy.\""
       },
       "title": {
         "show": true,
@@ -464,7 +464,7 @@
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1784237483935,
-    "modifiedTime": 1785441392034,
+    "modifiedTime": 1788724154594,
     "lastModifiedBy": "B4d9pDwUBOtAfJFE"
   },
   "ownership": {
