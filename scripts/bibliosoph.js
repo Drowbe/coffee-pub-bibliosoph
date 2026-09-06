@@ -709,8 +709,12 @@ function resolveOutcomeCast({ rollerActorId = null, rollerTokenId = null, hitAct
         const pool = Array.from(tokens ?? []);
         return pool.length === 1 ? (pool[0].actor ?? null) : null;
     };
-    const roller = game.actors.get(rollerActorId ?? '')
-        ?? canvas?.tokens?.get(rollerTokenId ?? '')?.actor
+    // TOKEN FIRST, for the same reason everywhere else does: `rollerActorId`
+    // is the speaker's BASE actor, shared by every copy of a pasted token, so
+    // resolving it first names the prototype rather than the creature that
+    // rolled. Resolve by token to identify or apply, by actor to aggregate.
+    const roller = canvas?.tokens?.get(rollerTokenId ?? '')?.actor
+        ?? game.actors.get(rollerActorId ?? '')
         ?? game.user?.character
         ?? lone(canvas?.tokens?.controlled)
         ?? null;
@@ -2259,8 +2263,15 @@ async function createChatCardInjury(category, target = null, { title = null } = 
             // rather than a hit point count, because the count depends on
             // who is reading it — and shows the real number for the token
             // the card is aimed at, when it is aimed at one.
-            const hurtActor = game.actors.get(target?.actorId ?? '')
-                ?? canvas?.tokens?.get(target?.tokenId ?? '')?.actor
+            // TOKEN FIRST. Injury damage is a PERCENTAGE of max HP, so the
+            // number this renders depends on whose hit points we read. An
+            // unlinked token carries its own in its delta, and copied tokens
+            // share a base actor -- resolving the actor first would compute
+            // the displayed damage from the prototype and print a number the
+            // applied effect does not match. Resolve by token to identify or
+            // apply; resolve by actor only to aggregate.
+            const hurtActor = canvas?.tokens?.get(target?.tokenId ?? '')?.actor
+                ?? game.actors.get(target?.actorId ?? '')
                 ?? null;
             const real = hurtActor ? damageFor(intInjuryDamage, hurtActor.system?.attributes?.hp) : 0;
             strInjuryDamage = real > 0

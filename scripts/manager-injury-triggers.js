@@ -87,8 +87,13 @@ export class InjuryTriggerManager {
         const automation = getSetting('injuryAutomation', 'click');
         if (automation === 'off' || automation === 'manual') return;
 
-        const actor = game.actors.get(outcome?.actorId ?? '')
-            ?? canvas?.tokens?.get(outcome?.tokenId ?? '')?.actor;
+        // TOKEN FIRST. Blacksmith's payload carries both, and `actorId` is
+        // the speaker's BASE actor -- shared by every copy of a pasted token.
+        // Resolving it first meant `_buildPayload` fell through to
+        // `getActiveTokens()[0]`, an arbitrary member of the group, so a toast
+        // about the cultist who was hit could name a different one entirely.
+        const actor = canvas?.tokens?.get(outcome?.tokenId ?? '')?.actor
+            ?? game.actors.get(outcome?.actorId ?? '');
         if (!actor) return;
         if (!this._passesSourceFilter(actor)) return;
 

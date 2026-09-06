@@ -31,8 +31,9 @@
 
 import { MODULE } from '../const.js';
 import {
-    SEVERITIES, DAMAGE_BANDS, TICK_BANDS, ODDS_BANDS,
-    MODIFIER_LIMITS, MODIFIER_STAT_KEYS, SEVERITY_DCS, MODIFIER_STATS
+    CATEGORIES, SEVERITIES, DAMAGE_BANDS, TICK_BANDS, ODDS_BANDS,
+    MODIFIER_LIMITS, MODIFIER_STAT_KEYS, SEVERITY_DCS, MODIFIER_STATS,
+    displayCategory
 } from './injury-schema.js';
 import { INJURY_PAGE_TYPE, InjuryPageModel } from './injury-page-model.js';
 
@@ -191,6 +192,59 @@ export const INJURY_DOCUMENT = {
 };
 
 /**
+ * QUESTIONS THE PROMPT ASKS THE AUTHOR, keyed by `id`; the answers reach
+ * `onBuildPrompt` in `promptOptions`.
+ *
+ * These are not payload fields and never reach a page. They narrow what is
+ * GENERATED, which matters because the alternative is a generation that
+ * scatters across fourteen categories and three severities and leaves the
+ * GM re-filing by hand.
+ *
+ * Both selects derive their options from injury-schema.js rather than
+ * listing them, for the same reason the declaration derives its machine
+ * shape from the model: a transcribed enum goes stale the first time
+ * CATEGORIES or SEVERITIES gains a value, and nothing would notice.
+ *
+ * `showForTemplate` is stamped by Blacksmith from our declaration id and
+ * declaring it is a registration error -- an unscoped field would appear
+ * on every other profile's prompt, so our severity question would turn up
+ * while somebody imports a Realm.
+ */
+export const INJURY_PROMPT_FIELDS = [
+    {
+        id: 'category',
+        label: 'Damage type',
+        inputType: 'select',
+        options: CATEGORIES.map((value) => ({ value, label: displayCategory(value) })),
+        value: 'general',
+        // The container field: it decides which journal the generated pages
+        // are filed into, so it is the one answer that changes where the
+        // work lands rather than only what it says.
+        hint: 'Which journal the generated injuries are filed into; general is the fallback for untyped or evenly mixed damage.'
+    },
+    {
+        id: 'severity',
+        label: 'Severity',
+        inputType: 'select',
+        options: SEVERITIES.map((value) => ({
+            value,
+            label: `${displayCategory(value)} (DC ${SEVERITY_DCS[value]})`
+        })),
+        value: 'moderate',
+        // Every numeric band we publish is severity-scoped, so fixing it up
+        // front turns conditional guidance -- "0-5 for minor, 6-10 for
+        // moderate" -- into one range the generator can actually hit.
+        hint: `Sets the treatment DC and the sensible ranges for damage (${bandsBySeverity(DAMAGE_BANDS)}), tick and modifiers.`
+    },
+    {
+        id: 'count',
+        label: 'How many',
+        value: '10',
+        hint: 'How many injuries to generate in one pass.'
+    }
+];
+
+/**
  * Build the declaration.
  *
  * `declarationFromModel` is INJECTED rather than imported, because this
@@ -216,6 +270,7 @@ export function buildInjuryDeclaration(declarationFromModel) {
         guidance: INJURY_GUIDANCE,
         examples: INJURY_EXAMPLES,
         extraFields: INJURY_EXTRA_FIELDS,
+        promptFields: INJURY_PROMPT_FIELDS,
         derive: [],
         rules: []
     });
