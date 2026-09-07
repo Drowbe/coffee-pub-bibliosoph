@@ -68,7 +68,7 @@ const targetList = TARGETS.map((t) => `${t} (${TARGET_LABELS[t]})`).join(', ');
 const SHARED_GUIDANCE = {
     appliesto: `Who the outcome lands on, one of ${targetList}.`,
     picks: `How many separate people the card asks the GM to choose, which only means anything for ally and is at most ${PICKS_MAX}.`,
-    image: "Path to the outcome's art, shown on the chat card.",
+    image: 'Always set this to a Foundry core icon path matching the outcome, such as icons/skills/melee/strike-sword-blood-red.webp, since an empty value ships a card with no art.',
     imagetitle: 'A short evocative caption shown beneath the art.',
     description: 'What happens, written in second person and read aloud at the table.',
     damage: `Flat hit points gained or lost when the outcome is applied, normally ${bandsBySeverity(DAMAGE_BANDS)}.`,
@@ -84,7 +84,7 @@ const SHARED_GUIDANCE = {
 };
 
 const SHARED_EXAMPLES = {
-    image: `modules/${MODULE.ID}/images/outcomes/example.webp`,
+    image: 'icons/skills/melee/strike-sword-blood-red.webp',
     damage: 0,
     duration: 12,
     odds: 20

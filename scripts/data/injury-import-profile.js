@@ -70,7 +70,7 @@ const bandsBySeverity = (bands) => SEVERITIES.map((s) => `${band(bands[s])} for 
 export const INJURY_GUIDANCE = {
     category: 'The damage type this injury belongs to, where `general` is the fallback for untyped or evenly mixed damage.',
     severity: `How bad the wound is, which sets the treatment DC (${SEVERITIES.map((s) => `${s} ${SEVERITY_DCS[s]}`).join(', ')}) and the sensible range for damage, tick and modifiers.`,
-    image: "Path to the injury's art, shown on the chat card and the token effect.",
+    image: 'Always set this to a Foundry core icon path matching the wound, such as icons/skills/wounds/injury-face-impact-orange.webp, since an empty value ships an injury with no art on its card or token.',
     imagetitle: 'A short evocative caption shown beneath the art on the chat card.',
     description: 'The narrative of the wound, written in second person.',
     treatment: 'How the injury may be treated, written as the GM will adjudicate it.',
@@ -97,7 +97,7 @@ export const INJURY_GUIDANCE = {
  * is worse for an author than the derived one.
  */
 export const INJURY_EXAMPLES = {
-    image: `modules/${MODULE.ID}/images/injuries/burn-severe.webp`,
+    image: 'icons/magic/acid/dissolve-pool-bubbles.webp',
     damage: 4,
     duration: 3600
 };

@@ -24,17 +24,17 @@
  */
 export const ACTIONS = {
     none: {
-        label: 'None — narrative only',
+        label: 'None, narrative only',
         hint: 'The table resolves this one.',
         needsTarget: false,
         icon: 'fa-comments',
-        effect: 'Resolved at the table — no automatic effect.'
+        effect: 'Resolved at the table, with no automatic effect.'
     },
     healFull: {
         label: 'Heal to full',
         button: 'Heal to Full',
         hint: 'Select the creature to heal.',
-        lands: 'Lands on any one creature — yourself, an ally, anyone.',
+        lands: 'Lands on any one creature: yourself, an ally, anyone.',
         needsTarget: true,
         icon: 'fa-heart',
         effect: 'Restores them to full hit points.'
@@ -57,12 +57,12 @@ export const ACTIONS = {
         needsTarget: true,
         params: ['formula'],
         icon: 'fa-bolt',
-        effect: 'Rolls {formula} for a percentage — they lose that share of their current hit points.'
+        effect: 'Rolls {formula} for a percentage, and they lose that share of their current hit points.'
     },
     swapHp: {
         label: 'Swap hit points with another character',
         button: 'Swap Health',
-        hint: 'Select BOTH characters — yours and theirs.',
+        hint: 'Select BOTH characters, yours and theirs.',
         lands: 'Lands on another party member.',
         needsTarget: true,
         icon: 'fa-right-left',
@@ -143,7 +143,7 @@ export function describeInspirationCard(card, { context = 'draw' } = {}) {
     // The card IS the cost. Holding it is the right to play it, playing it
     // spends it, and there is no separate point in the ledger to explain.
     if (context === 'item') {
-        lines.push({ icon: 'fa-clock', text: 'Use it any time. One use only — playing it discards the card.' });
+        lines.push({ icon: 'fa-clock', text: 'Use it any time. One use only, since playing it discards the card.' });
     } else if (context === 'play') {
         lines.push({ icon: 'fa-clock', text: 'Playing this discards the card.' });
     }

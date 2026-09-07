@@ -53,7 +53,12 @@ export class OutcomePageModel extends foundry.abstract.TypeDataModel {
                 stat: new fields.StringField({ required: true, blank: false, initial: 'attack', choices: choicesFrom(Object.keys(MODIFIER_STATS)) }),
                 value: new fields.NumberField({ required: true, integer: true, initial: -2, nullable: false }),
                 rounds: new fields.NumberField({ required: false, integer: true, min: 0, initial: 1, nullable: false })
-            }), { initial: [] }),
+            // `required: false` MATTERS, and matches InjuryPageModel. Foundry's
+            // ArrayField defaults to required:true, so omitting it made the derived
+            // declaration tell an author that MODIFIERS was mandatory, when 83 of our
+            // 94 shipped outcomes carry none. A generator reading that invents a
+            // penalty for a card that should not have one.
+            }), { required: false, initial: [] }),
             // Shipped "how to run it" guidance, same as injuries.
             // Hands someone a card from the inspiration deck. WHO comes
             // from `appliesto`, so this is a flag rather than a target of
