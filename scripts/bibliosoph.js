@@ -74,13 +74,21 @@ Hooks.once('ready', async () => {
         if (typeof BlacksmithAPI.waitForReady === 'function') {
             await BlacksmithAPI.waitForReady();
         }
+        // All four profiles register here, together, because they share one
+        // precondition: Blacksmith present and ready. Each reports its own
+        // failure rather than aborting the rest, so a rejected outcome
+        // declaration does not silently cost the GM injury import too.
         const { registerInjuryImportProfile } = await import('./data/injury-import-profile.js');
         registerInjuryImportProfile();
+        const { registerOutcomeImportProfiles } = await import('./data/outcome-import-profile.js');
+        registerOutcomeImportProfiles();
+        const { registerInspirationImportProfile } = await import('./data/inspiration-import-profile.js');
+        registerInspirationImportProfile();
     } catch (error) {
         // Loud rather than debug: with the legacy path gone, a failure here
         // means nothing imports an injury at all, and the GM's symptom is an
         // import tool that simply does not offer injuries.
-        logBib('Injury import profile could not be registered; injury import is unavailable', error, false, true);
+        logBib('Import profiles could not be registered; JSON import is unavailable for this content', error, false, true);
     }
 });
 

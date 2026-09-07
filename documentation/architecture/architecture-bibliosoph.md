@@ -127,6 +127,49 @@ The recurring pattern: hooks fire on every client, so any handler that writes to
 
 ---
 
+## Tokens and actors
+
+**Resolve by token to identify or apply. Resolve by actor to aggregate.**
+
+A copied token does not get its own actor. Drop one bandit on the canvas and
+paste it eighteen times and every copy carries the same base actor id, with
+only an ActorDelta of its own. So `actor.id` on an unlinked token is the id
+the whole group shares, and `game.actors.get(thatId)` returns the prototype
+rather than the creature anything actually happened to.
+
+Two consequences, and both are silent:
+
+- **Writing to it hits every copy.** An item granted to the base actor appears
+  on all nineteen bandits. One critical hit dealt an inspiration card to three
+  crocodiles this way.
+- **Reading from it describes the wrong creature.** A name comes back as the
+  prototype's, so nineteen tokens all read as "Bandit". Worse, a number
+  computed from the base actor's hit points is simply wrong for a token whose
+  delta changed them: injury damage is a percentage of max HP, so a card
+  rendered from the prototype printed a figure the applied effect did not
+  match.
+
+So a payload's `actorId` is correct for statistics, where per-actor totals are
+the point, and wrong for everything else. Blacksmith's roll payload carries
+both an `actorId` and a `tokenId`, and `hitTargets[]` / `targets[]` carry token
+uuids, which `fromUuid()` resolves to the token's own delta actor.
+
+**Where this bites in practice.** Anywhere a token id is available and an actor
+id is easier to reach for. The cast a card is built from must carry the TOKEN,
+not only the actor it resolves to: a cast that returns actors alone cannot say
+which crocodile, and every id stored from it re-resolves to the prototype
+later. Names come off the token too, since a token may be renamed from its
+prototype and copies are otherwise indistinguishable.
+
+**Why this is written down.** The rule is obvious once stated and was not
+stated, so the same mistake was made independently in six places here and two
+in Blacksmith, and survived because each looked like a local detail rather than
+an instance of a class. It presents as damage or effects "propagating between
+copies", which is what it was first reported as, and it is not: isolation is
+intact and the display is lying. Suspect this before suspecting Foundry.
+
+---
+
 ## Related documents
 
 - [architecture-injuries](architecture-injuries.md)
