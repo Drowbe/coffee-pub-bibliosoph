@@ -43,7 +43,6 @@ const actionList = ACTION_KEYS.map((k) => `${k} (${ACTIONS[k]?.label ?? k})`).jo
  * generation prompt alike.
  */
 export const INSPIRATION_GUIDANCE = {
-    image: 'Always set this to a Foundry core icon path matching the card, such as icons/magic/life/heart-glowing-red.webp, since an empty value ships a card with no art on the chat card or the inventory item.',
     imagetitle: 'A short evocative caption shown beneath the art.',
     description: 'What the card does, written for the player who holds it and read aloud when it is played.',
     odds: 'Relative likelihood when a card is drawn at random, higher being more common.',
@@ -68,6 +67,19 @@ export const INSPIRATION_EXAMPLES = {
  * on name AND folder together.
  */
 export const INSPIRATION_EXTRA_FIELDS = [
+    {
+        // RESOLVED, NOT TRUSTED. See the injury profile for why. The deck spans
+        // the most directories of the three for ten records, because the cards are
+        // deliberately varied rather than themed on one kind of harm.
+        name: 'image',
+        path: 'system.image',
+        type: 'string',
+        transform: 'resolveImage',
+        imageRoots: ['icons/skills', 'icons/magic', 'icons/consumables', 'icons/commodities', 'icons/sundries'],
+        imageFallback: 'icons/svg/card-joker.svg',
+        example: 'icons/magic/life/heart-glowing-red.webp',
+        guidance: 'Always set this to a Foundry core icon path matching the card, such as icons/magic/life/heart-glowing-red.webp, since an empty value ships a card with no art on the chat card or the inventory item.'
+    },
     {
         name: 'journaltype',
         role: 'selector',
@@ -131,7 +143,7 @@ export function buildInspirationDeclaration(declarationFromModel) {
     if (typeof declarationFromModel !== 'function') {
         throw new TypeError('buildInspirationDeclaration requires Blacksmith\'s declarationFromModel');
     }
-    return declarationFromModel(InspirationPageModel.defineSchema(), {
+    return declarationFromModel((() => { const { image: _derived, ...rest } = InspirationPageModel.defineSchema(); return rest; })(), {
         kind: 'journal',
         id: 'inspiration',
         label: 'Inspiration Card',

@@ -68,7 +68,6 @@ const targetList = TARGETS.map((t) => `${t} (${TARGET_LABELS[t]})`).join(', ');
 const SHARED_GUIDANCE = {
     appliesto: `Who the outcome lands on, one of ${targetList}.`,
     picks: `How many separate people the card asks the GM to choose, which only means anything for ally and is at most ${PICKS_MAX}.`,
-    image: 'Always set this to a Foundry core icon path matching the outcome, such as icons/skills/melee/strike-sword-blood-red.webp, since an empty value ships a card with no art.',
     imagetitle: 'A short evocative caption shown beneath the art.',
     description: 'What happens, written in second person and read aloud at the table.',
     damage: `Flat hit points gained or lost when the outcome is applied, normally ${bandsBySeverity(DAMAGE_BANDS)}.`,
@@ -110,6 +109,21 @@ const containerMap = (kind) =>
  * untitled.
  */
 const extraFields = (profileId, kind) => [
+    {
+        // RESOLVED, NOT TRUSTED. See the injury profile for why. Outcomes are the
+        // narrowest of the three: every one of our 94 shipped records sits under
+        // icons/skills or icons/magic.
+        name: 'image',
+        path: 'system.image',
+        type: 'string',
+        transform: 'resolveImage',
+        imageRoots: ['icons/skills', 'icons/magic'],
+        // A crit and a fumble deserve different defaults: the fallback is the art
+        // a GM sees when resolution failed, so it should still read as the thing.
+        imageFallback: profileId === 'critical' ? 'icons/svg/sword.svg' : 'icons/svg/downgrade.svg',
+        example: 'icons/skills/melee/strike-sword-blood-red.webp',
+        guidance: 'Always set this to a Foundry core icon path matching the outcome, such as icons/skills/melee/strike-sword-blood-red.webp, since an empty value ships a card with no art.'
+    },
     {
         // How a payload reaches this profile at all: the journal kind
         // routes on `role: 'selector'`, matching the lowercased value
@@ -202,7 +216,7 @@ export function buildOutcomeDeclaration(declarationFromModel, profileId) {
     // the model's authored `kind` fails with "duplicate field name". Taking it
     // out of the schema first is what makes the const the only declaration of
     // it, which is the whole point: the author never writes this field.
-    const { kind: _authoredKind, ...schema } = OutcomePageModel.defineSchema();
+    const { kind: _authoredKind, image: _derivedImage, ...schema } = OutcomePageModel.defineSchema();
 
     return declarationFromModel(schema, {
         kind: 'journal',

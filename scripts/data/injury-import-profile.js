@@ -70,7 +70,6 @@ const bandsBySeverity = (bands) => SEVERITIES.map((s) => `${band(bands[s])} for 
 export const INJURY_GUIDANCE = {
     category: 'The damage type this injury belongs to, where `general` is the fallback for untyped or evenly mixed damage.',
     severity: `How bad the wound is, which sets the treatment DC (${SEVERITIES.map((s) => `${s} ${SEVERITY_DCS[s]}`).join(', ')}) and the sensible range for damage, tick and modifiers.`,
-    image: 'Always set this to a Foundry core icon path matching the wound, such as icons/skills/wounds/injury-face-impact-orange.webp, since an empty value ships an injury with no art on its card or token.',
     imagetitle: 'A short evocative caption shown beneath the art on the chat card.',
     description: 'The narrative of the wound, written in second person.',
     treatment: 'How the injury may be treated, written as the GM will adjudicate it.',
@@ -108,6 +107,28 @@ export const INJURY_EXAMPLES = {
  * system one, which is why it cannot come from a schema walk.
  */
 export const INJURY_EXTRA_FIELDS = [
+    {
+        // RESOLVED, NOT TRUSTED. A generator writes image paths from memory and
+        // roughly one in ten does not exist, which imports cleanly and renders a
+        // broken card. Blacksmith matches the value against these roots on shared
+        // filename words and falls back when nothing is close enough.
+        //
+        // The roots are the narrowest set covering what we already ship, which is
+        // wider than it looks: injuries are filed by DAMAGE TYPE, and acid, sonic,
+        // air and lightning wounds have no art under skills/wounds, so ten of the
+        // fourteen categories draw from icons/magic. Roots are walked once per
+        // session and only on a miss, so breadth costs little.
+        name: 'image',
+        path: 'system.image',
+        type: 'string',
+        transform: 'resolveImage',
+        imageRoots: ['icons/skills', 'icons/magic', 'icons/consumables', 'icons/commodities'],
+        // Never a dead path: a fallback that does not resolve is this defect
+        // hiding inside the safety net, firing only on records already gone wrong.
+        imageFallback: 'icons/svg/blood.svg',
+        example: 'icons/magic/acid/dissolve-pool-bubbles.webp',
+        guidance: 'Always set this to a Foundry core icon path matching the wound, such as icons/skills/wounds/injury-face-impact-orange.webp, since an empty value ships an injury with no art on its card or token.'
+    },
     {
         // HOW A PAYLOAD REACHES THIS PROFILE AT ALL. The journal kind routes
         // on a `role: 'selector'` field: `declaredProfileFor` lowercases the
@@ -261,7 +282,7 @@ export function buildInjuryDeclaration(declarationFromModel) {
     if (typeof declarationFromModel !== 'function') {
         throw new TypeError('buildInjuryDeclaration requires Blacksmith\'s declarationFromModel');
     }
-    return declarationFromModel(InjuryPageModel.defineSchema(), {
+    return declarationFromModel((() => { const { image: _derived, ...rest } = InjuryPageModel.defineSchema(); return rest; })(), {
         kind: 'journal',
         id: 'injury',
         label: 'Injury',
