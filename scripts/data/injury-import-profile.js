@@ -108,28 +108,6 @@ export const INJURY_EXAMPLES = {
  */
 export const INJURY_EXTRA_FIELDS = [
     {
-        // RESOLVED, NOT TRUSTED. A generator writes image paths from memory and
-        // roughly one in ten does not exist, which imports cleanly and renders a
-        // broken card. Blacksmith matches the value against these roots on shared
-        // filename words and falls back when nothing is close enough.
-        //
-        // The roots are the narrowest set covering what we already ship, which is
-        // wider than it looks: injuries are filed by DAMAGE TYPE, and acid, sonic,
-        // air and lightning wounds have no art under skills/wounds, so ten of the
-        // fourteen categories draw from icons/magic. Roots are walked once per
-        // session and only on a miss, so breadth costs little.
-        name: 'image',
-        path: 'system.image',
-        type: 'string',
-        transform: 'resolveImage',
-        imageRoots: ['icons/skills', 'icons/magic', 'icons/consumables', 'icons/commodities'],
-        // Never a dead path: a fallback that does not resolve is this defect
-        // hiding inside the safety net, firing only on records already gone wrong.
-        imageFallback: 'icons/svg/blood.svg',
-        example: 'icons/magic/acid/dissolve-pool-bubbles.webp',
-        guidance: 'Always set this to a Foundry core icon path matching the wound, such as icons/skills/wounds/injury-face-impact-orange.webp, since an empty value ships an injury with no art on its card or token.'
-    },
-    {
         // HOW A PAYLOAD REACHES THIS PROFILE AT ALL. The journal kind routes
         // on a `role: 'selector'` field: `declaredProfileFor` lowercases the
         // payload's `journaltype` and looks up the registered profile by it.
@@ -185,7 +163,29 @@ export const INJURY_EXTRA_FIELDS = [
         required: true,
         example: 'Seared Corneas',
         guidance: 'The name of the injury, which becomes the page title.'
-    }
+    },
+    {
+        // RESOLVED, NOT TRUSTED. A generator writes image paths from memory and
+        // roughly one in ten does not exist, which imports cleanly and renders a
+        // broken card. Blacksmith matches the value against these roots on shared
+        // filename words and falls back when nothing is close enough.
+        //
+        // The roots are the narrowest set covering what we already ship, which is
+        // wider than it looks: injuries are filed by DAMAGE TYPE, and acid, sonic,
+        // air and lightning wounds have no art under skills/wounds, so ten of the
+        // fourteen categories draw from icons/magic. Roots are walked once per
+        // session and only on a miss, so breadth costs little.
+        name: 'image',
+        path: 'system.image',
+        type: 'string',
+        transform: 'resolveImage',
+        imageRoots: ['icons/skills', 'icons/magic', 'icons/consumables', 'icons/commodities'],
+        // Never a dead path: a fallback that does not resolve is this defect
+        // hiding inside the safety net, firing only on records already gone wrong.
+        imageFallback: 'icons/svg/blood.svg',
+        example: 'icons/magic/acid/dissolve-pool-bubbles.webp',
+        guidance: 'Always set this to a Foundry core icon path matching the wound, such as icons/skills/wounds/injury-face-impact-orange.webp, since an empty value ships an injury with no art on its card or token.'
+    },
 ];
 
 /**

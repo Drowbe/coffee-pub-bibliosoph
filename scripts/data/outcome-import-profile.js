@@ -110,21 +110,6 @@ const containerMap = (kind) =>
  */
 const extraFields = (profileId, kind) => [
     {
-        // RESOLVED, NOT TRUSTED. See the injury profile for why. Outcomes are the
-        // narrowest of the three: every one of our 94 shipped records sits under
-        // icons/skills or icons/magic.
-        name: 'image',
-        path: 'system.image',
-        type: 'string',
-        transform: 'resolveImage',
-        imageRoots: ['icons/skills', 'icons/magic'],
-        // A crit and a fumble deserve different defaults: the fallback is the art
-        // a GM sees when resolution failed, so it should still read as the thing.
-        imageFallback: profileId === 'critical' ? 'icons/svg/sword.svg' : 'icons/svg/downgrade.svg',
-        example: 'icons/skills/melee/strike-sword-blood-red.webp',
-        guidance: 'Always set this to a Foundry core icon path matching the outcome, such as icons/skills/melee/strike-sword-blood-red.webp, since an empty value ships a card with no art.'
-    },
-    {
         // How a payload reaches this profile at all: the journal kind
         // routes on `role: 'selector'`, matching the lowercased value
         // against the registered profile id.
@@ -161,7 +146,22 @@ const extraFields = (profileId, kind) => [
         required: true,
         example: profileId === 'critical' ? 'Carnage Incarnate' : 'Gaseous Maximus',
         guidance: 'The name of the outcome, which becomes the page title.'
-    }
+    },
+    {
+        // RESOLVED, NOT TRUSTED. See the injury profile for why. Outcomes are the
+        // narrowest of the three: every one of our 94 shipped records sits under
+        // icons/skills or icons/magic.
+        name: 'image',
+        path: 'system.image',
+        type: 'string',
+        transform: 'resolveImage',
+        imageRoots: ['icons/skills', 'icons/magic'],
+        // A crit and a fumble deserve different defaults: the fallback is the art
+        // a GM sees when resolution failed, so it should still read as the thing.
+        imageFallback: profileId === 'critical' ? 'icons/svg/sword.svg' : 'icons/svg/downgrade.svg',
+        example: 'icons/skills/melee/strike-sword-blood-red.webp',
+        guidance: 'Always set this to a Foundry core icon path matching the outcome, such as icons/skills/melee/strike-sword-blood-red.webp, since an empty value ships a card with no art.'
+    },
 ];
 
 /**

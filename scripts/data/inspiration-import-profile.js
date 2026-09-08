@@ -68,19 +68,6 @@ export const INSPIRATION_EXAMPLES = {
  */
 export const INSPIRATION_EXTRA_FIELDS = [
     {
-        // RESOLVED, NOT TRUSTED. See the injury profile for why. The deck spans
-        // the most directories of the three for ten records, because the cards are
-        // deliberately varied rather than themed on one kind of harm.
-        name: 'image',
-        path: 'system.image',
-        type: 'string',
-        transform: 'resolveImage',
-        imageRoots: ['icons/skills', 'icons/magic', 'icons/consumables', 'icons/commodities', 'icons/sundries'],
-        imageFallback: 'icons/svg/card-joker.svg',
-        example: 'icons/magic/life/heart-glowing-red.webp',
-        guidance: 'Always set this to a Foundry core icon path matching the card, such as icons/magic/life/heart-glowing-red.webp, since an empty value ships a card with no art on the chat card or the inventory item.'
-    },
-    {
         name: 'journaltype',
         role: 'selector',
         type: 'string',
@@ -103,7 +90,20 @@ export const INSPIRATION_EXTRA_FIELDS = [
         required: true,
         example: 'Second Wind',
         guidance: 'The name of the card, which becomes the page title.'
-    }
+    },
+    {
+        // RESOLVED, NOT TRUSTED. See the injury profile for why. The deck spans
+        // the most directories of the three for ten records, because the cards are
+        // deliberately varied rather than themed on one kind of harm.
+        name: 'image',
+        path: 'system.image',
+        type: 'string',
+        transform: 'resolveImage',
+        imageRoots: ['icons/skills', 'icons/magic', 'icons/consumables', 'icons/commodities', 'icons/sundries'],
+        imageFallback: 'icons/svg/card-joker.svg',
+        example: 'icons/magic/life/heart-glowing-red.webp',
+        guidance: 'Always set this to a Foundry core icon path matching the card, such as icons/magic/life/heart-glowing-red.webp, since an empty value ships a card with no art on the chat card or the inventory item.'
+    },
 ];
 
 /**
