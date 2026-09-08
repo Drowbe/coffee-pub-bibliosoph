@@ -66,6 +66,20 @@ A few criticals hand somebody an inspiration card instead of applying an effect.
 
 Inside a compendium, the journals are just browsing buckets, named for severity: Butchery, Carnage and Slaughter for criticals; Meek, Nasty and Devastating for fumbles. **Renaming a journal, adding your own, or dragging pages between them changes nothing** about how cards are drawn -- every page states its own severity and its own odds. Add a Homebrew journal if you like.
 
+## Import a batch instead of typing them
+
+For a whole bucket at once, or a set an AI drafted for you, use Blacksmith's **Import JSON** tool rather than adding pages by hand. Pick **Journal**, then **Critical Hit** or **Fumble**.
+
+**Import puts journals in your world, not in your compendium.** Bibliosoph draws from the compendiums named in your settings, so an outcome that imported perfectly and has not been moved across will not appear. Import, check it reads correctly, then move it into your own criticals or fumbles compendium.
+
+The **Prompt Template** tab asks two questions before it writes the prompt: which **bucket** the outcomes belong to, and **how many** to generate. The bucket matters twice over, because it decides both how hard the outcome hits and which journal it is filed into.
+
+Each record needs `journaltype` set to exactly `critical` or `fumble`, and a `foldername` for the folder to file under. It does NOT need `kind`: that is stamped for you from the profile you chose, which is why picking the wrong template cannot quietly produce a fumble labelled as a crit.
+
+Outcomes are filed by bucket, so `severity: "moderate"` lands in **Carnage** for a critical and **Nasty** for a fumble. Those names appear nowhere in the payload. An existing journal of that name in that folder is added to, and a page whose name already exists is updated rather than duplicated, so re-importing a corrected outcome does the obvious thing.
+
+If a generated icon path does not exist, Bibliosoph finds the closest real one rather than shipping a broken image, and falls back to a plain default when nothing is close. You will see a note in the console saying which it used.
+
 ## Presentation
 
 **Show Outcome Images (Criticals and Fumbles)** turns the artwork on and off. It is one switch covering both, so turning it off for fumbles turns it off for criticals too.

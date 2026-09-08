@@ -138,6 +138,20 @@ On use, `useInspirationCard()` resolves targets through `resolveInspirationTarge
 
 ---
 
+## Importing
+
+Inspiration cards import as JSON through Blacksmith's **Import JSON, Journal** tool. `scripts/data/inspiration-import-profile.js` registers the `inspiration` profile; the machine shape is derived from `InspirationPageModel` and the file supplies only the human layer, the envelope fields and the document block. See architecture-injuries.md for the invariant, which applies here unchanged.
+
+### A constant container
+
+Injuries file into one journal per damage type and outcomes into one per bucket, so both name a field to read. The whole deck lives in a single journal called **Inspiration Cards**, and the model has no category-like field at all, so the declaration states `containerName` outright. Before Blacksmith added that form, `containerNameFrom` was required and there was nothing to point it at, which made this profile unwritable.
+
+### Image paths are resolved, not trusted
+
+The declared `image` field carries `transform: 'resolveImage'`. The deck spans the most directories of the three content types for only ten records, because the cards are deliberately varied rather than themed on one kind of harm, so its `imageRoots` are the widest: skills, magic, consumables, commodities and sundries. A resolution failure lands `icons/svg/card-joker.svg` with a warning rather than a dead path.
+
+---
+
 ## Validation
 
 Reuses the sibling families' rules where they apply: `odds` 1-100, art must resolve, `imagetitle` under five words. Action-specific rules: `actionamount` is required and positive for `setHp`; `actionformula` is required and parseable for `percentDamage`; an `action` outside the enum is an error; and an `appliesto` outside `TARGET_MODES` is an error.

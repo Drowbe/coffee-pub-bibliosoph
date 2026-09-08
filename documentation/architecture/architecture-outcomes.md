@@ -87,6 +87,26 @@ Pipeline: `resources/outcomes.json` -> `outcomes:validate` -> `build-outcome-jou
 
 ---
 
+## Importing
+
+Criticals and fumbles import as JSON through Blacksmith's **Import JSON, Journal** tool, the same seam injuries use: Bibliosoph registers a declaration and Blacksmith builds the pages. See architecture-injuries.md for the invariant that governs all of it, since `OutcomePageModel` is the senior schema here in exactly the way `InjuryPageModel` is there.
+
+`scripts/data/outcome-import-profile.js` registers TWO profiles, `critical` and `fumble`, against one model. That is deliberate rather than incidental:
+
+- **`kind` becomes a `const` per profile**, so it cannot be authored or mistyped. One profile with an authored `kind` would let a payload claim to be a crit while carrying fumble semantics, and nothing would catch it. The const is WITHHELD from the schema walk rather than layered over it, because Blacksmith concatenates `extraFields` onto the derived fields and refuses a duplicate name at registration.
+- **It halves the container problem.** With `kind` fixed, the journal name depends on `severity` alone.
+- **Guidance is one sentence by contract.** A single profile would have to name all six bucket labels in it; two name three each, in the author's own vocabulary.
+
+### The container names are not stored anywhere
+
+`system.severity` is minor, moderate or major, while the journals are Butchery, Carnage, Slaughter and Meek, Nasty, Devastating. That mapping is not a casing of the stored value and is not derivable from it: `minor` is Butchery for a crit and Meek for a fumble. It reaches Blacksmith as `containerNameMap`, derived from `SEVERITY_LABELS` rather than transcribed, so it stays module-owned data carried by a Blacksmith-owned mechanism.
+
+### Image paths are resolved, not trusted
+
+A generator picks icon paths from memory and roughly one in ten does not exist, which imports cleanly and renders a broken card. The declared `image` field carries `transform: 'resolveImage'` with `imageRoots` of `icons/skills` and `icons/magic`, which covers every one of the 94 shipped records, and a per-profile `imageFallback` so a resolution failure lands real art rather than a dead path. Measured against the shipped corpus: 97% exact recovery from a corrupted filename word, 100% when the filename is right and the folder is wrong.
+
+---
+
 ## Targeting
 
 `appliesto` is real targeting, not a label. Richer than target and self, because real crit and fumble tables scatter effects everywhere.

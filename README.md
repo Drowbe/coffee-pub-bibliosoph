@@ -18,7 +18,7 @@ Your players talk to each other in character, and the dice leave marks. Biblioso
 - **Inspiration you can hold.** Cards are dealt into a character's inventory as real one-use items, so a player can sit on one for six sessions and cash it in at the right moment.
 - **Search a room.** One click rolls for coins and for items across five rarity tables, adds what turned up to the character sheet, and posts a narrated card.
 - **Build a fight at the table.** Pick a habitat and a difficulty, get a monster list scored against the party, roll for who noticed whom, and deploy straight to the canvas.
-- **Write your own content.** Injuries, criticals, fumbles and inspiration cards are journal pages with an editing sheet. Nothing about them is hardcoded, so your table's wounds can be yours.
+- **Write your own content.** Injuries, criticals, fumbles and inspiration cards are journal pages with an editing sheet. Nothing about them is hardcoded, so your table's wounds can be yours. Or import a batch as JSON through Blacksmith, which builds the pages, files them by category, and finds a real icon when a generated path does not exist.
 
 ## Requirements
 

@@ -66,6 +66,18 @@ Ten cards ship, which is thin for a deck, so writing your own is expected. A car
 
 If a GM rewords a card, characters already holding one see the new wording when they play it.
 
+## Import a batch instead of typing them
+
+For a whole deck at once, or a set an AI drafted for you, use Blacksmith's **Import JSON** tool. Pick **Journal**, then **Inspiration Card**.
+
+**Import puts journals in your world, not in your compendium.** Bibliosoph draws from the compendium named in **Inspiration Cards Source**, so a card that imported perfectly and has not been moved across will not appear in a draw. Import, read it, then move it into your own deck.
+
+The **Prompt Template** tab asks how many cards to generate, and whether to restrict them to one automatable action or allow any.
+
+Each record needs `journaltype` set to exactly `inspiration` and a `foldername` for the folder to file under. Every card lands in a single journal called **Inspiration Cards**, whatever the folder, because the deck is one journal by design.
+
+If a generated icon path does not exist, Bibliosoph finds the closest real one rather than shipping a broken image, and falls back to a plain default when nothing is close.
+
 ## Things it deliberately does not do
 
 - **A card can be drawn twice.** Draws are independent, and nothing tracks what has already come up. There is no discard pile and no shuffling.

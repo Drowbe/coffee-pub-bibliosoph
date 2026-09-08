@@ -176,6 +176,16 @@ Blacksmith matches an existing journal on name **and** folder, updates a page of
 
 Import creates in the **world**. The GM then exports to a compendium, because the picker reads the compendium named by the `injuryCompendium` setting rather than the world.
 
+### Image paths are resolved, not trusted
+
+A generator picks icon paths from memory and roughly one in ten does not exist, which imports cleanly, validates, and renders a broken card. The declared `image` field carries `transform: 'resolveImage'`, so Blacksmith confirms a supplied path, matches a broken one against the declared `imageRoots` on shared filename words, and lands `imageFallback` when nothing is close.
+
+The roots are wider than they look and that is the corpus rather than carelessness: injuries are filed by DAMAGE TYPE, so acid, sonic, air and lightning wounds have no art under `icons/skills/wounds`, and ten of the fourteen categories draw from `icons/magic`. Four roots, about 3,000 files, walked once per session and only on a miss.
+
+Measured against the 144 shipped injuries by corrupting art a person actually chose: 97% exact recovery from a wrong filename word, 100% when the filename is right and the folder is wrong.
+
+**`image` is withheld from the schema walk and declared by hand**, like the selector and `foldername`, because `extraFields` are concatenated onto the derived fields rather than merged and the walk cannot carry `transform`, `imageRoots` or `imageFallback`. Its guidance names the SHAPE of a path and the directories to draw from rather than a complete example, because a concrete value in a one-sentence guidance field is read by a generator as the answer instead of the format.
+
 ### The two vocabularies
 
 `journaltype` is REQUIRED in an import payload -- it is how Blacksmith resolves the profile -- and FORBIDDEN in `resources/injuries.json`, where `tools/validate-injuries.mjs` rejects it by name as a dropped field. The authoring source and the import payload are different representations of the same record, and neither is precedent for the other.
