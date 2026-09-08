@@ -184,7 +184,7 @@ export const INJURY_EXTRA_FIELDS = [
         // hiding inside the safety net, firing only on records already gone wrong.
         imageFallback: 'icons/svg/blood.svg',
         example: 'icons/magic/acid/dissolve-pool-bubbles.webp',
-        guidance: 'Always set this to a Foundry core icon path matching the wound, such as icons/skills/wounds/injury-face-impact-orange.webp, since an empty value ships an injury with no art on its card or token.'
+        guidance: 'A Foundry core icon path of the form icons/<category>/<group>/<name>.webp chosen to match THIS wound rather than reused from another, drawing on icons/skills/wounds for physical harm and the icons/magic subfolder of the damage type for elemental ones.'
     },
 ];
 

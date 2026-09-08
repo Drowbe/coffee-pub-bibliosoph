@@ -102,7 +102,7 @@ export const INSPIRATION_EXTRA_FIELDS = [
         imageRoots: ['icons/skills', 'icons/magic', 'icons/consumables', 'icons/commodities', 'icons/sundries'],
         imageFallback: 'icons/svg/card-joker.svg',
         example: 'icons/magic/life/heart-glowing-red.webp',
-        guidance: 'Always set this to a Foundry core icon path matching the card, such as icons/magic/life/heart-glowing-red.webp, since an empty value ships a card with no art on the chat card or the inventory item.'
+        guidance: 'A Foundry core icon path of the form icons/<category>/<group>/<name>.webp chosen to match THIS card rather than reused from another, drawing on whichever of icons/magic, icons/consumables or icons/sundries suits what the card does.'
     },
 ];
 

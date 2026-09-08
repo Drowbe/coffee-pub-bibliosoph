@@ -160,7 +160,7 @@ const extraFields = (profileId, kind) => [
         // a GM sees when resolution failed, so it should still read as the thing.
         imageFallback: profileId === 'critical' ? 'icons/svg/sword.svg' : 'icons/svg/downgrade.svg',
         example: 'icons/skills/melee/strike-sword-blood-red.webp',
-        guidance: 'Always set this to a Foundry core icon path matching the outcome, such as icons/skills/melee/strike-sword-blood-red.webp, since an empty value ships a card with no art.'
+        guidance: 'A Foundry core icon path of the form icons/<category>/<group>/<name>.webp chosen to match THIS outcome rather than reused from another, drawing on icons/skills/melee for blows and icons/skills/wounds for their aftermath.'
     },
 ];
 
