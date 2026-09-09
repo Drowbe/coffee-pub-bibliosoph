@@ -1,9 +1,10 @@
 # Coffee Pub Bibliosoph
 
-![Foundry v13](https://img.shields.io/badge/foundry-v13-green)
 ![Latest Release](https://img.shields.io/github/v/release/Drowbe/coffee-pub-bibliosoph)
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/Drowbe/coffee-pub-bibliosoph/release.yml)
 ![GitHub all releases](https://img.shields.io/github/downloads/Drowbe/coffee-pub-bibliosoph/total)
+![Foundry v13](https://img.shields.io/badge/foundry-v13-yellow)
+![Foundry v14](https://img.shields.io/badge/foundry-v14-green)
 ![MIT License](https://img.shields.io/badge/license-MIT-blue)
 
 Your players talk to each other in character, and the dice leave marks. Bibliosoph adds journal-backed messaging to your table, and turns critical hits, fumbles and lasting injuries into authored cards that apply real mechanics instead of prose somebody has to adjudicate.
@@ -22,7 +23,7 @@ Your players talk to each other in character, and the dice leave marks. Biblioso
 
 ## Requirements
 
-- Foundry VTT v13 or newer
+- Foundry VTT v13 or v14, verified on v14
 - The D&D 5e system, 5.5 or newer
 - **[Coffee Pub Blacksmith](https://github.com/Drowbe/coffee-pub-blacksmith) 13.17.0 or newer.** Bibliosoph will not run without it.
 

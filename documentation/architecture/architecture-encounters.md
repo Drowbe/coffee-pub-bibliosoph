@@ -68,7 +68,7 @@ Flavour text comes from `resources/encounters-narrative.json`, selected by habit
 
 ## The window
 
-`window-encounter.js` is Application V2, Foundry v13 only, using `HandlebarsApplicationMixin` for `_renderHTML`/`_replaceHTML`. It declares a unique `WINDOW_ENCOUNTER_APP_ID` so no other module's window can be reused.
+`window-encounter.js` is Application V2, Foundry v13 and v14, using `HandlebarsApplicationMixin` for `_renderHTML`/`_replaceHTML`. It declares a unique `WINDOW_ENCOUNTER_APP_ID` so no other module's window can be reused.
 
 Event handling uses a single module-level document delegation listener (`_encounterDelegationAttached`) that dispatches to the current window reference, rather than re-binding on every render.
 

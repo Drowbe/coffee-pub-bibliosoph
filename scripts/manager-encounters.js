@@ -112,7 +112,8 @@ async function resolveWildcardPath(path) {
         const pattern = parts.pop();
         const dir = parts.join('/');
 
-        const response = await FilePicker.browse('data', dir);
+        const FP = foundry.applications?.apps?.FilePicker?.implementation ?? globalThis.FilePicker;
+        const response = await FP.browse('data', dir);
         if (!response?.files?.length) return path;
 
         const regex = new RegExp(

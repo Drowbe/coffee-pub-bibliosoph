@@ -170,6 +170,21 @@ intact and the display is lying. Suspect this before suspecting Foundry.
 
 ---
 
+## Foundry compatibility
+
+`module.json` declares `{minimum: "13", verified: "14", maximum: "14"}` and requires Blacksmith `>= 14.1.0`. Requiring a 14.x Blacksmith while declaring `minimum: 13` is deliberate and not a contradiction: Blacksmith 14.1.0 itself declares `minimum: 13`, so a v13 world runs both.
+
+**What the v14 migration actually changed here.** Almost nothing, because the module was already on the modern APIs: ApplicationV2 and DialogV2 throughout, no ApplicationV1, no `FormApplication`, no bare `Dialog`, no `renderChatMessage` hook, and none of the removed `mergeObject` family. One bare global remained, `FilePicker.browse` in `manager-encounters.js`, and it now takes the namespaced form with the bare one as a fallback, matching `manager-conversations.js`.
+
+**Two classes of thing a search for removed globals does not catch**, both checked and both clean:
+
+- **A hook named after a renamed Application class registers successfully and never fires.** Nothing warns; the module simply stops responding. Our only such registration is `renderJournalDirectory`, and `class JournalDirectory` still exists on v14. Every other hook we register is a document, lifecycle, system or Blacksmith hook, none of which are named after classes. When adding a render hook, verify the CLASS still exists rather than assuming the hook name survived.
+- **A property removed from a global that still exists.** `CONST` survives while `CONST.CHAT_MESSAGE_TYPES` is gone on v14. We do not use that one, but we use four others, and `TEXT_ANCHOR_POINTS` is read UNGUARDED in `manager-injury-effects.js`, so its removal would throw rather than degrade. The guarded reads fall back to a literal, which is the quieter failure: possibly wrong rather than obviously broken. Grep your own unguarded `CONST.*` reads rather than only the property that bit somebody else.
+
+**What is verified and what is asserted.** The subtypes, the pack build and the round-trip verifiers are confirmed on 14.367. The `minimum: "13"` claim is NOT tested: there is no v13 install available, so it rests on the migration having removed deprecated usage rather than adopted v14-only APIs, which is the direction that preserves backward compatibility. It is likely true and it is not measured.
+
+---
+
 ## Related documents
 
 - [architecture-injuries](architecture-injuries.md)

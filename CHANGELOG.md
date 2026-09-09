@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [Unreleased]
+
+### Changed
+
+- **Verified on Foundry v14 and shipped as a v14 module.** `compatibility` is now `{minimum: "13", verified: "14", maximum: "14"}` and Blacksmith is required at `>= 14.1.0`, the release carrying its v14 work. Requiring a 14.x Blacksmith while declaring `minimum: 13` is deliberate: Blacksmith 14.1.0 declares `minimum: 13` itself, so a v13 world runs both. The README badges follow the suite form, v13 yellow for supported and v14 green for verified; ours had been v13 green, which is a verification claim and had to move with the `verified` field rather than stay put.
+
+  **The migration changed almost nothing, which is the point.** The module was already on ApplicationV2 and DialogV2 throughout, with no ApplicationV1, no `FormApplication`, no bare `Dialog`, no `renderChatMessage` hook and none of the removed `mergeObject` family. The single bare Foundry global was `FilePicker.browse` in `manager-encounters.js`, now namespaced with the bare form as a fallback. All three `JournalEntryPage` subtypes register and resolve their schemas on 14.367, with live pages of our subtype loading against the model, and `packs:build` produces compendiums that round-trip against source exactly.
+
+  **Two things were checked that a search for removed globals cannot find.** A hook named after a renamed Application class registers successfully and never fires, silently: ours is `renderJournalDirectory`, and `class JournalDirectory` still exists on v14, so the CLASS was verified rather than the hook name assumed. And a property can be removed from a global that survives, which is how `CONST.CHAT_MESSAGE_TYPES` went while `CONST` remained. We do not use that one, but we use four other `CONST` properties and `TEXT_ANCHOR_POINTS` is read unguarded, so its removal would throw rather than degrade. All four are present on v14.
+
+  **The `minimum: "13"` half is asserted rather than tested.** No v13 install exists on the machine this was migrated on, so every source check is evidence about v14 only. The claim rests on the work having REMOVED deprecated usage rather than adopted v14-only APIs, which is the direction that preserves backward compatibility, and it is recorded in `architecture-bibliosoph.md` as unmeasured rather than left to look verified.
+
 ## [13.8.0]
 
 ### Added
