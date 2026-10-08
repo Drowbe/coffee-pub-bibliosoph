@@ -531,7 +531,7 @@ export class WindowEncounter extends Base {
 
     /**
      * After first render, ensure delegation is attached on the app element so Recommend
-     * and other buttons work even if activateListeners is never called (e.g. with PARTS).
+     * and other buttons work regardless of how the app renders its PARTS.
      */
     async _onFirstRender(_context, options) {
         await super._onFirstRender?.(_context, options);
@@ -1100,113 +1100,6 @@ export class WindowEncounter extends Base {
             }
         });
         bsLog(MODULE.NAME, 'Quick Encounter: delegation listeners attached', 'habitat, recommend, roll, refresh cache, pattern deploy, sliders', false);
-    }
-
-    /**
-     * Attach listeners after render (may not be called for PARTS content). Delegation
-     * is ensured in _onFirstRender; here we also try to attach and attach direct listeners when root exists.
-     * @param {HTMLElement} html - Rendered element (native DOM)
-     */
-    activateListeners(html) {
-        this._attachDelegationOnce();
-
-        const root = html?.matches?.('.window-encounter') ? html : html?.querySelector?.('.window-encounter');
-        if (!root) return;
-
-        const appId = this.id || WINDOW_ENCOUNTER_APP_ID;
-
-        root.querySelectorAll('[data-encounter-role="habitat"]').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const habitat = e.currentTarget?.dataset?.habitat;
-                if (!habitat) return;
-                this._selectedHabitat = habitat;
-                bsLog(MODULE.NAME, 'Quick Encounter: habitat selected', habitat, true, false);
-                this.render();
-            });
-        });
-        root.querySelector(`#${appId}-include-input`)?.addEventListener('input', (e) => {
-            this._includeMonsterNamesText = e.target?.value ?? '';
-        });
-        root.querySelector(`#${appId}-exclude-input`)?.addEventListener('input', (e) => {
-            this._excludeMonsterNamesText = e.target?.value ?? '';
-        });
-        /* Setting sliders handled by document listener via [data-encounter-setting]; target CR via [data-encounter-cr-slider] */
-        root.querySelector('[data-encounter-cr-slider="target"]')?.addEventListener('change', (e) => {
-            const raw = parseFloat(e.target?.value);
-            if (!Number.isNaN(raw) && raw >= 0) {
-                this._targetCR = Math.round(raw);
-                this.render();
-            }
-        });
-        /* Roll, Recommend, Reset, Refresh cache: handled only by document-level delegation (_attachDelegationOnce) so one click = one action (activateListeners can run on every render and would add duplicate listeners). */
-        root.querySelectorAll('[data-encounter-role="result-card"]').forEach(card => {
-            card.addEventListener('click', (e) => {
-                if (e.target?.closest?.('[data-encounter-action="count-minus"], [data-encounter-action="count-plus"]')) return;
-                const uuid = card.getAttribute?.('data-actor-id') ?? card.dataset?.actorId;
-                if (!uuid) return;
-                if (this._selectedForDeploy.has(uuid)) {
-                    this._selectedForDeploy.delete(uuid);
-                    this._selectedCounts.delete(uuid);
-                } else {
-                    this._selectedForDeploy.add(uuid);
-                    const rec = (this._recommendations || []).find((r) => r.id === uuid);
-                    const initialCount = rec && typeof rec.count === 'number' && rec.count >= 1 ? rec.count : 1;
-                    this._selectedCounts.set(uuid, initialCount);
-                }
-                bsLog(MODULE.NAME, 'Quick Encounter: selection toggled', `${this._selectedForDeploy.size} selected`, true, false);
-                this.render();
-            });
-        });
-        root.querySelectorAll('[data-encounter-action="count-minus"]').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const uuid = btn.getAttribute?.('data-actor-id') ?? btn.dataset?.actorId;
-                if (!uuid || !this._selectedForDeploy.has(uuid)) return;
-                const n = (this._selectedCounts.get(uuid) ?? 1) - 1;
-                if (n <= 0) {
-                    this._selectedForDeploy.delete(uuid);
-                    this._selectedCounts.delete(uuid);
-                } else this._selectedCounts.set(uuid, n);
-                this.render();
-            });
-        });
-        root.querySelectorAll('[data-encounter-action="count-plus"]').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const uuid = btn.getAttribute?.('data-actor-id') ?? btn.dataset?.actorId;
-                if (!uuid || !this._selectedForDeploy.has(uuid)) return;
-                const n = Math.min(99, (this._selectedCounts.get(uuid) ?? 1) + 1);
-                this._selectedCounts.set(uuid, n);
-                this.render();
-            });
-        });
-        /* Deploy-pattern buttons: handled only by document-level delegation so one click = one deploy (same duplicate-listener issue as Roll/Recommend). */
-        root.querySelector(`#${appId}-deploy-visible`)?.addEventListener('change', (e) => {
-            this._deploymentHidden = !e.target?.checked;
-            this.render();
-        });
-        root.querySelector(`#${appId}-min-cr`)?.addEventListener('change', (e) => {
-            const raw = parseFloat(e.target?.value);
-            if (!Number.isNaN(raw) && raw >= 0) {
-                const v = Math.min(29, Math.max(0, raw));
-                const currentMax = Math.max(MIN_CR_GAP, Math.min(30, Number(this._maxCR) ?? 30));
-                this._minCR = Math.min(v, currentMax - MIN_CR_GAP);
-                this._maxCR = Math.max(this._maxCR ?? 30, this._minCR + MIN_CR_GAP);
-                game.settings.set?.(MODULE.ID, 'quickEncounterMinCR', this._minCR);
-                this.render();
-            }
-        });
-        root.querySelector(`#${appId}-max-cr`)?.addEventListener('change', (e) => {
-            const raw = parseFloat(e.target?.value);
-            if (!Number.isNaN(raw) && raw >= 0) {
-                const v = Math.min(30, Math.max(MIN_CR_GAP, raw));
-                const currentMin = Math.max(0, Math.min(29, Number(this._minCR) ?? 0));
-                this._maxCR = Math.max(v, currentMin + MIN_CR_GAP);
-                this._minCR = Math.min(this._minCR ?? 0, this._maxCR - MIN_CR_GAP);
-                game.settings.set?.(MODULE.ID, 'quickEncounterMaxCR', this._maxCR);
-                this.render();
-            }
-        });
     }
 
     /**
