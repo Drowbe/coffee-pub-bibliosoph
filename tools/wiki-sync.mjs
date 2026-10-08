@@ -54,7 +54,7 @@ function defaultBranch() {
 }
 const BRANCH = defaultBranch();
 const RAW_BASE = `https://raw.githubusercontent.com/${REPO_SLUG}/${BRANCH}/documentation/assets`;
-const ASSET_LINK = /(?:^|\/)assets\/([^/\\)]+)$/i;
+export const ASSET_LINK = /(?:^|\/)assets\/([^/\\)]+)$/i;
 
 // ---- What publishes: folder membership, not a hand-kept list. ----
 //
@@ -119,7 +119,21 @@ function label(rel) {
   const spaced = base.replace(/-/g, ' ');
   const titled = spaced.charAt(0).toUpperCase() + spaced.slice(1);
   // Sentence case mangles the acronyms that appear in guide names -- "Gm", "Api", "Ui".
-  return titled.replace(/\b(Gm|Api|Ui|Npc|Css|Json|Uuid|Dc)\b/g, (m) => m.toUpperCase());
+  //
+  // Done per word and case-insensitively, which a single case-sensitive regex could not be. Sentence
+  // casing capitalises only the LEADING character, so `\b(Api)\b` matched an acronym in first position
+  // and nothing after it: `architecture-blacksmith-api` gave "Blacksmith api". Plurals missed even in
+  // first position -- `apis-foo` gave "Apis foo". Found by the Herald session on 2026-09-09, which
+  // renamed its file to dodge it; this file is copied to every module, so the next one would not have
+  // known to.
+  const ACRONYMS = new Set(['gm', 'api', 'ui', 'npc', 'css', 'json', 'uuid', 'dc']);
+  return titled.split(' ').map((word) => {
+    const bare = word.toLowerCase();
+    if (ACRONYMS.has(bare)) return bare.toUpperCase();
+    const singular = bare.replace(/s$/, '');
+    if (bare !== singular && ACRONYMS.has(singular)) return `${singular.toUpperCase()}s`;
+    return word;
+  }).join(' ');
 }
 
 // ---- Fence-aware link rewriting ----
@@ -155,7 +169,14 @@ function siblingWikiUrl(target) {
   return `${HUB_WIKI}/${m[2]}${m[3] || ''}`;
 }
 
-const LINK = /\[([^\]]+)\]\(([^)]+)\)/g;
+// Alt text may be EMPTY. `![](assets/thing.webp)` is what someone writes for a decorative image and
+// what several markdown editors insert on paste -- and requiring non-empty text meant the publisher
+// skipped those links entirely, shipping a repo-relative path to the wiki where it resolves to
+// nothing. It renders correctly in the repo and in an editor, so the author sees it working
+// everywhere they look. Exported so check-docs-structure.mjs uses this definition rather than a
+// parallel one: the divergence between the two was what let this pass green.
+// (Raised by coffee-pub-librarian.)
+export const LINK = /\[([^\]]*)\]\(([^)]+)\)/g;
 const CODE_LINK = /\.(js|mjs|css|hbs|json|txt|webp|png)(#.*)?$/i;
 // CODE_PATH matches a directory name anywhere in the target, which is why the doc branch below runs
 // first: a documentation folder may share a name with a code folder -- `documentation/resources/` did,
