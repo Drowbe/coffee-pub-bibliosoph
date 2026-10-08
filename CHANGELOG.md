@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [Unreleased]
+
+### Changed
+
+- **Removed seven more dead namespaced-fallback-to-bare-global branches**, the same shape as the `Dialog.confirm` fallback removed in 14.0.1: on the module's v13 floor, the namespaced form always resolves, so the `?? globalThis.X` (or bare `?? X`) branch never ran. Sites: `bibliosoph.js` (`TextEditorImpl`), `manager-conversations.js` (`TextEditorImpl`, and `FilePicker` in `findOrphanImages`/`reclaimOrphanImages`), `manager-encounters.js` (`FilePicker` in wildcard path resolution), `mixin-messages-thread.js` (`ImagePopout` and `FilePicker` upload), `window-messages-lite.js` (`renderTemplate`), and `window-messages.js` (`saveDataToFile`). Includes the `FilePicker` fallback in `manager-encounters.js` that the 14.0.0 entry below called deliberate — on review it is dead by the same reasoning as the others and was removed too.
+
 ## [14.0.1]
 
 ### Changed

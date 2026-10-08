@@ -1007,7 +1007,7 @@ async function createChatCardTreatment(token) {
         return id.charAt(0).toUpperCase() + id.slice(1);
     };
 
-    const TextEditorImpl = foundry.applications?.ux?.TextEditor?.implementation ?? TextEditor;
+    const TextEditorImpl = foundry.applications.ux.TextEditor.implementation;
 
     // For a loose condition effect (Prone, Charmed…), find the flagged
     // affliction that conveys it, so its row can say "via Severed Strands"

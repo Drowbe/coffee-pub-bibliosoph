@@ -600,7 +600,7 @@ ${rows}
 </html>`;
 
         const filename = `messages-${name.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}-${new Date().toISOString().slice(0, 10)}.html`;
-        const save = foundry.utils?.saveDataToFile ?? globalThis.saveDataToFile;
+        const save = foundry.utils.saveDataToFile;
         if (typeof save !== 'function') {
             ui.notifications.error('Export helper unavailable in this Foundry version.');
             return;

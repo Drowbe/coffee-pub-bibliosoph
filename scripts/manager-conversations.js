@@ -850,7 +850,7 @@ export class ConversationManager {
     static async _composeHtml(text, entry = null) {
         let html = this.renderMarkdown(text);
         try {
-            const TE = foundry.applications?.ux?.TextEditor?.implementation ?? globalThis.TextEditor;
+            const TE = foundry.applications.ux.TextEditor.implementation;
             html = await TE.enrichHTML(html, { async: true });
         } catch (_) { /* store unenriched HTML */ }
         if (entry) html = this._applyMentionHtml(html, entry);
@@ -1133,7 +1133,7 @@ export class ConversationManager {
      * live message. Returns { dir, files, orphans } or null if unavailable.
      */
     static async findOrphanImages() {
-        const FP = foundry.applications?.apps?.FilePicker?.implementation ?? globalThis.FilePicker;
+        const FP = foundry.applications.apps.FilePicker.implementation;
         if (!FP?.browse) return null;
         const dir = this.imageDir;
 
@@ -1168,7 +1168,7 @@ export class ConversationManager {
      * @returns {Promise<number>} how many files were overwritten
      */
     static async reclaimOrphanImages(orphans) {
-        const FP = foundry.applications?.apps?.FilePicker?.implementation ?? globalThis.FilePicker;
+        const FP = foundry.applications.apps.FilePicker.implementation;
         if (!FP?.upload || !Array.isArray(orphans)) return 0;
         const blankPngB64 = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
         const bytes = Uint8Array.from(atob(blankPngB64), (c) => c.charCodeAt(0));

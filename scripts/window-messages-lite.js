@@ -39,7 +39,7 @@ function log(message, data = '', debug = true, notify = false) {
 }
 
 const renderTemplateFn = (...args) => {
-    const fn = foundry.applications?.handlebars?.renderTemplate ?? globalThis.renderTemplate;
+    const fn = foundry.applications.handlebars.renderTemplate;
     return fn(...args);
 };
 

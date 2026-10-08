@@ -462,7 +462,7 @@ export function ThreadBehavior(Base) {
 
         /** Open Foundry's image popout (handles both the V2 and legacy signatures). */
         _openImagePopout(src) {
-            const Popout = foundry.applications?.apps?.ImagePopout ?? globalThis.ImagePopout;
+            const Popout = foundry.applications.apps.ImagePopout;
             if (!Popout) return;
             try {
                 new Popout({ src, window: { title: 'Image' } }).render(true);
@@ -489,7 +489,7 @@ export function ThreadBehavior(Base) {
                 toast('Upload not permitted', 'You can still link images by path or URL.', 'fa-solid fa-image-slash');
                 return null;
             }
-            const FP = foundry.applications?.apps?.FilePicker?.implementation ?? globalThis.FilePicker;
+            const FP = foundry.applications.apps.FilePicker.implementation;
             if (!FP?.upload) {
                 toast('Upload unavailable', 'This Foundry version cannot upload files.', 'fa-solid fa-triangle-exclamation');
                 return null;
