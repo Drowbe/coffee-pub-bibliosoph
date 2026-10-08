@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [Unreleased]
+
+### Changed
+
+- **Removed the dead V1 `Dialog.confirm` fallback in `window-messages.js`.** `DialogV2.confirm` is guaranteed from the module's own v13 floor, so the `DialogV2?.confirm ? ... : Dialog.confirm(...)` ternary in "Delete Messages" and "Clean Unused Images" never took its V1 branch; it is now a plain `await foundry.applications.api.DialogV2.confirm(...)`.
+
 ## [14.0.0]
 
 ### Changed

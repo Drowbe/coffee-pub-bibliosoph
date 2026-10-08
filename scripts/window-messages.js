@@ -505,11 +505,8 @@ export class MessagesWindow extends ThreadBehavior(BlacksmithWindowBaseV2) {
 
         let confirmed = false;
         const content = `<p>Delete all <b>${count}</b> message${count === 1 ? '' : 's'} in <b>${escapeHtml(name)}</b>?</p><p>This removes the history for <b>everyone</b> and cannot be undone.</p>`;
-        const DialogV2 = foundry.applications?.api?.DialogV2;
         try {
-            confirmed = DialogV2?.confirm
-                ? await DialogV2.confirm({ window: { title: 'Delete Messages' }, content, rejectClose: false })
-                : await Dialog.confirm({ title: 'Delete Messages', content });
+            confirmed = await foundry.applications.api.DialogV2.confirm({ window: { title: 'Delete Messages' }, content, rejectClose: false });
         } catch (_) {
             confirmed = false;
         }
@@ -546,11 +543,8 @@ export class MessagesWindow extends ThreadBehavior(BlacksmithWindowBaseV2) {
             <p>Foundry modules cannot delete files, so cleaning replaces each with a tiny blank image to reclaim its space. To remove the files entirely, delete them from <code>${scan.dir}</code> on the server.</p>`;
 
         let confirmed = false;
-        const DialogV2 = foundry.applications?.api?.DialogV2;
         try {
-            confirmed = DialogV2?.confirm
-                ? await DialogV2.confirm({ window: { title: 'Clean Unused Images' }, content, rejectClose: false })
-                : await Dialog.confirm({ title: 'Clean Unused Images', content });
+            confirmed = await foundry.applications.api.DialogV2.confirm({ window: { title: 'Clean Unused Images' }, content, rejectClose: false });
         } catch (_) {
             confirmed = false;
         }
